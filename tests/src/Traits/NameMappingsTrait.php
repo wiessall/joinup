@@ -360,4 +360,78 @@ trait NameMappingsTrait {
     ];
   }
 
+  /**
+   * Mapping of human readable bundle names to machine names.
+   *
+   * @return array
+   *   The bundle mapping.
+   */
+  protected function bundleAliases(): array {
+    return [
+      'custom page' => 'custom_page',
+      'discussion' => 'discussion',
+      'distribution' => 'distribution',
+      'document' => 'document',
+      'event' => 'event',
+      'glossary' => 'glossary',
+      'news' => 'news',
+      'oss_solution' => 'oss_solution',
+      'release' => 'release',
+      'spdx licence' => 'spdx_licence',
+    ];
+  }
+
+  /**
+   * Maps an alias to an actual facet id.
+   *
+   * The facet id is used as "drupal-data-facet-id" property.
+   *
+   * @param string $alias
+   *   The facet alias.
+   *
+   * @return string
+   *   The facet id.
+   *
+   * @throws \Exception
+   *   Thrown when the mapping is not found.
+   */
+  protected function getFacetIdFromAlias(string $alias): string {
+    $mappings = [
+      'Collection event date' => 'collection_event_type',
+      'Content listing types' => 'content_listing_type',
+      'Content types' => 'type',
+      'EIF recommendations' => 'category',
+      'Entity bundle' => 'bookmark_entity_bundle',
+      'Event date' => 'event_date',
+      'Interoperable' => 'interoperable_flag',
+      'My collections content' => 'collection_my_content',
+      'My content' => 'content_my_content',
+      'My solutions content' => 'solution_my_content',
+      'Status' => 'status',
+      'User content' => 'user_content_bundle',
+      'collection content archived toggle' => 'collection_content_status',
+      'collection topic' => 'collection_topic',
+      'collection type' => 'collection_type',
+      'collection/solution' => 'group',
+      'eif conceptual model' => 'conceptual_model',
+      'eif interoperability layer' => 'interoperability_layer',
+      'eif principle' => 'principle',
+      'solution content archived toggle' => 'solution_content_status',
+      'solution spatial coverage' => 'solution_spatial_coverage',
+      'solution topic' => 'solution_topic',
+      'spatial coverage' => 'spatial_coverage',
+      'topic' => 'topic',
+      'OSS category' => 'oss_category',
+      'OSS intended audience' => 'oss_scope',
+      'OSS development status' => 'oss_development_status',
+      'OSS catalog' => 'oss_source',
+    ];
+
+    if (!isset($mappings[$alias])) {
+      throw new \Exception("No facet id mapping found for '$alias'.");
+    }
+
+    return $mappings[$alias];
+  }
+
 }

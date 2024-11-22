@@ -503,7 +503,7 @@ class JoinupContext extends RawDrupalContext {
    *   The title of the entity.
    * @param string $bundle
    *   An alias of a bundle as defined in the
-   *   \Drupal\joinup\Traits\EntityTrait::bundleAliases method.
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
    *
    * @When I go to the :action form of the :title :bundle
    */
