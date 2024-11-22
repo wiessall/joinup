@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_invite\Entity\Invitation;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
@@ -18,7 +17,6 @@ class JoinupInviteContext extends RawDrupalContext {
 
   use EntityTrait;
   use UserTrait;
-  use NameMappingsTrait;
 
   /**
    * Visits the invitation form.

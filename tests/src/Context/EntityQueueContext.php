@@ -10,7 +10,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 
 /**
  * Behat step definitions to interact with entity queues.
@@ -21,7 +20,6 @@ class EntityQueueContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
   use EntityTrait;
-  use NameMappingsTrait;
 
   /**
    * Name of highlighted queue.

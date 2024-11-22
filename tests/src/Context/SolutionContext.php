@@ -14,7 +14,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -50,7 +49,6 @@ class SolutionContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-  use NameMappingsTrait;
 
   /**
    * Navigates to the add solution form.
