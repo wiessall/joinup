@@ -228,7 +228,11 @@ trait NameMappingsTrait {
       ],
     ];
 
-    return $aliases[$type] ?? [];
+    if (!isset($aliases[$type])) {
+      throw new \InvalidArgumentException("Invalid taxonomy type, '$type' not found.");
+    }
+
+    return $aliases[$type];
   }
 
   /**
@@ -250,7 +254,11 @@ trait NameMappingsTrait {
       ],
     ];
 
-    return $aliases[$type] ?? [];
+    if (!isset($aliases[$type])) {
+      throw new \InvalidArgumentException("Invalid entity queue type, '$type' not found.");
+    }
+
+    return $aliases[$type];
   }
 
   /**
@@ -283,7 +291,11 @@ trait NameMappingsTrait {
       ],
     ];
 
-    return $mapping[$type] ?? [];
+    if (!isset($mapping[$type])) {
+      throw new \InvalidArgumentException("Invalid invitation info type, '$type' not found.");
+    }
+
+    return $mapping[$type];
   }
 
   /**
@@ -329,7 +341,11 @@ trait NameMappingsTrait {
       ],
     ];
 
-    return $mappings[$type] ?? [];
+    if (!isset($mappings[$type])) {
+      throw new \InvalidArgumentException("Invalid image library type, '$type' not found.");
+    }
+
+    return $mappings[$type];
   }
 
   /**
@@ -428,7 +444,7 @@ trait NameMappingsTrait {
     ];
 
     if (!isset($mappings[$alias])) {
-      throw new \Exception("No facet id mapping found for '$alias'.");
+      throw new \InvalidArgumentException("No facet id mapping found for '$alias'.");
     }
 
     return $mappings[$alias];
