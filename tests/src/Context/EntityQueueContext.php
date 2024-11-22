@@ -67,6 +67,8 @@ class EntityQueueContext extends RawDrupalContext {
    *
    * Any pre-existing field values will be replaced and will not be restored.
    *
+   * Check NameMappingsTrait::entityQueueFieldAliases() for the available fields.
+   *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The Behat table containing the field data to set on the entity queue.
    * @param string $label
