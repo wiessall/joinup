@@ -2125,10 +2125,7 @@ class FeatureContext extends RawDrupalContext {
     if (!ctype_digit($offset) || $offset < 1) {
       throw new \InvalidArgumentException("Invalid image position ($offset).");
     }
-    $map = $this->getImageLibraryBrowserMapping($content_type);
-    if (empty($map[$content_type])) {
-      throw new \InvalidArgumentException("Invalid content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map)) . '.');
-    }
+    $this->getImageLibraryBrowserMapping($content_type);
   }
 
   /**
