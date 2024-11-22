@@ -283,7 +283,53 @@ trait NameMappingsTrait {
       ],
     ];
 
-    return $mapping[$type];
+    return $mapping[$type] ?? [];
+  }
+
+  /**
+   * Returns the mapping of logo field to their content type.
+   *
+   * @param string $type
+   *   The node type for which to return the field name.
+   *
+   * @return array
+   *   Mapping.
+   */
+  protected function getImageLibraryBrowserMapping(string $type): array {
+    $mappings = [
+      'collection' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'logo',
+        ],
+      ],
+      'solution' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'logo',
+        ],
+      ],
+      'event' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_event_logo',
+        ],
+      ],
+      'news' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_news_logo',
+        ],
+      ],
+      'discussion' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_discussion_logo',
+        ],
+      ],
+    ];
+
+    return $mappings[$type] ?? [];
   }
 
 }
