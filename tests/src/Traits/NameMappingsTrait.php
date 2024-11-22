@@ -206,4 +206,26 @@ trait NameMappingsTrait {
     return $alias;
   }
 
+  /**
+   * Returns field mappings for a given taxonomy type.
+   *
+   * @param string $type
+   *   The taxonomy type.
+   *
+   * @return array
+   *   Field mappings.
+   */
+  protected function getTaxonomyFields(string $type): array {
+    $aliases = [
+      'spdx_licence' => [
+        'uri' => 'uri',
+        'ID' => 'spdx_id',
+        'title' => 'name',
+        'see also' => 'see_also',
+        'text' => 'description',
+      ],
+    ];
+
+    return $aliases[$type] ?? [];
+  }
 }
