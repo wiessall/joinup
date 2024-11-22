@@ -13,5 +13,7 @@ declare(strict_types=1);
  * Use entity reference for group field.
  */
 function joinup_media_views_data_alter(array &$data): void {
+  // Enable entity_reference views filter plugin, used for exposed filter in
+  // media view.
   $data['media__og_audience']['og_audience_target_id']['filter']['id'] = 'entity_reference';
 }
