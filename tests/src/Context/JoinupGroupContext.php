@@ -256,18 +256,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a specific announcement.
-   *
-   * @param string $subject
-   *   The announcement subject.
-   *
-   * @Then I delete the :subject announcement
-   */
-  public function deleteAnnouncement(string $subject): void {
-    $this->getAnnouncementBySubject($subject)->delete();
-  }
-
-  /**
    * Creates a set of announcements.
    *
    * Table format:
