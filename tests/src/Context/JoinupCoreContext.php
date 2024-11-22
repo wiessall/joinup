@@ -385,7 +385,7 @@ class JoinupCoreContext extends RawDrupalContext {
     ?string $bundle = NULL,
   ): FieldItemListInterface {
     $bundle = is_string($bundle) ? static::translateBundle($bundle) : NULL;
-    $entity = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $label, $bundle);
+    $entity = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $label, $bundle);
     Assert::assertInstanceOf(
       FieldableEntityInterface::class,
       $entity,

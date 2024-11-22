@@ -55,7 +55,7 @@ class EntityQueueContext extends RawDrupalContext {
     $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
 
     $entities = array_map(function (array $row): ContentEntityInterface {
-      $entity_type_id = self::translateEntityTypeAlias($row['type']);
+      $entity_type_id = $this->translateEntityTypeAlias($row['type']);
       $label = $row['label'];
       return $this->getEntityByLabel($entity_type_id, $label);
     }, $table->getColumnsHash());
