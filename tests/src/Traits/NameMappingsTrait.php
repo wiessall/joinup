@@ -332,4 +332,32 @@ trait NameMappingsTrait {
     return $mappings[$type] ?? [];
   }
 
+  /**
+   * Mapping of human-readable entity type names to machine names.
+   *
+   * @return array
+   *   The entity type mapping.
+   */
+  protected function entityTypeAliases(): array {
+    return [
+      'collection' => 'node',
+      'contact information' => 'node',
+      'content' => 'node',
+      'custom page' => 'node',
+      'discussion' => 'node',
+      'distribution' => 'node',
+      'document' => 'node',
+      'event' => 'node',
+      'glossary' => 'node',
+      'group' => 'node',
+      'news' => 'node',
+      'owner' => 'node',
+      'oss_solution' => 'node',
+      'release' => 'node',
+      'solution' => 'node',
+      'spdx licence' => 'taxonomy_term',
+      'topic' => 'taxonomy_term',
+    ];
+  }
+
 }

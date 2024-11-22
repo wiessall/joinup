@@ -453,7 +453,7 @@ class JoinupGroupContext extends RawDrupalContext {
 
     // Assume entity reference field and an entity label in the $value variable.
     if (is_string($entityTypeId)) {
-      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
+      $value = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
       Assert::assertNotEmpty(
         $value,
         sprintf(

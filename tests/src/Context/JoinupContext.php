@@ -1089,7 +1089,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given the workflow state of the :title :entity_type is changed to :state
    */
   public function updateWorkflowState(string $title, string $entity_type, string $state): void {
-    $entity_type = self::translateEntityTypeAlias($entity_type);
+    $entity_type = $this->translateEntityTypeAlias($entity_type);
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface|\Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getEntityByLabel($entity_type, $title);
     $entity->setWorkflowState($state);
@@ -2320,7 +2320,7 @@ class JoinupContext extends RawDrupalContext {
         'collection',
       ])
     ), 'Invalid bundle type.');
-    $entity_type_id = self::translateEntityTypeAlias($type);
+    $entity_type_id = $this->translateEntityTypeAlias($type);
     $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
