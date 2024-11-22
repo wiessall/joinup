@@ -1,6 +1,11 @@
 @import "../partials/core";
 @import "buttons";
 
+// Need to define this css variable for normal users.
+:root {
+  --drupal-displace-offset-top: 0px;
+}
+
 // Private message module.
 #private-message-page #private-message-thread-dimmer {
   background-color: $white;
@@ -40,6 +45,19 @@
 }
 
 // Inbox block.
+.private-messages-inbox-wrapper {
+  .private-messages-toggle-inbox {
+    position: relative;
+    z-index: 1;
+    float: right;
+    margin-top: -3.6em;
+  }
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: calc(100px + var(--drupal-displace-offset-top, 0));
+  }
+}
+
 .block-private-message-inbox-block {
   margin-bottom: $spacer * 2;
   border: 1px solid $gray-300;
@@ -61,7 +79,7 @@
       background: $gray-200;
     }
     &.unread-thread {
-      background-color: $secondary;
+      background-color: $secondary-darker;
     }
     .private-message__message {
       p {
