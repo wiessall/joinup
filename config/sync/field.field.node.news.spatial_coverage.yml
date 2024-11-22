@@ -1,15 +1,18 @@
-uuid: c3610d5c-9057-48f4-be47-afab944361bd
+uuid: 3ffc5c2d-eead-42eb-ad27-71f2e348a068
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_news_spatial_coverage
+    - field.storage.node.spatial_coverage
     - node.type.news
     - taxonomy.vocabulary.spatial
-_core:
-  default_config_hash: upWFyfBkIJ3PZ5GTPnTM-8N9Ih8b2QhgVdoNQ_aYcZ8
-id: node.news.field_news_spatial_coverage
-field_name: field_news_spatial_coverage
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.news.spatial_coverage
+field_name: spatial_coverage
 entity_type: node
 bundle: news
 label: 'Geographical coverage'
@@ -25,6 +28,7 @@ settings:
       spatial: spatial
     sort:
       field: _none
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference
