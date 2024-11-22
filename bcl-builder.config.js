@@ -1539,6 +1539,7 @@ module.exports = {
           "card-list.svg",
           "caret-down-fill.svg",
           "chat.svg",
+          "chat-dots.svg",
           "chat-left-text.svg",
           "chat-square.svg",
           "check-circle.svg",
