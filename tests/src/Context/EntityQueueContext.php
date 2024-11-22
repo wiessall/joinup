@@ -10,6 +10,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\NameMappingsTrait;
 
 /**
  * Behat step definitions to interact with entity queues.
@@ -20,6 +21,12 @@ class EntityQueueContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
   use EntityTrait;
+  use NameMappingsTrait;
+
+  /**
+   * Name of highlighted queue.
+   */
+  const string HIGHLIGHTED_QUEUE_NAME = 'highlighted_event';
 
   /**
    * Sets the content of the given entity queue to what is listed in the table.
@@ -62,8 +69,6 @@ class EntityQueueContext extends RawDrupalContext {
    *
    * Any pre-existing field values will be replaced and will not be restored.
    *
-   * Check ::entityQueueFieldAliases() for the available fields.
-   *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The Behat table containing the field data to set on the entity queue.
    * @param string $label
@@ -74,11 +79,12 @@ class EntityQueueContext extends RawDrupalContext {
   public function setEntityQueueFieldData(TableNode $table, string $label): void {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
     $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
+    $mappings = $this->getEntityQueueFieldMappings(self::HIGHLIGHTED_QUEUE_NAME);
 
     $values = $table->getRowsHash();
     $this->massageEntityQueueFieldValues($subqueue, $values);
     foreach ($values as $alias => $value) {
-      $field_name = self::translateFieldNameAlias($alias, self::entityQueueFieldAliases());
+      $field_name = self::translateFieldNameAlias($alias, $mappings);
       $subqueue->get($field_name)->setValue($value);
     }
 
@@ -95,7 +101,7 @@ class EntityQueueContext extends RawDrupalContext {
    */
   protected static function massageEntityQueueFieldValues(EntitySubqueueInterface $subqueue, array &$values): void {
     switch ($subqueue->bundle()) {
-      case 'highlighted_event':
+      case self::HIGHLIGHTED_QUEUE_NAME:
         // If the external URL is passed, then set the 'Link to external page'
         // flag. This checkbox is intended for UX reasons, to make the edit form
         // for the highlighted event entity queue easier to understand.
@@ -104,21 +110,6 @@ class EntityQueueContext extends RawDrupalContext {
         }
         break;
     }
-  }
-
-  /**
-   * Returns the mapping of human readable field aliases to field names.
-   *
-   * @return array
-   *   The mapping.
-   */
-  protected static function entityQueueFieldAliases(): array {
-    return [
-      'header text' => 'header',
-      'link text' => 'link_text',
-      'external url' => 'external_url',
-      'link to external page' => 'link_to_external_url',
-    ];
   }
 
 }

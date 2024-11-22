@@ -40,7 +40,7 @@ class SpdxContext extends RawDrupalContext {
    * @Given (the following )SPDX licences:
    */
   public function givenSpdxLicences(TableNode $data): void {
-    $aliases = $this->getTaxonomyFields(self::TAXONOMY_NAME);
+    $aliases = $this->getTaxonomyFieldMappings(self::TAXONOMY_NAME);
     foreach ($data->getColumnsHash() as $licence_data) {
       $values = (object) ['vocabulary_machine_name' => self::TAXONOMY_NAME];
 

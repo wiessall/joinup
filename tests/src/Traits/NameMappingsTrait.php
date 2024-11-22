@@ -17,7 +17,7 @@ trait NameMappingsTrait {
    * @param string $type
    *   The node type for which to return the field name.
    * @param string $alias
-   *   The human readable node field alias.
+   *   The human-readable node field alias.
    *
    * @return string
    *   The actual field name, or the original string if the alias is not known.
@@ -196,7 +196,7 @@ trait NameMappingsTrait {
       ],
     ];
 
-    // Check both the node type specific aliases as well as the shared aliases.
+    // Check both the node type specific aliases and the shared aliases.
     foreach ([$type, 'shared'] as $key) {
       if (!empty($aliases[$key][$alias])) {
         return $aliases[$key][$alias];
@@ -215,7 +215,7 @@ trait NameMappingsTrait {
    * @return array
    *   Field mappings.
    */
-  protected function getTaxonomyFields(string $type): array {
+  protected function getTaxonomyFieldMappings(string $type): array {
     $aliases = [
       'spdx_licence' => [
         'uri' => 'uri',
@@ -228,4 +228,27 @@ trait NameMappingsTrait {
 
     return $aliases[$type] ?? [];
   }
+
+  /**
+   * Returns field mappings for a given entity queue type.
+   *
+   * @param string $type
+   *   The entity queue type.
+   *
+   * @return array
+   *   Field mappings.
+   */
+  protected function getEntityQueueFieldMappings(string $type): array {
+    $aliases = [
+      'highlighted_event' => [
+        'header text' => 'header',
+        'link text' => 'link_text',
+        'external url' => 'external_url',
+        'link to external page' => 'link_to_external_url',
+      ],
+    ];
+
+    return $aliases[$type] ?? [];
+  }
+
 }
