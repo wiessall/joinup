@@ -84,6 +84,7 @@ trait EntityTrait {
    */
   protected static function entityTypeAliases(): array {
     return [
+      'announcement' => 'message',
       'collection' => 'node',
       'contact information' => 'node',
       'content' => 'node',
@@ -101,6 +102,7 @@ trait EntityTrait {
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
+      'user' => 'user',
     ];
   }
 
