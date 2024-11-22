@@ -839,7 +839,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function setGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
     $facet = strtolower($facet);
-    $facet = self::getFacetIdFromAlias($facet);
+    $facet = $this->getFacetIdFromAlias($facet);
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $region = strtolower($region);
     $data = $entity->get('listing_content')->getValue();
