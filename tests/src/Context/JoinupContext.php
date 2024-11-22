@@ -23,7 +23,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -68,7 +67,6 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-  use NameMappingsTrait;
 
   /**
    * Creates a user with data provided in a table.

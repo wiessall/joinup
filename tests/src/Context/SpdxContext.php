@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 
 /**
  * SPDX licences context.
@@ -15,7 +14,6 @@ use Drupal\joinup\Traits\NameMappingsTrait;
 class SpdxContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NameMappingsTrait;
 
   /**
    * Vocabulary machine name.

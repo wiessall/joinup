@@ -31,7 +31,6 @@ use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\NameMappingsTrait;
 use Drupal\joinup\Traits\PageCacheTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -65,7 +64,6 @@ class FeatureContext extends RawDrupalContext {
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
-  use NameMappingsTrait;
 
   /**
    * The Joinup version, retrieved from the `VERSION` file in the project root.
