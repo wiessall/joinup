@@ -1697,8 +1697,10 @@ class FeatureContext extends RawDrupalContext {
     // visible and can be inspected.
     $element->postValue(['text' => $value]);
 
-    // Wait for AJAX returning autocomplete results.
-    $this->waitForAjax();
+    $page = $this->getSession()->getPage();
+    $page->waitFor(3, function () use ($page) {
+      return $page->find('css', '.ui-autocomplete')->isVisible() === TRUE;
+    });
   }
 
   /**

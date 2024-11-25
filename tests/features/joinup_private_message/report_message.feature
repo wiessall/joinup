@@ -18,11 +18,6 @@ Feature: Private message report.
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
     And I wait for AJAX to finish
-    # Ensure we have waited long enough for the autocomplete list item to
-    # appear. Unfortunately, the AJAX wait above is not enough as there is a
-    # further slight delay between the AJAX request completing and the
-    # autocomplete list item appearing.
-    And I wait until "#private-message-create-form-wrapper + .ui-autocomplete > .ui-menu-item" element exists
     Then I should see the text "Bob Rolls" in the "Private message autocomplete results" region
     When I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Message" with "This is a mean message to Bob."
@@ -65,9 +60,6 @@ Feature: Private message report.
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
     And I wait for AJAX to finish
-    # Ensure that the fact that the user cannot be found is not because of
-    # behat checking the markup too soon.
-    And I wait for 1 second
     Then I should not see the text "Bob Rolls" in the "Private message autocomplete results" region
 
     # Ensure that the user cannot force the user to the recipient list.
