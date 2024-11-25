@@ -79,7 +79,7 @@ Feature: Collections Overview
 
     # Clean up the collection that was created manually.
     Then I delete the "Colonies in space" collection
-    And I delete the "Overviewer contact" contact_information
+    And I delete the "Overviewer contact" "contact information"
 
   Scenario: Custom pages should not be visible on the overview page
     Given collection content:
