@@ -108,4 +108,16 @@ function joinup_core_deploy_200102(): void {
       $database->schema()->dropTable($table);
     }
   }
+
+  // Clean keyvalue collection for tracking the installed schema.
+  $storageKeys = [
+    'meta_entity.field_schema_data.field_ss_related_solutions',
+    'message.field_schema_data.field_group_content',
+  ];
+  $entityStorageSchemaSql = \Drupal::keyValue('entity.storage_schema.sql');
+  foreach ($storageKeys as $storageKey) {
+    if ($entityStorageSchemaSql->has($storageKey)) {
+      $entityStorageSchemaSql->delete($storageKey);
+    }
+  }
 }
