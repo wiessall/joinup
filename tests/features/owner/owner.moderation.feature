@@ -143,4 +143,4 @@ Feature: Owner moderation
 
     # Final cleanup.
     Then I delete the "The healthy food European project" collection
-    And I delete the "Duche Baggins" contact_information
+    And I delete the "Duche Baggins" "contact information"
