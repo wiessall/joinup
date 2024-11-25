@@ -10,7 +10,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\joinup\ExportBatchedDataFormBase;
+use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

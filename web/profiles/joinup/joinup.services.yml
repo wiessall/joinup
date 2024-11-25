@@ -13,6 +13,6 @@ services:
     tags:
       - { name: access_check, applies_to: _node_creation_route }
   joinup.reporting_route_subscriber:
-    class: Drupal\joinup\Routing\ReportingRouteSubscriber
+    class: Drupal\joinup_reports\Routing\ReportingRouteSubscriber
     tags:
       - { name: event_subscriber }
