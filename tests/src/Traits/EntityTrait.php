@@ -94,6 +94,7 @@ trait EntityTrait {
       'event' => 'node',
       'glossary' => 'node',
       'group' => 'node',
+      'licence' => 'node',
       'news' => 'node',
       'owner' => 'node',
       'oss_solution' => 'node',

@@ -470,7 +470,11 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I delete the :identifier :bundle
    */
   public function deleteEntity(string $identifier, string $bundle): void {
-    if ($bundle !== 'user' && $bundle !== 'announcement') {
+    if (
+      $bundle !== 'user' &&
+      $bundle !== 'announcement' &&
+      $bundle !== 'webform'
+    ) {
       $entity_type_id = static::entityTypeAliases()[$bundle];
       $entity = $this->getEntityByLabel($entity_type_id, $identifier);
       if ($bundle === 'distribution') {
@@ -484,6 +488,9 @@ class JoinupGroupContext extends RawDrupalContext {
     }
     elseif ($bundle === 'user') {
       $entity = $this->getUserByName($identifier);
+    }
+    elseif ($bundle === 'webform') {
+      $entity = $this->getEntityById('webform', $identifier);
     }
     else {
       $entity = $this->getAnnouncementBySubject($identifier);
