@@ -423,6 +423,12 @@ private-message:
   css:
     theme:
       assets/css/private-message.min.css: { minified: true }
+  js:
+    assets/js/private-message.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
 
 releases:
   css:

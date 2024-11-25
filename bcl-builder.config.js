@@ -121,6 +121,17 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/private-message.js`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/private-message.js`,
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(
         outputFolder,
         `${ventuno}src/js/responsive-tables.js`,
