@@ -480,28 +480,4 @@ class JoinupCoreContext extends RawDrupalContext {
     );
   }
 
-  /**
-   * Deletes an entity, user or message.
-   *
-   * @param string $identifier
-   *   The entity title, name, subject, or username to identify the item.
-   * @param string $type
-   *   The entity type or bundle (e.g., 'node', 'user', or custom bundle name).
-   *
-   * @When I delete the :identifier :bundle
-   */
-  public function deleteEntity(string $identifier, string $bundle): void {
-    $entity_type_id = static::entityTypeAliases()[$bundle];
-    $entity = $this->getEntityByLabel($entity_type_id, $identifier);
-    if  ($bundle === 'distribution') {
-      if (isset($this->entities[$entity_type_id][$entity->id()])) {
-        unset($this->entities[$entity_type_id][$entity->id()]);
-      }
-    }
-    if ($bundle !== 'contact_information') {
-      $entity->skip_notification = TRUE;
-    }
-    $entity->delete();
-  }
-
 }
