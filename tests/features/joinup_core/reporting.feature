@@ -10,31 +10,48 @@ Feature:
     Then I should get a <code> HTTP response
 
     Examples:
-      | url                                          | role          | code |
-      | /admin/reporting                             | authenticated | 403  |
-      | /admin/reporting                             | moderator     | 200  |
-      | /admin/reporting/export-user-list            | authenticated | 403  |
-      | /admin/reporting/export-user-list            | moderator     | 200  |
-      | /admin/reporting/group-administrators/export | authenticated | 403  |
-      | /admin/reporting/group-administrators/export | moderator     | 200  |
-      | /admin/reporting/legal-notice-report         | authenticated | 403  |
-      | /admin/reporting/legal-notice-report         | moderator     | 200  |
-      | /admin/reporting/solutions-by-type           | authenticated | 403  |
-      | /admin/reporting/solutions-by-type           | moderator     | 200  |
-      | /admin/reporting/solutions-by-licences       | authenticated | 403  |
-      | /admin/reporting/solutions-by-licences       | moderator     | 200  |
-      | /admin/reporting/statistics-per-group        | authenticated | 403  |
-      | /admin/reporting/statistics-per-group        | moderator     | 200  |
+      | url                                                       | role          | code |
+      | /admin/reporting                                          | authenticated | 403  |
+      | /admin/reporting                                          | moderator     | 200  |
+      | /admin/reporting/actions-log                                         | authenticated | 403  |
+      | /admin/reporting/actions-log                                      | moderator     | 200  |
+      | /admin/reporting/distribution-downloads                   | authenticated | 403  |
+      | /admin/reporting/distribution-downloads                   | moderator     | 200  |
+      | /admin/reporting/distribution-downloads/csv               | authenticated | 403  |
+      | /admin/reporting/distribution-downloads /csv              | moderator     | 200  |
+      | /admin/reporting/export-user-list                         | authenticated | 403  |
+      | /admin/reporting/export-user-list                         | moderator     | 200  |
+      | /admin/reporting/group-administrators/export              | authenticated | 403  |
+      | /admin/reporting/group-administrators/export              | moderator     | 200  |
+      | /admin/reporting/legal-notice-report                      | authenticated | 403  |
+      | /admin/reporting/legal-notice-report                      | moderator     | 200  |
+      | /admin/reporting/messages-overview                        | authenticated | 403  |
+      | /admin/reporting/messages-overview                        | moderator     | 200  |
+      | /admin/reporting/solutions-by-type                        | authenticated | 403  |
+      | /admin/reporting/solutions-by-type                        | moderator     | 200  |
+      | /admin/reporting/solutions-by-licences                    | authenticated | 403  |
+      | /admin/reporting/solutions-by-licences                    | moderator     | 200  |
+      | /admin/reporting/statistics-per-group                     | authenticated | 403  |
+      | /admin/reporting/statistics-per-group                     | moderator     | 200  |
+      | /admin/reporting/subscribers-report                       | authenticated | 403  |
+      | /admin/reporting/subscribers-report                       | moderator     | 200  |
+      | /admin/reporting/subscribers-report/download              | authenticated | 403  |
+      | /admin/reporting/subscribers-report/download              | moderator     | 200  |
 
   Scenario: Links should be visible on the reporting page for a moderator.
     Given I am logged in as a user with the moderator role
     And I am on "/admin/reporting"
     Then I should see the following links:
       | Group administrators and facilitators |
+      | Export user list                      |
+      | Site-wide business log                |
       | Solutions by solution type            |
       | Solutions by licences                 |
       | Statistics per group                  |
+      | Subscribers report                    |
       | Legal notice report                   |
+      | Messages overview                     |
+      | Distribution downloads                |
 
   # This scenario is a light test to avoid regressions.
   Scenario: Moderators can access the list of published solutions and filter them by dates and type.

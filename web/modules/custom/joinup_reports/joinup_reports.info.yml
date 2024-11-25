@@ -1,5 +1,5 @@
 name: 'Joinup Reports'
 description: 'Reports management'
 type: module
-package: Custom
+package: Joinup
 core_version_requirement: ">= 10.2"
