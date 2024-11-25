@@ -11,6 +11,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -27,6 +28,7 @@ class JoinupGroupContext extends RawDrupalContext {
   use EntityTrait;
   use MailCollectorTrait;
   use TestingEntitiesTrait;
+  use UserTrait;
 
   /**
    * Navigates to the members page of the given group.
@@ -455,6 +457,38 @@ class JoinupGroupContext extends RawDrupalContext {
     MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
       ->set($fieldName, $value)
       ->save();
+  }
+
+  /**
+   * Deletes an entity, user or message.
+   *
+   * @param string $identifier
+   *   The entity title, name, subject, or username to identify the item.
+   * @param string $bundle
+   *   The entity type or bundle (e.g., 'node', 'user', or custom bundle name).
+   *
+   * @When I delete the :identifier :bundle
+   */
+  public function deleteEntity(string $identifier, string $bundle): void {
+    if ($bundle !== 'user' && $bundle !== 'announcement') {
+      $entity_type_id = static::entityTypeAliases()[$bundle];
+      $entity = $this->getEntityByLabel($entity_type_id, $identifier);
+      if ($bundle === 'distribution') {
+        if (isset($this->entities[$entity_type_id][$entity->id()])) {
+          unset($this->entities[$entity_type_id][$entity->id()]);
+        }
+      }
+      if ($bundle !== 'contact information') {
+        $entity->skip_notification = TRUE;
+      }
+    }
+    elseif ($bundle === 'user') {
+      $entity = $this->getUserByName($identifier);
+    }
+    else {
+      $entity = $this->getAnnouncementBySubject($identifier);
+    }
+    $entity->delete();
   }
 
 }
