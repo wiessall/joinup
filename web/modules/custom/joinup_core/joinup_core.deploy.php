@@ -98,9 +98,9 @@ function joinup_core_deploy_200102(): void {
 
   $database = \Drupal::database();
   $tables = [
-    // meta_entity.field_ss_related_solutions
+    // meta_entity.field_ss_related_solutions.
     'field_deleted_data_e581954d71',
-    // message.field_group_content
+    // message.field_group_content.
     'field_deleted_data_aa42a47f4e',
   ];
   foreach ($tables as $table) {
