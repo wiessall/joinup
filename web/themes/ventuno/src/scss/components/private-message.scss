@@ -45,10 +45,15 @@
   border: 1px solid $gray-300;
   .private-message-thread-inbox {
     margin-bottom: 0;
-    padding: $spacer !important;
+    padding: 0;
+    padding-bottom: $spacer;
     border: none !important;
+    & > .contextual-region {
+      & > div {
+        padding: $spacer $spacer 0 $spacer !important;
+      }
+    }
     &:not(:last-child) {
-      padding-bottom: $spacer;
       border-bottom: 1px solid $gray-300 !important;
     }
     &.active-thread,
@@ -71,40 +76,36 @@
   }
 }
 
+// Buttons.
+.private_message_thread_delete_link_wrapper,
+.private_message_thread_clear_history_link_wrapper {
+  position: relative;
+  z-index: 1;
+  a {
+    @extend .btn;
+    @extend .btn-sm;
+    @extend .btn-secondary;
+
+    text-decoration: none !important;
+    &::before {
+      @include get-bootstrap-icon("trash", currentColor);
+
+      margin-right: $spacer * 0.5;
+    }
+  }
+}
+.private_message_thread_delete_link_wrapper {
+  margin-right: $spacer * 0.5;
+  margin-bottom: $spacer * 0.5;
+}
+
+.private_message_thread_inbox_links {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 // Messages thread.
 .private-message-thread-full {
-  .private_message_thread_clear_history_link_wrapper,
-  .private_message_thread_delete_link_wrapper {
-    position: relative;
-    z-index: 1;
-    margin: 0 $spacer $spacer 0;
-    a {
-      @extend .btn;
-      @extend .btn-sm;
-      @extend .btn-secondary;
-
-      text-decoration: none !important;
-    }
-  }
-  .private_message_thread_clear_history_link_wrapper {
-    a {
-      &::before {
-        @include get-bootstrap-icon("trash", currentColor);
-
-        margin-right: $spacer * 0.5;
-      }
-    }
-  }
-
-  .private_message_thread_delete_link_wrapper {
-    a {
-      &::before {
-        @include get-bootstrap-icon("trash", currentColor);
-
-        margin-right: $spacer * 0.5;
-      }
-    }
-  }
   .username {
     margin-bottom: 0;
   }
@@ -126,11 +127,14 @@
       flex-basis: 100%;
       padding: 0 !important;
       border: none !important;
+      &:has(+ .private_message_delete) {
+        a.private_message_report {
+          margin-right: $spacer * 2;
+        }
+      }
     }
     a.private_message_report {
       float: right;
-      margin-right: $spacer * 0.5;
-      margin-right: $spacer * 2;
       text-decoration: none;
       color: $primary;
       font-weight: $font-weight-bold;

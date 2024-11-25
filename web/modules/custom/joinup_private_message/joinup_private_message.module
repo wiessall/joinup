@@ -178,9 +178,6 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
     // Open form in a modal.
     $build['clear_history_link']['#title'] = t('Delete for me');
     $build['clear_history_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
-    if ($display->id() === 'private_message_thread.private_message_thread.inbox') {
-      unset($build['clear_history_link']);
-    }
   }
 }
 
