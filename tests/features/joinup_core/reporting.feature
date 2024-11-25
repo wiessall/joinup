@@ -13,12 +13,12 @@ Feature:
       | url                                                       | role          | code |
       | /admin/reporting                                          | authenticated | 403  |
       | /admin/reporting                                          | moderator     | 200  |
-      | /admin/reporting/actions-log                                         | authenticated | 403  |
-      | /admin/reporting/actions-log                                      | moderator     | 200  |
+      | /admin/reporting/actions-log                              | authenticated | 403  |
+      | /admin/reporting/actions-log                              | moderator     | 200  |
       | /admin/reporting/distribution-downloads                   | authenticated | 403  |
       | /admin/reporting/distribution-downloads                   | moderator     | 200  |
       | /admin/reporting/distribution-downloads/csv               | authenticated | 403  |
-      | /admin/reporting/distribution-downloads /csv              | moderator     | 200  |
+      | /admin/reporting/distribution-downloads/csv               | moderator     | 200  |
       | /admin/reporting/export-user-list                         | authenticated | 403  |
       | /admin/reporting/export-user-list                         | moderator     | 200  |
       | /admin/reporting/group-administrators/export              | authenticated | 403  |
