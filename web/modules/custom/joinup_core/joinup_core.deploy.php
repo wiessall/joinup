@@ -68,3 +68,44 @@ function joinup_core_deploy_200101(): void {
     ]),
   ])->save();
 }
+
+/**
+ * Clean up db.
+ */
+function joinup_core_deploy_200102(): void {
+  $deletedStorage = \Drupal::service('entity_field.deleted_fields_repository');
+
+  $fieldStorages = [
+    'meta_entity.field_ss_related_solutions',
+    'message.field_group_content',
+  ];
+  /** @var \Drupal\field\Entity\FieldStorageConfig $fieldStorageDefinition */
+  foreach ($deletedStorage->getFieldStorageDefinitions() as $fieldStorageDefinition) {
+    if (in_array($fieldStorageDefinition->id(), $fieldStorages, TRUE)) {
+      $deletedStorage->removeFieldStorageDefinition($fieldStorageDefinition);
+    }
+  }
+
+  $fieldConfigs = [
+    'meta_entity.solution_settings.field_ss_related_solutions',
+  ];
+  /** @var \Drupal\field\Entity\FieldConfig $fieldDefinition */
+  foreach ($deletedStorage->getFieldDefinitions() as $fieldConfig) {
+    if (in_array($fieldConfig->id(), $fieldConfigs, TRUE)) {
+      $deletedStorage->removeFieldDefinition($fieldConfig);
+    }
+  }
+
+  $database = \Drupal::database();
+  $tables = [
+    // meta_entity.field_ss_related_solutions
+    'field_deleted_data_e581954d71',
+    // message.field_group_content
+    'field_deleted_data_aa42a47f4e',
+  ];
+  foreach ($tables as $table) {
+    if ($database->schema()->tableExists($table)) {
+      $database->schema()->dropTable($table);
+    }
+  }
+}
