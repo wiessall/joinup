@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.view_mode_tile_horizontal
     - node.type.document
   module:
     - node
@@ -123,7 +124,18 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'There''s are no published assessment reports yet. You can add one by filling this <a href="/assessments/questionnaire">questionnaire</a>'
+          tokenize: false
       sorts:
         created:
           id: created
@@ -207,7 +219,10 @@ display:
       style:
         type: default
       row:
-        type: fields
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: view_mode_tile_horizontal
       query:
         type: views_query
         options:
@@ -217,7 +232,20 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
-      header: {  }
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: '<a href="/assessments/questionnaire" class="btn btn-primary">New assessment</a>'
+            format: full_html
+          tokenize: false
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -239,7 +267,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: assessments/reports
+      path: assessments
     cache_metadata:
       max-age: -1
       contexts:

@@ -106,6 +106,7 @@ settings:
     - webform_submission_make_lock_action
     - webform_submission_make_unlock_action
     - webform_submission_delete_action
+    - webform_submission_print_download_action
   dialog: false
   dialog_options:
     narrow:
@@ -348,3 +349,24 @@ requirements:
 third_party_settings:
   captcha:
     replace_administration_mode: true
+  webform_entity_print:
+    template:
+      header: '<h1>[webform_submission:label]</h1>'
+      footer: ''
+      css: |-
+        /* Remove page margins and padding and rely on the PDF generator's default margins. */
+        body {
+          margin: 0;
+        }
+
+        .page {
+          padding: 0;
+        }
+    export_types:
+      pdf:
+        enabled: true
+        link_text: 'Download PDF'
+        link_attributes:
+          class:
+            - button
+    debug: false
