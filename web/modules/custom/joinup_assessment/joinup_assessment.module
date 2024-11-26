@@ -62,6 +62,27 @@ function joinup_assessment_options_list_alter(array &$options, array $context): 
 }
 
 /**
+ * Implements hook_preprocess_views_view().
+ */
+function joinup_assessment_preprocess_views_view(array &$variables): void {
+  $view = $variables['view'];
+  if ($view->id(
+    ) === 'assessment_reports' && $view->current_display === 'list') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      $button_link = [
+        '#type' => 'link',
+        '#title' => 'My assessments',
+        '#url' => Url::fromUserInput('/assessments/questionnaire/submissions'),
+        '#attributes' => [
+          'class' => ['m-3'],
+        ],
+      ];
+      $variables['header']['my_assessments'] = $button_link;
+    }
+  }
+}
+
+/**
  * Implements hook_webform_element_ELEMENT_TYPE_alter().
  */
 function joinup_assessment_webform_element_webform_actions_alter(array &$element, FormStateInterface $form_state, array $context): void {
