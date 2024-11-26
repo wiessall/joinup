@@ -127,6 +127,7 @@ module:
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
+  joinup_test: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
