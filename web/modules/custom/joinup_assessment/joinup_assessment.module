@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
@@ -65,7 +66,8 @@ function joinup_assessment_options_list_alter(array &$options, array $context): 
  */
 function joinup_assessment_preprocess_views_view(array &$variables): void {
   $view = $variables['view'];
-  if ($view->id() === 'assessment_reports' && $view->current_display === 'list') {
+  if ($view->id(
+    ) === 'assessment_reports' && $view->current_display === 'list') {
     if (\Drupal::currentUser()->isAuthenticated()) {
       $button_link = [
         '#type' => 'link',
@@ -78,4 +80,29 @@ function joinup_assessment_preprocess_views_view(array &$variables): void {
       $variables['header']['my_assessments'] = $button_link;
     }
   }
+}
+
+/**
+ * Implements hook_webform_element_ELEMENT_TYPE_alter().
+ */
+function joinup_assessment_webform_element_webform_actions_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  if ($element['#webform'] !== 'assessment') {
+    return;
+  }
+
+  $webform_id = $element['#webform_submission'];
+  if (empty($webform_id)) {
+    return;
+  }
+
+  $element['print'] = [
+    '#type' => 'link',
+    '#title' => t('Download PDF'),
+    '#url' => Url::fromRoute('entity_print.view', [
+      'export_type' => 'pdf',
+      'entity_type' => 'webform_submission',
+      'entity_id' => $webform_id,
+    ]),
+    '#weight' => 100,
+  ];
 }

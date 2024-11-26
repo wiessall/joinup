@@ -37,10 +37,12 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  masquerade:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 50
+    region: content
 hidden:
-  entity_print_view_epub: true
-  entity_print_view_pdf: true
-  entity_print_view_word_docx: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true

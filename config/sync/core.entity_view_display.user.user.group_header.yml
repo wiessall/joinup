@@ -109,15 +109,17 @@ content:
         template_suggestion: ''
     weight: 4
     region: content
+  masquerade:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 50
+    region: content
   member_for:
     settings: {  }
     third_party_settings: {  }
     weight: 7
     region: content
 hidden:
-  entity_print_view_epub: true
-  entity_print_view_pdf: true
-  entity_print_view_word_docx: true
   field_user_content: true
   field_user_frequency: true
   langcode: true

@@ -1,0 +1,364 @@
+diff --git a/config/schema/entity_print.schema.yml b/config/schema/entity_print.schema.yml
+index 2340decdecdf1f4c10138b7b8fe5c7aaf39d13bc..24f0dcc120d04c9df4212125fbb98b5096db8a79 100644
+--- a/config/schema/entity_print.schema.yml
++++ b/config/schema/entity_print.schema.yml
+@@ -16,6 +16,12 @@ entity_print.settings:
+     base_url:
+       type: string
+       label: 'Base URL to drupal page'
++    entity_types:
++      type: sequence
++      label: 'Restrict Entity Print feature to the selected types only'
++      nullable: true
++      sequence:
++        type: string
+ 
+ entity_print_engine_pdf:
+   type: mapping
+diff --git a/entity_print.module b/entity_print.module
+index 39c2b42baeca37ed3f58235aaf63f248648afaa6..cf62cd83765c21b512bd7dbc4fd882448bb168d9 100644
+--- a/entity_print.module
++++ b/entity_print.module
+@@ -6,8 +6,10 @@
+  */
+ 
+ use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\Core\Entity\ContentEntityTypeInterface;
+ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Url;
+ use Drupal\entity_print\Renderer\ContentEntityRenderer;
+@@ -47,11 +49,18 @@ function entity_print_entity_type_alter(array &$entity_types) {
+ function entity_print_entity_extra_field_info() {
+   $export_types = \Drupal::service('plugin.manager.entity_print.export_type')->getDefinitions();
+   $bundle_info = \Drupal::service('entity_type.bundle.info')->getAllBundleInfo();
+-
++  $content_entity_types = array_filter(
++    \Drupal::entityTypeManager()->getDefinitions(),
++    fn (EntityTypeInterface $entityType): bool => $entityType instanceof ContentEntityTypeInterface,
++  );
++  $enabled_types_settings = \Drupal::config('entity_print.settings')->get('entity_types', []);
++  $enabled_types = $enabled_types_settings
++    ? array_intersect($enabled_types_settings, array_keys($content_entity_types))
++    : array_keys($content_entity_types);
+   $extra_fields = [];
+ 
+-  foreach ($bundle_info as $entity_type_id => $bundles) {
+-    foreach ($bundles as $bundle_id => $bundle) {
++  foreach ($enabled_types as $entity_type_id) {
++    foreach ($bundle_info[$entity_type_id] as $bundle_id => $bundle) {
+       foreach ($export_types as $export_type => $definition) {
+         $extra_fields[$entity_type_id][$bundle_id]['display']['entity_print_view_' . $export_type] = [
+           'label' => t('View @label', ['@label' => $definition['label']]),
+@@ -100,8 +109,21 @@ function entity_print_form_entity_view_display_edit_form_alter(&$form, FormState
+   /** @var \Drupal\Core\Entity\Entity\EntityViewDisplay $display */
+   $display = $form_state->getFormObject()->getEntity();
+   $export_types = \Drupal::service('plugin.manager.entity_print.export_type')->getDefinitions();
++  $entity_print_keys = array_map(
++    fn (string $export_type): string => "entity_print_view_$export_type",
++    array_keys($export_types)
++  );
++
++  // Do not alter the form if the keys are not present.
++  if (!array_intersect($entity_print_keys, array_keys($form['fields']))) {
++    return;
++  }
+ 
+   foreach ($export_types as $export_type => $definition) {
++    $entity_print_key = "entity_print_view_$export_type";
++    if (!array_key_exists($entity_print_key, $form['fields'])) {
++      continue;
++    }
+     $form['fields']['entity_print_view_' . $export_type]['empty_cell'] = [
+       '#type' => 'textfield',
+       '#title' => '',
+diff --git a/entity_print.services.yml b/entity_print.services.yml
+index 151640a0cd9dd7d9bb564cc828fee4d968653867..1e66b846736afcbd477161e62b910758997739a9 100644
+--- a/entity_print.services.yml
++++ b/entity_print.services.yml
+@@ -38,3 +38,10 @@ services:
+     arguments: ['@current_route_match', '@entity_type.manager', '@messenger']
+     tags:
+       - { name: event_subscriber }
++
++  entity_print.config_subscriber:
++    class: Drupal\entity_print\EventSubscriber\ConfigSubscriber
++    arguments:
++      - '@entity_field.manager'
++    tags:
++      - { name: event_subscriber }
+diff --git a/src/Controller/EntityPrintController.php b/src/Controller/EntityPrintController.php
+index 9bfdeb3f1296db6f21e09280cd4bf241f076b95a..611b6531310d69e5f68d1cee29ce691d03cee5a4 100644
+--- a/src/Controller/EntityPrintController.php
++++ b/src/Controller/EntityPrintController.php
+@@ -134,6 +134,12 @@ class EntityPrintController extends ControllerBase {
+       return AccessResult::forbidden();
+     }
+ 
++    $entity_type_restriction = $this->config('entity_print.settings')->get('entity_types') ?: [];
++    // There is an entity type restriction and the entity type is not allowed.
++    if ($entity_type_restriction && !in_array($entity_type, $entity_type_restriction, TRUE)) {
++      return AccessResult::forbidden();
++    }
++
+     $account = $this->currentUser();
+ 
+     // Invalid storage type.
+diff --git a/src/EventSubscriber/ConfigSubscriber.php b/src/EventSubscriber/ConfigSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..f3379b74a99944e21661fcda3545833fd7b6d93c
+--- /dev/null
++++ b/src/EventSubscriber/ConfigSubscriber.php
+@@ -0,0 +1,50 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\entity_print\EventSubscriber;
++
++use Drupal\Core\Config\ConfigCrudEvent;
++use Drupal\Core\Config\ConfigEvents;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++/**
++ * Performs the required operations when Entity Print config is changed.
++ */
++class ConfigSubscriber implements EventSubscriberInterface {
++
++  public function __construct(
++    protected EntityFieldManagerInterface $entityFieldManager,
++  ) {}
++
++  /**
++   * Resets caches when entity_types config is changed.
++   *
++   * @param \Drupal\Core\Config\ConfigCrudEvent $event
++   *   The configuration event.
++   */
++  public function onConfigSave(ConfigCrudEvent $event): void {
++    if ($event->getConfig()->getName() !== 'entity_print.settings') {
++      return;
++    }
++
++    if (!$event->isChanged('entity_types')) {
++      return;
++    }
++
++    $this->entityFieldManager->clearCachedFieldDefinitions();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents() {
++    return [
++      ConfigEvents::SAVE => [
++        ['onConfigSave'],
++      ],
++    ];
++  }
++
++}
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+index e96410fb3acfd6aa53ef23bf2525bc48cf3ed3ea..2bb85816c206c83b9c14ef7003be32946f8366f3 100644
+--- a/src/Form/SettingsForm.php
++++ b/src/Form/SettingsForm.php
+@@ -3,7 +3,9 @@
+ namespace Drupal\entity_print\Form;
+ 
+ use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Entity\ContentEntityTypeInterface;
+ use Drupal\Core\Entity\EntityStorageInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Form\ConfigFormBase;
+ use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
+ use Drupal\entity_print\Plugin\ExportTypeManagerInterface;
+@@ -37,6 +39,13 @@ class SettingsForm extends ConfigFormBase {
+    */
+   protected $exportTypeManager;
+ 
++  /**
++   * The entity type manager.
++   *
++   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
++   */
++  protected $entityTypeManager;
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -45,6 +54,7 @@ class SettingsForm extends ConfigFormBase {
+     $instance->pluginManager = $container->get('plugin.manager.entity_print.print_engine');
+     $instance->exportTypeManager = $container->get('plugin.manager.entity_print.export_type');
+     $instance->storage = $container->get('entity_type.manager')->getStorage('print_engine');
++    $instance->entityTypeManager = $container->get('entity_type.manager');
+     return $instance;
+   }
+ 
+@@ -120,6 +130,24 @@ class SettingsForm extends ConfigFormBase {
+       '#default_value' => $config->get('base_url'),
+     ];
+ 
++    $content_entity_types = array_reduce(
++      $this->entityTypeManager->getDefinitions(),
++      function (array $carry, EntityTypeInterface $entity_type): array {
++        if ($entity_type instanceof ContentEntityTypeInterface) {
++          $carry[$entity_type->id()] = $entity_type->getLabel();
++        }
++        return $carry;
++      },
++      [],
++    );
++    $form['entity_print']['entity_types'] = [
++      '#type' => 'checkboxes',
++      '#title' => $this->t('Limit Entity Print feature to the following entity types'),
++      '#description' => $this->t('No restriction is applied if no entity types is selected.'),
++      '#options' => $content_entity_types,
++      '#default_value' => $config->get('entity_types') ?: [],
++    ];
++
+     foreach ($this->exportTypeManager->getDefinitions() as $export_type => $definition) {
+       // If we have a print_engine in the form_state then use that otherwise,
+       // fall back to what was saved as this is a fresh form. Check explicitly
+@@ -222,6 +250,7 @@ class SettingsForm extends ConfigFormBase {
+       ->set('default_css', $values['default_css'])
+       ->set('force_download', $values['force_download'])
+       ->set('base_url', $values['base_url'])
++      ->set('entity_types', array_values(array_filter($values['entity_types'])))
+       ->save();
+ 
+     $this->messenger()->addStatus($this->t('Configuration saved.'));
+diff --git a/tests/src/Functional/EntityPrintAdminTest.php b/tests/src/Functional/EntityPrintAdminTest.php
+index 167e7fea93558a8b94d5966742cfb88dcd3f42ed..5c24b34f1ef10bbb13bcf174dc94e639cfbba2db 100644
+--- a/tests/src/Functional/EntityPrintAdminTest.php
++++ b/tests/src/Functional/EntityPrintAdminTest.php
+@@ -113,9 +113,26 @@ class EntityPrintAdminTest extends BrowserTestBase {
+     $display = EntityViewDisplay::load('node.page.default');
+     $this->assertSame($full_view_mode, $display->getThirdPartySetting('entity_print', 'pdf_label'));
+ 
++    // Restrict Entity Print to user accounts.
++    $this->config('entity_print.settings')
++      ->set('entity_types', ['user'])
++      ->save();
++
++    // Node print should return 403.
++    $this->drupalGet('/print/pdf/node/1/debug');
++    $this->assertSession()->statusCodeEquals(403);
++
+     // Ensure the View PDF links appear on a entity type without a bundle.
+     $this->drupalGet('/admin/config/people/accounts/display');
+     $assert->pageTextContains('View PDF');
++
++    // If entity print is restricted to user accounts, then extra fields
++    // shouldn't appear on the node view display edit form.
++    $this->drupalGet('admin/structure/types/manage/page/display');
++    $this->assertSession()->statusCodeEquals(200);
++    $this->assertSession()->pageTextNotContains('View PDF');
++    $this->assertSession()->pageTextNotContains('View EPub');
++    $this->assertSession()->pageTextNotContains('View Word Document');
+   }
+ 
+ }
+diff --git a/tests/src/Kernel/ExtraFieldsTest.php b/tests/src/Kernel/ExtraFieldsTest.php
+index 6af45750db81e2992d76bb8a5430571e476e4c1a..b3323ab52318e980d4fa4a51e487c041f6288ba9 100644
+--- a/tests/src/Kernel/ExtraFieldsTest.php
++++ b/tests/src/Kernel/ExtraFieldsTest.php
+@@ -2,13 +2,17 @@
+ 
+ namespace Drupal\Tests\entity_print\Kernel;
+ 
++use Drupal\Core\Entity\ContentEntityTypeInterface;
+ use Drupal\Core\Entity\Entity\EntityViewDisplay;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Session\AnonymousUserSession;
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\node\Controller\NodeViewController;
+ use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
+ use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
++use Drupal\node\Controller\NodeViewController;
+ 
+ /**
+  * Tests the hook_extra_fields() implementation.
+@@ -110,4 +114,76 @@ class ExtraFieldsTest extends KernelTestBase {
+     $this->assertTrue(stripos($text, 'View PDF') > stripos($text, 'body text'), 'View PDF link appears last');
+   }
+ 
++  /**
++   * Verifies entity type restriction settings.
++   *
++   * @param string[]|null $entity_type_settings
++   *   The entity_types restriction settings value to test with.
++   * @param array $expected_types
++   *   The IDs of the entity types which expected to have Entity Print feature.
++   *
++   * @dataProvider providerTestEntityTypeRestriction
++   */
++  public function testEntityTypeRestriction(?array $entity_type_settings, array $expected_types): void {
++    $this->config('entity_print.settings')
++      ->set('entity_types', $entity_type_settings)
++      ->save();
++
++    $entityFieldManager = $this->container->get('entity_field.manager');
++    $this->assertInstanceOf(EntityFieldManagerInterface::class, $entityFieldManager);
++    $contentEntityTypes = array_filter(
++      $this->container->get('entity_type.manager')->getDefinitions(),
++      fn (EntityTypeInterface $entityType): bool => $entityType instanceof ContentEntityTypeInterface,
++    );
++    // Only check the first bundle.
++    $bundleInfo = $this->container->get('entity_type.bundle.info');
++    $this->assertInstanceOf(EntityTypeBundleInfoInterface::class, $bundleInfo);
++    $actualTypesHavingPrintFields = [];
++    foreach (array_keys($contentEntityTypes) as $entityTypeId) {
++      $bundle = key($bundleInfo->getBundleInfo($entityTypeId));
++      $extraFields = $entityFieldManager->getExtraFields($entityTypeId, $bundle)['display'];
++      $typeHasPrintFields = empty(
++        array_diff(
++          ['entity_print_view_pdf'],
++          array_keys($extraFields)
++        )
++      );
++      if ($typeHasPrintFields) {
++        $actualTypesHavingPrintFields[] = $entityTypeId;
++      }
++    }
++
++    $this->assertEquals(
++      $expected_types,
++      $actualTypesHavingPrintFields,
++    );
++  }
++
++  /**
++   * Test data provider for ::testEntityTypeRestriction.
++   *
++   * @return array[]
++   *   The test cases.
++   */
++  public static function providerTestEntityTypeRestriction(): array {
++    return [
++      'No restriction (null)' => [
++        'entity_type_settings' => NULL,
++        'expected_types' => ['user', 'node'],
++      ],
++      'No restriction (empty array)' => [
++        'entity_type_settings' => [],
++        'expected_types' => ['user', 'node'],
++      ],
++      'Restricted to node type' => [
++        'entity_type_settings' => ['node'],
++        'expected_types' => ['node'],
++      ],
++      'Node and user' => [
++        'entity_type_settings' => ['node', 'user'],
++        'expected_types' => ['user', 'node'],
++      ],
++    ];
++  }
++
+ }
