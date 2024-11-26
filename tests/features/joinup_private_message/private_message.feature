@@ -34,7 +34,7 @@ Feature: Private messages
     And I am on the homepage
     Then I should see 1 unread private message
     When I open the account menu
-    And I click "My messages"
+    And I click "My messages (1)"
     Then I should see the heading "Private Messages"
     And I should see the link "New message"
     And I should not see the text "You do not have any messages"
@@ -88,7 +88,7 @@ Feature: Private messages
     And I am on the homepage
     And I should see 1 unread private message
     Then I open the account menu
-    And I click "My messages"
+    And I click "My messages (1)"
     Then a message containing the text "Another private message from Bob to Alice." should be present
     And I should not see the link "Delete thread"
     And I should not see "Delete message"
