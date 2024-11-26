@@ -3,7 +3,10 @@ Feature: Add comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given users:
+    Given collection content:
+      | title             | state     | closed |
+      | Gossip collection | published | no     |
+    And users:
       | Username        | E-mail                 | Roles | First name | Family name |
       | Miss tell tales | tell.tales@example.com |       | Miss       | Tales       |
 
@@ -14,8 +17,8 @@ Feature: Add comments
   Scenario Outline: Make an authenticated comment, skips moderation.
 
     Given solution content:
-      | title                | collection | state     |
-      | Gossip girl solution | Joinup     | published |
+      | title                | collection        | state     |
+      | Gossip girl solution | Gossip collection | published |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -23,9 +26,9 @@ Feature: Add comments
       | Korma Salya       | korma.salya@example.com       |           | Korma      | Salya       |
       | Salma Coster      | salma.coster@example.com      |           | Salma      | Coster      |
     And the following collection user memberships:
-      | collection | user          | roles                      |
-      | Joinup     | Layonel Sarok | administrator, facilitator |
-      | Joinup     | Korma Salya   | facilitator                |
+      | collection        | user          | roles                      |
+      | Gossip collection | Layonel Sarok | administrator, facilitator |
+      | Gossip collection | Korma Salya   | facilitator                |
     And the following solution user memberships:
       | solution             | user          | roles                      |
       | Gossip girl solution | Layonel Sarok | administrator, facilitator |
@@ -84,14 +87,14 @@ Feature: Add comments
       | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
-      | recipient | Salma Coster                                                 |
+      | recipient | Salma Coster                            |
       | subject   | Interoperable Europe Portal: A new comment has been created. |
-      | body      | Salma Coster posted a comment in                             |
+      | body      | Salma Coster posted a comment in        |
 
     Examples:
       | content type | title           | state     | parent     | parent title         |
-      | news         | Scandalous news | published | collection | Joinup               |
-      | discussion   | Is gossip bad?  | published | collection | Joinup               |
+      | news         | Scandalous news | published | collection | Gossip collection    |
+      | discussion   | Is gossip bad?  | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
       | news         | Scandalous news | published | solution   | Gossip girl solution |
 
@@ -102,8 +105,8 @@ Feature: Add comments
   Scenario Outline: Make an authenticated comment at a community content using layout paragraphs, skips moderation.
 
     Given solution content:
-      | title                | collection | state     |
-      | Gossip girl solution | Joinup     | published |
+      | title                | collection        | state     |
+      | Gossip girl solution | Gossip collection | published |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -111,9 +114,9 @@ Feature: Add comments
       | Korma Salya       | korma.salya@example.com       |           | Korma      | Salya       |
       | Salma Coster      | salma.coster@example.com      |           | Salma      | Coster      |
     And the following collection user memberships:
-      | collection | user          | roles                      |
-      | Joinup     | Layonel Sarok | administrator, facilitator |
-      | Joinup     | Korma Salya   | facilitator                |
+      | collection        | user          | roles                      |
+      | Gossip collection | Layonel Sarok | administrator, facilitator |
+      | Gossip collection | Korma Salya   | facilitator                |
     And the following solution user memberships:
       | solution             | user          | roles                      |
       | Gossip girl solution | Layonel Sarok | administrator, facilitator |
@@ -172,19 +175,19 @@ Feature: Add comments
       | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
-      | recipient | Salma Coster                                                 |
+      | recipient | Salma Coster                            |
       | subject   | Interoperable Europe Portal: A new comment has been created. |
-      | body      | Salma Coster posted a comment in                             |
+      | body      | Salma Coster posted a comment in        |
 
     Examples:
-      | content type | title     | state     | parent     | parent title |
-      | document     | Wikileaks | published | collection | Joinup       |
-      | event        | Wikileaks | published | collection | Joinup       |
+      | content type | title     | state     | parent     | parent title      |
+      | document     | Wikileaks | published | collection | Gossip collection |
+      | event        | Wikileaks | published | collection | Gossip collection |
 
   Scenario Outline: Posting comments.
     Given <content type> content:
-      | title   | body                                                | collection | state   |
-      | <title> | How could this ever happen? Moral panic on its way! | Joinup     | <state> |
+      | title   | body                                                | collection        | state   |
+      | <title> | How could this ever happen? Moral panic on its way! | Gossip collection | <state> |
     Given I am logged in as "Miss tell tales"
     When I go to the content page of the type "<content type>" with the title "<title>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
@@ -263,13 +266,13 @@ Feature: Add comments
     And I should see the button "Post comment"
 
     Examples:
-      | collection     | content type | title                     | state     |
-      | Shy collection | news         | Scandalous news           | published |
-      | Shy collection | discussion   | Is gossip bad?            | published |
-      | Shy collection | document     | Wikileaks                 | published |
-      | Joinup         | news         | Rihanna wears pope outfit | published |
-      | Joinup         | discussion   | Is gossip good?           | published |
-      | Joinup         | document     | Celebrity scandals 2019   | published |
+      | collection        | content type | title                     | state     |
+      | Shy collection    | news         | Scandalous news           | published |
+      | Shy collection    | discussion   | Is gossip bad?            | published |
+      | Shy collection    | document     | Wikileaks                 | published |
+      | Gossip collection | news         | Rihanna wears pope outfit | published |
+      | Gossip collection | discussion   | Is gossip good?           | published |
+      | Gossip collection | document     | Celebrity scandals 2019   | published |
 
   Scenario Outline: Anonymized comments
     Given collection content:
@@ -306,10 +309,10 @@ Feature: Add comments
     Then comment #2 should contain the markup "Anonymous user"
 
     Examples:
-      | collection      | content type | title                     | state     |
-      | Show collection | news         | Scandalous busy           | published |
-      | Show collection | discussion   | Is gossip bad or not?     | published |
-      | Show collection | document     | Wikilikes                 | published |
-      | Joinup          | news         | Bosinga wears pope outfit | published |
-      | Joinup          | discussion   | Is gossip good or not?    | published |
-      | Joinup          | document     | Celebrity scandals 2022   | published |
+      | collection        | content type | title                     | state     |
+      | Show collection   | news         | Scandalous busy           | published |
+      | Show collection   | discussion   | Is gossip bad or not?     | published |
+      | Show collection   | document     | Wikilikes                 | published |
+      | Gossip collection | news         | Bosinga wears pope outfit | published |
+      | Gossip collection | discussion   | Is gossip good or not?    | published |
+      | Gossip collection | document     | Celebrity scandals 2022   | published |
