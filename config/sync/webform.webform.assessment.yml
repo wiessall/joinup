@@ -1,7 +1,9 @@
 uuid: d11bb8a4-7fb0-4180-89bb-c9f22a49753a
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_assessment
 weight: 0
 open: null
 close: null
@@ -83,7 +85,7 @@ elements: |-
       '#title': 'Please select your Institution'
       '#options':
         'European Parliament': 'European Parliament'
-        'European Counci': 'European Council'
+        'European Council': 'European Council'
         'Council of the European Union': 'Council of the European Union'
         'European Commission': 'European Commission'
         'Court of Justice of the European Union': 'Court of Justice of the European Union'
@@ -761,4 +763,13 @@ handlers:
       message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/assessments">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
       message_type: status
       debug: false
+  copy_eu_into_organization:
+    id: joinup_assessment_copy_organisation
+    handler_id: copy_eu_into_organization
+    label: 'Copy EU into organization'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
 variants: {  }

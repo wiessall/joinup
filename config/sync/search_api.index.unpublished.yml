@@ -245,13 +245,12 @@ field_settings:
         - 'entity:node/field_site_featured'
   spatial_coverage:
     label: 'Geographical coverage'
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: spatial_coverage
     type: string
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/field_document_spatial_coverage'
-        - 'entity:node/field_news_spatial_coverage'
+    dependencies:
+      config:
+        - field.storage.node.spatial_coverage
   state:
     label: State
     property_path: aggregated_field
