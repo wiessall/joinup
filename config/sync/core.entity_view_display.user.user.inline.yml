@@ -57,6 +57,11 @@ content:
         template_suggestion: no_wrappers
     weight: 0
     region: content
+  masquerade:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 50
+    region: content
 hidden:
   field_social_media: true
   field_user_business_title: true
