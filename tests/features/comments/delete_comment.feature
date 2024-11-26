@@ -3,23 +3,20 @@ Feature: Delete comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given collection content:
-      | title                 | logo     | state     |
-      | Semantic web fanatics | logo.png | published |
-    And users:
+    Given users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
       | Vicky visitor        | vicky.visitor@example.com     | Vicky       | visitor     |
       | Do Re Mi Facilitator | doremifacilitator@example.com | Do Re Mi    | Facilitator |
     And news content:
-      | title                          | body                              | collection            | state     |
-      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics | published |
+      | title                          | body                              | collection | state     |
+      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Joinup     | published |
     And comments:
       | subject         | field_body       | author          | parent                         |
       | ADMS is awesome | Let's all use it | Tim Berners Lee | RDF Schemas for government use |
     And the following collection user memberships:
-      | collection            | user                 | roles       |
-      | Semantic web fanatics | Do Re Mi Facilitator | facilitator |
+      | collection | user                 | roles       |
+      | Joinup     | Do Re Mi Facilitator | facilitator |
 
   Scenario: Delete comments
     # As the creator of the comment I can delete the comment.
@@ -46,6 +43,6 @@ Feature: Delete comments
     Then I should see "Are you sure you want to delete the comment ADMS is awesome?"
     Then I press "Delete"
     Then the following email should have been sent:
-      | recipient | Tim Berners Lee                                                                                                                                                  |
-      | subject   | Interoperable Europe Portal: Your comment has been deleted.                                                                                                                            |
+      | recipient | Tim Berners Lee                                                                                                                                                   |
+      | subject   | Interoperable Europe Portal: Your comment has been deleted.                                                                                                       |
       | body      | Do Re Mi Facilitator deleted your comment in "RDF Schemas for government use". To avoid comment moderation in the future, please read our community guidelines at |
