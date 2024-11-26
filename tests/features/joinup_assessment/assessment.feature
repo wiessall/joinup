@@ -175,3 +175,38 @@ Feature: Assessments
     And I press "Next"
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+
+  Scenario Outline: Check organization field value.
+    Given I am logged in as an "authenticated user"
+    And I check "I agree to the Legal notice document"
+    And I press "Submit"
+
+    When I am at "/assessments/questionnaire"
+    Then I should see the heading "Online form for Assessments"
+
+    # 1st page.
+    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "<public_sector_body>" from "Please select the type of public sector body"
+    And I select "<institution_name>" from "<institution>"
+    And I select the radio button "No"
+    And I press "Next"
+
+    # 2nd page.
+    When I check "Defense"
+    And I press "Next"
+
+    # 3rd page.
+    When I select the radio button "No"
+    And I press "Next"
+
+    # 4th page.
+    When I press "Submit"
+    Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+
+    When I am at "/assessments/questionnaire/submissions"
+    Then I should see the text "<organisation>"
+
+    Examples:
+      | public_sector_body         | institution                    | institution_name                | organisation                   |
+      | European Union institution | Please select your Institution | European Parliament             | European Parliament            |
+      | European Union body        | Please select your Body        | European Investment Bank        | European Investment Bank       |
