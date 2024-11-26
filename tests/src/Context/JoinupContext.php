@@ -134,7 +134,7 @@ class JoinupContext extends RawDrupalContext {
         'logo' => 'field_document_logo',
         'published at' => 'published_at',
         'short title' => 'field_short_title',
-        'spatial coverage' => 'field_document_spatial_coverage',
+        'spatial coverage' => 'spatial_coverage',
         'state' => 'field_state',
       ],
       'event' => [
@@ -149,7 +149,7 @@ class JoinupContext extends RawDrupalContext {
         'published at' => 'published_at',
         'scope' => 'field_scope',
         'short title' => 'field_short_title',
-        'spatial coverage' => 'field_event_spatial_coverage',
+        'spatial coverage' => 'spatial_coverage',
         'start date' => 'field_event_date:value',
         'state' => 'field_state',
         'web url' => 'field_event_web_url',
@@ -169,7 +169,7 @@ class JoinupContext extends RawDrupalContext {
         'keywords' => 'field_keywords',
         'logo' => 'field_news_logo',
         'published at' => 'published_at',
-        'spatial coverage' => 'field_news_spatial_coverage',
+        'spatial coverage' => 'spatial_coverage',
         'state' => 'field_state',
       ],
       'owner' => [

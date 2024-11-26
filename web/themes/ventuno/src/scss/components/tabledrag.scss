@@ -13,23 +13,6 @@
   }
 }
 
-// @todo Remove this hack as part of ISAICP-3021.
-// @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3021
-.joinup-nodrag {
-  a.tabledrag-handle,
-  .field-multiple-drag {
-    display: none;
-  }
-  .table {
-    td.field-multiple-drag {
-      width: 0;
-      padding: 0;
-    }
-    td.delta-order {
-      min-width: 5rem;
-    }
-  }
-}
 .draggable {
   a.tabledrag-handle .handle {
     width: 22px;

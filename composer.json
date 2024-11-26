@@ -27,8 +27,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core": "^10.3",
         "drupal/core-composer-scaffold": "~10.3.0",
+        "drupal/core-recommended": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -194,12 +194,6 @@
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
             "phpro/grumphp-shim": true
-        },
-        "audit": {
-            "abandoned": "report",
-            "ignore": {
-                "CVE-2024-45440": "Seems to be a disputed report @see https://www.drupal.org/i/3471501#comment-15756190"
-            }
         }
     },
     "autoload": {
@@ -335,7 +329,8 @@
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
-                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff"
+                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
+                "Performance Degraded after update to twig 3.14.2 @see https://www.drupal.org/i/3487031": "resources/patch/php/drupal/core/3487031.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -457,6 +452,10 @@
             },
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
+            },
+            "drupal/tmgmt_ec_etranslation": {
+                "text-to-translate has a length limit, @see https://www.drupal.org/i/3483072": "resources/patch/php/drupal/tmgmt_ec_etranslation/3483072.patch",
+                "Wrong logic for base64 text detection": "resources/patch/php/drupal/tmgmt_ec_etranslation/3484303.patch"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
