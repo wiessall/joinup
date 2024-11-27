@@ -8,29 +8,24 @@ Feature: Solution notifications
 
   Scenario: Notifications are sent every time a related transition is applied to a solution.
     Given collection content:
-      | title                          | logo     | state     |
-      | Collection of random solutions | logo.png | published |
-    And owner content:
-      | name               | owner type |
-      | Karanikolas Kitsos | Company    |
-    And contact_information content:
-      | name             | email                        |
-      | Information Desk | information.desk@example.com |
+      | title                          | logo     |
+      | Collection of random solutions | logo.png |
+    And I break
     And users:
       | Username     | Roles     | First name | Family name | E-mail                   |
-      | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |
+      | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com    |
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
     Given solution content:
-      | title                                                 | author       | abstract       | description | logo     | owner              | contact information | state        | topic       | solution type | collection                     |
-      | Solution notification to propose changes              | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to blacklist                    | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to publish from blacklisted     | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | blacklisted  | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to request changes              | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to propose from request changes | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | needs update | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by moderator team     | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by owner              | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | title                                                 | author       | abstract       | description | logo     | state        | solution type | collection                     |
+      | Solution notification to propose changes              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
+      | Solution notification to blacklist                    | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
+      | Solution notification to publish from blacklisted     | Ramiro Myers | Short abstract | Sample text | logo.png | blacklisted  | Business      | Collection of random solutions |
+      | Solution notification to request changes              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
+      | Solution notification to propose from request changes | Ramiro Myers | Short abstract | Sample text | logo.png | needs update | Business      | Collection of random solutions |
+      | Solution notification to delete by moderator team     | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
+      | Solution notification to delete by owner              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
 
     When I am logged in as "Pat Harper"
 
@@ -52,7 +47,7 @@ Feature: Solution notifications
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
-      | subject   | Interoperable Europe Portal: Your interoperability solution is blacklisted                                                                                                        |
+      | subject   | Interoperable Europe Portal: Your interoperability solution is blacklisted                                                                                   |
       | body      | the moderator has blacklisted your interoperability solution - Solution notification to blacklist, you can contact the moderation team to resolve the issue. |
 
     # Template 14. The moderation team restores a solution from blacklisted.
@@ -61,7 +56,7 @@ Feature: Solution notifications
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
-      | subject   | Interoperable Europe Portal: Your interoperability solution is published again                                                                                 |
+      | subject   | Interoperable Europe Portal: Your interoperability solution is published again                                                            |
       | body      | the moderator has published back your interoperability solution - Solution notification to publish from blacklisted that was blacklisted. |
 
     # Template 15. The moderation team requests changes.
@@ -74,7 +69,7 @@ Feature: Solution notifications
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                              |
-      | subject   | Interoperable Europe Portal: You are requested to update your solution                                                                                                                         |
+      | subject   | Interoperable Europe Portal: You are requested to update your solution                                                                                                    |
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | bcc       | pat.harper@example.com,jack.harper@example.com                                                                                                                            |
     And the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: You are requested to update your solution" contains the following lines of text:
@@ -87,7 +82,7 @@ Feature: Solution notifications
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
-      | recipient | Ramiro Myers                                                                                                        |
+      | recipient | Ramiro Myers                                                                                                                             |
       | subject   | Interoperable Europe Portal: Your solution has been deleted by the moderation team                                                       |
       | body      | The Interoperable Europe Portal moderation team deleted the interoperability solution Solution notification to delete by moderator team. |
 
@@ -99,7 +94,7 @@ Feature: Solution notifications
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
-      | If you think this action is not clear or not due, please contact Portal Support at                                                       |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                                            |
 
     # The owner deletes their own solution. No email should be sent to the owner
     # since we do not send notifications to the actor.
