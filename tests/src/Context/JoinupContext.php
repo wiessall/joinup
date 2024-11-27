@@ -23,6 +23,7 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -59,6 +60,7 @@ class JoinupContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use OgTrait;
+  use NodeTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
@@ -939,6 +941,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->field_state)) {
       $node->field_state = self::translateWorkflowStateAlias($node->field_state);
     }
+    else {
+      $node->field_state = 'published';
+    }
 
     if (property_exists($node, 'visit_count')) {
       $node->visit_count = MetaEntity::create([
@@ -1002,6 +1007,20 @@ class JoinupContext extends RawDrupalContext {
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
+    }
+    if (!empty($field_definitions['contact']) && empty($node->contact)) {
+      // For some tests, the node's contact has no relevance. Such tests are
+      // allowed to omit an explicit contact. We're assigning
+      // a default contact from joinup_test.install,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->contact = $this->getDefaultContact()->label();
+    }
+    if (!empty($field_definitions['owner']) && empty($node->owner)) {
+      // For some tests, the node's owner has no relevance. Such tests are
+      // allowed to omit an explicit owner. We're assigning
+      // a default owner from joinup_test.install,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->owner = $this->getDefaultOwner()->label();
     }
 
     // Handle file URL fields.
