@@ -5,13 +5,13 @@ Feature: Related solution
 
   Background:
     Given solution content:
-      | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic | state     | solution type |
-      | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Tools | published |               |
-      | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Tools | published | Citizen       |
-      | PHP        |                   | Make a site                      | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Tools | published | Citizen       |
-      | Golang     |                   | Concurrency for the masses       | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Tools | proposed  | Citizen       |
-      | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Tools | published |               |
-      | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Tools | published | Citizen       |
+      | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | solution type |
+      | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Citizen       |
+      | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Citizen       |
+      | PHP        |                   | Make a site                      | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Citizen       |
+      | Golang     |                   | Concurrency for the masses       | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Citizen       |
+      | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Citizen       |
+      | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Citizen       |
 
   # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
