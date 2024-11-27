@@ -29,3 +29,42 @@ function joinup_core_deploy_200100(): void {
     ");
   }
 }
+
+/**
+ * Case diff emails.
+ */
+function joinup_core_deploy_200101(): void {
+  // Query taken from https://www.drupal.org/node/3486109.
+  $query = <<<QUERY
+    SELECT ufd.uid, ufd.name, ufd.mail, ufd.status
+    FROM users_field_data ufd
+    JOIN (
+      SELECT LOWER(mail) AS lower_mail
+      FROM users_field_data
+      GROUP BY LOWER(mail)
+      HAVING COUNT(uid) > 1
+    ) duplicates ON LOWER(ufd.mail) = duplicates.lower_mail
+    ORDER BY LOWER(ufd.mail), ufd.uid;
+    QUERY;
+
+  $records = \Drupal::database()->query($query)->fetchAll();
+  $content = ['UserID, Username, Email, Status'];
+  foreach ($records as $record) {
+    $content[] = sprintf('%s, "%s", %s, %s', $record->uid, $record->name, $record->mail, $record->status);
+  }
+  $uri = 'private://duplicates.csv';
+  file_put_contents($uri, implode("\n", $content));
+
+  $entityTypeManager = \Drupal::entityTypeManager();
+
+  // Store data in the private file-system wrapped into a message.
+  $entityTypeManager->getStorage('message')->create([
+    'template' => 'contact_form_submission',
+    'field_contact_category' => 'usage',
+    'field_contact_subject' => 'Emails varying only by case',
+    'field_contact_attachment' => $entityTypeManager->getStorage('file')->create([
+      'uri' => $uri,
+      'status' => TRUE,
+    ]),
+  ])->save();
+}
