@@ -52,9 +52,8 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    */
   protected function exportEntityJsonLd(RdfSyncEntityInterface $entity): string {
     $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, $options = $this->getOptions());
-    $decodedSerialized = json_decode($serialized, TRUE);
 
-    if (json_last_error() !== JSON_ERROR_NONE) {
+    if (!is_array($decodedSerialized = json_decode($serialized, TRUE))) {
       return '';
     }
 
