@@ -29,8 +29,8 @@ Feature: "Add solution" visibility options.
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
-      | title                    | logo     | state     |
-      | Collection solution test | logo.png | published |
+      | title                    |
+      | Collection solution test |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -178,8 +178,8 @@ Feature: "Add solution" visibility options.
     # when an invalid state button was pressed.
     # @see issue ISAICP-3209
     Given collection content:
-      | title            | state     |
-      | Language parsers | published |
+      | title            |
+      | Language parsers |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -217,8 +217,8 @@ Feature: "Add solution" visibility options.
       | Ocean studies      |
       | Glacier monitoring |
     And solution content:
-      | title                  | abstract              | description                                       | collection    | state     |
-      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
+      | title                  | abstract              | description                                       | collection    |
+      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies |
     And owner content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
@@ -275,9 +275,12 @@ Feature: "Add solution" visibility options.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
+    Given collection content:
+      | title         |
+      | Ocean studies |
     Given solution content:
-      | title             | abstract              | description            | state     | solution type          |
-      | Cleaning solution | Cleans anything dirty | Use on metal surfaces. | published | Non-binding Instrument |
+      | title             | collection    |
+      | Cleaning solution | Ocean studies |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

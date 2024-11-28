@@ -8,24 +8,23 @@ Feature: Solution notifications
 
   Scenario: Notifications are sent every time a related transition is applied to a solution.
     Given collection content:
-      | title                          | logo     |
-      | Collection of random solutions | logo.png |
-    And I break
+      | title                          |
+      | Collection of random solutions |
     And users:
       | Username     | Roles     | First name | Family name | E-mail                   |
-      | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com    |
+      | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
     Given solution content:
-      | title                                                 | author       | abstract       | description | logo     | state        | solution type | collection                     |
-      | Solution notification to propose changes              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
-      | Solution notification to blacklist                    | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
-      | Solution notification to publish from blacklisted     | Ramiro Myers | Short abstract | Sample text | logo.png | blacklisted  | Business      | Collection of random solutions |
-      | Solution notification to request changes              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
-      | Solution notification to propose from request changes | Ramiro Myers | Short abstract | Sample text | logo.png | needs update | Business      | Collection of random solutions |
-      | Solution notification to delete by moderator team     | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
-      | Solution notification to delete by owner              | Ramiro Myers | Short abstract | Sample text | logo.png | published    | Business      | Collection of random solutions |
+      | title                                                 | author       | collection                     | state        |
+      | Solution notification to propose changes              | Ramiro Myers | Collection of random solutions | published    |
+      | Solution notification to blacklist                    | Ramiro Myers | Collection of random solutions | published    |
+      | Solution notification to publish from blacklisted     | Ramiro Myers | Collection of random solutions | blacklisted  |
+      | Solution notification to request changes              | Ramiro Myers | Collection of random solutions | published    |
+      | Solution notification to propose from request changes | Ramiro Myers | Collection of random solutions | needs update |
+      | Solution notification to delete by moderator team     | Ramiro Myers | Collection of random solutions | published    |
+      | Solution notification to delete by owner              | Ramiro Myers | Collection of random solutions | published    |
 
     When I am logged in as "Pat Harper"
 

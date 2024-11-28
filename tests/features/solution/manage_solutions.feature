@@ -3,9 +3,9 @@ Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
     Given collection content:
-      | uri                            | title       | state     |
-      | http://example.com/source      | Source      | published |
-      | http://example.com/destination | Destination | published |
+      | uri                            | title       |
+      | http://example.com/source      | Source      |
+      | http://example.com/destination | Destination |
     Given solution content:
       | title      | collection | state     | creation date    | modification date |
       | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |

@@ -15,11 +15,11 @@ Feature: Contact form for solution
       | john@example.com         | confirmed |
       | deleted@example.com      | confirmed |
     And collection content:
-      | title                | state     |
-      | Antibody development | published |
+      | title                |
+      | Antibody development |
     And solution content:
-      | title                    | description                     | state     | contact information | collection           |
-      | Six exclusion advantages | Separating molecules by weight. | published | John Revoked        | Antibody development |
+      | title                    | contact information | collection           |
+      | Six exclusion advantages | John Revoked        | Antibody development |
     And user:
       | Username | Joe Hard             |
       | E-mail   | joe.hard@example.com |

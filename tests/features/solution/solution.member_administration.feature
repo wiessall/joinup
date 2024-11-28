@@ -5,20 +5,14 @@ Feature: Solution membership administration
   I need to be able to manage solution members
 
   Background:
-    Given owner content:
-      | name                 |
-      | James Wilson the 2nd |
-    And contact_information content:
-      | name                                     | email                         |
-      | Princeton-Plainsboro Teaching University | info@princeton-plainsboro.edu |
-    And users:
+    Given users:
       | Username         | E-mail                       | First name | Family name |
       # Authenticated user.
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
     And solution content:
-      | title            | related solutions | description                       | documentation | moderation | logo     | state     | solution type | owner                | contact information                      |
-      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
+      | title            | moderation |
+      | The Missing Sons | no         |
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |

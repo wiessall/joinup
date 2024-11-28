@@ -8,12 +8,9 @@ Feature: Solution homepage
     Given owner content:
       | name          |
       | Awesome owner |
-    And contact_information content:
-      | name            | email                      | website url        |
-      | Awesome contact | awesomecontact@example.com | http://example.com |
     Given solution content:
-      | title     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | state     | owner         | contact information | topic                   | solution type                           | spatial coverage | language | status    | published at    | modification date | abstract                   |
-      | Petri net | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri at the age of 13 for the purpose of describing chemical processes.</p>" | published | Awesome owner | Awesome contact     | Demography, E-inclusion | Non-binding Instrument, Logging Service | Greece, Belgium  | English  | Completed | 2012-12-01T8:43 | 2017-12-01T8:43   | Short abstract description |
+      | title     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | owner         | topic                   | solution type                           | spatial coverage | language | status    | published at    | modification date | abstract                   |
+      | Petri net | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri at the age of 13 for the purpose of describing chemical processes.</p>" | Awesome owner | Demography, E-inclusion | Non-binding Instrument, Logging Service | Greece, Belgium  | English  | Completed | 2012-12-01T8:43 | 2017-12-01T8:43   | Short abstract description |
     And release content:
       | title          | release notes    | documentation | release number | release notes   | is version of | state     | creation date    | published at     |
       | Petri net v1.1 | A sample release | text.pdf      | 1.1            | Changed release | Petri net     | published | 2022-12-21T13:00 | 2022-12-21T13:00 |
@@ -49,11 +46,11 @@ Feature: Solution homepage
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
-      | title           | description                 | documentation | content creation | landing page                   |
-      | Jira restarters | Rebooting solves all issues | text.pdf      | registered users | http://foo-example.com/landing |
+      | title           | content creation | landing page                   |
+      | Jira restarters | registered users | http://foo-example.com/landing |
     And news content:
-      | title                             | body                             | solution        | topic                   | spatial coverage |
-      | Jira will be down for maintenance | As always, during business hours | Jira restarters | Statistics and Analysis | Luxembourg       |
+      | title                             | solution        |
+      | Jira will be down for maintenance | Jira restarters |
     And custom_page content:
       | title            | body                                       | solution        |
       | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira restarters |
@@ -63,38 +60,35 @@ Feature: Solution homepage
     And I should not see the "Maintenance page" tile
 
   Scenario: Test that a pager is shown on the solution page when needed.
-    Given owner content:
-      | name                  | owner type |
-      | Chiricahua Foundation | Company    |
     Given solution content:
-      | title             | description     | logo     | state     | owner                 | solution type |
-      | Chiricahua Server | Serving the web | logo.png | published | Chiricahua Foundation | Business      |
+      | title             |
+      | Chiricahua Server |
     # There should not be a pager when the solution is empty.
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should not see the "Pager" region
 
     # The pager should only appear when there are more than 12 items.
     Given distribution content:
-      | title           | description    | solution          |
-      | Distribution 1  | Description 1  | Chiricahua Server |
-      | Distribution 2  | Description 2  | Chiricahua Server |
-      | Distribution 3  | Description 3  | Chiricahua Server |
-      | Distribution 4  | Description 4  | Chiricahua Server |
-      | Distribution 5  | Description 5  | Chiricahua Server |
-      | Distribution 6  | Description 6  | Chiricahua Server |
-      | Distribution 7  | Description 7  | Chiricahua Server |
-      | Distribution 8  | Description 8  | Chiricahua Server |
-      | Distribution 9  | Description 9  | Chiricahua Server |
-      | Distribution 10 | Description 10 | Chiricahua Server |
-      | Distribution 11 | Description 11 | Chiricahua Server |
-      | Distribution 12 | Description 12 | Chiricahua Server |
+      | title           | solution          |
+      | Distribution 1  | Chiricahua Server |
+      | Distribution 2  | Chiricahua Server |
+      | Distribution 3  | Chiricahua Server |
+      | Distribution 4  | Chiricahua Server |
+      | Distribution 5  | Chiricahua Server |
+      | Distribution 6  | Chiricahua Server |
+      | Distribution 7  | Chiricahua Server |
+      | Distribution 8  | Chiricahua Server |
+      | Distribution 9  | Chiricahua Server |
+      | Distribution 10 | Chiricahua Server |
+      | Distribution 11 | Chiricahua Server |
+      | Distribution 12 | Chiricahua Server |
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should not see the "Pager" region
     And I should not see the "Distribution 13" tile
 
     Given distribution content:
-      | title           | description    | solution          | state     |
-      | Distribution 13 | Description 13 | Chiricahua Server | published |
+      | title           | solution          |
+      | Distribution 13 | Chiricahua Server |
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should see the following links:
       | Current page    |
@@ -120,19 +114,19 @@ Feature: Solution homepage
     And I should not see the "Distribution 12" tile
 
     Given distribution content:
-      | title           | description    | solution          |
-      | Distribution 14 | Description 14 | Chiricahua Server |
-      | Distribution 15 | Description 15 | Chiricahua Server |
-      | Distribution 16 | Description 16 | Chiricahua Server |
-      | Distribution 17 | Description 17 | Chiricahua Server |
-      | Distribution 18 | Description 18 | Chiricahua Server |
-      | Distribution 19 | Description 19 | Chiricahua Server |
-      | Distribution 20 | Description 20 | Chiricahua Server |
-      | Distribution 21 | Description 21 | Chiricahua Server |
-      | Distribution 22 | Description 22 | Chiricahua Server |
-      | Distribution 23 | Description 23 | Chiricahua Server |
-      | Distribution 24 | Description 24 | Chiricahua Server |
-      | Distribution 25 | Description 25 | Chiricahua Server |
+      | title           | solution          |
+      | Distribution 14 | Chiricahua Server |
+      | Distribution 15 | Chiricahua Server |
+      | Distribution 16 | Chiricahua Server |
+      | Distribution 17 | Chiricahua Server |
+      | Distribution 18 | Chiricahua Server |
+      | Distribution 19 | Chiricahua Server |
+      | Distribution 20 | Chiricahua Server |
+      | Distribution 21 | Chiricahua Server |
+      | Distribution 22 | Chiricahua Server |
+      | Distribution 23 | Chiricahua Server |
+      | Distribution 24 | Chiricahua Server |
+      | Distribution 25 | Chiricahua Server |
 
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should see the following links:
@@ -186,19 +180,19 @@ Feature: Solution homepage
 
     # The pager being visible in one solution should not affect other solutions.
     Given solution content:
-      | title           | description          | state     | owner                 |
-      | Chiricahua Solr | Searching your datas | published | Chiricahua Foundation |
+      | title           |
+      | Chiricahua Solr |
     And distribution content:
-      | title               | description   | solution        |
-      | Solr distribution 1 | Description 1 | Chiricahua Solr |
+      | title               | solution        |
+      | Solr distribution 1 | Chiricahua Solr |
     When I go to the homepage of the "Chiricahua Solr" solution
     Then I should not see the "Pager" region
 
   @javascript
   Scenario: Test that up to 7 topic terms are visible in the solution overview header.
     Given solution content:
-      | title      | description        | logo     | state     | topic                                                                                                                              |
-      | All topics | Bring in EVERYONE! | logo.png | published | Finance in EU, Supplier exchange, E-health, HR, Employment and Support Allowance, Statistics and Analysis, E-inclusion, Demography |
+      | title      | topic                                                                                                                              |
+      | All topics | Finance in EU, Supplier exchange, E-health, HR, Employment and Support Allowance, Statistics and Analysis, E-inclusion, Demography |
 
     When I go to the "All topics" solution
     Then I should see the text "Topic" in the "Header"
