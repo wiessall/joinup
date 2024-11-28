@@ -86,7 +86,7 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
     return [
       // Frame contains the "@context" and passes this to the values.
       'frame' => $content,
-      'jsonld_has_context' => true,
+      'jsonld_has_context' => TRUE,
     ];
   }
 
