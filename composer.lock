@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "439c2e4deba7c14631eb7ed9964b5fd7",
+    "content-hash": "8332c3e6c53af441e8cf7998ee0bc950",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6869,43 +6869,38 @@
         },
         {
             "name": "drupal/private_message",
-            "version": "3.0.2",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message.git",
-                "reference": "3.0.2"
+                "reference": "3.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.2.zip",
-                "reference": "3.0.2",
-                "shasum": "bb79d07ab72dc5fb6b423052c9f7676183fdafa8"
+                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.4.zip",
+                "reference": "3.0.4",
+                "shasum": "954e2faeb07b8ee962bdcc937bffe8c6e3fc3e68"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10.0 || ^11.0",
+                "drupal/core": "^10 || ^11",
                 "drupal/message": "^1.0",
                 "drupal/message_notify": "^1.0",
-                "php": ">=7.4"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "drupal/message_notify": "*"
-            },
-            "suggest": {
-                "drush/drush": "^10 || ^11 || ^12"
+                "drupal/message_notify": "*",
+                "drupal/rules": "^4.0",
+                "drupal/symfony_mailer_lite": "^2.0",
+                "drush/drush": "^12.5 || ^13.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.2",
-                    "datestamp": "1729586935",
+                    "version": "3.0.4",
+                    "datestamp": "1732206629",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^10 || ^11 || ^12"
                     }
                 }
             },
@@ -25106,10 +25101,10 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
-        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
+        "drupal/masquerade": 5,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
