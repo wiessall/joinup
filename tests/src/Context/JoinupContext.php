@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -61,6 +62,7 @@ class JoinupContext extends RawDrupalContext {
   use KeyboardInteractionTrait;
   use OgTrait;
   use NodeTrait;
+  use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
@@ -1009,18 +1011,19 @@ class JoinupContext extends RawDrupalContext {
       $node->field_topic = $this->getRandomTopic()->label();
     }
     if (!empty($field_definitions['contact']) && empty($node->contact)) {
-      // For some tests, the node's contact has no relevance. Such tests are
-      // allowed to omit an explicit contact. We're assigning
-      // a default contact from joinup_test.install,
-      // to satisfy data integrity and prevent form validation errors.
       $node->contact = $this->getDefaultContact()->label();
     }
     if (!empty($field_definitions['owner']) && empty($node->owner)) {
-      // For some tests, the node's owner has no relevance. Such tests are
-      // allowed to omit an explicit owner. We're assigning
-      // a default owner from joinup_test.install,
-      // to satisfy data integrity and prevent form validation errors.
       $node->owner = $this->getDefaultOwner()->label();
+    }
+    if (!empty($field_definitions['abstract']) && empty($node->abstract)) {
+      $node->abstract = 'default abstract';
+    }
+    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+      $node->description = 'default description';
+    }
+    if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
+      $node->solution_type = $this->getRandomTerm('eira')->label();
     }
 
     // Handle file URL fields.
