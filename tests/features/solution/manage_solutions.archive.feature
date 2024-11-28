@@ -3,18 +3,15 @@ Feature: When a solution is archived then its sub-content also should be archive
 
   Background:
     Given collection content:
-      | title      | state     |
-      | Collection | published |
-    And owner content:
-      | name        | owner type |
-      | The Company | Company    |
+      | title      |
+      | Collection |
     And contact_information content:
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
     And solution content:
-      | title    | collection | state     | abstract | description | topic      | solution type | creation date    | modification date | owner       | contact information              |
-      | Solution | Collection | published | Abstract | Description | Demography | Innovation    | 2018-11-19T10:00 | 2018-12-19T10:00  | The Company | Jennifer Unconfirmed, Liam Smith |
+      | title    | collection | creation date    | modification date | owner       | contact information              |
+      | Solution | Collection | 2018-11-19T10:00 | 2018-12-19T10:00  | The Company | Jennifer Unconfirmed, Liam Smith |
     And users:
       | Username           | E-mail                     | First name | Family name | Roles     |
       | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |
@@ -22,12 +19,12 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Blahman            | ferners-lee@example.com    |            |             |           |
       | John Moderator     | john.moderator@example.com | John       | Moderator   | moderator |
     And the following solution user memberships:
-      | solution | user               | roles                      |
-      | Solution | Anne Group Admin   | owner                      |
-      | Solution | Andrew Facilitator | facilitator                |
+      | solution | user               | roles       |
+      | Solution | Anne Group Admin   | owner       |
+      | Solution | Andrew Facilitator | facilitator |
     And "event" content:
-      | title          | solution | state     |
-      | Solution Event | Solution | published |
+      | title          | solution |
+      | Solution Event | Solution |
     And "news" content:
       | title           | solution | state     |
       | Solution News 1 | Solution | published |
@@ -42,8 +39,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Weird Solution Document | Solution   | draft     | 200 |
     And the workflow state of the "Weird Solution Document" content is changed to "archived"
     And "discussion" content:
-      | title               | collection | state     |
-      | Solution Discussion | Solution   | published |
+      | title               | collection |
+      | Solution Discussion | Solution   |
     And "custom_page" content:
       | title                  | solution | state     |
       | Solution Custom page 1 | Solution | published |
@@ -51,8 +48,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
     And distribution content:
-      | title                 | solution | state     |
-      | Solution Distribution | Solution | published |
+      | title                 | solution |
+      | Solution Distribution | Solution |
     And release content:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
@@ -106,7 +103,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
     And 2 e-mails should have been sent
     And the following email should have been sent:
-      | recipient | John Moderator                     |
+      | recipient | John Moderator                                          |
       | subject   | Interoperable Europe Portal: Solution has been archived |
     And the email sent to "John Moderator" with subject "Interoperable Europe Portal: Solution has been archived" contains the following lines of text:
       | Dear John,                                                           |

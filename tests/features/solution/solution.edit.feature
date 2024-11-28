@@ -12,8 +12,8 @@ Feature: Solution editing.
       | name      | owner type |
       | Acme inc. | Company    |
     And collection content:
-      | title              | state     |
-      | Collection example | published |
+      | title              |
+      | Collection example |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
@@ -21,8 +21,8 @@ Feature: Solution editing.
       | collection         | user         | roles       |
       | Collection example | Yancy Burton | facilitator |
     And solution content:
-      | title            | description       | logo     | state     |
-      | Another solution | Just another one. | logo.png | published |
+      | title            | logo     |
+      | Another solution | logo.png |
 
   @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
@@ -79,8 +79,8 @@ Feature: Solution editing.
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
     Given solution content:
-      | title      | description   | logo     | state     | solution type |
-      | Solution B | Second letter | logo.png | published | Citizen       |
+      | title      |
+      | Solution B |
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Solution B" solution
     Then I should see the link "Edit"

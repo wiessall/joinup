@@ -6,21 +6,21 @@ Feature: Solutions Overview
 
   Scenario: Solution overview paging
     Given solution content:
-      | title      | creation date     | state     |
-      | Arctic fox | 2018-10-04 8:21am | published |
-      | Alpaca     | 2018-10-04 8:31am | published |
-      | Boomalope  | 2018-10-04 8:28am | published |
-      | Boomrat    | 2018-10-04 8:35am | published |
-      | Megasloth  | 2018-10-04 8:01am | published |
-      | Thrumbo    | 2018-10-04 8:07am | published |
-      | Spelopede  | 2018-10-04 8:18am | published |
-      | Muffalo    | 2018-10-04 8:59am | published |
-      | Husky      | 2018-10-04 8:00am | published |
-      | Gazelle    | 2018-10-04 8:43am | published |
-      | Cow        | 2018-10-04 8:27am | published |
-      | Panther    | 2018-10-04 8:22am | published |
-      | Tortoise   | 2018-10-04 8:34am | published |
-      | Warg       | 2018-10-04 8:39am | published |
+      | title      | creation date     |
+      | Arctic fox | 2018-10-04 8:21am |
+      | Alpaca     | 2018-10-04 8:31am |
+      | Boomalope  | 2018-10-04 8:28am |
+      | Boomrat    | 2018-10-04 8:35am |
+      | Megasloth  | 2018-10-04 8:01am |
+      | Thrumbo    | 2018-10-04 8:07am |
+      | Spelopede  | 2018-10-04 8:18am |
+      | Muffalo    | 2018-10-04 8:59am |
+      | Husky      | 2018-10-04 8:00am |
+      | Gazelle    | 2018-10-04 8:43am |
+      | Cow        | 2018-10-04 8:27am |
+      | Panther    | 2018-10-04 8:22am |
+      | Tortoise   | 2018-10-04 8:34am |
+      | Warg       | 2018-10-04 8:39am |
     And I am an anonymous user
     When I visit the solution overview
     Then I should see the following tiles in the correct order:
@@ -59,8 +59,8 @@ Feature: Solutions Overview
       | Username      | E-mail                            |
       | Madam Shirley | i.dont.see.the.future@example.com |
     And collection content:
-      | title                 | logo     | state     |
-      | Pikachu, I choose you | logo.png | published |
+      | title                 | logo     |
+      | Pikachu, I choose you | logo.png |
     Given solution content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
