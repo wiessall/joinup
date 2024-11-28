@@ -479,7 +479,7 @@ class JoinupGroupContext extends RawDrupalContext {
     $entity = match ($entityTypeId) {
       'user' => $this->getUserByName($identifier),
       'webform' => $this->getEntityById($entityTypeId, $identifier),
-      'announcement' => $this->getAnnouncementBySubject($identifier),
+      'message' => $this->getAnnouncementBySubject($identifier),
       default => $this->getEntityByLabel($entityTypeId, $identifier),
     };
 
