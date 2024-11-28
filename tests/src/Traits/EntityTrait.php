@@ -104,6 +104,7 @@ trait EntityTrait {
       'topic' => 'taxonomy_term',
       'webform' => 'webform',
       'announcement' => 'message',
+      'user' => 'user',
     ];
   }
 
