@@ -460,41 +460,38 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes an entity, user or message.
+   * Deletes an entity, user, or message based on identifier and type alias.
    *
    * @param string $identifier
-   *   The entity title, name, subject, or username to identify the item.
-   * @param string $bundle
-   *   The entity type or bundle (e.g., 'node', 'user', or custom bundle name).
+   *   The entity title, username, or subject to identify the entity.
+   * @param string $entityTypeAlias
+   *   The alias of the entity type (e.g., 'node', 'contact information').
+   *   Refer to the `entityTypeAliases()` method for the full mapping.
    *
-   * @When I delete the :identifier :bundle
+   * @When I delete the :identifier :entityTypeAlias
    */
-  public function deleteEntity(string $identifier, string $bundle): void {
-    if (
-      $bundle !== 'user' &&
-      $bundle !== 'announcement' &&
-      $bundle !== 'webform'
-    ) {
-      $entity_type_id = static::entityTypeAliases()[$bundle];
-      $entity = $this->getEntityByLabel($entity_type_id, $identifier);
-      if ($bundle === 'distribution') {
-        if (isset($this->entities[$entity_type_id][$entity->id()])) {
-          unset($this->entities[$entity_type_id][$entity->id()]);
-        }
-      }
-      if ($bundle !== 'contact information') {
-        $entity->skip_notification = TRUE;
-      }
+  public function deleteEntity(string $identifier, string $entityTypeAlias): void {
+    $entityTypeId = static::entityTypeAliases()[$entityTypeAlias] ?? NULL;
+    if (!$entityTypeId) {
+      throw new \InvalidArgumentException("Invalid entity alias: $entityTypeAlias");
     }
-    elseif ($bundle === 'user') {
-      $entity = $this->getUserByName($identifier);
+
+    $entity = match ($entityTypeId) {
+      'user' => $this->getUserByName($identifier),
+      'webform' => $this->getEntityById($entityTypeId, $identifier),
+      'announcement' => $this->getAnnouncementBySubject($identifier),
+      default => $this->getEntityByLabel($entityTypeId, $identifier),
+    };
+
+    if (!$entity) {
+      throw new \RuntimeException("Entity not found for bundle: $entityTypeAlias, identifier: $identifier");
     }
-    elseif ($bundle === 'webform') {
-      $entity = $this->getEntityById('webform', $identifier);
+
+    if (isset($this->entities[$entity->bundle()][$entity->id()])) {
+      unset($this->entities[$entity->bundle()][$entity->id()]);
     }
-    else {
-      $entity = $this->getAnnouncementBySubject($identifier);
-    }
+
+    $entity->skip_notification = TRUE;
     $entity->delete();
   }
 

@@ -102,6 +102,8 @@ trait EntityTrait {
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
+      'webform' => 'webform',
+      'announcement' => 'message',
     ];
   }
 
