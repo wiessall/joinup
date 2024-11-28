@@ -21,7 +21,6 @@ dependencies:
     - custom_page
     - joinup_distribution
     - joinup_flag
-    - joinup_oss_catalogue
     - joinup_search
     - node
     - paragraphs
@@ -301,7 +300,6 @@ datasource_settings:
         - news
         - release
         - solution
-        - video
     languages:
       default: true
       selected: {  }
@@ -339,7 +337,6 @@ processor_settings:
   joinup_entity_status:
     inverse: true
   language_with_fallback: {  }
-  oss_solution_rendered_item: {  }
   rendered_item: {  }
   solr_date_range:
     weights:

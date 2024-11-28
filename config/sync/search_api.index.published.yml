@@ -34,7 +34,6 @@ dependencies:
     - custom_page
     - joinup_distribution
     - joinup_flag
-    - joinup_oss_catalogue
     - joinup_release
     - joinup_search
     - joinup_solution
@@ -734,7 +733,6 @@ datasource_settings:
         - news
         - release
         - solution
-        - video
     languages:
       default: true
       selected: {  }
@@ -801,7 +799,6 @@ processor_settings:
   joinup_entity_status:
     inverse: false
   language_with_fallback: {  }
-  oss_solution_rendered_item: {  }
   release_solution_data:
     weights:
       preprocess_index: -60
