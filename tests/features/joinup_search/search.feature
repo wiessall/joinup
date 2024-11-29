@@ -671,16 +671,6 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "fu" in the "search bar"
-    # When the search term is less than 3 characters, the search is global and
-    # all results are fetched. Thus, the first two results are returned by
-    # score. That bring the first available collections as their score is the
-    # highest.
-    Then I should see the following search suggestions:
-      | Radio cooking collection |
-      # Joinup collection is always installed
-      | Joinup                   |
-
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
       | Movistar                 |

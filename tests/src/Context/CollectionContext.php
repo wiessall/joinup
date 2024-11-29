@@ -180,20 +180,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a collection.
-   *
-   * @param string $collection
-   *   The title of the collection.
-   *
-   * @When I delete the :collection collection
-   */
-  public function deleteCollection(string $collection): void {
-    $collection = $this->getEntityByLabel('node', $collection);
-    $collection->skip_notification = TRUE;
-    $collection->delete();
-  }
-
-  /**
    * Subscribes the given users to the given collections.
    *
    * Table format:

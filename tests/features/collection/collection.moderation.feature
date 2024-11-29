@@ -240,7 +240,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Spectres in fog" collection
-    And I delete the "A secretary in the fog" contact information
+    And I delete the "A secretary in the fog" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
@@ -278,7 +278,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
-    And I delete the "Domestic secretary" contact information
+    And I delete the "Domestic secretary" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
@@ -316,7 +316,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
-    And I delete the "Secretary of thieves" contact information
+    And I delete the "Secretary of thieves" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
@@ -356,7 +356,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
-    And I delete the "Secretary of Silk" contact information
+    And I delete the "Secretary of Silk" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
@@ -396,4 +396,4 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
-    And I delete the "Secretary of the harbor" contact information
+    And I delete the "Secretary of the harbor" "contact information"

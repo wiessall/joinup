@@ -64,7 +64,7 @@ Feature:
     Then the following fields should be disabled "Short ID"
 
     Then I delete the "Structural Solar Traces" collection
-    And I delete the "Contact person" contact information
+    And I delete the "Contact person" "contact information"
 
   Scenario: Short IDs are unique in solutions.
     Given collection content:
@@ -137,4 +137,4 @@ Feature:
     Then the following fields should be disabled "Short ID"
 
     Then I delete the "I know what a solution is" solution
-    And I delete the "John Smith" contact information
+    And I delete the "John Smith" "contact information"
