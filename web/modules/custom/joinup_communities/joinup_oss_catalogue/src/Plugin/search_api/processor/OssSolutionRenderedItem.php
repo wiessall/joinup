@@ -101,7 +101,7 @@ class OssSolutionRenderedItem extends ProcessorPluginBase {
    */
   public static function supportsIndex(IndexInterface $index): bool {
     foreach ($index->getDatasources() as $datasource) {
-      if ($datasource->getEntityTypeId() === 'node') {
+      if ($datasource->getEntityTypeId() === 'node' && isset($datasource->getBundles()['oss_solution'])) {
         return TRUE;
       }
     }
