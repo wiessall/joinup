@@ -18,27 +18,34 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
   /**
    * Tests that SPARQL formats are supported.
    *
-   * @see \Drupal\joinup_sparql\JoinupAcceptHeaderMiddleware::getFormatFromRequest()
+   * @see \Drupal\joinup_rdf\JoinupAcceptHeaderMiddleware::getFormatFromRequest()
    */
   public function testFormatQueryArgument(): void {
-    // Create an RDF entity.
+    // Test an mapped rdf_sync entity bundle, assert 200 response.
     $entity = $this->createNode([
       'type' => 'collection',
       'field_state' => 'published',
     ]);
-    $this->assertNotEmpty($entity->id());
-    $this->assertNotEmpty(\Drupal::entityTypeManager()->getStorage('node')->load($entity->id()));
-
-    $this->visit($entity->toUrl('canonical')->setAbsolute()->toString());
+    $this->drupalGet($entity->toUrl());
     $this->assertSession()->statusCodeEquals(200);
-    // Assert that the page is in HTML format.
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
 
-    $query = ['query' => ['_format' => 'rdfxml']];
-    $this->visit($entity->toUrl('canonical', $query)->setAbsolute()->toString());
+    $this->drupalGet($entity->toUrl()->setOption('query', ['_format' => 'rdfxml']));
     $this->assertSession()->statusCodeEquals(200);
-    // Assert that the page is in RDFXML format.
     $this->assertSession()->responseHeaderEquals('Content-Type', 'application/rdf+xml');
+
+    // Test an unmapped rdf_sync entity bundle, assert 406 response.
+    $entity = $this->createNode([
+      'type' => 'custom_page',
+      'field_state' => 'published',
+    ]);
+    $this->drupalGet($entity->toUrl());
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
+
+    $this->drupalGet($entity->toUrl()->setOption('query', ['_format' => 'rdfxml']));
+    $this->assertSession()->statusCodeEquals(406);
+    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
   }
 
   /**
@@ -62,6 +69,11 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
     $this->assertSession()->pageTextContains('Not acceptable format: turtle');
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/turtle; charset=UTF-8');
     $this->assertNoExceptionsLogged('turtle');
+
+    $this->visit('/user/login_status?_format=jsonld');
+    $this->assertSession()->statusCodeEquals(404);
+    $this->assertSession()->pageTextContains('No route found');
+    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
 
     foreach (array_keys(RdfSyncEncoder::getSupportedFormats()) as $format) {
       // Regression test that passing rdfxml does not cause an empty format type
