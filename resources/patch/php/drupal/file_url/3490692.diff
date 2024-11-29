@@ -1,0 +1,31 @@
+diff --git a/src/Entity/RemoteFile.php b/src/Entity/RemoteFile.php
+index 33fe3cab367b297500edfe7434713c414bc34a53..34a20fd3764e9eca93ed895b43690492ca4e6f58 100644
+--- a/src/Entity/RemoteFile.php
++++ b/src/Entity/RemoteFile.php
+@@ -41,4 +41,11 @@ class RemoteFile extends File {
+     return $this->getFileUri();
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function createFileUrl($relative = TRUE): string {
++    return $this->getFileUri();
++  }
++
+ }
+diff --git a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
+index c3f09640ea5aba7c67d1db8f45f1757841575b5b..667e037f74f6b1a969c0f84719a0754ca7915245 100644
+--- a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
++++ b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
+@@ -44,7 +44,9 @@ class FileUrlFieldItemList extends EntityReferenceFieldItemList {
+   /**
+    * {@inheritdoc}
+    */
+-  public function defaultValuesForm(array &$form, FormStateInterface $form_state): array {}
++  public function defaultValuesForm(array &$form, FormStateInterface $form_state): array {
++    return parent::defaultValuesForm($form, $form_state);
++  }
+ 
+   /**
+    * {@inheritdoc}
