@@ -708,26 +708,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes the user account with the given name.
-   *
-   * This intended to be used for user accounts that are created through the UI
-   * and are not cleaned up automatically when a test ends.
-   *
-   * @param string $username
-   *   The name of the user to delete.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when an error occurs while the user is being deleted.
-   *
-   * @Then I delete the :username user
-   */
-  public function deleteUser(string $username): void {
-    /** @var \Drupal\user\UserInterface $user */
-    $user = $this->getUserByName($username);
-    $user->delete();
-  }
-
-  /**
    * Click on an element by css class.
    *
    * @param string $element

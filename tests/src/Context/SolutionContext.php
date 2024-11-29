@@ -216,20 +216,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a solution.
-   *
-   * @param string $solution
-   *   The name of the solution.
-   *
-   * @When I delete the :solution solution
-   */
-  public function deleteSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('node', $solution);
-    $solution->skip_notification = TRUE;
-    $solution->delete();
-  }
-
-  /**
    * Deletes a solution document's files.
    *
    * @param string $solution
