@@ -1,0 +1,308 @@
+diff --git a/rdf_sync.services.yml b/rdf_sync.services.yml
+index 96761aa9161a0672f048281958cb5d4041515029..3a650365d3c39aa1b1af0fc0bbfaff1059cce197 100644
+--- a/rdf_sync.services.yml
++++ b/rdf_sync.services.yml
+@@ -63,3 +63,9 @@ services:
+       - '@rdf_sync.mapper'
+     tags:
+       - { name: event_subscriber }
++
++  rdf_sync.exception_subscriber:
++    class: Drupal\rdf_sync\EventSubscriber\RdfSyncExceptionSubscriber
++    parent: serialization.exception.default
++    tags:
++      - { name: event_subscriber }
+diff --git a/src/Encoder/RdfSyncEncoder.php b/src/Encoder/RdfSyncEncoder.php
+index bd4582511bb48ff0e8d81fd237667b106d0c0c44..b1d0402edf49381560b8765ef26acbcb49d1fb56 100644
+--- a/src/Encoder/RdfSyncEncoder.php
++++ b/src/Encoder/RdfSyncEncoder.php
+@@ -8,6 +8,7 @@ use Drupal\rdf_sync\Model\RdfSyncFormat;
+ use EasyRdf\Format;
+ use EasyRdf\Graph;
+ use Symfony\Component\Serializer\Encoder\EncoderInterface;
++use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+ 
+ /**
+  * Base encoder.
+@@ -32,9 +33,14 @@ class RdfSyncEncoder implements EncoderInterface {
+    * {@inheritdoc}
+    */
+   public function encode($data, $format, array $context = []): string {
+-    $graph = new Graph();
+-    $graph->parse($data, 'php');
+-    return $graph->serialise($format);
++    try {
++      $graph = new Graph();
++      $graph->parse($data, 'php');
++      return $graph->serialise($format);
++    }
++    catch (\Exception $e) {
++      throw new NotEncodableValueException($e->getMessage(), 0, $e);
++    }
+   }
+ 
+   /**
+diff --git a/src/EventSubscriber/RdfSyncExceptionSubscriber.php b/src/EventSubscriber/RdfSyncExceptionSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5be6196e7d1b81d494d19fe3ca724f5f7aed62a
+--- /dev/null
++++ b/src/EventSubscriber/RdfSyncExceptionSubscriber.php
+@@ -0,0 +1,62 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\EventSubscriber;
++
++use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
++use Drupal\rdf_sync\Model\RdfSyncFormat;
++use Drupal\serialization\EventSubscriber\DefaultExceptionSubscriber;
++use Symfony\Component\HttpKernel\Event\ExceptionEvent;
++use Symfony\Component\HttpKernel\Exception\HttpException;
++use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
++use Symfony\Component\Serializer\Exception\NotEncodableValueException;
++
++/**
++ * Handles serialization exceptions for rdf_sync formats.
++ */
++class RdfSyncExceptionSubscriber extends DefaultExceptionSubscriber {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static function getPriority(): int {
++    // Execute before ExceptionLoggingSubscriber::onException (priority: 50).
++    /* @see \Drupal\Core\EventSubscriber\ExceptionLoggingSubscriber::onException */
++    return 70;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getHandledFormats(): array {
++    return array_map(static fn($case) => $case->value, RdfSyncFormat::cases());
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function onException(ExceptionEvent $event): void {
++    if (!$this->applies($event)) {
++      return;
++    }
++
++    $exception = $event->getThrowable();
++    if (!$exception instanceof HttpException) {
++      $exception = $exception instanceof NotEncodableValueException
++        ? new NotAcceptableHttpException($exception->getMessage(), $exception)
++        : new HttpException(500, $exception->getMessage(), $exception);
++      $event->setThrowable($exception);
++    }
++  }
++
++  /**
++   * Check if the error applies to rdf_sync.
++   */
++  protected function applies(ExceptionEvent $event): bool {
++    $request = $event->getRequest();
++    $format = $request->query->get(MainContentViewSubscriber::WRAPPER_FORMAT, $request->getRequestFormat());
++    return \in_array($format, $this->getHandledFormats(), TRUE);
++  }
++
++}
+diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
+index cfa8fd6e34fda3a0fa5f5a5b1c0d7ba68806968c..c4a89de81c93bd13770e83fe867b99e94ae0bd0a 100644
+--- a/src/Normalizer/RdfSyncNormalizer.php
++++ b/src/Normalizer/RdfSyncNormalizer.php
+@@ -17,6 +17,7 @@ use Drupal\serialization\Normalizer\EntityNormalizer;
+ use EasyRdf\Literal;
+ use EasyRdf\Resource;
+ use Psr\EventDispatcher\EventDispatcherInterface;
++use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+ 
+ /**
+  * Normalizes data to an EasyRDF graph PHP representation.
+@@ -38,7 +39,11 @@ class RdfSyncNormalizer extends EntityNormalizer {
+    * {@inheritdoc}
+    */
+   public function normalize($object, $format = NULL, array $context = []): array {
+-    /** @var \Drupal\Core\Entity\ContentEntityInterface $object */
++    \assert($object instanceof ContentEntityInterface);
++    if (!$this->mapper->isMappedEntity(entity: $object)) {
++      throw new NotEncodableValueException("The entity bundle `{$object->bundle()}` is not mapped.");
++    }
++
+     $normalized = parent::normalize($object, $format, $context);
+ 
+     $uriFieldName = $this->mapper->getRdfUriFieldName(entity: $object);
+@@ -130,7 +135,7 @@ class RdfSyncNormalizer extends EntityNormalizer {
+    * {@inheritdoc}
+    */
+   public function supportsNormalization($data, ?string $format = NULL, array $context = []): bool {
+-    return $this->checkFormat($format) && $this->mapper->isMappedEntity(entity: $data);
++    return $this->checkFormat($format);
+   }
+ 
+   /**
+diff --git a/src/RdfSyncEncoderFormatsCompilerPass.php b/src/RdfSyncEncoderFormatsCompilerPass.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..81daf301ec7aa961ed21260c4911a4779e806190
+--- /dev/null
++++ b/src/RdfSyncEncoderFormatsCompilerPass.php
+@@ -0,0 +1,41 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync;
++
++use Drupal\rdf_sync\Model\RdfSyncFormat;
++use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++
++/**
++ * Removes rdf_sync formats from 'serializer.formats' container parameter.
++ *
++ * - The REST module should only allow rdf_sync formats to be used for entity
++ *   resources/routes. e.g.: We don't want to apply this to login/logout routes.
++ * - The 'serialization.exception.default' service doesn't support our formats,
++ *   hence a custom exception subscriber is needed. This also allows us to
++ *   return 406 Not Acceptable when attempting to normalize an unmapped entity.
++ *   The NotEncodableValueException results in a NotAcceptableHttpException.
++ *
++ * @see \Drupal\serialization\RegisterSerializationClassesCompilerPass
++ * @see \Drupal\serialization\EventSubscriber\UserRouteAlterSubscriber::onRoutingAlterAddFormats
++ * @see \Drupal\serialization\EventSubscriber\DefaultExceptionSubscriber::on4xx
++ * @see \Drupal\rdf_sync\EventSubscriber\RdfSyncExceptionSubscriber::onException
++ *
++ * @todo see also https://www.drupal.org/project/drupal/issues/2979753
++ */
++class RdfSyncEncoderFormatsCompilerPass implements CompilerPassInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function process(ContainerBuilder $container): void {
++    if ($container->hasParameter('serializer.formats')) {
++      $rdf_sync_formats = array_map(static fn(RdfSyncFormat $format): string => $format->value, RdfSyncFormat::cases());
++      $filtered_formats = array_diff($container->getParameter('serializer.formats'), $rdf_sync_formats);
++      $container->setParameter('serializer.formats', array_values($filtered_formats));
++    }
++  }
++
++}
+diff --git a/src/RdfSyncServiceProvider.php b/src/RdfSyncServiceProvider.php
+index 935624e7e10e76a2c29cbfbda447bd6788b28fa4..2d7e605154922f30ccbadacbe45f9c947e905e8d 100644
+--- a/src/RdfSyncServiceProvider.php
++++ b/src/RdfSyncServiceProvider.php
+@@ -24,6 +24,7 @@ class RdfSyncServiceProvider implements ServiceProviderInterface {
+     // up by RegisterSerializationClassesCompilerPass.
+     // @see \Drupal\serialization\RegisterSerializationClassesCompilerPass
+     $container->addCompilerPass(new RdfSyncEncoderCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
++    $container->addCompilerPass(new RdfSyncEncoderFormatsCompilerPass(), PassConfig::TYPE_REMOVE);
+ 
+     // Register new content types.
+     if ($container->has('http_middleware.negotiation') && is_a($container->getDefinition('http_middleware.negotiation')->getClass(), NegotiationMiddleware::class, TRUE)) {
+diff --git a/tests/src/Functional/RdfSyncRestIntegrationTest.php b/tests/src/Functional/RdfSyncRestIntegrationTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..22256f9be00ebd38be33be774f7a5e59457ae934
+--- /dev/null
++++ b/tests/src/Functional/RdfSyncRestIntegrationTest.php
+@@ -0,0 +1,97 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\rdf_sync\Functional;
++
++use Drupal\Core\Url;
++use Drupal\Tests\BrowserTestBase;
++use Drupal\Tests\rdf_sync\Traits\RdfSyncTestingDataTrait;
++use Drupal\rdf_sync\Model\RdfSyncFormat;
++use Drupal\rest\Entity\RestResourceConfig;
++
++/**
++ * Tests REST module integration.
++ *
++ * @group rdf_sync
++ */
++class RdfSyncRestIntegrationTest extends BrowserTestBase {
++
++  use RdfSyncTestingDataTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'node',
++    'taxonomy',
++    'serialization',
++    'basic_auth',
++    'rest',
++    'rdf_sync',
++    'rdf_sync_test',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $this->setUpFields();
++
++    // Enable cookie-based authentication and add all formats for the
++    // entity:node REST resource.
++    $resource_config = RestResourceConfig::load('entity.node');
++    $configuration = $resource_config->get('configuration');
++    $configuration['authentication'][] = 'cookie';
++    $additional_formats = array_map(static fn($case) => $case->value, RdfSyncFormat::cases());
++    $configuration['formats'] = array_merge($configuration['formats'], $additional_formats);
++    $resource_config->set('configuration', $configuration)->save();
++    $this->rebuildAll();
++
++    $account = $this->drupalCreateUser(['access content']);
++    $this->drupalLogin($account);
++  }
++
++  /**
++   * Tests REST module routes.
++   *
++   * @dataProvider providerTestRestRouteSerialization
++   */
++  public function testRestRouteSerialization(string $format): void {
++    // Test mapped node bundle route, assert 200 response.
++    [, $node] = self::createEntities();
++    $this->drupalGet($node->toUrl()->setOption('query', ['_format' => $format]));
++    $this->assertSession()->statusCodeEquals(200);
++
++    // Test unmapped node bundle route, assert 406 Not Acceptable response.
++    $node = $this->drupalCreateNode(['type' => 'article']);
++    $this->drupalGet($node->toUrl()->setOption('query', ['_format' => $format]));
++    $this->assertSession()->statusCodeEquals(406);
++    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
++
++    // Test non-resource route, assert 404 response.
++    /* @see \Drupal\serialization\EventSubscriber\UserRouteAlterSubscriber::onRoutingAlterAddFormats */
++    $this->drupalGet(Url::fromRoute('user.login_status.http')->setOption('query', ['_format' => $format]));
++    $this->assertSession()->statusCodeEquals(404);
++    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
++  }
++
++  /**
++   * Provides test cases for self::testRestRouteSerialization()
++   *
++   * @return array
++   *   A list of testing cases.
++   *
++   * @see self::testRestRouteSerialization()
++   */
++  public static function providerTestRestRouteSerialization(): array {
++    return array_map(static fn($case) => [$case->value], RdfSyncFormat::cases());
++  }
++
++}
