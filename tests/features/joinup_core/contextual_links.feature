@@ -6,8 +6,8 @@ Feature:
 
   Scenario: Revisions link availability.
     Given collection content:
-      | title                | state     |
-      | Revisions collection | published |
+      | title                |
+      | Revisions collection |
     When I am logged in as a moderator
     And I go to the "Revisions collection" collection
     And I click "Add news" in the plus button menu
@@ -40,17 +40,11 @@ Feature:
 
   Scenario: Only solutions should have the share contextual link available.
     Given collection content:
-      | title            | state     |
-      | Share collection | published |
-    And contact_information content:
-      | name     | email                |
-      | Somebody | somebody@example.com |
-    And owner content:
-      | name       |
-      | Some owner |
+      | title            |
+      | Share collection |
     And solution content:
-      | title          | state     | collection       | contact information | owner      |
-      | Share solution | published | Share collection | Somebody            | Some owner |
+      | title          | collection       |
+      | Share solution | Share collection |
 
     When I am logged in as a user with the "moderator" role
     And I go to the "Share solution" solution

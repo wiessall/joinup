@@ -2,15 +2,9 @@
 Feature: Test SVG attachments.
 
   Background:
-    Given owner content:
-      | name        | owner type |
-      | SVG company | Company    |
-    And contact_information content:
-      | name        | email           |
-      | SVG contact | svg@example.com |
-    And collection content:
-      | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
-      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
+    Given collection content:
+      | title | content creation         | moderation |
+      | SVG   | facilitators and authors | yes        |
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.
