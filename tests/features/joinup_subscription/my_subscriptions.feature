@@ -74,7 +74,7 @@ Feature: My subscriptions
     And I click "My subscriptions"
     Then I should see the heading "My subscriptions"
     And I should see the heading "Collection"
-    # The default collection Joinup is there.
+    # The default collection The Portal is there.
     # @see \joinup_test_install().
     And I should see the text "The Portal" in the "Content" region
     And I should see the heading "Solution"
