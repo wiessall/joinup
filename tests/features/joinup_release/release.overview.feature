@@ -6,11 +6,11 @@ Feature: Asset distribution overview on solution.
 
   Scenario: Releases should be available in the overview page.
     Given collection content:
-      | title       | state     |
-      | End of Past | published |
+      | title       |
+      | End of Past |
     Given solution content:
-      | title            | collection  | description        | state     |
-      | Lovely Butterfly | End of Past | Sample description | published |
+      | title            | collection  |
+      | Lovely Butterfly | End of Past |
 
     # A solution with no releases or standalone distributions has no button.
     When I go to the homepage of the "Lovely Butterfly" solution
