@@ -14,6 +14,7 @@ dependencies:
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
+    - field.storage.node.spatial_coverage
     - field.storage.paragraph.field_body
     - search_api.server.joinup
   module:
@@ -299,7 +300,6 @@ datasource_settings:
         - news
         - release
         - solution
-        - video
     languages:
       default: true
       selected: {  }
@@ -317,9 +317,7 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_description
       - field_event_agenda
-      - field_is_description
     title: true
     alt: true
     tags:
@@ -328,23 +326,6 @@ processor_settings:
       h2: 3
       h3: 2
       strong: 2
-  ignorecase:
-    weights:
-      preprocess_index: -48
-      preprocess_query: -50
-    all_fields: false
-    fields:
-      - body
-      - description
-      - field_ar_description
-      - field_event_agenda
-      - field_is_description
-      - field_location
-      - field_news_headline
-      - field_organisation
-      - field_short_title
-      - label
-      - title
   include_custom_page_content:
     weights:
       preprocess_index: -49
@@ -360,100 +341,6 @@ processor_settings:
   solr_date_range:
     weights:
       preprocess_index: 0
-  stopwords:
-    weights:
-      preprocess_index: -45
-      preprocess_query: -47
-    all_fields: false
-    fields:
-      - body
-      - description
-      - field_ar_description
-      - field_event_agenda
-      - field_is_description
-      - field_location
-      - field_news_headline
-      - field_scope
-      - field_short_title
-      - keywords
-      - label
-      - title
-    stopwords:
-      - a
-      - an
-      - and
-      - are
-      - as
-      - at
-      - be
-      - but
-      - by
-      - for
-      - if
-      - in
-      - into
-      - is
-      - it
-      - 'no'
-      - not
-      - of
-      - 'on'
-      - or
-      - s
-      - such
-      - t
-      - that
-      - the
-      - their
-      - then
-      - there
-      - these
-      - they
-      - this
-      - to
-      - was
-      - will
-      - with
-  tokenizer:
-    weights:
-      preprocess_index: -47
-      preprocess_query: -49
-    all_fields: false
-    fields:
-      - body
-      - description
-      - field_ar_description
-      - field_event_agenda
-      - field_is_description
-      - field_location
-      - field_news_headline
-      - field_organisation
-      - field_scope
-      - field_short_title
-      - keywords
-      - label
-      - title
-    spaces: ''
-    ignored: ._-
-    overlap_cjk: 1
-    minimum_word_size: '3'
-  transliteration:
-    weights:
-      preprocess_index: -46
-      preprocess_query: -48
-    all_fields: false
-    fields:
-      - body
-      - description
-      - field_ar_description
-      - field_event_agenda
-      - field_is_description
-      - field_location
-      - field_news_headline
-      - field_organisation
-      - field_short_title
-      - label
-      - title
   type_boost:
     weights:
       preprocess_index: -42
@@ -467,11 +354,9 @@ processor_settings:
           distribution: 0.0
           document: 0.0
           event: 3.0
-          licence: 0.0
           news: 5.0
           release: 0.0
           solution: 13.0
-          video: 0.0
 tracker_settings:
   default:
     indexing_order: fifo
