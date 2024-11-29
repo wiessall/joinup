@@ -185,7 +185,7 @@ Feature: Homepage
     And the response should not contain "http://raresteaktown.com"
 
     When I click "Read more" in the "Highlighted event"
-    Then the url should match "/collection/joinup/event/florentine-steak-festival"
+    Then the url should match "/collection/the-portal/event/florentine-steak-festival"
 
     # The "More events" link should temporarily link to the search page with the
     # events pre-filtered. This will be replaced with the events page later.
@@ -294,9 +294,9 @@ Feature: Homepage
       | collection | Sunset ball                 | 2019-04-18 08:00     | There are many variations                                                                                                                                                                                                     |
       | collection | Sunset stream               | 2019-02-18 08:00     | There are many passages                                                                                                                                                                                                       |
       | collection | Jupiter sun                 | 2018-12-18 08:00     | Sum is therefore                                                                                                                                                                                                              |
-      # Joinup in installed by default.
+      # The Portal in installed by default.
       # @see joinup_test.install
-      | collection | Joinup                      | 2015-01-01 08:00     | Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience… |
+      | collection | The Portal                  | 2015-01-01 08:00     | The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experi… |
       | solution   | Lantern International       | 2022-12-18 08:00     | Lantern International Group has started deploying personnel in focused areas. In this quest we have decided to consolidate our private businesses into one entity as a significant step towards realizing our company's long… |
       | solution   | Products of Bulgaria        | 2021-08-14 17:36     | Supports health                                                                                                                                                                                                               |
       | solution   | Cities of Italy             | 2020-01-01 17:36     | Download our report report-2021-09-16.xls for more information.                                                                                                                                                               |
