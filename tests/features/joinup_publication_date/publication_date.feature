@@ -2,23 +2,14 @@
 Feature: Publication date works as expected on RDF entities
 
   Background:
-    Given owner content:
-      | name  |
-      | Owner |
-    And contact_information content:
-      | name     |
-      | Contact1 |
-      | Contact2 |
-      | Contact3 |
-      | Contact4 |
-    And collection content:
-      | title                 | state     | description | owner | contact information |
-      | Collection to publish | draft     | Description | Owner | Contact1            |
-      | Published collection  | published | Description | Owner | Contact2            |
+    Given collection content:
+      | title                 | state     |
+      | Collection to publish | draft     |
+      | Published collection  | published |
     Given solution content:
-      | title               | state     | collection           | solution type | abstract | description | moderation | owner | contact information |
-      | Solution to publish | draft     | Published collection | Business      | Abstract | Description | no         | Owner | Contact3            |
-      | Published solution  | published | Published collection | Business      | Abstract | Description | no         | Owner | Contact4            |
+      | title               | state | collection           |
+      | Solution to publish | draft | Published collection |
+      | Published solution  |       | Published collection |
     And release content:
       | title              | state | release number | release notes              | is version of      |
       | Release to publish | draft | 1.0.0          | Only works on flat ground. | Published solution |

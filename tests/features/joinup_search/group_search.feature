@@ -5,44 +5,38 @@ Feature: Search inside groups
   I want to be able to launch a search limited to my current collection or solution
 
   Background:
-    Given contact_information content:
-      | name                | email                           |
-      | Charalambos Katsumi | charalambos.katsumi@example.com |
-    And owner content:
-      | name             |
-      | Antonios Katsumi |
-    And collection content:
-      | title               | description       | logo     | moderation | topic      | spatial coverage | state     | owner            | contact information |
-      | Chalet construction | Lorem Ipsum ipsum | logo.png | no         | Demography | Belgium          | published | Antonios Katsumi | Charalambos Katsumi |
+    Given collection content:
+      | title               | moderation |
+      | Chalet construction | no         |
     And solution content:
-      | title                | description                                           | logo     | collection          | state     |
-      | Inclined foundations | Ways to construct foundations on hills and mountains. | logo.png | Chalet construction | published |
+      | title                | collection          |
+      | Inclined foundations | Chalet construction |
     And discussion content:
-      | title      | body                           | state     | collection          | solution             |
-      | Room sizes | What are the ideal dimensions? | published | Chalet construction |                      |
-      | Terrace?   | Want a decent sized terrace    | published |                     | Inclined foundations |
+      | title      | collection          | solution             |
+      | Room sizes | Chalet construction |                      |
+      | Terrace?   |                     | Inclined foundations |
     And document content:
-      | title       | field_paragraphs_body | state     | collection          | solution             |
-      | Ground plan | A classic design      | published | Chalet construction |                      |
-      | Rock types  | Ranked by hardness    | published |                     | Inclined foundations |
+      | title       | field_paragraphs_body | collection          | solution             |
+      | Ground plan | A classic design      | Chalet construction |                      |
+      | Rock types  | Ranked by hardness    |                     | Inclined foundations |
     And event content:
-      | title                        | field_paragraphs_body             | state     | collection          | solution             |
-      | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
-      | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
+      | title                        | field_paragraphs_body             | collection          | solution             |
+      | Opening of the winter season | Ski resorts will open in December | Chalet construction |                      |
+      | Presenting DrillMaster X88   | Our most finely ground drill bit  |                     | Inclined foundations |
     And news content:
-      | title             | headline          | abstract                      | field_paragraphs_body | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Materials natural | Abstract of natural materials | Ground feel           | Chalet construction |                      | Statistics and Analysis | Belgium          | published |
-      | Still frozen      | Frozen still      |                               | Maybe next week       |                     | Inclined foundations |                         | Greece           | published |
+      | title             | headline          | field_paragraphs_body | collection          | solution             |
+      | Natural materials | Materials natural | Ground feel           | Chalet construction |                      |
+      | Still frozen      | Frozen still      | Maybe next week       |                     | Inclined foundations |
     And custom_page content:
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |
       | Geography | A collection of height maps.     |                     | Inclined foundations | published |
     And release content:
-      | title     | release number | release notes              | is version of        | state     |
-      | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
+      | title     | release number | release notes              | is version of        |
+      | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations |
     And distribution content:
-      | title       | description          | release   | access url | state     |
-      | Zip archive | It has files inside. | Pre-alpha | test.zip   | published |
+      | title       | release   | access url |
+      | Zip archive | Pre-alpha | test.zip   |
 
   @javascript
   Scenario: Group filters are shown as chips

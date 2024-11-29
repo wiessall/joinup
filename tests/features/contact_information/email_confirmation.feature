@@ -4,15 +4,12 @@ Feature: Resend validation email from collection/solution about page
   then a message must be displayed under the about page
 
   Scenario: Scenario for Collection and Solution
-    Given owner content:
-      | name      | owner type |
-      | Rotterdam | Company    |
-    And collection content:
-      | title          | state     | description         | topic                   | owner     |
-      | Rally fanatics | published | Rally fanatics desc | Demography, E-inclusion | Rotterdam |
+    Given collection content:
+      | title          |
+      | Rally fanatics |
     And solution content:
-      | title        | state     | abstract             | description       | topic                   | owner     | solution type                           | spatial coverage | collection     |
-      | Klop mirubes | published | Klop mirubes abstact | Klop mirubes desc | Demography, E-inclusion | Rotterdam | Non-binding Instrument, Logging Service | Belgium, Greece  | Rally fanatics |
+      | title        | collection     |
+      | Klop mirubes | Rally fanatics |
     And users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
@@ -120,8 +117,8 @@ Feature: Resend validation email from collection/solution about page
       | name               | email               |
       | Existing to resend | existing@resend.com |
     Given solution content:
-      | title                       | description          | state     | contact information |
-      | Existing to resend solution | Default description. | published | Existing to resend  |
+      | title                       | contact information |
+      | Existing to resend solution | Existing to resend  |
 
     When I am logged in as a user with the authenticated role
     And I go to the "Existing to resend solution" solution
@@ -155,8 +152,8 @@ Feature: Resend validation email from collection/solution about page
       | name        | email                   |
       | Some Resend | some.resend@example.com |
     Given solution content:
-      | title                       | description          | state     | contact information |
-      | Existing to resend solution | Default description. | published | Some Resend         |
+      | title                       | contact information |
+      | Existing to resend solution | Some Resend         |
     And the following email confirmation requests:
       | email                   | status  |
       | some.resend@example.com | pending |
