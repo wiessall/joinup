@@ -8,19 +8,13 @@ Feature: Tests the collection last update time.
     Given users:
       | Username    | Roles     |
       | The Cleaner | moderator |
-    And contact_information content:
-      | name                  | email       |
-      | Your Cleaning Company | foo@bar.com |
-    And owner content:
-      | name | owner type |
-      | Sean | Company    |
     And collection content:
       | title            | state     | modification date | creation date | author      |
       | Household Wizard | published | 2011-05-06T21:56  | 2001-01-03    | The Cleaner |
     Given solution content:
-      | title           | collection       | state     | modification date | creation date | author      | contact information   | owner | description                    |
-      | Roof Hole Cover | Household Wizard | published | 2010-07-05T23:03  | 2001-01-01    | The Cleaner | Your Cleaning Company | Sean  | Keep your roof in a good shape |
-      | Mosquito Killer | Household Wizard | proposed  | 2017-05-03T11:45  | 2001-01-02    | The Cleaner | Your Cleaning Company | Sean  | Quiet nights                   |
+      | title           | collection       | state     | modification date | creation date | author      |
+      | Roof Hole Cover | Household Wizard | published | 2010-07-05T23:03  | 2001-01-01    | The Cleaner |
+      | Mosquito Killer | Household Wizard | proposed  | 2017-05-03T11:45  | 2001-01-02    | The Cleaner |
     And I am logged in as "The Cleaner"
 
     Given I go to the homepage of the "Household Wizard" collection
@@ -30,24 +24,24 @@ Feature: Tests the collection last update time.
     Then the response should contain "2011-05-06T21:56"
 
     Given document content:
-      | title           | document type | state     | changed          | created    | collection       | field_paragraphs_body |
-      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere...    |
+      | title           | document type | changed          | created    | collection       | field_paragraphs_body |
+      | Get Rid of Rats | Document      | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere...    |
 
     And I reload the page
     # The document is the newest thus will give the collection updated time.
     Then the response should contain "2012-01-17T07:38"
 
     Given discussion content:
-      | title           | state     | changed          | created    | collection       |
-      | Household Forum | published | 2013-04-19T15:18 | 2001-01-05 | Household Wizard |
+      | title           | changed          | created    | collection       |
+      | Household Forum | 2013-04-19T15:18 | 2001-01-05 | Household Wizard |
 
     And I reload the page
     # The discussion is the newest thus will give the collection updated time.
     Then the response should contain "2013-04-19T15:18"
 
     Given event content:
-      | title        | state     | changed          | created    | collection       |
-      | Cleaning Day | published | 2014-06-06T22:46 | 2001-01-06 | Household Wizard |
+      | title        | changed          | created    | collection       |
+      | Cleaning Day | 2014-06-06T22:46 | 2001-01-06 | Household Wizard |
 
     And I reload the page
     # The event is the newest thus will give the collection updated time.
@@ -64,8 +58,8 @@ Feature: Tests the collection last update time.
     But the response should contain "2014-06-06T22:46"
 
     Given custom_page content:
-      | title          | changed          | created    | collection       | state     |
-      | The Kids Space | 2016-05-06T05:29 | 2001-01-07 | Household Wizard | published |
+      | title          | changed          | created    | collection       |
+      | The Kids Space | 2016-05-06T05:29 | 2001-01-07 | Household Wizard |
 
     And I reload the page
     # The custom page is the newest thus will give the collection updated time.

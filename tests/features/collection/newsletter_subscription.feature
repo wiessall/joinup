@@ -10,18 +10,12 @@ Feature: Subscribing to collection newsletters
       | Filippos Demetriou | filippos.demetriou@example.com |           |
       | Tatiana Andreas    | tatiandri@example.com          |           |
       | Magdalini Kokinos  | m.kokinos@example.com          | moderator |
-    And contact_information content:
-      | name                  | email                             |
-      | Charalambos Demetriou | charalambos.demetriou@example.com |
-    And owner content:
-      | name              |
-      | Antonios Katsaros |
     And collection content:
-      | title    | description             | logo     | owner             | contact information   | state     | topic                   |
-      | Volkor X | We do not come in peace | logo.png | Antonios Katsaros | Charalambos Demetriou | published | Statistics and Analysis |
+      | title    |
+      | Volkor X |
     And "news" content:
-      | title      | collection | state     | author          |
-      | Hypersleep | Volkor X   | published | Tatiana Andreas |
+      | title      | collection | author          |
+      | Hypersleep | Volkor X   | Tatiana Andreas |
     And the following collection user memberships:
       | collection | user               | roles       |
       | Volkor X   | Filippos Demetriou | owner       |
