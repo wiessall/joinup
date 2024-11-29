@@ -112,21 +112,10 @@ Feature: Private messages
       | Joan Tiff    |
       | Alice Miller |
 
-    # Delete full thread.
-    When I click "Joan Tiff" in thread message card
-    When I click "Delete thread"
-    Then a modal should open
-    And I should see the text "Are you sure you want to delete the thread between you and the following users: Joan Tiff" in the "Modal title"
-    And I should see the text "This action cannot be undone." in the "Modal content"
-    And I should see the button "Delete thread" in the "Modal buttons" region
-    Then I press "Delete thread" in the "Modal buttons" region
-    And I should not see the text "Hello Bob message to delete"
-    And I should see the following threads in private messages:
-      | Alice Miller |
-
-    # Delete private message
-    When a message containing the text "A private message from Alice to Bob." should be present
-    And I click "Delete message"
+    # Delete a single private message.
+    When I click "Alice Miller" in thread message card
+    Then a message containing the text "A private message from Alice to Bob." should be present
+    When I click "Delete message"
     Then a modal should open
     And I should see the text "Are you sure you want to delete the private message" in the "Modal title"
     And I should see the text "This action cannot be undone." in the "Modal content"
@@ -134,6 +123,24 @@ Feature: Private messages
     Then I press "Delete" in the "Modal buttons" region
     Then the modal should be closed
     And a message containing the text "A private message from Alice to Bob." should not be present
+    And a message containing the text "Another private message from Bob to Alice." should be present
+    When I click "Delete message"
+    Then a modal should open
+    Then I press "Delete" in the "Modal buttons" region
+    Then the modal should be closed
+    And a message containing the text "Another private message from Bob to Alice." should not be present
+    And a message containing the text "A private message from Bob to Joan." should be present
+
+    # Delete full thread.
+    When I click "Joan Tiff" in thread message card
+    And I should see the text "A private message from Bob to Joan"
+    When I click "Delete thread"
+    Then a modal should open
+    And I should see the text "Are you sure you want to delete the thread between you and the following users: Joan Tiff" in the "Modal title"
+    And I should see the text "This action cannot be undone." in the "Modal content"
+    And I should see the button "Delete thread" in the "Modal buttons" region
+    Then I press "Delete thread" in the "Modal buttons" region
+    And I should not see the text "A private message from Bob to Joan"
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
