@@ -7,37 +7,28 @@ Feature: Creating content and commenting on archived collection
   Background: Check access to the Post comment form
     Given users:
       | Username    | Roles     |
-      | Flora Hunt  | moderator |
-      | Lee Reeves  |           |
-      | Karl Fields |           |
-    And contact_information content:
-      | name           | email                 |
-      | Jody Rodriquez | JodyRodriquez@bar.com |
-    And owner content:
-      | name          |
-      | April Hawkins |
-    And collection content:
-      | title               | abstract            | description         | logo     | owner         | contact information | state     | topic                   |
-      | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | April Hawkins | Jody Rodriquez      | published | Statistics and Analysis |
+      | Flora_Hunt  | moderator |
+      | Lee_Reeves  |           |
+      | Karl_Fields |           |
     And the following collection user memberships:
       | collection          | user        | roles              |
-      | The Willing Consort | Karl Fields | owner, facilitator |
+      | Joinup              | Karl_Fields | owner, facilitator |
 
   Scenario: 'Comment form' should not be accessible on an archived collection content.
     Given discussion content:
-      | title               | collection          | state     |
-      | The Weeping's Stars | The Willing Consort | published |
-    When I am logged in as "Lee Reeves"
+      | title               | collection          |
+      | The Weeping's Stars | Joinup              |
+    When I am logged in as "Lee_Reeves"
     And I go to the "The Weeping's Stars" discussion
     Then the following fields should be present "Create comment"
     And I should see the button "Post comment"
 
-    When I am logged in as "Karl Fields"
-    And I go to the "The Willing Consort" collection
+    When I am logged in as "Karl_Fields"
+    And I go to the "Joinup" collection
     And I click "Edit"
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "The Willing Consort" collection
+    And I go to the "Joinup" collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
@@ -45,7 +36,7 @@ Feature: Creating content and commenting on archived collection
     Then the following fields should not be present "Create comment"
     And I should not see the button "Post comment"
 
-    When I am logged in as "Lee Reeves"
+    When I am logged in as "Lee_Reeves"
     And I go to the "The Weeping's Stars" discussion
     Then the following fields should not be present "Create comment"
     And I should not see the button "Post comment"
@@ -56,17 +47,17 @@ Feature: Creating content and commenting on archived collection
     And I should not see the button "Post comment"
 
   Scenario: 'Add community content' menu items should not be visible in the archived connection.
-    When I am logged in as "Karl Fields"
-    And I go to the "The Willing Consort" collection
+    When I am logged in as "Karl_Fields"
+    And I go to the "Joinup" collection
     And I click "Edit"
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "The Willing Consort" collection
+    And I go to the "Joinup" collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
 
     # We only need to check that privileged users do not have access anymore.
     And I am logged in as a facilitator of the "The Willing Consort" collection
-    And I go to the "The Willing Consort" collection
+    And I go to the "Joinup" collection
     Then I should not see the plus button menu

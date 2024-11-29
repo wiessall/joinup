@@ -11,8 +11,8 @@ Feature: As a user of the website
       | katerpillar    | kater.pillar@example.com    |
       | trustysidekick | trusty.sidekick@example.com |
     And collection content:
-      | title      | state     |
-      | Fairy Tail | published |
+      | title      |
+      | Fairy Tail |
     And event content:
       | title                     | collection | start date   | end date            | created    | state     | author         |
       | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | published | katerpillar    |

@@ -6,10 +6,10 @@ Feature: Joining a collection as an anonymous user
 
   Background:
     Given collection content:
-      | title           | abstract                          | closed | state     |
-      | Reannual plants | Harvested before they are planted | no     | published |
-      | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |
-      | CoC collection  | We have a Code of Conduct         | yes    | published |
+      | title           | closed |
+      | Reannual plants | no     |
+      | Vul nuts        | yes    |
+      | CoC collection  | yes    |
     And users:
       | Username         |
       | Hepzibah Whitlow |

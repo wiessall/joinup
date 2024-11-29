@@ -12,13 +12,10 @@ Feature: Collection homepage
       | Kili        | active  |
       | Bilbo       | blocked |
       | Some goblin | active  |
-    Given owner content:
-      | name         |
-      | Hobbit owner |
     And collection content:
-      | title                                   | description        | owner        | logo     | moderation | closed | state     |
-      | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | published |
-      | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | published |
+      | title                                   | moderation | closed |
+      | Under the mountain                      | yes        | no     |
+      | Exactly the same collection, but closed | yes        | yes    |
     And the following collection user memberships:
       | collection                              | user   | roles       |
       | Under the mountain                      | Thorin | facilitator |

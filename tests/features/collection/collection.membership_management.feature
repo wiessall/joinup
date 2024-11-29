@@ -3,8 +3,8 @@ Feature: Tests membership to Interoperable Europe Portal collection.
 
   Background:
     Given collection content:
-      | title                   | state     |
-      | An arbitrary collection | published |
+      | title                   |
+      | An arbitrary collection |
 
   Scenario: As a newly registered user, I'm automatically member of the 'Joinup'
     collection and I cannot leave.
