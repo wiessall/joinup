@@ -16,9 +16,9 @@ Feature: Accessibility
       | /collection/govtechconnect/news/register-govtech-connect-govtech4all-webinar                                                    |
       | /collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news/validator-plugin-guide                 |
       | /collection/joinup                                                                                                              |
-      | /collection/the-portal/about                                                                                                    |
-      | /collection/the-portal/faq                                                                                                      |
-      | /collection/the-portal/interoperability-solutions                                                                               |
+      | /collection/portal/about                                                                                                    |
+      | /collection/portal/faq                                                                                                      |
+      | /collection/portal/interoperability-solutions                                                                               |
       | /collection/nifo-national-interoperability-framework-observatory/news/publication-2022-digital-public-administration-factsheets |
       | /collection/open-data/news/discover-new-series-webinars-data-providers                                                          |
       | /collection/open-data/news/register-finals-eu-datathon-2022                                                                     |
