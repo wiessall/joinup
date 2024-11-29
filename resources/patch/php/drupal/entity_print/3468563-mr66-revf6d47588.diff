@@ -16,7 +16,7 @@ index 2340decdecdf1f4c10138b7b8fe5c7aaf39d13bc..24f0dcc120d04c9df4212125fbb98b50
  entity_print_engine_pdf:
    type: mapping
 diff --git a/entity_print.module b/entity_print.module
-index 39c2b42baeca37ed3f58235aaf63f248648afaa6..cf62cd83765c21b512bd7dbc4fd882448bb168d9 100644
+index 39c2b42baeca37ed3f58235aaf63f248648afaa6..424449fec61184c92d7b201e219761fe48674397 100644
 --- a/entity_print.module
 +++ b/entity_print.module
 @@ -6,8 +6,10 @@
@@ -30,7 +30,7 @@ index 39c2b42baeca37ed3f58235aaf63f248648afaa6..cf62cd83765c21b512bd7dbc4fd88244
  use Drupal\Core\Form\FormStateInterface;
  use Drupal\Core\Url;
  use Drupal\entity_print\Renderer\ContentEntityRenderer;
-@@ -47,11 +49,18 @@ function entity_print_entity_type_alter(array &$entity_types) {
+@@ -47,11 +49,22 @@ function entity_print_entity_type_alter(array &$entity_types) {
  function entity_print_entity_extra_field_info() {
    $export_types = \Drupal::service('plugin.manager.entity_print.export_type')->getDefinitions();
    $bundle_info = \Drupal::service('entity_type.bundle.info')->getAllBundleInfo();
@@ -39,11 +39,15 @@ index 39c2b42baeca37ed3f58235aaf63f248648afaa6..cf62cd83765c21b512bd7dbc4fd88244
 +    \Drupal::entityTypeManager()->getDefinitions(),
 +    fn (EntityTypeInterface $entityType): bool => $entityType instanceof ContentEntityTypeInterface,
 +  );
-+  $enabled_types_settings = \Drupal::config('entity_print.settings')->get('entity_types', []);
++  $enabled_types_settings = (array) \Drupal::config('entity_print.settings')->get('entity_types');
 +  $enabled_types = $enabled_types_settings
 +    ? array_intersect($enabled_types_settings, array_keys($content_entity_types))
 +    : array_keys($content_entity_types);
    $extra_fields = [];
++  // It can happen that an entity type does not (yet) has any bundles. In such
++  // cases, it won't appear in bundle info, obviously. So, we have to filter out
++  // these entity types as well.
++  $enabled_types = array_intersect($enabled_types, array_keys($bundle_info));
  
 -  foreach ($bundle_info as $entity_type_id => $bundles) {
 -    foreach ($bundles as $bundle_id => $bundle) {
@@ -52,7 +56,7 @@ index 39c2b42baeca37ed3f58235aaf63f248648afaa6..cf62cd83765c21b512bd7dbc4fd88244
        foreach ($export_types as $export_type => $definition) {
          $extra_fields[$entity_type_id][$bundle_id]['display']['entity_print_view_' . $export_type] = [
            'label' => t('View @label', ['@label' => $definition['label']]),
-@@ -100,8 +109,21 @@ function entity_print_form_entity_view_display_edit_form_alter(&$form, FormState
+@@ -100,8 +113,21 @@ function entity_print_form_entity_view_display_edit_form_alter(&$form, FormState
    /** @var \Drupal\Core\Entity\Entity\EntityViewDisplay $display */
    $display = $form_state->getFormObject()->getEntity();
    $export_types = \Drupal::service('plugin.manager.entity_print.export_type')->getDefinitions();
@@ -108,7 +112,7 @@ index 9bfdeb3f1296db6f21e09280cd4bf241f076b95a..611b6531310d69e5f68d1cee29ce691d
      // Invalid storage type.
 diff --git a/src/EventSubscriber/ConfigSubscriber.php b/src/EventSubscriber/ConfigSubscriber.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..f3379b74a99944e21661fcda3545833fd7b6d93c
+index 0000000000000000000000000000000000000000..367161c8dfcb1b4f72fc2ff73afe1d87967ba2b1
 --- /dev/null
 +++ b/src/EventSubscriber/ConfigSubscriber.php
 @@ -0,0 +1,50 @@
@@ -124,7 +128,7 @@ index 0000000000000000000000000000000000000000..f3379b74a99944e21661fcda3545833f
 +use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 +
 +/**
-+ * Performs the required operations when Entity Print config is changed.
++ * Performs the required operations when Entity Print config was changed.
 + */
 +class ConfigSubscriber implements EventSubscriberInterface {
 +
@@ -153,7 +157,7 @@ index 0000000000000000000000000000000000000000..f3379b74a99944e21661fcda3545833f
 +  /**
 +   * {@inheritdoc}
 +   */
-+  public static function getSubscribedEvents() {
++  public static function getSubscribedEvents(): array {
 +    return [
 +      ConfigEvents::SAVE => [
 +        ['onConfigSave'],
@@ -263,7 +267,7 @@ index 167e7fea93558a8b94d5966742cfb88dcd3f42ed..5c24b34f1ef10bbb13bcf174dc94e639
  
  }
 diff --git a/tests/src/Kernel/ExtraFieldsTest.php b/tests/src/Kernel/ExtraFieldsTest.php
-index 6af45750db81e2992d76bb8a5430571e476e4c1a..b3323ab52318e980d4fa4a51e487c041f6288ba9 100644
+index 6af45750db81e2992d76bb8a5430571e476e4c1a..2de1d4e76095e1cca0291b2332d4c169b74b5379 100644
 --- a/tests/src/Kernel/ExtraFieldsTest.php
 +++ b/tests/src/Kernel/ExtraFieldsTest.php
 @@ -2,13 +2,17 @@
@@ -285,7 +289,7 @@ index 6af45750db81e2992d76bb8a5430571e476e4c1a..b3323ab52318e980d4fa4a51e487c041
  
  /**
   * Tests the hook_extra_fields() implementation.
-@@ -110,4 +114,76 @@ class ExtraFieldsTest extends KernelTestBase {
+@@ -110,4 +114,89 @@ class ExtraFieldsTest extends KernelTestBase {
      $this->assertTrue(stripos($text, 'View PDF') > stripos($text, 'body text'), 'View PDF link appears last');
    }
  
@@ -359,6 +363,19 @@ index 6af45750db81e2992d76bb8a5430571e476e4c1a..b3323ab52318e980d4fa4a51e487c041
 +        'expected_types' => ['user', 'node'],
 +      ],
 +    ];
++  }
++
++  /**
++   * Tests that a bundleable entity type does not break if it has no bundles.
++   */
++  public function testBundleableEntityTypeWithoutBundle(): void {
++    $this->enableModules(['entity_test']);
++    $this->installEntitySchema('entity_test_with_bundle');
++
++    $this->testEntityTypeRestriction(
++      ['entity_test_with_bundle'],
++      [],
++    );
 +  }
 +
  }
