@@ -127,7 +127,7 @@ Feature:
     And the row "v2.0" is selected
     But the row "1.1.1" is not selected
 
-    When I am on "/the-portal/legal-notice"
+    When I am on "/portal/legal-notice"
     Then I should see the heading "Legal notice"
     And I should see "New rules..."
 

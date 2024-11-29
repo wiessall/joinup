@@ -338,7 +338,7 @@ Feature: Global search
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
     # The Portal collection is included
-    Then the page should show the tiles "Joinup, Solution alpha, Release Alpha"
+    Then the page should show the tiles "The Portal, Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
