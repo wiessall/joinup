@@ -47,18 +47,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes an contact information entity.
-   *
-   * @param string $name
-   *   The name of the contact information to delete.
-   *
-   * @When I delete the :contact contact information
-   */
-  public function deleteContactInformation(string $name): void {
-    $this->getEntityByLabel('node', $name, 'contact_information')->delete();
-  }
-
-  /**
    * Validates the emails of given list of contact information entities.
    *
    * @param \Behat\Gherkin\Node\TableNode $contact_info_list
