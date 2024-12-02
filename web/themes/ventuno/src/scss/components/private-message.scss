@@ -107,11 +107,11 @@
     text-decoration: none !important;
     &::before {
       @include get-bootstrap-icon("trash", currentColor);
-
       margin-right: $spacer * 0.5;
     }
   }
 }
+
 .private_message_thread_delete_link_wrapper {
   margin-right: $spacer * 0.5;
   margin-bottom: $spacer * 0.5;
@@ -120,6 +120,32 @@
 .private_message_thread_inbox_links {
   display: flex;
   flex-wrap: wrap;
+}
+
+#load-previous-threads-button-wrapper {
+  a {
+    font-size: $font-size-base !important;
+    border-top: 1px solid $gray-300;
+    padding: $spacer * 0.5;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+#load-previous-messages-button-wrapper {
+  border-bottom: 1px solid $gray-300;
+  margin-bottom: $spacer;
+  a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    padding-bottom: $spacer;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+      margin-left: $spacer * 0.5;
+    }
+  }
 }
 
 // Messages thread.
@@ -144,6 +170,9 @@
       flex-basis: 100%;
       padding: 0 !important;
       border: none !important;
+      p {
+        margin-bottom: 0;
+      }
       &:has(+ .private_message_delete) {
         a.private_message_report {
           margin-right: $spacer * 2;
@@ -156,10 +185,7 @@
       min-height: 24px;
       color: $dark;
       &::before {
-        @include get-bootstrap-icon("exclamation-triangle", currentColor);
-      }
-      &:hover {
-        color: $primary;
+        @include get-bootstrap-icon("exclamation-triangle", $danger);
       }
     }
     a.private_message_delete {
