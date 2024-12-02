@@ -54,8 +54,24 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       if ($current_route_name !== 'private_message.private_message_create') {
         /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
         $thread = $form_state->getBuildInfo()['args'][0];
+        $members = $thread->getMembersId();
+        if (count($members) !== 2) {
+          // Failsafe in case something went wrong and the database is in an
+          // inconsistent state.
+          $form['warning'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('Something went wrong. Please, refresh the page.'),
+              ],
+            ],
+            '#weight' => -100,
+          ];
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['#attributes']['disabled'] = 'disabled';
+        }
         // Threads in Joinup always have only 2 members.
-        if (joinup_private_message_ban_exists_between_users(...$thread->getMembersId())) {
+        elseif (joinup_private_message_ban_exists_between_users(...$members)) {
           $form['warning'] = [
             '#theme' => 'status_messages',
             '#message_list' => [
@@ -106,6 +122,11 @@ function joinup_private_message_add_form_validate(array &$form, FormStateInterfa
   if (empty($thread)) {
     // A new message is being created.
     return;
+  }
+
+  $members = array_slice($thread->getMembersId(), 0, 2);
+  if (count($members) !== 2) {
+    $form_state->setError($form, t('Something went wrong. Please, refresh the page.'));
   }
 
   $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
