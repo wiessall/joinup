@@ -107,6 +107,7 @@
     text-decoration: none !important;
     &::before {
       @include get-bootstrap-icon("trash", currentColor);
+
       margin-right: $spacer * 0.5;
     }
   }
@@ -124,25 +125,27 @@
 
 #load-previous-threads-button-wrapper {
   a {
-    font-size: $font-size-base !important;
-    border-top: 1px solid $gray-300;
     padding: $spacer * 0.5;
+    border-top: 1px solid $gray-300;
+    font-size: $font-size-base !important;
     &::after {
       @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
       margin-left: $spacer * 0.5;
     }
   }
 }
 #load-previous-messages-button-wrapper {
-  border-bottom: 1px solid $gray-300;
   margin-bottom: $spacer;
+  border-bottom: 1px solid $gray-300;
   a {
     display: block;
-    text-decoration: none;
-    text-align: center;
     padding-bottom: $spacer;
+    text-align: center;
+    text-decoration: none;
     &::after {
       @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
       margin-left: $spacer * 0.5;
     }
   }
