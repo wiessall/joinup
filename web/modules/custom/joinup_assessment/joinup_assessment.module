@@ -68,7 +68,7 @@ function joinup_assessment_preprocess_views_view(array &$variables): void {
   if ($view->id() === 'assessment_reports' && $view->current_display === 'list' && \Drupal::currentUser()->isAuthenticated()) {
     $button_link = [
       '#type' => 'link',
-      '#title' => 'My assessments',
+      '#title' => t('My assessments'),
       '#url' => Url::fromUserInput('/assessments/questionnaire/submissions'),
       '#attributes' => [
         'class' => ['m-3'],
