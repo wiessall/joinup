@@ -46,7 +46,7 @@ Feature: Contact form for solution
     Given I go to the homepage of the "Six exclusion advantages" solution
     Then I should see the link "John Deleted"
     Given the "contact information" of "Six exclusion advantages" solution is changed to "John Revoked"
-    And I delete the "John Deleted" contact information
+    And I delete the "John Deleted" "contact information"
     Given there are no preexisting log records
     And I click "John Deleted" in the "Content" region
     Then I should see the following error message:
