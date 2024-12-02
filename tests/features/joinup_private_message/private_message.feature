@@ -21,7 +21,6 @@ Feature: Private messages
     Then a modal should open
     And I should see the text "New message" in the "Modal title"
     When I type "Bob Rolls" in the "To:" autocomplete field
-    And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Alice to Bob."
     And I press "Send" in the "Modal buttons" region
@@ -51,7 +50,6 @@ Feature: Private messages
     When I click "New message"
     Then a modal should open
     When I type "Joan Tiff" in the "To:" autocomplete field
-    And I wait until the page contains the text "Joan Tiff"
     And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Message" with "A private message from Bob to Joan."
     And I press "Send" in the "Modal buttons" region
