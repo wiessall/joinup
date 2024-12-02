@@ -17,7 +17,6 @@ Feature: Private message report.
     And I click "New message"
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
-    And I wait for AJAX to finish
     Then I should see the text "Bob Rolls" in the "Private message autocomplete results" region
     When I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Message" with "This is a mean message to Bob."
@@ -59,12 +58,10 @@ Feature: Private message report.
     And I click "New message"
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
-    And I wait for AJAX to finish
     Then I should not see the text "Bob Rolls" in the "Private message autocomplete results" region
 
     # Ensure that the user cannot force the user to the recipient list.
     When I type "Bob Rolls (9001)" in the "To:" autocomplete field
-    And I wait for AJAX to finish
     And I fill in "Message" with "This is another mean message to Bob."
     And I press "Send" in the "Modal buttons" region
     Then I should see the error message "You cannot send messages to a user that has blocked you, or was blocked by you."
