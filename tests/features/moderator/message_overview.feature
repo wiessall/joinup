@@ -71,4 +71,4 @@ Feature: Solutions message overview
 
     # Clean up the collection that was created.
     And I delete the "Message overview proposal" collection
-    And I delete the "Invisible Man" contact information
+    And I delete the "Invisible Man" "contact information"
