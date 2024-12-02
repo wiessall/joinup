@@ -62,20 +62,6 @@ class ReleaseContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a release.
-   *
-   * @param string $release
-   *   The name of the release.
-   *
-   * @When I delete the :release release
-   */
-  public function deleteRelease(string $release): void {
-    $release = $this->getEntityByLabel('node', $release);
-    $release->skip_notification = TRUE;
-    $release->delete();
-  }
-
-  /**
    * Asserts that releases are shown in the page in the exact order.
    *
    * This step is meant for the releases overview page within a solution.
