@@ -15,7 +15,7 @@ use Drupal\Core\Language\LanguageInterface;
 function joinup_legal_install(): void {
   $path_alias = \Drupal::entityTypeManager()->getStorage('path_alias')->create([
     'path' => '/legal/document/legal_notice',
-    'alias' => '/joinup/legal-notice',
+    'alias' => '/portal/legal-notice',
     'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
   ]);
   $path_alias->save();
