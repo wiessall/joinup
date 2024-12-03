@@ -82,7 +82,6 @@ function joinup_test_install($is_syncing): void {
   // Create the Joinup collection on clean installation.
   $nodeStorage = $entityTypeManager->getStorage('node');
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-//  if (!$mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
     $collection = $nodeStorage->create([
       'type' => 'collection',
       'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
@@ -118,7 +117,6 @@ function joinup_test_install($is_syncing): void {
       $index->setOption('index_directly', TRUE);
       $index->trackItemsUpdated('entity:node', [$collection->id() . ':en']);
     }
-//  }
 }
 
 /**
