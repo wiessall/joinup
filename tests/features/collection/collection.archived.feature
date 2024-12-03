@@ -10,25 +10,28 @@ Feature: Creating content and commenting on archived collection
       | Flora_Hunt  | moderator |
       | Lee_Reeves  |           |
       | Karl_Fields |           |
+    And collection content:
+      | title               |
+      | The Willing Consort |
     And the following collection user memberships:
       | collection          | user        | roles              |
-      | Joinup              | Karl_Fields | owner, facilitator |
+      | The Willing Consort | Karl_Fields | owner, facilitator |
 
   Scenario: 'Comment form' should not be accessible on an archived collection content.
     Given discussion content:
       | title               | collection          |
-      | The Weeping's Stars | Joinup              |
+      | The Weeping's Stars | The Willing Consort |
     When I am logged in as "Lee_Reeves"
     And I go to the "The Weeping's Stars" discussion
     Then the following fields should be present "Create comment"
     And I should see the button "Post comment"
 
     When I am logged in as "Karl_Fields"
-    And I go to the "Joinup" collection
+    And I go to the "The Willing Consort" collection
     And I click "Edit"
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "Joinup" collection
+    And I go to the "The Willing Consort" collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
@@ -48,16 +51,16 @@ Feature: Creating content and commenting on archived collection
 
   Scenario: 'Add community content' menu items should not be visible in the archived connection.
     When I am logged in as "Karl_Fields"
-    And I go to the "Joinup" collection
+    And I go to the "The Willing Consort" collection
     And I click "Edit"
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "Joinup" collection
+    And I go to the "The Willing Consort" collection
     And I click "Edit"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
 
     # We only need to check that privileged users do not have access anymore.
     And I am logged in as a facilitator of the "The Willing Consort" collection
-    And I go to the "Joinup" collection
+    And I go to the "The Willing Consort" collection
     Then I should not see the plus button menu
