@@ -602,7 +602,7 @@ display:
         weight: 4
         expanded: false
         menu_name: admin
-        parent: joinup.admin_reporting
+        parent: joinup_reports.admin_reporting
         context: '0'
       use_admin_theme: false
     cache_metadata:

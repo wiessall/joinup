@@ -11,6 +11,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -27,6 +28,7 @@ class JoinupGroupContext extends RawDrupalContext {
   use EntityTrait;
   use MailCollectorTrait;
   use TestingEntitiesTrait;
+  use UserTrait;
 
   /**
    * Navigates to the members page of the given group.
@@ -256,18 +258,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a specific announcement.
-   *
-   * @param string $subject
-   *   The announcement subject.
-   *
-   * @Then I delete the :subject announcement
-   */
-  public function deleteAnnouncement(string $subject): void {
-    $this->getAnnouncementBySubject($subject)->delete();
-  }
-
-  /**
    * Creates a set of announcements.
    *
    * Table format:
@@ -453,7 +443,7 @@ class JoinupGroupContext extends RawDrupalContext {
 
     // Assume entity reference field and an entity label in the $value variable.
     if (is_string($entityTypeId)) {
-      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
+      $value = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
       Assert::assertNotEmpty(
         $value,
         sprintf(
@@ -467,6 +457,42 @@ class JoinupGroupContext extends RawDrupalContext {
     MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
       ->set($fieldName, $value)
       ->save();
+  }
+
+  /**
+   * Deletes an entity, user, or message based on identifier and type alias.
+   *
+   * @param string $identifier
+   *   The entity title, username, or subject to identify the entity.
+   * @param string $entityTypeAlias
+   *   The alias of the entity type (e.g., 'node', 'contact information').
+   *   Refer to the `entityTypeAliases()` method for the full mapping.
+   *
+   * @When I delete the :identifier :entityTypeAlias
+   */
+  public function deleteEntity(string $identifier, string $entityTypeAlias): void {
+    $entityTypeId = $this->entityTypeAliases()[$entityTypeAlias] ?? NULL;
+    if (!$entityTypeId) {
+      throw new \InvalidArgumentException("Invalid entity alias: $entityTypeAlias");
+    }
+
+    $entity = match ($entityTypeId) {
+      'user' => $this->getUserByName($identifier),
+      'webform' => $this->getEntityById($entityTypeId, $identifier),
+      'message' => $this->getAnnouncementBySubject($identifier),
+      default => $this->getEntityByLabel($entityTypeId, $identifier),
+    };
+
+    if (!$entity) {
+      throw new \RuntimeException("Entity not found for bundle: $entityTypeAlias, identifier: $identifier");
+    }
+
+    if (isset($this->entities[$entity->bundle()][$entity->id()])) {
+      unset($this->entities[$entity->bundle()][$entity->id()]);
+    }
+
+    $entity->skip_notification = TRUE;
+    $entity->delete();
   }
 
 }

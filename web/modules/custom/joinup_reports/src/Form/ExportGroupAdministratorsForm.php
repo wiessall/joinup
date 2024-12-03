@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Form;
+namespace Drupal\joinup_reports\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\joinup\ExportBatchedDataFormBase;
+use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -44,7 +44,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    * {@inheritdoc}
    */
   protected function getRedirectRouteName(): string {
-    return 'joinup.group_administrators_report';
+    return 'joinup_reports.group_administrators_report';
   }
 
   /**

@@ -271,7 +271,7 @@ Feature: "Add solution" visibility options.
     # let's just get rid of both.
     Then I delete the "Climate change tracker" solution
     And I delete the "Climate change tracker" solution
-    And I delete the "Angela Crespi" contact information
+    And I delete the "Angela Crespi" "contact information"
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.

@@ -13,6 +13,8 @@ use Drupal\menu_link_content\MenuLinkContentInterface;
  */
 trait EntityTrait {
 
+  use NameMappingsTrait;
+
   /**
    * Finds and entity by label with given type and bundle.
    */
@@ -77,34 +79,6 @@ trait EntityTrait {
   }
 
   /**
-   * Mapping of human-readable entity type names to machine names.
-   *
-   * @return array
-   *   The entity type mapping.
-   */
-  protected static function entityTypeAliases(): array {
-    return [
-      'collection' => 'node',
-      'contact information' => 'node',
-      'content' => 'node',
-      'custom page' => 'node',
-      'discussion' => 'node',
-      'distribution' => 'node',
-      'document' => 'node',
-      'event' => 'node',
-      'glossary' => 'node',
-      'group' => 'node',
-      'news' => 'node',
-      'owner' => 'node',
-      'oss_solution' => 'node',
-      'release' => 'node',
-      'solution' => 'node',
-      'spdx licence' => 'taxonomy_term',
-      'topic' => 'taxonomy_term',
-    ];
-  }
-
-  /**
    * Translates human readable entity types to machine names.
    *
    * @param string $entity_type_label
@@ -113,9 +87,9 @@ trait EntityTrait {
    * @return string
    *   The machine name of the entity type.
    */
-  protected static function translateEntityTypeAlias(string $entity_type_label): string {
+  protected function translateEntityTypeAlias(string $entity_type_label): string {
     $entity_type_label = strtolower($entity_type_label);
-    $aliases = self::entityTypeAliases();
+    $aliases = $this->entityTypeAliases();
     if (array_key_exists($entity_type_label, $aliases)) {
       $entity_type_label = $aliases[$entity_type_label];
     }
@@ -131,34 +105,13 @@ trait EntityTrait {
    * @return string
    *   The machine name of the bundle.
    */
-  protected static function translateBundle(string $bundle): string {
+  protected function translateBundle(string $bundle): string {
     $bundle = strtolower($bundle);
-    $aliases = static::bundleAliases();
+    $aliases = $this->bundleAliases();
     if (array_key_exists($bundle, $aliases)) {
       $bundle = $aliases[$bundle];
     }
     return $bundle;
-  }
-
-  /**
-   * Mapping of human readable bundle names to machine names.
-   *
-   * @return array
-   *   The bundle mapping.
-   */
-  protected static function bundleAliases(): array {
-    return [
-      'custom page' => 'custom_page',
-      'discussion' => 'discussion',
-      'distribution' => 'distribution',
-      'document' => 'document',
-      'event' => 'event',
-      'glossary' => 'glossary',
-      'news' => 'news',
-      'oss_solution' => 'oss_solution',
-      'release' => 'release',
-      'spdx licence' => 'spdx_licence',
-    ];
   }
 
   /**
@@ -231,7 +184,7 @@ trait EntityTrait {
    *   The title of the entity.
    * @param string $bundle
    *   An alias of a bundle as defined in the
-   *   \Drupal\joinup\Traits\EntityTrait::bundleAliases method.
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
    *
    * @throws \InvalidArgumentException
    *   Thrown when an invalid action is passed.
