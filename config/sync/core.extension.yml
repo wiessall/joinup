@@ -76,7 +76,6 @@ module:
   github_feed: 0
   help: 0
   honeypot: 0
-  http_request_mock: 0
   iframe: 0
   image: 0
   image_library_widget: 0
@@ -129,7 +128,6 @@ module:
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
-  joinup_test: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
