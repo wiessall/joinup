@@ -17,8 +17,8 @@ Feature: Collection membership administration
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
     And collection content:
-      | title | closed |
-      | z     | yes    |
+      | title             | closed |
+      | Medical diagnosis | yes    |
     And the following collection user memberships:
       | collection        | user              | roles                      | state   |
       | Medical diagnosis | Lisa Cuddy        | administrator, facilitator | active  |
