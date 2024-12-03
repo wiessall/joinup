@@ -15,17 +15,26 @@ index 33fe3cab367b297500edfe7434713c414bc34a53..34a20fd3764e9eca93ed895b43690492
 +
  }
 diff --git a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
-index c3f09640ea5aba7c67d1db8f45f1757841575b5b..667e037f74f6b1a969c0f84719a0754ca7915245 100644
+index c3f09640ea5aba7c67d1db8f45f1757841575b5b..a7f1db8ef8496e5730b8d15b2fcc76e1a4405d32 100644
 --- a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
 +++ b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
-@@ -44,7 +44,9 @@ class FileUrlFieldItemList extends EntityReferenceFieldItemList {
+@@ -6,7 +6,6 @@ namespace Drupal\file_url\Plugin\Field\FieldType;
+ 
+ use Drupal\Core\Field\EntityReferenceFieldItemList;
+ use Drupal\Core\Field\FieldStorageDefinitionInterface;
+-use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\file\FileInterface;
+ use Drupal\file_url\FileUrlHandler;
+@@ -41,11 +40,6 @@ class FileUrlFieldItemList extends EntityReferenceFieldItemList {
+     return $constraints;
+   }
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function defaultValuesForm(array &$form, FormStateInterface $form_state): array {}
+-
    /**
     * {@inheritdoc}
     */
--  public function defaultValuesForm(array &$form, FormStateInterface $form_state): array {}
-+  public function defaultValuesForm(array &$form, FormStateInterface $form_state): array {
-+    return parent::defaultValuesForm($form, $form_state);
-+  }
- 
-   /**
-    * {@inheritdoc}
