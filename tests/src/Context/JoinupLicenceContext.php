@@ -69,20 +69,6 @@ class JoinupLicenceContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a licence.
-   *
-   * @param string $licence
-   *   The title of the licence.
-   *
-   * @When I delete the :licence licence
-   */
-  public function deleteLicence(string $licence): void {
-    $licence = $this->getEntityByLabel('node', $licence);
-    $licence->skip_notification = TRUE;
-    $licence->delete();
-  }
-
-  /**
    * Checks the number of available licences.
    *
    * @param int $number
