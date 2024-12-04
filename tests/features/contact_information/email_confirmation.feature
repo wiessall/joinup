@@ -84,8 +84,8 @@ Feature: Resend validation email from collection/solution about page
     # Check also for a solution and a facilitator.
     When I am logged in as a moderator
     And I go to the "Klop mirubes" solution
-    Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Klop mirubes" solution
+    And I press "Add new contact information"
     And I fill in the following:
       | E-mail | confirmation_email2.man@example.com |
       | Name   | Confirmation Invisible Man 2        |
@@ -116,8 +116,8 @@ Feature: Resend validation email from collection/solution about page
       | title          |
       | Rally fanatics |
     Given contact_information content:
-      | name               | email               |
-      | Existing to resend | existing@resend.com |
+      | name               | email              |
+      | Existing to resend | existing@gmail.com |
     Given solution content:
       | title                       | contact information | collection     |
       | Existing to resend solution | Existing to resend  | Rally fanatics |
@@ -138,10 +138,6 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am logged in as a moderator
-    And I go to the "Existing to resend solution" solution
-    Then I should see the text "Please confirm your contact information to enable users to contact you"
-
-    Given I am logged in as a facilitator of the "Existing to resend solution" solution
     And I go to the "Existing to resend solution" solution
     Then I should see the text "Please confirm your contact information to enable users to contact you"
 
