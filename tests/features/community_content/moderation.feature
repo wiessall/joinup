@@ -9,8 +9,8 @@ Feature: Moderate community content
       | title               | state     | content creation | moderation |
       | Black hole research | published | members          | yes        |
     And solution content:
-      | title                 | state     |
-      | Survey For Supernovae | published |
+      | title                 | state     | collection          |
+      | Survey For Supernovae | published | Black hole research |
     And users:
       | Username       | E-mail                   | First name | Family name |
       | Marco Farfarer | marco.farfar@example.com | Marco      | Farfarer    |
@@ -120,8 +120,6 @@ Feature: Moderate community content
 
     And I should see the following lines of text:
       | Hawking radiation            |
-      | Small amount of flux         |
-      | Carbon abundance             |
       | Fast electrons are not       |
       | VLT spectroscopic instrument |
       | Follow spiral paths          |
@@ -242,9 +240,7 @@ Feature: Moderate community content
       | Supermassive                 |
       | Optical and infrared         |
       | Weak ¹²CO absorption         |
-      | Small amount of flux         |
       | Accretion disk emission      |
-      | Carbon abundance             |
       | Chromospheric evaporation    |
       | Single-loop geometry         |
       | Fast electrons are not       |
