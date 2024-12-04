@@ -83,6 +83,7 @@ Feature: Private messages
     Then I should see "Sorry, you have reached your limit for posting. Please try again later."
     Then I restore the limit for messages or threads allowed
 
+    # Test the relevant links.
     Given I am logged in as "alice_m"
     And I am on the homepage
     And I should see 1 unread private message
@@ -91,7 +92,22 @@ Feature: Private messages
     Then a message containing the text "Another private message from Bob to Alice." should be present
     And I should not see the link "Delete thread"
     And I should not see "Delete message"
+    And I should not visibly see the link "Inbox"
     But I should see the link "Delete for me"
+    # Test Inbox with a small display.
+    # We use "Delete for me" to test if the Inbox is visible.
+    When I use a device with a "small" display
+    Then I should see the link "Inbox"
+    But I should not visibly see the link "Delete for me"
+    When I click "Inbox"
+    Then I should see the link "Delete for me"
+    Then I click "Bob Rolls" in thread message card
+    And I wait for CSS animations to finish
+    Then I should not visibly see the link "Delete for me"
+    # Go back to normal display.
+    Then I use a device with an "extra large" display
+    Then I should not visibly see the link "Inbox"
+    Then I should see the link "Delete for me"
     When I click "Delete for me"
     Then a modal should open
     And I should see the text "Delete conversation for me" in the "Modal title"
