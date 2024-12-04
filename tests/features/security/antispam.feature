@@ -17,8 +17,8 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | Username |
       | Günther  |
     And contact_information content:
-      | name      | email                |
-      | ACME Inc. | acme.inc@example.com |
+      | name      | email                | state     |
+      | ACME Inc. | acme.inc@example.com | validated |
     And the following email confirmation request:
       | email                | status    |
       | acme.inc@example.com | confirmed |

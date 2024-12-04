@@ -9,8 +9,8 @@ Feature:
       | title         | state     |
       | Plaster molds | published |
     And custom_page content:
-      | title                  | collection    | abstract             |
-      | Layout paragraphs test | Plaster molds | Layout page abstract |
+      | title                  | collection    | abstract             | state       |
+      | Layout paragraphs test | Plaster molds | Layout page abstract | unpublished |
     And I am logged in as a moderator
     And I go to the edit form of the "Layout paragraphs test" "custom page"
 
