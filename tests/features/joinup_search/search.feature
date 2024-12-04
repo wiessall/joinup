@@ -871,3 +871,47 @@ Feature: Global search
     And I should see the "Col for Sol net" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
     And I should see the text "Loky and Rocky." in the "Col for Sol net" card
+
+  @javascript
+  Scenario: Interoperability assessments search filter in the search page.
+    Given collection content:
+      | title        | description                                          | abstract                   | state     |
+      | Aortic alpha | <p>collection <strong>beta</strong> description.</p> | The aortic gamma abstract. | published |
+      | Col for Skye | <p>collection for the solution.</p>                  | The col for skye abstract. | published |
+    And event content:
+      | title        | short title       | field_paragraphs_body               | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection   | state     |
+      | Event domega | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Aortic alpha | published |
+      | Event ratega | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Aortic alpha | published |
+    And document content:
+      | title            | document type                | short title            | field_paragraphs_body                           | spatial coverage | keywords | collection   | state     |
+      | Document dome    | Interoperability Assessment  | Document dome delta    | A document dome consists of epsilon strings.    | Luxembourg       | Alphabet | Aortic alpha | published |
+      | Document gathers | Document                     | Document gathers delta | A document gathers consists of epsilon strings. | Luxembourg       | Alphabet | Aortic alpha | published |
+      | Document winners | Interoperability Assessment  | Document winners delta | A document winners consists of epsilon strings. | Luxembourg       | Alphabet | Aortic alpha | archived  |
+      | Document account | Document                     | Document account delta | A document account consists of epsilon strings. | Luxembourg       | Alphabet | Aortic alpha | archived  |
+
+    When I visit the search page
+    Then I should see the following tiles in the correct order:
+      | Aortic alpha     |
+      | Col for Skye     |
+      | The Portal       |
+      | Event domega     |
+      | Event ratega     |
+      | Document dome    |
+      | Document gathers |
+    And I should not see the "Document winners" tile
+    And I should not see the "Document account" tile
+    And I check the "Events (2)" checkbox from the "Content types" facet
+    And I check the "Documents (2)" checkbox from the "Content types" facet
+    Then I should see the following facet summary "Events, Documents"
+    And the page should show only the tiles "Event domega, Event ratega, Document dome, Document gathers"
+
+    When I check the "Show only interoperability assessments" checkbox from the "Type of document" facet
+    Then the page should show only the tiles "Document dome"
+    When I check the "Show only Archived items" checkbox from the "Status" facet
+    And the page should show only the tiles "Document winners"
+
+    Then I check the "Show only interoperability assessments" checkbox from the "Type of document" facet
+    And the page should show only the tiles "Document winners, Document account"
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    Then I should see the following facet summary "Events, Documents"
+    And the page should show only the tiles "Event domega, Event ratega, Document dome, Document gathers"
