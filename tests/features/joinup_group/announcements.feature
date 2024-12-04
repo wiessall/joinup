@@ -463,7 +463,6 @@ Feature: Messaging group announcements
       | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
     When I type "Collection1 Solution1" in the "group" autocomplete field
-    Then I wait until the page contains the text "Collection1 Solution1"
     And I pick "Collection1 Solution1" from the autocomplete suggestions
     And I press "Apply"
     Then the "announcement list" table should be:

@@ -4,20 +4,21 @@ Feature: Private message report.
   As a user
   I need to be able to report a message.
 
+  Background:
+    Given users:
+      | ID   | Username  | First name | Family name | E-mail                | Roles     |
+      | 900  | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
+      | 9001 | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+
   @javascript
   Scenario: Report a private message
-    Given users:
-      | Username  | First name | Family name | E-mail                | Roles     |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
-
     Given I am logged in as "alice_m"
     And I am on "/user/messages"
     And I click "New message"
     Then a modal should open
-    When I type "Bob Rolls" in the "To:" autocomplete field
-    And I wait for AJAX to finish
-    And I pick "Bob Rolls" from the "Member" autocomplete suggestions
+    When I type "Bob" in the "To:" autocomplete field
+    Then I should see the text "Bob Rolls" in the "Private message autocomplete results" region
+    When I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Message" with "This is a mean message to Bob."
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
@@ -46,6 +47,26 @@ Feature: Private message report.
       | This is a mean message to Bob.                                                                    |
       | Report reason:                                                                                    |
       | I want to report this message.                                                                    |
+
+    # A blocked user should not be able to send messages to the user that
+    # blocked them.
+    When I am logged in as "alice_m"
+    And I am on "/user/messages"
+    # Since there is only the thread with bob_rolls, we can already assert that
+    # the wysiwyg editor and the "Send" button are not present.
+    And the following button should be disabled "Send"
+    And I click "New message"
+    Then a modal should open
+    When I type "Bob" in the "To:" autocomplete field
+    Then I should not see the text "Bob Rolls" in the "Private message autocomplete results" region
+
+    # Ensure that the user cannot force the user to the recipient list.
+    When I type "Bob Rolls (9001)" in the "To:" autocomplete field
+    And I fill in "Message" with "This is another mean message to Bob."
+    And I press "Send" in the "Modal buttons" region
+    Then I should see the error message "You cannot send messages to a user that has blocked you, or was blocked by you."
+
+    Given I am logged in as "bob_rolls"
     When I am on "/user/messages/settings"
     And I click "Unblock"
     Then a modal should open
@@ -54,3 +75,21 @@ Feature: Private message report.
     When I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
+
+  @javascript
+  Scenario: Validation fails when a user is already messaging another user that
+  banned them.
+    Given the following private messages:
+      | owner   | recipient | message |
+      | alice_m | bob_rolls | Hello 1 |
+    And I am logged in as "bob_rolls"
+    And I am on "/user/messages"
+    And I fill in "Reply" with "A private message from Bob to Alice."
+
+    # Simulate that Alice has banned Bob while bob has already filled the
+    # message form and is about to send the message.
+    And "alice_m" has banned "bob_rolls"
+    And I press "Send"
+    Then I should see the warning message "You cannot send messages to a user that has blocked you, or was blocked by you."
+    And I reload the page
+    And I should not see the text "A private message from Bob to Alice."

@@ -212,6 +212,7 @@ default:
         Pager: 'nav.pager'
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
+        Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
         SevenHeader: '.region-header'
