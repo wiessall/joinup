@@ -671,7 +671,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     // Replace field label aliases with the actual field names.
     foreach (get_object_vars($node) as $alias => $value) {
       $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
@@ -748,6 +748,7 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->field_state)) {
       $node->field_state = self::translateWorkflowStateAlias($node->field_state);
     }
+
     elseif (!empty($field_definitions['field_state']) && empty($node->field_state)) {
       $node->field_state = 'published';
     }
@@ -808,7 +809,6 @@ class JoinupContext extends RawDrupalContext {
       unset($node->field_paragraphs_body);
     }
 
-    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
