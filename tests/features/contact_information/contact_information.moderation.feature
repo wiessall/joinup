@@ -115,8 +115,8 @@ Feature: Contact Information moderation
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |
     And contact_information content:
-      | name        | email            | author         |
-      | Secreteriat | info@example.com | Sown Carnberry |
+      | name        | email            | author         | state     |
+      | Secreteriat | info@example.com | Sown Carnberry | validated |
     And collection content:
       | title                 | description        | logo     | owner       | contact information | state     |
       | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         | published |

@@ -47,6 +47,7 @@ Feature: Resend validation email from collection/solution about page
     Given I am logged in as "Lope Facilitator"
     And I go to the "Rally fanatics" collection
     Then I should see the text "Please confirm your contact information to enable users to contact you"
+
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
     And a pending confirmation request for "confirmation_email.man@example.com" should exist
@@ -111,12 +112,15 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Test the resend functionality for a contact created through API.
+    Given collection content:
+      | title          |
+      | Rally fanatics |
     Given contact_information content:
       | name               | email               |
       | Existing to resend | existing@resend.com |
     Given solution content:
-      | title                       | contact information |
-      | Existing to resend solution | Existing to resend  |
+      | title                       | contact information | collection     |
+      | Existing to resend solution | Existing to resend  | Rally fanatics |
 
     When I am logged in as a user with the authenticated role
     And I go to the "Existing to resend solution" solution
@@ -146,12 +150,15 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Regression test to verify permissions into multiple edge cases.
+    Given collection content:
+      | title          |
+      | Rally fanatics |
     Given contact_information content:
       | name        | email                   |
       | Some Resend | some.resend@example.com |
     Given solution content:
-      | title                       | contact information |
-      | Existing to resend solution | Some Resend         |
+      | title                       | contact information | collection     |
+      | Existing to resend solution | Some Resend         | Rally fanatics |
     And the following email confirmation requests:
       | email                   | status  |
       | some.resend@example.com | pending |
