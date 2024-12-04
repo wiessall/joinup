@@ -112,6 +112,7 @@
     }
   }
 }
+
 .private_message_thread_delete_link_wrapper {
   margin-right: $spacer * 0.5;
   margin-bottom: $spacer * 0.5;
@@ -122,13 +123,40 @@
   flex-wrap: wrap;
 }
 
+#load-previous-threads-button-wrapper {
+  a {
+    padding: $spacer * 0.5;
+    border-top: 1px solid $gray-300;
+    font-size: $font-size-base !important;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+#load-previous-messages-button-wrapper {
+  margin-bottom: $spacer;
+  border-bottom: 1px solid $gray-300;
+  a {
+    display: block;
+    padding-bottom: $spacer;
+    text-align: center;
+    text-decoration: none;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+
 // Messages thread.
 .private-message-thread-full {
   .username {
     margin-bottom: 0;
   }
   .private-message-thread-messages {
-    margin-top: $spacer;
     padding: $spacer !important;
     border: 1px solid $gray-300;
   }
@@ -145,6 +173,9 @@
       flex-basis: 100%;
       padding: 0 !important;
       border: none !important;
+      p {
+        margin-bottom: 0;
+      }
       &:has(+ .private_message_delete) {
         a.private_message_report {
           margin-right: $spacer * 2;
@@ -153,11 +184,11 @@
     }
     a.private_message_report {
       float: right;
-      text-decoration: none;
-      color: $primary;
-      font-weight: $font-weight-bold;
-      &:hover {
-        text-decoration: underline;
+      min-width: 24px;
+      min-height: 24px;
+      color: $dark;
+      &::before {
+        @include get-bootstrap-icon("exclamation-triangle", $danger);
       }
     }
     a.private_message_delete {
