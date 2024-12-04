@@ -77,6 +77,9 @@ class LogRecordsContext extends RawDrupalContext {
    *   If there are any log records with level lower than the given level.
    */
   protected function failIfLogRecords(?string $level = NULL, ?string $type = NULL): void {
+    if (is_numeric($level)) {
+      throw new \InvalidArgumentException('The level - if provided - should be one of ' . implode(', ', RfcLogLevel::getLevels()));
+    }
     if (!is_null($level)) {
       $levelCapitalized = mb_convert_case($level, MB_CASE_TITLE);
       $levelMapping = array_map(
