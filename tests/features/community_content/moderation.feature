@@ -38,7 +38,7 @@ Feature: Moderate community content
       | Stellar flares                | Dim red dwarfs       |                     | Survey For Supernovae | published    | Marco Farfarer |
       | Upgrading CCD cameras         | Liquid cooled        |                     | Survey For Supernovae | archived     | Marco Farfarer |
     And document content:
-      | title                         | field_paragraphs_body         | collection          | solution              | state            |
+      | title                         | abstract                      | collection          | solution              | state            |
       | A multiwavelength study       | Optical and infrared          | Black hole research |                       | draft            |
       | X-Ray Transient V616          | Weak ¹²CO absorption          | Black hole research |                       | needs update     |
       | K-band spectroscopy           | Small amount of flux          | Black hole research |                       | proposed         |
@@ -120,6 +120,8 @@ Feature: Moderate community content
 
     And I should see the following lines of text:
       | Hawking radiation            |
+      | Small amount of flux         |
+      | Carbon abundance             |
       | Fast electrons are not       |
       | VLT spectroscopic instrument |
       | Follow spiral paths          |
@@ -178,6 +180,7 @@ Feature: Moderate community content
     And I should not see the text "Black-body spectrum radiation"
 
     # Now repeat this for the solution.
+    And I break
     When I am logged in as a facilitator of the "Survey For Supernovae" solution
     And I go to the homepage of the "Survey For Supernovae" solution
     And I click "Moderate content" in the "Entity actions" region
@@ -240,7 +243,9 @@ Feature: Moderate community content
       | Supermassive                 |
       | Optical and infrared         |
       | Weak ¹²CO absorption         |
+      | Small amount of flux         |
       | Accretion disk emission      |
+      | Carbon abundance             |
       | Chromospheric evaporation    |
       | Single-loop geometry         |
       | Fast electrons are not       |
