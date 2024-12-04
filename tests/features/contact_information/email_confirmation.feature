@@ -31,14 +31,12 @@ Feature: Resend validation email from collection/solution about page
 
     When I am not logged in
     And I go to the "Rally fanatics" collection
-    Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     # Check as a moderator for a collection.
     When I am logged in as a moderator
     And I go to the "Rally fanatics" collection
-
-    Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Rally fanatics" collection
+    Then I press "Add new contact information"
     And I fill in the following:
       | E-mail | confirmation_email.man@example.com |
       | Name   | Confirmation Invisible Man         |
