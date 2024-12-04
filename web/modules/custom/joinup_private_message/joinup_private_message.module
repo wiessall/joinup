@@ -12,6 +12,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -22,6 +23,7 @@ use Drupal\Core\Url;
 use Drupal\joinup_private_message\Form\PrivateMessageDeleteForm;
 use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -58,16 +60,55 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
     $current_route_name = \Drupal::routeMatch()->getRouteName();
     if (isset($form['message'])) {
       if ($current_route_name !== 'private_message.private_message_create') {
+        /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
+        $thread = $form_state->getBuildInfo()['args'][0];
+        $members = $thread->getMembersId();
+        if (count($members) !== 2) {
+          // Failsafe in case something went wrong and the database is in an
+          // inconsistent state.
+          $form['warning'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('Something went wrong. Please, refresh the page.'),
+              ],
+            ],
+            '#weight' => -100,
+          ];
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['widget'][0]['#attributes']['disabled'] = 'disabled';
+        }
+        // Threads in Joinup always have only 2 members.
+        elseif (joinup_private_message_ban_exists_between_users(...$members)) {
+          $form['warning'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('You cannot send messages to a user that has blocked you, or was blocked by you.'),
+              ],
+            ],
+            '#weight' => -100,
+          ];
+
+          // In order to avoid removing the button from the DOM, we disable it
+          // because otherwise, since this is a strictly AJAX form, an error
+          // will be raised about the missing AJAX callback.
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['#attributes']['disabled'] = 'disabled';
+        }
+
         // Change the label from "Message" to "Reply".
         $form['message']['widget'][0]['#title'] = t('Reply');
+        $form['actions']['submit']['#value'] = t('Send');
+
         // Use the tag <button> and set its value.
         $form['actions']['submit']['#extra_suggestion'] = 'tag_button';
-        $form['actions']['submit']['#value'] = t('Send');
       }
       // Set as default and limit the allowed formats format to 'Plain text'.
       $form['message']['widget'][0]['#format'] = 'plain_text';
       $form['message']['widget'][0]['#allowed_formats'] = ['plain_text'];
     }
+    $form['#validate'][] = 'joinup_private_message_add_form_validate';
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 
@@ -78,6 +119,27 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
     if (isset($form['actions']['submit']['#value'])) {
       $form['actions']['submit']['#value'] = t('Delete for me');
     }
+  }
+}
+
+/**
+ * Ensure that open windows are still unable to send messages to blocked users.
+ */
+function joinup_private_message_add_form_validate(array &$form, FormStateInterface $form_state): void {
+  $thread = $form_state->getBuildInfo()['args'][0];
+  if (empty($thread)) {
+    // A new message is being created.
+    return;
+  }
+
+  $members = array_slice($thread->getMembersId(), 0, 2);
+  if (count($members) !== 2) {
+    $form_state->setError($form, t('Something went wrong. Please, refresh the page.'));
+  }
+
+  $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
+  if ($is_banned) {
+    $form_state->setError($form, \Drupal::config('private_message.settings')->get('ban_message'));
   }
 }
 
@@ -304,4 +366,76 @@ function joinup_private_message_views_data_alter(array &$data): void {
       'id' => 'private_message_target',
     ],
   ];
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function joinup_private_message_query_skip_banned_users_alter(AlterableInterface $query): void {
+  $current_uid = $query->getMetaData('current_user');
+
+  // The user from the query should be excluded if the current user is banned
+  // by them, or that user is banned by the current user. The data are in the
+  // `private_message_ban` table.
+  $query->leftJoin('private_message_ban', 'ban', '(ban.owner = {base_table}.uid AND ban.target = :current_uid) OR (ban.owner = :current_uid AND ban.target = {base_table}.uid)', [
+    ':current_uid' => $current_uid,
+  ]);
+  $query->condition('ban.id', NULL, 'IS NULL');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function joinup_private_message_user_predelete(UserInterface $entity): void {
+  // In Joinup, threads strictly involve 2 users. If one of them is deleted,
+  // the thread should be deleted as well.
+  $query = \Drupal::entityQuery('private_message_thread')
+    ->accessCheck(FALSE)
+    ->condition('members', $entity->id());
+  $thread_ids = $query->execute();
+  if (!empty($thread_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_thread');
+    foreach ($storage->loadMultiple($thread_ids) as $thread) {
+      $thread->delete();
+    }
+  }
+
+  // Delete relevant bans.
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $or = $query->orConditionGroup()
+    ->condition('owner', $entity->id())
+    ->condition('target', $entity->id());
+  $ban_ids = $query->condition($or)
+    ->execute();
+
+  if (!empty($ban_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_ban');
+    $storage->delete($storage->loadMultiple($ban_ids));
+  }
+}
+
+/**
+ * Returns whether a private message ban exists between two users.
+ *
+ * @param int $user1
+ *   The first user ID.
+ * @param int $user2
+ *   The second user ID.
+ *
+ * @return bool
+ *   TRUE if a ban exists, FALSE otherwise.
+ */
+function joinup_private_message_ban_exists_between_users(string $user1, string $user2): bool {
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $or = $query->orConditionGroup()
+    ->condition('owner', $user1)
+    ->condition('target', $user1);
+  $or->condition('owner', $user2)
+    ->condition('target', $user2);
+  $ban_ids = $query->condition($or)
+    ->execute();
+
+  return !empty($ban_ids);
 }

@@ -517,4 +517,22 @@ class PrivateMessageContext extends RawDrupalContext {
     $this->visitPath($messageUrl);
   }
 
+  /**
+   * Bans a user from sending private messages to another user.
+   *
+   * @param string $userHasBanned
+   *   The user who has banned another user.
+   * @param string $bannedUser
+   *   The user who has been banned.
+   *
+   * @Given /^"([^"]*)" has banned "([^"]*)"$/
+   */
+  public function hasBanned(string $userHasBanned, $bannedUser): void {
+    $ban = PrivateMessageBan::create([
+      'owner' => $this->getUserByName($userHasBanned)->id(),
+      'target' => $this->getUserByName($bannedUser)->id(),
+    ]);
+    $ban->save();
+  }
+
 }

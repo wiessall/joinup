@@ -23,7 +23,6 @@ Feature:
     And a modal should open
     And I click "Entity reference"
     When I type "Related conte" in the "Content" autocomplete field
-    And I wait until the page contains the text "Related content"
     And I pick "Related content" from the autocomplete suggestions
     When I press "Save" in the "Modal buttons" region
     And I press "Update"
