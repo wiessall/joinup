@@ -116,8 +116,8 @@ Feature: Resend validation email from collection/solution about page
       | title          |
       | Rally fanatics |
     Given contact_information content:
-      | name               | email              |
-      | Existing to resend | existing@gmail.com |
+      | name               | email               |
+      | Existing to resend | existing@resend.com |
     Given solution content:
       | title                       | contact information | collection     |
       | Existing to resend solution | Existing to resend  | Rally fanatics |
