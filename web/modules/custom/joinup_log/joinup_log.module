@@ -11,7 +11,9 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_log\UserRoleLogger;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_form_alter().
@@ -123,4 +125,14 @@ function _joinup_log_logger_add_content(EntityInterface $entity): void {
     'type' => 'joinup:add_content',
     'actor' => $current_user->id(),
   ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function joinup_log_user_presave(UserInterface $user): void {
+  /** @var UserRoleLogger $userRoleLogger */
+  $userRoleLogger = \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(UserRoleLogger::class);
+  $userRoleLogger->detectChanges($user);
 }
