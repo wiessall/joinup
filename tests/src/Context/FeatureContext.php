@@ -8,14 +8,12 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
-use Behat\Mink\Selector\SelectorsHandler;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -44,8 +42,6 @@ use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Process\Process;
-use WebDriver\Exception;
-use WebDriver\Key;
 
 /**
  * Defines generic step definitions.
@@ -1637,11 +1633,6 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Fills in the autocomplete field with the given text.
    *
-   * This differs from MinkContext::fillField() in that this will no remove the
-   * focus on the field after entering the text, so that the autocomplete
-   * results will not disappear. The final action taken on the field will be the
-   * "keyup" event for the last character.
-   *
    * @param string $field
    *   The ID, name, label or value of the autocomplete field to fill in.
    * @param string $value
@@ -1652,35 +1643,10 @@ class FeatureContext extends RawDrupalContext {
   public function fillAutoCompleteField(string $field, string $value): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $driver = $this->getSession()->getDriver();
-    if (!$driver instanceof Selenium2Driver) {
-      throw new \RuntimeException("Only Selenium is currently supported for typing in autocomplete fields.");
-    }
-
-    $xpath = (new SelectorsHandler())->selectorToXpath('named', [
-      'field',
-      $field,
-    ]);
-    try {
-      $element = $driver->getWebDriverSession()->element('xpath', $xpath);
-    }
-    catch (Exception $e) {
-      throw new \RuntimeException("Field with locator '$field' was not found in the page.");
-    }
-
-    // Clear any existing data in the field before typing the new data.
-    $value = str_repeat(Key::BACKSPACE . Key::DELETE, strlen($element->property('value'))) . $value;
-
-    // Fill in the field by directly using the postValue() method of the
-    // webdriver. This executes the keystrokes that make up the text but will
-    // not remove focus from the field so the autocomplete results remain
-    // visible and can be inspected.
-    $element->postValue(['text' => $value]);
-
-    $page = $this->getSession()->getPage();
-    $page->waitFor(3, function () use ($page) {
-      return $page->find('css', '.ui-autocomplete')->isVisible() === TRUE;
-    });
+    $element = $this->assertSession()->fieldExists($field);
+    $element->setValue($value);
+    $this->getSession()->getDriver()->keyDown($element->getXpath(), ' ');
+    $this->waitForAutocomplete();
   }
 
   /**
