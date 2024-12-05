@@ -131,7 +131,7 @@ function _joinup_log_logger_add_content(EntityInterface $entity): void {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function joinup_log_user_presave(UserInterface $user): void {
-  /** @var UserRoleLogger $userRoleLogger */
+  /** @var \Drupal\joinup_log\UserRoleLogger $userRoleLogger */
   $userRoleLogger = \Drupal::service('class_resolver')
     ->getInstanceFromDefinition(UserRoleLogger::class);
   $userRoleLogger->detectChanges($user);

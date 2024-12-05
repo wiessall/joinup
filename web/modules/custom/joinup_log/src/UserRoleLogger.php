@@ -19,7 +19,7 @@ class UserRoleLogger implements ContainerInjectionInterface {
   public function __construct(
     protected LoggerChannelInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected AccountInterface $currentUser
+    protected AccountInterface $currentUser,
   ) {}
 
   /**
