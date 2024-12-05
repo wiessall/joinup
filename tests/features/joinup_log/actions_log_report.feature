@@ -106,7 +106,7 @@ Feature: Actions log
       | Date               | Type                 | Message             | User             | Actor            |
       | 16/07/2024 - 06:11 | Unflag interoperable | Unflagged           | Dave Crash       |                  |
       | 16/07/2024 - 06:28 | Flag interoperable   | Flagged             | Dave Crash       |                  |
-      | 16/07/2024 - 07:34 | Add role to member   | Add x author role   | Andre Munson     | Mary Shotgun     |
+      | 16/07/2024 - 07:34 | Add role             | Add x author role   | Andre Munson     | Mary Shotgun     |
       | 17/07/2024 - 11:21 | Deleted membership   | Delete x membership | Andre Munson     | Mary Shotgun     |
       | 18/07/2024 - 15:08 | Block membership     | Block x member      | Branson Winthrop | Mary Shotgun     |
       | 19/07/2024 - 18:54 | Add content          | Add x event         | Branson Winthrop | Branson Winthrop |
@@ -114,7 +114,7 @@ Feature: Actions log
       | Date;Type;Message;User;Actor                                                                  |
       | "16/07/2024 - 06:11";"Unflag interoperable";Unflagged;"Dave Crash";                           |
       | "16/07/2024 - 06:28";"Flag interoperable";Flagged;"Dave Crash";                               |
-      | "16/07/2024 - 07:34";"Add role to member";"Add x author role";"Andre Munson";"Mary Shotgun"   |
+      | "16/07/2024 - 07:34";"Add role";"Add x author role";"Andre Munson";"Mary Shotgun"             |
       | "17/07/2024 - 11:21";"Deleted membership";"Delete x membership";"Andre Munson";"Mary Shotgun" |
       | "18/07/2024 - 15:08";"Block membership";"Block x member";"Branson Winthrop";"Mary Shotgun"    |
       | "19/07/2024 - 18:54";"Add content";"Add x event";"Branson Winthrop";"Branson Winthrop"        |
