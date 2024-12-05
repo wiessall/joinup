@@ -92,6 +92,15 @@
       font-size: $font-size-sm;
     }
   }
+  @include media-breakpoint-up(lg) {
+    &.collapse,
+    &.collapsing {
+      display: block !important;
+      overflow: none;
+      height: auto;
+      transition: none;
+    }
+  }
 }
 
 // Buttons.
