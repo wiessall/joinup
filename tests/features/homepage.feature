@@ -10,7 +10,7 @@ Feature: Homepage
     When I reload the page
     Then the page should be cached
     And I should see the following lines of text:
-      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                                          |
+      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                    |
       | It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.                                                                                                                                                                |
       | It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations. |
       | Interoperable Europe covers the policy angle of interoperability.                                                                                                                                                                                                |
@@ -49,10 +49,10 @@ Feature: Homepage
       | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | published | 2021-03-29T10:18:00Z |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
-      | date   | topics                                      | title                       | body                                                                                                                                                                                                       |
-      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | We have some abstract here.                                                                                                                                                                                |
-      | 29 Mar | EU and European Policies                    | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left... |
-      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                  |
+      | date   | topics                                      | title                       | body                        |
+      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | We have some abstract here. |
+      | 29 Mar | EU and European Policies                    | Earlier transformations     | default abstract            |
+      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | default abstract            |
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -68,8 +68,8 @@ Feature: Homepage
       | title         | state     |
       | Mice in space | published |
     And news content:
-      | title       | headline       | collection    | topic                                                 | state     | logo       | abstract        | field_paragraphs_body |
-      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news abstract> | <news body>           |
+      | title       | headline       | collection    | topic                                                 | state     | logo       | field_paragraphs_body |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news body>           |
     And discussion content:
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
       | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
@@ -88,7 +88,7 @@ Feature: Homepage
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
       | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | <expected news spotlight body>                                                                                                                                                                  |
+      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | default abstract                                                                                                                                                                                |
       | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
       | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
@@ -105,17 +105,17 @@ Feature: Homepage
       | title              | state     |
       | Clash of documents | published |
     And <type> content:
-      | title        | headline     | collection         | topic                              | state     | logo     | <abstract source field>                                                                                                                                                                         |
-      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | headline     | collection         | topic                              | state     | logo     |
+      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg |
+      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg |
+      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg |
     And the "Highlighted content" content listing contains:
       | type   | label  |
       | <type> | Aliens |
 
     When I am on the homepage
     Then I should see "Aliens" as the Highlighted content
-    And I should see the text "Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group."
+    And I should see the text "default abstract"
     And I should see the link "Related content"
     When I click "Related content"
     Then I should be on the advanced search page
@@ -305,7 +305,7 @@ Feature: Homepage
       | solution   | Cities of France            | 2018-12-14 17:36     | There are many variations                                                                                                                                                                                                     |
       | solution   | Cities of Bulgaria          | 2018-11-14 17:36     | Supports fields                                                                                                                                                                                                               |
       | news       | Current biodiversity adapt  | 2021-04-30T19:09:00Z | Biodiversity adapt abstract                                                                                                                                                                                                   |
-      | news       | Super-Alfvenic plasma flow  | 2021-04-29T10:18:00Z | Magnetic draping                                                                                                                                                                                                              |
+      | news       | Super-Alfvenic plasma flow  | 2021-04-29T10:18:00Z | default abstract                                                                                                                                                                                                              |
       | news       | H-rich Wolf-Rayet star      | 2021-03-29T10:18:00Z | Polarimetric analysis Watch our video                                                                                                                                                                                         |
       | news       | Spatial construction        | 2021-02-26T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                     |
       | news       | Environmental tests         | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in...                      |
