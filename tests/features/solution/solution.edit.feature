@@ -40,7 +40,7 @@ Feature: Solution editing.
       | E-mail address | yancyb@example.com |
     And I attach the file "logo.png" to "Logo"
     And I select "Flemish" from "Language"
-    And I select "Tools" from "Topic"
+    And I select "Statistics and Analysis" from "Topic"
     And I select "Logging Service" from "Solution type"
 
     # Click the button to select an existing owner.
@@ -78,9 +78,12 @@ Feature: Solution editing.
     Then I delete the "Solution A revised" solution
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
+    Given collection content:
+      | title              |
+      | Collection example |
     Given solution content:
-      | title      |
-      | Solution B |
+      | title      | collection         |
+      | Solution B | Collection example |
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Solution B" solution
     Then I should see the link "Edit"
