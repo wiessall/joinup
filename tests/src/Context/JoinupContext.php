@@ -748,8 +748,7 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->field_state)) {
       $node->field_state = self::translateWorkflowStateAlias($node->field_state);
     }
-
-    elseif (!empty($field_definitions['field_state']) && empty($node->field_state)) {
+    elseif (!empty($field_definitions['field_state']) && empty($node->field_state) && $node->type != 'contact_information') {
       $node->field_state = 'published';
     }
 
