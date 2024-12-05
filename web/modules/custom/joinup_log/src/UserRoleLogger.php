@@ -47,11 +47,11 @@ class UserRoleLogger implements ContainerInjectionInterface {
       $originalRoles = $user->original->getRoles();
     }
 
-    $newRoles = $this->removeSystemRoles(array_diff($newRoles, $originalRoles));
-    $removedRoles = $this->removeSystemRoles(array_diff($originalRoles, $newRoles));
+    $newDiff = $this->removeSystemRoles(array_diff($newRoles, $originalRoles));
+    $removedDiff = $this->removeSystemRoles(array_diff($originalRoles, $newRoles));
 
-    $this->log($newRoles, 'joinup:add_role', $user);
-    $this->log($removedRoles, 'joinup:remove_role', $user);
+    $this->log($newDiff, 'joinup:add_role', $user);
+    $this->log($removedDiff, 'joinup:remove_role', $user);
   }
 
   /**
