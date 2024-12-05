@@ -15,12 +15,9 @@ Feature: Collection homepage
     And owner content:
       | name          |
       | Bilbo Baggins |
-    And contact_information content:
-      | name        | email                   |
-      | Kalikatoura | kalikatoura@example.com |
     And collection content:
       | title              | description        | owner         | contact information | logo     | moderation | content creation | state     | topic                            | published at      | modification date |
-      | Middle earth daily | Middle earth daily | Bilbo Baggins | Kalikatoura         | logo.png | yes        | members          | published | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
+      | Middle earth daily | Middle earth daily | Bilbo Baggins | Contact name        | logo.png | yes        | members          | published | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
     And solution content:
       | title        | collection         | description           | content creation | creation date     | state     | topic |
       | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | published | Info  |
@@ -182,7 +179,7 @@ Feature: Collection homepage
       | Owner                    |
       | Bilbo Baggins            |
       | Contact information      |
-      | Kalikatoura              |
+      | Contact name             |
       | Middle earth daily       |
       | 2 News                   |
       | 1 Event                  |
