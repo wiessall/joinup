@@ -53,9 +53,12 @@ Feature: Test the visibility of the quick links menu.
     Then I should not see the heading "Quick links"
 
   Scenario: Test visibility for solutions.
+    Given collection content:
+      | title           | content creation         | moderation |
+      | Some collection | facilitators and authors | yes        |
     Given solution content:
-      | title         |
-      | Some solution |
+      | title         | collection      |
+      | Some solution | Some collection |
     When I am not logged in
     And I go to the "Some solution" solution
     Then I should not see the heading "Quick links"
