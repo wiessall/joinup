@@ -20,6 +20,31 @@ targetEntityType: private_message_thread
 bundle: private_message_thread
 mode: default
 content:
+  members:
+    type: private_message_thread_member_formatter
+    label: hidden
+    settings:
+      display_type: entity
+      entity_display_mode: private_message_author
+      members_prefix: 'Conversation with'
+      separator: '  '
+      prefix_separator: false
+      display_current_user: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: false
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
   private_message_form:
     settings: {  }
     third_party_settings: {  }
@@ -55,7 +80,6 @@ hidden:
   clear_history_link: true
   delete_link: true
   last_message: true
-  members: true
   no_active_users: true
   search_api_excerpt: true
   subject: true
