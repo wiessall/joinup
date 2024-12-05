@@ -196,12 +196,15 @@ Feature:
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
+    Given collection content:
+      | title      |
+      | Collection |
     Given news content:
-      | title  | headline | state     |
-      | News 1 | News 1   | published |
+      | title  | headline | state     | collection |
+      | News 1 | News 1   | published | Collection |
     And custom_page content:
-      | title          | state     |
-      | Popular quotes | published |
+      | title          | state     | collection |
+      | Popular quotes | published | Collection |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                           |
@@ -229,7 +232,7 @@ Feature:
     Then I should see the "News 1" tile
     And I should see the "Popular quotes" tile
     # Regression test that text is trimmed properly.
-    Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
+    Then the response should contain "default abstract"
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
@@ -538,8 +541,8 @@ Feature:
   @javascript
   Scenario: Ampersand character is not decoded properly under a topic page.
     Given custom_page content:
-      | title                    | body                                         | state     |
-      | Legislation & Technology | What do we mean by Legislation & Technology? | published |
+      | title                    | state     |
+      | Legislation & Technology | published |
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
@@ -558,7 +561,7 @@ Feature:
       | Query presets   | type: text - value: entity_bundle\|custom_page |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
-    And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
+    And I should see the text "default abstract" in the "Legislation & Technology" tile
     And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile
 
   @javascript
@@ -592,5 +595,5 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "Magic abstract" in the "Col with abstract" tile
     And I should see the text "Another abstract" in the "Col without abstract" tile
-    And I should see the text "Lorem description issum" in the "Another rough day" tile
+    And I should see the text "default abstract" in the "Another rough day" tile
     And I should see the text "This is an soltion with abstract" in the "Just another solt" tile

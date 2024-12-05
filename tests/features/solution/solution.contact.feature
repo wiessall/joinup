@@ -9,6 +9,7 @@ Feature: Contact form for solution
       | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org | 1001 |
       | John Revoked | john@example.com         | http://www.example.org | 1002 |
       | John Deleted | deleted@example.com      | http://www.example.org | 1003 |
+    And I break
     And the following email confirmation request:
       | email                    | status    |
       | jocelyn.bass@example.com | confirmed |
@@ -26,6 +27,7 @@ Feature: Contact form for solution
 
     # Anonymous case.
     When I am not logged in
+    And I break
     And I go to the homepage of the "Six exclusion advantages" solution
     Then I should see the link "John Revoked"
     # Page was rendered, but in the meantime, contact is changed on backend.
