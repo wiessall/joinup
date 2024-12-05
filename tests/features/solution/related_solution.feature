@@ -4,14 +4,20 @@ Feature: Related solution
   solutions and present the related solutions to the users.
 
   Background:
+    Given contact_information content:
+      | name        | email       |
+      | Kalikatoura | bar@bar.com |
+    And owner content:
+      | name         | owner type |
+      | Kalikatoures | Company    |
     Given solution content:
-      | title      | related solutions | related by type | moderation |
-      | C          |                   | yes             | no         |
-      | Java       | C                 | yes             | no         |
-      | PHP        |                   | yes             | yes        |
-      | Golang     |                   | yes             | yes        |
-      | Python     |                   | yes             | no         |
-      | Javascript | Java, PHP         | no              | no         |
+      | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
+      | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | PHP        |                   | Make a site                      | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | Golang     |                   | Concurrency for the masses       | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Demography | proposed  | Citizen       | Kalikatoures | Kalikatoura         |
+      | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
 
   # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
