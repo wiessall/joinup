@@ -2,13 +2,19 @@
 Feature: CKEditor5
 
   Background:
-    Given collection content:
-      | title                 |
-      | Shaping of disruption |
-      | The Other Collection  |
+    Given owner content:
+      | name     | owner type |
+      | Landlord | Company    |
+    And contact_information content:
+      | name    | email                |
+      | ReachMe | reach.me@example.com |
+    And collection content:
+      | title                 | state     | topic                   | owner    | contact information |
+      | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |
+      | The Other Collection  | published | Statistics and Analysis | Landlord | ReachMe             |
     Given solution content:
-      | title       | collection            |
-      | Angry Birds | Shaping of disruption |
+      | title       | collection            | state     | topic             | owner    | contact information |
+      | Angry Birds | Shaping of disruption | published | Supplier exchange | Landlord | ReachMe             |
 
   Scenario: CKE5 textarea do not respect any configurable sizes.
     Given glossary content:
@@ -238,27 +244,35 @@ Feature: CKEditor5
 
   @casMockServer
   Scenario: Add test coverage for 'Contact us' wysiwyg button.
-    Given user:
+
+    And owner content:
+      | name  | owner type |
+      | Lotte | Company    |
+    And user:
       | Username    | Pally Rapamichael      |
       | First name  | Pally                  |
       | Family name | Rapamichael            |
       | E-mail      | p.papamichael@pally.de |
+    And contact_information content:
+      | name                 | email                      |
+      | Klim Smith           | klim.smith@example.com     |
+      | Raul Timon           | raul.timon@example.com     |
     And the following email confirmation request:
       | email                  | status    |
       | klim.smith@example.com | confirmed |
       | raul.timon@example.com | confirmed |
     And collection content:
-      | title                |
-      | Antiruin development |
+      | title                | state     | contact information |
+      | Antiruin development | published | Raul Timon          |
     And solution content:
-      | title                    | collection           |
-      | One exclusion advantages | Antiruin development |
+      | title                    | abstract                        | description                     | state     | topic                   | owner | solution type                      | collection           | contact information |
+      | One exclusion advantages | Separating molecules by height. | Separating molecules by weight. | published | Demography, E-inclusion | Lotte | Non-binding Instrument, Data Owner | Antiruin development | Klim Smith          |
     And users:
       | Username    | E-mail         | First name | Family name |
       | jmacc_local | jodine@ankh.am | John       | Maccalariat |
     And CAS users:
-      | First name | Last name   | Username | E-mail         | Password | Local username |
-      | John       | Maccalariat | jmacc    | jodine@ankh.am | 10d1ne   | jmacc_local    |
+      | First name | Last name   | Username  | E-mail         | Password | Local username |
+      | John       | Maccalariat | jmacc     | jodine@ankh.am | 10d1ne   | jmacc_local    |
 
     Given I am logged in as a moderator
     Then I go to "/collection/antiruin-development/solution/one-exclusion-advantages/contact"
@@ -302,8 +316,8 @@ Feature: CKEditor5
 
     # Check layout paragraphs.
     Given custom_page content:
-      | title                 | collection           | state     | abstract |
-      | Contact us text check | Antiruin development | published | N/A      |
+      | title                             | collection            | state     | abstract |
+      | Contact us text check             | Antiruin development  | published | N/A      |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Contact us text check" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
