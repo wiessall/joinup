@@ -27,21 +27,22 @@ Feature: Private messages
     Then the modal should be closed
     And I should see the heading "Private Messages"
     And I should see 1 private message
-    Then a message containing the text "A private message from Alice to Bob." should be present
+    And a message containing the text "A private message from Alice to Bob." should be present
+    And I see the text "Conversation with Bob Rolls"
 
     When I am logged in as "bob_rolls"
     And I am on the homepage
-    And I should see 1 unread private message
-    Then I open the account menu
+    Then I should see 1 unread private message
+    When I open the account menu
     And I click "My messages"
-    And I should see the heading "Private Messages"
+    Then I should see the heading "Private Messages"
     And I should see the link "New message"
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     # Moderators can delete a thread.
     And I should see the link "Delete thread"
     And a message containing the text "A private message from Alice to Bob." should be present
-    And I fill in "Reply" with "Another private message from Bob to Alice."
+    When I fill in "Reply" with "Another private message from Bob to Alice."
     And I press "Send"
     Then I should see 2 private messages
     And I should see the following texts in private messages:
@@ -58,17 +59,17 @@ Feature: Private messages
       | A private message from Bob to Joan.        |
       | Another private message from Bob to Alice. |
     When I click "Joan Tiff" in thread message card
-    And I should see 1 private message
-    Then I should see the following texts in private messages:
+    Then I should see 1 private message
+    And I should see the following texts in private messages:
       | A private message from Bob to Joan. |
-    Then I click "Alice Miller" in thread message card
+    When I click "Alice Miller" in thread message card
     And I wait until the page contains the text "A private message from Alice to Bob."
-    And I should see 2 private messages
-    Then I should see the following texts in private messages:
+    Then I should see 2 private messages
+    And I should see the following texts in private messages:
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
     # Regression test for ISAICP-9130: second click impacts modal.
-    Then I click "Alice Miller" in thread message card
+    When I click "Alice Miller" in thread message card
     And I wait until the page contains the text "A private message from Alice to Bob."
     And I click "New message"
     Then a modal should open
