@@ -41,13 +41,13 @@ Feature: Actions log
     When I go to the actions log report for "Skylight"
     Then I should see the text "Access denied"
 
-  Scenario: System wide role actions.
+  Scenario Outline: System wide role actions.
     Given users:
       | Username       | First name | Family name | E-mail                     | Roles     |
       | Andre Munson   | Andre      | Munson      | andre.munson@example.com   |           |
-      | Charles Darwin | Charles    | Darwin      | charles.darwin@example.com | Developer |
+      | Charles <role> | Charles    | <role>      | charles.darwin@example.com | Developer |
 
-    Given I am logged in as "Charles Darwin"
+    Given I am logged in as "Charles <role>"
     When I go to the public profile of "Andre Munson"
     And I click "Edit" in the "Entity actions" region
     And I check the box "Licence manager"
@@ -58,8 +58,13 @@ Feature: Actions log
 
     When I visit "/admin/reporting/actions-log"
     Then I should see the following lines of text:
-      | Successfully added the Licence manager role to Andre Munson by Charles Darwin        |
-      | Successfully removed the Licence manager role for the Andre Munson by Charles Darwin |
+      | Successfully added the Licence manager role to Andre Munson by Charles <role>        |
+      | Successfully removed the Licence manager role for the Andre Munson by Charles <role> |
+
+    Examples:
+      | role      |
+      | developer |
+      | moderator |
 
   Scenario: Report lists actions.
     Given users:
