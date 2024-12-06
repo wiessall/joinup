@@ -333,7 +333,8 @@
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "Performance Degraded after update to twig 3.14.2 @see https://www.drupal.org/i/3487031": "resources/patch/php/drupal/core/3487031.diff",
-                "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff"
+                "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff",
+                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -376,7 +377,8 @@
                 "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff",
                 "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
                 "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
+                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff",
+                "Handle External URL Schemes Like ftp:// in File URL Fields Without Errors. @see https://www.drupal.org/i/3490692": "resources/patch/php/drupal/file_url/3490692.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
@@ -475,7 +477,8 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
-                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
+                "Incorrect use of 'render element' for webform_submission_data @see https://www.drupal.org/i/3492193": "resources/patch/php/drupal/webform/3492193.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
