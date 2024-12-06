@@ -48,41 +48,35 @@ trait NodeTrait {
   /**
    * Returns contact_information entity referenced in Joinip collection.
    *
-   *  @See \joinup_test_install()
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @See \joinup_test_install()
    *
    * @return \Drupal\node\Entity\Node
    *   contact_information entity from field "contact" in Joinup collection
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function getDefaultContact(): Node {
-    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
-    $node = $nodeStorage->loadByProperties([
-      'type' => 'contact_information',
-      'uuid' => 'a1b2c3d4-e5f6-7890-ab12-cd34ef567890',
-    ]);
-    return array_shift($node);
+    return \Drupal::service('entity.repository')
+      ->loadEntityByUuid('node', 'a1b2c3d4-e5f6-7890-ab12-cd34ef567890');
   }
 
   /**
    * Returns owner entity referenced in Joinip collection.
    *
-   *  @See \joinup_test_install()
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @See \joinup_test_install()
    *
    * @return \Drupal\node\Entity\Node
    *   owner entity from field "contact" in Joinup collection
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function getDefaultOwner(): Node {
-    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
-    $node = $nodeStorage->loadByProperties([
-      'type' => 'owner',
-      'uuid' => 'a1b2c3d4-e5f6-7890-ab12-cd34ef567891',
-    ]);
-    return array_shift($node);
+    return \Drupal::service('entity.repository')
+      ->loadEntityByUuid('node', 'a1b2c3d4-e5f6-7890-ab12-cd34ef567891');
   }
 
 }

@@ -138,8 +138,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given I am logged in as a user with the :role role(s) of the :group_label
-   *   :group_bundle
+   * @Given I am logged in as a user with the :role role(s) of the :group_label :group_bundle
    * @Given I am logged in as a/an :role of the :group_label :group_bundle
    *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
@@ -219,8 +218,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given my membership state in the :group_label :group_bundle changes to
-   *   :state
+   * @Given my membership state in the :group_label :group_bundle changes to :state
    */
   public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
     $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
@@ -252,19 +250,16 @@ class JoinupContext extends RawDrupalContext {
    * @see \Drupal\DrupalExtension\Context\RawDrupalContext::loggedInWithRole
    */
   protected function loggedInWithOgRoles(array $roles, GroupInterface $group): bool {
-    if ($this->getUserManager()
-        ->currentUserIsAnonymous() || !$this->loggedIn()) {
+    if ($this->getUserManager()->currentUserIsAnonymous() || !$this->loggedIn()) {
       return FALSE;
     }
     $current_user = $this->getUserManager()->getCurrentUser();
-    $user = \Drupal::entityTypeManager()
-      ->getStorage('user')
-      ->loadUnchanged($current_user->uid);
+    $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->uid);
     $membership = $group->getMembership((int) $user->id());
     if (empty($membership)) {
       return FALSE;
     }
-    $expected_roles_ids = array_map(function(OgRoleInterface $role): string {
+    $expected_roles_ids = array_map(function (OgRoleInterface $role): string {
       return $role->id();
     }, $roles);
     $actual_roles_ids = $membership->getRolesIds();
@@ -294,9 +289,7 @@ class JoinupContext extends RawDrupalContext {
     $this->getSession()->getPage()->pressButton("Create new account");
 
     // Get the last registered user.
-    $results = \Drupal::entityTypeManager()
-      ->getStorage('user')
-      ->loadByProperties(['name' => $username]);
+    $results = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
     /** @var \Drupal\user\UserInterface $user */
     $user = reset($results);
 
@@ -324,7 +317,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function checkSelectContainsOptions($select, $options): void {
     $field = $this->findSelect($select);
-    $available_options = array_map(function(array $option): string {
+    $available_options = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
@@ -366,7 +359,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function checkSelectDoesNotContainOptions($select, $options): void {
     $field = $this->findSelect($select);
-    $available_options = array_map(function(array $option): string {
+    $available_options = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
@@ -409,7 +402,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptions($select, $options): void {
     $field = $this->findSelect($select);
-    $availableOptions = array_map(function(array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     sort($availableOptions);
@@ -443,7 +436,7 @@ class JoinupContext extends RawDrupalContext {
 
     // Get the checkboxes.
     $checkboxes = $field->findAll('css', 'input[type="checkbox"]');
-    $checkboxLabels = array_map(function(NodeElement $checkbox): string {
+    $checkboxLabels = array_map(function (NodeElement $checkbox): string {
       return $checkbox->getParent()->getText();
     }, $checkboxes);
 
@@ -462,12 +455,11 @@ class JoinupContext extends RawDrupalContext {
    * @param string $options
    *   A comma separated list of items to check.
    *
-   * @Then the available options in the :select select should not include the
-   *   :options( options)
+   * @Then the available options in the :select select should not include the :options( options)
    */
   public function assertSelectOptionNotAvailable($select, $options): void {
     $field = $this->findSelect($select);
-    $availableOptions = array_map(function(array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
@@ -648,9 +640,7 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title, $bundle);
 
-    $revision_count = \Drupal::entityTypeManager()
-      ->getStorage('node')
-      ->getQuery()
+    $revision_count = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
       ->allRevisions()
       ->accessCheck(FALSE)
       ->condition('nid', $node->id())
@@ -681,8 +671,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    $field_definitions = \Drupal::service('entity_field.manager')
-      ->getFieldDefinitions('node', $node->type);
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     // Replace field label aliases with the actual field names.
     foreach (get_object_vars($node) as $alias => $value) {
       $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
@@ -825,6 +814,7 @@ class JoinupContext extends RawDrupalContext {
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
     }
+
     if (!empty($field_definitions['contact']) && empty($node->contact)) {
       $node->contact = $this->getDefaultContact()->label();
     }
@@ -975,10 +965,8 @@ class JoinupContext extends RawDrupalContext {
   public function assertDateTimeFieldValue(string $field): void {
     $now = new \DateTimeImmutable();
 
-    $date_part = $this->findDateRangeComponent($field, 'date')
-      ->getAttribute('value');
-    $time_part = $this->findDateRangeComponent($field, 'time')
-      ->getAttribute('value');
+    $date_part = $this->findDateRangeComponent($field, 'date')->getAttribute('value');
+    $time_part = $this->findDateRangeComponent($field, 'time')->getAttribute('value');
     if (empty($date_part) || empty($time_part)) {
       throw new ExpectationFailedException("The '{$field}' date/time field is not filled with the current time.");
     }
@@ -1012,10 +1000,8 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the field was not found.
    */
   public function findDateFields($field): array {
-    $field_selectors = $this->getSession()
-      ->getPage()
-      ->findAll('css', '.field--widget-datetime-timestamp');
-    $field_selectors = array_filter($field_selectors, function($field_selector) use ($field) {
+    $field_selectors = $this->getSession()->getPage()->findAll('css', '.field--widget-datetime-timestamp');
+    $field_selectors = array_filter($field_selectors, function ($field_selector) use ($field) {
       return $field_selector->has('named', ['content', $field]);
     });
     if (empty($field_selectors)) {
@@ -1174,8 +1160,7 @@ class JoinupContext extends RawDrupalContext {
       // Custom page cards in carousels have a different structure. In order to
       // identify the tile, we need to check the title of the first "a" element.
       // First, retrieve the parent element so that the "a" element is present.
-      if ($result->getParent()
-        ->find('xpath', "/a[contains(@title, \"{$heading}\")]")) {
+      if ($result->getParent()->find('xpath', "/a[contains(@title, \"{$heading}\")]")) {
         return;
       }
     }
@@ -1295,8 +1280,7 @@ class JoinupContext extends RawDrupalContext {
    *   element of the list heading if given.
    *
    * @Then I( should) see the( following) tiles in the correct order:
-   * @Then in the :list_title list, I should see the following tiles in the
-   *   correct order:
+   * @Then in the :list_title list, I should see the following tiles in the correct order:
    */
   public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
@@ -1525,9 +1509,7 @@ class JoinupContext extends RawDrupalContext {
       // Only check the actual form submit buttons, ignore other buttons that
       // might be present in wysiwygs or are used to add multiple values to a
       // field.
-      $actual = count($this->getSession()
-        ->getPage()
-        ->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
+      $actual = count($this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
       Assert::assertEquals($count, $actual);
     }
   }
@@ -1565,9 +1547,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see the plus button menu
    */
   public function assertPlusButtonMenuPresent(): void {
-    $element = $this->getSession()
-      ->getPage()
-      ->find('css', '#dropdown-add-content');
+    $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
   }
 
@@ -1577,9 +1557,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should not see the plus button menu
    */
   public function assertPlusButtonMenuNotPresent(): void {
-    $element = $this->getSession()
-      ->getPage()
-      ->find('css', 'div.add-content-menu ul');
+    $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
     Assert::assertEmpty($element);
   }
 
@@ -1613,9 +1591,7 @@ class JoinupContext extends RawDrupalContext {
       return;
     }
 
-    $button = $this->getSession()
-      ->getPage()
-      ->find('css', '#dropdown-add-content');
+    $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     $button->press();
   }
 
@@ -1627,10 +1603,7 @@ class JoinupContext extends RawDrupalContext {
   public function iOpenTheEntityTasksMenu(): void {
     if ($this->hasJavascriptSupport()) {
       $entity_tasks_selector = $this->getRegionSelector('Entity actions');
-      $this->getSession()
-        ->getPage()
-        ->find('css', "$entity_tasks_selector button")
-        ->press();
+      $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
     }
   }
 
@@ -1648,9 +1621,7 @@ class JoinupContext extends RawDrupalContext {
 
     // Depending on the screen width, a different dropdown item may be visible.
     /** @var \Behat\Mink\Element\NodeElement[] $elements */
-    $elements = $this->getSession()
-      ->getPage()
-      ->findAll('css', '#main-navbar .dropdown');
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .dropdown');
     foreach ($elements as $element) {
       if ($element->isVisible()) {
         $this->openBootstrapDropdown($element);
@@ -1695,9 +1666,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertEmptyPlusButtonMenu(): void {
     if ($this->hasJavascriptSupport()) {
-      if ($this->getSession()
-        ->getPage()
-        ->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " add-content-menu ")]//li[last()]')) {
+      if ($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " add-content-menu ")]//li[last()]')) {
         throw new \Exception("The plus button menu is not empty.");
       }
     }
@@ -1806,9 +1775,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the current workflow state should be :state
    */
   public function assertCurrentWorkflowState($state): void {
-    $element = $this->getSession()
-      ->getPage()
-      ->find('css', 'div.current-workflow-state');
+    $element = $this->getSession()->getPage()->find('css', 'div.current-workflow-state');
     if (empty($element)) {
       throw new \Exception('The current workflow state field is not present on the page.');
     }
@@ -1873,8 +1840,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the field does not have a description.
    *
-   * @Then I should not see the description :description for (the ):label(
-   *   field)
+   * @Then I should not see the description :description for (the ):label( field)
    */
   public function assertNoFieldDescription($label, $description): void {
     $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
@@ -2006,8 +1972,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the link is not in the page.
    *
-   * @Then /^the share link "(?P<link>[^"]+)" should point to the
-   *   "(?P<title>[^"]+)" content(?:| entity)$/
+   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/
    */
   public function assertLinkContainsEntityUrl(string $link, string $title): void {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
@@ -2078,8 +2043,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Assert that a given attribute is not set for a given element in a region.
    *
-   * @Then I( should) not see the :tag element with the :attribute attribute
-   *   set to :value in the :region( region)
+   * @Then I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)
    */
   public function assertRegionElementAttribute($tag, $attribute, $value, $region): void {
     $regionObj = $this->getRegion($region);
@@ -2092,8 +2056,7 @@ class JoinupContext extends RawDrupalContext {
         $attr = $element->getAttribute($attribute);
         if (!empty($attr)) {
           if (strpos($attr, "$value") !== FALSE) {
-            throw new \Exception(sprintf('The "%s" attribute is equal to "%s" on the element "%s" in the "%s" region on the page %s', $attribute, $value, $tag, $region, $this->getSession()
-              ->getCurrentUrl()));
+            throw new \Exception(sprintf('The "%s" attribute is equal to "%s" on the element "%s" in the "%s" region on the page %s', $attribute, $value, $tag, $region, $this->getSession()->getCurrentUrl()));
           }
         }
       }
@@ -2106,8 +2069,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the persistent url should contain :pattern
    */
   public function thePersistentUrlShouldContain($pattern): void {
-    $this->assertSession()
-      ->elementAttributeContains('css', '.permalink', 'href', $pattern);
+    $this->assertSession()->elementAttributeContains('css', '.permalink', 'href', $pattern);
   }
 
   /**
@@ -2179,8 +2141,8 @@ class JoinupContext extends RawDrupalContext {
       // @see ::locatePath()
       $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
       $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
-          'q' => $value,
-        ]);
+        'q' => $value,
+      ]);
       $response = $client->get($uri);
 
       if ($response->getStatusCode() !== 200) {
@@ -2287,7 +2249,7 @@ class JoinupContext extends RawDrupalContext {
     $links = $this->findLinksMarkedAsActive($region);
 
     if (!empty($links)) {
-      $labels = array_map(function($link) {
+      $labels = array_map(function ($link) {
         /** @var \Behat\Mink\Element\NodeElement $link */
         return $link->getText() . ' (' . $link->getAttribute('href') . ')';
       }, $links);
@@ -2317,7 +2279,7 @@ class JoinupContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement[] $links */
     if (count($links) > 1) {
-      $labels = array_map(function($link) {
+      $labels = array_map(function ($link) {
         /** @var \Behat\Mink\Element\NodeElement $link */
         return $link->getText() . ' (' . $link->getAttribute('href') . ')';
       }, $links);
@@ -2361,8 +2323,6 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the :tile :type tile should not be marked as featured
    *
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    * @todo Due to the bug described in ISAICP-4352, we have to temporary check
    * if a tile is not featured via backend, rather than checking the DOM.
    * Manually testing or running this Behat step definition Behat in test
@@ -2371,6 +2331,8 @@ class JoinupContext extends RawDrupalContext {
    * Revert back the check that a tile is not featured by checking the DOM, in
    * ISAICP-4849.
    *
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    */
   public function assertTileNotMarkedAsFeatured(string $heading, string $type): void {
     assert(in_array($type,
@@ -2405,8 +2367,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @see \Drupal\DrupalExtension\Context\MarkupContext::assertNotRegionElementText()
    *
-   * @Then I( should) see a(n) :tag element with the text :text in the :region(
-   *   region)
+   * @Then I( should) see a(n) :tag element with the text :text in the :region( region)
    */
   public function assertRegionElementText($tag, $text, $region): void {
     $regionObj = $this->getRegion($region);
@@ -2418,8 +2379,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
     }
-    throw new \Exception(sprintf('The text "%s" was not found in the "%s" element in the "%s" region on the page %s', $text, $tag, $region, $this->getSession()
-      ->getCurrentUrl()));
+    throw new \Exception(sprintf('The text "%s" was not found in the "%s" element in the "%s" region on the page %s', $text, $tag, $region, $this->getSession()->getCurrentUrl()));
   }
 
   /**
@@ -2428,9 +2388,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then a tour should be available
    */
   public function assertTourAvailable(): void {
-    if (!$this->getSession()
-      ->getPage()
-      ->find('css', 'a.js-tour-start-button')) {
+    if (!$this->getSession()->getPage()->find('css', 'a.js-tour-start-button')) {
       throw new \Exception("No tour is available on the page.");
     }
   }
@@ -2535,9 +2493,7 @@ class JoinupContext extends RawDrupalContext {
 
     $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
-    $rows = $this->getSession()
-      ->getPage()
-      ->findAll('css', '#menu-overview tbody tr.draggable');
+    $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
     Assert::assertSameSize($expected, $rows);
 
@@ -2610,14 +2566,12 @@ class JoinupContext extends RawDrupalContext {
    *   page.
    *
    * @Then I drag the table row at position :position( to the) :direction
-   * @Then I drag the table row in the :region region at position :position( to
-   *   the) :direction
+   * @Then I drag the table row in the :region region at position :position( to the) :direction
    */
   public function findTableRowByPositionAndDragTowardsDirection(string $position, string $direction, ?string $region = NULL): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $region = empty($region) ? $this->getSession()
-      ->getPage() : $this->getRegion($region);
+    $region = empty($region) ? $this->getSession()->getPage() : $this->getRegion($region);
     $row = $this->findDraggableTableRowByPosition((int) $position, $region);
     $this->dragTableRowTowardsDirection($row, $direction);
   }
@@ -2643,8 +2597,7 @@ class JoinupContext extends RawDrupalContext {
     $fields = $page->findAll('named', ['field', $field]);
 
     if (empty($fields)) {
-      throw new ElementNotFoundException($this->getSession()
-        ->getDriver(), 'form field', 'id|name|label|value|placeholder', $field);
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'form field', 'id|name|label|value|placeholder', $field);
     }
 
     /** @var \Behat\Mink\Element\NodeElement $last */
@@ -2690,8 +2643,7 @@ class JoinupContext extends RawDrupalContext {
     $buttons = $page->findAll('named', ['button', $label]);
 
     if (empty($buttons)) {
-      throw new ElementNotFoundException($this->getSession()
-        ->getDriver(), 'button', 'label', $label);
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label', $label);
     }
 
     /** @var \Behat\Mink\Element\NodeElement $last_button */
@@ -2747,7 +2699,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I enter the following for the :label link field:
    */
   public function fillLinkField(TableNode $table, string $label): void {
-    $rows = array_map(function(array $row): array {
+    $rows = array_map(function (array $row): array {
       return array_change_key_case($row);
     }, $table->getColumnsHash());
 
@@ -2760,9 +2712,7 @@ class JoinupContext extends RawDrupalContext {
         throw new \InvalidArgumentException('Missing URL column in link table.');
       }
       $xpath = "//input[@id=(//label[text()='$label'])[$i]/@for]";
-      $url_input_element = $this->getSession()
-        ->getPage()
-        ->find('xpath', $xpath);
+      $url_input_element = $this->getSession()->getPage()->find('xpath', $xpath);
       if (!$url_input_element) {
         throw new \Exception("URL input field $i not found for link field with label '$label'.'");
       }
@@ -2780,9 +2730,7 @@ class JoinupContext extends RawDrupalContext {
         throw new \Exception("Malformed HTML ID for URL input field $i for link field with label '$label'.");
       }
 
-      $title_input_element = $this->getSession()
-        ->getPage()
-        ->findById($title_input_id);
+      $title_input_element = $this->getSession()->getPage()->findById($title_input_id);
       if (!$title_input_element) {
         throw new \Exception("Title input field $i not found for link field with label '$label'.'");
       }
@@ -2851,9 +2799,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a paragraph containing the text :text
    */
   public function assertParagraphText(string $text): void {
-    $element = $this->getSession()
-      ->getPage()
-      ->find('xpath', '//p[contains(text(), "' . $text . '")]');
+    $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
     Assert::assertNotEmpty($element);
   }
 
@@ -2883,8 +2829,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if at least a link exists in the page.
    *
-   * @Given I should not see the absolute urls of the following content
-   *   entities:
+   * @Given I should not see the absolute urls of the following content entities:
    */
   public function assertNotContentAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
     foreach ($titles->getRows() as $title) {
@@ -2905,8 +2850,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   Thrown when one of the parameters is not correct.
    *
-   * @Given the publication date of the :title :bundle content is changed to
-   *   :new_value
+   * @Given the publication date of the :title :bundle content is changed to :new_value
    */
   public function givenPublicationDateChanged(string $title, string $bundle, string $new_publication_date): void {
     $entity = $this->getEntityByLabel('node', $title, $bundle);
@@ -2958,11 +2902,9 @@ class JoinupContext extends RawDrupalContext {
    * @Given the name of the :old_name term is changed to :new_name
    */
   public function givenTermNameChanges(string $old_name, string $new_name): void {
-    $terms = \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->loadByProperties([
-        'name' => $old_name,
-      ]);
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+      'name' => $old_name,
+    ]);
     $term = reset($terms);
     $term->setName($new_name);
     $term->save();
@@ -2986,9 +2928,7 @@ class JoinupContext extends RawDrupalContext {
       '.glide__slides .slide a',
     ];
 
-    return $this->getSession()
-      ->getPage()
-      ->findAll('css', implode(', ', $locators));
+    return $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
   }
 
   /**
@@ -3023,8 +2963,7 @@ class JoinupContext extends RawDrupalContext {
       ->clearItems()
       ->save();
 
-    $meta_entity_storage = \Drupal::entityTypeManager()
-      ->getStorage('meta_entity');
+    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
     $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'topic')
       ->condition('published', TRUE)
@@ -3034,8 +2973,7 @@ class JoinupContext extends RawDrupalContext {
     if ($ids) {
       /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
       $meta_entities = $meta_entity_storage->loadMultiple($ids);
-      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()
-        ->id(), $meta_entities);
+      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
       $meta_entity_storage->delete($meta_entities);
       foreach ($tids as $tid) {
         $meta_entity_storage->create([

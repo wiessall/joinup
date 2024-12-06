@@ -24,25 +24,18 @@ function joinup_test_install($is_syncing): void {
   $termStorage = $entityTypeManager->getStorage('taxonomy_term');
 
   // Creates a term given term data from YAML file.
-  $createTerm = function(string $vid, int $weight, array $data, array $definitions, int $parentTermId = 0) use ($termStorage): TermInterface {
+  $createTerm = function (string $vid, int $weight, array $data, array $definitions, int $parentTermId = 0) use ($termStorage): TermInterface {
     $values = ['vid' => $vid, 'weight' => $weight, 'parent' => $parentTermId];
     foreach ($data as $fieldName => $fieldValue) {
       if (isset($definitions[$fieldName])) {
-        if (is_a($definitions[$fieldName]->getItemDefinition()
-          ->getClass(), EntityReferenceItemInterface::class, TRUE)) {
+        if (is_a($definitions[$fieldName]->getItemDefinition()->getClass(), EntityReferenceItemInterface::class, TRUE)) {
           // Reference to other entity should be always represented as URI.
           assert((bool) filter_var($fieldValue, FILTER_VALIDATE_URL));
-          $values[$fieldName] = \Drupal::getContainer()
-            ->get('rdf_sync.mapper')
-            ->getEntityByUri($fieldValue);
+          $values[$fieldName] = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($fieldValue);
         }
         else {
-          if (is_a($definitions[$fieldName]->getItemDefinition()
-            ->getClass(), TextItemBase::class, TRUE)) {
-            $fieldValue = [
-              'value' => $fieldValue,
-              'format' => 'content_editor',
-            ];
+          if (is_a($definitions[$fieldName]->getItemDefinition()->getClass(), TextItemBase::class, TRUE)) {
+            $fieldValue = ['value' => $fieldValue, 'format' => 'content_editor'];
           }
           $values[$fieldName] = $fieldValue;
         }
