@@ -1,0 +1,14 @@
+// @file
+// Component styles from paragraphs to make them reusable in editor styles.
+
+@mixin paragraph-table() {
+  table {
+    td {
+      min-width: 100px;
+      vertical-align: top;
+    }
+    @include media-breakpoint-up(md) {
+      table-layout: fixed;
+    }
+  }
+}
