@@ -12,9 +12,8 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And "event" content:
-      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     |
-      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | published |
-
+      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     | abstract |
+      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | published |          |
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
     And 1 metatag graph of type "http://schema.org/Event" should exist in the page
