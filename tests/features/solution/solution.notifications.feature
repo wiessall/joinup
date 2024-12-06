@@ -61,6 +61,7 @@ Feature: Solution notifications
     # Template 15. The moderation team requests changes.
     When I go to the homepage of the "Solution notification to request changes" solution
     And I click "Edit" in the "Entity actions" region
+    And I select "Data Owner" from "Solution type"
     And I press "Request changes"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
