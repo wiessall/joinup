@@ -1,0 +1,37 @@
+joinup_reports.group_administrators_report:
+  path: '/admin/reporting/group-administrators/export'
+  defaults:
+    _form: '\Drupal\joinup_reports\Form\ExportGroupAdministratorsForm'
+    _title: 'Group administrators and facilitators'
+  requirements:
+    _permission: 'administer users'
+  options:
+    _admin_route: TRUE
+
+joinup_reports.solutions_by_licences_report:
+  path: '/admin/reporting/solutions-by-licences'
+  defaults:
+    _form: '\Drupal\joinup_reports\Form\SolutionsByLicenceForm'
+    _title: 'Solutions by licences'
+  requirements:
+    _permission: 'access joinup reports'
+  options:
+    _admin_route: TRUE
+
+joinup_reports.statistics_per_group:
+  path: '/admin/reporting/statistics-per-group'
+  defaults:
+    _form: '\Drupal\joinup_reports\Form\ExportStatisticsPerGroupForm'
+    _title: 'Statistics per group'
+  requirements:
+    _permission: 'access joinup reports'
+  options:
+    _admin_route: TRUE
+
+joinup_reports.admin_reporting:
+  path: '/admin/reporting'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Reporting'
+  requirements:
+    _permission: 'access joinup reports'

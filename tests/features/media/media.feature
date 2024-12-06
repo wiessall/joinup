@@ -103,3 +103,58 @@ Feature: Administer media.
       | The File            | File            | Published   | Mars  | joe    |
       | Other File          | File            | Published   | Venus | joe    |
       | The Video           | Remote video    | Unpublished | Mars  | joe    |
+
+  # Regression test for patch resources/patch/php/drupal/core/2940605.diff
+  Scenario: Ensure that multiple media are rendered without logging any errors.
+    Given there are no preexisting log records on the site
+    And the following "Image" media:
+      | name                               | image      | alt            | group      | revision         | uuid        |
+      | The Image in Shaping of disruption | simple.svg | A simple image | The Portal | 2016-07-10T13:00 | abcde-12345 |
+
+    When I am logged in as a "facilitator" of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
+    And I click "Add discussion" in the plus button menu
+
+    Then I fill in the following:
+      | Title | Sample discussion |
+    And I select "Supplier exchange" from "Topic"
+
+    # Add in the body multiple times the media image.
+    And I fill in "Content" with:
+    """
+    Sample discussion:
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media>
+    """
+    And I press "Publish"
+    Then I should see the text "Sample discussion"
+    And the site should not have log records with level lower than Warning

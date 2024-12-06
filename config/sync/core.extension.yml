@@ -120,6 +120,7 @@ module:
   joinup_rdf: 0
   joinup_release: 0
   joinup_replicate: 0
+  joinup_reports: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
