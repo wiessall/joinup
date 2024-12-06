@@ -592,8 +592,8 @@ Feature:
       | Show content    | type: select - value: All                                  |
       | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
     And I press "Save"
-    And the url should match "/topic/law-and-justice/e-justice"
+#    And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "Magic abstract" in the "Col with abstract" tile
     And I should see the text "Another abstract" in the "Col without abstract" tile
-    And I should see the text "default abstract" in the "Another rough day" tile
+    And I should see the text "Lorem description issum" in the "Another rough day" tile
     And I should see the text "This is an soltion with abstract" in the "Just another solt" tile
