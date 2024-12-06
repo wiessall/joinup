@@ -903,26 +903,27 @@ Feature: Global search
     And I should not see the "Type of document" facet
     And I check the "Events (2)" checkbox from the "Content types" facet
     And I check the "Documents (2)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Events, Documents"
+    Then I should see the "Type of document" facet
+    And the "Type of document" checkbox facet should allow selecting the following values "Document (1), Interoperability Assessment (1)"
+    And I should see the following facet summary "Events, Documents"
     And the page should show only the tiles "Event domega, Event ratega, Document dome, Document gathers"
-    And I should see the "Type of document" facet
 
-    When I check the "Interoperability Assessment" checkbox from the "Type of document" facet
+    When I check the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     Then the page should show only the tiles "Document dome"
     When I check the "Show only Archived items" checkbox from the "Status" facet
     And the page should show only the tiles "Document winners"
 
-    Then I check the "Interoperability Assessment" checkbox from the "Type of document" facet
+    Then I uncheck the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     And the page should show only the tiles "Document winners, Document account"
-    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    Then I uncheck the "Show only Archived items" checkbox from the "Status" facet
     Then I should see the following facet summary "Events, Documents"
     And the page should show only the tiles "Event domega, Event ratega, Document dome, Document gathers"
 
-    Then I check the "Events (2)" checkbox from the "Content types" facet
+    Then I uncheck the "Events (2)" checkbox from the "Content types" facet
     And the page should show only the tiles "Document dome, Document gathers"
-    And I check the "Interoperability Assessment" checkbox from the "Type of document" facet
+    And I check the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     And the page should show only the tiles "Document dome"
-    Then I check the "Document (1)" checkbox from the "Content types" facet
+    Then I uncheck the "Document (1)" checkbox from the "Content types" facet
     Then I should see the following tiles in the correct order:
       | Aortic alpha     |
       | Col for Skye     |

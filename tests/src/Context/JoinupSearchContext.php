@@ -258,7 +258,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the checkbox is not found.
    *
-   * @Given I check the :option checkbox from the :facet_type facet
+   * @Given I (un)check the :option checkbox from the :facet_type facet
    */
   public function checkCheckboxFacet(string $option, string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
