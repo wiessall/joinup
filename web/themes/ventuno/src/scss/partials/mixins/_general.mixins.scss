@@ -1,0 +1,12 @@
+// @file
+// Component styles from _general to be reused also in editor styles.
+
+// Dirty hack to make videos responsive and half width.
+@mixin ventuno-media-video() {
+  width: 100%;
+  max-width: 648px;
+  margin-bottom: $spacer;
+  iframe {
+    max-width: 100%;
+  }
+}
