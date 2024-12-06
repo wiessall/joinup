@@ -93,21 +93,6 @@ Feature: Private messages
     And I should not see the link "Delete thread"
     And I should not see "Delete message"
     And I should not visibly see the link "Inbox"
-    But I should see the link "Delete for me"
-    # Test Inbox with a small display.
-    # We use "Delete for me" to test if the Inbox is visible.
-    When I use a device with a "small" display
-    Then I should see the link "Inbox"
-    But I should not visibly see the link "Delete for me"
-    When I click "Inbox"
-    Then I should see the link "Delete for me"
-    Then I click "Bob Rolls" in thread message card
-    And I wait for CSS animations to finish
-    Then I should not visibly see the link "Delete for me"
-    # Go back to normal display.
-    Then I use a device with an "extra large" display
-    Then I should not visibly see the link "Inbox"
-    Then I should see the link "Delete for me"
     When I click "Delete for me"
     Then a modal should open
     And I should see the text "Delete conversation for me" in the "Modal title"
@@ -165,6 +150,30 @@ Feature: Private messages
     And I should see the link "New message"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
+
+  @javascript @stopSession:after
+  Scenario: Check a the collapse of Inbox in different resolutions.
+    Given the following private messages:
+      | owner      | recipient | message                  |
+      | bob_rolls  | alice_m   | This is message from bob |
+
+    When I am logged in as "alice_m"
+    And I am on "/user/messages"
+    Then I should see the link "Delete for me"
+    # Test Inbox with a small display.
+    # We use "Delete for me" to test if the Inbox is visible.
+    When I use a device with a "small" display
+    Then I should see the link "Inbox"
+    But I should not visibly see the link "Delete for me"
+    When I click "Inbox"
+    Then I should see the link "Delete for me"
+    Then I click "Bob Rolls" in thread message card
+    And I wait for CSS animations to finish
+    Then I should not visibly see the link "Delete for me"
+    # Go back to normal display.
+    Then I use a device with an "extra large" display
+    Then I should not visibly see the link "Inbox"
+    Then I should see the link "Delete for me"
 
   @javascript
   Scenario: User should see validation errors inside modal.
