@@ -130,6 +130,9 @@
   border-bottom: none;
   background: $gray-200;
   font-weight: $font-weight-bold;
+  .username a {
+    color: $brand-darker;
+  }
 }
 
 #load-previous-threads-button-wrapper {
