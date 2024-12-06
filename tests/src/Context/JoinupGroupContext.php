@@ -443,7 +443,7 @@ class JoinupGroupContext extends RawDrupalContext {
 
     // Assume entity reference field and an entity label in the $value variable.
     if (is_string($entityTypeId)) {
-      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
+      $value = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
       Assert::assertNotEmpty(
         $value,
         sprintf(
@@ -471,7 +471,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I delete the :identifier :entityTypeAlias
    */
   public function deleteEntity(string $identifier, string $entityTypeAlias): void {
-    $entityTypeId = static::entityTypeAliases()[$entityTypeAlias] ?? NULL;
+    $entityTypeId = $this->entityTypeAliases()[$entityTypeAlias] ?? NULL;
     if (!$entityTypeId) {
       throw new \InvalidArgumentException("Invalid entity alias: $entityTypeAlias");
     }

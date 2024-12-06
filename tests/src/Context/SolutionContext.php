@@ -114,7 +114,7 @@ class SolutionContext extends RawDrupalContext {
    * @Given the :fieldName of :label solution is changed to :fieldValue
    */
   public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
-    $fieldName = JoinupContext::getNodeFieldNameFromAlias('solution', $fieldName);
+    $fieldName = $this->getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
     Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
     $fieldManager = \Drupal::service('entity_field.manager');
