@@ -910,19 +910,24 @@ Feature: Global search
 
     When I check the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     Then the page should show only the tiles "Document dome"
+    And I should see the following facet summary "Document, Interoperability Assessment"
     When I check the "Show only Archived items" checkbox from the "Status" facet
     And the page should show only the tiles "Document winners"
+    And I should see the following facet summary "Document, Interoperability Assessment"
 
     Then I uncheck the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     And the page should show only the tiles "Document winners, Document account"
+    And I should see the following facet summary "Documents"
     Then I uncheck the "Show only Archived items" checkbox from the "Status" facet
     Then I should see the following facet summary "Events, Documents"
     And the page should show only the tiles "Event domega, Event ratega, Document dome, Document gathers"
 
     Then I uncheck the "Events (2)" checkbox from the "Content types" facet
     And the page should show only the tiles "Document dome, Document gathers"
+    And I should see the following facet summary "Documents"
     And I check the "Interoperability Assessment (1)" checkbox from the "Type of document" facet
     And the page should show only the tiles "Document dome"
+    And I should see the following facet summary "Document, Interoperability Assessment"
     Then I uncheck the "Document (1)" checkbox from the "Content types" facet
     Then I should see the following tiles in the correct order:
       | Aortic alpha     |
