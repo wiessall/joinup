@@ -25,7 +25,6 @@ Feature: Solution notifications
       | Solution notification to propose from request changes | Ramiro Myers | Collection of random solutions | needs update |
       | Solution notification to delete by moderator team     | Ramiro Myers | Collection of random solutions | published    |
       | Solution notification to delete by owner              | Ramiro Myers | Collection of random solutions | published    |
-
     When I am logged in as "Pat Harper"
 
     # Template 7. The moderation team proposes changes.
@@ -35,6 +34,7 @@ Feature: Solution notifications
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
+    And I select "Data Owner" from "Solution type"
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: Changes have been proposed for your solution" contains the following lines of text:
       | The Portal Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |

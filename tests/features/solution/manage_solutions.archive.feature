@@ -252,6 +252,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should not see the text "Archived" in the "Header"
     When I go to the edit form of the "Solution" solution
     Then I should see the button "Archive"
+    And I select "Data Owner" from "Solution type"
     And I press "Archive"
     Then I should see the text "Archived" in the "Header"
 
