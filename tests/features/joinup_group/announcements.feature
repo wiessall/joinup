@@ -535,21 +535,29 @@ Feature: Messaging group announcements
       | Username   | E-mail                       | First name | Family name |
       | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
       | cbarnett68 | callista.barnett@example.com | Callista   | Barnett     |
-      | jgarnett69 | jonny.garnett@example.com    | Jonny      | Garnett     |
+      | jgarnett68 | jonny.garnett@example.com    | Jonny      | Garnett     |
       | jbarnett67 | joana.barnett@example.com    | Joana      | Barnett     |
     And the following collection user membership:
       | collection    | user           |
       | Wrong pension | cgarnett67     |
       | Wrong pension | cbarnett68     |
-      | Wrong pension | jgarnett69     |
+      | Wrong pension | jgarnett68     |
       | Wrong pension | jbarnett67     |
+    And the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.2   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And the following "Legal notice" acceptances:
+      | cgarnett67     |
+      | cbarnett68     |
+      | jgarnett68     |
+      | jbarnett67     |
     And the "cgarnett67" user subscribes to "Wrong pension" collection announcements
     And the "cbarnett68" user subscribes to "Wrong pension" collection announcements
-    And the "jgarnett69" user subscribes to "Wrong pension" collection announcements
+    And the "jgarnett68" user subscribes to "Wrong pension" collection announcements
     And the "jbarnett67" user subscribes to "Wrong pension" collection announcements
 
     When I am logged in as a moderator
-    When I go to the members page of "Wrong pension"
+    Then I go to the members page of "Wrong pension"
     And I click "Add announcement"
     Then the following fields should be present "Subject,Body"
 
@@ -561,12 +569,221 @@ Feature: Messaging group announcements
     And I press "Send for approval"
     Then I click "edit" in the "The recipient names" row
     And I press "Approve"
+    Then I should see the success message "The announcement has been delivered to the Wrong pension collection members."
 
     And the email sent to "cgarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Callista Garnett |
     And the email sent to "cbarnett68" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Callista Barnett |
-    And the email sent to "jgarnett69" with subject "The recipient names" contains the following lines of text:
+    And the email sent to "jgarnett68" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Jonny Garnett |
     And the email sent to "jbarnett67" with subject "The recipient names" contains the following lines of text:
       | The recipient's full name: Joana Barnett |
+
+    # Check mass-mails.
+    Given users:
+      | Username   | E-mail                       | First name | Family name |
+      | sgarnett69 | samuel.garnett@example.com   | Samuel     | Garnett     |
+      | sbrown70   | sally.brown@example.com      | Sally      | Brown       |
+      | ljones71   | lisa.jones@example.com       | Lisa       | Jones       |
+      | lwilson72  | luke.wilson@example.com      | Luke       | Wilson      |
+      | asmith73   | alice.smith@example.com      | Alice      | Smith       |
+      | adavis74   | aaron.davis@example.com      | Aaron      | Davis       |
+      | bclark75   | ben.clark@example.com        | Ben        | Clark       |
+      | bmartin76  | beth.martin@example.com      | Beth       | Martin      |
+      | dwhite77   | daniel.white@example.com     | Daniel     | White       |
+      | drichard78 | diana.richard@example.com    | Diana      | Richard     |
+      | fmorris79  | fiona.morris@example.com     | Fiona      | Morris      |
+      | fbaker80   | felix.baker@example.com      | Felix      | Baker       |
+      | hrobin81   | hannah.robin@example.com     | Hannah     | Robin       |
+      | hthomas82  | harry.thomas@example.com     | Harry      | Thomas      |
+      | kscott83   | kyle.scott@example.com       | Kyle       | Scott       |
+      | klee84     | kelly.lee@example.com        | Kelly      | Lee         |
+      | myoung85   | mia.young@example.com        | Mia        | Young       |
+      | mking86    | matt.king@example.com        | Matt       | King        |
+      | oturner87  | olivia.turner@example.com    | Olivia     | Turner      |
+      | owalker88  | owen.walker@example.com      | Owen       | Walker      |
+      | pallen89   | paige.allen@example.com      | Paige      | Allen       |
+      | phall90    | paul.hall@example.com        | Paul       | Hall        |
+      | rcooper91  | ruby.cooper@example.com      | Ruby       | Cooper      |
+      | rwood92    | ryan.wood@example.com        | Ryan       | Wood        |
+      | schapman93 | sarah.chapman@example.com    | Sarah      | Chapman     |
+      | sbell94    | sean.bell@example.com        | Sean       | Bell        |
+      | tcampbell95| taylor.campbell@example.com  | Taylor     | Campbell    |
+      | tbennett96 | tom.bennett@example.com      | Tom        | Bennett     |
+      | vmorgan97  | victoria.morgan@example.com | Victoria   | Morgan      |
+      | vcarter98  | vincent.carter@example.com   | Vincent    | Carter      |
+      | wreed99    | will.reed@example.com        | Will       | Reed        |
+      | wroberts00 | wendy.roberts@example.com    | Wendy      | Roberts     |
+      | ygreen01   | yara.green@example.com       | Yara       | Green       |
+      | ycollins02 | yuri.collins@example.com     | Yuri       | Collins     |
+      | zharris03  | zara.harris@example.com      | Zara       | Harris      |
+      | zward04    | zane.ward@example.com        | Zane       | Ward        |
+      | cmurphy05  | camila.murphy@example.com    | Camila     | Murphy      |
+      | cfisher06  | caleb.fisher@example.com     | Caleb      | Fisher      |
+      | dstevens07 | daisy.stevens@example.com    | Daisy      | Stevens     |
+      | dprice08   | dylan.price@example.com      | Dylan      | Price       |
+      | eperry09   | eva.perry@example.com        | Eva        | Perry       |
+      | edunn10    | ethan.dunn@example.com       | Ethan      | Dunn        |
+      | fgray11    | freya.gray@example.com       | Freya      | Gray        |
+      | fbryant12  | finn.bryant@example.com      | Finn       | Bryant      |
+      | hross13    | hayden.ross@example.com      | Hayden     | Ross        |
+      | hwright14  | hope.wright@example.com      | Hope       | Wright      |
+    And the following collection user memberships:
+      | collection    | user       |
+      | Wrong pension | sgarnett69 |
+      | Wrong pension | sbrown70   |
+      | Wrong pension | ljones71   |
+      | Wrong pension | lwilson72  |
+      | Wrong pension | asmith73   |
+      | Wrong pension | adavis74   |
+      | Wrong pension | bclark75   |
+      | Wrong pension | bmartin76  |
+      | Wrong pension | dwhite77   |
+      | Wrong pension | drichard78 |
+      | Wrong pension | fmorris79  |
+      | Wrong pension | fbaker80   |
+      | Wrong pension | hrobin81   |
+      | Wrong pension | hthomas82  |
+      | Wrong pension | kscott83   |
+      | Wrong pension | klee84     |
+      | Wrong pension | myoung85   |
+      | Wrong pension | mking86    |
+      | Wrong pension | oturner87  |
+      | Wrong pension | owalker88  |
+      | Wrong pension | pallen89   |
+      | Wrong pension | phall90    |
+      | Wrong pension | rcooper91  |
+      | Wrong pension | rwood92    |
+      | Wrong pension | schapman93 |
+      | Wrong pension | sbell94    |
+      | Wrong pension | tcampbell95|
+      | Wrong pension | tbennett96 |
+      | Wrong pension | vmorgan97  |
+      | Wrong pension | vcarter98  |
+      | Wrong pension | wreed99    |
+      | Wrong pension | wroberts00 |
+      | Wrong pension | ygreen01   |
+      | Wrong pension | ycollins02 |
+      | Wrong pension | zharris03  |
+      | Wrong pension | zward04    |
+      | Wrong pension | cmurphy05  |
+      | Wrong pension | cfisher06  |
+      | Wrong pension | dstevens07 |
+      | Wrong pension | dprice08   |
+      | Wrong pension | eperry09   |
+      | Wrong pension | edunn10    |
+      | Wrong pension | fgray11    |
+      | Wrong pension | fbryant12  |
+      | Wrong pension | hross13    |
+      | Wrong pension | hwright14  |
+    And the following "Legal notice" acceptances:
+      | sgarnett69 |
+      | sbrown70   |
+      | ljones71   |
+      | lwilson72  |
+      | asmith73   |
+      | adavis74   |
+      | bclark75   |
+      | bmartin76  |
+      | dwhite77   |
+      | drichard78 |
+      | fmorris79  |
+      | fbaker80   |
+      | hrobin81   |
+      | hthomas82  |
+      | kscott83   |
+      | klee84     |
+      | myoung85   |
+      | mking86    |
+      | oturner87  |
+      | owalker88  |
+      | pallen89   |
+      | phall90    |
+      | rcooper91  |
+      | rwood92    |
+      | schapman93 |
+      | sbell94    |
+      | tcampbell95|
+      | tbennett96 |
+      | vmorgan97  |
+      | vcarter98  |
+      | wreed99    |
+      | wroberts00 |
+      | ygreen01   |
+      | ycollins02 |
+      | zharris03  |
+      | zward04    |
+      | cmurphy05  |
+      | cfisher06  |
+      | dstevens07 |
+      | dprice08   |
+      | eperry09   |
+      | edunn10    |
+      | fgray11    |
+      | fbryant12  |
+      | hross13    |
+      | hwright14  |
+    And the "sgarnett69" user subscribes to "Wrong pension" collection announcements
+    And the "sbrown70" user subscribes to "Wrong pension" collection announcements
+    And the "ljones71" user subscribes to "Wrong pension" collection announcements
+    And the "lwilson72" user subscribes to "Wrong pension" collection announcements
+    And the "asmith73" user subscribes to "Wrong pension" collection announcements
+    And the "adavis74" user subscribes to "Wrong pension" collection announcements
+    And the "bclark75" user subscribes to "Wrong pension" collection announcements
+    And the "bmartin76" user subscribes to "Wrong pension" collection announcements
+    And the "dwhite77" user subscribes to "Wrong pension" collection announcements
+    And the "drichard78" user subscribes to "Wrong pension" collection announcements
+    And the "fmorris79" user subscribes to "Wrong pension" collection announcements
+    And the "fbaker80" user subscribes to "Wrong pension" collection announcements
+    And the "hrobin81" user subscribes to "Wrong pension" collection announcements
+    And the "hthomas82" user subscribes to "Wrong pension" collection announcements
+    And the "kscott83" user subscribes to "Wrong pension" collection announcements
+    And the "klee84" user subscribes to "Wrong pension" collection announcements
+    And the "myoung85" user subscribes to "Wrong pension" collection announcements
+    And the "mking86" user subscribes to "Wrong pension" collection announcements
+    And the "oturner87" user subscribes to "Wrong pension" collection announcements
+    And the "owalker88" user subscribes to "Wrong pension" collection announcements
+    And the "pallen89" user subscribes to "Wrong pension" collection announcements
+    And the "phall90" user subscribes to "Wrong pension" collection announcements
+    And the "rcooper91" user subscribes to "Wrong pension" collection announcements
+    And the "rwood92" user subscribes to "Wrong pension" collection announcements
+    And the "schapman93" user subscribes to "Wrong pension" collection announcements
+    And the "sbell94" user subscribes to "Wrong pension" collection announcements
+    And the "tcampbell95" user subscribes to "Wrong pension" collection announcements
+    And the "tbennett96" user subscribes to "Wrong pension" collection announcements
+    And the "vmorgan97" user subscribes to "Wrong pension" collection announcements
+    And the "vcarter98" user subscribes to "Wrong pension" collection announcements
+    And the "wreed99" user subscribes to "Wrong pension" collection announcements
+    And the "wroberts00" user subscribes to "Wrong pension" collection announcements
+    And the "ygreen01" user subscribes to "Wrong pension" collection announcements
+    And the "ycollins02" user subscribes to "Wrong pension" collection announcements
+    And the "zharris03" user subscribes to "Wrong pension" collection announcements
+    And the "zward04" user subscribes to "Wrong pension" collection announcements
+    And the "cmurphy05" user subscribes to "Wrong pension" collection announcements
+    And the "cfisher06" user subscribes to "Wrong pension" collection announcements
+    And the "dstevens07" user subscribes to "Wrong pension" collection announcements
+    And the "dprice08" user subscribes to "Wrong pension" collection announcements
+    And the "eperry09" user subscribes to "Wrong pension" collection announcements
+    And the "edunn10" user subscribes to "Wrong pension" collection announcements
+    And the "fgray11" user subscribes to "Wrong pension" collection announcements
+    And the "fbryant12" user subscribes to "Wrong pension" collection announcements
+    And the "hross13" user subscribes to "Wrong pension" collection announcements
+    And the "hwright14" user subscribes to "Wrong pension" collection announcements
+
+    Then I go to the members page of "Wrong pension"
+    And I click "Add announcement"
+    Then the following fields should be present "Subject,Body"
+
+    And I fill in "Subject" with "The recipient names mass-email"
+    And I fill in "Body" with "The recipient's full name: @recipient_name"
+    And I press "Create"
+    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+
+    And I press "Send for approval"
+    Then I click "edit" in the "The recipient names mass-email" row
+    And I press "Approve"
+    Then I should see the success message "The announcement has been delivered to the Wrong pension collection members."
+
+    Given the delivery queue of "The recipient names mass-email" announcement is processed
+    Then the "The recipient names mass-email" announcement should have been delivered for each group member
