@@ -525,3 +525,48 @@ Feature: Messaging group announcements
 
     # Explicitly delete announcements created via UI.
     And I delete the "TEST: Mass-mailing announcement" announcement
+
+  @group-e
+  Scenario: Wrong recipient's name in announcements.
+    Given collection content:
+      | title         | state     |
+      | Wrong pension | published |
+    And users:
+      | Username   | E-mail                       | First name | Family name |
+      | cgarnett67 | callista.garnett@example.com | Callista   | Garnett     |
+      | cbarnett68 | callista.barnett@example.com | Callista   | Barnett     |
+      | jgarnett69 | jonny.garnett@example.com    | Jonny      | Garnett     |
+      | jbarnett67 | joana.barnett@example.com    | Joana      | Barnett     |
+    And the following collection user membership:
+      | collection    | user           |
+      | Wrong pension | cgarnett67     |
+      | Wrong pension | cbarnett68     |
+      | Wrong pension | jgarnett69     |
+      | Wrong pension | jbarnett67     |
+    And the "cgarnett67" user subscribes to "Wrong pension" collection announcements
+    And the "cbarnett68" user subscribes to "Wrong pension" collection announcements
+    And the "jgarnett69" user subscribes to "Wrong pension" collection announcements
+    And the "jbarnett67" user subscribes to "Wrong pension" collection announcements
+
+    When I am logged in as a moderator
+    When I go to the members page of "Wrong pension"
+    And I click "Add announcement"
+    Then the following fields should be present "Subject,Body"
+
+    And I fill in "Subject" with "The recipient names"
+    And I fill in "Body" with "The recipient's full name: @recipient_name"
+    And I press "Create"
+    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+
+    And I press "Send for approval"
+    Then I click "edit" in the "The recipient names" row
+    And I press "Approve"
+
+    And the email sent to "cgarnett67" with subject "The recipient names" contains the following lines of text:
+      | The recipient's full name: Callista Garnett |
+    And the email sent to "cbarnett68" with subject "The recipient names" contains the following lines of text:
+      | The recipient's full name: Callista Barnett |
+    And the email sent to "jgarnett69" with subject "The recipient names" contains the following lines of text:
+      | The recipient's full name: Jonny Garnett |
+    And the email sent to "jbarnett67" with subject "The recipient names" contains the following lines of text:
+      | The recipient's full name: Joana Barnett |
