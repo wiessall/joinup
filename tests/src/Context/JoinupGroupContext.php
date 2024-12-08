@@ -367,11 +367,12 @@ class JoinupGroupContext extends RawDrupalContext {
     $limit = 250;
     while ($member_emails = $announcement->getRecipients($offset, $limit)) {
       foreach ($member_emails as $member_email) {
+        $body_processed = str_replace('@recipient_name', user_load_by_mail($member_email)->getDisplayName(), $body);
         $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
         $email = reset($emails);
         Assert::assertSame($member_email, $email['to']);
         Assert::assertSame($subject, $email['subject']);
-        Assert::assertStringContainsString($body, (string) $email['body']);
+        Assert::assertStringContainsString($body_processed, (string) $email['body']);
         $offset += $limit;
       }
     }
