@@ -523,8 +523,26 @@ Feature: Messaging group announcements
     Given the delivery queue of "TEST: Mass-mailing announcement" announcement is processed
     Then the "TEST: Mass-mailing announcement" announcement should have been delivered for each group member
 
+    # Regression test for ticket ISAICP-9253.
+    When I go to the announcements page of "Public Sector Tech Watch" collection
+    And I click "Add announcement"
+    And I fill in "Subject" with "TEST: Mass-mailing announcement token"
+    And I fill in "Body" with "The recipient's full name: @recipient_name"
+    And I press "Create"
+    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+
+    When I press "Send for approval"
+    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Public Sector Tech Watch collection members."
+    When I click "edit" in the "TEST: Mass-mailing announcement token" row
+    And I press "Approve"
+    Then I should see the success message "The announcement has been scheduled to be delivered to the Public Sector Tech Watch collection members. Because the collection has a large amount of members the emails will be sent in several batches."
+
+    Given the delivery queue of "TEST: Mass-mailing announcement token" announcement is processed
+    Then the "TEST: Mass-mailing announcement token" announcement should have been delivered for each group member
+
     # Explicitly delete announcements created via UI.
     And I delete the "TEST: Mass-mailing announcement" announcement
+    And I delete the "TEST: Mass-mailing announcement token" announcement
 
   @group-e
   Scenario: Wrong recipient's name in announcements.
