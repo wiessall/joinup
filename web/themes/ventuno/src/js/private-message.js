@@ -17,14 +17,17 @@
         myMessagesText = myMessagesText.replace(/ \([0-9]+\)/g, "");
 
         $(document).on("ajaxSuccess", (event, xhr) => {
-          const response = xhr.responseJSON[0];
-          if (response?.command !== "privateMessageUpdateUnreadItemsCount") {
-            return;
-          }
-          if (response.unreadItemsCount > 0) {
-            myMessagesLink.innerHTML = `${myMessagesText}(${response.unreadItemsCount})`;
-          } else {
-            myMessagesLink.innerHTML = myMessagesText;
+          if (
+            typeof xhr.responseJSON !== "undefined" &&
+            typeof xhr.responseJSON[0] !== "undefined" &&
+            xhr.responseJSON[0]?.command ===
+              "privateMessageUpdateUnreadItemsCount"
+          ) {
+            if (xhr.responseJSON[0].unreadItemsCount > 0) {
+              myMessagesLink.innerHTML = `${myMessagesText}(${xhr.responseJSON[0].unreadItemsCount})`;
+            } else {
+              myMessagesLink.innerHTML = myMessagesText;
+            }
           }
         });
       });
