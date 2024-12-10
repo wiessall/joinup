@@ -20,6 +20,11 @@ interface InteroperableEuropeCollectionInterface {
   public const NEWS_LISTING = '85aa19c4-58f6-4681-8105-3bf98ce7df4e';
 
   /**
+   * The UUID of the news for switching from Joinup to Portal for the homepage.
+   */
+  public const JOINUP_TO_PORTAL_NEWS = 'bf2435a3-119b-4db0-a1f3-4bfa37ea1a3f';
+
+  /**
    * The UUID of the events listing page.
    */
   public const EVENT_LISTING = '240cf939-639b-46bb-b907-f768b8f37267';

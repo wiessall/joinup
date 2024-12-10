@@ -7,5 +7,5 @@ joinup_subscription.my_subscriptions:
 joinup_subscription.subscribers_report:
   title: 'Subscribers report'
   route_name: joinup_subscription.subscribers_report
-  parent: joinup.admin_reporting
+  parent: joinup_reports.admin_reporting
   weight: 2
