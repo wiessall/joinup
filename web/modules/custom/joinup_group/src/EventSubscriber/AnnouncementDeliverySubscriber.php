@@ -19,7 +19,7 @@ class AnnouncementDeliverySubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      MessageNotifyDeliveryEvent::class => 'onAnnouncementDelivery',
+      MessageNotifyDeliveryEvent::class => ['onAnnouncementDelivery', 100],
     ];
   }
 
