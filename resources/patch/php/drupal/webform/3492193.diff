@@ -1,0 +1,50 @@
+diff --git a/includes/webform.theme.template.inc b/includes/webform.theme.template.inc
+index 8d9de9af3c3278364d8dc4c5cec1c8e0e4af9225..3a18bb17ceb44508c3010f0b96210344afcb871a 100644
+--- a/includes/webform.theme.template.inc
++++ b/includes/webform.theme.template.inc
+@@ -278,9 +278,8 @@ function template_preprocess_webform_submission(array &$variables) {
+  *
+  * @param array $variables
+  *   An associative array containing:
+- *   - data: An array of elements to display in view mode.
+- *   - webform_submission: The webform submissions object.
+- *   - view_mode: View mode; e.g., 'html', 'text', 'table', 'yaml', etc.
++ *   - elements: An associative array containing the properties of the element.
++ *     Properties used: #view_mode, #webform_submission.
+  */
+ function template_preprocess_webform_submission_data(array &$variables) {
+   $variables['view_mode'] = $variables['elements']['#view_mode'];
+@@ -288,6 +287,11 @@ function template_preprocess_webform_submission_data(array &$variables) {
+   if ($variables['webform_submission'] instanceof WebformSubmissionInterface) {
+     $variables['webform'] = $variables['webform_submission']->getWebform();
+   }
++
++  $variables['content'] = [];
++  foreach (Element::children($variables['elements']) as $key) {
++    $variables['content'][$key] = $variables['elements'][$key];
++  }
+ }
+ 
+ /**
+diff --git a/templates/webform-submission-data.html.twig b/templates/webform-submission-data.html.twig
+index 6f1b21b3dd95dc2de6b104311a9ded55f5470801..5aa6a4dc538075056c4ddde3ff2d75b68c180505 100644
+--- a/templates/webform-submission-data.html.twig
++++ b/templates/webform-submission-data.html.twig
+@@ -4,8 +4,10 @@
+  * Default theme implementation for webform submission data.
+  *
+  * Available variables:
++ * - view_mode: The view mode; e.g., 'html', 'text', 'table', 'yaml', etc.
+  * - webform_submission: The webform submission.
+  * - webform: The webform.
++ * - content: The webform submission content to render.
+  *
+  * @see template_preprocess_webform_submission_data()
+  *
+@@ -20,5 +22,5 @@
+   ]
+ %}
+ <div{{ attributes.addClass(classes) }}>
+-{{ elements }}
++  {{ content }}
+ </div>
