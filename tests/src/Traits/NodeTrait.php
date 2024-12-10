@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\node\Entity\Node;
 
 /**
@@ -59,7 +60,7 @@ trait NodeTrait {
    */
   protected function getDefaultContact(): Node {
     return \Drupal::service('entity.repository')
-      ->loadEntityByUuid('node', 'a1b2c3d4-e5f6-7890-ab12-cd34ef567890');
+      ->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_CONTACT_UUID);
   }
 
   /**
@@ -76,7 +77,7 @@ trait NodeTrait {
    */
   protected function getDefaultOwner(): Node {
     return \Drupal::service('entity.repository')
-      ->loadEntityByUuid('node', 'a1b2c3d4-e5f6-7890-ab12-cd34ef567891');
+      ->loadEntityByUuid('node', JoinupCollectionHelper::JOINUP_OWNER_UUID);
   }
 
 }
