@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f21f18bf386de3433f314d6409b5c31",
+    "content-hash": "0aa73fc1e1aa8c25a0f1bd7d6e88102c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7222,29 +7222,34 @@
         },
         {
             "name": "drupal/rdf_sync",
-            "version": "1.0.0-alpha14",
+            "version": "1.0.0-alpha16",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_sync.git",
-                "reference": "1.0.0-alpha14"
+                "reference": "1.0.0-alpha16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-alpha14.zip",
-                "reference": "1.0.0-alpha14",
-                "shasum": "73aab11db847d585bf4f7cb49b15f0163e8e5400"
+                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-alpha16.zip",
+                "reference": "1.0.0-alpha16",
+                "shasum": "41a4809c23da9c56fc2090f75e4b3f8862fcc2c8"
             },
             "require": {
-                "drupal/core": "^10.2",
+                "cweagans/composer-patches": "^1.7",
+                "drupal/core": "^10.2 || ^11",
                 "ext-pdo": "*",
                 "ml/json-ld": "^1.2",
                 "sweetrdf/easyrdf": "^1.11"
             },
+            "require-dev": {
+                "drush/drush": "^12.5 || ^13.3",
+                "semsol/arc2": "^3"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha14",
-                    "datestamp": "1728894010",
+                    "version": "1.0.0-alpha16",
+                    "datestamp": "1733857095",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7258,6 +7263,16 @@
                         "[project-root]/.gitattributes": {
                             "append": ".gitattributes.append"
                         }
+                    }
+                },
+                "enable-patching": false,
+                "composer-exit-on-patch-failure": true,
+                "patchLevel": {
+                    "drupal/core": "-p2"
+                },
+                "patches": {
+                    "semsol/arc2": {
+                        "https://github.com/semsol/arc2/issues/158": "https://patch-diff.githubusercontent.com/raw/semsol/arc2/pull/159.diff"
                     }
                 }
             },
@@ -10826,16 +10841,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.5.3",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "b650144166dfa7703e62a22e493b853b58d874b0"
+                "reference": "d150f911e0079e90ae3c106734c93137c184f932"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/b650144166dfa7703e62a22e493b853b58d874b0",
-                "reference": "b650144166dfa7703e62a22e493b853b58d874b0",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d150f911e0079e90ae3c106734c93137c184f932",
+                "reference": "d150f911e0079e90ae3c106734c93137c184f932",
                 "shasum": ""
             },
             "require": {
@@ -10860,8 +10875,9 @@
                 "phpstan/phpstan": "^1.8.2",
                 "phpunit/phpunit": "^9.5.21 || ^10.5.9 || ^11.0.0",
                 "scrutinizer/ocular": "^1.8.1",
-                "symfony/finder": "^5.3 | ^6.0 || ^7.0",
-                "symfony/yaml": "^2.3 | ^3.0 | ^4.0 | ^5.0 | ^6.0 || ^7.0",
+                "symfony/finder": "^5.3 | ^6.0 | ^7.0",
+                "symfony/process": "^5.4 | ^6.0 | ^7.0",
+                "symfony/yaml": "^2.3 | ^3.0 | ^4.0 | ^5.0 | ^6.0 | ^7.0",
                 "unleashedtech/php-coding-standard": "^3.1.1",
                 "vimeo/psalm": "^4.24.0 || ^5.0.0"
             },
@@ -10871,7 +10887,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.6-dev"
+                    "dev-main": "2.7-dev"
                 }
             },
             "autoload": {
@@ -10928,7 +10944,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-16T11:46:16+00:00"
+            "time": "2024-12-07T15:34:16+00:00"
         },
         {
             "name": "league/config",
