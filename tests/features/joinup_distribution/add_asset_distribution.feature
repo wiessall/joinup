@@ -207,3 +207,17 @@ Feature: Add distribution through the UI
     And I should see the text "Distribution" in the "Hot Snake" tile
     # Assert that the "Release" tile is present
     And I should see the "Authoritarian Alpaca" tile
+
+  # Regression test for ticket ISAICP-9239
+  Scenario Outline: Check distribution cannot be serialized to JsonLD object.
+    Given distribution content:
+      | title   | description        | access url   | solution               | state     |
+      | <title> | Sample description | <access url> | Solution random x name | published |
+    When I go to the "<title>" distribution
+    And the page should contain the html text '<script type="application/ld+json">'
+
+    Examples:
+      | title           | access url               |
+      | D example https | https://www.example.com/ |
+      | D example http  | http://www.example.com/  |
+      | D example ftp   | ftp://ftp.example.com    |

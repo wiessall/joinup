@@ -109,3 +109,21 @@ Feature: "Add document" visibility options.
     And I click "Edit" in the "Entity actions" region
     And I press "Update"
     Then I should see the success message "Document Laser types has been updated"
+
+  Scenario: Increase attachment file size limit in Documents.
+    Given collection content:
+      | title      | state     |
+      | Red blaser | published |
+    And licence content:
+      | title                 | description                                                         | licence type  |
+      | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
+    And document content:
+      | title            | document type | short title | abstract | field_paragraphs_body | licence               | state     | collection |
+      | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | published | Red blaser |
+
+    When I am logged in as a facilitator of the "Red blaser" collection
+    And I go to the "Red blaser types" document
+    And I click "Edit" in the "Entity actions" region
+    And the "Remote file URL" radio button should not be selected
+    And I should see the text "Unlimited number of files can be uploaded to this field."
+    And I should see the text "32 MB limit."
