@@ -3,9 +3,6 @@ collection_workflow:
   label: "Collection"
   group: collection
   states:
-    # @todo Remove the __new__ state.
-    __new__:
-      label: New
     draft:
       label: Draft
       published: false
@@ -24,15 +21,15 @@ collection_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, draft, proposed, published]
+      from: [draft, proposed, published]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, proposed, published]
+      from: [draft, proposed, published]
       to: proposed
     validate:
       label: Publish
-      from: [__new__, draft, proposed, archival_request]
+      from: [draft, proposed, archival_request]
       to: published
     update_published:
       label: Publish
