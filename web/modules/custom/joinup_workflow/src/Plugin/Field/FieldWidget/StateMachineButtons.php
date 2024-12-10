@@ -194,8 +194,8 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
     // Override the unarchive button to simply revert the entity to the previous
     // state.
-    if (isset($form['actions']['state_machine___new__'])) {
-      $form['actions']['state_machine___new__'] = [
+    if (isset($form['actions']['state_machine_draft'])) {
+      $form['actions']['state_machine_draft'] = [
         '#type' => 'submit',
         '#value' => t('Unarchive'),
         '#weight' => -10,
