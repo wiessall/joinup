@@ -21,8 +21,8 @@ Feature: Contact Information entities don't cause exceptions because of their in
   @javascript
   Scenario: Create contact info entity through IEF in a collection.
     Given collection content:
-      | title                     | state     |
-      | Contact Info Content Test | published |
+      | title                     | state     | owner | contact |
+      | Contact Info Content Test | published |       |         |
     Given I am logged in as a user with the "moderator" role
     When I go to the edit form of the "Contact Info Content Test" collection
     Then I should see the text "Edit Collection Contact Info Content Test"
@@ -40,7 +40,6 @@ Feature: Contact Information entities don't cause exceptions because of their in
     And I press "Create owner"
 
     # Add the contact information entity.
-    And I press "Add new contact information"
     And I fill in "Name" with "Mr. John Doe DLA"
     And I fill in "E-mail address" with "john.doe@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"

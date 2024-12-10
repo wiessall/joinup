@@ -815,10 +815,10 @@ class JoinupContext extends RawDrupalContext {
       $node->field_topic = $this->getRandomTopic()->label();
     }
 
-    if (!empty($field_definitions['contact']) && empty($node->contact)) {
+    if (!empty($field_definitions['contact']) && !isset($node->contact)) {
       $node->contact = $this->getDefaultContact()->label();
     }
-    if (!empty($field_definitions['owner']) && empty($node->owner)) {
+    if (!empty($field_definitions['owner']) && !isset($node->owner)) {
       $node->owner = $this->getDefaultOwner()->label();
     }
     if (!empty($field_definitions['abstract']) && !isset($node->abstract)) {
