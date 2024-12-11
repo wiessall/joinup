@@ -418,9 +418,9 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
 /**
  * Returns whether a private message ban exists between two users.
  *
- * @param int $user1
+ * @param string $user1
  *   The first user ID.
- * @param int $user2
+ * @param string $user2
  *   The second user ID.
  *
  * @return bool
