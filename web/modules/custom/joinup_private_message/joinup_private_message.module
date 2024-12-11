@@ -208,15 +208,6 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
     $build['clear_history_link']['#title'] = t('Delete for me');
     $build['clear_history_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
   }
-  if (isset($build['inbox_link'])) {
-    // Close Inbox when clicking in one of its items.
-    $build['inbox_link']['#attributes'] = array_merge($build['inbox_link']['#attributes'] ?? [], [
-      'data-bs-toggle' => 'collapse',
-      'data-bs-target' => '#block-ventuno-privatemessage-inbox',
-      'aria-controls' => '#block-ventuno-privatemessage-inbox',
-      'aria-expanded' => 'false',
-    ]);
-  }
 }
 
 /**
