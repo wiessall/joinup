@@ -29,7 +29,7 @@ node:pre_moderated:
       to: draft
     propose:
       label: 'Propose'
-      from: [draft, proposed ]
+      from: [draft, proposed]
       to: proposed
     propose_from_reported:
       label: 'Propose'

@@ -192,6 +192,16 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       unset($form['actions'][$key]['#dropbutton']);
     }
 
+    // We only care for entities transiting from the archived state.
+    $entity = $form_state->getFormObject()->getEntity();
+    if (!$entity instanceof EntityWorkflowStateInterface) {
+      return $element;
+    }
+
+    if ($entity->isNew() || $entity->getWorkflowState() !== 'archived') {
+      return $element;
+    }
+
     // Override the unarchive button to simply revert the entity to the previous
     // state.
     if (isset($form['actions']['state_machine_draft'])) {
