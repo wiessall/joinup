@@ -79,7 +79,7 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
           $form['message']['widget'][0]['#attributes']['disabled'] = 'disabled';
         }
         // Threads in Joinup always have only 2 members.
-        elseif (joinup_private_message_ban_exists_between_users(...$members)) {
+        elseif (joinup_private_message_block_exists_between_users(...$members)) {
           $form['warning'] = [
             '#theme' => 'status_messages',
             '#message_list' => [
@@ -137,7 +137,7 @@ function joinup_private_message_add_form_validate(array &$form, FormStateInterfa
     $form_state->setError($form, t('Something went wrong. Please, refresh the page.'));
   }
 
-  $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
+  $is_banned = joinup_private_message_block_exists_between_users(...$thread->getMembersId());
   if ($is_banned) {
     $form_state->setError($form, \Drupal::config('private_message.settings')->get('ban_message'));
   }
@@ -416,7 +416,7 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
 }
 
 /**
- * Returns whether a private message ban exists between two users.
+ * Returns whether a private message block exists between two users.
  *
  * @param string $user1
  *   The first user ID.
@@ -424,9 +424,9 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
  *   The second user ID.
  *
  * @return bool
- *   TRUE if a ban exists, FALSE otherwise.
+ *   TRUE if a block exists, FALSE otherwise.
  */
-function joinup_private_message_ban_exists_between_users(string $user1, string $user2): bool {
+function joinup_private_message_block_exists_between_users(string $user1, string $user2): bool {
   $query = \Drupal::entityQuery('private_message_ban')
     ->accessCheck(FALSE);
   $andGroup12 = $query->andConditionGroup()
