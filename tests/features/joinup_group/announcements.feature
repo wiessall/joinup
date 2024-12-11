@@ -825,7 +825,7 @@ Feature: Messaging group announcements
     And I press "Send for approval"
     Then I click "edit" in the "The recipient names mass-email" row
     And I press "Approve"
-    Then I should see the success message "The announcement has been delivered to the Wrong pension collection members."
+    Then I should see the success message "The announcement has been scheduled to be delivered to the Wrong pension collection members. Because the collection has a large amount of members the emails will be sent in several batches."
 
     Given the delivery queue of "The recipient names mass-email" announcement is processed
     Then the "The recipient names mass-email" announcement should have been delivered for each group member
