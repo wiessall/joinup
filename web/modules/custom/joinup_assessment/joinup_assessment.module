@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\Entity\AssessmentReport;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -101,4 +102,13 @@ function joinup_assessment_webform_element_webform_actions_alter(array &$element
     ]),
     '#weight' => 100,
   ];
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_assessment_entity_bundle_info_alter(&$bundles): void {
+  if (!empty($bundles['node']['assessment_report'])) {
+    $bundles['node']['assessment_report']['class'] = AssessmentReport::class;
+  }
 }

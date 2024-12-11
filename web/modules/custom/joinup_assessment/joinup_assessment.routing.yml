@@ -1,5 +1,5 @@
 joinup_assessment.moderation:
-  path: /assessments/questionnaire/{submission}/moderate
+  path:  /collection/assessments/assessment-reports/{submission}
   defaults:
     _form: Drupal\joinup_assessment\Form\AssessmentModerationForm
   requirements:
