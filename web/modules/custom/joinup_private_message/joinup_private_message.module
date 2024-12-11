@@ -429,12 +429,16 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
 function joinup_private_message_ban_exists_between_users(string $user1, string $user2): bool {
   $query = \Drupal::entityQuery('private_message_ban')
     ->accessCheck(FALSE);
-  $or = $query->orConditionGroup()
+  $andGroup12 = $query->andConditionGroup()
     ->condition('owner', $user1)
-    ->condition('target', $user1);
-  $or->condition('owner', $user2)
     ->condition('target', $user2);
-  $ban_ids = $query->condition($or)
+  $andGroup21 = $query->andConditionGroup()
+    ->condition('owner', $user2)
+    ->condition('target', $user1);
+  $orGroup = $query->orConditionGroup()
+    ->condition($andGroup12)
+    ->condition($andGroup21);
+  $ban_ids = $query->condition($orGroup)
     ->execute();
 
   return !empty($ban_ids);
