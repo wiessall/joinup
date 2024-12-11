@@ -647,6 +647,12 @@ Feature: Messaging group announcements
       | fbryant12  | finn.bryant@example.com      | Finn       | Bryant      |
       | hross13    | hayden.ross@example.com      | Hayden     | Ross        |
       | hwright14  | hope.wright@example.com      | Hope       | Wright      |
+      | epearry09  | evaa.perry@example.com       | Evaa       | Perry       |
+      | eduann10   | ethana.dunn@example.com      | Ethana     | Dunn        |
+      | fgraay11   | freyaa.gray@example.com      | Freyaa     | Gray        |
+      | fbryaant12 | finna.bryant@example.com     | Finna      | Bryant      |
+      | hrosas13   | haydena.ross@example.com     | Haydena    | Ross        |
+      | hwriaght14 | hopea.wright@example.com     | Hopea      | Wright      |
     And the following collection user memberships:
       | collection    | user       |
       | Wrong pension | sgarnett69 |
@@ -695,6 +701,12 @@ Feature: Messaging group announcements
       | Wrong pension | fbryant12  |
       | Wrong pension | hross13    |
       | Wrong pension | hwright14  |
+      | Wrong pension | epearry09  |
+      | Wrong pension | eduann10   |
+      | Wrong pension | fgraay11   |
+      | Wrong pension | fbryaant12 |
+      | Wrong pension | hrosas13   |
+      | Wrong pension | hwriaght14 |
     And the following "Legal notice" acceptances:
       | sgarnett69 |
       | sbrown70   |
@@ -742,6 +754,12 @@ Feature: Messaging group announcements
       | fbryant12  |
       | hross13    |
       | hwright14  |
+      | epearry09  |
+      | eduann10   |
+      | fgraay11   |
+      | fbryaant12 |
+      | hrosas13   |
+      | hwriaght14 |
     And the "sgarnett69" user subscribes to "Wrong pension" collection announcements
     And the "sbrown70" user subscribes to "Wrong pension" collection announcements
     And the "ljones71" user subscribes to "Wrong pension" collection announcements
@@ -788,6 +806,12 @@ Feature: Messaging group announcements
     And the "fbryant12" user subscribes to "Wrong pension" collection announcements
     And the "hross13" user subscribes to "Wrong pension" collection announcements
     And the "hwright14" user subscribes to "Wrong pension" collection announcements
+    And the "epearry09" user subscribes to "Wrong pension" collection announcements
+    And the "eduann10" user subscribes to "Wrong pension" collection announcements
+    And the "fgraay11" user subscribes to "Wrong pension" collection announcements
+    And the "fbryaant12" user subscribes to "Wrong pension" collection announcements
+    And the "hrosas13" user subscribes to "Wrong pension" collection announcements
+    And the "hwriaght14" user subscribes to "Wrong pension" collection announcements
 
     Then I go to the members page of "Wrong pension"
     And I click "Add announcement"
