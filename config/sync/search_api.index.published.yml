@@ -20,10 +20,12 @@ dependencies:
     - field.storage.node.field_short_title
     - field.storage.node.field_state
     - field.storage.node.field_type
+    - field.storage.node.organization
     - field.storage.node.owner
     - field.storage.node.solution_type
     - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
+    - field.storage.node.submission
     - field.storage.paragraph.field_body
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
@@ -522,6 +524,14 @@ field_settings:
       module:
         - meta_entity
         - node
+  organization:
+    label: Organization
+    datasource_id: 'entity:node'
+    property_path: organization
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.organization
   owner_title:
     label: 'Related Owner » Title'
     datasource_id: 'entity:node'
@@ -669,6 +679,14 @@ field_settings:
     dependencies:
       module:
         - node
+  submission:
+    label: Submission
+    datasource_id: 'entity:node'
+    property_path: submission
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.submission
   tid:
     label: 'Term ID'
     datasource_id: 'entity:taxonomy_term'
@@ -732,6 +750,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - assessment_report
         - collection
         - custom_page
         - discussion

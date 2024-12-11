@@ -16,6 +16,7 @@ use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\topic\Entity\TopicInterface;
@@ -128,7 +129,7 @@ class AssessmentModerationForm extends FormBase {
         break;
 
       case 'publish':
-        $document = $this->createDocument($submission);
+        $document = $this->createAssessmentReport($submission);
         // Normally, the submission is already locked but let's make sure.
         if (!$submission->isLocked()) {
           $submission->setLocked(TRUE)->save();
@@ -243,6 +244,45 @@ class AssessmentModerationForm extends FormBase {
     $assessment->save();
 
     return $document;
+  }
+
+  /**
+   * Creates a document out of a submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   *
+   * @return \Drupal\joinup_assessment\Entity\AssessmentReportInterface
+   *   The report document.
+   */
+  protected function createAssessmentReport(WebformSubmissionInterface $submission): AssessmentReportInterface {
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+
+    if (!$group = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID)) {
+      throw new \RuntimeException("Group with UUID " . AssessmentInterface::GROUP_UUID . "' was not found");
+    }
+    $organisation = $submission->getData()['organisation'];
+    if (in_array($submission->getData()['public_sector_body'],
+        [
+          'Local public sector body',
+          'Regional public sector body',
+          'National public sector body',
+        ]) && !empty($submission->getData()['country'])) {
+      $organisation .= '(' . $submission->getData()['country'] . ')';
+    }
+
+    $assessmentReport = $nodeStorage->create([
+      'type' => 'assessment_report',
+      'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $submission->id(),
+      'field_state' => AssessmentInterface::DOCUMENT_STATE,
+      'organization' => $organisation,
+      'og_audience' => $group,
+      'submission' => $submission->id(),
+    ]);
+
+    assert($assessmentReport instanceof AssessmentReportInterface);
+    $assessmentReport->save();
+    return $assessmentReport;
   }
 
   /**
