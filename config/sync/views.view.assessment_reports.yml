@@ -134,7 +134,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'There''s are no published assessment reports yet. You can add one by filling this <a href="/assessments/questionnaire">questionnaire</a>'
+          content: 'There''s are no published assessment reports yet. You can add one by filling this <a href="/collection/assessments/assessment-reports/questionnaire">questionnaire</a>'
           tokenize: false
       sorts:
         created:
@@ -243,7 +243,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/assessments/questionnaire" class="btn btn-primary">New assessment</a>'
+            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary">New assessment</a>'
             format: full_html
           tokenize: false
       footer: {  }
