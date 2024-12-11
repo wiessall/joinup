@@ -76,20 +76,28 @@ Feature: Private message report.
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
 
-  @javascript
-  Scenario: Validation fails when a user is already messaging another user that
-  banned them.
-    Given the following private messages:
-      | owner   | recipient | message |
-      | alice_m | bob_rolls | Hello 1 |
-    And I am logged in as "bob_rolls"
+  @javascript @teste
+  Scenario: Validation works for blocked users.
+    Given users:
+      | Username  | First name | Family name | E-mail                |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
+    And the following private messages:
+      | owner     | recipient | message |
+      | alice_m   | bob_rolls | Hello 1 |
+      | joan_tiff | bob_rolls | Hello 2 |
+    When I am logged in as "bob_rolls"
     And I am on "/user/messages"
+    And I click "Alice Miller" in thread message card
     And I fill in "Reply" with "A private message from Bob to Alice."
 
-    # Simulate that Alice has banned Bob while bob has already filled the
+    # Simulate that Alice has blocked Bob while bob has already filled the
     # message form and is about to send the message.
     And "alice_m" has banned "bob_rolls"
     And I press "Send"
     Then I should see the warning message "You cannot send messages to a user that has blocked you, or was blocked by you."
     And I reload the page
     And I should not see the text "A private message from Bob to Alice."
+
+    # Bob can send messages to other user that is not blocked.
+    When I click "Joan Tiff" in thread message card
+    Then I should not see the warning message "You cannot send messages to a user that has blocked you, or was blocked by you."
