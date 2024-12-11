@@ -69,7 +69,7 @@ function joinup_assessment_preprocess_views_view(array &$variables): void {
     $button_link = [
       '#type' => 'link',
       '#title' => t('My assessments'),
-      '#url' => Url::fromUserInput('/assessments/questionnaire/submissions'),
+      '#url' => Url::fromUserInput('/collection/assessments/assessment-reports/questionnaire/submissions'),
       '#attributes' => [
         'class' => ['m-3'],
       ],

@@ -11,7 +11,7 @@ Feature: Assessments
     And I check "I agree to the Legal notice document"
     And I press "Submit"
 
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
@@ -95,7 +95,7 @@ Feature: Assessments
     When I go to the latest assessment submission edit form
     Then I should see the warning message "The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the assessments report page."
 
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
     And I should see the following success messages:
       | success messages                                                                                              |
@@ -143,7 +143,7 @@ Feature: Assessments
     And I press "Save Draft"
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
 
-    When I go to "/assessments/questionnaire"
+    When I go to "/collection/assessments/assessment-reports/questionnaire"
     # Latest draft is prefilled.
     Then I should see the following success messages:
       | success messages                                                                   |
@@ -185,7 +185,7 @@ Feature: Assessments
     And I check "I agree to the Legal notice document"
     And I press "Submit"
 
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
@@ -207,7 +207,7 @@ Feature: Assessments
     When I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    When I am at "/assessments/questionnaire/submissions"
+    When I am at "/collection/assessments/assessment-reports/questionnaire/submissions"
     Then I should see the text "<organisation>"
 
     Examples:
@@ -221,7 +221,7 @@ Feature: Assessments
       | Regular  |       | regular@example.com |            |             |
 
     When I am logged in as "Regular"
-    And I go to "/assessments/questionnaire"
+    And I go to "/collection/assessments/assessment-reports/questionnaire"
     Then I should not see the link "Download PDF" in the "Content" region
 
     When I check "I agree to the Legal notice document"
@@ -240,7 +240,7 @@ Feature: Assessments
     When I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    When I go to "/assessments/questionnaire"
+    When I go to "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
     And I should see the text "You have already submitted this webform."
     And I should see the link "View your previous submission"
@@ -249,7 +249,7 @@ Feature: Assessments
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
     And I should see the link "Download PDF" in the "Content" region
 
-    When I go to "/assessments/questionnaire/submissions"
+    When I go to "/collection/assessments/assessment-reports/questionnaire/submissions"
     And I click "Download PDF"
     And the content type of the response should be "application/pdf"
 
