@@ -9,6 +9,10 @@ dependencies:
     - node.type.solution
   module:
     - og
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 _core:
   default_config_hash: V3Rn9ugh0VmEMGhb1EN-Egp0zcHeswv8Zdov0nmqUR0
 id: node.document.og_audience
