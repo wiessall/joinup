@@ -259,26 +259,6 @@ display:
       tags: {  }
   list:
     id: list
-    display_title: Page
-    display_plugin: page
-    position: 1
-    display_options:
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
-      path: assessments
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url.query_args
-        - 'user.node_grants:view'
-        - user.permissions
-      tags: {  }
-  list_of_submissions:
-    id: list_of_submissions
     display_title: 'List of submissions'
     display_plugin: block
     position: 2
