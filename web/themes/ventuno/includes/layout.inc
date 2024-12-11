@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\node\NodeInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -23,11 +23,11 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['version'] = $joinup_version->getVersion();
   $variables['version_url'] = $joinup_version->getUrl();
 
-  // Export the URL of the Interoperable Europe landing page.
-  $landing_page = \Drupal::getContainer()->get('entity.repository')
-    ->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::COLLECTION_UUID);
-  if ($landing_page instanceof CollectionInterface) {
-    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  // Export the URL of the homepage "Discover more" news link.
+  $news_page = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::JOINUP_TO_PORTAL_NEWS);
+  if ($news_page instanceof NodeInterface) {
+    $variables['discover_more_url'] = $news_page->toUrl()->toString();
   }
 
   // Export the username to display in the header.

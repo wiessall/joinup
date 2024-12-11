@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\EventSubscriber;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -33,9 +30,6 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface {
     // Set the priority to -9 to have just a little bit more priority than the
     // RenderArrayNonHtmlSubscriber.
     $events[KernelEvents::VIEW][] = ['onRespond', -9];
-    // Set the priority to -69 to have just a little bit more priority than the
-    // DefaultExceptionSubscriber.
-    $events[KernelEvents::EXCEPTION][] = ['on4xx', -69];
     return $events;
   }
 
@@ -62,33 +56,6 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface {
         'Content-Type' => $mimeType,
       ]);
       $event->setResponse($response);
-    }
-  }
-
-  /**
-   * Handles all 4xx errors for all serialization failures.
-   *
-   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
-   *   The event to process.
-   */
-  public function on4xx(ExceptionEvent $event): void {
-    $throwable = $event->getThrowable();
-    if (!$throwable instanceof NotFoundHttpException) {
-      return;
-    }
-
-    if ($event->getThrowable()->getStatusCode() !== 404) {
-      return;
-    }
-
-    $request = $event->getRequest();
-    $format = $request->getRequestFormat();
-    if (in_array($format, array_keys(RdfSyncEncoder::getSupportedFormats()))) {
-      // This ensures that there is a format for the response and avoid cases
-      // where debug information is logged about deprecations related to passing
-      // null arguments to internal PHP functions.
-      // @see \Drupal\Core\EventSubscriber\ActiveLinkResponseFilter::onResponse()
-      $request->setRequestFormat('txt');
     }
   }
 
