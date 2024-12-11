@@ -1,6 +1,6 @@
 @api @group-f
 Feature: Private message report.
-  In order to report private message and ban user
+  In order to report private message and block an user
   As a user
   I need to be able to report a message.
 
@@ -92,7 +92,7 @@ Feature: Private message report.
 
     # Simulate that Alice has blocked Bob while bob has already filled the
     # message form and is about to send the message.
-    And "alice_m" has banned "bob_rolls"
+    And "alice_m" has blocked "bob_rolls"
     And I press "Send"
     Then I should see the warning message "You cannot send messages to a user that has blocked you, or was blocked by you."
     And I reload the page

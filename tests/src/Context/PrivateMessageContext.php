@@ -518,21 +518,21 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Bans a user from sending private messages to another user.
+   * Blocks a user from sending private messages to another user.
    *
-   * @param string $userHasBanned
-   *   The user who has banned another user.
-   * @param string $bannedUser
-   *   The user who has been banned.
+   * @param string $userHasBlocked
+   *   The user who has blocked another user.
+   * @param string $blockedUser
+   *   The user who has been blocked.
    *
-   * @Given /^"([^"]*)" has banned "([^"]*)"$/
+   * @Given /^"([^"]*)" has blocked "([^"]*)"$/
    */
-  public function hasBanned(string $userHasBanned, $bannedUser): void {
-    $ban = PrivateMessageBan::create([
-      'owner' => $this->getUserByName($userHasBanned)->id(),
-      'target' => $this->getUserByName($bannedUser)->id(),
+  public function hasBlocked(string $userHasBlocked, string $blockedUser): void {
+    $blocking = PrivateMessageBan::create([
+      'owner' => $this->getUserByName($userHasBlocked)->id(),
+      'target' => $this->getUserByName($blockedUser)->id(),
     ]);
-    $ban->save();
+    $blocking->save();
   }
 
 }
