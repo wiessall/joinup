@@ -1,0 +1,62 @@
+uuid: 72438241-e1c7-487e-9ea1-2306e3c941e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.assessment_report.og_audience
+    - field.field.node.assessment_report.organization
+    - field.field.node.assessment_report.submission
+    - node.type.assessment_report
+  module:
+    - link
+    - user
+id: node.assessment_report.default
+targetEntityType: node
+bundle: assessment_report
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  og_audience:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  organization:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+  submission:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 103
+    region: content
+hidden:
+  langcode: true
+  published_at: true
+  search_api_excerpt: true
