@@ -182,7 +182,7 @@ class AssessmentModerationForm extends FormBase {
 
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
     $hasReport = (bool) $query->accessCheck(FALSE)
-      ->condition('type','assessment_report')
+      ->condition('type', 'assessment_report')
       ->condition('submission', $submission->id())
       ->count()
       ->execute();
