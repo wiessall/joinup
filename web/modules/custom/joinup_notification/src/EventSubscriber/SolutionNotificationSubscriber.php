@@ -148,7 +148,7 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : '__new__';
+    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
     $to_state = $this->entity->getWorkflowState();
     if (!$this->workflow->findTransition($this->fromState, $to_state)) {
       return;

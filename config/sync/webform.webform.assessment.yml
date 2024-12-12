@@ -263,6 +263,9 @@ elements: |-
           '#type': number
           '#title': Nr.
           '#description': 'Please number each requirement'
+          '#min': 1
+          '#attributes':
+            oninput: "validity.valid||(value='');"
         legal_reference:
           '#type': textfield
           '#title': 'Please provide a legal reference for the binding requirement, if available'
