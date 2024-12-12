@@ -50,7 +50,7 @@ Feature: Assessments
 
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then I should see the heading "Assessment reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the success message containing "The assessment submission report has been created: Assessment report #"
     And the following email should have been sent:
       | recipient | Regular                                                                               |
@@ -277,8 +277,8 @@ Feature: Assessments
     # the visibility of the documents in the view below as we force them as
     # published, but it does affect the custom page listing below.
     Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -297,8 +297,8 @@ Feature: Assessments
       | Assessment 11 | Assessment 11 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-11T00:00:00Z |
       | Assessment 12 | Assessment 12 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-12T00:00:00Z |
 
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -340,8 +340,8 @@ Feature: Assessments
       | Assessment 2  |
 
     When I am logged in as a moderator
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
