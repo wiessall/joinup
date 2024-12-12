@@ -15,6 +15,9 @@ Feature: Assessments
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
+    And I select "Local public sector body" from "Please select the type of public sector body"
+    And I should see "Name of your organisation"
+    And I fill in "Name of your organisation" with "my organization"
     And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
@@ -61,12 +64,10 @@ Feature: Assessments
     # This submission has fulfilled its scope. It cannot be moderated anymore.
     When I go to the latest submission moderation form
     Then the response status code should be 403
-
-    Given I am an anonymous user
     When I go to the latest assessment report
     Then I should see the following lines of text:
       | 1. General information                                                                                                                         |
-      | Please select the type of public sector body {Empty}                                                                                           |
+      | Please select the type of public sector body Local public sector body                                                                                          |
       | Please provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
       | If applicable, please provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                       |
@@ -89,9 +90,8 @@ Feature: Assessments
       | Please add any other comment you would like to share. {Empty}                                                                                  |
 
     Given I mark all emails as read
-
-    # After approval, the submission cannot be edite anymore.
     Given I am logged in as Regular
+    # After approval, the submission cannot be edite anymore.
     When I go to the latest assessment submission edit form
     Then I should see the warning message "The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the assessments report page."
 
@@ -107,7 +107,7 @@ Feature: Assessments
     When I click "View your previous submission"
     Then I should see the following lines of text:
       | 1. General information                                                                                                                         |
-      | Please select the type of public sector body {Empty}                                                                                           |
+      | Please select the type of public sector body Local public sector body                                                                                            |
       | Please provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
       | If applicable, please provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                       |
@@ -211,9 +211,9 @@ Feature: Assessments
     Then I should see the text "<organisation>"
 
     Examples:
-      | public_sector_body         | institution                    | institution_name                | organisation                   |
-      | European Union institution | Please select your Institution | European Parliament             | European Parliament            |
-      | European Union body        | Please select your Body        | European Investment Bank        | European Investment Bank       |
+      | public_sector_body         | institution                    | institution_name         | organisation             |
+      | European Union institution | Please select your Institution | European Parliament      | European Parliament      |
+      | European Union body        | Please select your Body        | European Investment Bank | European Investment Bank |
 
   Scenario: Webforms can be downloaded in PDF format.
     Given users:
@@ -282,20 +282,20 @@ Feature: Assessments
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
-    And document content:
-      | title         | body               | state     | document type               | collection                                     | created              |
-      | Assessment 1  | Assessment 1 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-01T00:00:00Z |
-      | Assessment 2  | Assessment 2 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-02T00:00:00Z |
-      | Assessment 3  | Assessment 3 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-03T00:00:00Z |
-      | Assessment 4  | Assessment 4 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-04T00:00:00Z |
-      | Assessment 5  | Assessment 5 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-05T00:00:00Z |
-      | Assessment 6  | Assessment 6 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-06T00:00:00Z |
-      | Assessment 7  | Assessment 7 body  | draft     | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-07T00:00:00Z |
-      | Assessment 8  | Assessment 8 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-08T00:00:00Z |
-      | Assessment 9  | Assessment 9 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-09T00:00:00Z |
-      | Assessment 10 | Assessment 10 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-10T00:00:00Z |
-      | Assessment 11 | Assessment 11 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-11T00:00:00Z |
-      | Assessment 12 | Assessment 12 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-12T00:00:00Z |
+    And assessment_report content:
+      | title         | state     | created              | organization         | collection                                     |
+      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization |                                                |
+      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization |                                                |
+      | Assessment 3  | published | 2020-01-03T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 4  | published | 2020-01-04T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 5  | published | 2020-01-05T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 6  | published | 2020-01-06T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 7  | published | 2020-01-07T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 8  | published | 2020-01-08T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 9  | published | 2020-01-09T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 10 | published | 2020-01-10T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 11 | published | 2020-01-11T00:00:00Z | default organization | Best practice for interoperability assessments |
+      | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Best practice for interoperability assessments |
 
     When I go to "/assessments"
     Then I should see the heading "Assessment reports"
@@ -309,11 +309,11 @@ Feature: Assessments
       | Assessment 10 |
       | Assessment 9  |
       | Assessment 8  |
+      | Assessment 7  |
       | Assessment 6  |
       | Assessment 5  |
       | Assessment 4  |
       | Assessment 3  |
-      | Assessment 2  |
     # Hidden away in the second page.
     And I should not see the "Assessment 1" tile
 
@@ -321,10 +321,8 @@ Feature: Assessments
     Given custom_page content:
       | title              | state     | collection                                     |
       | Custom assessments | published | Best practice for interoperability assessments |
-
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
-      | content_listing:value | a:4:{s:7:"enabled";i:1;s:13:"query_presets";s:38:"field_type\|interoperability_assessment";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"10";} |
-
+      | content_listing:value | a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:33:"organization\|default organization";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
     When I go to the "Custom assessments" custom_page
     Then I should see the heading "Custom assessments"
     And I should see the following tiles in the correct order:
@@ -333,11 +331,11 @@ Feature: Assessments
       | Assessment 10 |
       | Assessment 9  |
       | Assessment 8  |
+      | Assessment 7  |
       | Assessment 6  |
       | Assessment 5  |
       | Assessment 4  |
       | Assessment 3  |
-      | Assessment 2  |
 
     When I am logged in as a moderator
     When I go to "/assessments"

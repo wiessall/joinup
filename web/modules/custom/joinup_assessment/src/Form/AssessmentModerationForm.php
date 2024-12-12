@@ -129,18 +129,18 @@ class AssessmentModerationForm extends FormBase {
         break;
 
       case 'publish':
-        $document = $this->createAssessmentReport($submission);
+        $assessmentReport = $this->createAssessmentReport($submission);
         // Normally, the submission is already locked but let's make sure.
         if (!$submission->isLocked()) {
           $submission->setLocked(TRUE)->save();
         }
         $this->delivery->sendMessageTemplateToUser('assessment_published', [
-          '@assessment:report_url' => $document->toUrl()->setAbsolute()->toString(),
+          '@assessment:report_url' => $assessmentReport->toUrl()->setAbsolute()->toString(),
           '@assessment:reports_url' => Url::fromRoute('view.assessment_reports.list')->setAbsolute()->toString(),
         ], $submission->getOwner());
         $message = $this->t('The assessment submission report has been created: <a href=":href">@title</a>.', [
-          ':href' => $document->toUrl()->toString(),
-          '@title' => $document->label(),
+          ':href' => $assessmentReport->toUrl()->toString(),
+          '@title' => $assessmentReport->label(),
         ]);
         break;
 
@@ -180,8 +180,9 @@ class AssessmentModerationForm extends FormBase {
       return $accessResult;
     }
 
-    $query = $this->entityTypeManager->getStorage('meta_entity')->getQuery();
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
     $hasReport = (bool) $query->accessCheck(FALSE)
+      ->condition('type','assessment_report')
       ->condition('submission', $submission->id())
       ->count()
       ->execute();
