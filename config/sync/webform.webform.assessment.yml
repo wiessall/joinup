@@ -763,7 +763,7 @@ handlers:
       sticky: true
       locked: true
       data: ''
-      message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/assessments">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
+      message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/collection/assessments/assessment-reports">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
       message_type: status
       debug: false
   copy_eu_into_organization:
