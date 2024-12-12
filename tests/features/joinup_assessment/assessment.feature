@@ -21,6 +21,10 @@ Feature: Assessments
 
     # 2nd page.
     When I check "Defense"
+    And I fill in "Nr." with "-1"
+    And I press "Next"
+    Then I should see the error message "Nr. must be higher than or equal to 1."
+    When I clear the field "Nr."
     And I press "Next"
 
     # 3rd page.
