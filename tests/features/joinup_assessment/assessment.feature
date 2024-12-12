@@ -1,6 +1,12 @@
 @api @group-clone @demoAssessment
 Feature: Assessments
 
+  # Remove this after the new block has been added on the production environment.
+  Background:
+    Given I append "block" to "field_paragraphs_body" field in "node" entity with following "Assessment Reports" title:
+      | paragraph_block:plugin_id | views_block:assessment_reports-list                                                                                                                                                          |
+      | paragraph_block:settings  | a:6:{s:2:"id";s:35:"views_block:assessment_reports-list";s:5:"label";s:0:"";s:13:"label_display";b:0;s:8:"provider";s:5:"views";s:11:"views_label";s:0:"";s:14:"items_per_page";s:4:"none";} |
+
   Scenario: Create a document node out of a webform.
     Given users:
       | Username         | Roles     | E-mail                    | First name | Family name |
