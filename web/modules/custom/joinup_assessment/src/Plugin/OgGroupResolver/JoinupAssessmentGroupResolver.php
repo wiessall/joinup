@@ -95,10 +95,10 @@ class JoinupAssessmentGroupResolver extends OgRouteGroupResolverBase {
    */
   protected function isAssessmentRoute(): bool {
     $webformRoutes = [
-      'entity.webform.canonical' .
+      'entity.webform.canonical',
       'entity.webform.user.submissions',
     ];
-    if (in_array($this->routeMatch->getRouteName(), $webformRoutes, TRUE)) {
+    if (!in_array($this->routeMatch->getRouteName(), $webformRoutes, TRUE)) {
       return FALSE;
     }
 
