@@ -85,7 +85,7 @@ class AssessmentContext extends RawDrupalContext {
     }
 
     $node = $this->getEntityById('node', reset($nids));
-    $path = $node->toUrl()->toString();
+
     $this->visitPath($node->toUrl()->toString());
   }
 
