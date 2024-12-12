@@ -3,9 +3,6 @@ joinup_distribution_workflow:
   label: "Distribution"
   group: joinup_distribution
   states:
-    __new__:
-      label: New
-      published: true
     published:
       label: Published
       published: true
@@ -15,7 +12,7 @@ joinup_distribution_workflow:
   transitions:
     publish:
       label: Publish
-      from: [ __new__, published ]
+      from: [ published ]
       to: published
     archive:
       label: Archive
