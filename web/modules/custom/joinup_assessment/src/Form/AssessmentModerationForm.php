@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Form;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -14,7 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
@@ -116,15 +114,11 @@ class AssessmentModerationForm extends FormBase {
           ->set('require_update_reason', $reason)
           ->save();
 
-        $url = Url::fromRoute('joinup_assessment.edit', [
-          'webform_submission' => $submission->id(),
-        ])->setAbsolute();
-        // Using the same cutoff as the FieldFormatter\LinkFormatter default.
-        // @see \Drupal\link\Plugin\Field\FieldFormatter\LinkFormatter
-        $text = Unicode::truncate($url->toString(), 80, FALSE, TRUE);
         $arguments = [
           '@assessment:require_update_reason' => $reason,
-          '@assessment:submission_edit_url' => Link::fromTextAndUrl($text, $url)->toString(),
+          '@assessment:submission_edit_url' => Url::fromRoute('joinup_assessment.edit', [
+            'webform_submission' => $submission->id(),
+          ])->setAbsolute()->toString(),
         ];
         $this->delivery->sendMessageTemplateToUser('assessment_require_update', $arguments, $submission->getOwner());
         $message = $this->t('The assessment submission requires updates. The submitter has been notified.');
