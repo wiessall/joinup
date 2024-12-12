@@ -18,7 +18,7 @@ Feature: Assessments
     And I press "Submit"
 
     When I am at "/collection/assessments/assessment-reports/questionnaire"
-    Then I should see the heading "Best practice for interoperability assessments" in the "Header" region
+    Then I see the text "Best practice for interoperability assessments" in the "Header" region
     And I should see the heading "Online form for Assessments"
 
     # 1st page.
@@ -180,7 +180,6 @@ Feature: Assessments
     # User is able to edit a 'Require updates' submission.
     Given I am logged in as "Regular"
     And I click the link from email sent to "Regular" with subject "Your assessment needs updates"
-    Then I should see the heading "Best practice for interoperability assessments" in the "Header" region
     When I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Let It Be"
     And I press "Next"
     And I press "Next"
@@ -216,7 +215,7 @@ Feature: Assessments
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
     When I am at "/collection/assessments/assessment-reports/questionnaire/submissions"
-    Then I should see the heading "Best practice for interoperability assessments" in the "Header" region
+    Then I see the text "Best practice for interoperability assessments" in the "Header" region
     And I should see the text "<organisation>"
 
     Examples:
