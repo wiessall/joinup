@@ -21,7 +21,7 @@ trait EntityWorkflowStateTrait {
     assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
     assert(method_exists($this, 'getWorkflowStateFieldName'), __TRAIT__ . ' depends on EntityWorkflowStateInterface. Please implement it in your class.');
     $value = $this->getMainPropertyValue($this->getWorkflowStateFieldName());
-    return $value ? (string) $value : '__new__';
+    return $value ? (string) $value : 'draft';
   }
 
   /**
