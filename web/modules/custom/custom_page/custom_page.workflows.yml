@@ -3,9 +3,6 @@ custom_page_workflow:
   label: 'Custom page'
   group: custom_page
   states:
-    __new__:
-      label: New
-      published: false
     draft:
       label: Draft
       published: false
@@ -21,11 +18,11 @@ custom_page_workflow:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [ __new__, draft ]
+      from: [ draft ]
       to: draft
     publish:
       label: Publish
-      from: [ __new__, draft, published, unpublished ]
+      from: [ draft, published, unpublished ]
       to: published
     unpublish:
       label: Unpublish

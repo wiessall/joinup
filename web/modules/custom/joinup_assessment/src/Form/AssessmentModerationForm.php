@@ -117,7 +117,9 @@ class AssessmentModerationForm extends FormBase {
 
         $arguments = [
           '@assessment:require_update_reason' => $reason,
-          '@assessment:submission_edit_url' => $submission->toUrl('edit-form')->setAbsolute()->toString(),
+          '@assessment:submission_edit_url' => Url::fromRoute('joinup_assessment.edit', [
+            'webform_submission' => $submission->id(),
+          ])->setAbsolute()->toString(),
         ];
         $this->delivery->sendMessageTemplateToUser('assessment_require_update', $arguments, $submission->getOwner());
         $message = $this->t('The assessment submission requires updates. The submitter has been notified.');

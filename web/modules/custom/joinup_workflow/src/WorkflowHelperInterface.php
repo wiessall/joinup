@@ -18,11 +18,6 @@ use Stringable;
 interface WorkflowHelperInterface {
 
   /**
-   * Virtual state that acts as a beginning of the workflow.
-   */
-  const NON_STATE = '__new__';
-
-  /**
    * Returns the available target states of an entity for the given user.
    *
    * If no user is passed, the logged in user is checked. If no user is logged
