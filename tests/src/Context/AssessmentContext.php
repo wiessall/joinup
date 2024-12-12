@@ -71,11 +71,11 @@ class AssessmentContext extends RawDrupalContext {
    *
    * @When I go to the latest assessment report
    */
-  public function visitLatestDocumentAssessment(): void {
+  public function visitLatestAssessmentReport(): void {
     $nids = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
-      ->condition('type', 'document')
-      ->condition('field_type', AssessmentInterface::DOCUMENT_TYPE_KEY)
+      ->condition('type', 'assessment_report')
+      ->condition('organization', 'my organization')
       ->sort('nid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -85,6 +85,7 @@ class AssessmentContext extends RawDrupalContext {
     }
 
     $node = $this->getEntityById('node', reset($nids));
+    $path = $node->toUrl()->toString();
     $this->visitPath($node->toUrl()->toString());
   }
 
