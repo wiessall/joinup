@@ -563,7 +563,7 @@ settings:
   share_page_body_attributes: {  }
   submission_label: ''
   submission_exception_message: ''
-  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the <a href="[site:base-url]/assessments">assessments report</a> page.</p>'
+  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the <a href="[site:base-url]/collection/assessments/assessment-reports">assessments report</a> page.</p>'
   submission_log: true
   submission_excluded_elements: {  }
   submission_exclude_empty: false
