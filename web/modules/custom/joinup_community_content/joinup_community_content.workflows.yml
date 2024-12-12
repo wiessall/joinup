@@ -4,8 +4,6 @@ node:pre_moderated:
   label: "Pre moderated"
   group: community_content
   states:
-    __new__:
-      label: New
     draft:
       label: Draft
     published:
@@ -23,7 +21,7 @@ node:pre_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__, draft]
+      from: [draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -31,7 +29,7 @@ node:pre_moderated:
       to: draft
     propose:
       label: 'Propose'
-      from: [__new__, draft, proposed ]
+      from: [draft, proposed]
       to: proposed
     propose_from_reported:
       label: 'Propose'
@@ -39,7 +37,7 @@ node:pre_moderated:
       to: proposed
     publish:
       label: 'Publish'
-      from: [__new__, draft, published]
+      from: [draft, published]
       to: published
     approve_proposed:
       label: 'Publish'
@@ -74,15 +72,13 @@ node:pre_moderated:
     unarchive:
       label: Unarchive
       from: [archived]
-      to: __new__
+      to: draft
 # The workflow of the community content for a post moderated parent.
 node:post_moderated:
   id: post_moderated
   label: "Post moderated"
   group: community_content
   states:
-    __new__:
-      label: New
     draft:
       label: Draft
     published:
@@ -98,7 +94,7 @@ node:post_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__, draft]
+      from: [draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -110,7 +106,7 @@ node:post_moderated:
       to: proposed
     publish:
       label: 'Publish'
-      from: [__new__, draft, published]
+      from: [draft, published]
       to: published
     approve_proposed:
       label: 'Publish'
@@ -131,4 +127,4 @@ node:post_moderated:
     unarchive:
       label: Unarchive
       from: [archived]
-      to: __new__
+      to: draft

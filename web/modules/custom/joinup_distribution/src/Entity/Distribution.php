@@ -178,4 +178,12 @@ class Distribution extends Node implements DistributionInterface {
     return $this->getParent() instanceof SolutionInterface;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowState(): string {
+    $value = $this->getMainPropertyValue($this->getWorkflowStateFieldName());
+    return $value ? (string) $value : 'draft';
+  }
+
 }

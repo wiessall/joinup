@@ -167,8 +167,7 @@ Feature: Assessments
       | body      | Your submitted assessment questionnaire has been moderated but the moderator has required some changes. |
       | body      | Rejection reason:                                                                                       |
       | body      | Please drastically reconsider this form. I mean it!                                                     |
-      | body      | Please fix the issues at                                                                                |
-      | body      | and submit the form again when done.                                                                    |
+      | body      | Please edit the form and fix the issues mentioned above. Submit the form again once everything is OK.   |
 
     # User is able to edit a 'Require updates' submission.
     Given I am logged in as "Regular"
