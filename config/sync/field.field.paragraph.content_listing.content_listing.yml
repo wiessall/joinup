@@ -35,6 +35,7 @@ settings:
     top: Top
   view_modes:
     'entity:node':
+      assessment_report: view_mode_tile
       collection: view_mode_tile
       custom_page: view_mode_tile
       discussion: view_mode_tile
