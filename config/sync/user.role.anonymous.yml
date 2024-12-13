@@ -43,7 +43,6 @@ permissions:
   - 'use text format basic_html'
   - 'use text format plain_text_glossary'
   - 'use text format simple_text'
-  - 'view assessment meta-entity'
   - 'view bookmark'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'

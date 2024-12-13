@@ -25,7 +25,6 @@ dependencies:
     - comment
     - datetime
     - file_url
-    - joinup_assessment
     - joinup_workflow
     - layout_paragraphs
     - svg_image

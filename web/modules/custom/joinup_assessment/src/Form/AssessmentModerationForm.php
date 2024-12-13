@@ -7,7 +7,6 @@ namespace Drupal\joinup_assessment\Form;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -17,9 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
-use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
-use Drupal\topic\Entity\TopicInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformSubmissionViewBuilderInterface;
 
@@ -208,48 +205,6 @@ class AssessmentModerationForm extends FormBase {
   }
 
   /**
-   * Creates a document out of a submission.
-   *
-   * @param \Drupal\webform\WebformSubmissionInterface $submission
-   *   The webform submission.
-   *
-   * @return \Drupal\joinup_document\Entity\DocumentInterface
-   *   The report document.
-   */
-  protected function createDocument(WebformSubmissionInterface $submission): DocumentInterface {
-    $nodeStorage = $this->entityTypeManager->getStorage('node');
-    $metaStorage = $this->entityTypeManager->getStorage('meta_entity');
-
-    if (!$group = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID)) {
-      throw new \RuntimeException("Group with UUID " . AssessmentInterface::GROUP_UUID . "' was not found");
-    }
-
-    $abstract = substr($submission->getData()[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250);
-
-    $document = $nodeStorage->create([
-      'type' => 'document',
-      'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $submission->id(),
-      'field_paragraphs_body' => [$this->getLayoutParagraph()],
-      'field_state' => AssessmentInterface::DOCUMENT_STATE,
-      'og_audience' => $group,
-      'abstract' => $abstract,
-      'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
-      'field_topic' => $this->getTopic(),
-    ]);
-    assert($document instanceof DocumentInterface);
-    $document->save();
-
-    $assessment = $metaStorage->create([
-      'type' => 'assessment',
-      'target' => $document,
-      'submission' => $submission->id(),
-    ]);
-    $assessment->save();
-
-    return $document;
-  }
-
-  /**
    * Creates an assessment report out of a submission.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $submission
@@ -284,43 +239,6 @@ class AssessmentModerationForm extends FormBase {
     assert($assessmentReport instanceof AssessmentReportInterface);
     $assessmentReport->save();
     return $assessmentReport;
-  }
-
-  /**
-   * Generates the layout paragraph.
-   *
-   * @param string $layout_id
-   *   Layout name.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   Paragraph entity.
-   */
-  protected function getLayoutParagraph(string $layout_id = 'layout_onecol'): EntityInterface {
-    $layoutInstance = $this->layoutPluginManager->createInstance($layout_id);
-    $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
-
-    $layoutParagraph = $paragraphStorage->create(['type' => 'layout']);
-    $layoutParagraph->setBehaviorSettings(
-      'layout_paragraphs',
-      [
-        'layout' => $layout_id,
-        'config' => $layoutInstance->getConfiguration(),
-      ]
-    );
-
-    return $layoutParagraph;
-  }
-
-  /**
-   * Gets the topic term entity.
-   *
-   * @return \Drupal\topic\Entity\TopicInterface
-   *   The topic term.
-   */
-  protected function getTopic(): TopicInterface {
-    $topic = $this->entityRepository->loadEntityByUuid('taxonomy_term', AssessmentInterface::TOPIC_UUID);
-    assert($topic instanceof TopicInterface);
-    return $topic;
   }
 
 }
