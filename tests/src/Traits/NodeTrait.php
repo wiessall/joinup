@@ -47,7 +47,7 @@ trait NodeTrait {
   }
 
   /**
-   * Returns contact_information entity referenced in Joinip collection.
+   * Returns contact_information entity referenced in Joinup collection.
    *
    * @See \joinup_test_install()
    *
@@ -64,7 +64,7 @@ trait NodeTrait {
   }
 
   /**
-   * Returns owner entity referenced in Joinip collection.
+   * Returns owner entity referenced in Joinup collection.
    *
    * @See \joinup_test_install()
    *
