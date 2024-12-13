@@ -250,34 +250,32 @@ class AssessmentModerationForm extends FormBase {
   }
 
   /**
-   * Creates a document out of a submission.
+   * Creates an assessment report out of a submission.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $submission
    *   The webform submission.
    *
    * @return \Drupal\joinup_assessment\Entity\AssessmentReportInterface
-   *   The report document.
+   *   The assessment report.
    */
   protected function createAssessmentReport(WebformSubmissionInterface $submission): AssessmentReportInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     if (!$group = $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID)) {
-      throw new \RuntimeException("Group with UUID " . AssessmentInterface::GROUP_UUID . "' was not found");
+      throw new \RuntimeException("Group with UUID '" . AssessmentInterface::GROUP_UUID . "' was not found");
     }
     $organisation = $submission->getData()['organisation'];
-    if (in_array($submission->getData()['public_sector_body'],
-        [
-          'Local public sector body',
-          'Regional public sector body',
-          'National public sector body',
-        ]) && !empty($submission->getData()['country'])) {
-      $organisation .= '(' . $submission->getData()['country'] . ')';
+    if (in_array($submission->getData()['public_sector_body'], [
+      'Local public sector body',
+      'Regional public sector body',
+      'National public sector body',
+    ], TRUE) && !empty($submission->getData()['country'])) {
+      $organisation .= ' (' . $submission->getData()['country'] . ')';
     }
 
     $assessmentReport = $nodeStorage->create([
       'type' => 'assessment_report',
       'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $submission->id(),
-      'field_state' => AssessmentInterface::DOCUMENT_STATE,
       'organization' => $organisation,
       'og_audience' => $group,
       'submission' => $submission->id(),
