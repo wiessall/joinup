@@ -1,0 +1,83 @@
+GitHub solution 1:
+  en:
+    langcode: en
+    default_langcode: '1'
+    status: '1'
+    oss_available_languages:
+      - it
+      - en
+      - de
+    oss_categories:
+      - digital-citizenship
+    oss_development_status: stable
+    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
+    oss_license: AGPL-3.0-or-later
+    oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
+    oss_git_forks: 103
+    oss_git_stars: 123
+    oss_git_open_issues: 143
+    oss_maintenance_contacts:
+      - Peter Gregory
+    oss_maintenance_contractors:
+      - ACME Ltd
+      - Das Auto GmbH
+    oss_maintenance_type: contract
+    oss_owner: Sin City
+    oss_platforms:
+      - web
+    oss_publiccode_yml_version: '0.2'
+    oss_release_date: '2017-05-01'
+    oss_software_type: standalone/web
+    oss_software_version: '1.4'
+    oss_source:
+      - awesome_code_gouv_fr
+    oss_source_hash: _RnRGlJcP5QA_tiadP_JTMJyyOypigHzRYjIY-LlQMM
+    oss_long_description: |
+      [EN] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[EN] Solution 1: **Short description**'
+    oss_features:
+      - '[EN] Solution 1: Feature 1'
+      - '[EN] Solution 1: Feature 2'
+      - '[EN] Solution 1: Feature 3'
+    oss_screenshots:
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2.jpg
+    oss_git_open_pull_requests: 3
+  de:
+    langcode: de
+    default_langcode: '0'
+    oss_features:
+      - '[DE] Solution 1: Feature 1'
+    oss_long_description: |
+      [DE] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[DE] Solution 1: **Short description**'
+    oss_screenshots:
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot3.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot4.jpg
+  it:
+    langcode: it
+    default_langcode: '0'
+    oss_features:
+      - '[IT] Solution 1: Feature 1'
+      - '[IT] Solution 1: Feature 2'
+    oss_long_description: |
+      [IT] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[IT] Solution 1: **Short description**'
+    oss_screenshots:
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_IT_Screenshot1.jpg
