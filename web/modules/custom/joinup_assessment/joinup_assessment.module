@@ -41,27 +41,6 @@ function joinup_assessment_webform_submission_access(WebformSubmissionInterface 
 }
 
 /**
- * Implements hook_options_list_alter().
- */
-function joinup_assessment_options_list_alter(array &$options, array $context): void {
-  /** @var \Drupal\field\FieldConfigInterface $fieldDefinition */
-  $fieldDefinition = $context['fieldDefinition'];
-  $entity = $context['entity'];
-
-  if (empty($options) || $fieldDefinition->getName() !== 'field_type' || !$entity instanceof DocumentInterface) {
-    return;
-  }
-
-  if (isset($entity->assessment) && !$entity->get('assessment')->isEmpty()) {
-    return;
-  }
-
-  if (isset($options[AssessmentInterface::DOCUMENT_TYPE_KEY])) {
-    unset($options[AssessmentInterface::DOCUMENT_TYPE_KEY]);
-  }
-}
-
-/**
  * Implements hook_preprocess_views_view().
  */
 function joinup_assessment_preprocess_views_view(array &$variables): void {

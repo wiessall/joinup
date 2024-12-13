@@ -88,7 +88,6 @@ content:
     weight: 0
     region: content
 hidden:
-  assessment: true
   featured: true
   field_comments: true
   field_file: true
