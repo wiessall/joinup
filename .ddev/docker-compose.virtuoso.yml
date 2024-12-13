@@ -2,9 +2,7 @@ services:
 
   virtuoso:
     container_name: ddev-${DDEV_SITENAME}-virtuoso
-    # Temporary image until Virtuoso 7.2.12 is released.
-    # See https://github.com/openlink/virtuoso-opensource/issues/1187
-    image: pkleef/virtuoso-opensource-7
+    image: openlink/virtuoso-opensource-7:7
     labels:
         com.ddev.site-name: ${DDEV_SITENAME}
         com.ddev.approot: ${DDEV_APPROOT}
