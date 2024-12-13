@@ -20,7 +20,6 @@ Feature: Assessments
     And I select "Austria" from "Select your country"
     And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
-    And I select the radio button "No"
     And I press "Next"
 
     # 2nd page.
@@ -231,7 +230,10 @@ Feature: Assessments
     When I check "I agree to the Legal notice document"
     And I press "Submit"
     # 1st page.
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I select "Austria" from "Select your country"
+    And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
