@@ -76,7 +76,7 @@ function joinup_core_update_200100(): void {
 
   // Should be operational before config sync starts.
   $configFactory->getEditable('config_ignore.settings')
-    ->set('jointup.ignored_config_entities', [
+    ->set('ignored_config_entities', [
       'cas_mock_server.settings',
       'composer_deploy.settings',
       'core.menu.static_menu_link_overrides',
@@ -85,6 +85,6 @@ function joinup_core_update_200100(): void {
       'update.settings',
       'upgrade_status.settings',
       'webform.webform.*',
-      '~webform.webform.assessments',
+      '~webform.webform.assessment',
     ])->save(TRUE);
 }
