@@ -7,6 +7,4 @@ namespace Drupal\joinup_assessment\Entity;
 /**
  * Interface for AssessmentReport entities in Joinup.
  */
-interface AssessmentReportInterface {
-
-}
+interface AssessmentReportInterface {}

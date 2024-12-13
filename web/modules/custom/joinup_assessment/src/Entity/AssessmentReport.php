@@ -9,5 +9,4 @@ use Drupal\node\Entity\Node;
 /**
  * Entity subclass for the 'assessment_report' bundle.
  */
-class AssessmentReport extends Node implements AssessmentReportInterface {
-}
+class AssessmentReport extends Node implements AssessmentReportInterface {}
