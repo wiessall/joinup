@@ -1,7 +1,7 @@
 @api @group-clone @demoAssessment
 Feature: Assessments
 
-  Scenario: Create a document node out of a webform.
+  Scenario: Create an assessment report out of a webform.
     Given users:
       | Username         | Roles     | E-mail                    | First name | Family name |
       | Regular          |           | regular@example.com       |            |             |
@@ -293,10 +293,9 @@ Feature: Assessments
     Then I should see the heading "Access denied"
 
   Scenario: Assessment reports are listed in a distinct page.
-    # Publish the collection, otherwise the documents will end up in the
-    # unpublished index, and will not show in the listing. This does not affect
-    # the visibility of the documents in the view below as we force them as
-    # published, but it does affect the custom page listing below.
+    # Publish the collection, otherwise the nodes will not be published. This
+    # does not affect the visibility of the node in the view below as we force
+    # them as published, but it does affect the custom page listing below.
     Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
     When I go to "/assessments"
     Then I should see the heading "Assessment reports"
@@ -338,7 +337,6 @@ Feature: Assessments
     # Hidden away in the second page.
     And I should not see the "Assessment 1" tile
 
-    # A custom page can be created for only showing documents of a given type.
     Given custom_page content:
       | title              | state     | collection                                     |
       | Custom assessments | published | Best practice for interoperability assessments |
