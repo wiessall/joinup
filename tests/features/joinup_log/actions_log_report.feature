@@ -41,6 +41,31 @@ Feature: Actions log
     When I go to the actions log report for "Skylight"
     Then I should see the text "Access denied"
 
+  Scenario Outline: System wide role actions.
+    Given users:
+      | Username       | First name | Family name | E-mail                     | Roles     |
+      | Andre Munson   | Andre      | Munson      | andre.munson@example.com   |           |
+      | Charles <role> | Charles    | <role>      | charles.darwin@example.com | Developer |
+
+    Given I am logged in as "Charles <role>"
+    When I go to the public profile of "Andre Munson"
+    And I click "Edit" in the "Entity actions" region
+    And I check the box "Licence manager"
+    And I press "Save"
+    And I click "Edit" in the "Entity actions" region
+    And I uncheck the box "Licence manager"
+    And I press "Save"
+
+    When I visit "/admin/reporting/actions-log"
+    Then I should see the following lines of text:
+      | Successfully added the Licence manager role to Andre Munson by Charles <role>        |
+      | Successfully removed the Licence manager role for the Andre Munson by Charles <role> |
+
+    Examples:
+      | role      |
+      | developer |
+      | moderator |
+
   Scenario: Report lists actions.
     Given users:
       | Username         | E-mail                       |
@@ -81,7 +106,7 @@ Feature: Actions log
       | Date               | Type                 | Message             | User             | Actor            |
       | 16/07/2024 - 06:11 | Unflag interoperable | Unflagged           | Dave Crash       |                  |
       | 16/07/2024 - 06:28 | Flag interoperable   | Flagged             | Dave Crash       |                  |
-      | 16/07/2024 - 07:34 | Add role to member   | Add x author role   | Andre Munson     | Mary Shotgun     |
+      | 16/07/2024 - 07:34 | Add role             | Add x author role   | Andre Munson     | Mary Shotgun     |
       | 17/07/2024 - 11:21 | Deleted membership   | Delete x membership | Andre Munson     | Mary Shotgun     |
       | 18/07/2024 - 15:08 | Block membership     | Block x member      | Branson Winthrop | Mary Shotgun     |
       | 19/07/2024 - 18:54 | Add content          | Add x event         | Branson Winthrop | Branson Winthrop |
@@ -89,7 +114,7 @@ Feature: Actions log
       | Date;Type;Message;User;Actor                                                                  |
       | "16/07/2024 - 06:11";"Unflag interoperable";Unflagged;"Dave Crash";                           |
       | "16/07/2024 - 06:28";"Flag interoperable";Flagged;"Dave Crash";                               |
-      | "16/07/2024 - 07:34";"Add role to member";"Add x author role";"Andre Munson";"Mary Shotgun"   |
+      | "16/07/2024 - 07:34";"Add role";"Add x author role";"Andre Munson";"Mary Shotgun"             |
       | "17/07/2024 - 11:21";"Deleted membership";"Delete x membership";"Andre Munson";"Mary Shotgun" |
       | "18/07/2024 - 15:08";"Block membership";"Block x member";"Branson Winthrop";"Mary Shotgun"    |
       | "19/07/2024 - 18:54";"Add content";"Add x event";"Branson Winthrop";"Branson Winthrop"        |
