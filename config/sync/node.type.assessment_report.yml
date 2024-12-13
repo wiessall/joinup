@@ -26,9 +26,10 @@ third_party_settings:
       status: false
       settings:
         age: 0
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: assessment report
+label_plural: assessment reports
+label_count:
+  no_count_capitalize: "Assessment report\x03Assessment reports"
 name: 'Assessment report'
 type: assessment_report
 description: 'Interoperability assessment report'
