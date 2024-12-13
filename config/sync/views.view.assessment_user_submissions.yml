@@ -5,8 +5,7 @@ dependencies:
   config:
     - webform.webform.assessment
   module:
-    - dynamic_entity_reference
-    - meta_entity
+    - node
     - webform
     - webform_views
 id: assessment_user_submissions
@@ -463,15 +462,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        target__target_id:
-          id: target__target_id
-          table: meta_entity
-          field: target__target_id
-          relationship: reverse__meta_entity__submission
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: reverse__node__submission
           group_type: group
           admin_label: ''
-          entity_type: meta_entity
-          entity_field: target
+          entity_type: node
+          entity_field: title
           plugin_id: field
           label: Report
           exclude: false
@@ -514,11 +513,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: target_id
-          type: dynamic_entity_reference_label
+          click_sort_column: value
+          type: string
           settings:
-            link: true
-          group_column: ''
+            link_to_entity: true
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -724,13 +723,36 @@ display:
           row_class: ''
           default_row_class: true
           columns:
+            in_draft: in_draft
+            sid: sid
+            nothing_2: nothing_2
             webform_submission_value: webform_submission_value
             webform_submission_value_1: webform_submission_value_1
-            completed: completed
             created: created
-            target__target_id: target__target_id
+            completed: completed
+            title: title
+            nothing_1: nothing_1
           default: '-1'
           info:
+            in_draft:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            sid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nothing_2:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             webform_submission_value:
               sortable: true
               default_sort_order: asc
@@ -745,13 +767,6 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            completed:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
             created:
               sortable: true
               default_sort_order: asc
@@ -759,9 +774,21 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            target__target_id:
+            completed:
               sortable: true
               default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nothing_1:
               align: ''
               separator: ''
               empty_column: false
@@ -783,10 +810,10 @@ display:
           replica: false
           query_tags: {  }
       relationships:
-        reverse__meta_entity__submission:
-          id: reverse__meta_entity__submission
+        reverse__node__submission:
+          id: reverse__node__submission
           table: webform_submission
-          field: reverse__meta_entity__submission
+          field: reverse__node__submission
           relationship: none
           group_type: group
           admin_label: submission
