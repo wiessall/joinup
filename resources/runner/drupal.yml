@@ -281,8 +281,8 @@ drupal:
         $settings['sparql']['port'] = (int) getenv('DRUPAL_SPARQL_PORT');
         $settings['sparql']['user_readonly'] = getenv('DRUPAL_SPARQL_USER_READONLY');
         $settings['sparql']['password_readonly'] = getenv('DRUPAL_SPARQL_PASSWORD_READONLY');
-        $config['rdf_sync.settings']['endpoint']['host'] = $settings['sparql']['hostname'];
-        $config['rdf_sync.settings']['endpoint']['port'] = $settings['sparql']['port'];
+        $config['rdf_sync.settings']['connector']['config']['host'] = $settings['sparql']['hostname'];
+        $config['rdf_sync.settings']['connector']['config']['port'] = $settings['sparql']['port'];
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
