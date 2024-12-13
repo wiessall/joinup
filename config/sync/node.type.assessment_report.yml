@@ -7,9 +7,8 @@ dependencies:
     - node_revision_delete
 third_party_settings:
   menu_ui:
-    available_menus:
-      - main
-    parent: 'main:'
+    available_menus: {  }
+    parent: ''
   node_revision_delete:
     amount:
       status: false
@@ -34,6 +33,6 @@ name: 'Assessment report'
 type: assessment_report
 description: 'Interoperability assessment report'
 help: null
-new_revision: true
+new_revision: false
 preview_mode: 1
-display_submitted: true
+display_submitted: false
