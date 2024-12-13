@@ -100,7 +100,7 @@ class AssessmentContext extends RawDrupalContext {
   /**
    * Returns the latest submission entity ID.
    *
-   * @return int|null The latest webform submission ID.
+   * @return int|null
    *   The latest webform submission ID.
    */
   protected function getLatestSubmissionId(): ?int {
