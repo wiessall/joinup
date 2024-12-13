@@ -121,7 +121,7 @@ class AssessmentContext extends RawDrupalContext {
       $submission = WebformSubmission::load($submissionId);
       if ($submission) {
         $submission->delete();
-        // Remove also the corresponding documents.
+        // Remove also the corresponding assessment reports.
         $ids = $metaEntityStorage->getQuery()
           ->accessCheck(FALSE)
           ->condition('type', AssessmentInterface::WEBFORM_ID)
