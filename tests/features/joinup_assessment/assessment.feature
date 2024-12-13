@@ -292,7 +292,7 @@ Feature: Assessments
     When I go to the pdf download link of the latest assessment submission
     Then I should see the heading "Access denied"
 
-  Scenario: Assessment reports are listed in a distinct page.
+  Scenario: Assessment reports are listed in a distinct page and in search.
     # Publish the collection, otherwise the nodes will not be published. This
     # does not affect the visibility of the node in the view below as we force
     # them as published, but it does affect the custom page listing below.
@@ -355,6 +355,26 @@ Feature: Assessments
       | Assessment 5  |
       | Assessment 4  |
       | Assessment 3  |
+
+    # Advanced search page.
+    Given I am an anonymous user
+    When I visit "/search"
+    Then I should see the following "Content types" facet items "Collections,Solutions,News,Events,Documents,Assessment reports,Discussions,Releases,Custom pages,Licences,User profiles" in this order
+    When I click "Assessment reports"
+    And I take a screenshot
+    Then I should see the following tiles in the correct order:
+      | Assessment 12 |
+      | Assessment 11 |
+      | Assessment 10 |
+      | Assessment 9  |
+      | Assessment 8  |
+      | Assessment 7  |
+      | Assessment 6  |
+      | Assessment 5  |
+      | Assessment 4  |
+      | Assessment 3  |
+      | Assessment 2  |
+      | Assessment 1  |
 
     When I am logged in as a moderator
     When I go to "/assessments"
