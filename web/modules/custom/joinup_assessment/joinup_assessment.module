@@ -10,10 +10,12 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReport;
 use Drupal\joinup_document\Entity\DocumentInterface;
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -89,5 +91,22 @@ function joinup_assessment_webform_element_webform_actions_alter(array &$element
 function joinup_assessment_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['assessment_report'])) {
     $bundles['node']['assessment_report']['class'] = AssessmentReport::class;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_assessment_webform_submission_delete(WebformSubmissionInterface $submission): void {
+  if ($submission->getWebform()->id() === AssessmentInterface::WEBFORM_ID) {
+    // If a webform assessment submission is deleted, remove also the report.
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'assessment_report')
+      ->condition('submission', $submission->id())
+      ->execute();
+    if ($nids) {
+      $storage->delete($storage->loadMultiple($nids));
+    }
   }
 }

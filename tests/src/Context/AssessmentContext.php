@@ -8,8 +8,6 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_assessment\AssessmentInterface;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -30,19 +28,7 @@ class AssessmentContext extends RawDrupalContext {
    * @When I go to the latest assessment submission
    */
   public function visitLatestAssessmentCanonicalPath(): void {
-    $query = \Drupal::entityQuery('webform_submission')
-      ->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
-      ->sort('created', 'DESC')
-      ->range(0, 1);
-
-    $submissionIds = $query->execute();
-    if (empty($submissionIds)) {
-      throw new \Exception('The latest assessment submission was not found.');
-    }
-
-    $submission = $this->getEntityById('webform_submission', reset($submissionIds));
-    $this->visitPath($submission->toUrl()->toString());
+    $this->visitPath($this->getLatestSubmission()->toUrl()->toString());
   }
 
   /**
@@ -61,7 +47,7 @@ class AssessmentContext extends RawDrupalContext {
    */
   public function visitLatestSubmissionModerateForm(): void {
     $url = Url::fromRoute('joinup_assessment.moderation', [
-      'submission' => $this->getLatestSubmission()->id(),
+      'submission' => $this->getLatestSubmissionId(),
     ]);
     $this->visitPath($url->toString());
   }
@@ -75,7 +61,6 @@ class AssessmentContext extends RawDrupalContext {
     $nids = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
       ->condition('type', 'assessment_report')
-      ->condition('organization', 'my organization')
       ->sort('nid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -95,13 +80,7 @@ class AssessmentContext extends RawDrupalContext {
    * @BeforeScenario @demoAssessment
    */
   public function storeLatestSubmissionId(): void {
-    $submissionIds = \Drupal::entityQuery('webform_submission')
-      ->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
-      ->sort('sid', 'DESC')
-      ->range(0, 1)
-      ->execute();
-    $this->latestSubmissionId = $submissionIds ? (int) reset($submissionIds) : 0;
+    $this->latestSubmissionId = $this->getLatestSubmissionId() ?? 0;
   }
 
   /**
@@ -110,30 +89,29 @@ class AssessmentContext extends RawDrupalContext {
    * @AfterScenario @demoAssessment
    */
   public function cleanSubmissions(): void {
-    $submissionIds = \Drupal::entityQuery('webform_submission')
-      ->accessCheck(FALSE)
+    $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+    $submissionIds = $storage->getQuery()->accessCheck(FALSE)
       ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
       ->condition('sid', $this->latestSubmissionId, '>')
       ->execute();
+    $storage->delete($storage->loadMultiple($submissionIds));
+  }
 
-    $metaEntityStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-    foreach ($submissionIds as $submissionId) {
-      $submission = WebformSubmission::load($submissionId);
-      if ($submission) {
-        $submission->delete();
-        // Remove also the corresponding assessment reports.
-        $ids = $metaEntityStorage->getQuery()
-          ->accessCheck(FALSE)
-          ->condition('type', AssessmentInterface::WEBFORM_ID)
-          ->condition('submission', $submissionId)
-          ->execute();
-        if ($ids) {
-          $metaEntity = $metaEntityStorage->load(reset($ids));
-          assert($metaEntity instanceof MetaEntityInterface);
-          $metaEntity->getTargetEntity()->delete();
-        }
-      }
-    }
+  /**
+   * Returns the latest submission entity ID.
+   *
+   * @return int|null The latest webform submission ID.
+   *   The latest webform submission ID.
+   */
+  protected function getLatestSubmissionId(): ?int {
+    $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+    $sids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
+      ->sort('sid', 'DESC')
+      ->range(0, 1)
+      ->execute();
+    return $sids ? (int) reset($sids) : NULL;
   }
 
   /**
@@ -143,20 +121,12 @@ class AssessmentContext extends RawDrupalContext {
    *   The webform submission.
    */
   protected function getLatestSubmission(): WebformSubmissionInterface {
-    $sids = \Drupal::entityQuery('webform_submission')
-      ->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
-      ->sort('sid', 'DESC')
-      ->range(0, 1)
-      ->execute();
-
-    if (!$sids) {
-      throw new \Exception("Cannot find any 'assessment' webform submission.");
+    if ($submissionId = $this->getLatestSubmissionId()) {
+      $submission = \Drupal::entityTypeManager()->getStorage('webform_submission')->load($submissionId);
+      assert($submission instanceof WebformSubmissionInterface);
+      return $submission;
     }
-
-    $submission = WebformSubmission::load(reset($sids));
-    assert($submission instanceof WebformSubmissionInterface);
-    return $submission;
+    throw new \Exception("Cannot find any 'assessment' webform submission.");
   }
 
   /**
@@ -165,13 +135,11 @@ class AssessmentContext extends RawDrupalContext {
    * @When I go to the pdf download link of the latest assessment submission
    */
   public function visitLatestSubmissionPdfDownloadLink(): void {
-    $submission = $this->getLatestSubmission();
     $url = Url::fromRoute('entity_print.view', [
       'export_type' => 'pdf',
       'entity_type' => 'webform_submission',
-      'entity_id' => $submission->id(),
+      'entity_id' => $this->getLatestSubmissionId(),
     ]);
-
     $this->visitPath($url->toString());
   }
 
