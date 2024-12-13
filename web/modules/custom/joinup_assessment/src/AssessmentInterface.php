@@ -10,37 +10,14 @@ namespace Drupal\joinup_assessment;
 interface AssessmentInterface {
 
   /**
-   * Group UUID.
-   *
-   * Space where document's assessments are stored.
+   * UUID of the group where document's assessments are stored.
    */
   public const string GROUP_UUID = 'c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
 
   /**
-   * Title prefix.
-   *
-   * Default prefix value for a new document.
+   * Assessments report title pattern.
    */
-  public const string DOCUMENT_TITLE_PREFIX = 'Assessment report #';
-
-  /**
-   * State.
-   *
-   * Default value for a new document.
-   */
-  public const string DOCUMENT_STATE = 'published';
-
-  /**
-   * Type of document.
-   *
-   * Default value for a new document.
-   */
-  public const string DOCUMENT_TYPE_KEY = 'interoperability_assessment';
-
-  /**
-   * Default topic UUID for a new documents.
-   */
-  public const string TOPIC_UUID = '05f86e2a-8371-4944-b98f-87a8b7252f2a';
+  public const string REPORT_TITLE_PATTERN = 'Assessment report #%s';
 
   /**
    * Question used to generate abstract value.
@@ -48,8 +25,6 @@ interface AssessmentInterface {
   public const string SUBMISSION_ABSTRACT = 'initiative';
 
   /**
-   * Webform ID.
-   *
    * Webform which contains assessment questions.
    */
   public const string WEBFORM_ID = 'assessment';

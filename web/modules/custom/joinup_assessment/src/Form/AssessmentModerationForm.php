@@ -230,7 +230,7 @@ class AssessmentModerationForm extends FormBase {
 
     $assessmentReport = $nodeStorage->create([
       'type' => 'assessment_report',
-      'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $submission->id(),
+      'title' => sprintf(AssessmentInterface::REPORT_TITLE_PATTERN, $submission->id()),
       'organization' => $organisation,
       'og_audience' => $group,
       'submission' => $submission->id(),
