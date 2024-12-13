@@ -22,7 +22,10 @@ Feature: Assessments
     And I should see the heading "Online form for Assessments"
 
     # 1st page.
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I select "Austria" from "Select your country"
+    And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
     And I press "Next"
 
@@ -72,28 +75,28 @@ Feature: Assessments
     Given I am an anonymous user
     When I go to the latest assessment report
     Then I should see the following lines of text:
-      | 1. General information                                                                                                                         |
-      | Please select the type of public sector body {Empty}                                                                                           |
-      | Please provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
-      | If applicable, please provide a link to the initiative, project or action concerned: {Empty}                                                   |
-      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                       |
-      | 2. Binding requirements                                                                                                                        |
-      | The binding requirements identified concern (please select) {Empty}                                                                            |
-      | Please specify the concerned function of trans-European digital public service(s): Defense                                                     |
-      | Please list the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                            |
-      | Identified effects on cross-border legal interoperability {Empty}                                                                              |
-      | Identified effects on cross-border organisational interoperability {Empty}                                                                     |
-      | Identified effects on cross-border semantic interoperability {Empty}                                                                           |
-      | Identified effects on cross-border technical interoperability {Empty}                                                                          |
-      | 3. Results                                                                                                                                     |
-      | Internal Solutions in the Portal {Empty}                                                                                                       |
-      | Solutions not in the Portal (link) {Empty}                                                                                                     |
-      | Have you discovered any remaining barriers to cross-border interoperability? No                                                                |
-      | 4. Supporting documents                                                                                                                        |
-      | Binding requirement documents {Empty}                                                                                                          |
-      | Upload assessment documents {Empty}                                                                                                            |
-      | Please add any other comment you would like to share. {Empty}                                                                                  |
+      | 1. General information                                                                                                                  |
+      | Type of public sector body                                                                                                              |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
+      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
+      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
+      | 2. Binding requirements                                                                                                                 |
+      | The binding requirements identified concern: {Empty}                                                                                    |
+      | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
+      | List the binding requirement(s) assessed. {Empty}                                                                                       |
+      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Identified effects on cross-border legal interoperability {Empty}                                                                       |
+      | Identified effects on cross-border organisational interoperability {Empty}                                                              |
+      | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
+      | Identified effects on cross-border technical interoperability {Empty}                                                                   |
+      | 3. Results                                                                                                                              |
+      | Internal Solutions in the Portal {Empty}                                                                                                |
+      | Solutions not in the Portal (link) {Empty}                                                                                              |
+      | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
+      | 4. Supporting documents                                                                                                                 |
+      | Binding requirement documents {Empty}                                                                                                   |
+      | Upload assessment documents {Empty}                                                                                                     |
+      | Please add any other comment you would like to share. {Empty}                                                                           |
 
     Given I mark all emails as read
 
@@ -109,35 +112,35 @@ Feature: Assessments
       | You have already submitted this webform. View your previous submission.                                       |
       | You're about to fill a new assessment questionnaire. The form is prefilled with your previous submitted data. |
     # New submission is prefilled with values from previous submission.
-    And the "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" field should contain "Pioneer in making automobiles"
+    And the "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" field should contain "Pioneer in making automobiles"
 
     When I click "View your previous submission"
     Then I should see the following lines of text:
-      | 1. General information                                                                                                                         |
-      | Please select the type of public sector body {Empty}                                                                                           |
-      | Please provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
-      | If applicable, please provide a link to the initiative, project or action concerned: {Empty}                                                   |
-      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                       |
-      | 2. Binding requirements                                                                                                                        |
-      | The binding requirements identified concern (please select) {Empty}                                                                            |
-      | Please specify the concerned function of trans-European digital public service(s): Defense                                                     |
-      | Please list the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                            |
-      | Identified effects on cross-border legal interoperability {Empty}                                                                              |
-      | Identified effects on cross-border organisational interoperability {Empty}                                                                     |
-      | Identified effects on cross-border semantic interoperability {Empty}                                                                           |
-      | Identified effects on cross-border technical interoperability {Empty}                                                                          |
-      | 3. Results                                                                                                                                     |
-      | Internal Solutions in the Portal {Empty}                                                                                                       |
-      | Solutions not in the Portal (link) {Empty}                                                                                                     |
-      | Have you discovered any remaining barriers to cross-border interoperability? No                                                                |
-      | 4. Supporting documents                                                                                                                        |
-      | Binding requirement documents {Empty}                                                                                                          |
-      | Upload assessment documents {Empty}                                                                                                            |
-      | Please add any other comment you would like to share. {Empty}                                                                                  |
+      | 1. General information                                                                                                                  |
+      | Type of public sector body                                                                                                              |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
+      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
+      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
+      | 2. Binding requirements                                                                                                                 |
+      | The binding requirements identified concern: {Empty}                                                                                    |
+      | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
+      | List the binding requirement(s) assessed. {Empty}                                                                                       |
+      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Identified effects on cross-border legal interoperability {Empty}                                                                       |
+      | Identified effects on cross-border organisational interoperability {Empty}                                                              |
+      | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
+      | Identified effects on cross-border technical interoperability {Empty}                                                                   |
+      | 3. Results                                                                                                                              |
+      | Internal Solutions in the Portal {Empty}                                                                                                |
+      | Solutions not in the Portal (link) {Empty}                                                                                              |
+      | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
+      | 4. Supporting documents                                                                                                                 |
+      | Binding requirement documents {Empty}                                                                                                   |
+      | Upload assessment documents {Empty}                                                                                                     |
+      | Please add any other comment you would like to share. {Empty}                                                                           |
 
     When I move backward one page
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Abbey Road"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Abbey Road"
     And I select the radio button "No"
     And I press "Next"
 
@@ -174,13 +177,12 @@ Feature: Assessments
       | body      | Your submitted assessment questionnaire has been moderated but the moderator has required some changes. |
       | body      | Rejection reason:                                                                                       |
       | body      | Please drastically reconsider this form. I mean it!                                                     |
-      | body      | Please fix the issues at                                                                                |
-      | body      | and submit the form again when done.                                                                    |
+      | body      | Please edit the form and fix the issues mentioned above. Submit the form again once everything is OK.   |
 
     # User is able to edit a 'Require updates' submission.
     Given I am logged in as "Regular"
     And I click the link from email sent to "Regular" with subject "Your assessment needs updates"
-    When I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Let It Be"
+    When I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Let It Be"
     And I press "Next"
     And I press "Next"
     And I press "Next"
@@ -196,8 +198,8 @@ Feature: Assessments
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
-    And I select "<public_sector_body>" from "Please select the type of public sector body"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "<public_sector_body>" from "Type of public sector body"
     And I select "<institution_name>" from "<institution>"
     And I select the radio button "No"
     And I press "Next"
@@ -219,9 +221,9 @@ Feature: Assessments
     And I should see the text "<organisation>"
 
     Examples:
-      | public_sector_body         | institution                    | institution_name                | organisation                   |
-      | European Union institution | Please select your Institution | European Parliament             | European Parliament            |
-      | European Union body        | Please select your Body        | European Investment Bank        | European Investment Bank       |
+      | public_sector_body         | institution             | institution_name         | organisation             |
+      | European Union institution | Select your Institution | European Parliament      | European Parliament      |
+      | European Union body        | Select your Body        | European Investment Bank | European Investment Bank |
 
   Scenario: Webforms can be downloaded in PDF format.
     Given users:
@@ -235,7 +237,10 @@ Feature: Assessments
     When I check "I agree to the Legal notice document"
     And I press "Submit"
     # 1st page.
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I select "Austria" from "Select your country"
+    And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
