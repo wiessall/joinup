@@ -78,3 +78,13 @@ function joinup_test_node_presave(EntityInterface $entity): void {
   // @see \collection_node_delete().
   $entity->setChangedTime($entity->original->getChangedTime());
 }
+
+/**
+ * Implements hook_autologout_prevent().
+ */
+function joinup_test_autologout_prevent(): bool {
+  // Joinup test is only enabled on local environments. Prevent autologout from
+  // logging out users on local environments by blocking the JS refresh from
+  // being attached.
+  return isset($_SERVER['IS_DDEV_PROJECT']) && $_SERVER['IS_DDEV_PROJECT'] === 'true';
+}
