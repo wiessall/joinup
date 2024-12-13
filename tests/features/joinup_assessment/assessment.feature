@@ -193,8 +193,8 @@ Feature: Assessments
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
-    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
-    And I select "<public_sector_body>" from "Please select the type of public sector body"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select "<public_sector_body>" from "Type of public sector body"
     And I select "<institution_name>" from "<institution>"
     And I select the radio button "No"
     And I press "Next"
@@ -215,9 +215,9 @@ Feature: Assessments
     Then I should see the text "<organisation>"
 
     Examples:
-      | public_sector_body         | institution                    | institution_name                | organisation                   |
-      | European Union institution | Please select your Institution | European Parliament             | European Parliament            |
-      | European Union body        | Please select your Body        | European Investment Bank        | European Investment Bank       |
+      | public_sector_body         | institution             | institution_name         | organisation             |
+      | European Union institution | Select your Institution | European Parliament      | European Parliament      |
+      | European Union body        | Select your Body        | European Investment Bank | European Investment Bank |
 
   Scenario: Webforms can be downloaded in PDF format.
     Given users:
