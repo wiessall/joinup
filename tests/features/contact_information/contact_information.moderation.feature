@@ -118,8 +118,8 @@ Feature: Contact Information moderation
       | name        | email            | author         | state     |
       | Secreteriat | info@example.com | Sown Carnberry | validated |
     And collection content:
-      | title                 | description        | logo     | owner       | contact information | state     |
-      | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         | published |
+      | title                 | description        | logo     | owner       | contact information |
+      | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         |
     And the following collection user memberships:
       | collection            | user            | roles       |
       | Saint Louis solutions | Sown Carnberry  |             |

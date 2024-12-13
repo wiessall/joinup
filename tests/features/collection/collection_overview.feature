@@ -98,12 +98,12 @@ Feature: Collections Overview
   @javascript
   Scenario: Feature icon should be visible for collection's content.
     Given collection content:
-      | title                   | state     |
-      | Service Management apps | published |
+      | title                   |
+      | Service Management apps |
     And news content:
-      | title  | collection              | state     | featured |
-      | Jira   | Service Management apps | published | yes      |
-      | Trello | Service Management apps | published | no       |
+      | title  | collection              | featured |
+      | Jira   | Service Management apps | yes      |
+      | Trello | Service Management apps | no       |
     When I go to the homepage of the "Service Management apps" collection
     Then the "Jira" tile should be marked as featured
     But the "Trello" "news" tile should not be marked as featured
@@ -115,17 +115,17 @@ Feature: Collections Overview
       | Luigi Plant       |
       | Yiannis Parios    |
     And collection content:
-      | title                       | state     | featured | author            |
-      | Enemies of the state        | published | yes      | Luigi Plant       |
-      | Fed up meatlovers           | published | no       | Carolina Mercedes |
-      | Ugly farmers                | published | yes      | Luigi Plant       |
-      | Yiannis Parios collection 1 | published | no       | Yiannis Parios    |
-      | Yiannis Parios collection 2 | published | no       | Yiannis Parios    |
-      | Yiannis Parios collection 3 | published | no       | Yiannis Parios    |
+      | title                       | featured | author            |
+      | Enemies of the state        | yes      | Luigi Plant       |
+      | Fed up meatlovers           | no       | Carolina Mercedes |
+      | Ugly farmers                | yes      | Luigi Plant       |
+      | Yiannis Parios collection 1 | no       | Yiannis Parios    |
+      | Yiannis Parios collection 2 | no       | Yiannis Parios    |
+      | Yiannis Parios collection 3 | no       | Yiannis Parios    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And collection content:
-      | title              | state     | featured |
-      | Biologic meatballs | published | no       |
+      | title              | featured |
+      | Biologic meatballs | no       |
 
     When I am logged in as "Yiannis Parios"
     And I visit the collection overview
