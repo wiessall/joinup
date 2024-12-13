@@ -22,7 +22,7 @@ elements: |-
     '#next_button_label': Next
     general_info_intro:
       '#type': processed_text
-      '#text': "<h2><strong>This section collects general information on your interoperability assessment.</strong></h2><p>You can 'Save' the current progress of the report or you can 'Submit' it once finalised. The report will be published on the Portal after the European Commission has checked that it complies with the assessment guidelines.</p>"
+      '#text': "<h2><strong>This section collects general information on your interoperability assessment.</strong></h2><p>Please complete the form below by entering accurate and up-to date information in all the required fields. You can 'Save' the current progress of the report or you can 'Submit' it once finalised. The report will be published on the Portal after the European Commission has checked that it complies with the assessment guidelines.</p>"
       '#format': content_editor
     report_provider:
       '#type': processed_text
@@ -31,7 +31,7 @@ elements: |-
       '#format': content_editor
     public_sector_body:
       '#type': select
-      '#title': 'Please select the type of public sector body'
+      '#title': 'Type of public sector body'
       '#options':
         'Local public sector body': 'Local public sector body'
         'Regional public sector body': 'Regional public sector body'
@@ -39,9 +39,10 @@ elements: |-
         'European Union institution': 'European Union institution'
         'European Union agency': 'European Union agency'
         'European Union body': 'European Union body'
+      '#required': true
     country:
       '#type': select
-      '#title': 'Please select your country'
+      '#title': 'Select your country'
       '#options':
         Austria: Austria
         Belgium: Belgium
@@ -80,9 +81,10 @@ elements: |-
           - or
           - ':input[name="public_sector_body"]':
               value: 'National public sector body'
+      '#required': true
     institution:
       '#type': select
-      '#title': 'Please select your Institution'
+      '#title': 'Select your Institution'
       '#options':
         'European Parliament': 'European Parliament'
         'European Council': 'European Council'
@@ -95,9 +97,10 @@ elements: |-
         visible:
           ':input[name="public_sector_body"]':
             value: 'European Union institution'
+      '#required': true
     body:
       '#type': select
-      '#title': 'Please select your Body'
+      '#title': 'Select your Body'
       '#options':
         'European External Action Service': 'European External Action Service'
         'European Economic and Social Committee': 'European Economic and Social Committee'
@@ -111,9 +114,10 @@ elements: |-
         visible:
           ':input[name="public_sector_body"]':
             value: 'European Union body'
+      '#required': true
     agency:
       '#type': select
-      '#title': 'Please select your Agency'
+      '#title': 'Select your Agency'
       '#options':
         'Agency for Support for BEREC': 'Agency for Support for BEREC'
         'Agency for the Cooperation of Energy Regulators': 'Agency for the Cooperation of Energy Regulators'
@@ -155,6 +159,7 @@ elements: |-
         visible:
           ':input[name="public_sector_body"]':
             value: 'European Union agency'
+      '#required': true
     organisation:
       '#type': textfield
       '#title': 'Name of your organisation'
@@ -177,12 +182,12 @@ elements: |-
       '#format': content_editor
     initiative:
       '#type': textfield
-      '#title': 'Please provide the name of the initiative, project or action containing the binding requirements to be assessed:'
+      '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed:'
       '#required': true
       '#admin_title': 'Initiative, project, action'
     initiative_link:
       '#type': textfield
-      '#title': 'If applicable, please provide a link to the initiative, project or action concerned:'
+      '#title': 'If applicable, provide a link to the initiative, project or action concerned:'
     previous_assessments:
       '#type': radios
       '#title': 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
@@ -216,14 +221,14 @@ elements: |-
       '#type': webform_horizontal_rule
     binding_requirements_identified_concern:
       '#type': radios
-      '#title': 'The binding requirements identified concern (please select)'
+      '#title': 'The binding requirements identified concern:'
       '#options':
         'One or few specific trans-European digital public services': 'One or few specific trans-European digital public services'
         'Potentially many trans-European digital public services': 'Potentially many trans-European digital public services'
       '#options__properties': ''
     trans_european_digital_public_service_concerned:
       '#type': textfield
-      '#title': 'Please specify the trans-European digital public service(s) concerned:'
+      '#title': 'Specify the trans-European digital public service(s) concerned:'
       '#multiple': true
       '#states':
         visible:
@@ -234,7 +239,7 @@ elements: |-
       '#multiple__add_more_input': false
     concerned_application_domain_sector:
       '#type': checkboxes
-      '#title': 'Please specify the concerned function of trans-European digital public service(s):'
+      '#title': 'Specify the concerned function of trans-European digital public service(s):'
       '#options':
         Defense: Defense
         'Economic affairs': 'Economic affairs'
@@ -255,29 +260,29 @@ elements: |-
       '#format': content_editor
     binding_requirement_assessed:
       '#type': webform_custom_composite
-      '#title': 'Please list the binding requirement(s) assessed.'
+      '#title': 'List the binding requirement(s) assessed.'
       '#multiple__sorting': false
       '#multiple__add_more': false
       '#element':
         number_1:
           '#type': number
           '#title': Nr.
-          '#description': 'Please number each requirement'
+          '#description': 'Number each requirement'
           '#min': 1
           '#attributes':
             oninput: "validity.valid||(value='');"
         legal_reference:
           '#type': textfield
-          '#title': 'Please provide a legal reference for the binding requirement, if available'
+          '#title': 'Provide a legal reference for the binding requirement, if available'
         description_1:
           '#type': textfield
-          '#title': 'Please provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
+          '#title': 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
         relevant_1:
           '#type': webform_checkboxes_other
           '#options':
             Data: Data
             Systems: Systems
-          '#title': 'Please select all relevant '
+          '#title': 'Select all relevant '
     stakeholders_affected:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -297,7 +302,7 @@ elements: |-
       '#options__properties': ''
     geographical_origin:
       '#type': webform_custom_composite
-      '#title': 'Please select the stakeholder’s country'
+      '#title': 'Select the stakeholder’s country'
       '#multiple__header': false
       '#multiple__item_label': ''
       '#multiple__min_items': 1
@@ -338,7 +343,6 @@ elements: |-
             Luxembourg: Luxembourg
             Latvia: Latvia
             Malta: Malta
-            Moldova: null
             Netherlands: Netherlands
             Poland: Poland
             Portugal: Portugal
@@ -347,7 +351,7 @@ elements: |-
             Slovenia: Slovenia
             Sweden: Sweden
           '#title': 'Choose a country'
-          '#description': 'Choose a country'
+          '#description': ''
     cross_border_interoperability_effects:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -370,10 +374,10 @@ elements: |-
             Beneficial: Beneficial
             Negligible: Negligible
             Risky: Risky
-          '#title': 'Please tick the most appropriate '
+          '#title': 'Tick the most appropriate '
         organisational_options:
           '#type': textarea
-          '#title': 'Please provide a justification'
+          '#title': 'Provide a justification'
     identified_effects_cross_border_organisational:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border organisational interoperability'
@@ -387,10 +391,10 @@ elements: |-
             Beneficial: Beneficial
             Negligible: Negligible
             Risky: Risky
-          '#title': 'Please tick the most appropriate '
+          '#title': 'Tick the most appropriate '
         organisational_options:
           '#type': textarea
-          '#title': 'Please provide a justification'
+          '#title': 'Provide a justification'
     identified_effects_cross_border_semantic:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border semantic interoperability'
@@ -404,10 +408,10 @@ elements: |-
             Beneficial: Beneficial
             Negligible: Negligible
             Risky: Risky
-          '#title': 'Please tick the most appropriate '
+          '#title': 'Tick the most appropriate '
         organisational_options:
           '#type': textarea
-          '#title': 'Please provide a justification'
+          '#title': 'Provide a justification'
     identified_effects_cross_border_technical:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border technical interoperability'
@@ -421,10 +425,10 @@ elements: |-
             Beneficial: Beneficial
             Negligible: Negligible
             Risky: Risky
-          '#title': 'Please tick the most appropriate '
+          '#title': 'Tick the most appropriate '
         organisational_options:
           '#type': textarea
-          '#title': 'Please provide a justification'
+          '#title': 'Provide a justification'
   3_results:
     '#type': webform_wizard_page
     '#title': '3. Results'
