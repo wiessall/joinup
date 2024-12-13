@@ -16,10 +16,28 @@ Feature: Assessments
 
     # 1st page.
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
-    And I select "Local public sector body" from "Type of public sector body"
-    And I select "Austria" from "Select your country"
-    And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
+    And I press "Next"
+    Then I should see the error message "Type of public sector body field is required."
+
+    When I select "Regional public sector body" from "Type of public sector body"
+    And I press "Next"
+    Then I should see the following error messages:
+      | error messages                                |
+      | Select your country field is required. |
+      | Name of your organisation field is required.  |
+
+    When I select "Luxembourg" from "Select your country"
+    Then I should see the error message "Name of your organisation field is required."
+    And I press "Next"
+
+    When I fill in "Name of your organisation" with "ACME"
+
+    When I select "European Union agency" from "Type of public sector body"
+    And I press "Next"
+    Then I should see the error message "Select your Agency field is required."
+
+    When I select "Eurojust" from "Select your Agency"
     And I press "Next"
 
     # 2nd page.
@@ -67,7 +85,8 @@ Feature: Assessments
     When I go to the latest assessment report
     Then I should see the following lines of text:
       | 1. General information                                                                                                                  |
-      | Type of public sector body                                                                                                              |
+      | Type of public sector body European Union agency                                                                                        |
+      | Select your Agency Eurojust                                                                                                             |
       | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
       | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
@@ -107,7 +126,8 @@ Feature: Assessments
     When I click "View your previous submission"
     Then I should see the following lines of text:
       | 1. General information                                                                                                                  |
-      | Type of public sector body                                                                                                              |
+      | Type of public sector body European Union agency                                                                                        |
+      | Select your Agency Eurojust                                                                                                             |
       | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
       | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
@@ -226,10 +246,9 @@ Feature: Assessments
     When I check "I agree to the Legal notice document"
     And I press "Submit"
     # 1st page.
+    And I select "European Union agency" from "Type of public sector body"
+    And I select "Eurojust" from "Select your Agency"
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
-    And I select "Local public sector body" from "Type of public sector body"
-    And I select "Austria" from "Select your country"
-    And I fill in "Name of your organisation" with "Pioneer organisation"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
