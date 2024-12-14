@@ -366,7 +366,7 @@ Feature: Assessments
     When I go to "/collection/assessments/assessment-reports"
     Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
-    And I should not see the link "My assessments"
+    And I should not see the link "My submissions"
     And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
     And assessment_report content:
       | title         | state     | created              | organization         | collection                                     |
@@ -386,7 +386,7 @@ Feature: Assessments
     When I go to "/collection/assessments/assessment-reports"
     Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
-    And I should not see the link "My assessments"
+    And I should not see the link "My submissions"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
     # Reports are shown in creation descending order in a 10 pager listing.
     And I should see the following tiles in the correct order:
@@ -446,5 +446,5 @@ Feature: Assessments
     When I go to "/collection/assessments/assessment-reports"
     Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
-    And I should see the link "My assessments"
+    And I should see the link "My submissions"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
