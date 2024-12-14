@@ -99,7 +99,7 @@ class AssessmentModerationForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $submission = $form_state->getValue('entity');
     assert($submission instanceof WebformSubmissionInterface);
-    $assessmentReport = Url::fromUserInput('/collection/assessments/assessment-reports');
+    $assessmentReportsPage = Url::fromUserInput('/collection/assessments/assessment-reports');
 
     $action = $form_state->getValue('action');
     switch ($action) {
@@ -136,7 +136,7 @@ class AssessmentModerationForm extends FormBase {
         }
         $this->delivery->sendMessageTemplateToUser('assessment_published', [
           '@assessment:report_url' => $assessmentReport->toUrl()->setAbsolute()->toString(),
-          '@assessment:reports_url' => Url::fromRoute('view.assessment_reports.list')->setAbsolute()->toString(),
+          '@assessment:reports_url' => $assessmentReportsPage->setAbsolute()->toString(),
         ], $submission->getOwner());
         $message = $this->t('The assessment submission report has been created: <a href=":href">@title</a>.', [
           ':href' => $assessmentReport->toUrl()->toString(),
@@ -148,7 +148,7 @@ class AssessmentModerationForm extends FormBase {
         throw new \InvalidArgumentException("Unknown action '$action'");
     }
 
-    $form_state->setRedirectUrl($assessmentReport);
+    $form_state->setRedirectUrl($assessmentReportsPage);
     $this->messenger()->addStatus($message);
   }
 

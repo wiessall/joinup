@@ -211,7 +211,7 @@ Feature: Assessments
 
     # Check local/regional/national organizations.
     Given I mark all emails as read
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     # 1st page.
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
