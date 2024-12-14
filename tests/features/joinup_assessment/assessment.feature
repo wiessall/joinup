@@ -1,12 +1,6 @@
 @api @group-clone @demoAssessment
 Feature: Assessments
 
-  # Remove this after the new block has been added in production.
-  Background:
-    Given I append "block" to "field_paragraphs_body" field in "node" entity with following "Assessment Reports" title:
-      | paragraph_block:plugin_id | views_block:assessment_reports-list                                                                                                                                                          |
-      | paragraph_block:settings  | a:6:{s:2:"id";s:35:"views_block:assessment_reports-list";s:5:"label";s:0:"";s:13:"label_display";b:0;s:8:"provider";s:5:"views";s:11:"views_label";s:0:"";s:14:"items_per_page";s:4:"none";} |
-
   Scenario: Create an assessment report out of a webform.
     Given users:
       | Username         | Roles     | E-mail                    | First name | Family name |
@@ -78,7 +72,7 @@ Feature: Assessments
 
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then I should see the heading "Assessment Reports"
+    Then I should see the heading "Assessment reports"
     And I should see the success message containing "The assessment submission report has been created: Assessment report #"
     And the following email should have been sent:
       | recipient | Regular                                                                               |
@@ -364,7 +358,7 @@ Feature: Assessments
     # them as published, but it does affect the custom page listing below.
     Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment Reports"
+    Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My submissions"
     And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -384,7 +378,7 @@ Feature: Assessments
       | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Best practice for interoperability assessments |
 
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment Reports"
+    Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My submissions"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -444,7 +438,7 @@ Feature: Assessments
 
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment Reports"
+    Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My submissions"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
