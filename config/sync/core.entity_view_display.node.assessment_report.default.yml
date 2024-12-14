@@ -9,32 +9,20 @@ dependencies:
     - node.type.assessment_report
   module:
     - link
+    - template_suggestion
     - user
 id: node.assessment_report.default
 targetEntityType: node
 bundle: assessment_report
 mode: default
 content:
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  og_audience:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 102
-    region: content
   organization:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 101
+    weight: 0
     region: content
   report:
     type: link
@@ -43,21 +31,26 @@ content:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 2
     region: content
   submission:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 103
+    weight: 1
     region: content
 hidden:
   langcode: true
+  links: true
+  og_audience: true
   published_at: true
   search_api_excerpt: true
+  share_link: true

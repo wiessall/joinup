@@ -23,9 +23,9 @@ Feature: Assessments
     When I select "Regional public sector body" from "Type of public sector body"
     And I press "Next"
     Then I should see the following error messages:
-      | error messages                                |
-      | Select your country field is required. |
-      | Name of your organisation field is required.  |
+      | error messages                               |
+      | Select your country field is required.       |
+      | Name of your organisation field is required. |
 
     When I select "Luxembourg" from "Select your country"
     Then I should see the error message "Name of your organisation field is required."
@@ -83,6 +83,9 @@ Feature: Assessments
     When I go to the latest submission moderation form
     Then the response status code should be 403
     When I go to the latest assessment report
+    Then the "div.page-title__details" element should contain "Eurojust"
+    And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
+    And the "div.page-title__details" element should contain "Assessment report"
     Then I should see the following lines of text:
       | 1. General information                                                                                                                  |
       | Type of public sector body European Union agency                                                                                        |
@@ -198,6 +201,61 @@ Feature: Assessments
     And I press "Next"
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+
+    # Check local/regional/national organizations.
+    Given I mark all emails as read
+    When I am at "/assessments/questionnaire"
+    # 1st page.
+    When I select "National public sector body" from "Type of public sector body"
+    When I select "Luxembourg" from "Select your country"
+    When I fill in "Name of your organisation" with "Pink Floyd"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "The Wall"
+    And I select the radio button "No"
+    And I press "Next"
+    # 2nd page.
+    When I check "Defense"
+    And I press "Next"
+    # 3rd page.
+    When I select the radio button "No"
+    And I press "Next"
+    # 4th page.
+    When I press "Submit"
+    Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+    Given I am logged in as "Notify moderator"
+    And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
+    When I select the radio button "Publish report"
+    And I press "Submit"
+
+    When I go to the latest assessment report
+    # Country is added in subtitle for national/regional/local organizations.
+    Then the "div.page-title__details" element should contain "Pink Floyd (Luxembourg)"
+    And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
+    And the "div.page-title__details" element should contain "Assessment report"
+    Then I should see the following lines of text:
+      | 1. General information                                                                                             |
+      | Type of public sector body National public sector body                                                             |
+      | Select your country Luxembourg                                                                                     |
+      | Name of your organisation Pink Floyd                                                                               |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: The Wall |
+      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                              |
+      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No           |
+      | 2. Binding requirements                                                                                            |
+      | The binding requirements identified concern: {Empty}                                                               |
+      | Specify the concerned function of trans-European digital public service(s): Defense                                |
+      | List the binding requirement(s) assessed. {Empty}                                                                  |
+      | This data will potentially be processed by: {Empty}                                                                |
+      | Identified effects on cross-border legal interoperability {Empty}                                                  |
+      | Identified effects on cross-border organisational interoperability {Empty}                                         |
+      | Identified effects on cross-border semantic interoperability {Empty}                                               |
+      | Identified effects on cross-border technical interoperability {Empty}                                              |
+      | 3. Results                                                                                                         |
+      | Internal Solutions in the Portal {Empty}                                                                           |
+      | Solutions not in the Portal (link) {Empty}                                                                         |
+      | Have you discovered any remaining barriers to cross-border interoperability? No                                    |
+      | 4. Supporting documents                                                                                            |
+      | Binding requirement documents {Empty}                                                                              |
+      | Upload assessment documents {Empty}                                                                                |
+      | Please add any other comment you would like to share. {Empty}                                                      |
 
   Scenario Outline: Check organization field value.
     Given I am logged in as an "authenticated user"
@@ -361,7 +419,7 @@ Feature: Assessments
     When I visit "/search"
     Then I should see the following "Content types" facet items "Collections,Solutions,News,Events,Documents,Assessment reports,Discussions,Releases,Custom pages,Licences,User profiles" in this order
     When I click "Assessment reports"
-    And I take a screenshot
+
     Then I should see the following tiles in the correct order:
       | Assessment 12 |
       | Assessment 11 |
