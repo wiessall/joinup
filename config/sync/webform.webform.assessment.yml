@@ -525,8 +525,8 @@ settings:
   ajax_effect: fade
   ajax_speed: null
   page: true
-  page_submit_path: /assessments/questionnaire
-  page_confirm_path: /assessments/questionnaire/confirm
+  page_submit_path: /collection/assessments/assessment-reports/questionnaire
+  page_confirm_path: /collection/assessments/assessment-reports/questionnaire/confirm
   page_theme_name: ''
   form_title: source_entity_webform
   form_submit_once: false
@@ -567,7 +567,7 @@ settings:
   share_page_body_attributes: {  }
   submission_label: ''
   submission_exception_message: ''
-  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the <a href="[site:base-url]/assessments">assessments report</a> page.</p>'
+  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the <a href="[site:base-url]/collection/assessments/assessment-reports">assessments report</a> page.</p>'
   submission_log: true
   submission_excluded_elements: {  }
   submission_exclude_empty: false
@@ -740,7 +740,7 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: 'Assessment submission ([webform_submission:state:label])'
-      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>Please <a href="[site:base-url]/assessments/questionnaire/[webform_submission:sid]/moderate">moderate</a> the submission</p>'
+      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>Please <a href="[site:base-url]/collection/assessments/assessment-reports/questionnaire/[webform_submission:sid]/moderate">moderate</a> the submission</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
@@ -767,7 +767,7 @@ handlers:
       sticky: true
       locked: true
       data: ''
-      message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/assessments">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
+      message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/collection/assessments/assessment-reports">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
       message_type: status
       debug: false
   copy_eu_into_organization:

@@ -107,7 +107,7 @@ display:
             alter_text: false
             text: ''
             make_link: false
-            path: '/assessments/questionnaire/{{ sid }}/edit'
+            path: '/collection/assessments/assessment-reports/questionnaire/{{ sid }}/edit'
             absolute: false
             external: false
             replace_spaces: false
@@ -167,7 +167,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="/assessments/questionnaire/{{ sid }}/edit">{{ sid }}</a>{% if in_draft == ''1'' %} (draft){% endif %}'
+            text: '<a href="/collection/assessments/assessment-reports/questionnaire/{{ sid }}/edit">{{ sid }}</a>{% if in_draft == ''1'' %} (draft){% endif %}'
             make_link: false
             path: ''
             absolute: false
