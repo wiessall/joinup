@@ -228,8 +228,13 @@ Feature: Assessments
     And I press "Submit"
 
     When I go to the latest assessment report
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I should see the link "Bookmarked" in the "Bookmark block"
+    And I click "Like" in the "Like block" region
+    And I should see the link "Unlike" in the "Like block"
+    And I should see a Webtools eTrans element
     # Country is added in subtitle for national/regional/local organizations.
-    Then the "div.page-title__details" element should contain "Pink Floyd (Luxembourg)"
+    And the "div.page-title__details" element should contain "Pink Floyd (Luxembourg)"
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
     And the "div.page-title__details" element should contain "Assessment report"
     Then I should see the following lines of text:

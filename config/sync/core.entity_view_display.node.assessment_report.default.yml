@@ -48,6 +48,7 @@ content:
     weight: 1
     region: content
 hidden:
+  flag_like: true
   langcode: true
   links: true
   og_audience: true
