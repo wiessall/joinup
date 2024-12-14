@@ -133,7 +133,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'There''s are no published assessment reports yet. You can add one by filling this <a href="/assessments/questionnaire">questionnaire</a>'
+          content: 'There''s are no published assessment reports yet. You can add one by filling this <a href="/collection/assessments/assessment-reports/questionnaire">questionnaire</a>'
           tokenize: false
       sorts:
         created:
@@ -234,7 +234,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a href="/assessments/questionnaire" class="btn btn-primary">New assessment</a>'
+            value: '<a href="/collection/assessments/assessment-reports/questionnaire" class="btn btn-primary">New assessment</a>'
             format: full_html
           tokenize: false
       footer: {  }
@@ -250,9 +250,9 @@ display:
       tags: {  }
   list:
     id: list
-    display_title: Page
-    display_plugin: page
-    position: 1
+    display_title: 'List of submissions'
+    display_plugin: block
+    position: 2
     display_options:
       filters:
         status:
@@ -315,11 +315,11 @@ display:
       defaults:
         filters: false
         filter_groups: false
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: assessments
     cache_metadata:
       max-age: -1
       contexts:

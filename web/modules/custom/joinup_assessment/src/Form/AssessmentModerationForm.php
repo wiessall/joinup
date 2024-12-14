@@ -99,6 +99,7 @@ class AssessmentModerationForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $submission = $form_state->getValue('entity');
     assert($submission instanceof WebformSubmissionInterface);
+    $assessmentReport = Url::fromUserInput('/collection/assessments/assessment-reports');
 
     $action = $form_state->getValue('action');
     switch ($action) {
@@ -147,7 +148,7 @@ class AssessmentModerationForm extends FormBase {
         throw new \InvalidArgumentException("Unknown action '$action'");
     }
 
-    $form_state->setRedirect('view.assessment_reports.list');
+    $form_state->setRedirectUrl($assessmentReport);
     $this->messenger()->addStatus($message);
   }
 

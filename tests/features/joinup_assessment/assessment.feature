@@ -1,6 +1,12 @@
 @api @group-clone @demoAssessment
 Feature: Assessments
 
+  # Remove this after the new block has been added in production.
+  Background:
+    Given I append "block" to "field_paragraphs_body" field in "node" entity with following "Assessment Reports" title:
+      | paragraph_block:plugin_id | views_block:assessment_reports-list                                                                                                                                                          |
+      | paragraph_block:settings  | a:6:{s:2:"id";s:35:"views_block:assessment_reports-list";s:5:"label";s:0:"";s:13:"label_display";b:0;s:8:"provider";s:5:"views";s:11:"views_label";s:0:"";s:14:"items_per_page";s:4:"none";} |
+
   Scenario: Create an assessment report out of a webform.
     Given users:
       | Username         | Roles     | E-mail                    | First name | Family name |
@@ -11,8 +17,9 @@ Feature: Assessments
     And I check "I agree to the Legal notice document"
     And I press "Submit"
 
-    When I am at "/assessments/questionnaire"
-    Then I should see the heading "Online form for Assessments"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
+    Then I see the text "Best practice for interoperability assessments" in the "Header" region
+    And I should see the heading "Online form for Assessments"
 
     # 1st page.
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
@@ -71,7 +78,7 @@ Feature: Assessments
 
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then I should see the heading "Assessment reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the success message containing "The assessment submission report has been created: Assessment report #"
     And the following email should have been sent:
       | recipient | Regular                                                                               |
@@ -117,7 +124,7 @@ Feature: Assessments
     When I go to the latest assessment submission edit form
     Then I should see the warning message "The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the assessments report page."
 
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
     And I should see the following success messages:
       | success messages                                                                                              |
@@ -166,7 +173,7 @@ Feature: Assessments
     And I press "Save Draft"
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
 
-    When I go to "/assessments/questionnaire"
+    When I go to "/collection/assessments/assessment-reports/questionnaire"
     # Latest draft is prefilled.
     Then I should see the following success messages:
       | success messages                                                                   |
@@ -262,7 +269,7 @@ Feature: Assessments
     And I check "I agree to the Legal notice document"
     And I press "Submit"
 
-    When I am at "/assessments/questionnaire"
+    When I am at "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
@@ -284,8 +291,9 @@ Feature: Assessments
     When I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    When I am at "/assessments/questionnaire/submissions"
-    Then I should see the text "<organisation>"
+    When I am at "/collection/assessments/assessment-reports/questionnaire/submissions"
+    Then I see the text "Best practice for interoperability assessments" in the "Header" region
+    And I should see the text "<organisation>"
 
     Examples:
       | public_sector_body         | institution             | institution_name         | organisation             |
@@ -298,7 +306,7 @@ Feature: Assessments
       | Regular  |       | regular@example.com |            |             |
 
     When I am logged in as "Regular"
-    And I go to "/assessments/questionnaire"
+    And I go to "/collection/assessments/assessment-reports/questionnaire"
     Then I should not see the link "Download PDF" in the "Content" region
 
     When I check "I agree to the Legal notice document"
@@ -319,7 +327,7 @@ Feature: Assessments
     When I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    When I go to "/assessments/questionnaire"
+    When I go to "/collection/assessments/assessment-reports/questionnaire"
     Then I should see the heading "Online form for Assessments"
     And I should see the text "You have already submitted this webform."
     And I should see the link "View your previous submission"
@@ -328,7 +336,7 @@ Feature: Assessments
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
     And I should see the link "Download PDF" in the "Content" region
 
-    When I go to "/assessments/questionnaire/submissions"
+    When I go to "/collection/assessments/assessment-reports/questionnaire/submissions"
     And I click "Download PDF"
     And the content type of the response should be "application/pdf"
 
@@ -355,8 +363,8 @@ Feature: Assessments
     # does not affect the visibility of the node in the view below as we force
     # them as published, but it does affect the custom page listing below.
     Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -375,8 +383,8 @@ Feature: Assessments
       | Assessment 11 | published | 2020-01-11T00:00:00Z | default organization | Best practice for interoperability assessments |
       | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Best practice for interoperability assessments |
 
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -435,8 +443,8 @@ Feature: Assessments
       | Assessment 1  |
 
     When I am logged in as a moderator
-    When I go to "/assessments"
-    Then I should see the heading "Assessment reports"
+    When I go to "/collection/assessments/assessment-reports"
+    Then I should see the heading "Assessment Reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
