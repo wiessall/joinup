@@ -44,16 +44,19 @@ function joinup_assessment_webform_submission_access(WebformSubmissionInterface 
  */
 function joinup_assessment_preprocess_views_view(array &$variables): void {
   $view = $variables['view'];
-  if ($view->id() === 'assessment_reports' && $view->current_display === 'list' && \Drupal::currentUser()->isAuthenticated()) {
-    $button_link = [
+  if ($view->id() === 'assessment_reports' && $view->current_display === 'list') {
+    $variables['header']['my_submissions'] = [
       '#type' => 'link',
       '#title' => t('My submissions'),
       '#url' => Url::fromUserInput('/collection/assessments/assessment-reports/questionnaire/submissions'),
       '#attributes' => [
         'class' => ['m-3'],
       ],
+      '#access' => \Drupal::currentUser()->isAuthenticated(),
     ];
-    $variables['header']['my_assessments'] = $button_link;
+    // Add bottom padding.
+    $variables['header']['#prefix'] = '<div class="pb-3">';
+    $variables['header']['#suffix'] = '</div>';
   }
 }
 
