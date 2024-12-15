@@ -8,18 +8,19 @@
 declare(strict_types=1);
 
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 
 /**
  * Update 'Assessment reports' custom page.
  */
 function joinup_assessment_deploy_200100(): void {
-  $nodeUuid = 'a9896322-f334-485c-be5d-673a106f68ad';
   $layoutUuid = 'c97d143d-f012-4680-a816-dc4b2eee2ee2';
   $storage = \Drupal::entityTypeManager()->getStorage('paragraph');
 
-  $customPage = \Drupal::getContainer()->get('entity.repository')->loadEntityByUuid('node', $nodeUuid);
+  $customPage = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', AssessmentInterface::ASSESSMENT_REPORTS_UUID);
   if (!$customPage instanceof CustomPageInterface) {
-    throw new \RuntimeException("Can't load a custom page with UUID '$nodeUuid'");
+    throw new \RuntimeException("Can't load a custom page with UUID '" . AssessmentInterface::ASSESSMENT_REPORTS_UUID . "'");
   }
 
   $layout = $storage->create([
