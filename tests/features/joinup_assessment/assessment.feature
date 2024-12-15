@@ -116,7 +116,7 @@ Feature: Assessments
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
     Given I mark all emails as read
-    Given I am logged in as Regular
+    And I am logged in as Regular
     # After approval, the submission cannot be edite anymore.
     When I go to the latest assessment submission edit form
     Then I should see the warning message "The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the assessments report page."
@@ -206,7 +206,9 @@ Feature: Assessments
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    # Check local/regional/national organizations.
+    # Check the local/regional/national organizations case. Previous tests had
+    # covered the case of EU organization type. Cover also the local, regional,
+    # or national organizations cases.
     Given I mark all emails as read
     When I am at "/collection/assessments/assessment-reports/questionnaire"
     # 1st page.
@@ -237,6 +239,7 @@ Feature: Assessments
     And I should see the link "Unlike" in the "Like block"
     And I should see a Webtools eTrans element
     # Country is added in subtitle for national/regional/local organizations.
+    # @covers \Drupal\joinup_assessment\Form\AssessmentModerationForm::createAssessmentReport()
     And the "div.page-title__details" element should contain "Pink Floyd (Luxembourg)"
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
     And the "div.page-title__details" element should contain "Assessment report"
