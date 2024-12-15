@@ -99,7 +99,9 @@ class AssessmentModerationForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $submission = $form_state->getValue('entity');
     assert($submission instanceof WebformSubmissionInterface);
-    $assessmentReportsPage = Url::fromUserInput('/collection/assessments/assessment-reports');
+    $assessmentReportsPage = $this->entityRepository
+      ->loadEntityByUuid('node', AssessmentInterface::ASSESSMENT_REPORTS_UUID)
+      ->toUrl();
 
     $action = $form_state->getValue('action');
     switch ($action) {
