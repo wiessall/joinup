@@ -83,6 +83,9 @@ Feature: Assessments
     # This submission has fulfilled its scope. It cannot be moderated anymore.
     When I go to the latest submission moderation form
     Then the response status code should be 403
+
+    # @covers \joinup_assessment_webform_submission_access()
+    Given I am an anonymous user
     When I go to the latest assessment report
     Then the "div.page-title__details" element should contain "Eurojust"
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
