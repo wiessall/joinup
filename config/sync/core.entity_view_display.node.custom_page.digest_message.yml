@@ -17,7 +17,6 @@ dependencies:
   module:
     - field_fallback_formatter
     - joinup_core
-    - link
     - template_suggestion
     - user
 id: node.custom_page.digest_message
@@ -44,29 +43,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
-    region: content
-  flag_like:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 10
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  report:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
+    weight: 0
     region: content
 hidden:
   field_attachment: true
@@ -76,8 +53,11 @@ hidden:
   field_paragraphs_body: true
   field_state: true
   field_topic: true
+  flag_like: true
   langcode: true
+  links: true
   og_audience: true
   published_at: true
+  report: true
   search_api_excerpt: true
   share_link: true
