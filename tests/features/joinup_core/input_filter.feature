@@ -78,7 +78,7 @@ Feature: Input filter
   @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
     Given discussion content:
-      | title         | headline       | body                        | collection    | state |
+      | title         | headline       | body                        | collection    |
       | Famous actors | Famous peoples | Article about famous actors | Netflix group |
     And I set long body of "Famous actors" discussion
 
