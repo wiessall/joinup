@@ -4,7 +4,7 @@
  *
  * @see Drupal.theme.sharedContentCue
  */
-((drupalSettings) => {
+((Drupal, drupalSettings) => {
   /**
    * Theme function that renders a visual cue for shared content.
    *
@@ -19,4 +19,4 @@
     const label = Drupal.t("Shared from @group", { "@group": groupLabel });
     return `<span title="${label}"><svg class="bi icon--xs"><use xlink:href="${spritePath}#arrow-repeat"></use></svg></span>`;
   };
-})(drupalSettings);
+})(Drupal, drupalSettings);
