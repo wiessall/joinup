@@ -1,36 +1,28 @@
 /**
  * @file
- * Listen to a "click" on the searchbox trigger and focus accordingly.
+ * Focus on the search box input when opening the dropdown.
  */
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.searchboxFocus = {
-    attach() {
-      const trigger = document.querySelector(
-        ".joinup-navbar .dropdown-toggle#search-box-dropdown",
-      );
-      const box = document.querySelector("#dropdown-menu--search");
-      const input = document.querySelector(
-        "#dropdown-menu--search #search-box",
-      );
-      if (
-        trigger === null ||
-        trigger === undefined ||
-        input === null ||
-        input === undefined
-      ) {
-        return;
-      }
-      // Listen for click
-      trigger.addEventListener("click", () => {
-        // If click was for opening, focus.
-        if (box.classList.contains("show")) {
-          input.focus();
+    attach(context) {
+      once(
+        "search-box-focus",
+        ".joinup-navbar .dropdown-search",
+        context,
+      ).forEach((dropdown) => {
+        const toggle = dropdown.querySelector(
+          ".dropdown-toggle#search-box-dropdown",
+        );
+        const input = dropdown.querySelector(
+          ".dropdown-menu#dropdown-menu--search #search-box",
+        );
+        if (!toggle || !input) {
+          return;
         }
-        // If click was for closing, blur.
-        else {
-          input.blur();
-        }
+
+        toggle.addEventListener("shown.bs.dropdown", () => input.focus());
+        toggle.addEventListener("hidden.bs.dropdown", () => input.blur());
       });
     },
   };
-})();
+})(Drupal, once);

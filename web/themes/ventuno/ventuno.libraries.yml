@@ -353,6 +353,7 @@ searchbox-focus.js:
     assets/js/searchbox-focus.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
 
 navigation-bottom:
   css:
