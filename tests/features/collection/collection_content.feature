@@ -21,8 +21,8 @@ Feature: Collection content
       | title                                     | collection                | start date          | end date            | topic             |
       | Opening of the Hellenistic Period Section | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And news content:
-      | title                          | body                                                           | state     | collection                | changed    | topic             |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | published | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+      | title                          | body                                                           | collection                | changed    | topic             |
+      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner content:
