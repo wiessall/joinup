@@ -81,3 +81,36 @@ function joinup_assessment_deploy_200101(): void {
   $collection->skip_notification = TRUE;
   $collection->save();
 }
+
+/**
+ * Update user content listing.
+ */
+function joinup_assessment_deploy_200102(?array &$sandbox = NULL): string {
+  $db = \Drupal::database();
+  if (!isset($sandbox['data'])) {
+    $sandbox['data'] = $db->select('user__field_user_content', 'u')
+      ->fields('u', ['entity_id', 'field_user_content_value'])
+      ->execute()
+      ->fetchAll(\PDO::FETCH_NUM);
+    $sandbox['total'] = count($sandbox['data']);
+    $sandbox['processed'] = 0;
+  }
+
+  $data = array_splice($sandbox['data'], 0, 100);
+  foreach ($data as [$uid, $listing]) {
+    $listing = unserialize($listing, ['allowed_classes' => FALSE]);
+
+    // Append to potential existing value.
+    $query = trim($listing['query_presets'] ?? '') . "\nentity_bundle|assessment_report|<>";
+    $listing['query_presets'] = trim($query);
+
+    $db->update('user__field_user_content')
+      ->fields(['field_user_content_value' => serialize($listing)])
+      ->condition('entity_id', $uid)
+      ->execute();
+    $sandbox['processed']++;
+  };
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "{$sandbox['processed']} out of {$sandbox['total']} users processed";
+}
