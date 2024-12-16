@@ -6,9 +6,6 @@ Feature:
 
   @javascript
   Scenario: Present and search the solutions.
-    Given owner content:
-      | name | owner type |
-      | ACDC | Company    |
     And collection content:
       | title   | state     |
       | Killjoy | published |

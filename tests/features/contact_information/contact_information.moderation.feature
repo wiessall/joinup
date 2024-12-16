@@ -9,12 +9,9 @@ Feature: Contact Information moderation
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
-    And owner content:
-      | owner type | name               |
-      | Company    | Anglo-Saxon Museum |
     And collection content:
-      | title                        | description                                   | logo     | owner              | topic       | state |
-      | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | Anglo-Saxon Museum | E-inclusion | draft |
+      | title                        | description                                   | logo     | topic       | state |
+      | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | E-inclusion | draft |
     And collection user membership:
       | collection                   | user                  | roles       |
       | Games of the Anglo-Saxon age | Sæwine Cynebald       | facilitator |
