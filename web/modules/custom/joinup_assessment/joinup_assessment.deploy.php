@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 
@@ -63,4 +64,20 @@ function joinup_assessment_deploy_200100(): void {
     ->set('abstract', 'Interoperability assessment reports')
     ->set('field_paragraphs_body', [$layout, $block])
     ->save();
+}
+
+/**
+ * Update 'Assessments' collection content listing.
+ */
+function joinup_assessment_deploy_200101(): void {
+  $collection = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
+  if (!$collection instanceof CollectionInterface) {
+    throw new \RuntimeException("Can't load a collection with UUID '" . AssessmentInterface::GROUP_UUID . "'");
+  }
+  $listing = $collection->get('listing_content')->getValue();
+  $listing[0]['value']['query_presets'] = 'entity_bundle|assessment_report|<>';
+  $collection->set('listing_content', $listing);
+  $collection->skip_notification = TRUE;
+  $collection->save();
 }
