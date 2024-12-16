@@ -6,7 +6,7 @@ Feature: "Event page" editing.
 
   Scenario: Add and remove map
     Given collection content:
-      | title  | logo     | state     |
+      | title  | logo     |
       | Heroes | logo.png | published |
     And I am logged in as a facilitator of the "Heroes" collection
     When I go to the homepage of the "Heroes" collection
@@ -35,13 +35,13 @@ Feature: "Event page" editing.
       | Username |
       | <user>   |
     And collection content:
-      | title        | description        | state     | moderation |
-      | <collection> | Sample description | published | yes        |
+      | title        | description        | moderation |
+      | <collection> | Sample description | yes        |
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
     And "event" content:
-      | title   | author | collection   | state     |
+      | title   | author | collection   |
       | <event> | <user> | <collection> | published |
     When I am logged in as "<user>"
     And I go to the "<event>" event
@@ -61,8 +61,8 @@ Feature: "Event page" editing.
       | Username       |
       | Krista Garrett |
     Given solution content:
-      | title                | description        | state     | moderation |
-      | Dreamer in the Snake | Sample description | published | no         |
+      | title                | description        | moderation |
+      | Dreamer in the Snake | Sample description | no         |
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |

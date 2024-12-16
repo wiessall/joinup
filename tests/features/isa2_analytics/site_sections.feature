@@ -6,17 +6,17 @@ Feature: Site sections
 
   Background:
     Given collection content:
-      | uri                                              | title                | state     |
-      | http://joinup.eu/collection/the-polygone-project | The Polygone Project | published |
+      | uri                                              | title                |
+      | http://joinup.eu/collection/the-polygone-project | The Polygone Project |
     And solution content:
-      | title            | collection           | state     |
-      | Miss Fashionista | The Polygone Project | published |
+      | title            | collection           |
+      | Miss Fashionista | The Polygone Project |
     And discussion content:
-      | title         | body       | state     | collection           |
-      | Deep Carnival | Now online | published | The Polygone Project |
+      | title         | body       | collection           |
+      | Deep Carnival | Now online | The Polygone Project |
     And event content:
-      | title                      | state     | solution         |
-      | Flat Beat 20th Anniversary | published | Miss Fashionista |
+      | title                      | solution         |
+      | Flat Beat 20th Anniversary | Miss Fashionista |
 
   Scenario: Reporting of site sections to the analytics platform
     # Check a couple of pages that do not belong to a particular collection or

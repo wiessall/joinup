@@ -10,12 +10,12 @@ Feature: "Document" overview.
       | title        | description                                      | licence type  |
       | Beer licence | Offer a beer to the developer when you meet him. | Public domain |
     And collection content:
-      | title           | state     |
-      | Traveller tools | published |
+      | title           |
+      | Traveller tools |
     And document content:
-      | title                      | document type | short title           | file type | file                                                        | field_paragraphs_body                           | collection      | licence      | state     |
-      | VAT refund sample document | document      | VAT refund fac-simile | upload    | text.pdf                                                    | Valid for people living outside the EU.         | Traveller tools | Beer licence | published |
-      | Local maps archive         | document      | Local maps            | remote    | https://github.com/ec-europa/joinup-dev/archive/develop.zip | Contains maps with the top locations in the EU. | Traveller tools | Beer licence | published |
+      | title                      | document type | short title           | file type | file                                                        | field_paragraphs_body                           | collection      | licence      |
+      | VAT refund sample document | document      | VAT refund fac-simile | upload    | text.pdf                                                    | Valid for people living outside the EU.         | Traveller tools | Beer licence |
+      | Local maps archive         | document      | Local maps            | remote    | https://github.com/ec-europa/joinup-dev/archive/develop.zip | Contains maps with the top locations in the EU. | Traveller tools | Beer licence |
 
     When I go to the homepage of the "Traveller tools" collection
     Then I should see the "VAT refund sample document" tile

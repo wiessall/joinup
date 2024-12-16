@@ -8,22 +8,22 @@ Feature: Content Overview
       | welshbuzzard | Titus      | Nicotera    | nicotito@example.org |
       | hatchingegg  | Korinna    | Morin       | korimor@example.com  |
     And collection content:
-      | title             | description        | state     | moderation |
-      | Rumble collection | Sample description | published | yes        |
+      | title             | description        | moderation |
+      | Rumble collection | Sample description | yes        |
     And "event" content:
-      | title                | collection        | state     | created           |
-      | Seventh Windows      | Rumble collection | published | 2018-10-03 4:21am |
-      | A Night at the Opera | Rumble collection | published | 2018-10-03 4:17am |
+      | title                | collection        | created           |
+      | Seventh Windows      | Rumble collection | 2018-10-03 4:21am |
+      | A Night at the Opera | Rumble collection | 2018-10-03 4:17am |
     And "news" content:
       | title            | collection        | state     | author       | created           |
       | The Playful Tale | Rumble collection | published | batbull      | 2018-10-03 4:26am |
       | Night of Shadow  | Rumble collection | proposed  | welshbuzzard | 2018-10-03 4:26am |
     And "document" content:
-      | title             | collection        | state     | created           |
-      | History of Flight | Rumble collection | published | 2018-10-03 4:19am |
+      | title             | collection        | created           |
+      | History of Flight | Rumble collection | 2018-10-03 4:19am |
     And "discussion" content:
-      | title            | collection        | state     | author      | created           |
-      | The Men's Female | Rumble collection | published | hatchingegg | 2018-10-03 4:18am |
+      | title            | collection        | author      | created           |
+      | The Men's Female | Rumble collection | hatchingegg | 2018-10-03 4:18am |
 
     # Check that visiting as a moderator does not create cache for all users.
     When I am logged in as a user with the "moderator" role
@@ -88,21 +88,21 @@ Feature: Content Overview
       | michaelanewport | michaela.newport@example.com |
       | nenaroberts     | nena.roberts@example.com     |
     And collection content:
-      | title            | state     |
-      | Timely Xylophone | published |
+      | title            |
+      | Timely Xylophone |
     And "event" content:
-      | title            | collection       | state     |
-      | Sticky Vegetable | Timely Xylophone | published |
+      | title            | collection       |
+      | Sticky Vegetable | Timely Xylophone |
     And "news" content:
-      | title            | collection       | state     | author          | featured |
-      | Early Avenue     | Timely Xylophone | published | michaelanewport | yes      |
-      | Itchy Artificial | Timely Xylophone | published | nenaroberts     | no       |
+      | title            | collection       | author          | featured |
+      | Early Avenue     | Timely Xylophone | michaelanewport | yes      |
+      | Itchy Artificial | Timely Xylophone | nenaroberts     | no       |
     And "document" content:
-      | title             | collection       | state     |
-      | Limousine Scarlet | Timely Xylophone | published |
+      | title             | collection       |
+      | Limousine Scarlet | Timely Xylophone |
     And "discussion" content:
-      | title                  | collection       | state     | author          | featured |
-      | Hideous Dreaded Monkey | Timely Xylophone | published | michaelanewport | yes      |
+      | title                  | collection       | author          | featured |
+      | Hideous Dreaded Monkey | Timely Xylophone | michaelanewport | yes      |
 
     When I am logged in as "michaelanewport"
     And I visit the content overview
@@ -172,21 +172,21 @@ Feature: Content Overview
       | claricemitchell | clarice.mitchell@example.com |
       | jeffreypayne    | jeffrey.payne@example.com    |
     And collection content:
-      | title           | state     |
-      | Barbaric Avenue | published |
+      | title           |
+      | Barbaric Avenue |
     And event content:
-      | title                | collection      | start date   | end date            | created    | state     | author          |
-      | Bitter Finger        | Barbaric Avenue | now -1 years | now -1 years +1 day | now -4 day | published | claricemitchell |
-      | Frozen Barbershop    | Barbaric Avenue | now -1 day   | now +1 day          | now -3 day | published | claricemitchell |
-      | Frozen Breeze        | Barbaric Avenue | now +2 day   | now +4 day          | now -2 day | published | claricemitchell |
-      | Flying Official Fish | Barbaric Avenue | now -3 day   | now -1 day          | now        | published | jeffreypayne    |
+      | title                | collection      | start date   | end date            | created    | author          |
+      | Bitter Finger        | Barbaric Avenue | now -1 years | now -1 years +1 day | now -4 day | claricemitchell |
+      | Frozen Barbershop    | Barbaric Avenue | now -1 day   | now +1 day          | now -3 day | claricemitchell |
+      | Frozen Breeze        | Barbaric Avenue | now +2 day   | now +4 day          | now -2 day | claricemitchell |
+      | Flying Official Fish | Barbaric Avenue | now -3 day   | now -1 day          | now        | jeffreypayne    |
     # Technical: use a separate step to create an event associated to the anonymous user.
     And event content:
-      | title          | collection      | start date  | end date    | created    | state     |
-      | Autumn Boiling | Barbaric Avenue | now +1 week | now +1 week | now -5 day | published |
+      | title          | collection      | start date  | end date    | created    |
+      | Autumn Boiling | Barbaric Avenue | now +1 week | now +1 week | now -5 day |
     And discussion content:
-      | title           | collection      | state     | created   |
-      | Purple Poseidon | Barbaric Avenue | published | yesterday |
+      | title           | collection      | created   |
+      | Purple Poseidon | Barbaric Avenue | yesterday |
 
     When I am logged in as claricemitchell
     And I visit the content overview

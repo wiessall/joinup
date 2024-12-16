@@ -6,11 +6,11 @@ Feature: Landing custom page.
 
   Scenario: Manage custom landing pages
     Given collection content:
-      | title     | state     |
-      | Roman law | published |
+      | title     |
+      | Roman law |
     And custom_page content:
-      | title                       | collection | state     |
-      | Early law and jurisprudence | Roman law  | published |
+      | title                       | collection |
+      | Early law and jurisprudence | Roman law  |
 
     Given I am logged in as a "moderator"
 

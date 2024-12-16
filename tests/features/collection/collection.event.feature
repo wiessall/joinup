@@ -14,16 +14,16 @@ Feature: As a user of the website
       | title      |
       | Fairy Tail |
     And event content:
-      | title                     | collection | start date   | end date            | created    | state     | author         |
-      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | published | katerpillar    |
-      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | published | katerpillar    |
-      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | published | katerpillar    |
-      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | published | trustysidekick |
+      | title                     | collection | start date   | end date            | created    | author         |
+      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | katerpillar    |
+      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | katerpillar    |
+      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | katerpillar    |
+      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | trustysidekick |
       # The "Spring Freezing" event is associated with the anonymous user.
-      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | published |                |
+      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day |                |
     And document content:
-      | title       | collection | state     | created   |
-      | Yellow Zeus | Fairy Tail | published | yesterday |
+      | title       | collection | created   |
+      | Yellow Zeus | Fairy Tail | yesterday |
 
     When I am logged in as "katerpillar"
     And I go to the homepage of the "Fairy Tail" collection

@@ -3,27 +3,27 @@ Feature: Cloning of entities
 
   Background:
     Given collection content:
-      | title      | state     |
-      | Collection | published |
+      | title      |
+      | Collection |
     Given solution content:
-      | title    | collection | state     |
-      | Solution | Collection | published |
+      | title    | collection |
+      | Solution | Collection |
     And "custom_page" content:
-      | title                  | collection | field_paragraphs_body          | state     |
-      | Collection custom page | Collection | Collection custom page content | published |
-      | Solution custom page   | Solution   | Solution custom page content   | published |
+      | title                  | collection | field_paragraphs_body          |
+      | Collection custom page | Collection | Collection custom page content |
+      | Solution custom page   | Solution   | Solution custom page content   |
     And "event" content:
-      | title            | collection | state     |
-      | Collection event | Collection | published |
-      | Solution event   | Solution   | published |
+      | title            | collection |
+      | Collection event | Collection |
+      | Solution event   | Solution   |
     And "news" content:
-      | title           | collection | state     |
-      | Collection news | Collection | published |
-      | Solution news   | Solution   | published |
+      | title           | collection |
+      | Collection news | Collection |
+      | Solution news   | Solution   |
     And "document" content:
-      | title               | collection | state     |
-      | Collection document | Collection | published |
-      | Solution document   | Solution   | published |
+      | title               | collection |
+      | Collection document | Collection |
+      | Solution document   | Solution   |
     Given users:
       | Username               | Roles     |
       | Authenticated          |           |
@@ -78,8 +78,8 @@ Feature: Cloning of entities
 
   Scenario Outline: Only custom page, document, event and news nodes should have the "Clone content" link
     Given <type> content:
-      | title               | state     |
-      | Test <type> content | published |
+      | title               |
+      | Test <type> content |
     When I am logged in as a moderator
     And I go to the "Test <type> content" <type>
     Then I <link availability> the link "Clone content" in the "Entity actions" region
