@@ -84,6 +84,19 @@ Feature: Assessments
     When I go to the latest submission moderation form
     Then the response status code should be 403
 
+    # Moderators are able to see the submission is added to user profile.
+    When I go to the profile of "Regular"
+    And I click "Submissions"
+    Then I should see "1 submission"
+    And I should see "Submission title"
+    And I should see "Created"
+    And I should see "IP address"
+    And I should see "Online form for Assessments: Submission #"
+    # But regular users cannot see their submissions.
+    Given I am logged in as "Regular"
+    When I visit "/user"
+    Then I should not see the link "Submissions"
+
     # @covers \joinup_assessment_webform_submission_access()
     Given I am an anonymous user
     When I go to the latest assessment report
