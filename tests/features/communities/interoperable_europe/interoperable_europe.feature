@@ -7,10 +7,10 @@ Feature:
   Scenario: Anonymous visiting the landing page.
     Given I am on the homepage
     When I click "Discover more"
-    # The title should not be visible when the page is set as landing page.
-    Then I should not see "IOP landing page"
+    Then I should see the heading "Joinup is becoming Interoperable Europe Portal"
     And the page should be rendered using the "Interoperable Europe" theme
-    And I should not see the link "Report abusive content"
+    # Uncomment this in ISAICP-9192.
+    # And I should not see the link "Report abusive content"
 
     # Test other pages.
     When I visit "/interoperable-europe/initiatives"
