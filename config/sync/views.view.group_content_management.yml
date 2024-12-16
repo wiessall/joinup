@@ -734,6 +734,7 @@ display:
           value:
             custom_page: custom_page
             discussion: discussion
+            distribution: distribution
             document: document
             event: event
             news: news
