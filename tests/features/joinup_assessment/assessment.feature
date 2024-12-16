@@ -115,6 +115,10 @@ Feature: Assessments
       | Upload assessment documents {Empty}                                                                                                     |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
+    # Make sure assessment reports are not leaking into manage content list.
+    When I visit "/collection/assessments/manage-content"
+    Then I should not see "Assessment report"
+
     Given I mark all emails as read
     And I am logged in as Regular
     # After approval, the submission cannot be edite anymore.
