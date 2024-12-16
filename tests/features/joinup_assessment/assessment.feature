@@ -119,6 +119,10 @@ Feature: Assessments
     When I visit "/collection/assessments/manage-content"
     Then I should not see "Assessment report"
 
+    # Make sure assessment reports are not leaking in collection overview page.
+    When I visit "/collection/assessments"
+    Then I should not see "Assessment report #"
+
     Given I mark all emails as read
     And I am logged in as Regular
     # After approval, the submission cannot be edite anymore.
