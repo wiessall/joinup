@@ -443,6 +443,7 @@ shared-entity:
   js:
     assets/js/shared-entity.min.js: { minified: true }
   dependencies:
+    - core/drupal
     - core/drupalSettings
 
 show-accordion-invalid-fields:
