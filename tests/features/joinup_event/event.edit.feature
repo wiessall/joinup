@@ -7,7 +7,7 @@ Feature: "Event page" editing.
   Scenario: Add and remove map
     Given collection content:
       | title  | logo     |
-      | Heroes | logo.png | published |
+      | Heroes | logo.png |
     And I am logged in as a facilitator of the "Heroes" collection
     When I go to the homepage of the "Heroes" collection
     And I click "Add event" in the plus button menu
@@ -42,7 +42,7 @@ Feature: "Event page" editing.
       | <collection> | <user> | <role> |
     And "event" content:
       | title   | author | collection   |
-      | <event> | <user> | <collection> | published |
+      | <event> | <user> | <collection> |
     When I am logged in as "<user>"
     And I go to the "<event>" event
     Then I should see the link "Edit" in the "Entity actions" region

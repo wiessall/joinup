@@ -433,8 +433,8 @@ Feature:
   @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
-      | title       | headline    | short title | logo       |
-      | Custom tile | Custom tile | Custom tile | linus.jpeg | yes |
+      | title       | headline    | short title | logo       | published |
+      | Custom tile | Custom tile | Custom tile | linus.jpeg | yes       |
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
