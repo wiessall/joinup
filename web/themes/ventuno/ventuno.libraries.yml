@@ -248,6 +248,7 @@ highlight-invalid-fields.js:
     assets/js/highlight-invalid-fields.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
 
 glide:
   css:
@@ -448,6 +449,7 @@ show-accordion-invalid-fields:
     assets/js/show-accordion-invalid-fields.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
 
 spinners:
   css:
