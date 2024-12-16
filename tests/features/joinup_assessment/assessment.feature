@@ -123,6 +123,10 @@ Feature: Assessments
     When I visit "/collection/assessments"
     Then I should not see "Assessment report #"
 
+    # Make sure assessment reports are not leaking in the user profile page.
+    When I visit "/user"
+    Then I should not see "Assessment report #"
+
     Given I mark all emails as read
     And I am logged in as Regular
     # After approval, the submission cannot be edite anymore.
