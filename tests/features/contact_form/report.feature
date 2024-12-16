@@ -11,8 +11,8 @@ Feature: Submit the contact form
       | Report user      |           | report_user@test.com      | Rudi       | Sinatra     |
       | Report owner     |           | report_owner@test.com     | Clark      | The machine |
     And collection content:
-      | title                                 | state     | abstract     | description   |
-      | Collection with inappropriate content | published | No one cares | No one cares. |
+      | title                                 | abstract     | description   |
+      | Collection with inappropriate content | No one cares | No one cares. |
     And the following collection user memberships:
       | collection                            | user         | roles              |
       | Collection with inappropriate content | Report owner | owner, facilitator |
@@ -37,17 +37,17 @@ Feature: Submit the contact form
     Then the following email should have been sent:
       | template  | Report contact form                                                                                                                                                                             |
       | recipient | Report moderator                                                                                                                                                                                |
-      | subject   | Interoperable Europe Portal: This content has invalid location                                                                                                                                                       |
+      | subject   | Interoperable Europe Portal: This content has invalid location                                                                                                                                  |
       | body      | Balourdos Tsolias has reported the item "Event to report" as abusive due to The location described as "Somewhere" could not be found by my map application. You can access the reported content |
     And the following email should have been sent:
       | template  | Report contact form                                                                                                                                                                             |
       | recipient | Report owner                                                                                                                                                                                    |
-      | subject   | Interoperable Europe Portal: This content has invalid location                                                                                                                                                       |
+      | subject   | Interoperable Europe Portal: This content has invalid location                                                                                                                                  |
       | body      | Balourdos Tsolias has reported the item "Event to report" as abusive due to The location described as "Somewhere" could not be found by my map application. You can access the reported content |
     And the following email should have been sent:
-      | recipient_mail | balourdos@example.rg               |
-      | subject        | Interoperable Europe Portal: Contact form notification  |
-      | body           | We will reply as soon as possible. |
+      | recipient_mail | balourdos@example.rg                                   |
+      | subject        | Interoperable Europe Portal: Contact form notification |
+      | body           | We will reply as soon as possible.                     |
     And I should see the heading "Event to report"
 
     # Now the reporter requires also a copy of its message.
@@ -64,5 +64,5 @@ Feature: Submit the contact form
     Given I press "Submit"
     Then the following email should have been sent:
       | recipient_mail | gbelson@hooli.com                                                                                         |
-      | subject        | Interoperable Europe Portal: Contact form notification                                                                         |
+      | subject        | Interoperable Europe Portal: Contact form notification                                                    |
       | body           | I don't want to live in a world where someone else is making the world a better place better than we are. |

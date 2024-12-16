@@ -6,12 +6,12 @@ Feature: Subscribing to community content in collections and solutions
 
   Background:
     Given collection content:
-      | title              | state     |
-      | Black hole imaging | published |
+      | title              |
+      | Black hole imaging |
     Given solution content:
-      | title                 | state     | collection         |
-      | Null geodesics        | published | Black hole imaging |
-      | Bolometric appearance | published | Black hole imaging |
+      | title                 | collection         |
+      | Null geodesics        | Black hole imaging |
+      | Bolometric appearance | Black hole imaging |
     And users:
       | Username  | E-mail               | First name  | Family name | Notification frequency |
       | jpluminet | jpluminet@example.fr | Jean-Pierre | Luminet     | daily                  |
@@ -39,14 +39,14 @@ Feature: Subscribing to community content in collections and solutions
       | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | published | junfukue |
       | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
     And document content:
-      | title             | abstract         | field_paragraphs_body           | collection         | solution              | state     | author   |
-      | Doppler effect    |                  | Caused by disk rotation         | Black hole imaging |                       | published | junfukue |
-      | Distant observers | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | published | junfukue |
-      | Close observers   |                  | Close observers body            |                    | Bolometric appearance | published | junfukue |
+      | title             | abstract         | field_paragraphs_body           | collection         | solution              | author   |
+      | Doppler effect    |                  | Caused by disk rotation         | Black hole imaging |                       | junfukue |
+      | Distant observers | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | junfukue |
+      | Close observers   |                  | Close observers body            |                    | Bolometric appearance | junfukue |
     And event content:
-      | title               | field_paragraphs_body | collection         | solution       | state     | author   | start date          | end date            |abstract |
-      | Effective potential | Schwarzschild metric  | Black hole imaging |                | published | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |         |
-      | Deflected rays      | Marginally trapped    |                    | Null geodesics | published | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |         |
+      | title               | field_paragraphs_body | collection         | solution       | author   | start date          | end date            | abstract |
+      | Effective potential | Schwarzschild metric  | Black hole imaging |                | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |          |
+      | Deflected rays      | Marginally trapped    |                    | Null geodesics | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |          |
     And news content:
       | title             | field_paragraphs_body      | collection         | solution              | state     | author | abstract |
       | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published | bisera |          |
@@ -81,35 +81,35 @@ Feature: Subscribing to community content in collections and solutions
       | Deflected rays         |
 
     And the email sent to jpluminet with subject "Interoperable Europe Portal: Daily digest message" contains the following lines of text:
-      | Daily digest message                                                     |
-      | Dear Jean-Pierre,                                                        |
-      | New content published in Black hole imaging                              |
-      | Active galactic nuclei                                                   |
-      | A thin relativistic accretion disk                                       |
-      | Read more                                                                |
-      | Doppler effect                                                           |
-      | Caused by disk rotation                                                  |
-      | Read more                                                                |
-      | 28 November 2019                                                         |
-      | Effective potential                                                      |
-      | Schwarzschild metric                                                     |
-      | Read more                                                                |
-      | The periastron                                                           |
-      | Jacobian elliptic integral                                               |
-      | Read more                                                                |
-      | New content published in Bolometric appearance                           |
-      | Distant observers                                                        |
-      | Distant abstract                                                         |
-      | Read more                                                                |
-      | Close observers                                                          |
-      | Close observers body                                                     |
-      | Read more                                                                |
-      | New content published in Null geodesics                                  |
-      | 05 to 15 December 2019                                                   |
-      | Deflected rays                                                           |
-      | Marginally trapped                                                       |
-      | Read more                                                                |
-      | Kind regards,                                                            |
-      | The Portal Support Team                                                  |
+      | Daily digest message                                                                          |
+      | Dear Jean-Pierre,                                                                             |
+      | New content published in Black hole imaging                                                   |
+      | Active galactic nuclei                                                                        |
+      | A thin relativistic accretion disk                                                            |
+      | Read more                                                                                     |
+      | Doppler effect                                                                                |
+      | Caused by disk rotation                                                                       |
+      | Read more                                                                                     |
+      | 28 November 2019                                                                              |
+      | Effective potential                                                                           |
+      | Schwarzschild metric                                                                          |
+      | Read more                                                                                     |
+      | The periastron                                                                                |
+      | Jacobian elliptic integral                                                                    |
+      | Read more                                                                                     |
+      | New content published in Bolometric appearance                                                |
+      | Distant observers                                                                             |
+      | Distant abstract                                                                              |
+      | Read more                                                                                     |
+      | Close observers                                                                               |
+      | Close observers body                                                                          |
+      | Read more                                                                                     |
+      | New content published in Null geodesics                                                       |
+      | 05 to 15 December 2019                                                                        |
+      | Deflected rays                                                                                |
+      | Marginally trapped                                                                            |
+      | Read more                                                                                     |
+      | Kind regards,                                                                                 |
+      | The Portal Support Team                                                                       |
       | You received this email because you opted in for Interoperable Europe Portal digest messages. |
-      | Manage your subscription notifications or unsubscribe from all.          |
+      | Manage your subscription notifications or unsubscribe from all.                               |

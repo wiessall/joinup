@@ -36,17 +36,17 @@ Feature: Homepage
 
   Scenario: Latest news is shown on the homepage
     Given collection content:
-      | title             | state     |
-      | Shaping of nature | published |
+      | title             |
+      | Shaping of nature |
     And the following "Remote video" media:
       | name      | video                                       | group             | uuid                                 |
       | The Video | https://www.youtube.com/watch?v=C0DPdy98e4c | Shaping of nature | 32b3beae-2218-11ee-be56-0242ac120002 |
     And news content:
-      | title                       | headline                 | collection        | topic                                                 | state     | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                                       |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | published | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                               |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | published | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                          |
-      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | published | 2021-02-28T13:15:00Z |                             | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                   |
-      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | published | 2021-03-29T10:18:00Z |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
+      | title                       | headline                 | collection        | topic                                                 | published at          | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                                       |
+      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z  | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                               |
+      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | p2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                          |
+      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | 2021-02-28T13:15:00Z  |                             | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                   |
+      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | 2021-03-29T10:18:00Z  |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
       | date   | topics                                      | title                       | body                                                                                                                                                                                                       |
@@ -68,17 +68,17 @@ Feature: Homepage
       | title         | state     |
       | Mice in space | published |
     And news content:
-      | title       | headline       | collection    | topic                                                 | state     | logo       | field_paragraphs_body |
-      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news body>           |
+      | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
     And discussion content:
-      | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
-      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | title                | collection    | topic                            | logo    | body                                                                                                                                                                                       |
+      | Influence of gravity | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | abstract                                                                                                                                                                                        |
-      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | collection    | topic                                  | logo     | abstract                                                                                                                                                                                        |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
-      | title           | collection    | topic                    | state     | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
-      | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | title           | collection    | topic                    | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
+      | Stay at the ISS | Mice in space | EU and European Policies | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
       | type    | label           |
       | content | New muscles     |
@@ -102,8 +102,8 @@ Feature: Homepage
 
   Scenario Outline: Community content be highlighted on the homepage
     Given collection content:
-      | title              | state     |
-      | Clash of documents | published |
+      | title              |
+      | Clash of documents |
     And <type> content:
       | title        | headline     | collection         | topic                              | state     | logo     |
       | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg |

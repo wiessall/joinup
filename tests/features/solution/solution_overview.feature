@@ -160,20 +160,20 @@ Feature: Solutions Overview
       | Ryker Brandon   | ryker.brandon@example.com   |
       | Joann Womack    | joann.womack@example.com    |
     And collection content:
-      | title                 | state     |
-      | Insane Wooden Crystal | published |
+      | title                 |
+      | Insane Wooden Crystal |
     Given solution content:
-      | title                        | collection            | state     | featured | author          |
-      | Subdivision Morbid           | Insane Wooden Crystal | published | yes      | Marjorie Parker |
-      | Long Tungsten                | Insane Wooden Crystal | published | no       | Ryker Brandon   |
-      | Hungry Disappointed Tungsten | Insane Wooden Crystal | published | yes      | Marjorie Parker |
-      | Lost Yard                    | Insane Wooden Crystal | published | no       | Joann Womack    |
-      | Lost Scattered Fish          | Insane Wooden Crystal | published | no       | Joann Womack    |
-      | Silver Gravel                | Insane Wooden Crystal | published | no       | Joann Womack    |
+      | title                        | collection            | featured | author          |
+      | Subdivision Morbid           | Insane Wooden Crystal | yes      | Marjorie Parker |
+      | Long Tungsten                | Insane Wooden Crystal | no       | Ryker Brandon   |
+      | Hungry Disappointed Tungsten | Insane Wooden Crystal | yes      | Marjorie Parker |
+      | Lost Yard                    | Insane Wooden Crystal | no       | Joann Womack    |
+      | Lost Scattered Fish          | Insane Wooden Crystal | no       | Joann Womack    |
+      | Silver Gravel                | Insane Wooden Crystal | no       | Joann Womack    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And solution content:
-      | title      | collection            | state     | featured |
-      | Flag Rough | Insane Wooden Crystal | published | no       |
+      | title      | collection            | featured |
+      | Flag Rough | Insane Wooden Crystal | no       |
 
     When I am logged in as "Joann Womack"
     And I visit the solution overview

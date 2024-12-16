@@ -28,9 +28,9 @@ Feature: Search inside groups
       | Natural materials | Materials natural | Ground feel           | Chalet construction |                      |
       | Still frozen      | Frozen still      | Maybe next week       |                     | Inclined foundations |
     And custom_page content:
-      | title     | body                             | collection          | solution             | state     |
-      | Resources | Here are some interesting links. | Chalet construction |                      | published |
-      | Geography | A collection of height maps.     |                     | Inclined foundations | published |
+      | title     | body                             | collection          | solution             |
+      | Resources | Here are some interesting links. | Chalet construction |                      |
+      | Geography | A collection of height maps.     |                     | Inclined foundations |
     And release content:
       | title     | release number | release notes              | is version of        |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations |
