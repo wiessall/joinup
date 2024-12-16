@@ -432,6 +432,7 @@ see-more:
     assets/js/toggle-text-seemore-btn.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
     - core/drupalSettings
 
 share-content-form:
