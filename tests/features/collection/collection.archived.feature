@@ -10,23 +10,17 @@ Feature: Creating content and commenting on archived collection
       | Flora Hunt  | moderator |
       | Lee Reeves  |           |
       | Karl Fields |           |
-    And contact_information content:
-      | name           | email                 |
-      | Jody Rodriquez | JodyRodriquez@bar.com |
-    And owner content:
-      | name          |
-      | April Hawkins |
     And collection content:
-      | title               | abstract            | description         | logo     | owner         | contact information | state     | topic                   |
-      | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | April Hawkins | Jody Rodriquez      | published | Statistics and Analysis |
+      | title               | abstract            | description         | logo     | topic                   |
+      | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
     And the following collection user memberships:
       | collection          | user        | roles              |
       | The Willing Consort | Karl Fields | owner, facilitator |
 
   Scenario: 'Comment form' should not be accessible on an archived collection content.
     Given discussion content:
-      | title               | collection          | state     |
-      | The Weeping's Stars | The Willing Consort | published |
+      | title               | collection          |
+      | The Weeping's Stars | The Willing Consort |
     When I am logged in as "Lee Reeves"
     And I go to the "The Weeping's Stars" discussion
     Then the following fields should be present "Create comment"
