@@ -204,6 +204,7 @@ explore-block:
     assets/js/explore-block.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
     - ventuno/glide
 
 fieldset-show-more:
