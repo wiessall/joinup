@@ -3,7 +3,7 @@
  * JavaScript code for the subscriptions form.
  */
 
-((Drupal) => {
+((Drupal, once) => {
   Drupal.behaviors.joinupSubscription = {
     attach(context) {
       // Whenever any of the checkboxes for a collection is clicked, enable the
@@ -64,4 +64,4 @@
       );
     },
   };
-})(Drupal);
+})(Drupal, once);
