@@ -199,8 +199,9 @@ Feature: User authentication
       | admin/reporting/solutions-by-type                             |
       | admin/reporting/subscribers-report                            |
       | admin/structure/compatibility-document                        |
-      | admin/structure/webform/manage/assessment/results/submissions |
       | admin/structure/webform                                       |
+      | admin/structure/webform/manage/assessment/results/submissions |
+      | admin/structure/webform/submissions/manage                    |
       | announcements                                                 |
       | dashboard                                                     |
       | licence                                                       |
@@ -232,7 +233,6 @@ Feature: User authentication
       | admin/structure/media                               |
       | admin/structure/webform/manage/assessment           |
       | admin/structure/webform/manage/assessment/settings  |
-      | admin/structure/webform/submissions/manage          |
       | admin/tmgmt/cart                                    |
       | admin/tmgmt/job_items                               |
       | admin/tmgmt/jobs                                    |
