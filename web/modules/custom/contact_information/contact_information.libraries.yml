@@ -4,6 +4,7 @@ contact-us:
     js/contact-us.js: {}
   dependencies:
     - core/drupal
+    - core/once
     - js_cookie/js-cookie
 
 contactus:
