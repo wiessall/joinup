@@ -3,4 +3,4 @@ outdated_content:
     js/outdated_content.js: {  }
   dependencies:
     - core/drupal
-    - core/drupalSettings
+    - core/once
