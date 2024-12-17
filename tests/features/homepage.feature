@@ -65,8 +65,8 @@ Feature: Homepage
 
   Scenario Outline: Community content can be placed "In the spotlight" on the homepage
     Given collection content:
-      | title         | state     |
-      | Mice in space | published |
+      | title         |
+      | Mice in space |
     And news content:
       | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
       | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
@@ -133,8 +133,8 @@ Feature: Homepage
 
   Scenario: An event in the highlighted content on the homepage should display the start date.
     Given event content:
-      | title            | start date       | end date         | state     | field_paragraphs_body | abstract                |
-      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | published | High and lite         | Abstract: High and lite |
+      | title            | start date       | end date         | field_paragraphs_body | abstract                |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | High and lite         | Abstract: High and lite |
     And the "Highlighted content" content listing contains:
       | type    | label            |
       | content | Light and height |
@@ -152,8 +152,8 @@ Feature: Homepage
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
-      | title                     | start date       | end date         | state     |
-      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 | published |
+      | title                     | start date       | end date         |
+      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 |
     And the "Highlighted event" content listing contains:
       | type    | label                     |
       | content | Florentine steak festival |
@@ -209,8 +209,8 @@ Feature: Homepage
 
   Scenario: Search box is shown in the main content
     Given collection content:
-      | title        | state     |
-      | RNA vaccines | published |
+      | title        |
+      | RNA vaccines |
     And I am on the homepage
     Then I should see the "Search" field in the Featured region
     When I enter "RNA" in the search bar and press enter

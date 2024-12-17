@@ -79,8 +79,8 @@ Feature: Test the visibility of the quick links menu.
 
     # Lets not test all links in a separate list of steps to save time.
     Given release content:
-      | title        | is version of | state     |
-      | Some release | Some solution | published |
+      | title        | is version of |
+      | Some release | Some solution |
     And I go to the edit form of the "Some solution" solution
     And I fill in the following:
       | Landing page | http://www.example.com |

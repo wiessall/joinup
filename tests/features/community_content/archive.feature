@@ -71,8 +71,8 @@ Feature: Content archival.
       | title             | state    |
       | Cartridge cleaner | archived |
     Given <type> content:
-      | title                | state    | solution          | state    |
-      | Test archived <type> | archived | Cartridge cleaner | archived |
+      | title                | state    | solution          |
+      | Test archived <type> | archived | Cartridge cleaner |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test archived <type>" <type>

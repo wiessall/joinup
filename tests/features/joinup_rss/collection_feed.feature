@@ -21,29 +21,29 @@ Feature: Collection RSS feed.
       | Indigo Monkey    | forest  | facilitator |
       | Dreaded Scissors | otto    | facilitator |
     Given solution content:
-      | title           | state     | author  | creation date    | collection       |
-      | Lantern Global  | published | alejake | 2018-12-18 08:00 | Indigo Monkey    |
-      | Proton Lonesome | published | alejake | 2019-01-05 10:00 | Indigo Monkey    |
-      | Shiny Ray       | published | otto    | 2018-08-14 17:36 | Dreaded Scissors |
+      | title           | author  | creation date    | collection       |
+      | Lantern Global  | alejake | 2018-12-18 08:00 | Indigo Monkey    |
+      | Proton Lonesome | alejake | 2019-01-05 10:00 | Indigo Monkey    |
+      | Shiny Ray       | otto    | 2018-08-14 17:36 | Dreaded Scissors |
     And news content:
-      | title                                   | field_paragraphs_body                                    | state     | author  | created          | collection       | solution        |
-      | Monkeys favourite indigo amongst colors | Research results are out.                                | published | alejake | 2019-01-21 12:36 | Indigo Monkey    |                 |
-      | Proton lonesomeness reaches peak        | More than 200 thousand protons were interviewed.         | published | forest  | 2019-01-07 12:00 |                  | Proton Lonesome |
-      | New metal alloy improves scissors       | It improves sharpness but they are more subject to rust. | published | otto    | 2018-04-11 09:00 | Dreaded Scissors |                 |
+      | title                                   | field_paragraphs_body                                    | author  | created          | collection       | solution        |
+      | Monkeys favourite indigo amongst colors | Research results are out.                                | alejake | 2019-01-21 12:36 | Indigo Monkey    |                 |
+      | Proton lonesomeness reaches peak        | More than 200 thousand protons were interviewed.         | forest  | 2019-01-07 12:00 |                  | Proton Lonesome |
+      | New metal alloy improves scissors       | It improves sharpness but they are more subject to rust. | otto    | 2018-04-11 09:00 | Dreaded Scissors |                 |
     And event content:
-      | title                    | abstract | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                           | state     | author | created          | collection       |
-      | Banana tasting           | abstract | Testing more than 20 varities of bananas from all over the world.                                                                                                                                                                                                                                                                                               | published | forest | 2018-09-14 07:36 | Indigo Monkey    |
-      | Scissor sharpening party | abstract | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | published | otto   | 2017-11-26 14:18 | Dreaded Scissors |
+      | title                    | abstract | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                           | author | created          | collection       |
+      | Banana tasting           | abstract | Testing more than 20 varities of bananas from all over the world.                                                                                                                                                                                                                                                                                               | forest | 2018-09-14 07:36 | Indigo Monkey    |
+      | Scissor sharpening party | abstract | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | otto   | 2017-11-26 14:18 | Dreaded Scissors |
     And document content:
-      | title                  | field_paragraphs_body                                    | state     | author  | created          | collection    |
-      | Indigo technical paper | All technical information about the rare indigo monkeys. | published | alejake | 2016-05-30 12:21 | Indigo Monkey |
+      | title                  | field_paragraphs_body                                    | author  | created          | collection    |
+      | Indigo technical paper | All technical information about the rare indigo monkeys. | alejake | 2016-05-30 12:21 | Indigo Monkey |
     And discussion content:
-      | title                                          | body                                                                                   | state     | author  | created          | collection    |
-      | Is the indigo coloration caused by their food? | I was reading the technical paper and it seems their main food is the indigo cherries. | published | alejake | 2019-01-21 13:00 | Indigo Monkey |
+      | title                                          | body                                                                                   | author  | created          | collection    |
+      | Is the indigo coloration caused by their food? | I was reading the technical paper and it seems their main food is the indigo cherries. | alejake | 2019-01-21 13:00 | Indigo Monkey |
     And custom_page content:
-      | title             | body                                            | state     | author | created          | collection        |
-      | Indigo variations | The four major tones of indigo are listed here. | published | forest | 2017-10-15 18:30 | Indigo Monkey     |
-      | List of devices   | Available remote electrical devices.            | published |        | 2019-02-08 09:00 | Remote Electrical |
+      | title             | body                                            | author | created          | collection        |
+      | Indigo variations | The four major tones of indigo are listed here. | forest | 2017-10-15 18:30 | Indigo Monkey     |
+      | List of devices   | Available remote electrical devices.            |        | 2019-02-08 09:00 | Remote Electrical |
 
     When I am an anonymous user
     And I go to the homepage of the "Indigo Monkey" collection
