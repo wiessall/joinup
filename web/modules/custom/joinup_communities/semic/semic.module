@@ -44,7 +44,7 @@ function semic_preprocess_field(&$variables): void {
   $content = &$variables['items'][0]['content'];
   $module_url = $GLOBALS['base_url'] . '/' . \Drupal::service('extension.list.module')->getPath('semic');
 
-  $content['#attached']['library'][] = 'semic/eu.webtools.load';
+  $content['#attached']['library'][] = 'oe_webtools/drupal.webtools-smartloader';
   $content['#attached']['drupalSettings']['semic']['map']['adoptersListUrl'] = "$module_url/adopters.xml";
   $content['#prefix'] = semic_map_markup($module_url);
 }
