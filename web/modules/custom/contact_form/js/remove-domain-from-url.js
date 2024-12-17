@@ -1,24 +1,23 @@
 /**
  * @file
- * Removes the domain from a given URL inputed by the user if needed.
- * For the sites that are installed in a sub-directory, it also removes the base
- * path (drupalSettings.path.baseUrl).
+ * Removes the domain/base URL from a given URL input by the user if needed.
+ * For sites installed in a subdirectory, it also removes the base path.
  */
-((drupalSettings) => {
+((Drupal, once) => {
   Drupal.behaviors.removeDomainFromUrl = {
-    attach() {
-      const input = document.querySelector(
+    attach(context, settings) {
+      once(
+        "remove-domain-url",
         "input#edit-field-contact-url-0-uri",
-      );
-      if (input === null || input === undefined) {
-        return;
-      }
-      input.addEventListener("blur", (event) => {
-        const domain = window.location.origin + drupalSettings.path.baseUrl;
-        if (event.target.value.startsWith(domain)) {
-          event.target.value = event.target.value.replace(domain, "/");
-        }
+        context,
+      ).forEach((input) => {
+        input.addEventListener("blur", (event) => {
+          const domain = window.location.origin + settings.path.baseUrl;
+          if (event.target.value.startsWith(domain)) {
+            event.target.value = event.target.value.replace(domain, "/");
+          }
+        });
       });
     },
   };
-})(drupalSettings);
+})(Drupal, once);
