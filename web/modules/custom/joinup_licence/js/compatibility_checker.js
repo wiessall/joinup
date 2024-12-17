@@ -3,9 +3,15 @@
  * Licence compatibility checker functionality.
  */
 
-((drupalSettings) => {
+((Drupal, once, drupalSettings) => {
   Drupal.behaviors.licenceCompatibilityCheck = {
     attach() {
+      // Ensure the licence_filter_block is present.
+      const selector = ".block-licence-filter-block";
+      if (!once("licence-compatibility-check", selector).length) {
+        return;
+      }
+
       // Enable or disable all compare buttons.
       function enableButtons(state) {
         if (state) {
@@ -79,4 +85,4 @@
       initCompatibleRadios();
     },
   };
-})(drupalSettings);
+})(Drupal, once, drupalSettings);
