@@ -19,3 +19,9 @@ Feature: Minimal install clone testing.
     And "Solutions" should be the active item in the "Navigation bar" region
     Then I visit "/collection/portal"
     And no menu items should be active in the "Navigation bar" region
+
+  @javascript
+  Scenario: Assert publiccode.yml page.
+    Given I am an anonymous user
+    When I visit "/publiccode-editor"
+    And I should see "publiccode.yml Editor"
