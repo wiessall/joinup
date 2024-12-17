@@ -518,11 +518,11 @@ elements: |-
       '#markup': '<p>In this section you can upload documents supporting your assessment.</p>'
     binding_requirement_documents:
       '#type': webform_document_file
-      '#title': 'Binding requirement documents'
+      '#title': 'Binding requirements supporting documents'
       '#multiple': 5
     upload_assessment_documents:
       '#type': webform_document_file
-      '#title': 'Upload assessment documents'
+      '#title': 'General Assessment supporting documents'
       '#multiple': 5
     comments:
       '#type': text_format
