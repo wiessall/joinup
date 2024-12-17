@@ -6,8 +6,8 @@ Feature:
 
   Background:
     Given collection content:
-      | title         | state     |
-      | Plaster molds | published |
+      | title         |
+      | Plaster molds |
     And custom_page content:
       | title                  | collection    | abstract             | state       |
       | Layout paragraphs test | Plaster molds | Layout page abstract | unpublished |
