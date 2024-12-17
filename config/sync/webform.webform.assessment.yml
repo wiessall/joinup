@@ -498,16 +498,17 @@ elements: |-
   annexes:
     '#type': webform_wizard_page
     '#title': '4. Supporting documents'
+    intro_documents:
+      '#type': webform_markup
+      '#markup': '<p>In this section you can upload documents supporting your assessment.</p>'
     binding_requirement_documents:
       '#type': webform_document_file
       '#title': 'Binding requirement documents'
       '#multiple': 5
-      '#file_placeholder': '<p>Please upload any document giving more information on your binding requirements.</p>'
     upload_assessment_documents:
       '#type': webform_document_file
       '#title': 'Upload assessment documents'
       '#multiple': 5
-      '#file_placeholder': '<p>Please upload any document giving more information on your assessment.</p>'
     comments:
       '#type': text_format
       '#title': 'Please add any other comment you would like to share.'
