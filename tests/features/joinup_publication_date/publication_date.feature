@@ -7,9 +7,9 @@ Feature: Publication date works as expected on RDF entities
       | Collection to publish | draft     |
       | Published collection  | published |
     Given solution content:
-      | title               | state | collection           |
-      | Solution to publish | draft | Published collection |
-      | Published solution  |       | Published collection |
+      | title               | state     | collection           |
+      | Solution to publish | draft     | Published collection |
+      | Published solution  | published | Published collection |
     And release content:
       | title              | state | release number | release notes              | is version of      |
       | Release to publish | draft | 1.0.0          | Only works on flat ground. | Published solution |
