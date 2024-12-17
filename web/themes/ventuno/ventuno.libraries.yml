@@ -508,6 +508,7 @@ tour-first-balloon:
     assets/js/tour-first-balloon.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
 
 user--group-header:
   css:
