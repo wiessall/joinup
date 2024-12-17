@@ -204,6 +204,10 @@ elements: |-
         visible:
           ':input[name="previous_assessments"]':
             value: 'Yes'
+      '#multiple__min_items': 1
+      '#multiple__empty_items': 0
+      '#multiple__add': false
+      '#multiple__add_more_input': false
   2_binding_requirements:
     '#type': webform_wizard_page
     '#title': '2. Binding requirements'
@@ -261,8 +265,11 @@ elements: |-
     binding_requirement_assessed:
       '#type': webform_custom_composite
       '#title': 'List the binding requirement(s) assessed.'
+      '#multiple__min_items': 1
+      '#multiple__empty_items': 0
       '#multiple__sorting': false
-      '#multiple__add_more': false
+      '#multiple__add': false
+      '#multiple__add_more_input': false
       '#element':
         number_1:
           '#type': number
@@ -306,6 +313,7 @@ elements: |-
       '#multiple__header': false
       '#multiple__item_label': ''
       '#multiple__min_items': 1
+      '#multiple__empty_items': 0
       '#multiple__sorting': false
       '#multiple__add': false
       '#multiple__add_more_input': false
@@ -351,7 +359,6 @@ elements: |-
             Slovenia: Slovenia
             Sweden: Sweden
           '#title': 'Choose a country'
-          '#description': ''
     cross_border_interoperability_effects:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -364,6 +371,7 @@ elements: |-
     identified_effects_cross_border_legal:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border legal interoperability'
+      '#multiple': false
       '#multiple__sorting': false
       '#multiple__operations': false
       '#multiple__add_more': false
@@ -381,6 +389,7 @@ elements: |-
     identified_effects_cross_border_organisational:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border organisational interoperability'
+      '#multiple': false
       '#multiple__sorting': false
       '#multiple__operations': false
       '#multiple__add_more': false
@@ -398,6 +407,7 @@ elements: |-
     identified_effects_cross_border_semantic:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border semantic interoperability'
+      '#multiple': false
       '#multiple__sorting': false
       '#multiple__operations': false
       '#multiple__add_more': false
@@ -415,6 +425,7 @@ elements: |-
     identified_effects_cross_border_technical:
       '#type': webform_custom_composite
       '#title': 'Identified effects on cross-border technical interoperability'
+      '#multiple': false
       '#multiple__sorting': false
       '#multiple__operations': false
       '#multiple__add_more': false
@@ -459,7 +470,9 @@ elements: |-
       '#type': entity_autocomplete
       '#title': 'Internal Solutions in the Portal  '
       '#multiple': true
-      '#multiple__add_more': false
+      '#multiple__min_items': 1
+      '#multiple__empty_items': 0
+      '#multiple__add': false
       '#multiple__add_more_input': false
       '#target_type': node
       '#selection_handler': 'default:node'
@@ -470,8 +483,10 @@ elements: |-
       '#type': webform_link
       '#title': 'Solutions not in the Portal (link)'
       '#multiple': true
+      '#multiple__min_items': 1
+      '#multiple__empty_items': 0
       '#multiple__sorting': false
-      '#multiple__add_more': false
+      '#multiple__add': false
       '#multiple__add_more_input': false
       '#title__title': 'Solution Title'
       '#url__title': 'Solution URL'
