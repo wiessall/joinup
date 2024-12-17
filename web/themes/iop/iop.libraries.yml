@@ -78,9 +78,10 @@ paragraph__carousel:
 
 paragraph__carousel.js:
   js:
-    assets/js/glide.min.js: { minified: true  }
+    assets/js/glide.min.js: { minified: true }
   dependencies:
     - core/drupal
+    - core/once
 
 paragraph__image:
   css:
