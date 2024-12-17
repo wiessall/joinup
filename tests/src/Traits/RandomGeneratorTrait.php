@@ -38,9 +38,14 @@ trait RandomGeneratorTrait {
   protected function getRandomTerm(string $vocabulary): EntityInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-    $tids = array_values($storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $vocabulary)
-      ->execute());
+    $query = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', $vocabulary);
+    // Only get last level terms for the EIRA vocabulary.
+    if ($vocabulary === 'eira') {
+      $query->condition('parent', '0', '<>');
+    }
+
+    $tids = array_values($query->execute());
     return $storage->load($tids[array_rand($tids)]);
   }
 
