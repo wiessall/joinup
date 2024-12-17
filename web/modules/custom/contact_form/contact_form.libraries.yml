@@ -9,3 +9,6 @@ remove-domain-from-url:
 empty-url:
   js:
     js/empty-url.js: { }
+  dependencies:
+    - core/drupal
+    - core/once
