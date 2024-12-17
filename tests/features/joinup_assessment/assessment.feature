@@ -124,8 +124,8 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                                              |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
       | 4. Supporting documents                                                                                                                 |
-      | Binding requirement documents {Empty}                                                                                                   |
-      | Upload assessment documents {Empty}                                                                                                     |
+      | Binding requirements supporting documents {Empty}                                                                                                   |
+      | General Assessment supporting documents {Empty}                                                                                                     |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
     # Make sure assessment reports are not leaking into manage content list.
@@ -177,8 +177,8 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                                              |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
       | 4. Supporting documents                                                                                                                 |
-      | Binding requirement documents {Empty}                                                                                                   |
-      | Upload assessment documents {Empty}                                                                                                     |
+      | Binding requirements supporting documents {Empty}                                                                                                   |
+      | General Assessment supporting documents {Empty}                                                                                                     |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
     When I move backward one page
@@ -290,8 +290,8 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                         |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                    |
       | 4. Supporting documents                                                                                            |
-      | Binding requirement documents {Empty}                                                                              |
-      | Upload assessment documents {Empty}                                                                                |
+      | Binding requirements supporting documents {Empty}                                                                              |
+      | General Assessment supporting documents {Empty}                                                                                |
       | Please add any other comment you would like to share. {Empty}                                                      |
 
   Scenario Outline: Check organization field value.
