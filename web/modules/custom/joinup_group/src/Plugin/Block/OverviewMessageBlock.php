@@ -30,26 +30,12 @@ class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected ConfigEntityStorageInterface $nodeStorage;
 
-  /**
-   * Constructs a new OverviewMessageBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    protected CurrentRouteMatch $currentRouteMatch,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly CurrentRouteMatch $currentRouteMatch,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

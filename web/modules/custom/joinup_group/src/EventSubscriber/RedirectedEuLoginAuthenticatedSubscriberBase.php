@@ -27,30 +27,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * and redirecting the user back to the original page where, optionally, a
  * specific action, such as opening a modal, may be automatically triggered.
  */
-abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubscriberInterface {
+abstract readonly class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubscriberInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The time keeping service.
-   */
-  protected TimeInterface $time;
 
   /**
    * The current request.
    */
   protected Request $currentRequest;
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   */
-  public function __construct(TimeInterface $time, RequestStack $request_stack) {
-    $this->time = $time;
+  public function __construct(
+    protected TimeInterface $time,
+    RequestStack $request_stack,
+  ) {
     $this->currentRequest = $request_stack->getCurrentRequest();
   }
 

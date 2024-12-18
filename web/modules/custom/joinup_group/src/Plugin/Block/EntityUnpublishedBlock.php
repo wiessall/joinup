@@ -9,7 +9,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
@@ -46,55 +45,15 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
     'news',
   ];
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The revision manager service.
-   *
-   * @var \Drupal\state_machine_revisions\RevisionManagerInterface
-   */
-  protected RevisionManagerInterface $revisionManager;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected AccountInterface $currentUser;
-
-  /**
-   * Constructs a new RecommendedContentBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The og membership manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revision_manager
-   *   The revision manager service.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    RevisionManagerInterface $revision_manager,
-    AccountProxyInterface $current_user,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RevisionManagerInterface $revisionManager,
+    protected readonly AccountProxyInterface $currentUser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->revisionManager = $revision_manager;
-    $this->currentUser = $current_user;
   }
 
   /**

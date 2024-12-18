@@ -29,22 +29,9 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
    */
   protected $group;
 
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
-   * Constructs a LeaveGroupConfirmForm.
-   *
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The membership manager service.
-   */
-  public function __construct(MembershipManagerInterface $membershipManager) {
-    $this->membershipManager = $membershipManager;
-  }
+  public function __construct(
+    protected readonly MembershipManagerInterface $membershipManager,
+  ) {}
 
   /**
    * {@inheritdoc}

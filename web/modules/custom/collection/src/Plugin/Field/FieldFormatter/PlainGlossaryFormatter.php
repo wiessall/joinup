@@ -24,35 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class PlainGlossaryFormatter extends FormatterBase {
 
-  /**
-   * Constructs a PlainGlossaryFormatter object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\filter\FilterPluginManager $filterPluginManager
-   *   The filter plugin manager service.
-   */
   public function __construct(
-    $plugin_id,
-    $plugin_definition,
-    FieldDefinitionInterface $field_definition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    readonly FieldDefinitionInterface $field_definition,
     array $settings,
-    $label,
-    $view_mode,
-    array $third_party_settings,
-    protected FilterPluginManager $filterPluginManager,
+    string $label,
+    readonly string $view_mode,
+    readonly array $third_party_settings,
+    protected readonly FilterPluginManager $filterPluginManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }

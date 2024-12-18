@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * confirmation form. Instead, we redirect back to the main view and we show
  * some warnings, explaining the errors.
  */
-class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
+readonly class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
 
   /**
    * The user private temp store.
@@ -32,16 +32,6 @@ class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
    */
   protected PrivateTempStore $tempStore;
 
-  /**
-   * Constructs a new event subscriber.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   The user private temp store factory.
-   */
   public function __construct(
     protected AccountInterface $currentUser,
     protected MessengerInterface $messenger,

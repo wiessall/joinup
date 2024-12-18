@@ -14,27 +14,17 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 /**
  * Provides custom pages to whoever desires them.
  */
-class CustomPageProvider implements CustomPageProviderInterface {
+readonly class CustomPageProvider implements CustomPageProviderInterface {
 
   /**
    * Builds a new custom page OG menu links updater service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menuLinkManager
-   *   The core menu link manager.
-   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager
-   *   The custom page menu link manager.
-   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
-   *   Group menu manager.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
     protected GroupMenuManagerInterface $groupMenuManager,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

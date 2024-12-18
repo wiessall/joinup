@@ -24,22 +24,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupMediaLibrary extends MediaLibrary {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Joinup group manager service.
-   */
-  public function __construct(array $configuration, string $pluginId, CKEditor5PluginDefinition $pluginDefinition, EntityTypeManagerInterface $entityTypeManager, protected JoinupGroupManagerInterface $groupManager) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $entityTypeManager);
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly CKEditor5PluginDefinition $plugin_definition,
+    readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly JoinupGroupManagerInterface $groupManager,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager);
   }
 
   /**

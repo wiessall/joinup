@@ -20,24 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CommunityContentController extends GroupNodeController {
 
-  /**
-   * The node workflow access control handler.
-   *
-   * @var \Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler
-   */
-  protected CommunityContentWorkflowAccessControlHandler $workflowAccessControlHandler;
-
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access handler.
-   * @param \Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler $workflow_access_control_handler
-   *   The node workflow access control handler.
-   */
-  public function __construct(OgAccessInterface $og_access, CommunityContentWorkflowAccessControlHandler $workflow_access_control_handler) {
+  public function __construct(
+    readonly OgAccessInterface $og_access,
+    readonly CommunityContentWorkflowAccessControlHandler $workflowAccessControlHandler,
+  ) {
     parent::__construct($og_access);
-    $this->workflowAccessControlHandler = $workflow_access_control_handler;
   }
 
   /**

@@ -28,8 +28,8 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
 
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly JoinupGroupManagerInterface $groupManager,
     protected readonly RdfSyncMapper $mapper,

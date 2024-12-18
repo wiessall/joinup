@@ -55,49 +55,18 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    */
   const MAX_DEPTH = 3;
 
-  /**
-   * The Symfony route matcher.
-   *
-   * @var \Symfony\Component\Routing\Matcher\UrlMatcherInterface
-   */
-  protected UrlMatcherInterface $urlMatcher;
-
-  /**
-   * Constructs an OgMenuInstanceForm.
-   *
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   The entity type manager.
-   * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager
-   *   The menu link manager.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree
-   *   The menu tree service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG Access service.
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
-   *   The URL generator.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Symfony\Component\Routing\Matcher\UrlMatcherInterface $url_matcher
-   *   The Symfony route matcher.
-   */
   public function __construct(
-    EntityRepositoryInterface $entity_repository,
-    MenuLinkManagerInterface $menu_link_manager,
-    MenuLinkTreeInterface $menu_tree,
-    LinkGeneratorInterface $link_generator,
-    OgAccessInterface $og_access,
-    UrlGeneratorInterface $url_generator,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    readonly EntityRepositoryInterface $entity_repository,
+    readonly MenuLinkManagerInterface $menu_link_manager,
+    readonly MenuLinkTreeInterface $menu_tree,
+    readonly LinkGeneratorInterface $link_generator,
+    readonly OgAccessInterface $og_access,
+    readonly UrlGeneratorInterface $url_generator,
+    readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
     TimeInterface $time,
-    UrlMatcherInterface $url_matcher,
+    protected readonly UrlMatcherInterface $url_matcher,
   ) {
     parent::__construct($entity_repository, $menu_link_manager, $menu_tree, $link_generator, $og_access, $url_generator, $entity_type_bundle_info, $time);
-
-    $this->urlMatcher = $url_matcher;
   }
 
   /**
@@ -356,7 +325,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         $pathinfo = substr($pathinfo, strlen(base_path()) - 1);
 
         // Disable nesting of links that are not pointing to nodes.
-        $route_info = $this->urlMatcher->match($pathinfo);
+        $route_info = $this->url_matcher->match($pathinfo);
         if ($route_info['_route'] !== 'entity.node.canonical') {
           // Force parent value to be empty. This will disable any value
           // submission for this form element, thus disallowing any parent to

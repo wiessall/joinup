@@ -17,24 +17,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * What do you mean, this is confusing?
  */
-class JoinupEventEventSubscriber implements EventSubscriberInterface {
+readonly class JoinupEventEventSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The inbound path processor.
-   *
-   * @var \Drupal\Core\PathProcessor\InboundPathProcessorInterface
-   */
-  protected $pathProcessor;
-
-  /**
-   * Constructs an event subscriber for events.
-   *
-   * @param \Drupal\Core\PathProcessor\InboundPathProcessorInterface $pathProcessor
-   *   The inbound path processor.
-   */
-  public function __construct(InboundPathProcessorInterface $pathProcessor) {
-    $this->pathProcessor = $pathProcessor;
-  }
+  public function __construct(protected InboundPathProcessorInterface $pathProcessor) {}
 
   /**
    * {@inheritdoc}

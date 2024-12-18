@@ -28,12 +28,11 @@ class AnnouncementForm extends FormBase {
   protected AnnouncementInterface $announcement;
 
   public function __construct(
-    protected JoinupMessageDeliveryInterface $messageDelivery,
-    protected TimeInterface $time,
-    protected LoggerChannelInterface $logger,
-    protected Connection $connection,
-  ) {
-  }
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly TimeInterface $time,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly Connection $connection,
+  ) {}
 
   /**
    * {@inheritdoc}

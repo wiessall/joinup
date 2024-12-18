@@ -15,24 +15,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Event subscriber for news.
  */
-class JoinupNewsEventSubscriber implements EventSubscriberInterface {
+readonly class JoinupNewsEventSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The inbound path processor.
-   *
-   * @var \Drupal\Core\PathProcessor\InboundPathProcessorInterface
-   */
-  protected $pathProcessor;
-
-  /**
-   * Constructs an event subscriber for news.
-   *
-   * @param \Drupal\Core\PathProcessor\InboundPathProcessorInterface $pathProcessor
-   *   The inbound path processor.
-   */
-  public function __construct(InboundPathProcessorInterface $pathProcessor) {
-    $this->pathProcessor = $pathProcessor;
-  }
+  public function __construct(
+    protected InboundPathProcessorInterface $pathProcessor,
+  ) {}
 
   /**
    * {@inheritdoc}

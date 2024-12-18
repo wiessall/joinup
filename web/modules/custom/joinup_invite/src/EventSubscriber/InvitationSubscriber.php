@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber handling invitations to groups.
  */
-class InvitationSubscriber implements EventSubscriberInterface {
+readonly class InvitationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 

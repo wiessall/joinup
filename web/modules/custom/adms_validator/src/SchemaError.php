@@ -9,95 +9,34 @@ namespace Drupal\adms_validator;
  *
  * @todo Better document the meaning of the different properties.
  */
-class SchemaError {
+readonly class SchemaError {
+
+  public function __construct(
+    public ?string $className = NULL,
+    public ?string $message = NULL,
+    public ?string $object = NULL,
+    public ?string $predicate = NULL,
+    public ?string $ruleDescription = NULL,
+    public ?string $ruleID = NULL,
+    public ?string $ruleSeverity = NULL,
+    public ?string $subject = NULL,
+  ) {
+  }
 
   /**
-   * The name of the class.
-   *
-   * @var string
+   * Factory method to create an instance from a record object.
    */
-  protected $className;
-
-  /**
-   * The message.
-   *
-   * @var string
-   */
-  protected $message;
-
-  /**
-   * The object.
-   *
-   * @var string
-   */
-  protected $object;
-
-  /**
-   * The predicate.
-   *
-   * @var string
-   */
-  protected $predicate;
-
-  /**
-   * The rule description.
-   *
-   * @var string
-   */
-  protected $ruleDescription;
-
-  /**
-   * The rule ID.
-   *
-   * @var string
-   */
-  protected $ruleID;
-
-  /**
-   * The severity of the rule.
-   *
-   * @var string
-   */
-  protected $ruleSeverity;
-
-  /**
-   * The subject.
-   *
-   * @var string
-   */
-  protected $subject;
-
-  /**
-   * Constructs a SchemaError object from a database result row.
-   *
-   * @param object $record
-   *   A SPARQL result row.
-   */
-  public function __construct(\stdClass $record) {
-    if (!empty($record->Class_Name)) {
-      $this->className = strval($record->Class_Name);
-    }
-    if (!empty($record->Message)) {
-      $this->message = strval($record->Message);
-    }
-    if (!empty($record->Object)) {
-      $this->object = strval($record->Object);
-    }
-    if (!empty($record->Predicate)) {
-      $this->predicate = strval($record->Predicate);
-    }
-    if (!empty($record->Rule_Description)) {
-      $this->ruleDescription = strval($record->Rule_Description);
-    }
-    if (!empty($record->Rule_ID)) {
-      $this->ruleID = strval($record->Rule_ID);
-    }
-    if (!empty($record->Rule_Severity)) {
-      $this->ruleSeverity = strval($record->Rule_Severity);
-    }
-    if (!empty($record->Subject)) {
-      $this->subject = strval($record->Subject);
-    }
+  public static function fromRecord(\stdClass $record): self {
+    return new self(
+      className: !empty($record->Class_Name) ? strval($record->Class_Name) : NULL,
+      message: !empty($record->Message) ? strval($record->Message) : NULL,
+      object: !empty($record->Object) ? strval($record->Object) : NULL,
+      predicate: !empty($record->Predicate) ? strval($record->Predicate) : NULL,
+      ruleDescription: !empty($record->Rule_Description) ? strval($record->Rule_Description) : NULL,
+      ruleID: !empty($record->Rule_ID) ? strval($record->Rule_ID) : NULL,
+      ruleSeverity: !empty($record->Rule_Severity) ? strval($record->Rule_Severity) : NULL,
+      subject: !empty($record->Subject) ? strval($record->Subject) : NULL
+    );
   }
 
 }

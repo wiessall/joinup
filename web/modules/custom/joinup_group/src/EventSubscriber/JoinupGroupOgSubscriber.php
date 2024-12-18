@@ -15,26 +15,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to events fired by Organic Groups.
  */
-class JoinupGroupOgSubscriber implements EventSubscriberInterface {
+readonly class JoinupGroupOgSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The currently logged in user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * Constructs a JoinupGroupOgSubscriber.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged in user.
-   */
-  public function __construct(AccountInterface $currentUser) {
-    $this->currentUser = $currentUser;
-  }
+  public function __construct(
+    protected AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}
