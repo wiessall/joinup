@@ -44,26 +44,12 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
    */
   protected array $messages = [];
 
-  /**
-   * Constructs a new action object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   The tempstore factory.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    array $plugin_definition,
-    PrivateTempStoreFactory $tempStoreFactory,
-    protected AccountInterface $currentUser,
+    readonly string $plugin_id,
+    readonly array $plugin_definition,
+    readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly AccountInterface $currentUser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');

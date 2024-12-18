@@ -20,10 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupFlagFlaggedEntity extends FieldPluginBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 

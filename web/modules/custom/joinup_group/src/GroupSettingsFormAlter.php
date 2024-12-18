@@ -14,23 +14,14 @@ use Drupal\menu_link_content\MenuLinkContentStorageInterface;
 /**
  * Provides implementation of "joinup_group.group_settings_form_alter" service.
  */
-class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
+readonly class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Builds a new group settings form alter service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
-   *   Group menu manager.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected GroupMenuManagerInterface $groupMenuManager,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

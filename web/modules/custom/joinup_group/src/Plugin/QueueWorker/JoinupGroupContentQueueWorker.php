@@ -24,38 +24,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupGroupContentQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The pathauto alias generator service.
-   *
-   * @var \Drupal\pathauto\PathautoGeneratorInterface
-   */
-  protected $aliasGenerator;
-
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\pathauto\PathautoGeneratorInterface $alias_generator
-   *   The pathauto alias generator service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, PathautoGeneratorInterface $alias_generator) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly PathautoGeneratorInterface $aliasGenerator,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->aliasGenerator = $alias_generator;
   }
 
   /**

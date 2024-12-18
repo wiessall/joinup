@@ -16,13 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class CollectionCacheContext implements CacheContextInterface {
 
-  /**
-   * Constructs a new CollectionCacheContext service.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   */
-  public function __construct(protected RequestStack $requestStack) {}
+  public function __construct(protected readonly RequestStack $requestStack) {}
 
   /**
    * {@inheritdoc}

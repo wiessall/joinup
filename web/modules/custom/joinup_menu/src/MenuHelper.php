@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Helper methods for working with menus.
  */
-class MenuHelper implements MenuHelperInterface {
+readonly class MenuHelper implements MenuHelperInterface {
 
   use StringTranslationTrait;
   use RedirectDestinationTrait;

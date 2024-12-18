@@ -12,12 +12,10 @@ use EasyRdf\Graph;
  */
 class AdmsValidator implements AdmsValidatorInterface {
 
-  /**
-   * The validation query.
-   *
-   * @var string
-   */
-  protected $validationQuery;
+  public function __construct(
+    protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
+    protected string $validationQuery,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -36,13 +34,6 @@ class AdmsValidator implements AdmsValidatorInterface {
     $this->validationQuery = $validation_query;
     return $this;
   }
-
-  /**
-   * Constructs a new AdmsValidator object.
-   */
-  public function __construct(
-    protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
-  ) {}
 
   /**
    * {@inheritdoc}
