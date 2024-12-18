@@ -82,7 +82,7 @@ Feature: Notification test for the collection transitions.
 
     # Clean up the manually created entities.
     Then I delete the "NC proposed new" collection
-    And I delete the "Super Sayan Academy" contact information
+    And I delete the "Super Sayan Academy" "contact information"
 
     # Test 'propose' operation (on an existing collection)
     And I am logged in as "NC owner"

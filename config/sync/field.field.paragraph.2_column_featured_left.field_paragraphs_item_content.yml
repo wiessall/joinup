@@ -12,6 +12,10 @@ dependencies:
     - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: paragraph.2_column_featured_left.field_paragraphs_item_content
 field_name: field_paragraphs_item_content
 entity_type: paragraph
@@ -26,62 +30,101 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
+      image: image
       simple_paragraph: simple_paragraph
       call_to_action: call_to_action
-      image: image
       testimony: testimony
       video: video
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -37
+        weight: -60
         enabled: false
       2_column_featured_left:
-        weight: -36
+        weight: -59
         enabled: false
       2_column_featured_right:
-        weight: -35
+        weight: -58
         enabled: false
       2_column_layout:
-        weight: -34
+        weight: -57
         enabled: false
       3_column_layout:
-        weight: -33
+        weight: -56
         enabled: false
       accordion:
-        weight: -32
+        weight: -55
         enabled: false
       accordion_item:
-        weight: -31
+        weight: -54
+        enabled: false
+      block:
+        weight: -44
         enabled: false
       call_to_action:
-        weight: -25
+        weight: -48
         enabled: true
       carousel:
-        weight: -30
+        weight: -53
+        enabled: false
+      configurable_listing:
+        weight: -43
         enabled: false
       content_listing:
-        weight: -29
+        weight: -52
         enabled: false
       entity_reference:
-        weight: -28
+        weight: -51
+        enabled: false
+      github_feed:
+        weight: -42
+        enabled: false
+      heading:
+        weight: -41
         enabled: false
       iframe:
-        weight: -27
+        weight: -50
         enabled: false
       image:
-        weight: -24
+        weight: -61
         enabled: true
+      image_gallery:
+        weight: -40
+        enabled: false
       json_map:
-        weight: -23
+        weight: -47
+        enabled: false
+      layout:
+        weight: -39
+        enabled: false
+      poll:
+        weight: -38
+        enabled: false
+      quote:
+        weight: -37
         enabled: false
       simple_paragraph:
-        weight: -26
+        weight: -49
         enabled: true
+      social_media:
+        weight: -36
+        enabled: false
       testimony:
-        weight: -21
+        weight: -46
         enabled: true
+      text:
+        weight: -35
+        enabled: false
+      tile:
+        weight: -34
+        enabled: false
+      tiles:
+        weight: -33
+        enabled: false
       video:
-        weight: -20
+        weight: -45
         enabled: true
+      webform:
+        weight: -32
+        enabled: false
 field_type: entity_reference_revisions

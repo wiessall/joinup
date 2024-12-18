@@ -1,0 +1,6 @@
+joinup_rdf.uri_converter:
+  title: 'RDF URI converter'
+  route_name: joinup_rdf.uri_converter
+  description: 'Converts entity URI to URL and vice versa.'
+  parent: system.admin
+  weight: 1

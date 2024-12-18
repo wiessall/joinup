@@ -318,11 +318,17 @@
   .l-ventuno--joinup_layout_four_column_grid--section-label-detailed-information__region-content {
     padding: $spacer;
     background-color: $light;
+    gap: $spacer + 0.5;
 
     .block-layout-builder .field__items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: $spacer * 0.5;
+      display: inline-block;
+      margin-right: $spacer * 0.5;
+      .field__item {
+        display: inline;
+        &[data-modal-link] {
+          display: block;
+        }
+      }
     }
   }
 

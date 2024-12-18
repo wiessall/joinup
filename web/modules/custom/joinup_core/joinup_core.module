@@ -26,11 +26,13 @@ use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
+use Drupal\joinup_core\Plugin\views\JoinupVboBulkForm;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
+use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
  * Implements hook_theme().
@@ -67,7 +69,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering,deprecated_modules,field_group_jquery_ui_accordion,media_insecure_iframe';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'conflicting emails,update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering,deprecated_modules,field_group_jquery_ui_accordion,media_insecure_iframe';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
@@ -487,4 +489,19 @@ function joinup_core_mail_alter(&$message): void {
   // in HTML mails.
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
+}
+
+/**
+ * Implements hook_views_plugins_field_alter().
+ *
+ * Restores crucial, but removed features between VBO 4.2.7 and 4.3.2.
+ */
+function joinup_core_views_plugins_field_alter(array &$plugins): void {
+  if (
+    !isset($plugins['views_bulk_operations_bulk_form']) ||
+    $plugins['views_bulk_operations_bulk_form']['class'] !== ViewsBulkOperationsBulkForm::class
+  ) {
+    return;
+  }
+  $plugins['views_bulk_operations_bulk_form']['class'] = JoinupVboBulkForm::class;
 }

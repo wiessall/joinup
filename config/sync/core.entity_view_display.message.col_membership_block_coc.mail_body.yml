@@ -1,0 +1,24 @@
+uuid: b0ee2373-73db-4139-a440-2eb485189783
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - message.template.col_membership_block_coc
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.col_membership_block_coc.mail_body
+targetEntityType: message
+bundle: col_membership_block_coc
+mode: mail_body
+content:
+  partial_1:
+    weight: 0
+    region: content
+hidden:
+  partial_0: true
+  search_api_excerpt: true

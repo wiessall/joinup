@@ -11,6 +11,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -27,6 +28,7 @@ class JoinupGroupContext extends RawDrupalContext {
   use EntityTrait;
   use MailCollectorTrait;
   use TestingEntitiesTrait;
+  use UserTrait;
 
   /**
    * Navigates to the members page of the given group.
@@ -256,18 +258,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a specific announcement.
-   *
-   * @param string $subject
-   *   The announcement subject.
-   *
-   * @Then I delete the :subject announcement
-   */
-  public function deleteAnnouncement(string $subject): void {
-    $this->getAnnouncementBySubject($subject)->delete();
-  }
-
-  /**
    * Creates a set of announcements.
    *
    * Table format:
@@ -411,7 +401,7 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Sets a group settings (meta entity) field to the given value.
+   * Sets or unset a group settings (meta entity) field to the given value.
    *
    * @param string $config
    *   The configuration (field name) of the collection's settings meta entity.
@@ -419,12 +409,13 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the collection or solution.
    * @param string $group
    *   The type of the group ("collection" or "solution").
-   * @param string $value
+   * @param string|null $value
    *   The new value of the meta entity field. This should be an entity label if
    *   the field is an entity reference field.
    * @param string|null $entityTypeId
    *   The entity type ID (or alias) if the value is an entity reference.
    *
+   * @Given the :config setting of the :collectionLabel :group is unset
    * @Given the :config setting of the :collectionLabel :group is set to :value
    * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
    */
@@ -432,11 +423,11 @@ class JoinupGroupContext extends RawDrupalContext {
     string $config,
     string $groupLabel,
     string $group,
-    string $value,
+    ?string $value = NULL,
     ?string $entityTypeId = NULL,
   ): void {
-    Assert::assertTrue(in_array($group, ['collection', 'solution']));
-    $groupEntity = $this->getEntityByLabel('node', $groupLabel, $group);
+    Assert::assertContains($group, ['collection', 'solution']);
+    $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
     Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
 
@@ -451,22 +442,62 @@ class JoinupGroupContext extends RawDrupalContext {
       ));
     }
 
-    // Assume entity reference field and an entity label in the $value variable.
-    if (is_string($entityTypeId)) {
-      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
-      Assert::assertNotEmpty(
-        $value,
-        sprintf(
-          "Cannot find '%s' entity with label '%s'.",
-          $entityTypeId,
-          $labelToSearchFor
-        ),
-      );
+    if (isset($value)) {
+      // Assume entity reference field and an entity label in $value.
+      $newValue = is_string($entityTypeId)
+        ? static::getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $value)
+        : $value;
+
+      MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+        ->set($fieldName, $newValue)
+        ->save();
+    }
+    else {
+      $metaEntities = \Drupal::entityTypeManager()->getStorage('meta_entity')
+        ->loadByProperties([
+          'type' => "{$group}_settings",
+          'target.target_type' => $groupEntity->getEntityTypeId(),
+          'target.target_id' => $groupEntity->id(),
+        ]);
+      $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
+      $metaEntity?->delete();
+    }
+  }
+
+  /**
+   * Deletes an entity, user, or message based on identifier and type alias.
+   *
+   * @param string $identifier
+   *   The entity title, username, or subject to identify the entity.
+   * @param string $entityTypeAlias
+   *   The alias of the entity type (e.g., 'node', 'contact information').
+   *   Refer to the `entityTypeAliases()` method for the full mapping.
+   *
+   * @When I delete the :identifier :entityTypeAlias
+   */
+  public function deleteEntity(string $identifier, string $entityTypeAlias): void {
+    $entityTypeId = $this->entityTypeAliases()[$entityTypeAlias] ?? NULL;
+    if (!$entityTypeId) {
+      throw new \InvalidArgumentException("Invalid entity alias: $entityTypeAlias");
     }
 
-    MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
-      ->set($fieldName, $value)
-      ->save();
+    $entity = match ($entityTypeId) {
+      'user' => $this->getUserByName($identifier),
+      'webform' => $this->getEntityById($entityTypeId, $identifier),
+      'message' => $this->getAnnouncementBySubject($identifier),
+      default => $this->getEntityByLabel($entityTypeId, $identifier),
+    };
+
+    if (!$entity) {
+      throw new \RuntimeException("Entity not found for bundle: $entityTypeAlias, identifier: $identifier");
+    }
+
+    if (isset($this->entities[$entity->bundle()][$entity->id()])) {
+      unset($this->entities[$entity->bundle()][$entity->id()]);
+    }
+
+    $entity->skip_notification = TRUE;
+    $entity->delete();
   }
 
 }

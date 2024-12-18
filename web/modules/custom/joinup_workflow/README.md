@@ -60,15 +60,6 @@ function joinup_news_workflow_selector(EntityInterface $entity) {
 }
 ```
 
-**Important**
-For the community content, an extra state need to be created called `__new__`.
-This state will be used to represent that an entity is being created. The
-transitions should also take care of that.
-For example, in order to create a news entity, a transition has to be made from
-the state `__new__` towards an allowed state defined in the transitions.
-This provides the opportunity to handle the `create` operation in a generic way
-as well.
-
 ### The settings files
 For the settings of the transitions, two files are needed:
 * The schema file. The structure of the file is shared between the
@@ -222,7 +213,7 @@ project. Users are allowed to create community content only within the context
 of a group.
 
 The access is given to the user if there are allowed transitions from the
-default one (`__new__`).
+default one (`draft`).
 
 **Important:**
 A non saved entity must be passed as an argument as the content creation setting

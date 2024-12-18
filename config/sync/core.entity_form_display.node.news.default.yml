@@ -11,13 +11,13 @@ dependencies:
     - field.field.node.news.field_news_logo
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
-    - field.field.node.news.field_news_spatial_coverage
     - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
+    - field.field.node.news.spatial_coverage
     - image.style.thumbnail
     - media.type.news_logo
     - node.type.news
@@ -107,22 +107,14 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_news_spatial_coverage:
-    type: entity_reference_autocomplete
-    weight: 6
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
     weight: 4
     region: content
     settings:
+      view_mode: default
       preview_view_mode: preview
+      form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
@@ -151,6 +143,16 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  spatial_coverage:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   title:
     type: string_textfield

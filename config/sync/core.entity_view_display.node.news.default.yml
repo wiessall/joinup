@@ -12,13 +12,13 @@ dependencies:
     - field.field.node.news.field_news_logo
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
-    - field.field.node.news.field_news_spatial_coverage
     - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
+    - field.field.node.news.spatial_coverage
     - image.style.logo
     - node.type.news
   module:
@@ -184,7 +184,6 @@ hidden:
   abstract: true
   featured: true
   field_keywords: true
-  field_news_spatial_coverage: true
   field_site_featured: true
   field_state: true
   field_topic: true
@@ -196,4 +195,5 @@ hidden:
   published_at: true
   read_more: true
   search_api_excerpt: true
+  spatial_coverage: true
   visit_count: true
