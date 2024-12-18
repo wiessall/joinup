@@ -407,6 +407,9 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/mimemail": {
+                "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal//mimemail/mimemail_attachment_errors-2904611-55.patch"
+            },
             "drupal/node_revision_delete": {
                 "It is possible that queue table does not exist @see https://www.drupal.org/project/node_revision_delete/issues/3436432": "resources/patch/php/drupal/node_revision_delete/3436432.patch"
             },
