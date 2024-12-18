@@ -72,7 +72,7 @@ Feature: Global search
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
     #
-    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # The Portal collection is always present and has 'Demography' as topic. Thus
     # the 'Demography' and its parent, 'Social and Political', will have the
     # count increased by one each. See joinup_test.install
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
@@ -85,7 +85,7 @@ Feature: Global search
 
     When I check the "Social and Political (7)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # The Portal collection is always present and has 'Demography' as topic. Thus
     # the 'Demography' and its parent, 'Social and Political', will have the
     # count increased by one each. See joinup_test.install
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
@@ -99,17 +99,17 @@ Feature: Global search
 
     # Test ability to tick many topics.
     When I check the "Demography (3)" checkbox from the "topic" facet
-    # Joinup collection is included
+    # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (3)"
     When I check the "E-inclusion (4)" checkbox from the "topic" facet
-    # Joinup collection is included
+    # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (7)"
     And the "Demography" content checkbox item should be selected
     And the "E-inclusion" content checkbox item should be selected
 
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
-    # Joinup collection is included
+    # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (3)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
@@ -147,14 +147,14 @@ Feature: Global search
     Given I click "Clear filters"
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    # Joinup collection is included
+    # The Portal collection is included
     And the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
-    # Joinup collection is included
+    # The Portal collection is included
     Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
@@ -276,7 +276,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    # Joinup collection is included
+    # The Portal collection is included
     Then the "Content types" checkbox facet should allow selecting the following values "Collections (3), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
@@ -337,8 +337,8 @@ Feature: Global search
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    # Joinup collection is included
-    Then the page should show the tiles "Joinup, Solution alpha, Release Alpha"
+    # The Portal collection is included
+    Then the page should show the tiles "The Portal, Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -648,8 +648,8 @@ Feature: Global search
       | The uneven universe |
       | Quantum information |
       | Red revolution      |
-      # Joinup collection is installed in all tests. See joinup_test.install
-      | Joinup              |
+      # The Portal collection is installed in all tests. See joinup_test.install
+      | The Portal          |
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -671,16 +671,6 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "fu" in the "search bar"
-    # When the search term is less than 3 characters, the search is global and
-    # all results are fetched. Thus, the first two results are returned by
-    # score. That bring the first available collections as their score is the
-    # highest.
-    Then I should see the following search suggestions:
-      | Radio cooking collection |
-      # Joinup collection is always installed
-      | Joinup                   |
-
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
       | Movistar                 |
@@ -697,11 +687,11 @@ Feature: Global search
     # Check if facet summary was remove correctly.
     When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    # There are 2 collections given the default Joinup collection.
+    # There are 2 collections given the default The Portal collection.
     And I check the "Collections (2)" checkbox from the "Content types" facet
     Then I should see the following facet summary "Collections, News"
     When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection, Joinup"
+    Then the page should show only the tiles "Radio cooking collection, The Portal"
 
     # Check if search autocomplete works in navbar.
     When I visit the collection overview
@@ -774,11 +764,11 @@ Feature: Global search
     And I should see the text "SEARCH RESULTS (8)"
 
     Then I go to "/search?f[0]=date:(min:,max:1609113600)"
-    # One extra result due to the default Joinup collection.
+    # One extra result due to the default The Portal collection.
     And I should see the text "SEARCH RESULTS (9)"
 
     Then I go to "/search?f[0]=date:(min:,max:)"
-    # One extra result due to the default Joinup collection.
+    # One extra result due to the default The Portal collection.
     And I should see the text "SEARCH RESULTS (15)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.

@@ -1,5 +1,5 @@
 joinup_featured.site_feature:
-  path: '/feature/{entity_type}/{entity}/add'
+  path: '/feature/{node}/add'
   defaults:
     _controller: '\Drupal\joinup_featured\Controller\FeaturedContentController::feature'
     _title: 'Feature'
@@ -9,11 +9,11 @@ joinup_featured.site_feature:
     _csrf_token: 'TRUE'
   options:
     parameters:
-      entity:
-        type: entity:{entity_type}
+      node:
+        type: entity:node
 
 joinup_featured.site_unfeature:
-  path: '/feature/{entity_type}/{entity}/remove'
+  path: '/feature/{node}/remove'
   defaults:
     _controller: '\Drupal\joinup_featured\Controller\FeaturedContentController::unfeature'
     _title: 'Remove from featured'
@@ -23,5 +23,5 @@ joinup_featured.site_unfeature:
     _csrf_token: 'TRUE'
   options:
     parameters:
-      entity:
-        type: entity:{entity_type}
+      node:
+        type: entity:node

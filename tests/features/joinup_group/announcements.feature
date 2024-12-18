@@ -115,6 +115,14 @@ Feature: Messaging group announcements
     And I should not see the button "Create"
     And I should not see the button "Undo reject"
 
+    # Test subject formatting (special chars, HTML tags).
+    When I fill in "Subject" with "Subject with special chars '&>< and HTML <span>tag</span> <Your feedback matters>"
+    When I press "Preview"
+    And the email sent to "Sons of tweets" with subject "Subject with special chars '&>< and HTML <span>tag</span> <Your feedback matters>" contains the following lines of text:
+      | Subject with special chars '&>< and HTML <span>tag</span> <Your feedback matters> |
+    And the email sent to "Sons of tweets" with subject "Subject with special chars '&>< and HTML <span>tag</span> <Your feedback matters>" should not contain the following lines of text:
+      | &quot;&amp;&gt;&lt; |
+
     When I fill in "Subject" with "The Big Opening is postponed"
     And I fill in "Body" with:
     """

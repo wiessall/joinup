@@ -77,29 +77,6 @@ class DistributionContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a distribution.
-   *
-   * @param string $distribution
-   *   The title of the distribution.
-   *
-   * @When I delete the :distribution distribution
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the entity could not be deleted.
-   *
-   * @todo Do we still need this?
-   */
-  public function deleteDistribution(string $distribution): void {
-    /** @var \Drupal\joinup_distribution\Entity\DistributionInterface $entity */
-    $entity = $this->getEntityByLabel('node', $distribution);
-    if (isset($this->entities['node'][$entity->id()])) {
-      unset($this->entities['node'][$entity->id()]);
-    }
-    $entity->skip_notification = TRUE;
-    $entity->delete();
-  }
-
-  /**
    * Checks if a distribution in compact view contains download links.
    *
    * The compact view is used for example in the "Downloads" page.

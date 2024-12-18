@@ -151,7 +151,7 @@ Feature: User profile
       | Botanic E.D.E.N.              |
       # Always present in all tests.
       # See joinup_test.install
-      | Joinup                        |
+      | The Portal                    |
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
@@ -281,7 +281,7 @@ Feature: User profile
       | Salt is salty           |
       # Always present in all tests.
       # See joinup_test.install
-      | Joinup                  |
+      | The Portal               |
 
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
