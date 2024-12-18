@@ -174,6 +174,14 @@ class Distribution extends Node implements DistributionInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasParent(): bool {
+    $parent = $this->get('parent')->entity;
+    return $parent instanceof DistributionsParentInterface;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isStandalone(): bool {
     return $this->getParent() instanceof SolutionInterface;
   }
