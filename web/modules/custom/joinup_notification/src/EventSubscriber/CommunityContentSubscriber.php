@@ -10,13 +10,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_discussion\Entity\Discussion;
-use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\og\MembershipManager;
@@ -145,10 +143,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnCreate(): bool {
-    // @todo Old logic, does it even make sense?
-    if (!$this->entity instanceof CommunityContentInterface
-      && !$this->entity instanceof DistributionInterface
-      && !$this->entity instanceof ReleaseInterface) {
+    if (!$this->entity instanceof CommunityContentInterface) {
       return FALSE;
     }
 
