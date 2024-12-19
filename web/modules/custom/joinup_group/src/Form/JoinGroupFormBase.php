@@ -50,11 +50,11 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
   }
 
   public function __construct(
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly MembershipManagerInterface $membershipManager,
-    protected readonly AccessManagerInterface $accessManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected AccessManagerInterface $accessManager,
     protected $messenger,
-    protected readonly FormBuilderInterface $formBuilder,
+    protected FormBuilderInterface $formBuilder,
   ) {}
 
   /**

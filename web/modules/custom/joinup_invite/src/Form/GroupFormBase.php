@@ -25,10 +25,10 @@ abstract class GroupFormBase extends InviteFormBase {
   protected OgRoleInterface $role;
 
   public function __construct(
-    readonly EntityTypeManagerInterface $entityTypeManager,
-    readonly InvitationMessageHelperInterface $invitationMessageHelper,
-    readonly LoggerChannelInterface $logger,
-    protected readonly MembershipManagerInterface $ogMembershipManager,
+    EntityTypeManagerInterface $entityTypeManager,
+    InvitationMessageHelperInterface $invitationMessageHelper,
+    LoggerChannelInterface $logger,
+    protected MembershipManagerInterface $ogMembershipManager,
   ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
   }

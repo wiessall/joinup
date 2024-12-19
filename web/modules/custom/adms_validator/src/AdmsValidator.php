@@ -12,9 +12,16 @@ use EasyRdf\Graph;
  */
 class AdmsValidator implements AdmsValidatorInterface {
 
+  /**
+   * The validation query.
+   *
+   * @var string
+   */
+  protected $validationQuery;
+
+
   public function __construct(
     protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
-    protected string $validationQuery,
   ) {}
 
   /**
