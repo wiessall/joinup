@@ -29,7 +29,7 @@ class ContentModerationOverviewForm extends FormBase {
   protected $nodeStorage;
 
   public function __construct(
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
