@@ -41,9 +41,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     readonly FieldDefinitionInterface $field_definition,
     array $settings,
     readonly array $third_party_settings,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly FilterPluginManagerInterface $filterPluginManager,
-    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected FilterPluginManagerInterface $filterPluginManager,
+    protected EventDispatcherInterface $eventDispatcher,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
   }

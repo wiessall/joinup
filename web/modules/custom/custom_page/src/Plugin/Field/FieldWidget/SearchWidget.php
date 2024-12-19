@@ -30,38 +30,18 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class SearchWidget extends DefaultSearchWidget {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  private $currentUser;
-
-  /**
-   * Constructs a SearchWidget object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the widget.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the widget is associated.
-   * @param array $settings
-   *   The widget settings.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\search_api_field\Plugin\FilterPluginManagerInterface $filter_plugin_manager
-   *   The filter plugin manager service.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager, EventDispatcherInterface $event_dispatcher, AccountInterface $current_user) {
+  public function __construct(
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    readonly FieldDefinitionInterface $field_definition,
+    array $settings,
+    readonly array $third_party_settings,
+    EntityTypeManagerInterface $entity_type_manager,
+    FilterPluginManagerInterface $filter_plugin_manager,
+    EventDispatcherInterface $event_dispatcher,
+    protected AccountInterface $currentUser
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_manager, $filter_plugin_manager, $event_dispatcher);
-    $this->currentUser = $current_user;
   }
 
   /**
