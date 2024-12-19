@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Listens to CAS events.
  */
-readonly class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
+class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
@@ -48,13 +48,13 @@ readonly class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterf
   protected Request $currentRequest;
 
   public function __construct(
-    ConfigFactoryInterface $configFactory,
-    protected UserDataInterface $userData,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    RequestStack $requestStack,
-    protected MessengerInterface $messenger,
-    protected StateInterface $state,
-    protected Authmap $authmap,
+    readonly ConfigFactoryInterface $configFactory,
+    protected readonly UserDataInterface $userData,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    readonly RequestStack $requestStack,
+    protected readonly MessengerInterface $messenger,
+    protected readonly StateInterface $state,
+    protected readonly Authmap $authmap,
   ) {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
     $this->casSettings = $configFactory->get('cas.settings');
