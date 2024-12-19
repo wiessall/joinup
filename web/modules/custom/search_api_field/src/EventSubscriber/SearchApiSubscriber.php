@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Performs subscribed alterations for the Search API field module.
  */
-readonly class SearchApiSubscriber implements EventSubscriberInterface {
+class SearchApiSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
