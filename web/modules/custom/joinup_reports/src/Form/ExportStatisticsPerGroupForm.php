@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Form;
+namespace Drupal\joinup_reports\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\joinup\ExportBatchedDataFormBase;
+use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -56,7 +56,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * {@inheritdoc}
    */
   protected function getRedirectRouteName(): string {
-    return 'joinup.statistics_per_group';
+    return 'joinup_reports.statistics_per_group';
   }
 
   /**

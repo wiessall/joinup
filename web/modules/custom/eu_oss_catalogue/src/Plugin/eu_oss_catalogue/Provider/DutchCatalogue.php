@@ -20,8 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @EuOssCatalogueProvider(
  *   id = "dutch_catalogue",
- *   label = @Translation("Dutch catalogue"),
- *   description = @Translation("Dutch open source software solutions for the public administrations."),
+ *   label = @Translation("Developer Overheid"),
+ *   description = @Translation("Dutch National OSS Catalogue, by https://developer.overheid.nl website."),
  *   parser = "publiccode_yml",
  * )
  */

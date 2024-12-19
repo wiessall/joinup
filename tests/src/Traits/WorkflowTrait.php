@@ -124,7 +124,7 @@ trait WorkflowTrait {
     return [
       'deletion request' => 'deletion_request',
       'needs update' => 'needs_update',
-      'new' => '__new__',
+      'new' => 'draft',
     ];
   }
 

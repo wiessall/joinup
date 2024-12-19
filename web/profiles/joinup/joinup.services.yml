@@ -12,7 +12,3 @@ services:
     class: Drupal\joinup\Access\NodeCreationRoutesAccess
     tags:
       - { name: access_check, applies_to: _node_creation_route }
-  joinup.reporting_route_subscriber:
-    class: Drupal\joinup\Routing\ReportingRouteSubscriber
-    tags:
-      - { name: event_subscriber }

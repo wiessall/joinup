@@ -7,4 +7,5 @@ package: Joinup communities
 dependencies:
   - og:og
   - drupal:filter
+  - joinup_notification:joinup_notification
   - rdf_sync:rdf_sync
