@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * - show only the content the user is author of;
  * - do not show entities of some bundles.
  */
-readonly class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
+class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
