@@ -16,15 +16,9 @@ class SpdxContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
-   * Mapping of human-readable field labels to machine names.
+   * Vocabulary machine name.
    */
-  protected const FIELD_ALIASES = [
-    'uri' => 'uri',
-    'ID' => 'spdx_id',
-    'title' => 'name',
-    'see also' => 'see_also',
-    'text' => 'description',
-  ];
+  const string TAXONOMY_NAME = 'spdx_licence';
 
   /**
    * Creates a number of SPDX licence records.
@@ -44,9 +38,9 @@ class SpdxContext extends RawDrupalContext {
    * @Given (the following )SPDX licences:
    */
   public function givenSpdxLicences(TableNode $data): void {
-    $aliases = self::FIELD_ALIASES;
+    $aliases = $this->getTaxonomyFieldMappings(self::TAXONOMY_NAME);
     foreach ($data->getColumnsHash() as $licence_data) {
-      $values = (object) ['vocabulary_machine_name' => 'spdx_licence'];
+      $values = (object) ['vocabulary_machine_name' => self::TAXONOMY_NAME];
 
       // Replace the human-readable aliases with the field machine names.
       foreach ($licence_data as $key => $value) {

@@ -708,26 +708,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes the user account with the given name.
-   *
-   * This intended to be used for user accounts that are created through the UI
-   * and are not cleaned up automatically when a test ends.
-   *
-   * @param string $username
-   *   The name of the user to delete.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when an error occurs while the user is being deleted.
-   *
-   * @Then I delete the :username user
-   */
-  public function deleteUser(string $username): void {
-    /** @var \Drupal\user\UserInterface $user */
-    $user = $this->getUserByName($username);
-    $user->delete();
-  }
-
-  /**
    * Click on an element by css class.
    *
    * @param string $element
@@ -2034,10 +2014,10 @@ class FeatureContext extends RawDrupalContext {
    */
   public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
-    $map = $this->getImageLibraryBrowserMapping();
+    $map = $this->getImageLibraryBrowserMapping($content_type);
 
     $page = $this->getSession()->getPage();
-    if (!$field = $page->findField("files[{$map[$content_type]['fields']['logo']}_0]")) {
+    if (!$field = $page->findField("files[{$map['fields']['logo']}_0]")) {
       throw new \InvalidArgumentException("Invalid field (logo).");
     }
 
@@ -2091,9 +2071,9 @@ class FeatureContext extends RawDrupalContext {
    */
   public function assertLogoFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $offset): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
-    $map = $this->getImageLibraryBrowserMapping();
-    $entity = $this->getEntityByLabel($map[$content_type]['type'], $title, $content_type);
-    $image_field = $entity->get($map[$content_type]['fields']['logo']);
+    $map = $this->getImageLibraryBrowserMapping($content_type);
+    $entity = $this->getEntityByLabel($map['type'], $title, $content_type);
+    $image_field = $entity->get($map['fields']['logo']);
     if ($image_field->isEmpty()) {
       throw new ExpectationFailedException("The {$title} logo field is empty but it should point to the image at position #{$offset}.");
     }
@@ -2106,47 +2086,6 @@ class FeatureContext extends RawDrupalContext {
     if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
       throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
     }
-  }
-
-  /**
-   * Returns the mapping of logo field to their content type.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected function getImageLibraryBrowserMapping(): array {
-    return [
-      'collection' => [
-        'type' => 'node',
-        'fields' => [
-          'logo' => 'logo',
-        ],
-      ],
-      'solution' => [
-        'type' => 'node',
-        'fields' => [
-          'logo' => 'logo',
-        ],
-      ],
-      'event' => [
-        'type' => 'node',
-        'fields' => [
-          'logo' => 'field_event_logo',
-        ],
-      ],
-      'news' => [
-        'type' => 'node',
-        'fields' => [
-          'logo' => 'field_news_logo',
-        ],
-      ],
-      'discussion' => [
-        'type' => 'node',
-        'fields' => [
-          'logo' => 'field_discussion_logo',
-        ],
-      ],
-    ];
   }
 
   /**
@@ -2164,10 +2103,7 @@ class FeatureContext extends RawDrupalContext {
     if (!ctype_digit($offset) || $offset < 1) {
       throw new \InvalidArgumentException("Invalid image position ($offset).");
     }
-    $map = $this->getImageLibraryBrowserMapping();
-    if (!isset($map[$content_type])) {
-      throw new \InvalidArgumentException("Invalid content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map)) . '.');
-    }
+    $this->getImageLibraryBrowserMapping($content_type);
   }
 
   /**
