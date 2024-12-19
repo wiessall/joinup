@@ -19,16 +19,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Alter the order of results for search api field.
  */
-class SearchApiFieldListingOrder implements EventSubscriberInterface {
+readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
 
-  /**
-   * Constructs a subscriber instance.
-   *
-   * @param \Drupal\facets\Utility\FacetsDateHandler $facetDateHandler
-   *   Facets date handler.
-   */
-  public function __construct(protected FacetsDateHandler $facetDateHandler) {
-  }
+  public function __construct(
+    protected FacetsDateHandler $facetDateHandler,
+  ) {}
 
   /**
    * {@inheritdoc}

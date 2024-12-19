@@ -16,54 +16,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Reacts on user cancelling.
  */
-class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
+readonly class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The OG membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
-   * The user data service.
-   *
-   * @var \Drupal\user\UserDataInterface
-   */
-  protected UserDataInterface $userData;
-
-  /**
-   * The password generator service.
-   *
-   * @var \Drupal\Core\Password\PasswordGeneratorInterface
-   */
-  protected PasswordGeneratorInterface $passwordGenerator;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The OG membership manager service.
-   * @param \Drupal\user\UserDataInterface $user_data
-   *   The user data service.
-   * @param \Drupal\Core\Password\PasswordGeneratorInterface $password_generator
-   *   The password generator service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, UserDataInterface $user_data, PasswordGeneratorInterface $password_generator) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $membership_manager;
-    $this->userData = $user_data;
-    $this->passwordGenerator = $password_generator;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected UserDataInterface $userData,
+    protected PasswordGeneratorInterface $passwordGenerator,
+  ) {}
 
   /**
    * {@inheritdoc}

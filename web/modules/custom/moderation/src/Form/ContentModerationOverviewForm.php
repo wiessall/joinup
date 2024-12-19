@@ -22,30 +22,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ContentModerationOverviewForm extends FormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The node storage class.
    *
    * @var \Drupal\node\NodeStorageInterface
    */
   protected $nodeStorage;
 
-  /**
-   * Constructs a new ContentModerationOverviewForm object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
 

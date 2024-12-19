@@ -21,7 +21,7 @@ use Drupal\og\OgMembershipInterface;
  * Determines access to routes based on an account role permission, but also
  * taking Organic Group membership permissions.
  */
-class JoinupReplicatePermission implements AccessInterface {
+readonly class JoinupReplicatePermission implements AccessInterface {
 
   public function __construct(
     protected MembershipManagerInterface $membershipManager,

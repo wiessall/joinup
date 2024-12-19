@@ -39,10 +39,10 @@ class UnsubscribeForm extends ConfirmFormBase {
   protected ?array $types;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RendererInterface $renderer,
-    protected EntityTypeBundleInfoInterface $bundleInfo,
-    protected MembershipManagerInterface $membershipManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RendererInterface $renderer,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    protected readonly MembershipManagerInterface $membershipManager,
   ) {}
 
   /**

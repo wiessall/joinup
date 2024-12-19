@@ -20,8 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 class QueryController extends ControllerBase {
 
   public function __construct(
-    protected CachedSparqlReadOnlyEndpoint $endpoint,
-    protected SparqlFormatManager $sparqlFormatManager,
+    protected readonly CachedSparqlReadOnlyEndpoint $endpoint,
+    protected readonly SparqlFormatManager $sparqlFormatManager,
   ) {}
 
   /**

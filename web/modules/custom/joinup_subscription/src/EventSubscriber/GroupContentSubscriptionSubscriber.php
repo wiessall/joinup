@@ -22,44 +22,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscriber for compiling group content subscription digest messages.
  */
-class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
+readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The Joinup message delivery service.
-   *
-   * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
-   */
-  protected $messageDelivery;
-
-  /**
-   * The logger channel factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected $loggerFactory;
-
-  /**
-   * Constructs a new event subscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $joinupMessageDelivery
-   *   The Joinup message delivery service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger channel factory.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, JoinupMessageDeliveryInterface $joinupMessageDelivery, LoggerChannelFactoryInterface $logger) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->messageDelivery = $joinupMessageDelivery;
-    $this->loggerFactory = $logger;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected JoinupMessageDeliveryInterface $messageDelivery,
+    protected LoggerChannelFactoryInterface $loggerFactory,
+  ) {}
 
   /**
    * {@inheritdoc}

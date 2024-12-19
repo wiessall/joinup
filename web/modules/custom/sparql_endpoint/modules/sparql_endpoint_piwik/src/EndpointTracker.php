@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Track usage of the SPARQL endpoint.
  */
-class EndpointTracker {
+readonly class EndpointTracker {
 
   /**
    * Module configuration.
