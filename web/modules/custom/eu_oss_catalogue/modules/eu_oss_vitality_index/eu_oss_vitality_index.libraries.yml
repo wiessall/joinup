@@ -5,9 +5,7 @@ chart.js:
       type: external
 vitality-index-chart:
   js:
-    js/vitality_index_chart.js:
-      attributes:
-        defer: true
+    js/vitality_index_chart.js: {}
   dependencies:
     - core/drupal
     - core/once
