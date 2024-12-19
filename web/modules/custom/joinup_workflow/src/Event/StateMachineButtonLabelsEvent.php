@@ -21,7 +21,7 @@ class StateMachineButtonLabelsEvent extends Event implements StateMachineButtonL
 
   public function __construct(
     protected readonly EntityWorkflowStateInterface $entity,
-    protected readonly array $transitions,
+    protected array $transitions,
     protected readonly string $stateId,
   ) {}
 
