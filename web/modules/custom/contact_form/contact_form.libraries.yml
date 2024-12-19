@@ -1,14 +1,6 @@
-remove-domain-from-url:
-  version: VERSION
+contact-form:
   js:
-    js/remove-domain-from-url.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
-empty-url:
-  js:
-    js/empty-url.js: { }
+    js/contact-form.js: { }
   dependencies:
     - core/drupal
     - core/once
