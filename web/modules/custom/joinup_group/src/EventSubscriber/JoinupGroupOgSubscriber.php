@@ -15,12 +15,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to events fired by Organic Groups.
  */
-readonly class JoinupGroupOgSubscriber implements EventSubscriberInterface {
+class JoinupGroupOgSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected readonly AccountInterface $currentUser,
   ) {}
 
   /**
