@@ -97,7 +97,7 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
       'views_bulk_operations.execute_configurable',
       'views_bulk_operations.confirm',
     ];
-    if (!in_array($this->route_match->getRouteName(), $vboRoutes, TRUE) ||
+    if (!in_array($this->routeMatch->getRouteName(), $vboRoutes, TRUE) ||
       $this->routeMatch->getParameter('view_id') !== 'group_content_management') {
       return NULL;
     }
