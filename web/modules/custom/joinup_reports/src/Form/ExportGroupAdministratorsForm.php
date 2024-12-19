@@ -19,7 +19,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
   public function __construct(
     protected readonly CacheBackendInterface $cache,
-    protected readonly DateFormatterInterface $dateFormatter,
+    protected DateFormatterInterface $dateFormatter,
     protected readonly TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
