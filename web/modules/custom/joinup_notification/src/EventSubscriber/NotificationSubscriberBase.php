@@ -25,7 +25,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * A base class for the notification subscribers.
  */
-abstract readonly class NotificationSubscriberBase implements EventSubscriberInterface {
+abstract class NotificationSubscriberBase implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
@@ -47,12 +47,12 @@ abstract readonly class NotificationSubscriberBase implements EventSubscriberInt
   protected ?array $config;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected ConfigFactory $configFactory,
-    protected AccountProxy $currentUser,
-    protected MembershipManagerInterface $membershipManager,
-    protected WorkflowHelperInterface $workflowHelper,
-    protected JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly ConfigFactory $configFactory,
+    protected readonly AccountProxy $currentUser,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly WorkflowHelperInterface $workflowHelper,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
   ) {}
 
   /**
