@@ -19,10 +19,16 @@ namespace Drupal\custom_page\ProxyClass {
     {
         use DependencySerializationTrait;
 
-        public function __construct(
+      /**
+       * The real proxied service, after it was lazy loaded.
+       *
+       * @var \Drupal\custom_page\CustomPageOgMenuLinksManager
+       */
+      protected $service;
+
+      public function __construct(
           readonly ContainerInterface $container,
           readonly string $drupalProxyOriginalServiceId,
-          object $service
         ) {}
 
         /**
