@@ -10,7 +10,7 @@
         "tour-first-balloon",
         "ul#main-navbar-list",
         context,
-      )[0];
+      ).shift();
       if (!navbarList) return;
 
       const loggedIn = settings.user.uid !== 0;
