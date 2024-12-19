@@ -39,7 +39,7 @@ class SearchWidget extends DefaultSearchWidget {
     EntityTypeManagerInterface $entity_type_manager,
     FilterPluginManagerInterface $filter_plugin_manager,
     EventDispatcherInterface $event_dispatcher,
-    protected AccountInterface $currentUser
+    protected AccountInterface $currentUser,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_manager, $filter_plugin_manager, $event_dispatcher);
   }
