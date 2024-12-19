@@ -19,7 +19,6 @@ class AdmsValidator implements AdmsValidatorInterface {
    */
   protected $validationQuery;
 
-
   public function __construct(
     protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
   ) {}
