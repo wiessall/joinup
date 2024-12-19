@@ -36,11 +36,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
-    readonly array $third_party_settings,
+    array $third_party_settings,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FilterPluginManagerInterface $filterPluginManager,
     protected EventDispatcherInterface $eventDispatcher,
