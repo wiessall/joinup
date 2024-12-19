@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * and redirecting the user back to the original page where, optionally, a
  * specific action, such as opening a modal, may be automatically triggered.
  */
-abstract readonly class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubscriberInterface {
+abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
@@ -37,8 +37,8 @@ abstract readonly class RedirectedEuLoginAuthenticatedSubscriberBase implements 
   protected Request $currentRequest;
 
   public function __construct(
-    protected TimeInterface $time,
-    RequestStack $request_stack,
+    protected readonly TimeInterface $time,
+    readonly RequestStack $request_stack,
   ) {
     $this->currentRequest = $request_stack->getCurrentRequest();
   }

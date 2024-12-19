@@ -19,16 +19,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber handling invitations to groups.
  */
-readonly class InvitationSubscriber implements EventSubscriberInterface {
+class InvitationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected MembershipManagerInterface $membershipManager,
-    protected MessengerInterface $messenger,
-    protected LoggerChannelInterface $logger,
-    protected AccountInterface $currentUser,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly MessengerInterface $messenger,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly AccountInterface $currentUser,
   ) {}
 
   /**

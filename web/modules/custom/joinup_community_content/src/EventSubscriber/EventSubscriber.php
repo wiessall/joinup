@@ -17,15 +17,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscribers for the Joinup community content module.
  */
-readonly class EventSubscriber implements EventSubscriberInterface {
+class EventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected EntityTypeBundleInfoInterface $entityTypeBundleInfo,
-    protected AccountInterface $currentUser,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected OgAccessInterface $ogAccess,
+    protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+    protected readonly AccountInterface $currentUser,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly OgAccessInterface $ogAccess,
   ) {}
 
   /**
