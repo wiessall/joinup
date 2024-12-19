@@ -16,7 +16,9 @@ use Drupal\state_machine\WorkflowManagerInterface;
  */
 readonly class CustomPageGuard implements GuardInterface {
 
-  public function __construct(protected WorkflowManagerInterface $workflowManager) {}
+  public function __construct(
+    protected WorkflowManagerInterface $workflowManager
+  ) {}
 
   /**
    * {@inheritdoc}

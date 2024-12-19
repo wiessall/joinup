@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Decorator for the arbitrary facet widget.
  */
-readonly class ArbitraryFacetWidgetDecorator implements WidgetPluginInterface, ContainerFactoryPluginInterface {
+class ArbitraryFacetWidgetDecorator implements WidgetPluginInterface, ContainerFactoryPluginInterface {
 
   use DependencySerializationTrait;
   use StringTranslationTrait;
