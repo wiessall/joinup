@@ -20,8 +20,8 @@ class NotificationEvent extends Event {
   protected $success = TRUE;
 
   public function __construct(
-    string $operation,
-    EntityInterface $entity,
+    protected string $operation,
+    protected EntityInterface $entity,
   ) {}
 
   /**
