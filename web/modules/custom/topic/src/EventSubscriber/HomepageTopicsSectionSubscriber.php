@@ -13,16 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Topic module event subscriber.
  */
-class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
+readonly class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -49,7 +44,8 @@ class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
     }
 
     /** @var \Drupal\entityqueue\Entity\EntitySubqueue $entity_queue */
-    $entity_queue = $this->entityTypeManager->getStorage('entity_subqueue')->load('homepage_topics');
+    $entity_queue = $this->entityTypeManager->getStorage('entity_subqueue')
+      ->load('homepage_topics');
     // If there are no topics, don't show any labels.
     if ($entity_queue->get('items')->isEmpty()) {
       $build['#configuration']['label_display'] = FALSE;

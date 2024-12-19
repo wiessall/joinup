@@ -14,26 +14,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Performs subscribed alterations for the Search API field module.
  */
-class SearchApiSubscriber implements EventSubscriberInterface {
+readonly class SearchApiSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The Facet Manager.
-   *
-   * @var \Drupal\facets\FacetManager\DefaultFacetManager
-   */
-  protected DefaultFacetManager $facetManager;
-
-  /**
-   * Constructs SearchApiSubscriber.
-   *
-   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
-   *   The facet manager service.
-   */
-  public function __construct(DefaultFacetManager $facet_manager) {
-    $this->facetManager = $facet_manager;
-  }
+  public function __construct(
+    protected DefaultFacetManager $facetManager,
+  ) {}
 
   /**
    * {@inheritdoc}

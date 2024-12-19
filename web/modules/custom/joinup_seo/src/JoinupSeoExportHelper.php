@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Helper service to ensure that data are exported properly.
  */
-class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
+readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
 
   /**
    * Serialization format.
@@ -20,14 +20,6 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    */
   protected const SERIALIZATION_FORMAT = 'jsonld';
 
-  /**
-   * Constructs a JoinupSeoExportHelper object.
-   *
-   * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-   *   The general serializer service.
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $extensionPathResolver
-   *   The extension path resolver.
-   */
   public function __construct(
     protected SerializerInterface $serializer,
     protected ExtensionPathResolver $extensionPathResolver,

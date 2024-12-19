@@ -10,18 +10,12 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Helper methods for dealing with tours on Joinup.
  */
-class TourHelper implements TourHelperInterface {
+readonly class TourHelper implements TourHelperInterface {
 
-  /**
-   * Constructs a TourHelper object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $currentRouteMatch
-   *   The current route match.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RouteMatchInterface $currentRouteMatch) {
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RouteMatchInterface $currentRouteMatch,
+  ) {}
 
   /**
    * {@inheritdoc}

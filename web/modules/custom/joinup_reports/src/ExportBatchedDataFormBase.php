@@ -20,7 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class ExportBatchedDataFormBase extends FormBase {
 
-  public function __construct(protected CacheBackendInterface $cacheStorage, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time) {}
+  public function __construct(
+    protected readonly CacheBackendInterface $cacheStorage,
+    protected readonly DateFormatterInterface $dateFormatter,
+    protected readonly TimeInterface $time,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -116,7 +120,8 @@ abstract class ExportBatchedDataFormBase extends FormBase {
     $this->messenger()->addMessage('Data have been rebuilt.');
 
     // Handle the file here.
-    return new RedirectResponse(Url::fromRoute($this->getRedirectRouteName())->toString());
+    return new RedirectResponse(Url::fromRoute($this->getRedirectRouteName())
+      ->toString());
   }
 
   /**

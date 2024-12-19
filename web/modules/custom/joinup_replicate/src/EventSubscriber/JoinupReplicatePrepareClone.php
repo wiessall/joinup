@@ -22,7 +22,7 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
   use StringTranslationTrait;
 
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected readonly AccountInterface $currentUser,
   ) {}
 
   /**

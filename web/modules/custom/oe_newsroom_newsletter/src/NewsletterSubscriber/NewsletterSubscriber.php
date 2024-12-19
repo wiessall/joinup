@@ -23,27 +23,15 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
   const NEWSROOM_NEWSLETTER_SUBSCRIPTION_URL = 'https://ec.europa.eu/newsroom/api/v1/subscribe';
 
   /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $httpClient;
-
-  /**
    * The list of registered service application keys.
    *
    * @var array
    */
   protected $settings;
 
-  /**
-   * Constructs a new NewsletterSubscriber object.
-   *
-   * @param \GuzzleHttp\ClientInterface $httpClient
-   *   The HTTP client.
-   */
-  public function __construct(ClientInterface $httpClient) {
-    $this->httpClient = $httpClient;
+  public function __construct(
+    protected readonly ClientInterface $httpClient,
+  ) {
     $this->settings = [];
     $settings = Settings::get('oe_newsroom_universe_keys');
     if (!empty($settings) && $settings = json_decode($settings)) {

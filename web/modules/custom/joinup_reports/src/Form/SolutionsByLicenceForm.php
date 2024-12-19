@@ -26,20 +26,10 @@ class SolutionsByLicenceForm extends FormBase {
     return 'solutions_by_licence_form';
   }
 
-  /**
-   * Constructs a SolutionsByLicenceController.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\mysql\Driver\Database\mysql\Connection $database
-   *   The database service.
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $linkGenerator
-   *   The link generator.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected Connection $database,
-    protected LinkGeneratorInterface $linkGenerator,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly Connection $database,
+    protected readonly LinkGeneratorInterface $linkGenerator,
   ) {}
 
   /**

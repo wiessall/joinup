@@ -30,39 +30,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The logger instance.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
-   * Constructs a new object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   The logger instance.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LoggerInterface $logger,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger;
   }
 
   /**

@@ -15,11 +15,13 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 /**
  * Guard class for the transitions of the solution entity.
  */
-class SolutionTransitionGuard implements GuardInterface {
+readonly class SolutionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  public function __construct(protected AccountInterface $currentUser) {}
+  public function __construct(
+    protected AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

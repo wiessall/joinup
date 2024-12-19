@@ -39,34 +39,16 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    */
   protected EntityStorageInterface $commentStorage;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   Module handler.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\Config\ImmutableConfig $userSettings
-   *   User setting.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected ModuleHandlerInterface $moduleHandler,
-    protected LoggerInterface $logger,
-    protected ImmutableConfig $userSettings,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly ModuleHandlerInterface $moduleHandler,
+    protected readonly LoggerInterface $logger,
+    protected readonly ImmutableConfig $userSettings,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
     $this->commentStorage = $this->entityTypeManager->getStorage('comment');

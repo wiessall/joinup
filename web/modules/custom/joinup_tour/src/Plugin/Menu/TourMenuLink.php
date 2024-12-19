@@ -16,23 +16,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TourMenuLink extends MenuLinkDefault {
 
-  /**
-   * Creates a new menu link instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Menu\StaticMenuLinkOverridesInterface $static_override
-   *   The static override storage.
-   * @param \Drupal\joinup_tour\TourHelperInterface $tourHelper
-   *   The tour helper service.
-   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $currentRouteMatch
-   *   The current route match.
-   */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, protected TourHelperInterface $tourHelper, protected ResettableStackedRouteMatchInterface $currentRouteMatch) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    readonly StaticMenuLinkOverridesInterface $static_override,
+    protected readonly TourHelperInterface $tourHelper,
+    protected readonly ResettableStackedRouteMatchInterface $currentRouteMatch,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $static_override);
   }
 
