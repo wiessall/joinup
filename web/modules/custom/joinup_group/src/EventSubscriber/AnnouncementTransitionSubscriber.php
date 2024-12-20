@@ -16,16 +16,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to group announcements transitions.
  */
-readonly class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
+class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected MailManagerInterface $mailManager,
-    protected LanguageManagerInterface $languageManager,
-    protected JoinupMessageDeliveryInterface $messageDelivery,
-    protected QueueFactory $queueFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MailManagerInterface $mailManager,
+    protected readonly LanguageManagerInterface $languageManager,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly QueueFactory $queueFactory,
   ) {
   }
 
