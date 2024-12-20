@@ -22,7 +22,6 @@ class AdmsValidationResult {
    */
   protected $errors = [];
 
-
   public function __construct(
     readonly Result $result,
     readonly string $graph_uri,
