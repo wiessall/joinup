@@ -18,9 +18,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class AdmsValidatorForm extends FormBase {
 
   public function __construct(
-    protected readonly AdmsValidatorInterface $admsValidator,
-    protected readonly Session $session,
-    protected readonly RdfSyncConnectionInterface $connection,
+    protected AdmsValidatorInterface $admsValidator,
+    protected Session $session,
+    protected RdfSyncConnectionInterface $connection,
   ) {}
 
   /**
