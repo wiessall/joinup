@@ -13,12 +13,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Base class for AddGroupContentEvent::class event subscribers.
  */
-abstract readonly class AddGroupContentEventSubscriberBase implements EventSubscriberInterface {
+abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
