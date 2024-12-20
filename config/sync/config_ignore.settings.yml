@@ -8,3 +8,4 @@ ignored_config_entities:
   - update.settings
   - upgrade_status.settings
   - 'webform.webform.*'
+  - ~webform.webform.assessment

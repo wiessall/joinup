@@ -1,0 +1,39 @@
+uuid: 28ae9cb6-3d9a-4b8b-9fa0-28eb8f17aea7
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - node_revision_delete
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  node_revision_delete:
+    amount:
+      status: false
+      settings:
+        amount: 0
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
+label_singular: 'assessment report'
+label_plural: 'assessment reports'
+label_count:
+  no_count_capitalize: "Assessment report\x03Assessment reports"
+name: 'Assessment report'
+type: assessment_report
+description: 'Interoperability assessment report'
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false
