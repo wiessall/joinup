@@ -16,9 +16,6 @@ use Drupal\og\OgGroupAudienceHelperInterface;
  */
 readonly class CustomPageProvider implements CustomPageProviderInterface {
 
-  /**
-   * Builds a new custom page OG menu links updater service.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,

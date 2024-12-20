@@ -29,35 +29,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
 
-  /**
-   * Constructs a FormatterBase object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\token\TokenInterface $token
-   *   The token replacement service.
-   */
   public function __construct(
-    string $plugin_id,
-    mixed $plugin_definition,
-    FieldDefinitionInterface $field_definition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    readonly FieldDefinitionInterface $field_definition,
     array $settings,
     string $label,
-    string $view_mode,
-    array $third_party_settings,
-    protected TokenInterface $token,
+    readonly string $view_mode,
+    readonly array $third_party_settings,
+    protected readonly TokenInterface $token,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }

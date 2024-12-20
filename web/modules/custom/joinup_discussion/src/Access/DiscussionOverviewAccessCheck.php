@@ -16,16 +16,8 @@ use Symfony\Component\Routing\Route;
 /**
  * Provides a route access checker for _joinup_discussion_overview.
  */
-class DiscussionOverviewAccessCheck implements AccessInterface {
+readonly class DiscussionOverviewAccessCheck implements AccessInterface {
 
-  /**
-   * Builds a new access checker instance.
-   *
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   Group manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
-   */
   public function __construct(
     protected JoinupGroupManagerInterface $groupManager,
     protected EntityTypeManagerInterface $entityTypeManager,

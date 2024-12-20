@@ -21,28 +21,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GitHubFeedDefaultFormatter extends FormatterBase {
 
-  /**
-   * Constructs a new GitHubFeedDefaultFormatter object.
-   *
-   * @param string $pluginId
-   *   The plugin_id for the formatter.
-   * @param \Drupal\Component\Plugin\Definition\PluginDefinitionInterface $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $thirdPartySettings
-   *   Any third party settings.
-   * @param \Drupal\github_feed\GitHubFeedInterface $githubFeed
-   *   The GitHub feed client.
-   */
-  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $view_mode, array $thirdPartySettings, protected GitHubFeedInterface $githubFeed) {
-    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $view_mode, $thirdPartySettings);
+  public function __construct(
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    FieldDefinitionInterface $fieldDefinition,
+    array $settings,
+    string $label,
+    readonly string $view_mode,
+    array $thirdPartySettings,
+    protected readonly GitHubFeedInterface $githubFeed,
+  ) {
+    parent::__construct($plugin_id, $plugin_definition, $fieldDefinition, $settings, $label, $view_mode, $thirdPartySettings);
   }
 
   /**

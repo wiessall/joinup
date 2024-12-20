@@ -13,26 +13,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Base class for AddGroupContentEvent::class event subscribers.
  */
-abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInterface {
+abstract readonly class AddGroupContentEventSubscriberBase implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}

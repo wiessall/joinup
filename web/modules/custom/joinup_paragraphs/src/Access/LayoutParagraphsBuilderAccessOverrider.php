@@ -22,17 +22,9 @@ use Drupal\paragraphs\ParagraphsTypeInterface;
  */
 class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAccess {
 
-  /**
-   * Constructs overrider.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   Organic access service.
-   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
-    protected OgAccessInterface $ogAccess,
+    protected readonly OgAccessInterface $ogAccess,
   ) {
     parent::__construct($entityTypeManager);
   }

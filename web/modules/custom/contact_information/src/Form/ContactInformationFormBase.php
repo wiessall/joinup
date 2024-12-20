@@ -25,28 +25,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class ContactInformationFormBase extends ContactForm {
 
-  /**
-   * Constructs a new contact information form base.
-   *
-   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
-   *   Mail manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
-   * @param \Drupal\honeypot\HoneypotServiceInterface|null $honeypot
-   *   Honeypot service.
-   * @param string|null $entityType
-   *   Entity type.
-   * @param string|null $entityId
-   *   Entity id.
-   * @param string|null $fieldName
-   *   Field name.
-   * @param array|null $fieldSettings
-   *   Field settings.
-   */
   public function __construct(
-    protected MailManagerInterface $mailManager,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected ?HoneypotServiceInterface $honeypot,
+    protected readonly MailManagerInterface $mailManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly ?HoneypotServiceInterface $honeypot,
     ?string $entityType = NULL,
     ?string $entityId = NULL,
     ?string $fieldName = NULL,

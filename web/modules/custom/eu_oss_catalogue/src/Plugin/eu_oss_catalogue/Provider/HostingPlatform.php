@@ -47,34 +47,16 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
    */
   protected bool $done = FALSE;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS Catalogue parser plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The code hosting platform plugin manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
     protected EuOssCataloguePluginManagerInterface $platformManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $parserManager, $logger);
   }
 
   /**
