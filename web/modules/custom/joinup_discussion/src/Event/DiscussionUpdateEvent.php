@@ -12,7 +12,7 @@ use Drupal\joinup_discussion\Entity\DiscussionInterface;
 class DiscussionUpdateEvent extends DiscussionEventBase {
 
   public function __construct(
-    readonly DiscussionInterface $node,
+    DiscussionInterface $node,
     protected readonly array $changedFields,
   ) {
     parent::__construct($node);

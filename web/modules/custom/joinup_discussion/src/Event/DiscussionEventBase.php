@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 abstract class DiscussionEventBase extends Event {
 
   public function __construct(
-    protected readonly DiscussionInterface $node,
+    protected DiscussionInterface $node,
   ) {}
 
   /**
