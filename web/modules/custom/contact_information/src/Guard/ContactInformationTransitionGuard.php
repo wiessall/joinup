@@ -15,7 +15,7 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 /**
  * Guard class for the transitions of the contact_information entity.
  */
-readonly class ContactInformationTransitionGuard implements GuardInterface {
+class ContactInformationTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
