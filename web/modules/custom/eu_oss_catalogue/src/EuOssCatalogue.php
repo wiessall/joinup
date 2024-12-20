@@ -21,18 +21,18 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * Default implementation for `eu_oss_catalogue` service.
  */
-readonly class EuOssCatalogue implements EuOssCatalogueInterface {
+class EuOssCatalogue implements EuOssCatalogueInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected EuOssCataloguePluginManagerInterface $providerManager,
-    protected EuOssCataloguePluginManagerInterface $parserManager,
-    protected QueueFactory $queueFactory,
-    protected EventDispatcherInterface $eventDispatcher,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelInterface $logger,
-    protected TimeInterface $time,
+    protected readonly EuOssCataloguePluginManagerInterface $providerManager,
+    protected readonly EuOssCataloguePluginManagerInterface $parserManager,
+    protected readonly QueueFactory $queueFactory,
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly TimeInterface $time,
   ) {}
 
   /**
