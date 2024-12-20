@@ -24,7 +24,7 @@ class MyCollectionsArbitraryFacet extends ArbitraryFacetBase implements Containe
     array $configuration,
     readonly string $plugin_id,
     readonly mixed $plugin_definition,
-    protected readonly AccountProxyInterface $currentUser
+    protected readonly AccountProxyInterface $currentUser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

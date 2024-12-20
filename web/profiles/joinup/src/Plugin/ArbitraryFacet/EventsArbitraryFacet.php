@@ -27,7 +27,7 @@ class EventsArbitraryFacet extends ArbitraryFacetBase implements ContainerFactor
     readonly string $plugin_id,
     readonly mixed $plugin_definition,
     protected readonly AccountProxyInterface $currentUser,
-    protected readonly FacetsDateHandler $facetDateHandler
+    protected readonly FacetsDateHandler $facetDateHandler,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
