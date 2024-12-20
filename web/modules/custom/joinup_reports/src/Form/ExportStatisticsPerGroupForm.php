@@ -23,7 +23,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   public function __construct(
     protected readonly CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
-    protected readonly TimeInterface $time,
+    protected TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly Connection $mysql,
     protected readonly RdfSyncConnectionInterface $sparql,

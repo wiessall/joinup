@@ -23,7 +23,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
   public function __construct(
     protected readonly CacheBackendInterface $cacheStorage,
     protected DateFormatterInterface $dateFormatter,
-    protected readonly TimeInterface $time,
+    protected TimeInterface $time,
   ) {}
 
   /**
