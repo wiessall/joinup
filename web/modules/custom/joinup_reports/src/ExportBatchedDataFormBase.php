@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class ExportBatchedDataFormBase extends FormBase {
 
   public function __construct(
-    protected readonly CacheBackendInterface $cacheStorage,
+    protected CacheBackendInterface $cacheStorage,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
   ) {}

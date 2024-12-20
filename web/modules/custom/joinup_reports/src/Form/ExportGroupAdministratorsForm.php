@@ -18,10 +18,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
   public function __construct(
-    protected readonly CacheBackendInterface $cache,
+    protected CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
