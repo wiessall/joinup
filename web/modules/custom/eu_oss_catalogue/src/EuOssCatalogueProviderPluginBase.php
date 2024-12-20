@@ -22,10 +22,10 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    protected readonly EuOssCataloguePluginManagerInterface $parserManager,
-    protected readonly LoggerChannelInterface $logger,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
