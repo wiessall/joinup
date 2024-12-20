@@ -32,6 +32,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TableOfContentsOutline extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * The active link.
+   *
+   * @var \Drupal\Core\Menu\MenuLinkInterface|null
+   */
+  protected $activeLink;
+
+  /**
    * The flattened OG menu .
    *
    * @var \Drupal\Core\Menu\MenuLinkInterface[]

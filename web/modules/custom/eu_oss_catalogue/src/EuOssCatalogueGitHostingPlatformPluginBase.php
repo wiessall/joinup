@@ -21,11 +21,11 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    protected readonly ClientInterface $httpClient,
-    protected readonly Settings $settings,
-    protected readonly LoggerChannelInterface $logger,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected ClientInterface $httpClient,
+    protected Settings $settings,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
