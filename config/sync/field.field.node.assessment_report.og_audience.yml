@@ -1,0 +1,35 @@
+uuid: 52bccd20-4efe-4233-a66d-a20cd48d504f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.og_audience
+    - node.type.assessment_report
+    - node.type.collection
+  module:
+    - og
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.assessment_report.og_audience
+field_name: og_audience
+entity_type: node
+bundle: assessment_report
+label: 'Groups audience'
+description: 'OG group audience reference field.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      collection: collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
+field_type: og_standard_reference
