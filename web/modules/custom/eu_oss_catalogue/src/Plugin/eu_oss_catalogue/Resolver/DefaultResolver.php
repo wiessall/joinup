@@ -28,8 +28,8 @@ class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterf
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected  LoggerChannelInterface $logger,
-    protected  LanguageManagerInterface $languageManger,
+    protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

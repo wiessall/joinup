@@ -23,9 +23,9 @@ class AdmsValidationResult {
   protected $errors = [];
 
   public function __construct(
-     Result $result,
-     string $graph_uri,
-     RdfSyncConnectionInterface $sparql,
+    Result $result,
+    string $graph_uri,
+    RdfSyncConnectionInterface $sparql,
   ) {
     $skipped_rules = [100, 101, 102, 103];
     foreach ($result as $error) {
