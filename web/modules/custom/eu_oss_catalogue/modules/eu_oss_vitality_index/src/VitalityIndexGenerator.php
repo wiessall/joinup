@@ -18,7 +18,7 @@ use Gitonomy\Git\Repository;
 /**
  * Vitality Index service.
  */
-readonly class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
+class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
   /**
    * Directory relative to 'private://'.
@@ -33,10 +33,10 @@ readonly class VitalityIndexGenerator implements VitalityIndexGeneratorInterface
   protected ImmutableConfig $config;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelInterface $logger,
-    protected FileSystemInterface $fileSystem,
-    ConfigFactoryInterface $configFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly FileSystemInterface $fileSystem,
+    readonly ConfigFactoryInterface $configFactory,
   ) {
     $this->config = $configFactory->get('eu_oss_vitality_index.settings');
   }
