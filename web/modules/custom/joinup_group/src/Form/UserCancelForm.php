@@ -22,10 +22,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class UserCancelForm extends CoreUserCancelForm {
 
   public function __construct(
-    readonly EntityRepositoryInterface $entity_repository,
-    readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    EntityRepositoryInterface $entity_repository,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
     TimeInterface $time,
-    protected readonly JoinupGroupManagerInterface $groupManager,
+    protected JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
   }
