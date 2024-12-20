@@ -24,11 +24,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
 
   public function __construct(
-    readonly PrivateTempStoreFactory $temp_store_factory,
-    readonly UserStorageInterface $user_storage,
-    readonly EntityTypeManagerInterface $entity_type_manager,
-    protected readonly JoinupGroupManagerInterface $groupManager,
-    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    PrivateTempStoreFactory $temp_store_factory,
+    UserStorageInterface $user_storage,
+    EntityTypeManagerInterface $entity_type_manager,
+    protected JoinupGroupManagerInterface $groupManager,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {
     parent::__construct($temp_store_factory, $user_storage, $entity_type_manager);
   }
