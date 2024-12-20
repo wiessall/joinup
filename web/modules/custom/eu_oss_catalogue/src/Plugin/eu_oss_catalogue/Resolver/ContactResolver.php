@@ -24,11 +24,11 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    protected readonly LoggerChannelInterface $logger,
-    protected readonly LanguageManagerInterface $languageManger,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManger,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $this->languageManger);
   }

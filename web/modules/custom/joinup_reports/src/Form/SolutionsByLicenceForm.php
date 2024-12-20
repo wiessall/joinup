@@ -27,9 +27,9 @@ class SolutionsByLicenceForm extends FormBase {
   }
 
   public function __construct(
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly Connection $database,
-    protected readonly LinkGeneratorInterface $linkGenerator,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $database,
+    protected LinkGeneratorInterface $linkGenerator,
   ) {}
 
   /**
