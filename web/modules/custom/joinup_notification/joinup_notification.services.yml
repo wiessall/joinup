@@ -5,6 +5,7 @@ services:
   joinup_notification.message_delivery:
     class: Drupal\joinup_notification\JoinupMessageDelivery
     arguments: ['@message_notify.sender']
+  Drupal\joinup_notification\JoinupMessageDeliveryInterface: '@joinup_notification.message_delivery'
   joinup_notification.notification_subscriber_base:
     abstract: true
     arguments: ['@entity_type.manager', '@config.factory', '@current_user', '@og.membership_manager', '@joinup_workflow.workflow_helper', '@joinup_notification.message_delivery']

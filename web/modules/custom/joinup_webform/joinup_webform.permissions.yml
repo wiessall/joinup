@@ -1,0 +1,3 @@
+administer webform via ui:
+  title: Administer web forms via UI
+  restrict access: true
