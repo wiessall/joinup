@@ -68,37 +68,17 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected int $numberOfProvidedSolutions = 0;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS Catalogue parser plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \GuzzleHttp\Client $httpClient
-   *   The HTTP client.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The EU OSS Catalogue code hosting platform plugin manager service.
-   * @param \Drupal\eu_oss_catalogue\ApiGuesserInterface $apiGuesser
-   *   The API guesser service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
     protected Client $httpClient,
     protected EuOssCataloguePluginManagerInterface $platformManager,
     protected ApiGuesserInterface $apiGuesser,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $parserManager, $logger);
   }
 
   /**

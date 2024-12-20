@@ -22,29 +22,13 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class ContactInformationContactFormController extends ContactController {
 
-  /**
-   * Constructs a new contact information contact form controller.
-   *
-   * @param \Psr\Log\LoggerInterface $logger
-   *   Logger.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
-   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
-   *   Form builder.
-   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   Event dispatcher.
-   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
-   *   Email manager.
-   * @param \Drupal\honeypot\HoneypotServiceInterface|null $honeypot
-   *   Honeypot service.
-   */
   public function __construct(
     LoggerInterface $logger,
     EntityTypeManagerInterface $entityTypeManager,
     FormBuilderInterface $formBuilder,
     EventDispatcherInterface $eventDispatcher,
-    protected MailManagerInterface $mailManager,
-    protected ?HoneypotServiceInterface $honeypot,
+    protected readonly MailManagerInterface $mailManager,
+    protected readonly ?HoneypotServiceInterface $honeypot,
   ) {
     parent::__construct(
       $logger, $entityTypeManager, $formBuilder, $eventDispatcher

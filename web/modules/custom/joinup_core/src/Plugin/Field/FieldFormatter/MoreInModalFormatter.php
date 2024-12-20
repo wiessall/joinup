@@ -27,38 +27,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class MoreInModalFormatter extends FormatterBase {
 
-  /**
-   * Constructs a new MoreInModalFormatter instance.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $displayRepository
-   *   The entity display repository.
-   * @param \Drupal\Core\Field\FormatterPluginManager $formatterManager
-   *   The field formatter plugin manager.
-   */
   public function __construct(
-    $plugin_id,
-    $plugin_definition,
-    FieldDefinitionInterface $field_definition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    readonly FieldDefinitionInterface $field_definition,
     array $settings,
-    $label,
-    $view_mode,
+    string $label,
+    readonly string $view_mode,
     array $third_party_settings,
-    protected EntityDisplayRepositoryInterface $displayRepository,
-    protected FormatterPluginManager $formatterManager,
+    protected readonly EntityDisplayRepositoryInterface $displayRepository,
+    protected readonly FormatterPluginManager $formatterManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }

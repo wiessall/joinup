@@ -18,40 +18,6 @@ class Project {
    */
   protected array $silentErrors = [];
 
-  /**
-   * Creates a new result object.
-   *
-   * @param string $namespace
-   *   The namespace.
-   * @param string $name
-   *   The repository name.
-   * @param string $url
-   *   The repository URL.
-   * @param string $platform
-   *   The code hosting platform plugin ID.
-   * @param string $defaultBranch
-   *   The repository default branch.
-   * @param string|null $latestReleaseTag
-   *   The latest release tag.
-   * @param string|null $latestReleaseDate
-   *   The latest release date.
-   * @param string|null $platformReference
-   *   The code platform internal unique ID.
-   * @param string|null $description
-   *   The repository description, if any.
-   * @param string|null $logo
-   *   The URL of the project's logo/avatar.
-   * @param int|null $numberOfForks
-   *   Number of times the project has been forked.
-   * @param int|null $numberOfStars
-   *   Number of times the project has been starred.
-   * @param int|null $numberOfIssues
-   *   Number of open issues for the project.
-   * @param int|null $numberOfPullRequests
-   *   Number of open pull requests.
-   * @param string[] $files
-   *   A list of file blobs keyed by a file identifier.
-   */
   public function __construct(
     public readonly string $namespace,
     public readonly string $name,

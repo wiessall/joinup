@@ -31,9 +31,9 @@ trait WrapperHandlerTrait {
    *   The lock backend service.
    */
   public function __construct(
-    string $type,
-    StateInterface $state,
-    protected ?LockBackendInterface $lockBackend = NULL,
+    readonly string $type,
+    readonly StateInterface $state,
+    protected readonly ?LockBackendInterface $lockBackend = NULL,
   ) {
     $this->settings = $state->get('joinup.log_alerts', [$type => []])[$type] + static::getDefaultSettings();
     parent::__construct(...$this->settings);

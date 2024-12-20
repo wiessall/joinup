@@ -29,38 +29,24 @@ class ColorBehavior extends ParagraphsBehaviorBase {
    */
   private const DEFAULT_COLOR = 'primary';
 
-  /**
-   * Constructs a new behaviour plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   The entity field manager.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $themeManager
-   *   The theme manager service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
     EntityFieldManagerInterface $entityFieldManager,
-    protected ThemeManagerInterface $themeManager,
+    protected readonly ThemeManagerInterface $themeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $entityFieldManager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityFieldManager);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('entity_field.manager'),
       $container->get('theme.manager'),
     );

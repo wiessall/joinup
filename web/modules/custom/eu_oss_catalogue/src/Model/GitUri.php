@@ -11,19 +11,6 @@ use Drupal\Component\Utility\UrlHelper;
  */
 final class GitUri {
 
-  /**
-   * Constructs a new GitUri instance.
-   *
-   * @param string $scheme
-   *   The scheme of the git URL.
-   * @param string $host
-   *   The host of the git URL. Might be only a domain, but also a domain with
-   *   a path like "repository.example.com/self-hosted-gitlab".
-   * @param string|null $namespace
-   *   The namespace of the git package.
-   * @param string|null $name
-   *   The name of the package.
-   */
   public function __construct(
     public readonly string $scheme,
     public readonly string $host,

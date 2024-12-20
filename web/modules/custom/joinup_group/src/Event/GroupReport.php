@@ -12,53 +12,14 @@ use Drupal\Core\Url;
  *
  * @see \Drupal\joinup_group\Event\GroupReportsEventInterface
  */
-class GroupReport {
+readonly class GroupReport {
 
-  /**
-   * The machine name of the group report.
-   *
-   * @var string
-   */
-  protected $id;
-
-  /**
-   * The title of the group report.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslatableMarkup
-   */
-  protected $title;
-
-  /**
-   * Optional description of the group report.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslatableMarkup|null
-   */
-  protected $description;
-
-  /**
-   * URL leading to the group report page.
-   *
-   * @var \Drupal\Core\Url
-   */
-  protected $url;
-
-  /**
-   * Constructs a GroupReport object.
-   *
-   * @param string $id
-   *   The machine name of the group report.
-   * @param \Drupal\Core\StringTranslation\TranslatableMarkup $title
-   *   The title of the group report.
-   * @param \Drupal\Core\Url $url
-   *   The URL of the group report.
-   * @param \Drupal\Core\StringTranslation\TranslatableMarkup|null $description
-   *   Optional description of the group report.
-   */
-  public function __construct(string $id, TranslatableMarkup $title, Url $url, ?TranslatableMarkup $description) {
-    $this->id = $id;
-    $this->title = $title;
-    $this->url = $url;
-    $this->description = $description;
+  public function __construct(
+    protected string $id,
+    protected TranslatableMarkup $title,
+    protected Url $url,
+    protected ?TranslatableMarkup $description,
+  ) {
   }
 
   /**

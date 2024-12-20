@@ -13,15 +13,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Exception event subscriber.
  */
-final class ExceptionEventSubscriber implements EventSubscriberInterface {
+final readonly class ExceptionEventSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs an ExceptionEventSubscriber object.
-   *
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel.
-   */
-  public function __construct(protected LoggerChannelInterface $logger) {}
+  public function __construct(
+    protected LoggerChannelInterface $logger,
+  ) {}
 
   /**
    * {@inheritdoc}

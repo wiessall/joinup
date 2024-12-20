@@ -18,7 +18,7 @@ use Gitonomy\Git\Repository;
 /**
  * Vitality Index service.
  */
-class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
+readonly class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
   /**
    * Directory relative to 'private://'.

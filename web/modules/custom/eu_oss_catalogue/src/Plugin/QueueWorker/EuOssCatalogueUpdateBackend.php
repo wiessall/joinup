@@ -20,25 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new worker instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueInterface $catalogueService
-   *   The EU OSS catalogue service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
     protected EuOssCatalogueInterface $catalogueService,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

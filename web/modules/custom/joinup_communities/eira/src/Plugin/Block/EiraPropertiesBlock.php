@@ -24,30 +24,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new EiraPropertiesBlock instance.
-   *
-   * @param array $configuration
-   *   The plugin configuration.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   The current_route_match service.
-   */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected CurrentRouteMatch $currentRouteMatch) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly CurrentRouteMatch $currentRouteMatch,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): EiraPropertiesBlock {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): EiraPropertiesBlock {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('current_route_match')
     );
   }

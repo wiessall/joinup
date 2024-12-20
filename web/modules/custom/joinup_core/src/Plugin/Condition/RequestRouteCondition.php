@@ -26,28 +26,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RequestRouteCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The route match service.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
-   * Constructs a new RequestRouteCondition condition plugin.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The route match service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly RouteMatchInterface $routeMatch,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->routeMatch = $route_match;
   }
 
   /**

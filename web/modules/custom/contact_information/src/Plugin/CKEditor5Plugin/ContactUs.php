@@ -16,19 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Joinup Group manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected JoinupGroupManagerInterface $groupManager) {
+  public function __construct(
+    array $configuration,
+    readonly string $plugin_id,
+    readonly mixed $plugin_definition,
+    protected readonly JoinupGroupManagerInterface $groupManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 

@@ -102,14 +102,6 @@ class VitalityIndexProcessor {
    */
   private array $tags;
 
-  /**
-   * Constructs a new processor instance.
-   *
-   * @param \Gitonomy\Git\Repository $repository
-   *   The Git repository.
-   * @param int $days
-   *   (optional) The number of days to compute the vitality index.
-   */
   public function __construct(
     protected readonly Repository $repository,
     protected readonly int $days = 60,

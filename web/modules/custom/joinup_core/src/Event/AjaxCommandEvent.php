@@ -15,33 +15,10 @@ class AjaxCommandEvent extends Event {
 
   use AttachmentsTrait;
 
-  /**
-   * The Ajax command.
-   *
-   * @var \Drupal\Core\Ajax\CommandInterface
-   */
-  public CommandInterface $command;
-
-  /**
-   * Context data that might concern the subscribers.
-   *
-   * @var array
-   *   Context data.
-   */
-  public array $context;
-
-  /**
-   * Constructs a new event instance.
-   *
-   * @param \Drupal\Core\Ajax\CommandInterface $command
-   *   The Ajax command.
-   * @param array $context
-   *   Context data that might concern the subscribers.
-   */
-  public function __construct(CommandInterface $command, array $context = []) {
-    $this->command = $command;
-    $this->context = $context;
-  }
+  public function __construct(
+    protected CommandInterface $command,
+    protected array $context = [],
+  ) {}
 
   /**
    * Sets the Ajax command.
