@@ -24,22 +24,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class PinEntityController extends ControllerBase {
 
-  /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * Instantiates a new PinEntityController object.
-   *
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The OG access service.
-   */
-  public function __construct(OgAccessInterface $ogAccess) {
-    $this->ogAccess = $ogAccess;
-  }
+  public function __construct(
+    protected readonly OgAccessInterface $ogAccess
+  ) {}
 
   /**
    * {@inheritdoc}
