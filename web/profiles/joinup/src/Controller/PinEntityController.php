@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class PinEntityController extends ControllerBase {
 
   public function __construct(
-    protected readonly OgAccessInterface $ogAccess
+    protected readonly OgAccessInterface $ogAccess,
   ) {}
 
   /**
