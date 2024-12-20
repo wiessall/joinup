@@ -18,17 +18,9 @@ use WebDriver\Exception\JavaScriptError;
  */
 class JsErrorsContext extends RawDrupalContext {
 
-  /**
-   * Constructs a new context.
-   *
-   * @param string[]|null $ignoredErrors
-   *   (Optional) A list of regex matching errors to ignore.
-   * @param string[]|null $ignoredWarnings
-   *   (Optional) A list of regex matching warnings to ignore.
-   */
   public function __construct(
-    protected array $ignoredErrors = [],
-    protected array $ignoredWarnings = [],
+    protected readonly array $ignoredErrors = [],
+    protected readonly array $ignoredWarnings = [],
   ) {}
 
   /**
