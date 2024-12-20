@@ -56,35 +56,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Config ignore changes.
- */
-function joinup_core_update_200100(): void {
-  $configFactory = \Drupal::configFactory();
-
-  // Delete the current assessment webform.
-  $configFactory->getEditable('webform.webform.online_form_for_assessments')
-    ->delete();
-
-  // Set permissions to all other UI managed webforms.
-  foreach ($configFactory->listAll('webform.webform.') as $name) {
-    $configFactory->getEditable($name)
-      ->set('access.administer.permissions', ['administer webform via ui'])
-      ->save();
-  }
-
-  // Should be operational before config sync starts.
-  $configFactory->getEditable('config_ignore.settings')
-    ->set('ignored_config_entities', [
-      'cas_mock_server.settings',
-      'composer_deploy.settings',
-      'core.menu.static_menu_link_overrides',
-      'joinup_core.outdated_content_threshold',
-      'memcache_admin.settings',
-      'update.settings',
-      'upgrade_status.settings',
-      'webform.webform.*',
-      '~webform.webform.assessment',
-    ])->save(TRUE);
-}
