@@ -56,13 +56,13 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
   protected bool $hasPublished;
 
   public function __construct(
-    readonly EntityTypeManagerInterface $entityTypeManager,
-    readonly ConfigFactory $configFactory,
-    readonly AccountProxy $currentUser,
-    readonly MembershipManager $ogMembershipManager,
-    readonly WorkflowHelperInterface $workflowHelper,
-    readonly JoinupMessageDeliveryInterface $messageDelivery,
-    protected readonly RevisionManagerInterface $revisionManager,
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactory $configFactory,
+    AccountProxy $currentUser,
+    MembershipManager $ogMembershipManager,
+    WorkflowHelperInterface $workflowHelper,
+    JoinupMessageDeliveryInterface $messageDelivery,
+    protected RevisionManagerInterface $revisionManager,
   ) {
     parent::__construct($entityTypeManager, $configFactory, $currentUser, $ogMembershipManager, $workflowHelper, $messageDelivery);
   }
