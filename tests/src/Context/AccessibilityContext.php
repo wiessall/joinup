@@ -66,18 +66,9 @@ class AccessibilityContext extends RawDrupalContext {
    */
   private int $line;
 
-  /**
-   * Constructs a new context.
-   *
-   * @param array $standardTags
-   *   A list of configurable standard tags as an associative array keyed by tag
-   *   and having the tag label as value.
-   * @param string[] $excludeElements
-   *   A list of CSS element selectors to be excluded from check.
-   */
   public function __construct(
-    protected array $standardTags,
-    protected array $excludeElements,
+    protected readonly array $standardTags,
+    protected readonly array $excludeElements,
   ) {}
 
   /**
