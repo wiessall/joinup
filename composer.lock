@@ -20500,16 +20500,16 @@
         },
         {
             "name": "ec-europa/qa-automation",
-            "version": "9.4.0",
+            "version": "9.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/qa-automation.git",
-                "reference": "d7e5c27dce8f380e63acad93beea847bd85defd8"
+                "reference": "92c3b71b2c43e29fd46592661ef75e90ebb8389c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/qa-automation/zipball/d7e5c27dce8f380e63acad93beea847bd85defd8",
-                "reference": "d7e5c27dce8f380e63acad93beea847bd85defd8",
+                "url": "https://api.github.com/repos/ec-europa/qa-automation/zipball/92c3b71b2c43e29fd46592661ef75e90ebb8389c",
+                "reference": "92c3b71b2c43e29fd46592661ef75e90ebb8389c",
                 "shasum": ""
             },
             "require": {
@@ -20547,20 +20547,20 @@
                 "issues": "https://github.com/ec-europa/qa-automation/issues",
                 "source": "https://github.com/ec-europa/qa-automation"
             },
-            "time": "2024-11-26T09:22:52+00:00"
+            "time": "2024-07-17T06:26:41+00:00"
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.16.0",
+            "version": "10.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "f52d6867d09664715bde4d04b36072b808e6b00a"
+                "reference": "75b891996632fed332d5379b435dac6d20ab639e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/f52d6867d09664715bde4d04b36072b808e6b00a",
-                "reference": "f52d6867d09664715bde4d04b36072b808e6b00a",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/75b891996632fed332d5379b435dac6d20ab639e",
+                "reference": "75b891996632fed332d5379b435dac6d20ab639e",
                 "shasum": ""
             },
             "require": {
@@ -20569,10 +20569,8 @@
                 "consolidation/annotated-command": "^4.7.0",
                 "consolidation/robo": "^3.0 || ^4.0 || ^5.0",
                 "cweagans/composer-patches": "^1.7 || ^2.0",
-                "dantleech/gherkin-lint": "^0.2.3",
-                "drupal/coder": "^8.3.10",
                 "drush/drush": "^11.0.4 || ^12.0 || ^13.0",
-                "ec-europa/qa-automation": "^9.4.0",
+                "ec-europa/qa-automation": "^9.3",
                 "ec-europa/toolkit-composer-plugin": "^0.0.1",
                 "ext-curl": "*",
                 "ext-dom": "*",
@@ -20588,7 +20586,7 @@
                 "phpmd/phpmd": "^2.12",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpunit/phpunit": "^9.5 || ^10.0 || ^11.0",
+                "phpunit/phpunit": "^9.5 || ^10.0",
                 "squizlabs/php_codesniffer": "^3.7",
                 "vlucas/phpdotenv": "^5.6"
             },
@@ -20618,7 +20616,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2024-12-13T09:24:45+00:00"
+            "time": "2024-08-19T13:27:25+00:00"
         },
         {
             "name": "ec-europa/toolkit-composer-plugin",
