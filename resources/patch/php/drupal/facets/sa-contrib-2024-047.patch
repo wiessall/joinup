@@ -1,0 +1,39 @@
+From 718741fc321f7e2eef486c8233b4ea604149ce80 Mon Sep 17 00:00:00 2001
+From: Jimmy Henderickx <jimmyhdx@gmail.com>
+Date: Wed, 9 Oct 2024 09:23:41 +0200
+Subject: [PATCH] Facets Summary refactor
+
+---
+ .../FacetsSummaryManager/DefaultFacetsSummaryManager.php | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/modules/facets_summary/src/FacetsSummaryManager/DefaultFacetsSummaryManager.php b/modules/facets_summary/src/FacetsSummaryManager/DefaultFacetsSummaryManager.php
+index bfb236cb..13408b96 100644
+--- a/modules/facets_summary/src/FacetsSummaryManager/DefaultFacetsSummaryManager.php
++++ b/modules/facets_summary/src/FacetsSummaryManager/DefaultFacetsSummaryManager.php
+@@ -12,6 +12,7 @@ use Drupal\facets_summary\Processor\BuildProcessorInterface;
+ use Drupal\facets_summary\Processor\ProcessorInterface;
+ use Drupal\facets_summary\Processor\ProcessorPluginManager;
+ use Drupal\facets_summary\FacetsSummaryInterface;
++use Drupal\Component\Utility\Xss;
+ 
+ /**
+  * The facet summary manager.
+@@ -156,6 +157,14 @@ class DefaultFacetsSummaryManager {
+       $build = $processor->build($facets_summary, $build, $facets);
+     }
+ 
++    if (isset($build["#items"])) {
++      foreach ($build["#items"] as &$item) {
++        if (isset($item["#title"]) and is_string($item["#title"])) {
++          $item["#title"] = Xss::filter($item["#title"]);
++        }
++      }
++    }
++
+     return $build;
+   }
+ 
+-- 
+GitLab
+
