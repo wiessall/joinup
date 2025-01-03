@@ -26,10 +26,11 @@ visibility:
     context_mapping:
       node: '@node.node_route_context:node'
     content:
+      node-assessment_report: node-assessment_report
+      node-collection: node-collection
       node-custom_page: node-custom_page
       node-discussion: node-discussion
       node-document: node-document
       node-event: node-event
       node-news: node-news
-      node-collection: node-collection
       node-solution: node-solution

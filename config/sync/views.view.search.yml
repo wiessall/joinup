@@ -382,6 +382,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              assessment_report: view_mode_tile_horizontal
               collection: view_mode_tile_horizontal
               custom_page: view_mode_tile_horizontal
               discussion: view_mode_tile_horizontal
@@ -397,6 +398,7 @@ display:
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              oss_category: default
               topic: default
             'entity:user':
               user: view_mode_tile_horizontal

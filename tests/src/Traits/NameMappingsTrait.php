@@ -441,6 +441,7 @@ trait NameMappingsTrait {
       'solution topic' => 'solution_topic',
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
+      'Type of document' => 'type_of_document',
       'OSS category' => 'oss_category',
       'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',

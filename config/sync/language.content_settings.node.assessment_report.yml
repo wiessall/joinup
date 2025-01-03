@@ -1,0 +1,11 @@
+uuid: b4566837-b75c-425c-97d7-8c1e2066818d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report
+target_entity_type_id: node
+target_bundle: assessment_report
+default_langcode: site_default
+language_alterable: false
