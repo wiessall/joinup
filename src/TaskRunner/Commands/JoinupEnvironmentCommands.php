@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Joinup\TaskRunner\Commands;
 
-use Behat\Behat\ApplicationFactory;
+use Composer\InstalledVersions;
 use Drupal\Core\Database\Database;
 use EasyRdf\Http;
 use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
@@ -164,7 +164,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    *   The Behat version.
    */
   protected function behatVersion(): string {
-    return ApplicationFactory::VERSION;
+    return InstalledVersions::getVersion('behat/behat');
   }
 
   /**
