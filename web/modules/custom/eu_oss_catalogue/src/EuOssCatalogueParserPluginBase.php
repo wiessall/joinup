@@ -33,10 +33,10 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected  EntityTypeManagerInterface $entityTypeManager,
-    protected  EuOssCataloguePluginManagerInterface $resolverManager,
-    protected  LoggerChannelInterface $logger,
-    protected  LanguageManagerInterface $languageManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected EuOssCataloguePluginManagerInterface $resolverManager,
+    protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
