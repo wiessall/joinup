@@ -8,6 +8,7 @@ dependencies:
 id: bookmark
 label: Bookmark
 bundles:
+  - assessment_report
   - collection
   - custom_page
   - discussion

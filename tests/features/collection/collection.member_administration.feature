@@ -14,6 +14,8 @@ Feature: Collection membership administration
       | Donald Duck       |           | donald_duck@example.com       | Donald     | Duck        |
       | Turkey Ham        |           | turkey_ham@example.com        | Turkey     | Ham         |
       | Cam Bridge        |           | cambridge@example.com         | Cam        | Bridge      |
+      | Justin Times      |           | justintimes@example.com       | Justin     | Times       |
+      | Ben Dover         |           | bendover@example.com          | Ben        | Dover       |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
     And collection content:
@@ -25,6 +27,8 @@ Feature: Collection membership administration
       | Medical diagnosis | Turkey Ham        | facilitator                | active  |
       | Medical diagnosis | Gregory House     |                            | active  |
       | Medical diagnosis | Kathie Cumbershot |                            | pending |
+      | Medical diagnosis | Justin Times      |                            | active  |
+      | Medical diagnosis | Ben Dover         |                            | active  |
 
   Scenario: Only one instance of the "Apply to selected items" should exist.
     Given I am logged in as a moderator
@@ -182,6 +186,40 @@ Feature: Collection membership administration
     # Check that I see one of the random links that requires an active membership.
     Then I should not see the plus button menu
     And I should see the button "Join this collection"
+
+  Scenario: Block a membership
+    # With CoC, an email should be sent.
+    Given custom_page content:
+      | title                 | collection        | state     |
+      | Medical diagnosis CoC | Medical diagnosis | published |
+    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    Given I am logged in as "Lisa Cuddy"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Ben Dover"
+    Then I select "Block the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Block the selected membership(s) was applied to 1 item."
+    And the email sent to "Ben Dover" with subject "Interoperable Europe Portal: Membership status update for Medical diagnosis" contains the following lines of text:
+      | We regret to inform you that your membership in Medical diagnosis has been revoked due to a violation of the Code of Conduct. |
+      | If you think this action is not clear, please contact the owner of Medical diagnosis.                                         |
+
+    When I am logged in as "Ben Dover"
+    And I go to the "Medical diagnosis" collection
+    Then I should not see the plus button menu
+
+    # Without CoC, no email should be sent.
+    And the "code of conduct" setting of the "Medical diagnosis" collection is unset
+    Given I am logged in as "Lisa Cuddy"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Justin Times"
+    Then I select "Block the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Block the selected membership(s) was applied to 1 item."
+    And no email has been sent to "Justin Times"
+
+    When I am logged in as "Justin Times"
+    And I go to the "Medical diagnosis" collection
+    Then I should not see the plus button menu
 
   Scenario: Assign a new role to a member
     # Check that Dr House can't edit the collection.
