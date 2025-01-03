@@ -1,0 +1,34 @@
+uuid: bf84063b-6ad5-470b-9027-88aa4eb408a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.submission
+    - node.type.assessment_report
+    - webform.webform.assessment
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.assessment_report.submission
+field_name: submission
+entity_type: node
+bundle: assessment_report
+label: Submission
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:webform_submission'
+  handler_settings:
+    target_bundles:
+      assessment: assessment
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
