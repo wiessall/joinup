@@ -8,6 +8,7 @@ dependencies:
     - facets.facet.spatial_coverage
     - facets.facet.topic
     - facets.facet.type
+    - facets.facet.type_of_document
     - search_api.index.published
     - views.view.search
   module:
@@ -23,28 +24,34 @@ facets:
     label: 'Geographic coverage'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -10
   topic:
     checked: true
     label: Topic
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -9
   type:
     checked: true
     label: Type
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -8
+  type_of_document:
+    checked: true
+    label: 'Type of document'
+    separator: ', '
+    show_count: false
+    weight: -7
   group:
     checked: true
     label: Collection/Solution
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -6
   interoperable_flag:
     checked: true
     label: 'Interoperable flag'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -5
