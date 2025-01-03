@@ -49,7 +49,7 @@ mode: highlighted
 content:
   abstract:
     type: field_fallback_formatter
-    label: above
+    label: hidden
     settings:
       main_field_formatter_id: string
       main_field_formatter_settings:
