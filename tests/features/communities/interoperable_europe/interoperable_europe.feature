@@ -101,7 +101,7 @@ Feature:
     When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should not see the button "Translate"
+    And I should see the button "Translate"
 
     Examples:
       | type       |
