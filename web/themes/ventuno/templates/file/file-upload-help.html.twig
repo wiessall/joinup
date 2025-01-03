@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Override to display help text for file fields in a single line.
+ *
+ * Available variables:
+ * - descriptions: Lines of help text for uploading a file.
+ *
+ * @see template_preprocess_file_upload_help()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ descriptions|safe_join(' ') }}
