@@ -6,8 +6,8 @@ Feature: Asset distribution deleting.
 
   Scenario: "Delete" button should be shown to facilitators of the related solution.
     Given solution content:
-      | title                 | description        | state     |
-      | Rough valentine's day | Sample description | published |
+      | title                 | description        |
+      | Rough valentine's day | Sample description |
     And users:
       | Username   | E-mail                |
       | Papa Roach | paparoach@example.com |
@@ -15,8 +15,8 @@ Feature: Asset distribution deleting.
       | solution              | user       | roles                      |
       | Rough valentine's day | Papa roach | administrator, facilitator |
     And distribution content:
-      | title            | description    | access url | solution              | state     |
-      | Francesco's cats | Sample content | test.zip   | Rough valentine's day | published |
+      | title            | description    | access url | solution              |
+      | Francesco's cats | Sample content | test.zip   | Rough valentine's day |
 
     When I am logged in as a facilitator of the "Rough valentine's day" solution
     And I go to the homepage of the "Francesco's cats" distribution
@@ -26,5 +26,5 @@ Feature: Asset distribution deleting.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Papa Roach                                                                                        |
-      | subject   | Interoperable Europe Portal: A distribution has been deleted                                                           |
+      | subject   | Interoperable Europe Portal: A distribution has been deleted                                      |
       | body      | The distribution Francesco's cats of the solution Rough valentine's day was successfully deleted. |

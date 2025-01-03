@@ -5,13 +5,7 @@ Feature: Collection membership overview
   I need to be able to see an overview of my fellow members
 
   Scenario: Show the collection members as a list of tiles
-    Given owner content:
-      | name           |
-      | Ayodele Sommer |
-    And contact_information content:
-      | name      | email                 |
-      | Nita Yang | supernita@yahoo.co.uk |
-    And users:
+    Given users:
       # We're adding many users so we can test the different roles and states,
       #  as well as the pager. 12 users are shown per page.
       | Username              | First name | Family name | Photo        | Business title                  |
@@ -32,9 +26,9 @@ Feature: Collection membership overview
       | Aniruddha Kováts      | Aniruddha  | Kováts      | blaise.jpg   | Chief Communications Officer    |
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
     And collection content:
-      | title           | description        | logo     | owner          | contact information | state     |
-      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | published |
-      | Jubilant Rabits | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | draft     |
+      | title           | state     |
+      | Jubilant Robots | published |
+      | Jubilant Rabits | draft     |
     And the following collection user memberships:
       | collection      | user                  | roles       | state   |
       | Jubilant Robots | Ruby Valenta          | owner       |         |

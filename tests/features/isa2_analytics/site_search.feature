@@ -12,8 +12,8 @@ Feature: Site search
 
   Scenario: Search results should contain a total count when results are available.
     And collection content:
-      | title                  | description               | abstract               | state     | creation date    | modification date |
-      | Collection total count | No description available. | No abstract available. | published | 03-08-2023 12:05 | 03-04-2022 12:05  |
+      | title                  | description               | abstract               | creation date    | modification date |
+      | Collection total count | No description available. | No abstract available. | 03-08-2023 12:05 | 03-04-2022 12:05  |
     And news content:
       | title                | headline             | abstract | field_paragraphs_body | collection             | state     | created    | changed    |
       | News total count     | News total count     |          | No body available.    | Collection total count | published | 01/01/2019 | 03/03/2022 |

@@ -24,16 +24,16 @@ Feature:
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | draft     |
     And distribution content:
-      | title                | description           | release           | access url | state     |
-      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
+      | title                | description           | release           | access url |
+      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   |
     And licence content:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
-      | title                                           | collection                   | body | logo     | langcode | state     |
-      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       | published |
-      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       | published |
-      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       | published |
+      | title                                           | collection                   | body | logo     | langcode |
+      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
+      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |
+      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       |
     And news content:
       | title                                    | headline     | body              | solution                   | state     | published at              |
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |

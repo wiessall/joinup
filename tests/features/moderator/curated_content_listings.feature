@@ -57,20 +57,20 @@ Feature: Curated content listings
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658
 
     Given collection content:
-      | title           | state     |
-      | Spacex in space | published |
+      | title           |
+      | Spacex in space |
     And news content:
-      | title          | collection      | topic                                      | state     |
-      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
+      | title          | collection      | topic                                      |
+      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health |
     And discussion content:
-      | title                | collection      | topic                            | state     |
-      | Reference of gravity | Spacex in space | Employment and Support Allowance | published |
+      | title                | collection      | topic                            |
+      | Reference of gravity | Spacex in space | Employment and Support Allowance |
     And document content:
-      | title        | collection      | topic                                  | state     |
-      | Licrogravity | Spacex in space | HR, Statistics and Analysis, E-justice | published |
+      | title        | collection      | topic                                  |
+      | Licrogravity | Spacex in space | HR, Statistics and Analysis, E-justice |
     And event content:
-      | title           | collection      | topic                    | state     |
-      | Stay at the CSS | Spacex in space | EU and European Policies | published |
+      | title           | collection      | topic                    |
+      | Stay at the CSS | Spacex in space | EU and European Policies |
     And the "Highlighted event" content listing contains:
       | type    | label           |
       | content | Stay at the CSS |
@@ -120,11 +120,11 @@ Feature: Curated content listings
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
 
     Given collection content:
-      | title           | state     |
-      | Spacex in space | published |
+      | title           |
+      | Spacex in space |
     And news content:
-      | title          | collection      | topic                                      | state     |
-      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
+      | title          | collection      | topic                                      |
+      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health |
 
     Given I am logged in as a "moderator"
     When there are no preexisting log records on the site

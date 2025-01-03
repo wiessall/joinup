@@ -189,8 +189,8 @@ Feature: My subscriptions
   @javascript
   Scenario Outline: Change the notification frequency of my digests
     Given collection content:
-      | title           | state     |
-      | Malicious plans | published |
+      | title           |
+      | Malicious plans |
     And the following collection user memberships:
       | collection      | user             |
       | Malicious plans | Auric Goldfinger |
@@ -243,9 +243,9 @@ Feature: My subscriptions
   Scenario: Regression test "My subscriptions"
 
     Given collection content:
-      | title     | state     |
-      | Fireblade | published |
-      | Lopitopes | published |
+      | title     |
+      | Fireblade |
+      | Lopitopes |
     And user:
       | Username | Blade One           |
       | E-mail   | blade.1@example.com |

@@ -5,12 +5,12 @@ Feature: Global Interoperable search
   @javascript
   Scenario: User can find Interoperable items
     Given collection content:
-      | title          | state     |
-      | Open standards | published |
+      | title          |
+      | Open standards |
     Given solution content:
-      | title           | state     | collection     | description                                                                  |
-      | eGovernment     | published | Open standards | It refers to the collaboration ability of cross-border services for citizens |
-      | Military forces | published | Open standards | the ability of the forces of two or more nations to train                    |
+      | title           | collection     | description                                                                  |
+      | eGovernment     | Open standards | It refers to the collaboration ability of cross-border services for citizens |
+      | Military forces | Open standards | the ability of the forces of two or more nations to train                    |
 
     Given I am logged in as a user with the "interoperability_validator" role
     When I go to the homepage of the "eGovernment" solution

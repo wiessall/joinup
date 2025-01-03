@@ -6,11 +6,11 @@ Feature:
 
   Scenario Outline: Last update date shown for specific content bundles.
     Given collection content:
-      | title                        | state     |
-      | Gravitational wave detectors | published |
+      | title                        |
+      | Gravitational wave detectors |
     And <type> content:
-      | title | created                   | <publication field name>  | changed                   | collection                   | state     |
-      | LIGO  | Wed, 25 Dec 2019 13:00:00 | Wed, 25 Dec 2019 14:00:00 | Wed, 25 Dec 2019 15:00:00 | Gravitational wave detectors | published |
+      | title | created                   | <publication field name>  | changed                   | collection                   |
+      | LIGO  | Wed, 25 Dec 2019 13:00:00 | Wed, 25 Dec 2019 14:00:00 | Wed, 25 Dec 2019 15:00:00 | Gravitational wave detectors |
 
     When I go to the "LIGO" <type>
     Then I should see the text "Published on: 25/12/2019"
@@ -63,8 +63,8 @@ Feature:
 
   Scenario: Documents without a publication date should show the published_at property.
     Given collection content:
-      | title                        | state     |
-      | Gravitational pull detectors | published |
+      | title                        |
+      | Gravitational pull detectors |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection
     And I go to the "Gravitational pull detectors" collection
     And I click "Add document"
@@ -90,8 +90,8 @@ Feature:
 
   Scenario: Draft documents without a publication date should only show the last updated time.
     Given collection content:
-      | title                        | state     |
-      | Gravitational pull detectors | published |
+      | title                        |
+      | Gravitational pull detectors |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection
     And I go to the "Gravitational pull detectors" collection
     And I click "Add document"

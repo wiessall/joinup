@@ -9,24 +9,24 @@ Feature:
     Given I am logged in as a developer
 
     Given collection content:
-      | title           | state     |
-      | Test collection | published |
+      | title           |
+      | Test collection |
     When I go to the "Test collection" collection
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given solution content:
-      | title         | collection      | state     |
-      | Test solution | Test collection | published |
+      | title         | collection      |
+      | Test solution | Test collection |
     When I go to the "Test solution" solution
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given release content:
-      | title        | is version of | state     |
-      | Test release | Test solution | published |
+      | title        | is version of |
+      | Test release | Test solution |
     When I go to the "Test release" release
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
@@ -35,8 +35,8 @@ Feature:
     Then I should see the link "View" in the "Entity actions" region
 
     Given distribution content:
-      | title             | release      | state     |
-      | Test distribution | Test release | published |
+      | title             | release      |
+      | Test distribution | Test release |
     When I go to the "Test distribution" distribution
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
@@ -55,32 +55,32 @@ Feature:
     # Then I should see the link "View" in the "Entity actions" region
 
     Given discussion content:
-      | title           | collection      | state     |
-      | Test discussion | Test collection | published |
+      | title           | collection      |
+      | Test discussion | Test collection |
     When I go to the "Test discussion" discussion
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given document content:
-      | title         | collection      | state     |
-      | Test document | Test collection | published |
+      | title         | collection      |
+      | Test document | Test collection |
     When I go to the "Test document" document
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given event content:
-      | title      | collection      | state     |
-      | Test event | Test collection | published |
+      | title      | collection      |
+      | Test event | Test collection |
     When I go to the "Test event" event
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given news content:
-      | title     | collection      | state     |
-      | Test news | Test collection | published |
+      | title     | collection      |
+      | Test news | Test collection |
     When I go to the "Test news" news
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region

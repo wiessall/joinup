@@ -15,19 +15,19 @@ Feature: Group member permissions table
       | Hex              |
       | Mustrum Ridcully |
     Given collection content:
-      | title                                       | state     | content creation         | moderation |
-      | Applied astrology                           | published | facilitators and authors | yes        |
-      | Illiberal studies                           | published | facilitators and authors | no         |
-      | Approximate accuracy                        | published | members                  | yes        |
-      | Dust, miscellaneous particles and filaments | published | members                  | no         |
-      | Creative uncertainty                        | published | registered users         | yes        |
-      | Woolly thinking                             | published | registered users         | no         |
+      | title                                       | content creation         | moderation |
+      | Applied astrology                           | facilitators and authors | yes        |
+      | Illiberal studies                           | facilitators and authors | no         |
+      | Approximate accuracy                        | members                  | yes        |
+      | Dust, miscellaneous particles and filaments | members                  | no         |
+      | Creative uncertainty                        | registered users         | yes        |
+      | Woolly thinking                             | registered users         | no         |
     Given solution content:
-      | title                         | state     | content creation         | moderation |
-      | Applied anthropics            | published | facilitators and authors | yes        |
-      | Extreme horticulture          | published | facilitators and authors | no         |
-      | Prehumous morbid bibliomancy  | published | registered users         | yes        |
-      | Posthumous morbid bibliomancy | published | registered users         | no         |
+      | title                         | content creation         | moderation |
+      | Applied anthropics            | facilitators and authors | yes        |
+      | Extreme horticulture          | facilitators and authors | no         |
+      | Prehumous morbid bibliomancy  | registered users         | yes        |
+      | Posthumous morbid bibliomancy | registered users         | no         |
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |

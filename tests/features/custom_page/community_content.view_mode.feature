@@ -5,39 +5,33 @@ Feature:
   I need to be able to see the content listed in the appropriate view mode.
 
   Scenario: Present custom page solution listings in tiles.
-    Given owner content:
-      | name                   | owner type |
-      | Some fancy named owner | Company    |
-    And contact_information content:
-      | name                     | email                 |
-      | Some fancy named contact | who.cares@example.com |
     Given solution content:
-      | title         | description | owner                  | contact information      | state     |
-      | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
+      | title         | description |
+      | Tile solution | Meh...      |
     And release content:
-      | title        | release number | release notes | is version of | contact information      | state     |
-      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named contact | published |
+      | title        | release number | release notes | is version of |
+      | Tile release | 0.1            | Meh...        | Tile solution |
     And distribution content:
-      | title       | description | release      | access url | state     |
-      | Tile distro | meh...      | Tile release | test.zip   | published |
+      | title       | description | release      | access url |
+      | Tile distro | meh...      | Tile release | test.zip   |
     And licence content:
       | title        | description |
       | Tile licence | Meh...      |
     And news content:
-      | title     | headline  | body   | solution      | state     |
-      | Tile news | Tile news | Meh... | Tile solution | published |
+      | title     | headline  | body   | solution      |
+      | Tile news | Tile news | Meh... | Tile solution |
     And event content:
-      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | solution      | state     |
-      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile solution | published |
+      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | solution      |
+      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile solution |
     And document content:
-      | title         | document type | short title | field_paragraphs_body | solution      | state     |
-      | Tile document | Document      | Meh...      | Meh...                | Tile solution | published |
+      | title         | document type | short title | field_paragraphs_body | solution      |
+      | Tile document | Document      | Meh...      | Meh...                | Tile solution |
     And discussion content:
-      | title           | body   | solution      | state     |
-      | Tile discussion | Meh... | Tile solution | published |
+      | title           | body   | solution      |
+      | Tile discussion | Meh... | Tile solution |
     And custom_page content:
-      | title            | solution      | state     |
-      | Tile custom page | Tile solution | published |
+      | title            | solution      |
+      | Tile custom page | Tile solution |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
       | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:68:"entity_bundle\|distribution,release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
@@ -54,30 +48,24 @@ Feature:
     But I should not see the "Tile licence" tile
 
   Scenario: Present custom page collection listings in tiles.
-    Given owner content:
-      | name                   | owner type |
-      | Some fancy named owner | Company    |
-    And contact_information content:
-      | name                     | email                 |
-      | Some fancy named contact | who.cares@example.com |
     And collection content:
-      | title           | description | owner                  | contact information      | state     |
-      | Tile collection | Meh...      | Some fancy named owner | Some fancy named contact | published |
+      | title           | description |
+      | Tile collection | Meh...      |
     And news content:
-      | title     | headline  | body   | collection      | state     |
-      | Tile news | Tile news | Meh... | Tile collection | published |
+      | title     | headline  | body   | collection      |
+      | Tile news | Tile news | Meh... | Tile collection |
     And event content:
-      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | collection      | state     |
-      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile collection | published |
+      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | collection      |
+      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile collection |
     And document content:
-      | title         | document type | short title | field_paragraphs_body | collection      | state     |
-      | Tile document | Document      | Meh...      | Meh...                | Tile collection | published |
+      | title         | document type | short title | field_paragraphs_body | collection      |
+      | Tile document | Document      | Meh...      | Meh...                | Tile collection |
     And discussion content:
-      | title           | body   | collection      | state     |
-      | Tile discussion | Meh... | Tile collection | published |
+      | title           | body   | collection      |
+      | Tile discussion | Meh... | Tile collection |
     And custom_page content:
-      | title            | collection      | state     |
-      | Tile custom page | Tile collection | published |
+      | title            | collection      |
+      | Tile custom page | Tile collection |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
       | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:47:"entity_bundle\|discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
