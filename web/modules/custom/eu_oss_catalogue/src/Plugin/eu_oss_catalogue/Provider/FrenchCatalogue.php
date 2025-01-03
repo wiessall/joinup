@@ -167,8 +167,8 @@ class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
     }
 
     $this->numberOfProvidedSolutions = count($responseData);
+    $required = ['url', 'name'];
     foreach ($responseData as $row) {
-      $required = ['url', 'name'];
       foreach ($required as $field) {
         if (empty($row[$field])) {
           $this->logger->error('Lacks the mandatory @field in @row', [
@@ -185,6 +185,9 @@ class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
         continue;
       }
 
+      // This snippet copies the URL from $row['url'],
+      // strips the base URL, splits the remainder into segments,
+      // then uses the last segment as $name and the rest as $namespace.
       $url = preg_replace('/^(.*)$/', '$1', $row['url']);
       $pathParts = explode('/', trim(substr($url, strlen($api->baseUrl)), '/'));
       $name = array_pop($pathParts);
