@@ -7,8 +7,10 @@ import Glide, {
   Controls,
   Keyboard,
   Swipe,
-  // eslint-disable-next-line import/no-unresolved
-} from "@glidejs/glide/dist/glide.modular.esm";
+  // It is impossible to build this script with BLC-builder without the file
+  // extension since Glide 3.7.0+
+  // eslint-disable-next-line import/extensions
+} from "@glidejs/glide/dist/glide.modular.esm.js";
 
 (() => {
   Drupal.behaviors.iopGlide = {
