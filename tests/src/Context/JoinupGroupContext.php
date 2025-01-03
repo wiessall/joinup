@@ -401,7 +401,7 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Sets a group settings (meta entity) field to the given value.
+   * Sets or unset a group settings (meta entity) field to the given value.
    *
    * @param string $config
    *   The configuration (field name) of the collection's settings meta entity.
@@ -409,12 +409,13 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The label of the collection or solution.
    * @param string $group
    *   The type of the group ("collection" or "solution").
-   * @param string $value
+   * @param string|null $value
    *   The new value of the meta entity field. This should be an entity label if
    *   the field is an entity reference field.
    * @param string|null $entityTypeId
    *   The entity type ID (or alias) if the value is an entity reference.
    *
+   * @Given the :config setting of the :collectionLabel :group is unset
    * @Given the :config setting of the :collectionLabel :group is set to :value
    * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
    */
@@ -422,11 +423,11 @@ class JoinupGroupContext extends RawDrupalContext {
     string $config,
     string $groupLabel,
     string $group,
-    string $value,
+    ?string $value = NULL,
     ?string $entityTypeId = NULL,
   ): void {
-    Assert::assertTrue(in_array($group, ['collection', 'solution']));
-    $groupEntity = $this->getEntityByLabel('node', $groupLabel, $group);
+    Assert::assertContains($group, ['collection', 'solution']);
+    $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
     Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
 
@@ -441,22 +442,26 @@ class JoinupGroupContext extends RawDrupalContext {
       ));
     }
 
-    // Assume entity reference field and an entity label in the $value variable.
-    if (is_string($entityTypeId)) {
-      $value = $this->getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
-      Assert::assertNotEmpty(
-        $value,
-        sprintf(
-          "Cannot find '%s' entity with label '%s'.",
-          $entityTypeId,
-          $labelToSearchFor
-        ),
-      );
-    }
+    if (isset($value)) {
+      // Assume entity reference field and an entity label in $value.
+      $newValue = is_string($entityTypeId)
+        ? static::getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $value)
+        : $value;
 
-    MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
-      ->set($fieldName, $value)
-      ->save();
+      MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+        ->set($fieldName, $newValue)
+        ->save();
+    }
+    else {
+      $metaEntities = \Drupal::entityTypeManager()->getStorage('meta_entity')
+        ->loadByProperties([
+          'type' => "{$group}_settings",
+          'target.target_type' => $groupEntity->getEntityTypeId(),
+          'target.target_id' => $groupEntity->id(),
+        ]);
+      $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
+      $metaEntity?->delete();
+    }
   }
 
   /**

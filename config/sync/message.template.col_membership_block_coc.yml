@@ -1,0 +1,22 @@
+uuid: 236fc087-2ffb-4f51-a201-1cb87448f171
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: col_membership_block_coc
+label: 'Collection block membership (CoC violation)'
+description: 'An active membership was blocked due to CoC violation.'
+text:
+  -
+    value: '<p>Interoperable Europe Portal: Membership status update for @entity:title</p>'
+    format: full_html
+  -
+    value: "<p>We regret to inform you that your membership in <a href=\"@entity:url\">@entity:title</a> has been revoked due to a violation of the <a href=\"@entity:code_of_conduct:url\">Code of Conduct</a>.</p>\r\n<p>If you think this action is not clear, please contact the owner of @entity:title.</p>\r\n<p><a href=\"@entity:contact:url\">@entity:contact:url</a></p>"
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }

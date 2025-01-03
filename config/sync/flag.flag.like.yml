@@ -3,11 +3,12 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_like
+    - flag_count
     - node
 id: like
 label: Like
 bundles:
+  - assessment_report
   - custom_page
   - discussion
   - document
