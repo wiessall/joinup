@@ -6,11 +6,11 @@ Feature:
 
   Scenario Outline: Authors can add content regardless of group settings.
     Given collection content:
-      | title             | state     |
-      | Author collection | published |
+      | title             |
+      | Author collection |
     And solution content:
-      | title           | moderation   | content creation   | state     | collection        |
-      | Author solution | <moderation> | <content creation> | published | Author collection |
+      | title           | moderation   | content creation   | collection        |
+      | Author solution | <moderation> | <content creation> | Author collection |
 
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
@@ -36,8 +36,8 @@ Feature:
       | Username          |
       | Solution API user |
     And collection content:
-      | title                    | logo     | moderation | content creation         | state     |
-      | This is a klm collection | logo.png | no         | facilitators and authors | published |
+      | title                    | logo     | moderation | content creation         |
+      | This is a klm collection | logo.png | no         | facilitators and authors |
     And the following collection user memberships:
       | user              | collection               | roles       |
       | Solution API user | This is a klm collection | facilitator |
@@ -58,7 +58,7 @@ Feature:
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Leechidna"
     And I select "Flemish" from "Language"
-    And I select "EU and European Policies" from "Topic"
+    And I select "Statistics and Analysis" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add owner"
     And I press "Save"

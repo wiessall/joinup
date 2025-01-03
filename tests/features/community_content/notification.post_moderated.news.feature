@@ -12,8 +12,8 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title              | state     | content creation | moderation   |
-      | CC post collection | published | members          | <moderation> |
+      | title              | content creation | moderation   |
+      | CC post collection | members          | <moderation> |
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |
@@ -41,8 +41,8 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                       |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                                                                             |
+      | recipient | CC owner                                                                                                                                                        |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                         |
       | body      | CC Member has published the new news - "CCN create publish" in the collection: "CC post collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -52,7 +52,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                           |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                 |
+      | subject   | Interoperable Europe Portal: Content has been published                                            |
       | body      | CC Member has published the new news - "CCN post publish" in the collection: "CC post collection". |
 
     When I am logged in as "CC facilitator"
@@ -83,7 +83,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                   |
-      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                            |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                       |
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the news - "CCN post approve proposed" in the collection: "CC post collection". |
 
     # Test 'delete' operation.
@@ -94,7 +94,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                    |
-      | subject   | Interoperable Europe Portal: Content has been deleted                                                                             |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                        |
       | body      | Facilitator CC Facilitator has deleted the news - "CCN post delete" in the collection: "CC post collection". |
 
     Examples:

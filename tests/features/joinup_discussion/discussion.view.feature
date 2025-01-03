@@ -4,11 +4,11 @@ Feature: View discussion API
 
   Scenario: Programmatically create a discussion
     And collection content:
-      | title                | state     |
-      | Parallel programming | published |
+      | title                |
+      | Parallel programming |
     Given discussion content:
-      | title                | content                  | collection           | state     |
-      | Fearless concurrency | Let us have a discussion | Parallel programming | published |
+      | title                | content                  | collection           |
+      | Fearless concurrency | Let us have a discussion | Parallel programming |
     Then I should have a "Discussion" page titled "Fearless concurrency"
 
     # Check that the basic fields are visible.

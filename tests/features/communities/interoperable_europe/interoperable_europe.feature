@@ -72,8 +72,8 @@ Feature:
   @javascript
   Scenario: User should see error message if he does not fill out all required fields.
     Given custom_page content:
-      | title               | collection           | state     |
-      | IOP validation page | Interoperable Europe | published |
+      | title               | collection           |
+      | IOP validation page | Interoperable Europe |
 
     Then I am logged in as a moderator
     And I go to the edit form of the "IOP validation page" "custom page"
@@ -84,8 +84,8 @@ Feature:
   @javascript
   Scenario: Report link and eTranslate button are not available in IOP custom pages.
     Given custom_page content:
-      | title    | collection           | state     |
-      | IOP page | Interoperable Europe | published |
+      | title    | collection           |
+      | IOP page | Interoperable Europe |
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP page" custom page
@@ -95,8 +95,8 @@ Feature:
   @javascript
   Scenario Outline: Report link and eTranslate button are not available in IOP.
     Given <type> content:
-      | title      | collection           | state     |
-      | IOP <type> | Interoperable Europe | published |
+      | title      | collection           |
+      | IOP <type> | Interoperable Europe |
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP <type>" <type>

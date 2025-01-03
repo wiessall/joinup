@@ -10,12 +10,12 @@ Feature: Asset distribution editing.
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
     And collection content:
-      | title              | state     |
-      | Collection example | published |
+      | title              |
+      | Collection example |
     Given solution content:
-      | title      | collection         | description        | state     |
-      | Solution A | Collection example | Sample description | published |
-      | Solution B | Collection example | Sample description | published |
+      | title      | collection         | description        |
+      | Solution A | Collection example | Sample description |
+      | Solution B | Collection example | Sample description |
     And licence content:
       | title | description                         | deprecated |
       | LGPL  | The LGPL more permisssive than GPL. | yes        |
@@ -23,8 +23,8 @@ Feature: Asset distribution editing.
       | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
-      | title                      | description        | licence | access url | release               | state     | published at     | modification date |
-      | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | published | 2019-11-19       | 2021-11-19        |
+      | title                      | description        | licence | access url | release               | published at | modification date |
+      | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | 2019-11-19   | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |
@@ -73,9 +73,9 @@ Feature: Asset distribution editing.
     Then I should see the heading "Asset distribution example revised"
     And the following email should have been sent:
       | recipient | Gregg Hill                                                                                                                                          |
-      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                                             |
+      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                        |
       | body      | The distribution Asset distribution example revised of the release Asset release example, C3PO of the solution Solution A was successfully updated. |
     And the following email should have been sent:
       | recipient | Pedro Torres                                                                                                                                        |
-      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                                             |
+      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                        |
       | body      | The distribution Asset distribution example revised of the release Asset release example, C3PO of the solution Solution A was successfully updated. |

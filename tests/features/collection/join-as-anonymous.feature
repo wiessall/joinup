@@ -6,10 +6,10 @@ Feature: Joining a collection as an anonymous user
 
   Background:
     Given collection content:
-      | title           | abstract                          | closed | state     |
-      | Reannual plants | Harvested before they are planted | no     | published |
-      | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |
-      | CoC collection  | We have a Code of Conduct         | yes    | published |
+      | title           | closed |
+      | Reannual plants | no     |
+      | Vul nuts        | yes    |
+      | CoC collection  | yes    |
     And users:
       | Username         |
       | Hepzibah Whitlow |
@@ -23,8 +23,8 @@ Feature: Joining a collection as an anonymous user
       | Username           | E-mail         | Password |
       | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
     And custom_page content:
-      | title                 | collection     | state     |
-      | CoC of CoC collection | CoC collection | published |
+      | title                 | collection     |
+      | CoC of CoC collection | CoC collection |
     And the "code of conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
 
   Scenario: Joining collections without JavaScript

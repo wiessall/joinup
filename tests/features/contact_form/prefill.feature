@@ -6,11 +6,11 @@ Feature: Prefill contact form fields
 
   Scenario: The subject field can be prefilled through links.
     Given collection content:
-      | title                | state     | topic |
-      | CAMSS test community | published | HR    |
+      | title                | topic |
+      | CAMSS test community | HR    |
     And custom_page content:
-      | title                | collection           | state     |
-      | IOP page custom page | CAMSS test community | published |
+      | title                | collection           |
+      | IOP page custom page | CAMSS test community |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "IOP page custom page" title:
       | field_body:value  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
       | field_body:format | content_editor                                                                       |

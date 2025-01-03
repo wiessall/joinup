@@ -6,11 +6,11 @@ Feature: Sharing content on social networks
 
   Scenario Outline: Sharing content on Facebook, Twitter and Linkedin.
     Given collection content:
-      | title           | state     |
-      | Social networks | published |
+      | title           |
+      | Social networks |
     And <content type> content:
-      | title                 | collection      | state     |
-      | Important information | Social networks | published |
+      | title                 | collection      |
+      | Important information | Social networks |
 
     When I am an anonymous user
     And I go to the content page of the type "<content type>" with the title "Important information"
@@ -33,11 +33,11 @@ Feature: Sharing content on social networks
 
   Scenario: Sharing solutions on social media.
     Given collection content:
-      | title           | state     |
-      | Social networks | published |
+      | title           |
+      | Social networks |
     Given solution content:
-      | title              | collection      | state     |
-      | Important solution | Social networks | published |
+      | title              | collection      |
+      | Important solution | Social networks |
 
     When I am logged in as a user with the "authenticated" role
     And I go to "/solutions"

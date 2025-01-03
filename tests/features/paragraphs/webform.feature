@@ -5,8 +5,8 @@ Feature:
 
   Background:
     Given collection content:
-      | title              | state     |
-      | Webform collection | published |
+      | title              |
+      | Webform collection |
     And users:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |
