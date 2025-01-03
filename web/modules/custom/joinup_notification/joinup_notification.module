@@ -9,12 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
@@ -42,17 +39,9 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  * @see https://www.drupal.org/node/2833084
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
-  // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-  if (
-    $entity->isNew()
-      || !($entity instanceof CommunityContentInterface
-      || $entity instanceof DistributionInterface
-      || $entity instanceof ReleaseInterface
-      || $entity instanceof GroupInterface
-    )) {
-    return;
+  if (!$entity->isNew() && $entity instanceof EntityWorkflowStateInterface && $entity->hasWorkflow()) {
+    $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
   }
-  $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
 }
 
 /**
