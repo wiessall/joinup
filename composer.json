@@ -129,6 +129,7 @@
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
         "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",

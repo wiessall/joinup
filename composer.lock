@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10055e7cd3e5efee7561164730fefbda",
+    "content-hash": "d74d2f63d161c364067011dc77450cab",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -12366,6 +12366,18 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/jquery-jsonview/-/jquery-jsonview-1.2.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/js-cookie",
+            "version": "3.0.5",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
             },
             "type": "npm-asset",
             "license": [
