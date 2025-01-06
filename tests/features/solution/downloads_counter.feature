@@ -5,15 +5,15 @@ Feature:
   Scenario: Check solution downloads counter
     # Create the dummy data to work with.
     Given collection content:
-      | title         | state     |
-      | Ocean studies | published |
+      | title         |
+      | Ocean studies |
     Given solution content:
-      | title                  | description                                       | collection    | state     |
-      | Climate change tracker | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
+      | title                  | collection    |
+      | Climate change tracker | Ocean studies |
     Given distribution content:
-      | title                 | description          | solution               | downloads | state     |
-      | Sample distribution   | Sample description   | Climate change tracker | 10        | published |
-      | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         | published |
+      | title                 | solution               | downloads |
+      | Sample distribution   | Climate change tracker | 10        |
+      | Sample distribution 2 | Climate change tracker | 0         |
     # Checks solutions tiles to we have the correct numbers.
     When I visit the solution overview
     Then I should see the "Climate change tracker" tile
@@ -29,7 +29,7 @@ Feature:
     When I visit the solution overview
     Then the download icon should not be shown in the "Climate change tracker" tile
     Given distribution content:
-      | title                 | description          | solution               | downloads | state     |
-      | Sample distribution 3 | Sample description 3 | Climate change tracker | 20        | published |
+      | title                 | solution               | downloads |
+      | Sample distribution 3 | Climate change tracker | 20        |
     When I reload the page
     Then the "Climate change tracker" tile should show 20 downloads

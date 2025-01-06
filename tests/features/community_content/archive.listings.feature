@@ -2,24 +2,18 @@
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
-    Given owner content:
-      | name       |
-      | Some owner |
-    And contact_information content:
-      | name         |
-      | Some contact |
-    And collection content:
-      | title           | description | topic             | owner      | contact information | state     |
-      | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
-      | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
+    Given collection content:
+      | title           | description | topic             |
+      | Some collection | Test        | Supplier exchange |
+      | Poly screens    | Test        | Supplier exchange |
     And news content:
-      | title          | headline       | state     | collection      | abstract | field_paragraphs_body | content | created         |
-      | Archived news  | Archived news  | published | Some collection | Abstract | Test                  | Test    | 2016-01-03T4:00 |
-      | Published news | Published news | published | Some collection | Abstract | Test                  | Test    | 2016-02-04T5:00 |
-      | Poly news 1    | Poly news 1    | published | Poly screens    | Abstract | Test                  | Test    | 2016-03-05T6:00 |
-      | Poly news 2    | Poly news 2    | published | Poly screens    | Abstract | Test                  | Test    | 2016-04-06T7:00 |
-      | Poly news 3    | Poly news 3    | published | Poly screens    | Abstract | Test                  | Test    | 2016-05-07T8:00 |
-      | Poly news 4    | Poly news 4    | published | Poly screens    | Abstract | Test                  | Test    | 2016-06-08T9:00 |
+      | title          | headline       | collection      | abstract | field_paragraphs_body | content | created         |
+      | Archived news  | Archived news  | Some collection | Abstract | Test                  | Test    | 2016-01-03T4:00 |
+      | Published news | Published news | Some collection | Abstract | Test                  | Test    | 2016-02-04T5:00 |
+      | Poly news 1    | Poly news 1    | Poly screens    | Abstract | Test                  | Test    | 2016-03-05T6:00 |
+      | Poly news 2    | Poly news 2    | Poly screens    | Abstract | Test                  | Test    | 2016-04-06T7:00 |
+      | Poly news 3    | Poly news 3    | Poly screens    | Abstract | Test                  | Test    | 2016-05-07T8:00 |
+      | Poly news 4    | Poly news 4    | Poly screens    | Abstract | Test                  | Test    | 2016-06-08T9:00 |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
@@ -66,8 +60,8 @@ Feature: Archived content on content listings - groups and paragraphs.
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.
     And custom_page content:
-      | title     | abstract           | collection      | state     | topic             |
-      | Some page | Some page abstract | Some collection | published | Supplier exchange |
+      | title     | abstract           | collection      | topic             |
+      | Some page | Some page abstract | Some collection | Supplier exchange |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Some page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -114,15 +108,15 @@ Feature: Archived content on content listings - groups and paragraphs.
   @javascript
   Scenario: Carousel listings can also control archived items visibility.
     Given collection content:
-      | uri                                                            | title                | state     |
-      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published |
+      | uri                                                            | title                |
+      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe |
     And news content:
       | title              | headline           | state     | collection           | body | content |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |
       | IOP published news | IOP published news | published | Interoperable Europe | Test | Test    |
     And custom_page content:
-      | title    | abstract          | collection           | state     |
-      | IOP page | IOP page abstract | Interoperable Europe | published |
+      | title    | abstract          | collection           |
+      | IOP page | IOP page abstract | Interoperable Europe |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "IOP page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -188,8 +182,8 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   Scenario: "Show archived" facet on Discussions page content listing.
     Given collection content:
-      | title                      | description | topic             | owner      | contact information | state     |
-      | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | published |
+      | title                      | description | topic             |
+      | Some discussion collection | Test        | Supplier exchange |
     And discussion content:
       | title           | collection                 | state     |
       | Rand discussion | Some discussion collection | published |

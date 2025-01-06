@@ -8,11 +8,11 @@ Feature:
 
   Background:
     Given collection content:
-      | title               | state     |
-      | Flagging collection | published |
+      | title               |
+      | Flagging collection |
     And news content:
-      | title      | headline   | state     | collection          |
-      | Some title | Some title | published | Flagging collection |
+      | title      | headline   | collection          |
+      | Some title | Some title | Flagging collection |
 
   Scenario: Only content entity internal URLs are allowed for flagging menu items.
     When I am logged in as a moderator

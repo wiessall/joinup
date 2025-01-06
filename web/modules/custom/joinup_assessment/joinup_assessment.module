@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup assessment module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Url;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_assessment\Entity\AssessmentReport;
+use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Implements hook_webform_submission_access().
+ */
+function joinup_assessment_webform_submission_access(WebformSubmissionInterface $submission, string $operation): AccessResultInterface {
+  $metadata = (new CacheableMetadata())->addCacheContexts(['route']);
+
+  if ($operation === 'view' && $submission->getWebform()->id() === AssessmentInterface::WEBFORM_ID) {
+    $routeMatch = \Drupal::routeMatch();
+    // Show a locked submission in the context of the assessment report.
+    if (
+      $routeMatch->getRouteName() === 'entity.node.canonical' &&
+      ($report = $routeMatch->getParameter('node')) &&
+      $report instanceof AssessmentReportInterface &&
+      $report->isPublished()
+    ) {
+      $metadata->addCacheableDependency($report);
+      return AccessResult::allowed()->addCacheableDependency($metadata);
+    }
+  }
+
+  return AccessResult::neutral()->addCacheableDependency($metadata);
+}
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function joinup_assessment_preprocess_views_view(array &$variables): void {
+  $view = $variables['view'];
+  if ($view->id() === 'assessment_reports' && $view->current_display === 'list') {
+    $variables['header']['my_submissions'] = [
+      '#type' => 'link',
+      '#title' => t('My submissions'),
+      '#url' => Url::fromUserInput('/collection/assessments/assessment-reports/questionnaire/submissions'),
+      '#attributes' => [
+        'class' => ['m-3'],
+      ],
+      '#access' => \Drupal::currentUser()->isAuthenticated(),
+    ];
+    // Add bottom padding.
+    $variables['header']['#prefix'] = '<div class="pb-3">';
+    $variables['header']['#suffix'] = '</div>';
+  }
+}
+
+/**
+ * Implements hook_webform_element_ELEMENT_TYPE_alter().
+ */
+function joinup_assessment_webform_element_webform_actions_alter(array &$element): void {
+  if ($element['#webform'] !== 'assessment') {
+    return;
+  }
+
+  $webform_id = $element['#webform_submission'];
+  if (empty($webform_id)) {
+    return;
+  }
+
+  $element['print'] = [
+    '#type' => 'link',
+    '#title' => t('Download PDF'),
+    '#url' => Url::fromRoute('entity_print.view', [
+      'export_type' => 'pdf',
+      'entity_type' => 'webform_submission',
+      'entity_id' => $webform_id,
+    ]),
+    '#weight' => 100,
+  ];
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_assessment_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['node']['assessment_report'])) {
+    $bundles['node']['assessment_report']['class'] = AssessmentReport::class;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_assessment_webform_submission_delete(WebformSubmissionInterface $submission): void {
+  if ($submission->getWebform()->id() === AssessmentInterface::WEBFORM_ID) {
+    // If a webform assessment submission is deleted, remove also the report.
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'assessment_report')
+      ->condition('submission', $submission->id())
+      ->execute();
+    if ($nids) {
+      $storage->delete($storage->loadMultiple($nids));
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function joinup_assessment_preprocess_page_title(array &$variables): void {
+  $report = $variables['entity'] ?? NULL;
+  if ($report instanceof AssessmentReportInterface) {
+    $dateFormatter = \Drupal::getContainer()->get('date.formatter');
+    $variables['additional_content']['organization'] = $report->get('organization')->value;
+    $variables['additional_content']['publication_date'] = $dateFormatter->format($report->getCreatedTime(), 'date_only');
+    $variables['bundle_label'] = $report->get('type')->entity->label();
+  }
+}

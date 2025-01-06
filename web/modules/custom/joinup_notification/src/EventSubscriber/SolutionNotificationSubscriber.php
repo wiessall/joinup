@@ -122,16 +122,12 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[NotificationEvents::RDF_ENTITY_CRUD] = [
-      ['onCreate'],
-      ['onUpdate'],
-      ['onDelete'],
+    return [
+      NotificationEvents::NODE_CREATE => ['onCreate'],
+      NotificationEvents::NODE_UPDATE => ['onUpdate'],
+      NotificationEvents::NODE_DELETE => ['onDelete'],
+      NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED => ['onCompleteArchival'],
     ];
-    $events[NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED] = [
-      ['onCompleteArchival'],
-    ];
-
-    return $events;
   }
 
   /**
@@ -392,6 +388,11 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
     }
 
     if ($this->operation !== 'delete') {
+      return FALSE;
+    }
+
+    \assert($this->entity instanceof SolutionInterface);
+    if (!$this->entity->hasGroup()) {
       return FALSE;
     }
 

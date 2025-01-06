@@ -7,16 +7,10 @@ Feature: Solution homepage
   # @covers \Drupal\joinup_release\Plugin\search_api\processor\ReleaseSolutionData::preprocessIndexItems
   # @covers \Drupal\joinup_search\Plugin\search_api\processor\AddAggregatedTopicHierarchy::preprocessIndexItems
   Scenario: The solution homepage shows related content.
-    Given owner content:
-      | name          | owner type |
-      | Kostas Agathe | Company    |
-    And contact_information content:
-      | name    | email               |
-      | Placebo | Placebo@example.com |
     Given solution content:
-      | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
-      | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
-      | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
+      | title                        | abstract                              | description                           | logo     | status | related by type | solution type | topic       |
+      | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png |        | yes             | Business      | E-inclusion |
+      | Security audit tools         | Automated test of security            | Automated test of security            | logo.png |        | yes             | Business      | E-inclusion |
     And release content:
       | title                | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
       | IS protocol paper    | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
@@ -37,8 +31,8 @@ Feature: Solution homepage
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
       | Archiving some distribution | Old ZIP version archived.           | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | archived  |
     And document content:
-      | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     | state     |
-      | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | published |
+      | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     |
+      | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol |
 
     When I go to the homepage of the "Information sharing protocol" solution
     # I should see only the related release.

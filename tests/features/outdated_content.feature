@@ -6,20 +6,20 @@ Feature:
   Scenario: Test moderator and anonymous user perspectives.
 
     Given collection content:
-      | title            | state     |
-      | Outdated content | published |
+      | title            |
+      | Outdated content |
     Given solution content:
-      | title             | collection       | state     |
-      | Recent solution   | Outdated content | published |
-      | Outdated solution | Outdated content | published |
+      | title             | collection       |
+      | Recent solution   | Outdated content |
+      | Outdated solution | Outdated content |
     And discussion content:
-      | title                         | collection       | published at     | created   | state     |
-      | Recent published discussion   | Outdated content | -2 years         | -2 years  | published |
-      | Outdated published discussion | Outdated content | -11 years        | -11 years | published |
-      | Not published discussion      | Outdated content |                  | -12 years | draft     |
+      | title                         | collection       | published at | created   | state     |
+      | Recent published discussion   | Outdated content | -2 years     | -2 years  | published |
+      | Outdated published discussion | Outdated content | -11 years    | -11 years | published |
+      | Not published discussion      | Outdated content |              | -12 years | draft     |
     And document content:
-      | title             | collection       | document publication date | state     |
-      | Very old document | Outdated content | 1985-03-04                | published |
+      | title             | collection       | document publication date |
+      | Very old document | Outdated content | 1985-03-04                |
     And event content:
       | title                    | collection       | published at     | created          | state     |
       | Recent published event   | Outdated content | -3 months        | -3 months        | published |

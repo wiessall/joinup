@@ -10,11 +10,11 @@ Feature: Bookmark/Unbookmark feature.
       | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
       | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
     Given collection content:
-      | title  | state     |
-      | Batman | published |
+      | title  |
+      | Batman |
     Given solution content:
-      | title         | state     | collection |
-      | Batman Begins | published | Batman     |
+      | title         | collection |
+      | Batman Begins | Batman     |
 
   Scenario Outline: User can Bookmark/unbookmark rdf.
     When I am logged in as "Gregory Bookmark"
@@ -38,8 +38,8 @@ Feature: Bookmark/Unbookmark feature.
 
   Scenario Outline: User can bookmark content.
     And <content type> content:
-      | title            | solution      | state     |
-      | Bookmark content | Batman Begins | published |
+      | title            | solution      |
+      | Bookmark content | Batman Begins |
 
     When I am logged in as "Gregory Bookmark"
     And I go to the content page of the type "<content type>" with the title "Bookmark content"
@@ -77,11 +77,11 @@ Feature: Bookmark/Unbookmark feature.
 
   Scenario: User bookmark page.
     And news content:
-      | title               | solution      | state     |
-      | Bookmark news one   | Batman Begins | published |
-      | Bookmark news two   | Batman Begins | published |
-      | Bookmark news three | Batman Begins | published |
-      | Ohter news          | Batman Begins | published |
+      | title               | solution      |
+      | Bookmark news one   | Batman Begins |
+      | Bookmark news two   | Batman Begins |
+      | Bookmark news three | Batman Begins |
+      | Ohter news          | Batman Begins |
 
     # Add small delays between flaggings so they have different creation dates,
     # important when checking the order later (granularity: seconds).

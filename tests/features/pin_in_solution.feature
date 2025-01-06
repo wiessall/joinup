@@ -6,9 +6,9 @@ Feature: Pinning content entities inside solutions
 
   Background:
     Given solution content:
-      | title       | state     |
-      | Blue Wrench | published |
-      | Sunny Beam  | published |
+      | title       |
+      | Blue Wrench |
+      | Sunny Beam  |
     And users:
       | Username          | E-mail                        |
       | Sara Jessica      | sara.jessica@example.com      |
@@ -25,12 +25,12 @@ Feature: Pinning content entities inside solutions
 
   Scenario Outline: Facilitators can pin and unpin community content inside their solutions.
     Given news content:
-      | title                      | solution    | state     | created    |
-      | What is the HEX for lemon? | Blue Wrench | published | 2018-12-13 |
+      | title                      | solution    | created    |
+      | What is the HEX for lemon? | Blue Wrench | 2018-12-13 |
     And <content type> content:
-      | title              | headline           | solution    | state     | pinned | created    |
-      | Very important     | Very important     | Blue Wrench | published | yes    | 2018-11-03 |
-      | Useful information | Useful information | Blue Wrench | published | no     | 2018-12-03 |
+      | title              | headline           | solution    | pinned | created    |
+      | Very important     | Very important     | Blue Wrench | yes    | 2018-11-03 |
+      | Useful information | Useful information | Blue Wrench | no     | 2018-12-03 |
 
     When I am an anonymous user
     And I go to the homepage of the "Blue Wrench" solution
@@ -102,9 +102,9 @@ Feature: Pinning content entities inside solutions
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
-      | title       | headline    | solution    | state     | pinned |
-      | Lantern FAQ | Lantern FAQ | Blue Wrench | published | yes    |
-      | Lantern TCA | Lantern TCA | Blue Wrench | published | no     |
+      | title       | headline    | solution    | pinned |
+      | Lantern FAQ | Lantern FAQ | Blue Wrench | yes    |
+      | Lantern TCA | Lantern TCA | Blue Wrench | no     |
 
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned

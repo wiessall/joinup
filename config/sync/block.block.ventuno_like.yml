@@ -26,6 +26,7 @@ visibility:
     context_mapping:
       node: '@node.node_route_context:node'
     content:
+      node-assessment_report: node-assessment_report
       node-custom_page: node-custom_page
       node-discussion: node-discussion
       node-document: node-document
