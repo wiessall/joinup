@@ -272,6 +272,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 function _ventuno_get_default_icon(string $entity_type_id, string $bundle): string {
   $mapping = [
     'node' => [
+      'assessment_report' => 'file-earmark-check',
       'collection' => 'folder2-open',
       'custom_page' => 'file-earmark-richtext',
       'discussion' => 'chat-left-text',

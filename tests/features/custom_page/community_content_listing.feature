@@ -11,26 +11,26 @@ Feature:
       | Family name | Nine                            |
       | E-mail      | jimmy.nine@ec-europa.example.eu |
     Given collection content:
-      | title      | logo     | state     |
-      | Nintendo64 | logo.png | published |
-      | Emulators  | logo.png | published |
+      | title      | logo     |
+      | Nintendo64 | logo.png |
+      | Emulators  | logo.png |
     And custom_page content:
-      | title               | collection | created           | body                               | state     | pinned |
-      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
+      | title               | collection | created           | body                               | pinned |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | no     |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Latest news listing" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And news content:
-      | title                                 | collection | created           | field_paragraphs_body            | state     | pinned |
-      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | published | no     |
-      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | published | no     |
+      | title                                 | collection | created           | field_paragraphs_body            | pinned |
+      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | no     |
+      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | no     |
     And event content:
-      | title               | collection | created           | field_paragraphs_body                       | state     | pinned |
-      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | published | no     |
-      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | published | yes    |
+      | title               | collection | created           | field_paragraphs_body                       | pinned |
+      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | no     |
+      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | yes    |
     And discussion content:
-      | title                           | collection | content                 | created          | state     | pinned |
-      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | published | no     |
-      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | published | no     |
+      | title                           | collection | content                 | created          | pinned |
+      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | no     |
+      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | no     |
     And the following collection user membership:
       | collection | user      | roles       |
       | Nintendo64 | jimmy7892 | facilitator |
@@ -272,8 +272,8 @@ Feature:
 
     # Create a solution and add it to the list.
     Given solution content:
-      | title                 | state     | collection |
-      | N64 cartridge cleaner | published | Nintendo64 |
+      | title                 | collection |
+      | N64 cartridge cleaner | Nintendo64 |
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
@@ -376,20 +376,20 @@ Feature:
 
   Scenario: Test listing by keywords that contain the same word.
     Given document content:
-      | title        | keywords            | field_paragraphs_body | collection | state     |
-      | User's Guide | nintendo64 manuals  | User manual           | Nintendo64 | published |
-      | Licence      | nintendo64 licences | Licence               | Nintendo64 | published |
+      | title        | keywords            | field_paragraphs_body | collection |
+      | User's Guide | nintendo64 manuals  | User manual           | Nintendo64 |
+      | Licence      | nintendo64 licences | Licence               | Nintendo64 |
     And custom_page content:
-      | title   | collection | state     |
-      | Manuals | Nintendo64 | published |
+      | title   | collection |
+      | Manuals | Nintendo64 |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Manuals" title with:
     """
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:60:"entity_bundle|document
             keywords|"nintendo64 manuals"";s:5:"limit";s:2:"10";}
     """
     And custom_page content:
-      | title    | collection | state     |
-      | Licences | Nintendo64 | published |
+      | title    | collection |
+      | Licences | Nintendo64 |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Licences" title with:
     """
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:61:"entity_bundle|document
@@ -457,8 +457,8 @@ Feature:
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
-      | title       | collection | state     |
-      | All content | Nintendo64 | published |
+      | title       | collection |
+      | All content | Nintendo64 |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
@@ -517,14 +517,14 @@ Feature:
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
 
     Given solution content:
-      | title                | collection | state     |
-      | Save the Planet      | Nintendo64 | published |
-      | Fight Global Warming | Nintendo64 | published |
-      | The Green Alliance   | Nintendo64 | published |
+      | title                | collection |
+      | Save the Planet      | Nintendo64 |
+      | Fight Global Warming | Nintendo64 |
+      | The Green Alliance   | Nintendo64 |
 
     And custom_page content:
-      | title   | collection | state     |
-      | Forests | Nintendo64 | published |
+      | title   | collection |
+      | Forests | Nintendo64 |
 
     Given I am logged in as jimmy7892
     And I go to the edit form of the "Forests" "custom page"
@@ -569,14 +569,14 @@ Feature:
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
     Given solution content:
-      | title              | collection | state     |
-      | Save gasoline      | Nintendo64 | published |
-      | Fight battery mode | Nintendo64 | published |
-      | Black Noise        | Nintendo64 | published |
+      | title              | collection |
+      | Save gasoline      | Nintendo64 |
+      | Fight battery mode | Nintendo64 |
+      | Black Noise        | Nintendo64 |
 
     And custom_page content:
-      | title | collection | state     | abstract |
-      | Bikes | Nintendo64 | published | N/A      |
+      | title | collection |  abstract |
+      | Bikes | Nintendo64 |  N/A      |
 
     And I am logged in as jimmy7892
     And I go to the edit form of the "Bikes" "custom page"
@@ -640,44 +640,44 @@ Feature:
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7819
 
     Given event content:
-      | title              | collection | state     | created           | start date | end date   |
-      | Event pagination 1 | Nintendo64 | published | 2016-10-09 4:29am | now +8 day | now +9 day |
-      | Event pagination 2 | Nintendo64 | published | 2016-10-08 4:29am | now +7 day | now +8 day |
-      | Event pagination 3 | Nintendo64 | published | 2015-10-07 4:29am | now +6 day | now +7 day |
-      | Event pagination 4 | Nintendo64 | published | 2014-10-06 4:29am | now +5 day | now +6 day |
-      | Event pagination 5 | Nintendo64 | published | 2014-10-05 4:29am | now +4 day | now +5 day |
-      | Event pagination 6 | Nintendo64 | published | 2013-10-04 4:29am | now +3 day | now +4 day |
-      | Event pagination 7 | Nintendo64 | published | 2012-10-03 4:29am | now +2 day | now +3 day |
-      | Event pagination 8 | Nintendo64 | published | 2011-10-02 4:29am | now +1 day | now +2 day |
-      | Event pagination 9 | Nintendo64 | published | 2010-10-01 4:29am | now        | now +1 day |
+      | title              | collection |  created           | start date | end date   |
+      | Event pagination 1 | Nintendo64 |  2016-10-09 4:29am | now +8 day | now +9 day |
+      | Event pagination 2 | Nintendo64 |  2016-10-08 4:29am | now +7 day | now +8 day |
+      | Event pagination 3 | Nintendo64 |  2015-10-07 4:29am | now +6 day | now +7 day |
+      | Event pagination 4 | Nintendo64 |  2014-10-06 4:29am | now +5 day | now +6 day |
+      | Event pagination 5 | Nintendo64 |  2014-10-05 4:29am | now +4 day | now +5 day |
+      | Event pagination 6 | Nintendo64 |  2013-10-04 4:29am | now +3 day | now +4 day |
+      | Event pagination 7 | Nintendo64 |  2012-10-03 4:29am | now +2 day | now +3 day |
+      | Event pagination 8 | Nintendo64 |  2011-10-02 4:29am | now +1 day | now +2 day |
+      | Event pagination 9 | Nintendo64 |  2010-10-01 4:29am | now        | now +1 day |
     And news content:
-      | title              | collection | state     |
-      | News pagination 1  | Nintendo64 | published |
-      | News pagination 2  | Nintendo64 | published |
-      | News pagination 3  | Nintendo64 | published |
-      | News pagination 4  | Nintendo64 | published |
-      | News pagination 5  | Nintendo64 | published |
-      | News pagination 6  | Nintendo64 | published |
-      | News pagination 7  | Nintendo64 | published |
-      | News pagination 8  | Nintendo64 | published |
-      | News pagination 9  | Nintendo64 | published |
-      | News pagination 10 | Nintendo64 | published |
-      | News pagination 11 | Nintendo64 | published |
-      | News pagination 12 | Nintendo64 | published |
-      | News pagination 13 | Nintendo64 | published |
-      | News pagination 14 | Nintendo64 | published |
-      | News pagination 15 | Nintendo64 | published |
-      | News pagination 16 | Nintendo64 | published |
-      | News pagination 17 | Nintendo64 | published |
-      | News pagination 18 | Nintendo64 | published |
-      | News pagination 19 | Nintendo64 | published |
-      | News pagination 20 | Nintendo64 | published |
-      | News pagination 21 | Nintendo64 | published |
-      | News pagination 22 | Nintendo64 | published |
-      | News pagination 23 | Nintendo64 | published |
+      | title              | collection |
+      | News pagination 1  | Nintendo64 |
+      | News pagination 2  | Nintendo64 |
+      | News pagination 3  | Nintendo64 |
+      | News pagination 4  | Nintendo64 |
+      | News pagination 5  | Nintendo64 |
+      | News pagination 6  | Nintendo64 |
+      | News pagination 7  | Nintendo64 |
+      | News pagination 8  | Nintendo64 |
+      | News pagination 9  | Nintendo64 |
+      | News pagination 10 | Nintendo64 |
+      | News pagination 11 | Nintendo64 |
+      | News pagination 12 | Nintendo64 |
+      | News pagination 13 | Nintendo64 |
+      | News pagination 14 | Nintendo64 |
+      | News pagination 15 | Nintendo64 |
+      | News pagination 16 | Nintendo64 |
+      | News pagination 17 | Nintendo64 |
+      | News pagination 18 | Nintendo64 |
+      | News pagination 19 | Nintendo64 |
+      | News pagination 20 | Nintendo64 |
+      | News pagination 21 | Nintendo64 |
+      | News pagination 22 | Nintendo64 |
+      | News pagination 23 | Nintendo64 |
     And custom_page content:
-      | title          | collection | state     |
-      | Pagination bug | Nintendo64 | published |
+      | title          | collection |
+      | Pagination bug | Nintendo64 |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Pagination bug" title:
       | content_listing:value | a:7:{s:6:"fields";a:2:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}s:22:"content_listing_status";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:1:"2";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Pagination bug" title:
@@ -709,8 +709,8 @@ Feature:
   @javascript
   Scenario: Facets are not shown when there are more than one paragraphs of the same datasource in the page.
     Given custom_page content:
-      | title                  | collection | state     |
-      | Multi paragraph facets | Nintendo64 | published |
+      | title                  | collection |
+      | Multi paragraph facets | Nintendo64 |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 

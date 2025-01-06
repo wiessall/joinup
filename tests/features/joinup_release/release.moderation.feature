@@ -5,21 +5,15 @@ Feature: Asset release moderation
   I need to be able to transit the releases from one state to another.
 
   Scenario: Publish, Update, request changes, publish again and delete a release.
-    Given owner content:
-      | name        | owner type |
-      | Kenny Logan | Company    |
-    And contact_information content:
-      | name       | email                  |
-      | SheriMoore | SheriMoore@example.com |
-    And users:
+    Given users:
       | Username        | E-mail                      | First name | Family name | Roles     |
       | Bonnie Holloway | bonnie.holloway@example.com | Bonnie     | Holloway    |           |
       | Felix Russell   | Felix.Russell@example.com   | Felix      | Russell     |           |
       | Wilson Mendoza  | Wilson.Mendoza@example.com  | Wilson     | Mendoza     | moderator |
       | Patric Sereira  | Patric.Sereira@example.com  | Patric     | Sereira     | moderator |
     And solution content:
-      | title     | description | logo     | owner       | contact information | state     |
-      | Dark Ship | Dark ship   | logo.png | Kenny Logan | SheriMoore          | published |
+      | title     | description |
+      | Dark Ship | Dark ship   |
     And the following solution user membership:
       | solution  | user            | roles       |
       | Dark Ship | Bonnie Holloway | owner       |

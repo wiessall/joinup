@@ -7,29 +7,29 @@ Feature: Machine translation
   @javascript
   Scenario: Translation link is only visible on content focused pages
     Given collection content:
-      | title  | state     |
-      | Brexit | published |
+      | title  |
+      | Brexit |
     And event content:
-      | title                      | collection | state     |
-      | Confiscating of sandwiches | Brexit     | published |
+      | title                      | collection |
+      | Confiscating of sandwiches | Brexit     |
     And news content:
-      | title                   | collection | state     |
-      | Supply chain disruption | Brexit     | published |
+      | title                   | collection |
+      | Supply chain disruption | Brexit     |
     And document content:
-      | title                           | collection | state     |
-      | Increased postal delivery costs | Brexit     | published |
+      | title                           | collection |
+      | Increased postal delivery costs | Brexit     |
     And discussion content:
-      | title                                    | collection | state     |
-      | Restriction on animal-based food imports | Brexit     | published |
+      | title                                    | collection |
+      | Restriction on animal-based food imports | Brexit     |
     And custom_page content:
-      | title                      | collection | state     |
-      | Increased credit card fees | Brexit     | published |
+      | title                      | collection |
+      | Increased credit card fees | Brexit     |
     And glossary content:
       | title               | abbreviation | summary                 | definition                | collection |
       | Digital portability | DP           | Availability of content | Across streaming services | Brexit     |
     And solution content:
-      | title         | state     | collection |
-      | Rejoin the EU | published | Brexit     |
+      | title         | collection |
+      | Rejoin the EU | Brexit     |
 
     When I am logged in as a moderator
     # Inside a collection sidebar, only custom pages, glossary terms (but not

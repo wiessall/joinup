@@ -99,11 +99,13 @@ function joinup_test_install($is_syncing): void {
       ],
       'contact' => $nodeStorage->create([
         'type' => 'contact_information',
+        'uuid' => JoinupCollectionHelper::JOINUP_CONTACT_UUID,
         'title' => 'Contact name',
         'email' => 'contact.email@example.com',
       ]),
       'owner' => $nodeStorage->create([
         'type' => 'owner',
+        'uuid' => JoinupCollectionHelper::JOINUP_OWNER_UUID,
         'title' => 'ISA²',
       ]),
 

@@ -6,14 +6,14 @@ Feature:
 
   Background:
     Given collection content:
-      | title                 | state     | topic |
-      | Paragraphs collection | published | HR    |
+      | title                 | topic |
+      | Paragraphs collection | HR    |
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
-      | title           | collection            | state     | topic | abstract                 |
-      | Paragraphs page | Paragraphs collection | published | HR    | Paragraphs page abstract |
+      | title           | collection            | topic | abstract                 |
+      | Paragraphs page | Paragraphs collection | HR    | Paragraphs page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -48,8 +48,8 @@ Feature:
   @javascript
   Scenario Outline: Privileged users can add paragraphs.
     Given <group type> content:
-      | title                 | state     |
-      | Paragraphs group type | published |
+      | title                 |
+      | Paragraphs group type |
     And users:
       | Username |
       | Zohan    |

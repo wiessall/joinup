@@ -3,8 +3,8 @@ Feature: Asset distribution content archival.
 
   Scenario: Asset distribution content can be archived any time.
     Given solution content:
-      | title            | state     |
-      | Some AD solution | published |
+      | title            |
+      | Some AD solution |
     And licence content:
       | title  | description                               | deprecated |
       | WTFPLA | The WTFPLA is a rather permissive licence | no         |

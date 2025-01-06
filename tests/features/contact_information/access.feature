@@ -14,9 +14,6 @@ Feature: Contact information access
     Then I should see the heading "Sign in to continue"
 
   Scenario: Facilitator can edit contact information
-    Given owner content:
-      | name         | owner type |
-      | Ausy BENELUX | Company    |
     Given users:
       | Username      | Roles | E-mail                      | First name | Family name |
       | Michiel Lucas |       | michiel.lucas@one-agency.be | Michiel    | Lucas       |
@@ -24,8 +21,8 @@ Feature: Contact information access
       | name | email            | author        |
       | info | info@dataflow.be | Michiel Lucas |
     And collection content:
-      | title                   | description        | logo     | owner        | contact information | state     |
-      | Ausy software solutions | A software company | logo.png | Ausy BENELUX | info                | published |
+      | title                   | contact information |
+      | Ausy software solutions | info                |
     And the following collection user memberships:
       | collection              | user          | roles       |
       | Ausy software solutions | Michiel Lucas | facilitator |

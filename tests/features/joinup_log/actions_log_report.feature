@@ -6,11 +6,11 @@ Feature: Actions log
 
   Background:
     Given collection content:
-      | title         | state     |
-      | Tilt and Turn | published |
+      | title         |
+      | Tilt and Turn |
     Given solution content:
-      | title    | state     | collection    |
-      | Skylight | published | Tilt and Turn |
+      | title    | collection    |
+      | Skylight | Tilt and Turn |
 
   Scenario: Access to report is limited.
     Given I am not logged in

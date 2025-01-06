@@ -9,14 +9,14 @@ Feature: "Document page" editing.
       | Username |
       | <user>   |
     And collection content:
-      | title        | description        | state     |
-      | <collection> | Sample description | published |
+      | title        | description        |
+      | <collection> | Sample description |
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
     And "document" content:
-      | title      | author | collection   | state     |
-      | <document> | <user> | <collection> | published |
+      | title      | author | collection   |
+      | <document> | <user> | <collection> |
     When I am logged in as "<user>"
     And I go to the "<document>" document
     Then I should see the link "Edit" in the "Entity actions" region
@@ -34,14 +34,14 @@ Feature: "Document page" editing.
       | Username    |
       | Peter Floyd |
     Given solution content:
-      | title                  | description        | state     |
-      | Predator in the Future | Sample description | published |
+      | title                  | description        |
+      | Predator in the Future | Sample description |
     And the following solution user memberships:
       | solution               | user        | roles       |
       | Predator in the Future | Peter Floyd | facilitator |
     And "document" content:
-      | title        | author      | solution               | state     |
-      | Prized Cloud | Peter Floyd | Predator in the Future | published |
+      | title        | author      | solution               |
+      | Prized Cloud | Peter Floyd | Predator in the Future |
     When I am logged in as "Peter Floyd"
     And I go to the "Prized Cloud" document
     Then I should see the link "Edit" in the "Entity actions" region

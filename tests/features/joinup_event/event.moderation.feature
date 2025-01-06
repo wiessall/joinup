@@ -10,15 +10,9 @@ Feature: Event moderation
       | Salvador Thomas |
       | Rosa Vaughn     |
       | Patricia Lynch  |
-    And owner content:
-      | name     |
-      | Alma Lee |
-    And contact_information content:
-      | name        | email                   |
-      | Evs contact | evs.contact@example.com |
     And collection content:
-      | title     | description           | logo     | content creation | moderation | state     | owner    | contact information | topic       |
-      | Wet Lords | The Forgotten Female. | logo.png | registered users | no         | published | Alma Lee | Evs contact         | E-inclusion |
+      | title     | description           | logo     | content creation | moderation | topic       |
+      | Wet Lords | The Forgotten Female. | logo.png | registered users | no         | E-inclusion |
     And the following collection user membership:
       | collection | user           | roles       |
       | Wet Lords  | Rosa Vaughn    | member      |

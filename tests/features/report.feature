@@ -6,11 +6,11 @@ Feature: Report inappropriate content
 
   Scenario Outline: Report inappropriate community content
     Given collection content:
-      | title            | state     |
-      | Deployment tools | published |
+      | title            |
+      | Deployment tools |
     And "<type>" content:
-      | title   | body   | collection       | state   |
-      | <title> | <body> | Deployment tools | <state> |
+      | title   | body   | collection       |
+      | <title> | <body> | Deployment tools |
     Given I am not logged in
     When I go to the content page of the type "<type>" with the title "<title>"
     And I click "Report"
@@ -30,9 +30,9 @@ Feature: Report inappropriate content
     Then I should see the heading "<title>"
 
     Examples:
-      | type        | title                        | body                    | state     |
-      | discussion  | Git is not a deployment tool | Use tarballs to deploy. | published |
-      | custom_page | The best tools               | Current best-in-class.  | published |
-      | news        | Now deploying to containers  | Long awaited feature.   | published |
-      | document    | Deployment strategies        | Deploy faster.          | published |
-      | event       | GovDeploy Bootcamp 2017      | Submit your session.    | published |
+      | type        | title                        | body                    |
+      | discussion  | Git is not a deployment tool | Use tarballs to deploy. |
+      | custom_page | The best tools               | Current best-in-class.  |
+      | news        | Now deploying to containers  | Long awaited feature.   |
+      | document    | Deployment strategies        | Deploy faster.          |
+      | event       | GovDeploy Bootcamp 2017      | Submit your session.    |

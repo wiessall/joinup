@@ -13,18 +13,18 @@ Feature: Sharing content between collections
       | Marjolein Rye | marjolein.rye@example.com |
       | Group owner   | group.owner@example.com   |
     And <group type> content:
-      | title        | state     |
-      | Classic Rock | published |
-      | Hip-Hop      | published |
-      | Power ballad | published |
-      | Drum'n'Bass  | published |
+      | title        |
+      | Classic Rock |
+      | Hip-Hop      |
+      | Power ballad |
+      | Drum'n'Bass  |
     And news content:
-      | title                          | short title                    | <group type> | state     |
-      | New D'n'B compilation released | New D'n'B compilation released | Classic Rock | published |
-      | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      | published |
+      | title                          | short title                    | <group type> |
+      | New D'n'B compilation released | New D'n'B compilation released | Classic Rock |
+      | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      |
     And document content:
-      | title                       | <group type> | state     |
-      | Rockabilly is still rocking | Classic Rock | published |
+      | title                       | <group type> |
+      | Rockabilly is still rocking | Classic Rock |
     And the following <group type> user memberships:
       | <group type> | user          | roles |
       | Hip-Hop      | Marjolein Rye |       |
@@ -33,8 +33,8 @@ Feature: Sharing content between collections
       | Drum'n'Bass  | Sara Barber   |       |
       | Hip-Hop      | Group owner   | owner |
     And <content type> content:
-      | title               | <group type> | state     |
-      | Interesting content | Hip-Hop      | published |
+      | title               | <group type> |
+      | Interesting content | Hip-Hop      |
 
     # Anonymous users can share only in social networks.
     When I am an anonymous user
@@ -162,12 +162,12 @@ Feature: Sharing content between collections
   @javascript
   Scenario Outline: Share/Unshare should be visible according to the group permissions.
     Given <group type> content:
-      | title      | state     |
-      | Westeros   | published |
-      | Essos city | published |
+      | title      |
+      | Westeros   |
+      | Essos city |
     And "<content type>" content:
-      | title       | <group type> | state     |
-      | Iron throne | Westeros     | published |
+      | title       | <group type> |
+      | Iron throne | Westeros     |
     Given users:
       | Username       | E-mail                     | Roles     |
       | Jamie Lanister | jamie.lanister@example.com | moderator |
@@ -232,15 +232,15 @@ Feature: Sharing content between collections
   @javascript
   Scenario Outline: Shared content should show visual cues in the groups they are shared into.
     Given <group type> content:
-      | title | state     |
-      | Earth | published |
-      | Mars  | published |
-      | Venus | published |
+      | title |
+      | Earth |
+      | Mars  |
+      | Venus |
     And <content type> content:
-      | title         | <group type> | shared on   | state     |
-      | Earth content | Earth        | Mars        | published |
-      | Mars content  | Mars         |             | published |
-      | Venus content | Venus        | Earth, Mars | published |
+      | title         | <group type> | shared on   |
+      | Earth content | Earth        | Mars        |
+      | Mars content  | Mars         |             |
+      | Venus content | Venus        | Earth, Mars |
 
     When I go to the homepage of the "Earth" <group type>
     Then I should see the "Earth content" tile
@@ -276,13 +276,13 @@ Feature: Sharing content between collections
 
   Scenario: Shared pinned content is erroneously shown first.
     Given collection content:
-      | title         | state     |
-      | Milky Way     | published |
-      | Chocolate Way | published |
+      | title         |
+      | Milky Way     |
+      | Chocolate Way |
     And "document" content:
-      | title                 | collection    | shared on     | state     | created    | pinned |
-      | Milky Way content     | Milky Way     | Chocolate Way | published | 2017-06-04 | yes    |
-      | Chocolate Way content | Chocolate Way |               | published | 2017-06-05 | no     |
+      | title                 | collection    | shared on     | created    | pinned |
+      | Milky Way content     | Milky Way     | Chocolate Way | 2017-06-04 | yes    |
+      | Chocolate Way content | Chocolate Way |               | 2017-06-05 | no     |
     When I go to the homepage of the "Chocolate Way" collection
     Then I should see the following tiles in the correct order:
       | Chocolate Way content |
@@ -291,15 +291,15 @@ Feature: Sharing content between collections
   @javascript
   Scenario: Carousel tiles should show the "Shared from" visual cue.
     Given collection content:
-      | title | state     |
-      | Earth | published |
-      | Mars  | published |
-      | Venus | published |
+      | title |
+      | Earth |
+      | Mars  |
+      | Venus |
     And news content:
-      | title         | collection | shared on   | state     |
-      | Earth content | Earth      | Mars        | published |
-      | Mars content  | Mars       |             | published |
-      | Venus content | Venus      | Earth, Mars | published |
+      | title         | collection | shared on   |
+      | Earth content | Earth      | Mars        |
+      | Mars content  | Mars       |             |
+      | Venus content | Venus      | Earth, Mars |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Earth" collection
@@ -327,12 +327,12 @@ Feature: Sharing content between collections
   @javascript
   Scenario Outline: The sharing options should be shown in a modal window.
     Given collection content:
-      | title   | state     |
-      | Secrets | published |
-      | Gossip  | published |
+      | title   |
+      | Secrets |
+      | Gossip  |
     And <content type> content:
-      | title                 | collection | state     |
-      | An unshareable secret | Secrets    | published |
+      | title                 | collection |
+      | An unshareable secret | Secrets    |
     And users:
       | Username        | E-mail                |
       | Sanjica Sauvage | sanjisauv@example.com |
@@ -355,10 +355,10 @@ Feature: Sharing content between collections
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:
-      | Share on               |
-      | Facebook               |
-      | Twitter                |
-      | Linkedin               |
+      | Share on                                    |
+      | Facebook                                    |
+      | Twitter                                     |
+      | Linkedin                                    |
       | Other groups on Interoperable Europe Portal |
     When I check "Gossip"
     And I press "Share" in the "Modal buttons" region

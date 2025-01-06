@@ -6,14 +6,14 @@ Feature:
 
   Scenario: Entities should have distinct URI pattern
     Given collection content:
-      | title                 | logo     | state     | uri                                                            |
-      | Persistent collection | logo.png | published | http://data.europa.eu/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0 |
+      | title                 | logo     | uri                                                            |
+      | Persistent collection | logo.png | http://data.europa.eu/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0 |
     And solution content:
-      | title               | collection            | description                     | state     | uri                                                            |
-      | Persistent solution | Persistent collection | Persistent solution description | published | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
+      | title               | collection            | description                     | uri                                                            |
+      | Persistent solution | Persistent collection | Persistent solution description | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
     And release content:
-      | title              | release number | release notes      | is version of       | state     | uri                                                            |
-      | Persistent release | 23             | Persistent release | Persistent solution | published | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
+      | title              | release number | release notes      | is version of       | uri                                                            |
+      | Persistent release | 23             | Persistent release | Persistent solution | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
     And distribution content:
       | title                   | description             | access url | solution            | uri                                                            |
       | Persistent distribution | Persistent distribution | test.zip   | Persistent solution | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
@@ -35,20 +35,20 @@ Feature:
       | http://data.europa.eu/dr8/Dream/Domain | Dream Domain | You're safe from pain in the dream domain. |
 
     And discussion content:
-      | title                 | body                  | collection            | state     |
-      | Persistent discussion | Persistent discussion | Persistent collection | published |
+      | title                 | body                  | collection            |
+      | Persistent discussion | Persistent discussion | Persistent collection |
     And document content:
-      | title               | field_paragraphs_body | collection            | state     |
-      | Persistent document | Persistent document   | Persistent collection | published |
+      | title               | field_paragraphs_body | collection            |
+      | Persistent document | Persistent document   | Persistent collection |
     And event content:
-      | title            | field_paragraphs_body | collection            | state     |
-      | Persistent event | Persistent event      | Persistent collection | published |
+      | title            | field_paragraphs_body | collection            |
+      | Persistent event | Persistent event      | Persistent collection |
     And news content:
-      | title           | body            | collection            | state     |
-      | Persistent news | Persistent news | Persistent collection | published |
+      | title           | body            | collection            |
+      | Persistent news | Persistent news | Persistent collection |
     And custom_page content:
-      | title           | body            | collection            | state     |
-      | Persistent page | Persistent page | Persistent collection | published |
+      | title           | body            | collection            |
+      | Persistent page | Persistent page | Persistent collection |
 
     When I go to the "Persistent release" release
     Then the persistent url should contain "http://data.europa.eu/w21"

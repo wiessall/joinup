@@ -12,8 +12,8 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title             | state     | content creation | moderation |
-      | CC pre collection | published | members          | yes        |
+      | title             | content creation | moderation |
+      | CC pre collection | members          | yes        |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
@@ -64,7 +64,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | Notify moderator                                                                                                             |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                            |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                       |
       | body      | CC Member has submitted an update of the news - "CCN create propose" for publication in the collection: "CC pre collection". |
     And the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been proposed" contains the following lines of text:
       | CC Member has submitted an update of the news - "CCN create propose" for publication in the collection: "CC pre collection". |
@@ -82,8 +82,8 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                           |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                                                                                 |
+      | recipient | CC owner                                                                                                                                                            |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                             |
       | body      | CC Facilitator has published the new news - "CCN create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -117,7 +117,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                          |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                                 |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                            |
       | body      | CC Member has submitted an update of the news - "CCN published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -126,7 +126,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                              |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                    |
+      | subject   | Interoperable Europe Portal: Content has been published                                               |
       | body      | CC Facilitator has published the new news - "CCN pre publish" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -141,7 +141,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                                                  |
     But the following email should not have been sent:
       | recipient | CC owner                                                                                                                               |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                                      |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                 |
       | body      | CC Facilitator has submitted an update of the news - "CCN pre request changes" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -161,7 +161,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                 |
-      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                          |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                     |
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the news - "CCN pre approve proposed" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -173,7 +173,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Reject deletion"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                              |
-      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                       |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                  |
       | body      | the Facilitator, CC Facilitator has not approved your request to delete the news - "CCN pre reject deletion" in the collection: "CC pre collection", with the following motivation: "I still like it". |
 
     # Test 'delete' operation.
@@ -184,7 +184,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                |
-      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                                         |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                    |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the news - "CCN pre delete" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -194,7 +194,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                          |
-      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                                                   |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                              |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the news - "CCN pre request deletion" in the collection: "CC pre collection". |
 
     # Test 'delete' operation for a published entity.
@@ -205,5 +205,5 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                           |
-      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                    |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                               |
       | body      | Facilitator CC Facilitator has deleted the news - "CCN published to delete" in the collection: "CC pre collection". |

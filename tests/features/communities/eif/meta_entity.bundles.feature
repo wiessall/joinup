@@ -6,8 +6,8 @@ Feature:
 
   Background:
     Given solution content:
-      | title             | state     |
-      | Some EIF solution | published |
+      | title             |
+      | Some EIF solution |
 
   Scenario Outline: Only moderators can access the EIF perspective page.
     Given I am <role>
