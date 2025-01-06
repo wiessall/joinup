@@ -253,6 +253,9 @@
             "web/libraries/slick": [
                 "npm-asset/slick-carousel"
             ],
+            "web/libraries/colorbox": [
+                "npm-asset/jquery-colorbox"
+            ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
             ],
