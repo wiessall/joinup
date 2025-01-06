@@ -294,6 +294,7 @@ drupal:
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
+        $config['mailsystem.settings']['modules']['webform']['none']['sender'] = 'test_mail_collector';
       Mail transport: |
         $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Site email:
