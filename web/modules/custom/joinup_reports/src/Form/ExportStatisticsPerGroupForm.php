@@ -148,7 +148,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     $content_ids = [];
     $content_ids[] = $group->id();
 
-    array_walk_recursive($content, function($value) use (&$content_ids): void {
+    array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
 
