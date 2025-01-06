@@ -5,12 +5,13 @@ package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:
-  - 'drupal:language'
-  - 'drupal:link'
-  - 'drupal:text'
-  - 'email_confirmer:email_confirmer'
-  - 'email_contact:email_contact'
-  - 'joinup:joinup_core'
-  - 'joinup:joinup_group'
-  - 'joinup:joinup_workflow'
-  - 'state_machine:state_machine'
+  - drupal:language
+  - drupal:link
+  - drupal:text
+  - email_confirmer:email_confirmer
+  - email_contact:email_contact
+  - joinup:joinup_core
+  - joinup:joinup_group
+  - joinup:joinup_workflow
+  - js_cookie:js_cookie
+  - state_machine:state_machine
