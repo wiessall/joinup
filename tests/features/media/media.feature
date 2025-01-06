@@ -8,9 +8,9 @@ Feature: Administer media.
       | joe      |           |
       | theOne   | moderator |
     And collection content:
-      | title | state     |
-      | Mars  | published |
-      | Venus | published |
+      | title |
+      | Mars  |
+      | Venus |
     And the following "Collection logo" media:
       | name                | owner | image                       |
       | The Collection Logo | joe   | library/collection-logo.png |

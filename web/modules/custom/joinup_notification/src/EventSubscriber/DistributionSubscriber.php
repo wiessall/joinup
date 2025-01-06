@@ -34,34 +34,13 @@ class DistributionSubscriber extends NotificationSubscriberBase {
   const string TEMPLATE_DELETE = 'distribution_delete';
 
   /**
-   * The notification event.
-   *
-   * @var \Drupal\joinup_notification\Event\NotificationEvent
-   */
-  protected NotificationEvent $event;
-
-  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[NotificationEvents::RDF_ENTITY_CRUD] = [
-      ['onUpdate'],
-      ['onDelete'],
+    return [
+      NotificationEvents::NODE_UPDATE => ['onUpdate'],
+      NotificationEvents::NODE_DELETE => ['onDelete'],
     ];
-
-    return $events;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function initialize(NotificationEvent $event): void {
-    parent::initialize($event);
-    if ($this->entity->bundle() !== 'distribution') {
-      return;
-    }
-
-    $this->event = $event;
   }
 
   /**
@@ -151,6 +130,16 @@ class DistributionSubscriber extends NotificationSubscriberBase {
       return FALSE;
     }
 
+    // Avoid sending notifications when orphaned distributions are deleted.
+    \assert($this->entity instanceof DistributionInterface);
+    if (!$this->entity->hasParent()) {
+      return FALSE;
+    }
+
+    if (!$this->entity->hasGroup()) {
+      return FALSE;
+    }
+
     return TRUE;
   }
 
@@ -161,11 +150,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnDistributions(): bool {
-    if ($this->entity->getEntityTypeId() !== 'node') {
-      return FALSE;
-    }
-
-    if ($this->entity->bundle() !== 'distribution') {
+    if (!$this->entity instanceof DistributionInterface) {
       return FALSE;
     }
 

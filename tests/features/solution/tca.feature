@@ -6,8 +6,8 @@ Feature: Solution TCA agreement
 
   Scenario: Authenticated users can access the solution TCA agreement page.
     Given collection content:
-      | title             | state     |
-      | Agreed collection | published |
+      | title             |
+      | Agreed collection |
 
     When I am logged in as a facilitator of the "Agreed collection" collection
     And I go to the "Agreed collection" collection

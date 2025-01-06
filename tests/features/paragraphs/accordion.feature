@@ -5,8 +5,8 @@ Feature:
 
   Background:
     Given collection content:
-      | title                 | state     | topic |
-      | Paragraphs collection | published | HR    |
+      | title                 | topic |
+      | Paragraphs collection | HR    |
 
   Scenario Outline: Add an accordion to the custom page.
     Given I am logged in as a <role>
@@ -62,8 +62,8 @@ Feature:
     # Regression test for ticket #ISAICP-8233.
 
     Given custom_page content:
-      | title             | collection            | state     | abstract             |
-      | Nested paragraphs | Paragraphs collection | published | Nested page abstract |
+      | title             | collection            | abstract             |
+      | Nested paragraphs | Paragraphs collection | Nested page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Nested paragraphs" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 

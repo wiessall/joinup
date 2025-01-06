@@ -38,8 +38,8 @@ Feature:
   Scenario Outline: Test user support menu usage.
 
     Given collection content:
-      | title            | state     |
-      | Hotel California | published |
+      | title            |
+      | Hotel California |
 
     Given I am <role>
 

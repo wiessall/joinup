@@ -23,7 +23,9 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
@@ -59,6 +61,8 @@ class JoinupContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use OgTrait;
+  use NodeTrait;
+  use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
@@ -667,7 +671,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     // Replace field label aliases with the actual field names.
     foreach (get_object_vars($node) as $alias => $value) {
       $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
@@ -744,6 +748,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->field_state)) {
       $node->field_state = self::translateWorkflowStateAlias($node->field_state);
     }
+    elseif (!empty($field_definitions['field_state']) && empty($node->field_state) && $node->type != 'contact_information') {
+      $node->field_state = 'published';
+    }
 
     if (property_exists($node, 'visit_count')) {
       $node->visit_count = MetaEntity::create([
@@ -801,12 +808,28 @@ class JoinupContext extends RawDrupalContext {
       unset($node->field_paragraphs_body);
     }
 
-    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
+    }
+
+    if (!empty($field_definitions['contact']) && !isset($node->contact)) {
+      $node->contact = $this->getDefaultContact()->label();
+    }
+    if (!empty($field_definitions['owner']) && !isset($node->owner)) {
+      $node->owner = $this->getDefaultOwner()->label();
+    }
+    if (!empty($field_definitions['abstract']) && !isset($node->abstract)) {
+      $node->abstract = 'default abstract';
+    }
+
+    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+      $node->description = 'default description';
+    }
+    if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
+      $node->solution_type = $this->getRandomTerm('eira')->label();
     }
 
     // Handle file URL fields.

@@ -96,12 +96,10 @@ $utilities: map.merge(
         2: 2,
       ),
     ),
-    "font-weight":
-      map.merge(
+    "font-weight": map.merge(
         map.get($utilities, "font-weight"),
         (
-          values:
-            map.merge(
+          values: map.merge(
               map.get(map.get($utilities, "font-weight"), "values"),
               (
                 md: $font-weight-medium,
@@ -109,12 +107,10 @@ $utilities: map.merge(
             ),
         )
       ),
-    "font-size":
-      map.merge(
+    "font-size": map.merge(
         map.get($utilities, "font-size"),
         (
-          values:
-            map.merge(
+          values: map.merge(
               map.get(map.get($utilities, "font-size"), "values"),
               (
                 sm: $font-size-sm,

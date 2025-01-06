@@ -6,21 +6,21 @@ Feature: Solutions Overview
 
   Scenario: Solution overview paging
     Given solution content:
-      | title      | creation date     | state     |
-      | Arctic fox | 2018-10-04 8:21am | published |
-      | Alpaca     | 2018-10-04 8:31am | published |
-      | Boomalope  | 2018-10-04 8:28am | published |
-      | Boomrat    | 2018-10-04 8:35am | published |
-      | Megasloth  | 2018-10-04 8:01am | published |
-      | Thrumbo    | 2018-10-04 8:07am | published |
-      | Spelopede  | 2018-10-04 8:18am | published |
-      | Muffalo    | 2018-10-04 8:59am | published |
-      | Husky      | 2018-10-04 8:00am | published |
-      | Gazelle    | 2018-10-04 8:43am | published |
-      | Cow        | 2018-10-04 8:27am | published |
-      | Panther    | 2018-10-04 8:22am | published |
-      | Tortoise   | 2018-10-04 8:34am | published |
-      | Warg       | 2018-10-04 8:39am | published |
+      | title      | creation date     |
+      | Arctic fox | 2018-10-04 8:21am |
+      | Alpaca     | 2018-10-04 8:31am |
+      | Boomalope  | 2018-10-04 8:28am |
+      | Boomrat    | 2018-10-04 8:35am |
+      | Megasloth  | 2018-10-04 8:01am |
+      | Thrumbo    | 2018-10-04 8:07am |
+      | Spelopede  | 2018-10-04 8:18am |
+      | Muffalo    | 2018-10-04 8:59am |
+      | Husky      | 2018-10-04 8:00am |
+      | Gazelle    | 2018-10-04 8:43am |
+      | Cow        | 2018-10-04 8:27am |
+      | Panther    | 2018-10-04 8:22am |
+      | Tortoise   | 2018-10-04 8:34am |
+      | Warg       | 2018-10-04 8:39am |
     And I am an anonymous user
     When I visit the solution overview
     Then I should see the following tiles in the correct order:
@@ -59,8 +59,8 @@ Feature: Solutions Overview
       | Username      | E-mail                            |
       | Madam Shirley | i.dont.see.the.future@example.com |
     And collection content:
-      | title                 | logo     | state     |
-      | Pikachu, I choose you | logo.png | published |
+      | title                 | logo     |
+      | Pikachu, I choose you | logo.png |
     Given solution content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
@@ -160,20 +160,20 @@ Feature: Solutions Overview
       | Ryker Brandon   | ryker.brandon@example.com   |
       | Joann Womack    | joann.womack@example.com    |
     And collection content:
-      | title                 | state     |
-      | Insane Wooden Crystal | published |
+      | title                 |
+      | Insane Wooden Crystal |
     Given solution content:
-      | title                        | collection            | state     | featured | author          |
-      | Subdivision Morbid           | Insane Wooden Crystal | published | yes      | Marjorie Parker |
-      | Long Tungsten                | Insane Wooden Crystal | published | no       | Ryker Brandon   |
-      | Hungry Disappointed Tungsten | Insane Wooden Crystal | published | yes      | Marjorie Parker |
-      | Lost Yard                    | Insane Wooden Crystal | published | no       | Joann Womack    |
-      | Lost Scattered Fish          | Insane Wooden Crystal | published | no       | Joann Womack    |
-      | Silver Gravel                | Insane Wooden Crystal | published | no       | Joann Womack    |
+      | title                        | collection            | featured | author          |
+      | Subdivision Morbid           | Insane Wooden Crystal | yes      | Marjorie Parker |
+      | Long Tungsten                | Insane Wooden Crystal | no       | Ryker Brandon   |
+      | Hungry Disappointed Tungsten | Insane Wooden Crystal | yes      | Marjorie Parker |
+      | Lost Yard                    | Insane Wooden Crystal | no       | Joann Womack    |
+      | Lost Scattered Fish          | Insane Wooden Crystal | no       | Joann Womack    |
+      | Silver Gravel                | Insane Wooden Crystal | no       | Joann Womack    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And solution content:
-      | title      | collection            | state     | featured |
-      | Flag Rough | Insane Wooden Crystal | published | no       |
+      | title      | collection            | featured |
+      | Flag Rough | Insane Wooden Crystal | no       |
 
     When I am logged in as "Joann Womack"
     And I visit the solution overview

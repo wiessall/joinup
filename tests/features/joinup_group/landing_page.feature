@@ -13,14 +13,14 @@ Feature: Tests the group landing page customization.
   # - As a group facilitator, when I visit my group, I can set a landing page.
 
     Given <group> content:
-      | title               | state     | description                         |
-      | <group> group       | published | The <group> arbitrary description   |
-      | other <group> group | published | Other <group> arbitrary description |
+      | title               | description                         |
+      | <group> group       | The <group> arbitrary description   |
+      | other <group> group | Other <group> arbitrary description |
     And "custom_page" content:
-      | title         | <group>       | body                      | state     |
-      | Custom Page 1 | <group> group | The custom page 1 content | published |
-      | Custom Page 2 | <group> group | The custom page 2 content | published |
-      | Custom Page 3 | <group> group | The custom page 3 content | published |
+      | title         | <group>       | body                      |
+      | Custom Page 1 | <group> group | The custom page 1 content |
+      | Custom Page 2 | <group> group | The custom page 2 content |
+      | Custom Page 3 | <group> group | The custom page 3 content |
     Given I am not logged in
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
@@ -115,11 +115,11 @@ Feature: Tests the group landing page customization.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
   Scenario: As a group facilitator I cannot set the landing page.
     Given collection content:
-      | title            | state     | description                          |
-      | collection group | published | The collection arbitrary description |
+      | title            | description                          |
+      | collection group | The collection arbitrary description |
     Given solution content:
-      | title          | state     | description                        |
-      | solution group | published | The solution arbitrary description |
+      | title          | description                        |
+      | solution group | The solution arbitrary description |
 
     Given I am logged in as a facilitator of the "collection group" collection
     When I go to the homepage of the "collection group" collection
@@ -132,13 +132,13 @@ Feature: Tests the group landing page customization.
 
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
     Given collection content:
-      | title          | state     |
-      | Rally fanatics | published |
-      | My own book    | published |
+      | title          |
+      | Rally fanatics |
+      | My own book    |
     And "custom_page" content:
-      | title         | collection     | body                      | state     |
-      | Custom Page 1 | Rally fanatics | The custom page 1 content | published |
-      | Custom Page 2 | My own book    | The custom page 2 content | published |
+      | title         | collection     | body                      |
+      | Custom Page 1 | Rally fanatics | The custom page 1 content |
+      | Custom Page 2 | My own book    | The custom page 2 content |
     Given I am logged in as a moderator
     When I go to the homepage of the "Rally fanatics" collection
     And I click "Settings"
@@ -164,11 +164,11 @@ Feature: Tests the group landing page customization.
 
   Scenario: Landing custom page redirects to group page.
     Given collection content:
-      | title         | state     |
-      | United States | published |
+      | title         |
+      | United States |
     And "custom_page" content:
-      | title    | collection    | body                                                                                 | state     |
-      | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. | published |
+      | title    | collection    | body                                                                                 |
+      | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. |
 
     When I go to the "Michigan" custom page
     Then I should be on "/collection/united-states/michigan"

@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -90,9 +91,9 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    */
   public static function getSubscribedEvents(): array {
     return [
-      NotificationEvents::COMMUNITY_CONTENT_CREATE => ['onCreate'],
-      NotificationEvents::COMMUNITY_CONTENT_UPDATE => ['onUpdate'],
-      NotificationEvents::COMMUNITY_CONTENT_DELETE => ['onDelete'],
+      NotificationEvents::NODE_CREATE => ['onCreate'],
+      NotificationEvents::NODE_UPDATE => ['onUpdate'],
+      NotificationEvents::NODE_DELETE => ['onDelete'],
     ];
   }
 
@@ -142,6 +143,10 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnCreate(): bool {
+    if (!$this->entity instanceof CommunityContentInterface) {
+      return FALSE;
+    }
+
     // If there is no original version, then it is not an update.
     if (isset($this->entity->original)) {
       return FALSE;
@@ -211,6 +216,10 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnUpdate(): bool {
+    if (!$this->entity instanceof CommunityContentInterface) {
+      return FALSE;
+    }
+
     // If there is no original version, then it is not an update.
     if ($this->entity->isNew()) {
       return FALSE;
@@ -260,6 +269,14 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnDelete(): bool {
+    if (!$this->entity instanceof CommunityContentInterface) {
+      return FALSE;
+    }
+
+    if (!$this->entity->hasGroup()) {
+      return FALSE;
+    }
+
     // If any of the workflow related properties are empty, return early.
     if (!$this->entity instanceof EntityWorkflowStateInterface) {
       return FALSE;

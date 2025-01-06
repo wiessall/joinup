@@ -6,12 +6,12 @@ Feature: "Add document" visibility options.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
     Given collection content:
-      | title                   | logo     | state     |
-      | Collective Seventh Name | logo.png | published |
+      | title                   | logo     |
+      | Collective Seventh Name | logo.png |
     Given solution content:
-      | title               | collection              | logo     | state     |
-      | Seventh Name        | Collective Seventh Name | logo.png | published |
-      | The Obsessed Stream | Collective Seventh Name | logo.png | published |
+      | title               | collection              | logo     |
+      | Seventh Name        | Collective Seventh Name | logo.png |
+      | The Obsessed Stream | Collective Seventh Name | logo.png |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Seventh Name" solution
@@ -34,11 +34,11 @@ Feature: "Add document" visibility options.
 
   Scenario: Add document as a facilitator.
     Given collection content:
-      | title                          | logo     | state     |
-      | Collective Winter of Beginning | logo.png | published |
+      | title                          | logo     |
+      | Collective Winter of Beginning | logo.png |
     Given solution content:
-      | title               | collection                     | logo     | state     |
-      | Winter of Beginning | Collective Winter of Beginning | logo.png | published |
+      | title               | collection                     | logo     |
+      | Winter of Beginning | Collective Winter of Beginning | logo.png |
     And I am logged in as a facilitator of the "Winter of Beginning" solution
 
     When I go to the homepage of the "Winter of Beginning" solution

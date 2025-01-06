@@ -16,13 +16,13 @@ Feature:
       | hoshiko  |       | Hoshiko    | Watanabe    |
       | takehiko |       | Takehiko   | Moto        |
     And collection content:
-      | title                    | state     |
-      | Muscle tissue formation  | published |
-      | Cultured meat technology | published |
+      | title                    |
+      | Muscle tissue formation  |
+      | Cultured meat technology |
     Given solution content:
-      | title                         | state     | collection               |
-      | Aligning myotubes             | published | Muscle tissue formation  |
-      | Increasing global meat demand | published | Cultured meat technology |
+      | title                         | collection               |
+      | Aligning myotubes             | Muscle tissue formation  |
+      | Increasing global meat demand | Cultured meat technology |
     And collection user memberships:
       | collection               | user   | roles       |
       | Muscle tissue formation  | keiko  | facilitator |

@@ -35,11 +35,11 @@ Feature:
 
   Scenario: A moderator deletes a user using the administrative UI.
     Given collection content:
-      | title           | state     |
-      | Test collection | published |
+      | title           |
+      | Test collection |
     And news content:
-      | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | published |
+      | title     | author       | collection      |
+      | News item | alicia__1997 | Test collection |
 
     Given I am logged in as a moderator
     And I click "People"
@@ -75,17 +75,17 @@ Feature:
 
   Scenario: Cancel own account.
     Given collection content:
-      | title           | state     |
-      | Test collection | published |
+      | title           |
+      | Test collection |
     And news content:
-      | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | published |
+      | title     | author       | collection      |
+      | News item | alicia__1997 | Test collection |
     And document content:
-      | title | author       | collection      | state     |
-      | Docky | alicia__1997 | Test collection | published |
+      | title | author       | collection      |
+      | Docky | alicia__1997 | Test collection |
     And discussion content:
-      | title  | collection      | state     |
-      | Disqus | Test collection | published |
+      | title  | collection      |
+      | Disqus | Test collection |
     And comments:
       | subject  | field_body   | author       | parent |
       | Awesome! | Let's use it | alicia__1997 | Disqus |

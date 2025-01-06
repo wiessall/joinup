@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Template override for assessment report's full view mode.
+ */
+#}
+<div class="pt-3 pb-5 border-bottom">
+  {# Render every field which isn't rendered below. #}
+  {{ content|without('organization', 'report') }}
+</div>
+<div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
+  {{ content.report }}
+</div>

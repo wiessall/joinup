@@ -6,13 +6,13 @@ Feature: "Add custom page" visibility options.
 
   Background:
     Given collection content:
-      | title           | logo     | state     | topic      |
-      | Open Collective | logo.png | published | Demography |
-      | Code Camp       | logo.png | published | Demography |
+      | title           | logo     | topic      |
+      | Open Collective | logo.png | Demography |
+      | Code Camp       | logo.png | Demography |
     Given solution content:
-      | title     | logo     | state     | topic      |
-      | Parachute | logo.png | published | Demography |
-      | Skydiving | logo.png | published | Demography |
+      | title     | logo     | topic      |
+      | Parachute | logo.png | Demography |
+      | Skydiving | logo.png | Demography |
 
   Scenario Outline: Links and help text for adding custom pages should should only be shown to privileged users
     # Custom pages cannot be added by normal members. Custom pages are
@@ -123,11 +123,11 @@ Feature: "Add custom page" visibility options.
 
   Scenario: Title can be visually hidden.
     Given collection content:
-      | title             | state     |
-      | Aggressive Rubber | published |
+      | title             |
+      | Aggressive Rubber |
     And custom_page content:
-      | title        | collection        | field_hide_title | state     |
-      | Rubber bands | Aggressive Rubber | 1                | published |
+      | title        | collection        | field_hide_title |
+      | Rubber bands | Aggressive Rubber | 1                |
 
     When I go to the "Rubber bands" custom page
     Then I see the text "Rubber bands" in the "Visually hidden title" region
@@ -150,14 +150,14 @@ Feature: "Add custom page" visibility options.
   @javascript
   Scenario: Long list of attachments should be collapsed.
     Given collection content:
-      | title             | state     |
-      | Aggressive Rubber | published |
+      | title             |
+      | Aggressive Rubber |
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:
-      | title          | body                 | collection        | state     | attachments                                                                                                                                                                                                          |
-      | Rubber bands   | The aggressive ones. | Aggressive Rubber | published | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
-      | Elastic rubber | Also aggressive.     | Aggressive Rubber | published | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
+      | title          | body                 | collection        | attachments                                                                                                                                                                                                          |
+      | Rubber bands   | The aggressive ones. | Aggressive Rubber | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
+      | Elastic rubber | Also aggressive.     | Aggressive Rubber | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
 
     When I go to the "Rubber bands" custom page
     Then the "empty.rdf" link in the Content region should be visible
@@ -193,8 +193,8 @@ Feature: "Add custom page" visibility options.
 
   Scenario Outline: Creating a custom page with a title that already exists.
     And custom_page content:
-      | title        | body        | <group>       | creation date       | state     |
-      | Rubber boots | For outside | <first title> | 2014-08-30 23:59:00 | published |
+      | title        | body        | <group>       | creation date       |
+      | Rubber boots | For outside | <first title> | 2014-08-30 23:59:00 |
 
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>
@@ -237,8 +237,8 @@ Feature: "Add custom page" visibility options.
   Scenario Outline: Regression test for auto generated aliases.
     # Regression test for ISAICP-8886.
     Given custom_page content:
-      | title   | body        | <type>  | creation date       | state     |
-      | <title> | For outside | <group> | 2014-08-30 23:59:00 | published |
+      | title   | body        | <type>  | creation date       |
+      | <title> | For outside | <group> | 2014-08-30 23:59:00 |
 
     When I am logged in as a moderator
     And I go to the homepage of the "<group>" <type>

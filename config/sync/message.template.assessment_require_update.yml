@@ -1,0 +1,26 @@
+uuid: 3edba9e1-a8d9-4641-b9a2-4f4592980255
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: assessment_require_update
+label: 'Assessments: require updates'
+description: 'Requires updates of assessment questionnaire'
+text:
+  -
+    value: 'Your assessment needs updates'
+    format: full_html
+  -
+    value: |
+      <p>Your submitted assessment questionnaire has been moderated but the moderator has required some changes.</p>
+      <p>Rejection reason:</p>
+      <p><em>@assessment:require_update_reason</em></p>
+      <p>Please <a href="@assessment:submission_edit_url">edit</a> the form and fix the issues mentioned above. Submit the form again once everything is OK.</p>
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': false
+  purge_override: false
+  purge_methods: {  }

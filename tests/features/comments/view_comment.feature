@@ -4,11 +4,11 @@ Feature: View a comment
 
   Scenario Outline: View comments on community content
     Given collection content:
-      | title                      | state     |
-      | Hashrate, shares & workers | published |
+      | title                      |
+      | Hashrate, shares & workers |
     And <content type> content:
-      | title                      | body                                  | collection                 | state     |
-      | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers | published |
+      | title                      | body                                  | collection                 |
+      | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers |
     And user:
       | Username | Vasundhara Guadarrama |
     And comments:

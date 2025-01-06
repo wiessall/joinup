@@ -2,31 +2,25 @@
 Feature: Test for a 'facets' regression on the solution overview page.
   # @see ISAICP-4188
   Scenario: Test that no pager is shown on the solution page when not needed.
-    Given owner content:
-      | name              | owner type |
-      | Apache Foundation | Company    |
-    And contact_information content:
-      | name           | email                      |
-      | Pierre Plezant | pierre.plezant@example.com |
     Given solution content:
-      | title                | description                | logo     | state     | owner             | contact information | solution type | topic       |
-      | Apache               | Serving the web            | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Security audit tools | Automated test of security | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Drupal               | Content management         | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | MongoDB              | Free for all in box        | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | NodeJS               | Download all the packages  | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 1           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 2           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 3           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 4           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 5           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 6           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 7           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 8           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 9           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-      | Solution 10          | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
+      | title                |
+      | Apache               |
+      | Security audit tools |
+      | Drupal               |
+      | MongoDB              |
+      | NodeJS               |
+      | Solution 1           |
+      | Solution 2           |
+      | Solution 3           |
+      | Solution 4           |
+      | Solution 5           |
+      | Solution 6           |
+      | Solution 7           |
+      | Solution 8           |
+      | Solution 9           |
+      | Solution 10          |
     And distribution content:
-      | title    | description         | access url | solution | state     |
-      | test.zip | Apache distribution | test.zip   | Apache   | published |
+      | title    | access url | solution |
+      | test.zip | test.zip   | Apache   |
     And I go to the homepage of the "Apache" solution
     Then I should not see the "Pager" region

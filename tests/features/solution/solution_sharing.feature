@@ -11,13 +11,13 @@ Feature: As a privileged user
       | kleev_elant | kleev_elant@example.com | Kleev      | Elant       |           |
       | sand_beach  | sand_beach@example.com  | Sand       | Beach       | moderator |
     And collection content:
-      | title                        | logo     | state     |
-      | Collection share original    | logo.png | published |
-      | Collection share candidate 1 | logo.png | published |
-      | Collection share candidate 2 | logo.png | published |
+      | title                        |
+      | Collection share original    |
+      | Collection share candidate 1 |
+      | Collection share candidate 2 |
     Given solution content:
-      | title                 | description         | logo     | state     | collection                |
-      | Solution to be shared | Doesn't affect test | logo.png | published | Collection share original |
+      | title                 | collection                |
+      | Solution to be shared | Collection share original |
     And the following solution user memberships:
       | solution              | user        | roles       |
       | Solution to be shared | joe_dare    | owner       |

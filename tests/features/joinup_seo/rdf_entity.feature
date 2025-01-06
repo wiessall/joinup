@@ -6,8 +6,8 @@ Feature: SEO for RDF entities.
 
   Scenario Outline: Basic JSON meta information for collections and solutions.
     Given <type> content:
-      | title      | state     |
-      | SEO entity | published |
+      | title      |
+      | SEO entity |
 
     When I visit the "SEO entity" <type>
     And the metatag graph of the item with "title" "SEO entity" should be present
@@ -27,14 +27,14 @@ Feature: SEO for RDF entities.
 
   Scenario: Basic JSON meta information for releases and distributions.
     Given solution content:
-      | title        | state     |
-      | SEO solution | published |
+      | title        |
+      | SEO solution |
     And release content:
-      | title       | is version of | state     |
-      | SEO release | SEO solution  | published |
+      | title       | is version of |
+      | SEO release | SEO solution  |
     And distribution content:
-      | title            | release     | state     |
-      | SEO distribution | SEO release | published |
+      | title            | release     |
+      | SEO distribution | SEO release |
 
     When I go to the "SEO release" release
     Then the metatag graph of the item with title "SEO release" should be present

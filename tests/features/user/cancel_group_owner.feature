@@ -8,12 +8,12 @@ Feature:
       | Hazel Olson   |       | HazelOlson@example.com   | Hazel      | Olson       |
       | Amelia Barker |       | AmeliaBarker@example.com | Amelia     | Barker      |
     And collection content:
-      | title                   | state     |
-      | Lugia was just released | published |
-      | Articuno is hunted      | published |
+      | title                   |
+      | Lugia was just released |
+      | Articuno is hunted      |
     Given solution content:
-      | title                        | state     |
-      | Random chat machine learning | published |
+      | title                        |
+      | Random chat machine learning |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
