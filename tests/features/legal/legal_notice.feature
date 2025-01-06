@@ -179,8 +179,8 @@ Feature:
       | Username        | E-mail                  | Password | Local username  |
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
     And collection content:
-      | title              | state     |
-      | Land of submarines | published |
+      | title              |
+      | Land of submarines |
 
     Given I am an anonymous user
     When I go to the homepage of the "Land of submarines" collection

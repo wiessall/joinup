@@ -5,8 +5,8 @@ Feature: Multilingual search
   Scenario: Anonymous user sees English version only
     Given the language "ca" is enabled
     And collection content:
-      | title                        | logo     | moderation | topic      | spatial coverage | state     |
-      | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
+      | title                        | logo     | moderation | topic      | spatial coverage |
+      | Molecular cooking collection | logo.png | no         | Demography | Belgium          |
     And the multilingual "El celler de Can Roca" solution of "Molecular cooking collection" collection
     When I go to the "Molecular cooking collection" collection
     Then I should see 1 tile

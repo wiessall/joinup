@@ -14,11 +14,11 @@ Feature: Export collection metadata
 
   Scenario: Distribution nodes can be exported as RDF.
     Given solution content:
-      | title      | state     |
-      | Solution 1 | published |
+      | title      |
+      | Solution 1 |
     Given distribution content:
-      | title          | description   | access_url        | state     | solution   |
-      | Distribution 1 | Description 1 | http://access.url | published | Solution 1 |
+      | title          | description   | access_url        | solution   |
+      | Distribution 1 | Description 1 | http://access.url | Solution 1 |
     When I go to the "Distribution 1" distribution
     When I click "Metadata"
     Then I should see the heading "Download the Distribution 1 content item as:"

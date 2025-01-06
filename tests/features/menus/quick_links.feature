@@ -2,15 +2,9 @@
 Feature: Test the visibility of the quick links menu.
 
   Background:
-    Given owner content:
-      | name                 | owner type |
-      | Organisation example | Company    |
-    And contact_information content:
-      | name                 | email                            |
-      | Collection editorial | collection.editorial@example.com |
-    And collection content:
-      | title           | abstract      | description      | content creation         | moderation | topic             | owner                | contact information  | state     |
-      | Some collection | Some abstract | Some description | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | published |
+    Given collection content:
+      | title           | content creation         | moderation |
+      | Some collection | facilitators and authors | yes        |
 
   Scenario: Test visibility for collections.
     When I am not logged in
@@ -59,9 +53,12 @@ Feature: Test the visibility of the quick links menu.
     Then I should not see the heading "Quick links"
 
   Scenario: Test visibility for solutions.
+    Given collection content:
+      | title           | content creation         | moderation |
+      | Some collection | facilitators and authors | yes        |
     Given solution content:
-      | title         | abstract      | description      | topic             | solution type    | owner                | contact information  | state     |
-      | Some solution | Some abstract | Some description | Supplier exchange | Digital Solution | Organisation example | Collection editorial | published |
+      | title         | collection      |
+      | Some solution | Some collection |
     When I am not logged in
     And I go to the "Some solution" solution
     Then I should not see the heading "Quick links"
@@ -82,8 +79,8 @@ Feature: Test the visibility of the quick links menu.
 
     # Lets not test all links in a separate list of steps to save time.
     Given release content:
-      | title        | is version of | state     |
-      | Some release | Some solution | published |
+      | title        | is version of |
+      | Some release | Some solution |
     And I go to the edit form of the "Some solution" solution
     And I fill in the following:
       | Landing page | http://www.example.com |
@@ -114,15 +111,15 @@ Feature: Test the visibility of the quick links menu.
   @javascript
   Scenario: Test quick links menu structure.
     Given collection content:
-      | title           | state     |
-      | Some collection | published |
+      | title           |
+      | Some collection |
     And custom_page content:
-      | title         | collection      | state     | topic |
-      | Custom page 1 | Some collection | published | HR    |
-      | Custom page 2 | Some collection | published | HR    |
-      | Custom page 3 | Some collection | published | HR    |
-      | Custom page 4 | Some collection | published | HR    |
-      | Custom page 5 | Some collection | published | HR    |
+      | title         | collection      |
+      | Custom page 1 | Some collection |
+      | Custom page 2 | Some collection |
+      | Custom page 3 | Some collection |
+      | Custom page 4 | Some collection |
+      | Custom page 5 | Some collection |
     And collection content:
       | title   | Custom page 1 | Custom page 2 | Custom page 3 | Custom page 4 | Custom page 5 |
       | enabled | yes           | yes           | yes           | yes           | yes           |

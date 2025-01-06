@@ -22,15 +22,15 @@ Feature: "Custom page" editing.
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
     And <group> content:
-      | title            | state           |
-      | Dumbo Collective |published        |
+      | title            |
+      | Dumbo Collective |
     And the following <group> user memberships:
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |
       | Dumbo Collective | Pluto        | member      |
     And "custom_page" content:
-      | title                            | <group>          |abstract | body | logo     | state     |
-      | Buena Vista Distribution Company | Dumbo Collective | N/A     | N/A  | logo.png | published |
+      | title                            | <group>          | abstract | body | logo     |
+      | Buena Vista Distribution Company | Dumbo Collective | N/A      | N/A  | logo.png |
 
     # Group owner should see the button.
     When I am logged in as "Mickey Mouse"

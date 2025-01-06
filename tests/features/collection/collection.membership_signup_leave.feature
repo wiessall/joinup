@@ -10,12 +10,12 @@ Feature: Joining and leaving collections through the web interface
       | Collection author |
       | Stewe Griffin     |
     Given collection content:
-      | title                                 | state     | closed | author            |
-      | Open collection                       | published | no     | Collection author |
-      | Open collection with public CoC       | published | no     |                   |
-      | Closed collection                     | published | yes    |                   |
-      | Closed collection with public CoC     | published | yes    |                   |
-      | Closed collection with non-public CoC | published | yes    |                   |
+      | title                                 | closed | author            |
+      | Open collection                       | no     | Collection author |
+      | Open collection with public CoC       | no     |                   |
+      | Closed collection                     | yes    |                   |
+      | Closed collection with public CoC     | yes    |                   |
+      | Closed collection with non-public CoC | yes    |                   |
     Given custom_page content:
       | title                           | collection                            | state     |
       | Public CoC of Open collection   | Open collection with public CoC       | published |

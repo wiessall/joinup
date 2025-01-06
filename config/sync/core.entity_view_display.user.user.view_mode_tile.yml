@@ -87,6 +87,11 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
+  masquerade:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 50
+    region: content
   member_for:
     settings: {  }
     third_party_settings: {  }

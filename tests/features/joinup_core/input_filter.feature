@@ -6,25 +6,25 @@ Feature: Input filter
 
   Background:
     Given collection content:
-      | title         | logo     | state     |
-      | Netflix group | logo.png | published |
+      | title         | logo     |
+      | Netflix group | logo.png |
 
   Scenario: Ensure all required formats are supported in the content editor.
     Given the following "Image" media:
       | name         | image    | alt                  | group         | uuid          |
       | Inline image | logo.png | Image media alt text | Netflix group | whatever uuid |
     And discussion content:
-      | title                   | body                                                                                                                                                                                                                                                                                                                                                                                                                                           | collection    | state     |
-      | Jessica Jones returns   | <iframe width="560" height="315" src="https://www.youtube.com/embed/nWHUjuJ8zxE" frameborder="0" allowfullscreen></iframe>                                                                                                                                                                                                                                                                                                                     | Netflix group | published |
-      | Luke cage               | <iframe width="50" height="50" src="https://www.example.com" ></iframe>                                                                                                                                                                                                                                                                                                                                                                        | Netflix group | published |
-      | Slideshare presentation | <iframe src="//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>                                                                                                                                                            | Netflix group | published |
-      | Google docs             | <iframe frameborder="0" height="800" marginheight="0" marginwidth="0" src="https://docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform?embedded=true" width="100%">Loading...</iframe>                                                                                                                                                                                                                               | Netflix group | published |
-      | Interoperable Europe Portal iframe           | <iframe frameborder="0" height="800" marginheight="0" marginwidth="0" src="/homepage" width="100%"></iframe>                                                                                                                                                                                                                                                                                                                                   | Netflix group | published |
-      | Quoted texts            | <q>This is a famous quote.</q> ~ Interoperable Europe Portal developer.                                                                                                                                                                                                                                                                                                                                                                                             | Netflix group | published |
+      | title                              | body                                                                                                                                                                                                                                                                                | collection    |
+      | Jessica Jones returns              | <iframe width="560" height="315" src="https://www.youtube.com/embed/nWHUjuJ8zxE" frameborder="0" allowfullscreen></iframe>                                                                                                                                                          | Netflix group |
+      | Luke cage                          | <iframe width="50" height="50" src="https://www.example.com" ></iframe>                                                                                                                                                                                                             | Netflix group |
+      | Slideshare presentation            | <iframe src="//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> | Netflix group |
+      | Google docs                        | <iframe frameborder="0" height="800" marginheight="0" marginwidth="0" src="https://docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform?embedded=true" width="100%">Loading...</iframe>                                                                    | Netflix group |
+      | Interoperable Europe Portal iframe | <iframe frameborder="0" height="800" marginheight="0" marginwidth="0" src="/homepage" width="100%"></iframe>                                                                                                                                                                        | Netflix group |
+      | Quoted texts                       | <q>This is a famous quote.</q> ~ Interoperable Europe Portal developer.                                                                                                                                                                                                             | Netflix group |
       # Since area coordinates contains commas and we don't want this to be interpreted as multiple values we need to enclose the value with double quotes and escape the quotes in the HTML.
-      | Image map               | "<map name=""imagemap""><area shape=""circle"" coords=""50,50,25"" href=""/"" alt=""Homepage""/></map><img usemap=""imagemap"" src=""/images/my-image.png"" alt=""Imagemap example"" />"                                                                                                                                                                                                                                                       | Netflix group | published |
-      | Accessibility planning  | Accessibility planning is framed in the context of social exclusion within transport planning <img src="/web/sites/default/files/logo.png" />                                                                                                                                                                                                                                                                                                  | Netflix group | published |
-      | Accessibility rating    | The Accessibility Rating Matrix (ARM) <drupal-media data-entity-type="media" data-entity-uuid="whatever uuid" />                                                                                                                                                                                                                                                                                                                               | Netflix group | published |
+      | Image map                          | "<map name=""imagemap""><area shape=""circle"" coords=""50,50,25"" href=""/"" alt=""Homepage""/></map><img usemap=""imagemap"" src=""/images/my-image.png"" alt=""Imagemap example"" />"                                                                                            | Netflix group |
+      | Accessibility planning             | Accessibility planning is framed in the context of social exclusion within transport planning <img src="/web/sites/default/files/logo.png" />                                                                                                                                       | Netflix group |
+      | Accessibility rating               | The Accessibility Rating Matrix (ARM) <drupal-media data-entity-type="media" data-entity-uuid="whatever uuid" />                                                                                                                                                                    | Netflix group |
 
     # 'src' attributes are the url encoded version of the URLs that were inputted prepended by the ec cck url.
     When I go to the "Jessica Jones returns" discussion
@@ -58,8 +58,8 @@ Feature: Input filter
   @javascript
   Scenario: Tags h1, h5, h6 can exist in a formatted text but the user does not have these options on the editor.
     Given discussion content:
-      | title         | headline      | body                                                                                                  | collection    | state     |
-      | Ragged Crying | Ragged Crying | <h1>test h1</h1> <h2>test h2</h2> <h3>test h3</h3> <h4>test h4</h4> <h5>test h5</h5> <h6>test h6</h6> | Netflix group | published |
+      | title         | headline      | body                                                                                                  | collection    |
+      | Ragged Crying | Ragged Crying | <h1>test h1</h1> <h2>test h2</h2> <h3>test h3</h3> <h4>test h4</h4> <h5>test h5</h5> <h6>test h6</h6> | Netflix group |
 
     When I am logged in as a moderator
     And I go to the "Ragged Crying" discussion
@@ -78,8 +78,8 @@ Feature: Input filter
   @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
     Given discussion content:
-      | title         | headline       | body                        | collection    | state     |
-      | Famous actors | Famous peoples | Article about famous actors | Netflix group | published |
+      | title         | headline       | body                        | collection    |
+      | Famous actors | Famous peoples | Article about famous actors | Netflix group |
     And I set long body of "Famous actors" discussion
 
     When I go to the "Famous actors" discussion

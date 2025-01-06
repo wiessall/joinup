@@ -185,37 +185,38 @@ Feature: User authentication
     Then I visit "<path>"
 
     Examples:
-      | path                                        |
-      | admin/content/files                         |
-      | admin/content/media                         |
-      | admin/homepage-topics                       |
-      | admin/legal-notice                          |
-      | admin/legal-notice/add                      |
-      | admin/people                                |
-      | admin/reporting/distribution-downloads      |
-      | admin/reporting/distribution-downloads/csv  |
-      | admin/reporting/export-user-list            |
-      | admin/reporting/group-administrators/export |
-      | admin/reporting/messages-overview           |
-      | admin/reporting/solutions-by-licences       |
-      | admin/reporting/solutions-by-type           |
-      | admin/reporting/subscribers-report          |
-      | admin/structure/compatibility-document      |
-      | admin/structure/webform                     |
-      | admin/structure/webform/submissions/manage  |
-      | announcements                               |
-      | dashboard                                   |
-      | licence                                     |
-      | media/add                                   |
-      | media/add/collection_logo                   |
-      | media/add/event_logo                        |
-      | media/add/file                              |
-      | media/add/image                             |
-      | media/add/news_logo                         |
-      | media/add/solution_logo                     |
-      | media/add/remote_video                      |
-      | outdated-content-threshold                  |
-      | propose/collection                          |
+      | path                                                          |
+      | admin/content/files                                           |
+      | admin/content/media                                           |
+      | admin/homepage-topics                                         |
+      | admin/legal-notice                                            |
+      | admin/legal-notice/add                                        |
+      | admin/people                                                  |
+      | admin/reporting/distribution-downloads                        |
+      | admin/reporting/distribution-downloads/csv                    |
+      | admin/reporting/export-user-list                              |
+      | admin/reporting/group-administrators/export                   |
+      | admin/reporting/messages-overview                             |
+      | admin/reporting/solutions-by-licences                         |
+      | admin/reporting/solutions-by-type                             |
+      | admin/reporting/subscribers-report                            |
+      | admin/structure/compatibility-document                        |
+      | admin/structure/webform                                       |
+      | admin/structure/webform/manage/assessment/results/submissions |
+      | admin/structure/webform/submissions/manage                    |
+      | announcements                                                 |
+      | dashboard                                                     |
+      | licence                                                       |
+      | media/add                                                     |
+      | media/add/collection_logo                                     |
+      | media/add/event_logo                                          |
+      | media/add/file                                                |
+      | media/add/image                                               |
+      | media/add/news_logo                                           |
+      | media/add/solution_logo                                       |
+      | media/add/remote_video                                        |
+      | outdated-content-threshold                                    |
+      | propose/collection                                            |
 
   Scenario Outline: Moderator cannot access restricted pages
     Given I am logged in as a user with the "moderator" role
@@ -232,12 +233,14 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/structure/webform/manage/assessment           |
+      | admin/structure/webform/manage/assessment/settings  |
+      | admin/tmgmt/cart                                    |
       | admin/tmgmt/job_items                               |
       | admin/tmgmt/jobs                                    |
-      | admin/tmgmt/sources                                 |
-      | admin/tmgmt/cart                                    |
-      | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
+      | admin/tmgmt/sources                                 |
+      | admin/tmgmt/translators                             |
       | node/add                                            |
       | node/add/collection                                 |
       | node/add/contact_information                        |
