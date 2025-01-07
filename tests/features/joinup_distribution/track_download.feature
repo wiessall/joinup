@@ -89,16 +89,16 @@ Feature: Asset distribution editing.
       | user1    | user1@example.com |
       | user2    | user2@example.com |
     And solution content:
-      | title    |
-      | Solution |
+      | title      |
+      | Solution 5 |
     And release content:
       | title     | is version of |
-      | Release 1 | Solution      |
+      | Release 1 | Solution 5    |
     And distribution content:
-      | title          | solution | release   | access url |
-      | Distribution 1 |          | Release 1 | text.pdf   |
-      | Distribution 2 | Solution |           | test.zip   |
-      | Distribution 3 | Solution |           | test1.zip  |
+      | title          | solution   | release   | access url |
+      | Distribution 1 |            | Release 1 | text.pdf   |
+      | Distribution 2 | Solution 5 |           | test.zip   |
+      | Distribution 3 | Solution 5 |           | test1.zip  |
     And the following distribution download events:
       | distribution   | user                |
       | Distribution 1 | visitor@example.com |
@@ -120,6 +120,6 @@ Feature: Asset distribution editing.
       # The %title% variable will translate the title to the entity ID since that is what is exported in the CSV file.
       | ,"Anonymous (not verified)",visitor@example.com,text.pdf,"Distribution 1",%Release 1%, |
       | ,user1,user1@example.com,text.pdf,"Distribution 1",%Release 1%,                        |
-      | ,user2,user2@example.com,test.zip,"Distribution 2",%Solution%,                         |
-      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3",%Solution%,    |
-      | ,user1,user1@example.com,test1.zip,"Distribution 3",%Solution%,                        |
+      | ,user2,user2@example.com,test.zip,"Distribution 2",%Solution 5%,                         |
+      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3",%Solution 5%,    |
+      | ,user1,user1@example.com,test1.zip,"Distribution 3",%Solution 5%,                        |
