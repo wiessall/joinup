@@ -14,7 +14,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
 /**
  * Re-import spdx-licenses.
  */
-function joinup_oss_catalogue_update_200101(): void {
+function joinup_oss_catalogue_update_200200(): void {
   $terms = [];
 
   $licencesJsonFile = DRUPAL_ROOT . "/../vendor/composer/spdx-licenses/res/spdx-licenses.json";
