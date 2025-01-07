@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - node
     - oe_webtools_etrans
     - system
   theme:
@@ -36,5 +37,15 @@ visibility:
       - entity.taxonomy_term.delete_form
   request_path:
     id: request_path
+    negate: true
+    pages: ''
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
     negate: false
-    pages: "/interoperable-europe/news/*\r\n/interoperable-europe/event/*\r\n/interoperable-europe/document/*\r\n/interoperable-europe/discussion/*"
+    context_mapping: {  }
+    bundles:
+      custom_page: custom_page
+      discussion: discussion
+      document: document
+      event: event
+      news: news
