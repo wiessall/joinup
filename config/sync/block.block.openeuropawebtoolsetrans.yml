@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - joinup_core
-    - node
     - oe_webtools_etrans
     - system
   theme:
@@ -38,14 +37,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: ''
-  'entity_bundle:node':
-    id: 'entity_bundle:node'
-    negate: false
-    context_mapping: {  }
-    bundles:
-      custom_page: custom_page
-      discussion: discussion
-      document: document
-      event: event
-      news: news
+    pages: /interoperable-europe
