@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -82,7 +83,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     // Query to fetch all groups.
     $storage = $this->entityTypeManager->getStorage('node');
     $query = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('status', 1)
+      ->condition('status', NodeInterface::PUBLISHED)
       ->condition('field_state', 'archived', '<>')
       ->condition('type', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN');
 
