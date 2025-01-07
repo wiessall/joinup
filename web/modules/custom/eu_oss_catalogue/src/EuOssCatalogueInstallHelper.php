@@ -21,7 +21,14 @@ class EuOssCatalogueInstallHelper {
   public static function createTerms(array $items, array &$context): void {
     $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     foreach ($items as $item) {
-      $termStorage->create($item)->save();
+      $existingTerms = $termStorage->loadByProperties([
+        'name' => $item['name'],
+        'vid' => $item['vid'],
+      ]);
+
+      if (empty($existingTerms)) {
+        $termStorage->create($item)->save();
+      }
     }
     $context['message'] = t('Imported @count terms in controlled vocabularies', [
       '@count' => count($items),
