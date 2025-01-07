@@ -28,11 +28,11 @@ Feature: Asset distribution overview on solution.
       | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | 29-01-1995 12:06 | Lovely Butterfly | published |
       | The Child of the Past | text.pdf      | 1              | Notes 1       | 29-01-1996 12:05 | 29-01-1996 12:05 | Lovely Butterfly | published |
     And distribution content:
-      | title       | access url                          | creation date    | solution         | release               |
-      | Linux       | test.zip                            | 28-01-1995 12:05 |                  | Thief in the Angels   |
-      | Windows     | http://www.example.org/download.php | 28-01-1995 12:06 |                  | The Child of the Past |
-      | User manual | test.zip                            | 28-01-1995 11:07 | Lovely Butterfly |                       |
-      | Solaris     | test.zip                            | 28-01-1995 12:08 |                  | Hidden spies          |
+      | title         | access url                          | creation date    | solution         | release               |
+      | Linux ubuntu  | test.zip                            | 28-01-1995 12:05 |                  | Thief in the Angels   |
+      | Windows 10    | http://www.example.org/download.php | 28-01-1995 12:06 |                  | The Child of the Past |
+      | User manual 2 | test.zip                            | 28-01-1995 11:07 | Lovely Butterfly |                       |
+      | Solaris       | test.zip                            | 28-01-1995 12:08 |                  | Hidden spies          |
 
     When I go to the homepage of the "Lovely Butterfly" solution
     And I click "Release history"
@@ -55,9 +55,9 @@ Feature: Asset distribution overview on solution.
     # Distributions of unpublished releases should not be shown.
     But I should not see the text "Solaris"
 
-    And I should see the download link in the "Linux" distribution
-    And I should see the download link in the "User manual" distribution
-    And I should see the external link in the "Windows" distribution
+    And I should see the download link in the "Linux ubuntu" distribution
+    And I should see the download link in the "User manual 2" distribution
+    And I should see the external link in the "Windows 10" distribution
 
     And the "The Child of the Past" release should be marked as the latest release
 
@@ -120,9 +120,9 @@ Feature: Asset distribution overview on solution.
     And the "The Deep Doors" release should be marked as the latest release
 
     # Check that the cache is invalidated.
-    When I delete the "Linux" distribution
-    And I delete the "Windows" distribution
-    And I delete the "User manual" distribution
+    When I delete the "Linux ubuntu" distribution
+    And I delete the "Windows 10" distribution
+    And I delete the "User manual 2" distribution
     And I delete the "Solaris" distribution
     And I delete the "Hidden spies" release
     And I delete the "Thief in the Angels" release
