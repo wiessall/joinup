@@ -17,7 +17,7 @@ function joinup_reports_views_pre_render(ViewExecutable $view): void {
     return;
   }
 
-  foreach ($view->result as &$row) {
+  foreach ($view->result as $row) {
     $lastAccess = $row->_entity->get('access')->getString();
     if ($lastAccess === '0') {
       $row->_entity->get('access')->setValue(NULL);
