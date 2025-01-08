@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification;
 
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\message\Entity\Message;
 use Drupal\message\MessageInterface;
 use Drupal\message_notify\MessageNotifier;
@@ -27,7 +29,8 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
   ];
 
   public function __construct(
-    protected MessageNotifier $messageNotifier,
+    protected readonly MessageNotifier $messageNotifier,
+    protected readonly CacheTagsInvalidatorInterface $cacheTagsInvalidator,
   ) {}
 
   /**
@@ -162,25 +165,17 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
       $message->save();
     }
 
-    if ($message->bundle() !== 'announcement') {
-      return array_reduce($recipients_metadata, function (bool $success, array $recipient_metadata) use ($message): bool {
-        return $this->messageNotifier->send($message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
-      }, TRUE);
-    }
-
-    $success = TRUE;
-    foreach ($recipients_metadata as $recipient_metadata) {
-      if (!$account = user_load_by_mail($recipient_metadata['options']['mail'])) {
-        return FALSE;
+    return array_reduce($recipients_metadata, function (bool $success, array $recipient_metadata) use ($message): bool {
+      if ($message instanceof AnnouncementInterface) {
+        $account = user_load_by_mail($recipient_metadata['options']['mail']);
+        $message->setArguments($message->getArguments() + static::getAnnouncementTokenMappings());
+        $message->setOwner($account);
       }
-      $cloned_message = $message->createDuplicate();
-      $arguments = $message->getArguments();
-      $new_arguments = array_merge($arguments, $this->getAnnouncementTokenMappings());
-      $cloned_message->setArguments($new_arguments);
-      $cloned_message->setOwner($account);
-      $success = $this->messageNotifier->send($cloned_message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
-    }
-    return $success;
+
+      // Make sure we're the message build is not cached.
+      $this->cacheTagsInvalidator->invalidateTags($message->getCacheTagsToInvalidate());
+      return $this->messageNotifier->send($message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
+    }, TRUE);
   }
 
   /**
