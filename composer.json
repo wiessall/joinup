@@ -311,6 +311,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "behat/behat": {
+                "Do not disable xdebug if an active session is found @see https://github.com/Behat/Behat/pull/1581": "resources/patch/php/behat/behat/1581.diff"
+            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
