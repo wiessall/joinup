@@ -127,6 +127,12 @@
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
+        "npm-asset/dompurify": "^3.0.9",
+        "npm-asset/jquery-colorbox": "^1.6.4",
+        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/js-cookie": "^3.0.5",
+        "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
+        "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -187,15 +193,16 @@
             "php": "8.3"
         },
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
             "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
-            "openeuropa/composer-artifacts": true,
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": true
+            "oomphinc/composer-installers-extender": true,
+            "openeuropa/composer-artifacts": true,
+            "php-http/discovery": true,
+            "phpro/grumphp-shim": true,
+            "phpstan/extension-installer": true
         }
     },
     "autoload": {
@@ -239,7 +246,17 @@
         ]
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
+            "web/libraries/slick": [
+                "npm-asset/slick-carousel"
+            ],
+            "web/libraries/colorbox": [
+                "npm-asset/jquery-colorbox"
+            ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
             ],
@@ -250,7 +267,9 @@
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -293,6 +312,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "behat/behat": {
+                "Do not disable xdebug if an active session is found @see https://github.com/Behat/Behat/pull/1581": "resources/patch/php/behat/behat/1581.diff"
+            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
@@ -504,6 +526,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         },
         {
             "type": "package",
