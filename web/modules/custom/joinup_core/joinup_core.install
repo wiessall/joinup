@@ -74,9 +74,9 @@ function joinup_core_update_200200(): void {
     $connection->update($table)
       ->expression(
         'access_url_target_id',
-        "REPLACE(access_url_target_id, 'http://joinup.ec.europa.eu/', 'http://interoperable-europe.ec.europa.eu/')"
+        "REPLACE(access_url_target_id, 'joinup.ec.europa.eu', 'interoperable-europe.ec.europa.eu')"
       )
-      ->condition('access_url_target_id', '%http://joinup.ec.europa.eu/%', 'LIKE')
+      ->condition('access_url_target_id', '%joinup.ec.europa.eu%', 'LIKE')
       ->execute();
   }
 }
