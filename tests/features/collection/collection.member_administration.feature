@@ -5,12 +5,6 @@ Feature: Collection membership administration
   I need to be able to manage collection members
 
   Background:
-    Given owner content:
-      | name         |
-      | James Wilson |
-    And contact_information content:
-      | name                                   | email                        |
-      | Princeton-Plainsboro Teaching Hospital | info@princeton-plainsboro.us |
     And users:
       | Username          | Roles     | E-mail                        | First name | Family name |
       # Authenticated user.
@@ -20,17 +14,21 @@ Feature: Collection membership administration
       | Donald Duck       |           | donald_duck@example.com       | Donald     | Duck        |
       | Turkey Ham        |           | turkey_ham@example.com        | Turkey     | Ham         |
       | Cam Bridge        |           | cambridge@example.com         | Cam        | Bridge      |
+      | Justin Times      |           | justintimes@example.com       | Justin     | Times       |
+      | Ben Dover         |           | bendover@example.com          | Ben        | Dover       |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
     And collection content:
-      | title             | description               | logo     | owner        | contact information                    | closed | state     |
-      | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
+      | title             | closed |
+      | Medical diagnosis | yes    |
     And the following collection user memberships:
       | collection        | user              | roles                      | state   |
       | Medical diagnosis | Lisa Cuddy        | administrator, facilitator | active  |
       | Medical diagnosis | Turkey Ham        | facilitator                | active  |
       | Medical diagnosis | Gregory House     |                            | active  |
       | Medical diagnosis | Kathie Cumbershot |                            | pending |
+      | Medical diagnosis | Justin Times      |                            | active  |
+      | Medical diagnosis | Ben Dover         |                            | active  |
 
   Scenario: Only one instance of the "Apply to selected items" should exist.
     Given I am logged in as a moderator
@@ -50,7 +48,7 @@ Feature: Collection membership administration
       | /collection/medical-diagnosis/members                                              |
     And the following email should have been sent:
       | recipient | Turkey Ham                                                                         |
-      | subject   | Interoperable Europe Portal: A user has requested to join your collection                               |
+      | subject   | Interoperable Europe Portal: A user has requested to join your collection          |
       | body      | Donald Duck has requested to join your collection "Medical diagnosis" as a member. |
 
   Scenario: Approve a membership
@@ -159,9 +157,9 @@ Feature: Collection membership administration
       | success messages                                                                       |
       | The member Kathie Cumbershot has been deleted from the 'Medical diagnosis' collection. |
     And the following email should have been sent:
-      | recipient | Kathie Cumbershot                                                               |
-      | subject   | Interoperable Europe Portal: Your request to join the collection Medical diagnosis was rejected      |
-      | body      | Lisa Cuddy has rejected your request to join the "Medical diagnosis" collection |
+      | recipient | Kathie Cumbershot                                                                               |
+      | subject   | Interoperable Europe Portal: Your request to join the collection Medical diagnosis was rejected |
+      | body      | Lisa Cuddy has rejected your request to join the "Medical diagnosis" collection                 |
 
     # Delete multiple members from collection.
     Given I check the box "Update the member Gregory House"
@@ -188,6 +186,40 @@ Feature: Collection membership administration
     # Check that I see one of the random links that requires an active membership.
     Then I should not see the plus button menu
     And I should see the button "Join this collection"
+
+  Scenario: Block a membership
+    # With CoC, an email should be sent.
+    Given custom_page content:
+      | title                 | collection        | state     |
+      | Medical diagnosis CoC | Medical diagnosis | published |
+    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    Given I am logged in as "Lisa Cuddy"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Ben Dover"
+    Then I select "Block the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Block the selected membership(s) was applied to 1 item."
+    And the email sent to "Ben Dover" with subject "Interoperable Europe Portal: Membership status update for Medical diagnosis" contains the following lines of text:
+      | We regret to inform you that your membership in Medical diagnosis has been revoked due to a violation of the Code of Conduct. |
+      | If you think this action is not clear, please contact the owner of Medical diagnosis.                                         |
+
+    When I am logged in as "Ben Dover"
+    And I go to the "Medical diagnosis" collection
+    Then I should not see the plus button menu
+
+    # Without CoC, no email should be sent.
+    And the "code of conduct" setting of the "Medical diagnosis" collection is unset
+    Given I am logged in as "Lisa Cuddy"
+    When I am on the members page of "Medical diagnosis"
+    And I check the box "Update the member Justin Times"
+    Then I select "Block the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Block the selected membership(s) was applied to 1 item."
+    And no email has been sent to "Justin Times"
+
+    When I am logged in as "Justin Times"
+    And I go to the "Medical diagnosis" collection
+    Then I should not see the plus button menu
 
   Scenario: Assign a new role to a member
     # Check that Dr House can't edit the collection.
@@ -407,8 +439,8 @@ Feature: Collection membership administration
 
   Scenario: User needs to accept code of conduct on the confirmation form.
     Given custom_page content:
-      | title                 | collection        | state     |
-      | Medical diagnosis CoC | Medical diagnosis | published |
+      | title                 | collection        |
+      | Medical diagnosis CoC | Medical diagnosis |
     And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
 
     When I am logged in as "Lisa Cuddy"

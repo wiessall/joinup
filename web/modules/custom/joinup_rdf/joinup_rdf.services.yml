@@ -6,10 +6,6 @@ services:
     class: Drupal\joinup_rdf\VocabularyFixturesHelper
     arguments: [ 'rdf_sync.connection' ]
 
-  joinup_rdf.requirements_helper:
-    class: Drupal\joinup_rdf\RequirementsHelper
-    arguments: ['@rdf_sync.connection', '@string_translation']
-
   # Move in joinup_rdf. See ISAICP-9156.
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
@@ -23,10 +19,6 @@ services:
     arguments: ['@entity_type.manager', '@entity_type.bundle.info', '@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
-
-  joinup_rdf.migration_helper:
-    class: Drupal\joinup_rdf\MigrationHelper
-    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@rdf_sync.connection', '@rdf_sync.mapper', '@state']
 
   joinup_rdf.http_middleware.accept_based_negotiation:
     class: Drupal\joinup_rdf\Middleware\JoinupAcceptHeaderMiddleware

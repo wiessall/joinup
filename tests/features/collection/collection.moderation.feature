@@ -19,13 +19,7 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given owner content:
-      | name           |
-      | Simon Sandoval |
-    And contact_information content:
-      | name    | email               |
-      | Francis | Francis@example.com |
-    And users:
+    Given users:
       | Username        | Roles     |
       # Authenticated user.
       | Velma Smith     |           |
@@ -36,12 +30,12 @@ Feature: Collection moderation
       # Facilitator of all the collections.
       | Carole James    |           |
     And collection content:
-      | title               | description         | logo     | owner          | contact information | state            |
-      | Deep Past           | Azure ship          | logo.png | Simon Sandoval | Francis             | draft            |
-      | The Licking Silence | The Licking Silence | logo.png | Simon Sandoval | Francis             | proposed         |
-      | Person of Wizards   | Person of Wizards   | logo.png | Simon Sandoval | Francis             | published        |
-      | The Shard's Hunter  | The Shard's Hunter  | logo.png | Simon Sandoval | Francis             | archival request |
-      | Luck in the Abyss   | Luck in the Abyss   | logo.png | Simon Sandoval | Francis             | archived         |
+      | title               | state            |
+      | Deep Past           | draft            |
+      | The Licking Silence | proposed         |
+      | Person of Wizards   | published        |
+      | The Shard's Hunter  | archival request |
+      | Luck in the Abyss   | archived         |
     And the following collection user memberships:
       | collection          | user         | roles       |
       | Deep Past           | Erika Reid   | owner       |
@@ -169,15 +163,9 @@ Feature: Collection moderation
   # for collections.
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
-    Given owner content:
-      | name             | owner type |
-      | Carpet Sandation | Company    |
-    And contact_information content:
-      | name        | email                   |
-      | Partyanimal | partyanimal@example.com |
     And collection content:
-      | title          | description        | abstract           | logo     | owner            | contact information | topic             | state    |
-      | Some berry pie | Berries are tasty. | Berries are tasty. | logo.png | Carpet Sandation | Partyanimal         | Supplier exchange | proposed |
+      | title          | logo     | topic             | state    |
+      | Some berry pie | logo.png | Supplier exchange | proposed |
     When I visit the collection overview
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
@@ -252,7 +240,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Spectres in fog" collection
-    And I delete the "A secretary in the fog" contact information
+    And I delete the "A secretary in the fog" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
@@ -290,7 +278,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
-    And I delete the "Domestic secretary" contact information
+    And I delete the "Domestic secretary" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
@@ -328,7 +316,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
-    And I delete the "Secretary of thieves" contact information
+    And I delete the "Secretary of thieves" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
@@ -368,7 +356,7 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
-    And I delete the "Secretary of Silk" contact information
+    And I delete the "Secretary of Silk" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
@@ -408,4 +396,4 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
-    And I delete the "Secretary of the harbor" contact information
+    And I delete the "Secretary of the harbor" "contact information"

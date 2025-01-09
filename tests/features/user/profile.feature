@@ -104,33 +104,26 @@ Feature: User profile
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
     And collection content:
-      | title                 | description                           | logo     | state     | creation date    |
-      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 |
-      | Ethic flower handling | Because even flowers have feelings.   | logo.png | published | 2017-02-23 12:00 |
+      | title                 | description                           | logo     | creation date    |
+      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | 2017-02-23 10:00 |
+      | Ethic flower handling | Because even flowers have feelings.   | logo.png | 2017-02-23 12:00 |
     Given solution content:
-      | title              | collection            | description                                     | logo     | state     | creation date    |
-      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | published | 2017-02-23 13:00 |
-      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | published | 2017-02-23 14:01 |
+      | title              | collection            | description                                     | logo     | creation date    |
+      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | 2017-02-23 13:00 |
+      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | 2017-02-23 14:01 |
     And discussion content:
-      | title                          | author          | collection            | state     | created          |
-      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | published | 2018-06-15 16:00 |
-      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | published | 2018-09-01 19:30 |
+      | title                          | author          | collection            | created          |
+      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | 2018-06-15 16:00 |
+      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | 2018-09-01 19:30 |
     And document content:
-      | title                    | author        | collection       | state     | created          |
-      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | published | 2017-05-13 16:00 |
+      | title                    | author        | collection       | created          |
+      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | 2017-05-13 16:00 |
     And event content:
-      | title                | author        | collection       | state     | created          |
-      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | published | 2018-06-27 18:00 |
+      | title                | author        | collection       | created          |
+      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | 2018-06-27 18:00 |
     And news content:
-      | title                         | author        | collection       | state     | created         |
-      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | published | 2018-11-15 9:01 |
-    # Contact information and owner tiles should never be shown.
-    And contact_information content:
-      | name           | email                      | website url        | author        |
-      | Wibo Verhoeven | wibo.verhoeven@example.com | http://example.com | Corwin Robert |
-    And owner content:
-      | owner type | name                 | author        |
-      | Company    | Somboon De Laurentis | Corwin Robert |
+      | title                         | author        | collection       | created         |
+      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | 2018-11-15 9:01 |
     And the following collection user membership:
       | user          | collection       |
       | Corwin Robert | Botanic E.D.E.N. |
@@ -151,7 +144,7 @@ Feature: User profile
       | Botanic E.D.E.N.              |
       # Always present in all tests.
       # See joinup_test.install
-      | Joinup                        |
+      | The Portal                    |
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
@@ -281,7 +274,7 @@ Feature: User profile
       | Salt is salty           |
       # Always present in all tests.
       # See joinup_test.install
-      | Joinup                  |
+      | The Portal              |
 
     When I click "Show archived"
     Then I should see the following tiles in the correct order:

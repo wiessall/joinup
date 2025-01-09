@@ -7,9 +7,7 @@ namespace Drupal\joinup\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\UserTrait;
-use Drupal\joinup_discussion\Form\InviteToDiscussionForm;
 use Drupal\joinup_invite\Entity\Invitation;
-use Drupal\joinup_invite\Form\InviteToGroupForm;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 
 /**
@@ -56,39 +54,6 @@ class JoinupInviteContext extends RawDrupalContext {
     $arguments = $this->getInvitationMessageHelper()->getMessage($invitation, $invitation_info['message_template'])->getArguments();
 
     $this->visitPath($arguments["@invitation:{$action}_url"]);
-  }
-
-  /**
-   * Returns information about the invitations related to the given entity type.
-   *
-   * @param string $entity_type
-   *   The entity type for which to return relevant invitation info.
-   *
-   * @return array
-   *   An associative array with the following keys:
-   *   - invitation_bundle: The ID of the InvitationType that is associated with
-   *     inviting people to content of the given entity type.
-   *   - message_template: The message template which is used to generate
-   *     invitation notifications when people are invited to content of the
-   *     given entity type.
-   */
-  protected function getInvitationInfo(string $entity_type): array {
-    $mapping = [
-      'discussion' => [
-        'invitation_bundle' => 'discussion',
-        'message_template' => InviteToDiscussionForm::TEMPLATE_DISCUSSION_INVITE,
-      ],
-      'collection' => [
-        'invitation_bundle' => 'group_membership',
-        'message_template' => InviteToGroupForm::TEMPLATES['collection'],
-      ],
-      'solution' => [
-        'invitation_bundle' => 'group_membership',
-        'message_template' => InviteToGroupForm::TEMPLATES['solution'],
-      ],
-    ];
-
-    return $mapping[$entity_type];
   }
 
   /**

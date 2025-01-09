@@ -6,8 +6,8 @@ Feature: Solution API
 
   Scenario: Programmatically create a solution
     Given solution content:
-      | uri                                    | title                | description       | logo     | documentation | content creation | landing page                   | state     |
-      | http://example.com/this%20has%20spaces | Solution with spaces | A sample solution | logo.png | text.pdf      | registered users | http://foo-example.com/landing | published |
+      | uri                                    | title                | content creation | landing page                   |
+      | http://example.com/this%20has%20spaces | Solution with spaces | registered users | http://foo-example.com/landing |
     And solution content:
-      | uri                                                                                                      | title                 | description       | logo     | documentation | content creation | landing page                   | state     |
-      | http://www.it-planungsrat.de/DE/Projekte/Koordinierungsprojekte/OsiP/Online_Sicherheitspr%C3%BCfung.html | Solution with unicode | A sample solution | logo.png | text.pdf      | registered users | http://foo-example.com/landing | published |
+      | uri                                                                                                      | title                 | content creation | landing page                   |
+      | http://www.it-planungsrat.de/DE/Projekte/Koordinierungsprojekte/OsiP/Online_Sicherheitspr%C3%BCfung.html | Solution with unicode | registered users | http://foo-example.com/landing |

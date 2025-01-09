@@ -127,7 +127,7 @@ Feature:
     And the row "v2.0" is selected
     But the row "1.1.1" is not selected
 
-    When I am on "/joinup/legal-notice"
+    When I am on "/portal/legal-notice"
     Then I should see the heading "Legal notice"
     And I should see "New rules..."
 
@@ -179,8 +179,8 @@ Feature:
       | Username        | E-mail                  | Password | Local username  |
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
     And collection content:
-      | title              | state     |
-      | Land of submarines | published |
+      | title              |
+      | Land of submarines |
 
     Given I am an anonymous user
     When I go to the homepage of the "Land of submarines" collection

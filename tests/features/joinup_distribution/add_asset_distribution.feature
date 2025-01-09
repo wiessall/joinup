@@ -6,14 +6,14 @@ Feature: Add distribution through the UI
 
   Background:
     Given collection content:
-      | title                   | logo     | state     |
-      | Asset Distribution Test | logo.png | published |
+      | title                   | logo     |
+      | Asset Distribution Test | logo.png |
     And solution content:
-      | title                  | collection              | description                      | state     |
-      | Solution random x name | Asset Distribution Test | Some reusable random description | published |
+      | title                  | collection              | description                      |
+      | Solution random x name | Asset Distribution Test | Some reusable random description |
     And release content:
-      | title                | release notes        | release number | creation date    | is version of          | status    | state     |
-      | Authoritarian Alpaca | First public release | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
+      | title                | release notes        | release number | creation date    | is version of          | status    |
+      | Authoritarian Alpaca | First public release | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed |
     And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -143,8 +143,8 @@ Feature: Add distribution through the UI
 
   Scenario: Adding a distribution with a duplicate title
     Given solution content:
-      | title               | description             | state     |
-      | Solubility of gases | Affected by temperature | published |
+      | title               | description             |
+      | Solubility of gases | Affected by temperature |
     And release content:
       | title                | release notes        | is version of       |
       | 1.0.0 Adolf Sieverts | First public release | Solubility of gases |
@@ -175,8 +175,8 @@ Feature: Add distribution through the UI
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
-      | title            | description        | access url | solution               | state     |
-      | Windows - source | Sample description | test.zip   | Solution random x name | published |
+      | title            | description        | access url | solution               |
+      | Windows - source | Sample description | test.zip   | Solution random x name |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
     And I click "Add distribution" in the plus button menu
@@ -190,9 +190,9 @@ Feature: Add distribution through the UI
       | title                  | description                                                                    |
       | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
     And distribution content:
-      | title        | licence                | solution               | state     | creation date    | modification date |
-      | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
-      | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |
+      | title        | licence                | solution               | creation date    | modification date |
+      | Hot Snake    | WTFPL                  | Solution random x name | 2019-11-19 20:45 | 2021-11-19 20:45  |
+      | Quality Yard | Boost Software License | Solution random x name | 2019-12-19 20:45 | 2021-12-19 20:45  |
 
     When I go to the homepage of the "Solution random x name" solution
     # Distributions are still shown in the solution page and so the License text will be visible in the page.
@@ -207,3 +207,17 @@ Feature: Add distribution through the UI
     And I should see the text "Distribution" in the "Hot Snake" tile
     # Assert that the "Release" tile is present
     And I should see the "Authoritarian Alpaca" tile
+
+  # Regression test for ticket ISAICP-9239
+  Scenario Outline: Check distribution cannot be serialized to JsonLD object.
+    Given distribution content:
+      | title   | description        | access url   | solution               |
+      | <title> | Sample description | <access url> | Solution random x name |
+    When I go to the "<title>" distribution
+    And the page should contain the html text '<script type="application/ld+json">'
+
+    Examples:
+      | title           | access url               |
+      | D example https | https://www.example.com/ |
+      | D example http  | http://www.example.com/  |
+      | D example ftp   | ftp://ftp.example.com    |

@@ -10,7 +10,7 @@ Feature: Homepage
     When I reload the page
     Then the page should be cached
     And I should see the following lines of text:
-      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                                          |
+      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                    |
       | It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.                                                                                                                                                                |
       | It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations. |
       | Interoperable Europe covers the policy angle of interoperability.                                                                                                                                                                                                |
@@ -36,17 +36,17 @@ Feature: Homepage
 
   Scenario: Latest news is shown on the homepage
     Given collection content:
-      | title             | state     |
-      | Shaping of nature | published |
+      | title             |
+      | Shaping of nature |
     And the following "Remote video" media:
       | name      | video                                       | group             | uuid                                 |
       | The Video | https://www.youtube.com/watch?v=C0DPdy98e4c | Shaping of nature | 32b3beae-2218-11ee-be56-0242ac120002 |
     And news content:
-      | title                       | headline                 | collection        | topic                                                 | state     | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                                       |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | published | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                               |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | published | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                          |
-      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | published | 2021-02-28T13:15:00Z |                             | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                   |
-      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | published | 2021-03-29T10:18:00Z |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
+      | title                       | headline                 | collection        | topic                                                 | published at          | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                                       |
+      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z  | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                               |
+      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | p2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                          |
+      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | 2021-02-28T13:15:00Z  |                             | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                   |
+      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | 2021-03-29T10:18:00Z  |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
       | date   | topics                                      | title                       | body                                                                                                                                                                                                       |
@@ -65,20 +65,20 @@ Feature: Homepage
 
   Scenario Outline: Community content can be placed "In the spotlight" on the homepage
     Given collection content:
-      | title         | state     |
-      | Mice in space | published |
+      | title         |
+      | Mice in space |
     And news content:
-      | title       | headline       | collection    | topic                                                 | state     | logo       | abstract        | field_paragraphs_body |
-      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news abstract> | <news body>           |
+      | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
     And discussion content:
-      | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
-      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | title                | collection    | topic                            | logo    | body                                                                                                                                                                                       |
+      | Influence of gravity | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | abstract                                                                                                                                                                                        |
-      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | collection    | topic                                  | logo     | abstract                                                                                                                                                                                        |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
-      | title           | collection    | topic                    | state     | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
-      | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | title           | collection    | topic                    | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
+      | Stay at the ISS | Mice in space | EU and European Policies | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
       | type    | label           |
       | content | New muscles     |
@@ -88,7 +88,7 @@ Feature: Homepage
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
       | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | <expected news spotlight body>                                                                                                                                                                  |
+      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | default abstract                                                                                                                                                                                |
       | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
       | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
@@ -102,20 +102,20 @@ Feature: Homepage
 
   Scenario Outline: Community content be highlighted on the homepage
     Given collection content:
-      | title              | state     |
-      | Clash of documents | published |
+      | title              |
+      | Clash of documents |
     And <type> content:
-      | title        | headline     | collection         | topic                              | state     | logo     | <abstract source field>                                                                                                                                                                         |
-      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | headline     | collection         | topic                              | state     | logo     |
+      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg |
+      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg |
+      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg |
     And the "Highlighted content" content listing contains:
       | type   | label  |
       | <type> | Aliens |
 
     When I am on the homepage
     Then I should see "Aliens" as the Highlighted content
-    And I should see the text "Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group."
+    And I should see the text "default abstract"
     And I should see the link "Related content"
     When I click "Related content"
     Then I should be on the advanced search page
@@ -133,8 +133,8 @@ Feature: Homepage
 
   Scenario: An event in the highlighted content on the homepage should display the start date.
     Given event content:
-      | title            | start date       | end date         | state     | field_paragraphs_body | abstract                |
-      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | published | High and lite         | Abstract: High and lite |
+      | title            | start date       | end date         | field_paragraphs_body | abstract                |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | High and lite         | Abstract: High and lite |
     And the "Highlighted content" content listing contains:
       | type    | label            |
       | content | Light and height |
@@ -152,8 +152,8 @@ Feature: Homepage
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
-      | title                     | start date       | end date         | state     |
-      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 | published |
+      | title                     | start date       | end date         |
+      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 |
     And the "Highlighted event" content listing contains:
       | type    | label                     |
       | content | Florentine steak festival |
@@ -185,7 +185,7 @@ Feature: Homepage
     And the response should not contain "http://raresteaktown.com"
 
     When I click "Read more" in the "Highlighted event"
-    Then the url should match "/collection/joinup/event/florentine-steak-festival"
+    Then the url should match "/collection/portal/event/florentine-steak-festival"
 
     # The "More events" link should temporarily link to the search page with the
     # events pre-filtered. This will be replaced with the events page later.
@@ -209,8 +209,8 @@ Feature: Homepage
 
   Scenario: Search box is shown in the main content
     Given collection content:
-      | title        | state     |
-      | RNA vaccines | published |
+      | title        |
+      | RNA vaccines |
     And I am on the homepage
     Then I should see the "Search" field in the Featured region
     When I enter "RNA" in the search bar and press enter
@@ -294,9 +294,9 @@ Feature: Homepage
       | collection | Sunset ball                 | 2019-04-18 08:00     | There are many variations                                                                                                                                                                                                     |
       | collection | Sunset stream               | 2019-02-18 08:00     | There are many passages                                                                                                                                                                                                       |
       | collection | Jupiter sun                 | 2018-12-18 08:00     | Sum is therefore                                                                                                                                                                                                              |
-      # Joinup in installed by default.
+      # The Portal in installed by default.
       # @see joinup_test.install
-      | collection | Joinup                      | 2015-01-01 08:00     | Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience… |
+      | collection | The Portal                  | 2015-01-01 08:00     | The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their…        |
       | solution   | Lantern International       | 2022-12-18 08:00     | Lantern International Group has started deploying personnel in focused areas. In this quest we have decided to consolidate our private businesses into one entity as a significant step towards realizing our company's long… |
       | solution   | Products of Bulgaria        | 2021-08-14 17:36     | Supports health                                                                                                                                                                                                               |
       | solution   | Cities of Italy             | 2020-01-01 17:36     | Download our report report-2021-09-16.xls for more information.                                                                                                                                                               |

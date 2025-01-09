@@ -3,9 +3,9 @@ Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
     Given collection content:
-      | uri                            | title       | state     |
-      | http://example.com/source      | Source      | published |
-      | http://example.com/destination | Destination | published |
+      | uri                            | title       |
+      | http://example.com/source      | Source      |
+      | http://example.com/destination | Destination |
     Given solution content:
       | title      | collection | state     | creation date    | modification date |
       | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |
@@ -21,15 +21,13 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     Given I am an anonymous user
     When I go to the homepage of the "Source" collection
     Then I should not see the link "Manage solutions"
-    # This URL works because of redirection. Use the correct URL in ISAICP-8376.
-    When I go to "/rdf_entity/http_e_f_fexample_ccom_fsource/change-collection"
+    When I go to "/collection/source/change-collection"
     Then I should see the heading "Sign in to continue"
 
     Given I am logged in as an "authenticated"
     When I go to the homepage of the "Source" collection
     Then I should not see the link "Manage solutions"
-    # This URL works because of redirection. Use the correct URL in ISAICP-8376.
-    When I go to "/rdf_entity/http_e_f_fexample_ccom_fsource/change-collection"
+    When I go to "/collection/source/change-collection"
     Then I should get an access denied error
 
     Given I am logged in as a moderator

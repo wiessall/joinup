@@ -6,8 +6,8 @@ Feature: Plus button
 
   Scenario: Plus button shown when actions are available.
     Given solution content:
-      | title            | description                              | state     |
-      | Simple solutions | Conplex problems call for easy solutions | published |
+      | title            | description                              |
+      | Simple solutions | Conplex problems call for easy solutions |
 
     When I am logged in as a facilitator of the "Simple solutions" solution
     And I go to the homepage of the "Simple solutions" solution

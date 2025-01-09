@@ -8,12 +8,7 @@ services:
     class: Drupal\joinup\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
-  joinup.uid_1_only_access:
-    class: Drupal\joinup\Access\Uid1OnlyAccess
-    arguments: ['@current_user']
+  joinup.node_creation_routes.access:
+    class: Drupal\joinup\Access\NodeCreationRoutesAccess
     tags:
-      - { name: access_check, applies_to: _uid_1_only }
-  joinup.reporting_route_subscriber:
-    class: Drupal\joinup\Routing\ReportingRouteSubscriber
-    tags:
-      - { name: event_subscriber }
+      - { name: access_check, applies_to: _node_creation_route }

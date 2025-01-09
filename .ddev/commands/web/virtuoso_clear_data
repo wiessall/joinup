@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Clear the <http://data? Virtuoso graph
+## Usage: virtuoso:clear-data
+
+vendor/bin/drush eval "Drupal::service('rdf_sync.connection')->update('CLEAR GRAPH <http://data>')"
+echo "Cleared the <http://data> graph."

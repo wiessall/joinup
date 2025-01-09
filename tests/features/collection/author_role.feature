@@ -6,8 +6,8 @@ Feature:
 
   Scenario Outline: Authors can add content regardless of group settings.
     Given collection content:
-      | title             | moderation   | content creation   | state     |
-      | Author collection | <moderation> | <content creation> | published |
+      | title             | moderation   | content creation   |
+      | Author collection | <moderation> | <content creation> |
 
     When I am logged in as an "author" of the "Author collection" collection
     And I go to the "Author collection" collection

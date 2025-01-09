@@ -4,8 +4,8 @@ Feature: Freeze comments on archived content
 
   Background:
     Given collection content:
-      | title             | state     |
-      | Gossip collection | published |
+      | title             |
+      | Gossip collection |
     And users:
       | Username        | E-mail                      | Roles | First name | Family name |
       | Sons of anarchy | sons-of-anarchy@example.com |       | Sons       | Anarchy     |

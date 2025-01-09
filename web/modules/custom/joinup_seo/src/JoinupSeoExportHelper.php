@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_seo;
 
+use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -24,9 +25,12 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    *
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   The general serializer service.
+   * @param \Drupal\Core\Extension\ExtensionPathResolver $extensionPathResolver
+   *   The extension path resolver.
    */
   public function __construct(
     protected SerializerInterface $serializer,
+    protected ExtensionPathResolver $extensionPathResolver,
   ) {}
 
   /**
@@ -47,10 +51,9 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
    *   The exported string.
    */
   protected function exportEntityJsonLd(RdfSyncEntityInterface $entity): string {
-    $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, $options = self::getOptions());
-    if (
-      !is_array($decodedSerialized = json_decode($serialized, TRUE))
-    ) {
+    $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, $options = $this->getOptions());
+
+    if (!is_array($decodedSerialized = json_decode($serialized, TRUE))) {
       return '';
     }
 
@@ -76,7 +79,7 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
     // resource, the expected response has to be in the 'application/jsonld'
     // format, something that we do not have. However, even for performance and
     // availability purposes, a local file is used instead.
-    $context_path = __DIR__ . '/../assets/adms-ap-2.01.jsonld';
+    $context_path = $this->extensionPathResolver->getPath('module', 'joinup_seo') . '/assets/adms-ap-2.01.jsonld';
     $content = file_get_contents($context_path);
     $content = json_decode($content);
     return [

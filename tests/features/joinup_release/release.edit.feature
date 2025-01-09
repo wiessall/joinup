@@ -5,18 +5,12 @@ Feature: "Edit" visibility options.
   I need to be able to edit "Release" rdf entities through UI.
 
   Scenario: "Edit" button should only be shown to solution facilitators and moderators.
-    Given owner content:
-      | name           |
-      | Awesome person |
-    And contact_information content:
-      | name            | email                      | website url        |
-      | Awesome contact | awesomecontact@example.com | http://example.com |
-    And solution content:
-      | title                   | description         | documentation | owner          | contact information | state     |
-      | My awesome solution abc | My awesome solution | text.pdf      | Awesome person | Awesome contact     | published |
+    Given solution content:
+      | title                   | description         | documentation |
+      | My awesome solution abc | My awesome solution | text.pdf      |
     And release content:
-      | title                      | release notes | documentation | release number | release notes | is version of           | state     | creation date    | modification date | published at     |
-      | My awesome solution abc v1 | A sample      | text.pdf      | 1              | Changed       | My awesome solution abc | published | 2020-11-19 20:45 | 2022-11-19 20:45  | 2020-11-19 20:45 |
+      | title                      | release notes | documentation | release number | release notes | is version of           | creation date    | modification date | published at     |
+      | My awesome solution abc v1 | A sample      | text.pdf      | 1              | Changed       | My awesome solution abc | 2020-11-19 20:45 | 2022-11-19 20:45  | 2020-11-19 20:45 |
 
     When I am logged in as a "facilitator" of the "My awesome solution abc" solution
     And I go to the homepage of the "My awesome solution abc v1" release
@@ -24,10 +18,10 @@ Feature: "Edit" visibility options.
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "My awesome solution abc v1" release
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "My awesome solution abc v1" release
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
     And I should see the text "Published on: 19/11/2020"
     And I should see the text "Last update: 19/11/2022"

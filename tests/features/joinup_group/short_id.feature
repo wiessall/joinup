@@ -6,8 +6,8 @@ Feature:
 
   Scenario: Short IDs are unique in collections.
     Given collection content:
-      | title              | short ID | state     |
-      | Scientific Studies | sst-2020 | published |
+      | title              | short ID |
+      | Scientific Studies | sst-2020 |
     And owner content:
       | name                 | owner type |
       | Organisation example | Company    |
@@ -64,15 +64,15 @@ Feature:
     Then the following fields should be disabled "Short ID"
 
     Then I delete the "Structural Solar Traces" collection
-    And I delete the "Contact person" contact information
+    And I delete the "Contact person" "contact information"
 
   Scenario: Short IDs are unique in solutions.
     Given collection content:
-      | title              | short ID | state     |
-      | Scientific Studies | sst-2020 | published |
+      | title              | short ID |
+      | Scientific Studies | sst-2020 |
     Given solution content:
-      | title                         | short ID | state     | collection         |
-      | Who knows what a solution is? | wkwasi   | published | Scientific Studies |
+      | title                         | short ID | collection         |
+      | Who knows what a solution is? | wkwasi   | Scientific Studies |
     And owner content:
       | name                 | owner type |
       | Organisation example | Company    |
@@ -137,4 +137,4 @@ Feature:
     Then the following fields should be disabled "Short ID"
 
     Then I delete the "I know what a solution is" solution
-    And I delete the "John Smith" contact information
+    And I delete the "John Smith" "contact information"

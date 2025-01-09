@@ -16,13 +16,13 @@ Feature: Subscribers report
       | young    |       | Young      | G           |
       | lil      |       | Lil        | Mama        |
     And collection content:
-      | title             | state     |
-      | Marine ecosystems | published |
-      | Plant science     | published |
+      | title             |
+      | Marine ecosystems |
+      | Plant science     |
     Given solution content:
-      | title                 | state     | collection        |
-      | Seagrass meadows      | published | Marine ecosystems |
-      | Intertidal seagrasses | published | Plant science     |
+      | title                 | collection        |
+      | Seagrass meadows      | Marine ecosystems |
+      | Intertidal seagrasses | Plant science     |
     And collection user memberships:
       | collection        | user    | roles       |
       | Marine ecosystems | busta   | facilitator |

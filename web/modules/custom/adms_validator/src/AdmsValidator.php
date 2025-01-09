@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\adms_validator;
 
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Drupal\rdf_sync\RdfSyncTriplesInterface;
 use EasyRdf\Graph;
 
 /**
@@ -43,7 +42,6 @@ class AdmsValidator implements AdmsValidatorInterface {
    */
   public function __construct(
     protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
-    protected readonly RdfSyncTriplesInterface $rdfSyncTriples,
   ) {}
 
   /**
@@ -64,7 +62,7 @@ class AdmsValidator implements AdmsValidatorInterface {
     }
 
     // Store the graph in the graph store.
-    $result = $this->rdfSyncTriples->createGraphStore()->replace($graph);
+    $result = $this->sparqlEndpoint->createGraphStore()->replace($graph);
     if (!$result->isSuccessful()) {
       throw new \Exception('Could not store triples in triple store.');
     }

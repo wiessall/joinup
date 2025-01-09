@@ -22,6 +22,11 @@ class EntityQueueContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
+   * Name of highlighted queue.
+   */
+  const string HIGHLIGHTED_QUEUE_NAME = 'highlighted_event';
+
+  /**
    * Sets the content of the given entity queue to what is listed in the table.
    *
    * Any pre-existing content in the entity queue will be replaced.
@@ -48,7 +53,7 @@ class EntityQueueContext extends RawDrupalContext {
     $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
 
     $entities = array_map(function (array $row): ContentEntityInterface {
-      $entity_type_id = self::translateEntityTypeAlias($row['type']);
+      $entity_type_id = $this->translateEntityTypeAlias($row['type']);
       $label = $row['label'];
       return $this->getEntityByLabel($entity_type_id, $label);
     }, $table->getColumnsHash());
@@ -61,8 +66,8 @@ class EntityQueueContext extends RawDrupalContext {
    * Sets the fields of the given entity queue to what is listed in the table.
    *
    * Any pre-existing field values will be replaced and will not be restored.
-   *
-   * Check ::entityQueueFieldAliases() for the available fields.
+   * Check NameMappingsTrait::entityQueueFieldAliases()
+   * for the available fields.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The Behat table containing the field data to set on the entity queue.
@@ -74,11 +79,12 @@ class EntityQueueContext extends RawDrupalContext {
   public function setEntityQueueFieldData(TableNode $table, string $label): void {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
     $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
+    $mappings = $this->getEntityQueueFieldMappings(self::HIGHLIGHTED_QUEUE_NAME);
 
     $values = $table->getRowsHash();
     $this->massageEntityQueueFieldValues($subqueue, $values);
     foreach ($values as $alias => $value) {
-      $field_name = self::translateFieldNameAlias($alias, self::entityQueueFieldAliases());
+      $field_name = self::translateFieldNameAlias($alias, $mappings);
       $subqueue->get($field_name)->setValue($value);
     }
 
@@ -95,7 +101,7 @@ class EntityQueueContext extends RawDrupalContext {
    */
   protected static function massageEntityQueueFieldValues(EntitySubqueueInterface $subqueue, array &$values): void {
     switch ($subqueue->bundle()) {
-      case 'highlighted_event':
+      case self::HIGHLIGHTED_QUEUE_NAME:
         // If the external URL is passed, then set the 'Link to external page'
         // flag. This checkbox is intended for UX reasons, to make the edit form
         // for the highlighted event entity queue easier to understand.
@@ -104,21 +110,6 @@ class EntityQueueContext extends RawDrupalContext {
         }
         break;
     }
-  }
-
-  /**
-   * Returns the mapping of human readable field aliases to field names.
-   *
-   * @return array
-   *   The mapping.
-   */
-  protected static function entityQueueFieldAliases(): array {
-    return [
-      'header text' => 'header',
-      'link text' => 'link_text',
-      'external url' => 'external_url',
-      'link to external page' => 'link_to_external_url',
-    ];
   }
 
 }

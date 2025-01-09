@@ -6,12 +6,12 @@ Feature: Collections/Solutions settings Metadata Banner disabled
 
   Scenario: Moderator or collection/solution owner is able to disable or enable metadata from banner in collections/solutions
     Given collection content:
-      | title          | state     |
-      | Rally fanatics | published |
-      | Legion of Doom | published |
+      | title          |
+      | Rally fanatics |
+      | Legion of Doom |
     And solution content:
-      | title        | state     | collection     |
-      | Klop mirubes | published | Rally fanatics |
+      | title        | collection     |
+      | Klop mirubes | Rally fanatics |
     And users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
@@ -26,11 +26,11 @@ Feature: Collections/Solutions settings Metadata Banner disabled
       | solution     | user      | roles |
       | Klop mirubes | Plot user | owner |
     And "news" content:
-      | title                   | headline                | body | state     | author | collection     |
-      | Creating Justice League | 6 Members to start with | TBD  | published | Eagle  | Rally fanatics |
+      | title                   | headline                | body | author | collection     |
+      | Creating Justice League | 6 Members to start with | TBD  | Eagle  | Rally fanatics |
     And "news" content:
-      | title             | headline                                    | body                                                              | state     | author | solution     |
-      | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | published | Eagle  | Klop mirubes |
+      | title             | headline                                    | body                                                              | author | solution     |
+      | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | Eagle  | Klop mirubes |
 
     Given I am logged in as "Ferners Lee"
     When I go to the "Rally fanatics" collection

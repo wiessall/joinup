@@ -8,9 +8,6 @@ Feature: Notification test for the collection transitions.
     Given owner content:
       | name       | owner type |
       | NC for all | Company    |
-    And contact_information content:
-      | name                       | email                             |
-      | Notificationous absolutous | absolute.notification@example.com |
     And users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |
@@ -21,21 +18,21 @@ Feature: Notification test for the collection transitions.
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
     And collection content:
-      | title                  | state            | abstract     | description   | topic             | owner      | contact information        |
-      | NC to propose          | draft            | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to publish          | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | title                  | state            | abstract     | description   | owner      |
+      | NC to propose          | draft            | No one cares | No one cares. | NC for all |
+      | NC to publish          | proposed         | No one cares | No one cares. | NC for all |
       # The following will also cover the validate edited notification.
-      | NC to propose edit     | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to publish edit     | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to request archival | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to reject archival  | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to archive          | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to delete           | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to delete by mod    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to propose edit     | published        | No one cares | No one cares. | NC for all |
+      | NC to publish edit     | published        | No one cares | No one cares. | NC for all |
+      | NC to request archival | published        | No one cares | No one cares. | NC for all |
+      | NC to reject archival  | archival request | No one cares | No one cares. | NC for all |
+      | NC to archive          | archival request | No one cares | No one cares. | NC for all |
+      | NC to delete           | published        | No one cares | No one cares. | NC for all |
+      | NC to delete by mod    | published        | No one cares | No one cares. | NC for all |
     Given solution content:
-      | title        | collection    | logo     | state     |
-      | NC Solution1 | NC to archive | logo.png | published |
-      | NC Solution2 | NC to archive | logo.png | published |
+      | title        | collection    |
+      | NC Solution1 | NC to archive |
+      | NC Solution2 | NC to archive |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |
@@ -82,7 +79,7 @@ Feature: Notification test for the collection transitions.
 
     # Clean up the manually created entities.
     Then I delete the "NC proposed new" collection
-    And I delete the "Super Sayan Academy" contact information
+    And I delete the "Super Sayan Academy" "contact information"
 
     # Test 'propose' operation (on an existing collection)
     And I am logged in as "NC owner"
@@ -207,6 +204,6 @@ Feature: Notification test for the collection transitions.
       | subject   | The collection NC to delete by mod was deleted.                                    |
       | body      | The collection "NC to delete by mod", of which you are a member, has been deleted. |
     And the following email should have been sent:
-      | recipient | NC owner                                                              |
+      | recipient | NC owner                                                                                   |
       | subject   | Interoperable Europe Portal: Your collection has been deleted by the moderation team       |
       | body      | The Interoperable Europe Portal moderation team deleted the collection NC to delete by mod |

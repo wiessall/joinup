@@ -74,9 +74,9 @@ Feature: My subscriptions
     And I click "My subscriptions"
     Then I should see the heading "My subscriptions"
     And I should see the heading "Collection"
-    # The default collection Joinup is there.
+    # The default collection The Portal is there.
     # @see \joinup_test_install().
-    And I should see the text "Joinup" in the "Content" region
+    And I should see the text "The Portal" in the "Content" region
     And I should see the heading "Solution"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
     And I should not see the text "Alpha Centauri"
@@ -189,8 +189,8 @@ Feature: My subscriptions
   @javascript
   Scenario Outline: Change the notification frequency of my digests
     Given collection content:
-      | title           | state     |
-      | Malicious plans | published |
+      | title           |
+      | Malicious plans |
     And the following collection user memberships:
       | collection      | user             |
       | Malicious plans | Auric Goldfinger |
@@ -243,9 +243,9 @@ Feature: My subscriptions
   Scenario: Regression test "My subscriptions"
 
     Given collection content:
-      | title     | state     |
-      | Fireblade | published |
-      | Lopitopes | published |
+      | title     |
+      | Fireblade |
+      | Lopitopes |
     And user:
       | Username | Blade One           |
       | E-mail   | blade.1@example.com |

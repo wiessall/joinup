@@ -10,40 +10,31 @@ namespace Drupal\joinup_notification;
 final class NotificationEvents {
 
   /**
-   * An event for sending notifications on community content creation.
+   * An event for sending notifications on node creation.
    *
    * @Event
    *
    * @var string
    */
-  const string COMMUNITY_CONTENT_CREATE = 'joinup_notification.cc.create';
+  const string NODE_CREATE = 'joinup_notification.node.create';
 
   /**
-   * An event for sending notifications on community content update.
+   * An event for sending notifications on node update.
    *
    * @Event
    *
    * @var string
    */
-  const string COMMUNITY_CONTENT_UPDATE = 'joinup_notification.cc.update';
+  const string NODE_UPDATE = 'joinup_notification.node.update';
 
   /**
-   * An event for sending notifications on community content deletion.
+   * An event for sending notifications on node deletion.
    *
    * @Event
    *
    * @var string
    */
-  const string COMMUNITY_CONTENT_DELETE = 'joinup_notification.cc.delete';
-
-  /**
-   * An event that sends notifications on RDF entity CRUD operations.
-   *
-   * @Event
-   *
-   * @var string
-   */
-  const string RDF_ENTITY_CRUD = 'joinup_notification.rdf.notify';
+  const string NODE_DELETE = 'joinup_notification.node.delete';
 
   /**
    * An event that sends notifications on comment CRUD operations.
