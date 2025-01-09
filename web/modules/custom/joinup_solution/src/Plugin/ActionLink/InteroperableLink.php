@@ -6,7 +6,7 @@ namespace Drupal\joinup_solution\Plugin\ActionLink;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
-use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
+use Drupal\flag\Plugin\ActionLink\ConfirmForm;
 
 /**
  * Provides the AJAX link type.
@@ -20,7 +20,7 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
  *   description = @Translation("An AJAX JavaScript request will be made without reloading the page."),
  * )
  */
-class InteroperableLink extends AJAXactionLink {
+class InteroperableLink extends ConfirmForm {
 
   /**
    * View modes where actions are allowed.
