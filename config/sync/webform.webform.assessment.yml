@@ -194,8 +194,9 @@ elements: |-
       '#options':
         'Yes': 'Yes'
         'No': 'No'
-      '#options__properties': ''
       '#required': true
+      '#wrapper_type': form_element
+      '#options__properties': ''
     reference_of_the_linked_assessment:
       '#type': textfield
       '#title': 'Reference of the linked assessment'
