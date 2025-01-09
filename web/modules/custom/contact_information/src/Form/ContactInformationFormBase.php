@@ -26,8 +26,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class ContactInformationFormBase extends ContactForm {
 
   public function __construct(
-    protected readonly MailManagerInterface $mailManager,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected MailManagerInterface $mailManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected ?HoneypotServiceInterface $honeypot,
     ?string $entityType = NULL,
     ?string $entityId = NULL,
