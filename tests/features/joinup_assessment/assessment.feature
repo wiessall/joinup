@@ -112,7 +112,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                                                    |
       | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
       | List the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
       | Identified effects on cross-border legal interoperability {Empty}                                                                       |
       | Identified effects on cross-border organisational interoperability {Empty}                                                              |
       | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
@@ -165,7 +165,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                                                    |
       | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
       | List the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
       | Identified effects on cross-border legal interoperability {Empty}                                                                       |
       | Identified effects on cross-border organisational interoperability {Empty}                                                              |
       | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
@@ -278,7 +278,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                               |
       | Specify the concerned function of trans-European digital public service(s): Defense                                |
       | List the binding requirement(s) assessed. {Empty}                                                                  |
-      | This data will potentially be processed by: {Empty}                                                                |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                            |
       | Identified effects on cross-border legal interoperability {Empty}                                                  |
       | Identified effects on cross-border organisational interoperability {Empty}                                         |
       | Identified effects on cross-border semantic interoperability {Empty}                                               |
