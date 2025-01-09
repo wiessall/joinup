@@ -19,6 +19,9 @@ Feature: Block paragraph tests.
     Given I am logged in as a user with the "interoperability_validator" role
     When I go to the homepage of the "Early Omega" solution
     And I click "Set interoperable flag" in the "Header" region
+    And a modal should open
+    And I press "Confirm" in the "Modal buttons" region
+    And the modal should be closed
 
     When I am an anonymous user
     And I visit the "Recommended solutions" custom page

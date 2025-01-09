@@ -28,4 +28,9 @@ flagTypeConfig:
   show_contextual_link: false
   extra_permissions:
     owner: '0'
-linkTypeConfig: {  }
+linkTypeConfig:
+  flag_confirmation: 'Set interoperable flag for this solution?'
+  unflag_confirmation: 'Remove interoperable flag for this solution?'
+  flag_create_button: Confirm
+  flag_delete_button: Confirm
+  form_behavior: modal
