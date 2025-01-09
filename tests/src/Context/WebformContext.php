@@ -63,16 +63,4 @@ class WebformContext extends RawDrupalContext {
     ];
   }
 
-  /**
-   * Deletes a webform.
-   *
-   * @param string $id
-   *   The machine name of the webform.
-   *
-   * @When I delete the :id webform
-   */
-  public function deleteWebform(string $id): void {
-    $this->getEntityById('webform', $id)->delete();
-  }
-
 }

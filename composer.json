@@ -15,6 +15,7 @@
         "cfpinto/graphql": "^2.0",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "composer/installers": "^2",
+        "composer/spdx-licenses": "^1.5",
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
@@ -27,8 +28,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core": "^10.3",
         "drupal/core-composer-scaffold": "~10.3.0",
+        "drupal/core-recommended": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -40,6 +41,7 @@
         "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^4.0",
+        "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.0",
         "drupal/facets": "^3.0",
@@ -115,15 +117,22 @@
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.5",
         "drupal/views_block_area": "^1.0@beta",
-        "drupal/views_bulk_operations": "4.2.7",
+        "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
+        "drupal/webform_views": "^5.4",
         "drush/drush": "^12.1",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
+        "npm-asset/dompurify": "^3.0.9",
+        "npm-asset/jquery-colorbox": "^1.6.4",
+        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/js-cookie": "^3.0.5",
+        "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
+        "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -146,7 +155,6 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-driver": "v2.2.2",
         "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
@@ -163,8 +171,6 @@
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
-        "php-task-runner/composer": "dev-toolkit-runner",
-        "php-task-runner/sparql": "dev-toolkit-runner",
         "phpro/grumphp-shim": "^2.6",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
@@ -187,21 +193,16 @@
             "php": "8.3"
         },
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
             "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
-            "openeuropa/composer-artifacts": true,
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": true
-        },
-        "audit": {
-            "abandoned": "report",
-            "ignore": {
-                "CVE-2024-45440": "Seems to be a disputed report @see https://www.drupal.org/i/3471501#comment-15756190"
-            }
+            "oomphinc/composer-installers-extender": true,
+            "openeuropa/composer-artifacts": true,
+            "php-http/discovery": true,
+            "phpro/grumphp-shim": true,
+            "phpstan/extension-installer": true
         }
     },
     "autoload": {
@@ -245,7 +246,17 @@
         ]
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
+            "web/libraries/slick": [
+                "npm-asset/slick-carousel"
+            ],
+            "web/libraries/colorbox": [
+                "npm-asset/jquery-colorbox"
+            ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
             ],
@@ -256,7 +267,9 @@
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -299,12 +312,11 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "behat/behat": {
+                "Do not disable xdebug if an active session is found @see https://github.com/Behat/Behat/pull/1581": "resources/patch/php/behat/behat/1581.diff"
+            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
-            },
-            "drupal/autologout": {
-                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010-29.patch",
-                "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
             "drupal/cas_mock_server": {
                 "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
@@ -336,7 +348,9 @@
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
-                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff"
+                "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
+                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
+                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -358,6 +372,10 @@
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
+            "drupal/entity_print": {
+                "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563-mr66-revf6d47588.diff",
+                "Missing schema for disable_log property. @see https://www.drupal.org/i/3014768": "resources/patch/php/drupal/entity_print/3014768.diff"
+            },
             "drupal/error_page": {
                 "Creation of dynamic property deprecated in PHP 8.2 @see https://www.drupal.org/i/3376919": "resources/patch/php/drupal/error_page/3376919.patch"
             },
@@ -373,13 +391,17 @@
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
             },
+            "drupal/field_permissions": {
+                "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
+            },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
                 "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff",
                 "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
                 "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
+                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff",
+                "Handle External URL Schemes Like ftp:// in File URL Fields Without Errors. @see https://www.drupal.org/i/3490692": "resources/patch/php/drupal/file_url/3490692.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
@@ -450,8 +472,7 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
             },
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
@@ -468,7 +489,8 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
-                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
+                "Incorrect use of 'render element' for webform_submission_data @see https://www.drupal.org/i/3492193": "resources/patch/php/drupal/webform/3492193.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
@@ -504,6 +526,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         },
         {
             "type": "package",

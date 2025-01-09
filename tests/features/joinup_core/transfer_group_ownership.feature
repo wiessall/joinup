@@ -13,8 +13,8 @@ Feature: As a group (collection or solution) owner or site moderator
       | light    | moderator               | Bjartur    | Jóhannsson    |
       | frozen   |                         | Edda       | Agnarsdóttir  |
     And collection content:
-      | title                       | state     |
-      | Intensive Language Learning | published |
+      | title                       |
+      | Intensive Language Learning |
     And the following collection user memberships:
       | collection                  | user   | roles       |
       | Intensive Language Learning | loner  |             |
@@ -22,8 +22,8 @@ Feature: As a group (collection or solution) owner or site moderator
       | Intensive Language Learning | shy    | facilitator |
       | Intensive Language Learning | frozen | owner       |
     And solution content:
-      | title                   | state     |
-      | Learn German in 1 Month | published |
+      | title                   |
+      | Learn German in 1 Month |
     And the following solution user memberships:
       | solution                | user   | roles       |
       | Learn German in 1 Month | loner  |             |
@@ -86,13 +86,13 @@ Feature: As a group (collection or solution) owner or site moderator
       | body      | <full name> has changed your role in <type> "<title>" to facilitator. |
 
     Examples:
-      | user  | option exists | type       | type capitalized | title                       | full name               | user name            |
-      | happy | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Saga Þórirsdóttir    |
-      | light | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Bjartur Jóhannsson   |
-      | cruel | not contain   | collection | Collection       | Intensive Language Learning | Finnur Robertsson       | Finnur Robertsson    |
-      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Saga Þórirsdóttir    |
-      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Bjartur Jóhannsson   |
-      | cruel | not contain   | solution   | Solution         | Learn German in 1 Month     | Finnur Robertsson       | Finnur Robertsson    |
+      | user  | option exists | type       | type capitalized | title                       | full name               | user name          |
+      | happy | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Saga Þórirsdóttir  |
+      | light | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Bjartur Jóhannsson |
+      | cruel | not contain   | collection | Collection       | Intensive Language Learning | Finnur Robertsson       | Finnur Robertsson  |
+      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Saga Þórirsdóttir  |
+      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Bjartur Jóhannsson |
+      | cruel | not contain   | solution   | Solution         | Learn German in 1 Month     | Finnur Robertsson       | Finnur Robertsson  |
 
   Scenario Outline: Group facilitators do not have access to transfer ownership.
     Given I am logged in as "shy"
@@ -106,11 +106,11 @@ Feature: As a group (collection or solution) owner or site moderator
 
   Scenario: Collection owner cannot transfer ownership of a child solution, neither viceversa.
     Given collection content:
-      | title   | state     |
-      | Babylon | published |
+      | title   |
+      | Babylon |
     And solution content:
-      | title             | collection | state     |
-      | Rivers Of Babylon | Babylon    | published |
+      | title             | collection |
+      | Rivers Of Babylon | Babylon    |
     And collection user membership:
       | collection | user  | roles       |
       | Babylon    | shy   | owner       |

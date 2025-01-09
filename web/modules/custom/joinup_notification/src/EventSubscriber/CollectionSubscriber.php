@@ -65,16 +65,14 @@ class CollectionSubscriber extends NotificationSubscriberBase {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[NotificationEvents::RDF_ENTITY_CRUD] = [
-      // Notification id 1 - Propose new collection.
-      ['onCreate'],
-      // All notification Ids.
-      ['onUpdate'],
-      // Notification id 9, 12, 13, 14.
-      ['onDelete'],
+    return [
+      // Notification ID 1 - Propose new collection.
+      NotificationEvents::NODE_CREATE => ['onCreate'],
+      // All notification IDs.
+      NotificationEvents::NODE_UPDATE => ['onUpdate'],
+      // Notification ID 9, 12, 13, 14.
+      NotificationEvents::NODE_DELETE => ['onDelete'],
     ];
-
-    return $events;
   }
 
   /**
@@ -88,7 +86,7 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : '__new__';
+    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
     $to_state = $this->entity->getWorkflowState();
     $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;

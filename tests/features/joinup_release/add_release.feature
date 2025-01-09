@@ -6,8 +6,8 @@ Feature: "Add release" visibility options.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
     Given solution content:
-      | title                 | description         | documentation | state     |
-      | Release solution test | My awesome solution | text.pdf      | published |
+      | title                 | description         | documentation |
+      | Release solution test | My awesome solution | text.pdf      |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -24,15 +24,13 @@ Feature: "Add release" visibility options.
     Then I should not see the link "Add release"
 
   Scenario: Add release as a solution facilitator.
-    Given owner content:
-      | name                 | owner type |
-      | Organisation example | Company    |
+
     Given solution content:
-      | title          | description        | documentation | owner                | state     |
-      | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
+      | title          | description        | documentation |
+      | Release Test 1 | test description 1 | text.pdf      |
     And release content:
-      | title           | is version of  | release number | status    | state     | creation date       | published at        |
-      | Chasing shadows | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
+      | title           | is version of  | release number | status    | creation date       | published at        |
+      | Chasing shadows | Release Test 1 | 1.0            | Completed | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
     When I go to the homepage of the "Release Test 1" solution
@@ -95,28 +93,23 @@ Feature: "Add release" visibility options.
     And I delete the "Chasing shadows" release
     And I delete the "Chasing flares" release
 
-  # TODO: This test works because of the redirection but it should be adapted to
-  # use the correct URL in ISAICP-8376.
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
-      | uri                       | title               | state     |
-      | http://example1regression | The Stripped Stream | published |
+      | uri                       | title               |
+      | http://example1regression | The Stripped Stream |
 
     When I am not logged in
-    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
+    And I go to "/collection/stripped-stream/release/add"
     Then I should see the heading "Page not found"
 
     When I am logged in as a moderator
-    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
+    And I go to "/collection/stripped-stream/release/add"
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.
-    Given owner content:
-      | name                     | owner type |
-      | Organisation example two | Company    |
     Given solution content:
-      | title          | description        | documentation | owner                    | state     |
-      | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |
+      | title          | description        | documentation |
+      | Release Test 2 | test description 2 | text.pdf      |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
     And I go to the homepage of the "Release Test 2" solution
     And I click "Add release" in the plus button menu

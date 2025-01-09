@@ -22,5 +22,6 @@ dependencies:
   - joinup:oe_newsroom_newsletter
   - joinup:owner
   - joinup:search_api_field
+  - js_cookie:js_cookie
   - smart_trim:smart_trim
   - state_machine:state_machine

@@ -6,9 +6,9 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Access the navigation menu through the contextual link
     Given <group> content:
-      | title            | logo     | state     |
-      | Rainbow tables   | logo.png | published |
-      | Cripple Mr Onion | logo.png | published |
+      | title            | logo     |
+      | Rainbow tables   | logo.png |
+      | Cripple Mr Onion | logo.png |
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items
@@ -58,9 +58,9 @@ Feature: Navigation menu for custom pages
     # Create a few custom pages in the second collection so we can check if the
     # right menu shows up in each collection.
     Given custom_page content:
-      | title           | body                                                                                                                                  | <group>          | state     | topic |
-      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion | published | HR    |
-      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion | published | HR    |
+      | title           | body                                                                                                                                  | <group>          | topic |
+      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion | HR    |
+      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion | HR    |
 
     # Test as a normal member of the group.
     Given I am logged in as a member of the "Rainbow tables" <group>
@@ -118,25 +118,25 @@ Feature: Navigation menu for custom pages
   @javascript
   Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
     Given collection content:
-      | title         | state     |
-      | Plaster molds | published |
+      | title         |
+      | Plaster molds |
     And custom_page content:
-      | title              | body                   | collection    | state     | topic |
-      | Molds for candles  | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for walls    | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for crafts   | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for pottery  | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for ceramics | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for soaps    | This is a sample body. | Plaster molds | published | HR    |
+      | title              | body                   | collection    | topic |
+      | Molds for candles  | This is a sample body. | Plaster molds | HR    |
+      | Molds for walls    | This is a sample body. | Plaster molds | HR    |
+      | Molds for crafts   | This is a sample body. | Plaster molds | HR    |
+      | Molds for pottery  | This is a sample body. | Plaster molds | HR    |
+      | Molds for ceramics | This is a sample body. | Plaster molds | HR    |
+      | Molds for soaps    | This is a sample body. | Plaster molds | HR    |
     # Menu items are displayed normally
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
     But I should not see the text "See more" in the "Navigation menu"
     # A menu with items that do not fit the available space are in a dropdown
     Given custom_page content:
-      | title           | body                   | collection    | state     | topic |
-      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
-      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
+      | title           | body                   | collection    | topic |
+      | Vintage molds   | This is a sample body. | Plaster molds | HR    |
+      | Plaster casting | This is a sample body. | Plaster molds | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
@@ -151,11 +151,11 @@ Feature: Navigation menu for custom pages
     # As a group facilitator
     # I should see a button in the navigation menu that displays options when clicked
     Given <group> content:
-      | title        | logo     | state     |
-      | Prism Gazers | logo.png | published |
+      | title        | logo     |
+      | Prism Gazers | logo.png |
     And custom_page content:
-      | title           | body                   | <group>      | state     | topic |
-      | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
+      | title           | body                   | <group>      | topic |
+      | Mists of dreams | This is a sample body. | Prism Gazers | HR    |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
     And I go to the homepage of the "Prism Gazers" <group>
     Then I should see the contextual links button in the "Navigation menu"
@@ -178,11 +178,11 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Synchronize titles of custom pages and menu links
     Given <group> content:
-      | title                               | state     |
-      | Ravenous wood-munching alphabeavers | published |
+      | title                               |
+      | Ravenous wood-munching alphabeavers |
     And custom_page content:
-      | title       | abstract               | body                                                                | <group>                             | topic | state     |
-      | Tree eaters | entire region of trees | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
+      | title       | abstract               | body                                                                | <group>                             | topic |
+      | Tree eaters | entire region of trees | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"
@@ -203,19 +203,19 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
     Given <group> content:
-      | title                   | state     |
-      | Table of contents group | published |
+      | title                   |
+      | Table of contents group |
     And custom_page content:
-      | title         | <group>                 | state     | topic |
-      | Page 1        | Table of contents group | published | HR    |
-      | Page 2        | Table of contents group | published | HR    |
-      | Page 3        | Table of contents group | published | HR    |
-      | Subpage 1-1   | Table of contents group | published | HR    |
-      | Subpage 1-1-1 | Table of contents group | published | HR    |
-      | Subpage 1-2   | Table of contents group | published | HR    |
-      | Subpage 1-2-1 | Table of contents group | published | HR    |
-      | Subpage 1-2-2 | Table of contents group | published | HR    |
-      | Subpage 2-1   | Table of contents group | published | HR    |
+      | title         | <group>                 | topic |
+      | Page 1        | Table of contents group | HR    |
+      | Page 2        | Table of contents group | HR    |
+      | Page 3        | Table of contents group | HR    |
+      | Subpage 1-1   | Table of contents group | HR    |
+      | Subpage 1-1-1 | Table of contents group | HR    |
+      | Subpage 1-2   | Table of contents group | HR    |
+      | Subpage 1-2-1 | Table of contents group | HR    |
+      | Subpage 1-2-2 | Table of contents group | HR    |
+      | Subpage 2-1   | Table of contents group | HR    |
     And the following custom pages navigation menu structure for the "Table of contents group" <group>:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
@@ -301,15 +301,15 @@ Feature: Navigation menu for custom pages
   @javascript
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
     Given <group> content:
-      | title               | state     |
-      | Ergonomic backpacks | published |
+      | title               |
+      | Ergonomic backpacks |
     And custom_page content:
-      | title              | <group>             | state     | topic |
-      | Types of backpacks | Ergonomic backpacks | published | HR    |
-      | Frameless          | Ergonomic backpacks | published | HR    |
-      | External frame     | Ergonomic backpacks | published | HR    |
-      | Internal frame     | Ergonomic backpacks | published | HR    |
-      | Bodypack           | Ergonomic backpacks | published | HR    |
+      | title              | <group>             | topic |
+      | Types of backpacks | Ergonomic backpacks | HR    |
+      | Frameless          | Ergonomic backpacks | HR    |
+      | External frame     | Ergonomic backpacks | HR    |
+      | Internal frame     | Ergonomic backpacks | HR    |
+      | Bodypack           | Ergonomic backpacks | HR    |
     And the following custom pages navigation menu structure for the "Ergonomic backpacks" <group>:
       | title              | parent             | weight |
       | Types of backpacks |                    | 3      |
@@ -425,8 +425,8 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
     Given <group> content:
-      | title                     | state     |
-      | Table of contents outline | published |
+      | title                     |
+      | Table of contents outline |
     And custom_page content:
       | title      | <group>                   | state       | topic |
       | TOCO 1     | Table of contents outline | published   | HR    |
@@ -512,12 +512,12 @@ Feature: Navigation menu for custom pages
   @javascript
   Scenario Outline: Assert cache invalidation of the TOC outline.
     Given <group> content:
-      | title                            | state     |
-      | Table of contents outline cached | published |
+      | title                            |
+      | Table of contents outline cached |
     And custom_page content:
-      | title           | <group>                          | state     | topic |
-      | TOCO cached 1   | Table of contents outline cached | published | HR    |
-      | TOCO cached 1-1 | Table of contents outline cached | published | HR    |
+      | title           | <group>                          | topic |
+      | TOCO cached 1   | Table of contents outline cached | HR    |
+      | TOCO cached 1-1 | Table of contents outline cached | HR    |
     And the following custom pages navigation menu structure for the "Table of contents outline cached" <group>:
       | title           | parent        | weight |
       | TOCO cached 1   |               | 1      |

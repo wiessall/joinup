@@ -127,7 +127,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $nodes): void {
+  public function executeMultiple(array $nodes): array {
     $message = array_fill_keys(['error', 'warning', 'status'], []);
     $groupId = $this->getConfiguration()['group'];
     if (!$group = $this->entityTypeManager->getStorage('node')->load($groupId)) {
@@ -253,6 +253,13 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         $this->messenger()->addMessage($this->renderer->render($list), $type);
       }
     }
+
+    return [
+      'message' => $this->t('Action processing results: @operation (@count).', [
+        '@operation' => $this->getPluginDefinition()['label'],
+        '@count' => count($initialNids),
+      ]),
+    ];
   }
 
   /**

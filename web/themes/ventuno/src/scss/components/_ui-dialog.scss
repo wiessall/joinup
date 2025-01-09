@@ -5,8 +5,16 @@
 .ui-widget-overlay {
   z-index: $zindex-modal-backdrop;
 }
-.ui-widget-content a.btn-brand {
-  color: $white;
+.ui-widget-content {
+  a {
+    text-decoration: underline;
+    color: var(--bs-link-color);
+    text-decoration-color: inherit !important;
+    &.btn-brand {
+      text-decoration: none;
+      color: $white;
+    }
+  }
 }
 .ui-dialog {
   z-index: $zindex-modal !important;

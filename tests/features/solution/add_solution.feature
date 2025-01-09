@@ -6,8 +6,8 @@ Feature: "Add solution" visibility options.
 
   Scenario: Required fields should be filled in
     Given collection content:
-      | title            | state     |
-      | Language parsers | published |
+      | title            |
+      | Language parsers |
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -29,8 +29,8 @@ Feature: "Add solution" visibility options.
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
-      | title                    | logo     | state     |
-      | Collection solution test | logo.png | published |
+      | title                    |
+      | Collection solution test |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -54,8 +54,8 @@ Feature: "Add solution" visibility options.
   @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given collection content:
-      | title             | logo     | state     |
-      | Belgian barista's | logo.png | published |
+      | title             | logo     |
+      | Belgian barista's | logo.png |
     And owner content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
@@ -106,7 +106,7 @@ Feature: "Add solution" visibility options.
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
-      | If you think this action is not clear or not due, please contact Portal Support at                |
+      | If you think this action is not clear or not due, please contact Portal Support at                                     |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
     And Log entry with the message "A new solution entity titled Espresso is the solution has been created by Wendell Silva in Belgian barista's." should exist.
 
@@ -131,7 +131,7 @@ Feature: "Add solution" visibility options.
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
-      | subject   | Interoperable Europe Portal: Your solution has been accepted                                                                     |
+      | subject   | Interoperable Europe Portal: Your solution has been accepted                                                |
       | body      | Your proposed interoperability solution: "Espresso is the solution" has been validated as per your request. |
 
     When I am logged in as a facilitator of the "Belgian barista's" collection
@@ -178,8 +178,8 @@ Feature: "Add solution" visibility options.
     # when an invalid state button was pressed.
     # @see issue ISAICP-3209
     Given collection content:
-      | title            | state     |
-      | Language parsers | published |
+      | title            |
+      | Language parsers |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -213,12 +213,12 @@ Feature: "Add solution" visibility options.
 
   Scenario: Create a solution with a name that already exists
     Given collection content:
-      | title              | state     |
-      | Ocean studies      | published |
-      | Glacier monitoring | published |
+      | title              |
+      | Ocean studies      |
+      | Glacier monitoring |
     And solution content:
-      | title                  | abstract              | description                                       | collection    | state     |
-      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
+      | title                  | abstract              | description                                       | collection    |
+      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies |
     And owner content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
@@ -271,19 +271,16 @@ Feature: "Add solution" visibility options.
     # let's just get rid of both.
     Then I delete the "Climate change tracker" solution
     And I delete the "Climate change tracker" solution
-    And I delete the "Angela Crespi" contact information
+    And I delete the "Angela Crespi" "contact information"
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
-    Given owner content:
-      | name                 | owner type |
-      | Organisation example | Company    |
-    And contact_information content:
-      | name          | email                     |
-      | Invisible Man | invisible.man@example.com |
-    And solution content:
-      | title             | abstract              | description            | owner                | state     | solution type          | topic                            | contact information |
-      | Cleaning solution | Cleans anything dirty | Use on metal surfaces. | Organisation example | published | Non-binding Instrument | Employment and Support Allowance | Invisible Man       |
+    Given collection content:
+      | title         |
+      | Ocean studies |
+    Given solution content:
+      | title             | collection    |
+      | Cleaning solution | Ocean studies |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

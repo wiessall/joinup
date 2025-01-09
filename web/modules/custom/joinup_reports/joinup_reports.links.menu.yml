@@ -1,0 +1,28 @@
+joinup_reports.admin_reporting:
+  route_name: joinup_reports.admin_reporting
+  parent: system.admin
+  description: 'Access Interoperable Europe Portal reports.'
+  title: 'Reporting'
+  weight: 75
+
+joinup_reports.group_administrators_report:
+  title: 'Group administrators and facilitators'
+  route_name: joinup_reports.group_administrators_report
+  route_parameters:
+    entity_type_id: 'node'
+    bundle_id: 'collection'
+  description: 'Export group administrators and facilitators in a csv format.'
+  parent: joinup_reports.admin_reporting
+  weight: -1
+
+joinup_reports.solutions_by_licences_report:
+  title: 'Solutions by licences'
+  route_name: joinup_reports.solutions_by_licences_report
+  parent: joinup_reports.admin_reporting
+  weight: 2
+
+joinup_reports.statistics_per_group:
+  title: 'Statistics per group'
+  route_name: joinup_reports.statistics_per_group
+  parent: joinup_reports.admin_reporting
+  weight: 2

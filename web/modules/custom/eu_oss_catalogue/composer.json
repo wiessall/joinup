@@ -30,7 +30,7 @@
         "drupal/multivalue_form_element": "^1.0",
         "knplabs/github-api": "^3.0",
         "m4tthumphrey/php-gitlab-api": "^11.11",
-        "spdx/license-list-data": "1.0.0"
+        "composer/spdx-licenses": "^1.5"
     },
     "require-dev": {
         "drupal/http_request_mock": "^1.1",
@@ -56,18 +56,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "1.0.0",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

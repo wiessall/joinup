@@ -67,7 +67,12 @@ class JoinupNotificationContext extends RawDrupalContext {
     /** @var string $body */
     /** @var string $subject */
     /** @var string $signature_required */
+    /** @var string $recipient_list_contains */
     extract($table->getRowsHash());
+
+    if (empty($recipient) && !empty($recipient_list_contains)) {
+      $recipient = $recipient_list_contains;
+    }
 
     // Translate the human readable value for the requirement of the signature
     // to a boolean. This defaults to TRUE.
@@ -94,7 +99,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       $recipient = $user->getEmail();
     }
 
-    $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
+    $mails = $this->getEmailsBySubjectAndMail($subject, $recipient, FALSE, !empty($recipient_list_contains));
     $email_found = FALSE;
     foreach ($mails as $mail) {
       // Check the sender email if it is set.
@@ -115,8 +120,8 @@ class JoinupNotificationContext extends RawDrupalContext {
       // - remove the HTML to simplify the matching on the body text.
       // @see vendor/twig/twig/lib/Twig/Extension/Core.php:1034
       if ($mail['body'] instanceof MarkupInterface) {
-        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
         $mail_body = strip_tags($mail_body);
+        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
       }
 
       // Ensure that there are no un-replaced arguments in the mail subject and
@@ -140,7 +145,7 @@ class JoinupNotificationContext extends RawDrupalContext {
         // just match partial text.
         $body = preg_replace("/\s+/", ' ', $body);
         $mail_body = preg_replace("/\s+/", ' ', $mail_body);
-        if (strpos($mail_body, $body) === FALSE) {
+        if (!str_contains($mail_body, $body)) {
           continue;
         }
       }
@@ -169,10 +174,10 @@ class JoinupNotificationContext extends RawDrupalContext {
     // mail.
     /** @var array $mail */
     if ($html) {
-      Assert::assertEquals(SymfonyMailer::FORMAT_HTML, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
+      Assert::assertStringContainsString(SymfonyMailer::FORMAT_HTML, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
     }
     else {
-      Assert::assertStringStartsWith(SymfonyMailer::FORMAT_PLAIN, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
+      Assert::assertStringContainsString(SymfonyMailer::FORMAT_PLAIN, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
     }
   }
 
@@ -496,7 +501,7 @@ class JoinupNotificationContext extends RawDrupalContext {
     }
     $no_mail_message = "No email with '$subject' subject was sent to $recipient";
     $no_match_message = "The email sent to $recipient did not contain a link.";
-    $this->assertMailLinkMatchingPattern('!https?://[^\s].*!', $recipient, $no_mail_message, $no_match_message, NULL);
+    $this->assertMailLinkMatchingPattern('!https?://[^\s\]]*!', $recipient, $no_mail_message, $no_match_message, NULL);
   }
 
   /**

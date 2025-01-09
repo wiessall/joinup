@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\NotificationEvents;
@@ -66,9 +65,8 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      NotificationEvents::COMMUNITY_CONTENT_CREATE => 'notifyOnCommunityContentCreation',
-      NotificationEvents::COMMUNITY_CONTENT_UPDATE => 'notifyOnCommunityContentPublication',
-      NotificationEvents::RDF_ENTITY_CRUD => 'notifyOnRdfEntityCrudOperation',
+      NotificationEvents::NODE_CREATE => ['notifyOnCommunityContentCreation', 'notifyOnGroupEntityCrudOperation'],
+      NotificationEvents::NODE_UPDATE => ['notifyOnCommunityContentPublication', 'notifyOnGroupEntityCrudOperation'],
     ];
   }
 
@@ -124,13 +122,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
    *   The event object.
    */
-  public function notifyOnRdfEntityCrudOperation(NotificationEvent $event): void {
-    // Only act on entities that are being created or updated. Subscribers are
-    // not notified about entities that are being removed.
-    if (!in_array($event->getOperation(), ['create', 'update'])) {
-      return;
-    }
-
+  public function notifyOnGroupEntityCrudOperation(NotificationEvent $event): void {
     // Ignore content that does not belong to a group, and content that is not
     // published.
     $entity = $event->getEntity();
@@ -160,10 +152,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
     }
 
     // Avoid including orphaned group content in the digest.
-    try {
-      $group = $entity->getGroup();
-    }
-    catch (MissingGroupException $e) {
+    if (!$entity->hasGroup()) {
       return;
     }
 

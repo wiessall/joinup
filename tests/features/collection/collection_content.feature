@@ -6,23 +6,23 @@ Feature: Collection content
 
   Background:
     Given collection content:
-      | title                     | state     |
-      | Turin Egyptian Collection | published |
+      | title                     |
+      | Turin Egyptian Collection |
     And solution content:
-      | title                       | collection                | state     | creation date    | modification date | topic |
-      | Tomb Of Unknown Restoration | Turin Egyptian Collection | published | 2017-11-11T11:11 | 2017-11-30T11:11  | HR    |
+      | title                       | collection                | creation date    | modification date | topic |
+      | Tomb Of Unknown Restoration | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11  | HR    |
     And discussion content:
-      | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
-      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+      | title                                 | body                                                                    | collection                | topic                                                 | created          | changed                   |
+      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
-      | title           | field_paragraphs_body                            | state     | collection                | creation date    | changed          | topic    |
-      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+      | title           | field_paragraphs_body                            | collection                | creation date    | changed          | topic    |
+      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
-      | title                                     | state     | collection                | start date          | end date            | topic             |
-      | Opening of the Hellenistic Period Section | published | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
+      | title                                     | collection                | start date          | end date            | topic             |
+      | Opening of the Hellenistic Period Section | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And news content:
-      | title                          | body                                                           | state     | collection                | changed    | topic             |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | published | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+      | title                          | body                                                           | collection                | changed    | topic             |
+      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner content:
@@ -74,7 +74,7 @@ Feature: Collection content
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
     Then I delete the "Solution from draft to published" solution
-    And I delete the "Costas Papazoglou" contact information
+    And I delete the "Costas Papazoglou" "contact information"
 
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile
@@ -98,20 +98,20 @@ Feature: Collection content
     And I should see the link "1 Solution"
 
     Given solution content:
-      | title                | collection                | state     |
-      | Protecting Artifacts | Turin Egyptian Collection | published |
+      | title                | collection                |
+      | Protecting Artifacts | Turin Egyptian Collection |
     And discussion content:
-      | title                              | state     | collection                |
-      | Is the entrance free for children? | published | Turin Egyptian Collection |
+      | title                              | collection                |
+      | Is the entrance free for children? | Turin Egyptian Collection |
     And document content:
-      | title                   | state     | collection                |
-      | Fire Safety Regulations | published | Turin Egyptian Collection |
+      | title                   | collection                |
+      | Fire Safety Regulations | Turin Egyptian Collection |
     And event content:
-      | title                        | state     | collection                |
-      | Cleopatra Jewelry Exhibition | published | Turin Egyptian Collection |
+      | title                        | collection                |
+      | Cleopatra Jewelry Exhibition | Turin Egyptian Collection |
     And news content:
-      | title                                  | state     | collection                |
-      | Museum Temporary Closed Next Wednesday | published | Turin Egyptian Collection |
+      | title                                  | collection                |
+      | Museum Temporary Closed Next Wednesday | Turin Egyptian Collection |
 
     Given I reload the page
     Then the "Discussions" content tab is not displayed

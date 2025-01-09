@@ -160,15 +160,22 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $labels
    *   A comma-separated list of facet item labels.
+   * @param string $facet
+   *   (optional) If passed limit to this facet.
    *
    * @throws \Exception
    *   Thrown when a wanted facet item is not shown in the page.
    *
-   * @When I should see the following facet items :labels in this order
+   * @Then I should see the following facet items :labels in this order
+   * @Then I should see the following :facet facet items :labels in this order
    */
-  public function assertContentTypeFacetItemsPresent(string $labels): void {
+  public function assertContentTypeFacetItemsPresent(string $labels, ?string $facet = NULL): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";
+    $xpath = "a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";
+    if ($facet) {
+      $xpath = "div[contains(concat(' ', normalize-space(@class), ' '), ' facet-block__content ') and .//h3[text() = '$facet']]//$xpath";
+    }
+    $xpath = "//$xpath";
 
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
@@ -258,7 +265,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the checkbox is not found.
    *
-   * @Given I check the :option checkbox from the :facet_type facet
+   * @Given I (un)check the :option checkbox from the :facet_type facet
    */
   public function checkCheckboxFacet(string $option, string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
@@ -839,7 +846,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function setGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
     $facet = strtolower($facet);
-    $facet = self::getFacetIdFromAlias($facet);
+    $facet = $this->getFacetIdFromAlias($facet);
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $region = strtolower($region);
     $data = $entity->get('listing_content')->getValue();

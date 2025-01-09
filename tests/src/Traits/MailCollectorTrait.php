@@ -28,8 +28,8 @@ trait MailCollectorTrait {
     // - undo the encoding done by Twig to quotes;
     // - remove the HTML to simplify the matching on the body text.
     // @see vendor/twig/twig/lib/Twig/Extension/Core.php:1034
-    $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
-    return strip_tags($mail_body);
+    $mail_body = strip_tags($mail_body);
+    return htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
   }
 
   /**
@@ -85,6 +85,8 @@ trait MailCollectorTrait {
    * @param bool $strict
    *   When set to TRUE will throw an exception if no mails are found with the
    *   given subject and mail. Defaults to TRUE.
+   * @param bool $search_recipient_in_list
+   *   If TRUE, the email recipient contains recipients other than $recipient.
    *
    * @return array
    *   An array of emails found.
@@ -92,8 +94,8 @@ trait MailCollectorTrait {
    * @throws \PHPUnit\Framework\ExpectationFailedException
    *   When no emails are found with the given subject and/or recipient.
    */
-  protected function getEmailsBySubjectAndMail(string $subject, string $recipient, bool $strict = TRUE): array {
-    $emails_found = $this->getMails(['to' => $recipient, 'subject' => $subject]);
+  protected function getEmailsBySubjectAndMail(string $subject, string $recipient, bool $strict = TRUE, bool $search_recipient_in_list = FALSE): array {
+    $emails_found = $this->getMails(['to' => $recipient, 'subject' => $subject], $search_recipient_in_list);
     if (empty($emails_found) && $strict) {
       throw new ExpectationFailedException("No emails found sent to {$recipient} with subject '{$subject}'.");
     }
@@ -111,20 +113,26 @@ trait MailCollectorTrait {
    * @param array $filter
    *   An array containing key/value pairs used to filter the emails that are
    *   returned.
+   * @param bool $search_recipient_in_list
+   *   If TRUE, the email recipient contains recipients other than $recipient.
    *
    * @return array[]
    *   An array containing email messages captured during the current test.
    *
    * @see \Drupal\Core\Test\AssertMailTrait::getMails()
    */
-  protected function getMails(array $filter = []): array {
+  protected function getMails(array $filter = [], bool $search_recipient_in_list = FALSE): array {
     \Drupal::state()->resetCache();
     $captured_emails = \Drupal::state()->get('system.test_mail_collector', []);
     $filtered_emails = [];
 
     foreach ($captured_emails as $message) {
       foreach ($filter as $key => $value) {
-        if (!isset($message[$key]) || $message[$key] != $value) {
+        if (!$search_recipient_in_list && (!isset($message[$key]) || $message[$key] != $value)) {
+          continue 2;
+        }
+        // This allows to check is the recipient is in a list.
+        if ($key === 'to' && $search_recipient_in_list && !str_contains($message[$key], $value)) {
           continue 2;
         }
       }
@@ -167,7 +175,7 @@ trait MailCollectorTrait {
       }
 
       // Filter out messages that do not match the given e-mail address.
-      if ($mail_sent['to'] !== $mail) {
+      if (!str_contains($mail_sent['to'], $mail)) {
         continue;
       }
 

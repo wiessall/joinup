@@ -115,7 +115,7 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $default_values = [
-      'state' => 'draft',
+      'state' => 'published',
       'abstract' => 'This is a test abstract.',
     ];
 
@@ -177,20 +177,6 @@ class CollectionContext extends RawDrupalContext {
     if ($is_featured) {
       $node->feature();
     }
-  }
-
-  /**
-   * Deletes a collection.
-   *
-   * @param string $collection
-   *   The title of the collection.
-   *
-   * @When I delete the :collection collection
-   */
-  public function deleteCollection(string $collection): void {
-    $collection = $this->getEntityByLabel('node', $collection);
-    $collection->skip_notification = TRUE;
-    $collection->delete();
   }
 
   /**

@@ -13,18 +13,30 @@ Feature:
       | url                                          | role          | code |
       | /admin/reporting                             | authenticated | 403  |
       | /admin/reporting                             | moderator     | 200  |
+      | /admin/reporting/actions-log                 | authenticated | 403  |
+      | /admin/reporting/actions-log                 | moderator     | 200  |
+      | /admin/reporting/distribution-downloads      | authenticated | 403  |
+      | /admin/reporting/distribution-downloads      | moderator     | 200  |
+      | /admin/reporting/distribution-downloads/csv  | authenticated | 403  |
+      | /admin/reporting/distribution-downloads/csv  | moderator     | 200  |
       | /admin/reporting/export-user-list            | authenticated | 403  |
       | /admin/reporting/export-user-list            | moderator     | 200  |
       | /admin/reporting/group-administrators/export | authenticated | 403  |
       | /admin/reporting/group-administrators/export | moderator     | 200  |
       | /admin/reporting/legal-notice-report         | authenticated | 403  |
       | /admin/reporting/legal-notice-report         | moderator     | 200  |
+      | /admin/reporting/messages-overview           | authenticated | 403  |
+      | /admin/reporting/messages-overview           | moderator     | 200  |
       | /admin/reporting/solutions-by-type           | authenticated | 403  |
       | /admin/reporting/solutions-by-type           | moderator     | 200  |
       | /admin/reporting/solutions-by-licences       | authenticated | 403  |
       | /admin/reporting/solutions-by-licences       | moderator     | 200  |
       | /admin/reporting/statistics-per-group        | authenticated | 403  |
       | /admin/reporting/statistics-per-group        | moderator     | 200  |
+      | /admin/reporting/subscribers-report          | authenticated | 403  |
+      | /admin/reporting/subscribers-report          | moderator     | 200  |
+      | /admin/reporting/subscribers-report/download | authenticated | 403  |
+      | /admin/reporting/subscribers-report/download | moderator     | 200  |
 
   Scenario: Links should be visible on the reporting page for a moderator.
     Given I am logged in as a user with the moderator role
@@ -32,22 +44,26 @@ Feature:
     Then I should see the following links:
       | Group administrators and facilitators |
       | Export user list                      |
+      | Site-wide business log                |
       | Solutions by solution type            |
       | Solutions by licences                 |
       | Statistics per group                  |
+      | Subscribers report                    |
       | Legal notice report                   |
+      | Messages overview                     |
+      | Distribution downloads                |
 
   # This scenario is a light test to avoid regressions.
   Scenario: Moderators can access the list of published solutions and filter them by dates and type.
     Given collection content:
-      | title               | state     |
-      | Monday's Artificial | published |
-      | Restless Burst      | published |
+      | title               |
+      | Monday's Artificial |
+      | Restless Burst      |
     Given solution content:
-      | title           | collection          | state     | creation date    | modification date | solution type                                   |
-      | Worthy Puppet   | Monday's Artificial | published | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Logging Service |
-      | Long Artificial | Restless Burst      | published | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers              |
-      | Beta Frozen     | Restless Burst      | published | 2017-10-15T14:54 | 2017-11-24T12:43  | Data Owner                                      |
+      | title           | collection          | creation date    | modification date | solution type                                   |
+      | Worthy Puppet   | Monday's Artificial | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Logging Service |
+      | Long Artificial | Restless Burst      | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers              |
+      | Beta Frozen     | Restless Burst      | 2017-10-15T14:54 | 2017-11-24T12:43  | Data Owner                                      |
 
     Given I am logged in as a moderator
     And I click "Reporting" in the "Administration toolbar" region

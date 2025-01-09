@@ -5,9 +5,9 @@ Feature:
 
   Scenario: Use the content management UI
     Given collection content:
-      | title        | state     |
-      | Vintage Art  | published |
-      | Decadent Art | published |
+      | title        |
+      | Vintage Art  |
+      | Decadent Art |
     And user:
       | Username | Vasundhara Commentator |
     And document content:
@@ -15,21 +15,21 @@ Feature:
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     | created    | published at     | changed    |
-      | The Ultimate Debate | Vintage Art | published | 2016-11-19 | 2016-11-19       | 2016-11-19 |
+      | title               | collection  | created    | published at | changed    |
+      | The Ultimate Debate | Vintage Art | 2016-11-19 | 2016-11-19   | 2016-11-19 |
     And comments:
       | message             | author                 | parent              | created          | changed    |
       | Conducting a Debate | Vasundhara Commentator | The Ultimate Debate | 2017-06-12 19:00 | 1497294000 |
     And event content:
-      | title                    | collection  | state     |
-      | Version 2.0 Launch Party | Vintage Art | published |
+      | title                    | collection  |
+      | Version 2.0 Launch Party | Vintage Art |
     And news content:
-      | title                              | collection  | state     |
-      | Exports Leap Despite Currency Gain | Vintage Art | published |
+      | title                              | collection  |
+      | Exports Leap Despite Currency Gain | Vintage Art |
     And custom_page content:
-      | title                | collection  | state     | changed          |
-      | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
-      | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
+      | title                | collection  | changed          |
+      | HOWTOs               | Vintage Art | 2016-11-19 20:00 |
+      | Looking for Support? | Vintage Art | 2015-11-19 20:00 |
     And the following custom page navigation menu structure for the "Vintage Art" collection:
       | title                | parent |
       | Looking for Support? | HOWTOs |
@@ -218,14 +218,14 @@ Feature:
 
   Scenario: Move a custom page to a solution
     Given collection content:
-      | title       | state     |
-      | Vintage Art | published |
+      | title       |
+      | Vintage Art |
     Given solution content:
-      | title                | state     |
-      | Vintage Solution Art | published |
+      | title                |
+      | Vintage Solution Art |
     And custom_page content:
-      | title                       | collection  | state     | changed          |
-      | Will be moved to a solution | Vintage Art | published | 2015-11-19 20:00 |
+      | title                       | collection  | changed          |
+      | Will be moved to a solution | Vintage Art | 2015-11-19 20:00 |
 
     Given I am logged in as a moderator
     And I go to the manage content page of "Vintage Art"
@@ -242,12 +242,12 @@ Feature:
   @javascript
   Scenario Outline: Able to select all items on the content management UI
     Given collection content:
-      | title       | state     |
-      | Vintage Art | published |
+      | title       |
+      | Vintage Art |
     And event content:
-      | title                   | collection  | state     |
-      | The Panama Papers Party | Vintage Art | published |
-      | The Area 51 Party       | Vintage Art | published |
+      | title                   | collection  |
+      | The Panama Papers Party | Vintage Art |
+      | The Area 51 Party       | Vintage Art |
 
     When I am <role>
     And I go to the manage content page of "Vintage Art"
@@ -266,22 +266,22 @@ Feature:
 
   Scenario: Releases can only be transferred to solutions.
     Given collection content:
-      | title        | state     |
-      | Collection 1 | published |
-      | Collection 2 | published |
+      | title        |
+      | Collection 1 |
+      | Collection 2 |
     Given solution content:
-      | title      | state     | collection   |
-      | Solution 1 | published | Collection 1 |
-      | Solution 2 | published | Collection 2 |
+      | title      | collection   |
+      | Solution 1 | Collection 1 |
+      | Solution 2 | Collection 2 |
     And event content:
-      | title   | solution   | state     |
-      | Event 1 | Solution 1 | published |
+      | title   | solution   |
+      | Event 1 | Solution 1 |
     And release content:
-      | title     | release number | release notes | is version of | state     |
-      | Release 1 | 1.0            | Release notes | Solution 1    | published |
+      | title     | release number | release notes | is version of |
+      | Release 1 | 1.0            | Release notes | Solution 1    |
     And distribution content:
-      | title          | description | release   | access url         | state     |
-      | Distribution 1 | Description | Release 1 | http://example.com | published |
+      | title          | description | release   | access url         |
+      | Distribution 1 | Description | Release 1 | http://example.com |
 
     When I am logged in as a moderator
     And I go to the manage content page of "Solution 1"

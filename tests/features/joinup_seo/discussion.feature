@@ -6,14 +6,14 @@ Feature: SEO for discussion forum posts.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given collection content:
-      | title                            | state     |
-      | Interoperable Europe Portal SEO discussion collection | published |
+      | title                                                 |
+      | Interoperable Europe Portal SEO discussion collection |
     And users:
-      | Username          | E-mail                 | First name | Family name |
+      | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kindle     | eReader     |
     And "discussion" content:
-      | title                           | published at              | changed                   | content                                                      | author            | attachments         | keywords                       | state     | collection                       |
-      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | published | Interoperable Europe Portal SEO discussion collection |
+      | title                           | published at              | changed                   | content                                                      | author                                 | attachments         | keywords                       | collection                                            |
+      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | Interoperable Europe Portal SEO discussion collection |
 
     When I visit the "Discussions are now forum posts" discussion
     Then the metatag JSON should be attached in the page
@@ -36,8 +36,8 @@ Feature: SEO for discussion forum posts.
       | 2        | metatag    |
       | 3        | schema.org |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "image" properties:
-      | property | value                                                                                                                    |
-      | @type    | http://schema.org/ImageObject                                                                                            |
+      | property | value                                                                                                                                  |
+      | @type    | http://schema.org/ImageObject                                                                                                          |
       # Discussions don't have an image field but an image is required by google. Add the Interoperable Europe Portal logo as the image of
       # all discussions.
       | url      | https://interoperable-europe.ec.europa.eu/sites/default/files/styles/logo/public/collection/logo/2019-04/190404-logo-JOINUP-blue-2.png |

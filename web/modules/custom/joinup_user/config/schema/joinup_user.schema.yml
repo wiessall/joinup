@@ -14,6 +14,14 @@ views.filter.user_tristate_status:
   type: views.filter.in_operator
   label: 'User tristate status'
 
+views.filter.joinup_user_group:
+  type: views_filter
+  label: 'OG groups the user belongs to.'
+
 views.field.joinup_user_bulk_form:
   type: views.field.user_bulk_form
   label: 'Interoperable Europe Portal user operations bulk form'
+
+views.field.joinup_user_is_author:
+  type: views.field.boolean
+  label: 'Has authored content'

@@ -23,7 +23,9 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
@@ -59,6 +61,8 @@ class JoinupContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use OgTrait;
+  use NodeTrait;
+  use RandomGeneratorTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
@@ -67,201 +71,6 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-
-  /**
-   * Returns the actual field name for a given node field alias.
-   *
-   * @param string $type
-   *   The node type for which to return the field name.
-   * @param string $alias
-   *   The human readable node field alias.
-   *
-   * @return string
-   *   The actual field name, or the original string if the alias is not known.
-   */
-  public static function getNodeFieldNameFromAlias(string $type, string $alias): string {
-    $aliases = [
-      'collection' => [
-        'author' => 'uid',
-        'uri' => 'uri',
-        'title' => 'title',
-        'short ID' => 'short_id',
-        'abstract' => 'abstract',
-        'access url' => 'website_url',
-        'closed' => 'closed_group',
-        'contact information' => 'contact',
-        'content creation' => 'content_creation',
-        'creation date' => 'created',
-        'description' => 'description',
-        'featured' => 'featured',
-        'keywords' => 'field_keywords',
-        'logo' => 'logo',
-        'moderation' => 'group_moderation',
-        'modification date' => 'changed',
-        'owner' => 'owner',
-        'published at' => 'published_at',
-        'spatial coverage' => 'spatial_coverage',
-        'state' => 'field_state',
-      ],
-      'contact_information' => [
-        'email' => 'email',
-        'name' => 'title',
-        'website url' => 'webpage',
-        'author' => 'uid',
-        'state' => 'field_state',
-      ],
-      'custom_page' => [
-        'attachments' => 'field_attachment',
-        'body' => 'field_paragraphs_body',
-        'keywords' => 'field_keywords',
-        'logo' => 'field_custom_page_logo',
-        'state' => 'field_state',
-      ],
-      'discussion' => [
-        'attachments' => 'field_attachment',
-        'content' => 'body',
-        'keywords' => 'field_keywords',
-        'logo' => 'field_discussion_logo',
-        'published at' => 'published_at',
-        'state' => 'field_state',
-      ],
-      'document' => [
-        'document publication date' => 'field_document_publication_date',
-        'document type' => 'field_type',
-        'file' => 'field_file',
-        'keywords' => 'field_keywords',
-        'licence' => 'field_licence',
-        'logo' => 'field_document_logo',
-        'published at' => 'published_at',
-        'short title' => 'field_short_title',
-        'spatial coverage' => 'field_document_spatial_coverage',
-        'state' => 'field_state',
-      ],
-      'event' => [
-        'agenda' => 'field_event_agenda',
-        'body' => 'field_paragraphs_body',
-        'end date' => 'field_event_date:end_value',
-        'keywords' => 'field_keywords',
-        'location' => 'field_location',
-        'logo' => 'field_event_logo',
-        'online location' => 'field_event_online_location',
-        'organisation' => 'field_organisation',
-        'published at' => 'published_at',
-        'scope' => 'field_scope',
-        'short title' => 'field_short_title',
-        'spatial coverage' => 'field_event_spatial_coverage',
-        'start date' => 'field_event_date:value',
-        'state' => 'field_state',
-        'web url' => 'field_event_web_url',
-      ],
-      'glossary' => [
-        'definition' => 'field_glossary_definition:value',
-        'summary' => 'field_glossary_definition:summary',
-        'synonyms' => 'field_glossary_synonyms',
-      ],
-      'licence' => [
-        'licence type' => 'licence_type',
-        'spdx licence' => 'spdx_licence',
-        'legal type' => 'legal_type',
-      ],
-      'news' => [
-        'headline' => 'field_news_headline',
-        'keywords' => 'field_keywords',
-        'logo' => 'field_news_logo',
-        'published at' => 'published_at',
-        'spatial coverage' => 'field_news_spatial_coverage',
-        'state' => 'field_state',
-      ],
-      'owner' => [
-        'name' => 'title',
-        'owner type' => 'owner_type',
-        'state' => 'field_state',
-        'author' => 'uid',
-      ],
-      'distribution' => [
-        'access url' => 'access_url',
-        'creation date' => 'created',
-        'description' => 'description',
-        'downloads' => 'downloads',
-        'file size' => 'file_size',
-        'format' => 'format',
-        'licence' => 'field_licence',
-        'modification date' => 'changed',
-        'representation technique' => 'representation_technique',
-        'release' => 'release',
-        'solution' => 'og_audience',
-        'state' => 'field_state',
-        'status' => 'process_status',
-        'title' => 'title',
-        'uri' => 'uri',
-        'published at' => 'published_at',
-      ],
-      'release' => [
-        'uri' => 'uri',
-        'is version of' => 'og_audience',
-        'title' => 'title',
-        'release number' => 'release_number',
-        'keywords' => 'field_keywords',
-        'spatial coverage' => 'spatial_coverage',
-        'status' => 'process_status',
-        'state' => 'field_state',
-        'creation date' => 'created',
-        'modification date' => 'changed',
-        'published at' => 'published_at',
-        'documentation' => 'documentation',
-        'release notes' => 'description',
-      ],
-      'solution' => [
-        'author' => 'uid',
-        'uri' => 'uri',
-        'title' => 'title',
-        'short ID' => 'short_id',
-        'abstract' => 'abstract',
-        'contact information' => 'contact',
-        'content creation' => 'content_creation',
-        'creation date' => 'created',
-        'description' => 'description',
-        'documentation' => 'documentation',
-        'keywords' => 'field_keywords',
-        'landing page' => 'landing_page',
-        'language' => 'language',
-        'logo' => 'logo',
-        'metrics page' => 'metrics_page',
-        'moderation' => 'group_moderation',
-        'modification date' => 'changed',
-        'owner' => 'owner',
-        'topic' => 'field_topic',
-        'related by type' => 'list_related_entities',
-        'related solutions' => 'related_solutions',
-        'solution type' => 'solution_type',
-        'spatial coverage' => 'spatial_coverage',
-        'status' => 'field_status',
-        'state' => 'field_state',
-        'collection' => 'og_audience',
-        'collections' => 'og_audience',
-        'featured' => 'featured',
-        'pinned in' => 'pinned_in_collection',
-        'published at' => 'published_at',
-        'unpinned in' => 'unpinned_in_collection',
-      ],
-      'shared' => [
-        'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
-        'shared on' => 'field_shared_in',
-        'solution' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
-        'topic' => 'field_topic',
-        'visits' => 'visit_count',
-      ],
-    ];
-
-    // Check both the node type specific aliases as well as the shared aliases.
-    foreach ([$type, 'shared'] as $key) {
-      if (!empty($aliases[$key][$alias])) {
-        return $aliases[$key][$alias];
-      }
-    }
-
-    return $alias;
-  }
 
   /**
    * Creates a user with data provided in a table.
@@ -696,7 +505,7 @@ class JoinupContext extends RawDrupalContext {
    *   The title of the entity.
    * @param string $bundle
    *   An alias of a bundle as defined in the
-   *   \Drupal\joinup\Traits\EntityTrait::bundleAliases method.
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
    *
    * @When I go to the :action form of the :title :bundle
    */
@@ -862,10 +671,10 @@ class JoinupContext extends RawDrupalContext {
    */
   public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     // Replace field label aliases with the actual field names.
     foreach (get_object_vars($node) as $alias => $value) {
-      $name = self::getNodeFieldNameFromAlias($node->type, $alias);
+      $name = $this->getNodeFieldNameFromAlias($node->type, $alias);
       if ($name !== $alias) {
         unset($node->$alias);
         // Don't set empty values, since we can have multiple aliases that point
@@ -939,6 +748,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($node->field_state)) {
       $node->field_state = self::translateWorkflowStateAlias($node->field_state);
     }
+    elseif (!empty($field_definitions['field_state']) && empty($node->field_state) && $node->type != 'contact_information') {
+      $node->field_state = 'published';
+    }
 
     if (property_exists($node, 'visit_count')) {
       $node->visit_count = MetaEntity::create([
@@ -996,12 +808,28 @@ class JoinupContext extends RawDrupalContext {
       unset($node->field_paragraphs_body);
     }
 
-    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
     if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
+    }
+
+    if (!empty($field_definitions['contact']) && !isset($node->contact)) {
+      $node->contact = $this->getDefaultContact()->label();
+    }
+    if (!empty($field_definitions['owner']) && !isset($node->owner)) {
+      $node->owner = $this->getDefaultOwner()->label();
+    }
+    if (!empty($field_definitions['abstract']) && !isset($node->abstract)) {
+      $node->abstract = 'default abstract';
+    }
+
+    if (!empty($field_definitions['description']) && empty($node->descritpion)) {
+      $node->description = 'default description';
+    }
+    if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
+      $node->solution_type = $this->getRandomTerm('eira')->label();
     }
 
     // Handle file URL fields.
@@ -1282,7 +1110,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given the workflow state of the :title :entity_type is changed to :state
    */
   public function updateWorkflowState(string $title, string $entity_type, string $state): void {
-    $entity_type = self::translateEntityTypeAlias($entity_type);
+    $entity_type = $this->translateEntityTypeAlias($entity_type);
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface|\Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getEntityByLabel($entity_type, $title);
     $entity->setWorkflowState($state);
@@ -2513,7 +2341,7 @@ class JoinupContext extends RawDrupalContext {
         'collection',
       ])
     ), 'Invalid bundle type.');
-    $entity_type_id = self::translateEntityTypeAlias($type);
+    $entity_type_id = $this->translateEntityTypeAlias($type);
     $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
