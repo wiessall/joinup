@@ -22,12 +22,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GitHubFeedDefaultFormatter extends FormatterBase {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     FieldDefinitionInterface $fieldDefinition,
     array $settings,
     string $label,
-    readonly string $view_mode,
+    string $view_mode,
     array $thirdPartySettings,
     protected readonly GitHubFeedInterface $githubFeed,
   ) {

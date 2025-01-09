@@ -31,11 +31,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class StateMachineButtons extends OptionsSelectWidget implements ContainerFactoryPluginInterface {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
-    readonly array $third_party_settings,
+    array $third_party_settings,
     protected readonly EventDispatcherInterface $eventDispatcher,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);

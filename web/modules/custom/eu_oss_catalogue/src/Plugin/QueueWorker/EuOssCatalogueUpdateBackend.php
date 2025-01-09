@@ -22,8 +22,8 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected EuOssCatalogueInterface $catalogueService,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);

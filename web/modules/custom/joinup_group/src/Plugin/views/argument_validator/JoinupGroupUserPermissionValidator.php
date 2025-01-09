@@ -29,8 +29,8 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly PermissionManagerInterface $ogPermissionManager,
     protected readonly PermissionHandlerInterface $permissionHandler,
     protected readonly ModuleExtensionList $moduleExtensionList,

@@ -30,8 +30,8 @@ class UnarchiveAction extends StateActionBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly RendererInterface $renderer,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly WorkflowHelperInterface $workflowHelper,

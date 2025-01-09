@@ -42,8 +42,8 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     EntityTypeManagerInterface $entityTypeManager,
     LanguageManagerInterface $languageManager,
     MessengerInterface $messenger,

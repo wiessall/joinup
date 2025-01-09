@@ -30,8 +30,8 @@ class ArchiveAction extends StateActionBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly RendererInterface $renderer,
     protected readonly TimeInterface $time,
     protected readonly AccountInterface $currentUser,

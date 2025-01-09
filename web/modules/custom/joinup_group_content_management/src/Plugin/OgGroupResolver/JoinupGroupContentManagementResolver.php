@@ -34,8 +34,8 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     RouteMatchInterface $routeMatch,
     GroupTypeManagerInterface $groupTypeManager,
     EntityTypeManagerInterface $entityTypeManager,

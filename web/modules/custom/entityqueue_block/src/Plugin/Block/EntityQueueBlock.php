@@ -25,7 +25,7 @@ class EntityQueueBlock extends BlockBase implements ContainerFactoryPluginInterf
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     readonly array $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityDisplayRepositoryInterface $entityDisplayRepository,

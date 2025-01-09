@@ -27,13 +27,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
     string $label,
-    readonly string $view_mode,
-    readonly array $third_party_settings,
+    string $view_mode,
+    array $third_party_settings,
     protected readonly LanguageManagerInterface $languageManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);

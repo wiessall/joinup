@@ -19,7 +19,7 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
   public function __construct(
     TimeInterface $time,
     RequestStack $request_stack,
-    readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($time, $request_stack);
   }

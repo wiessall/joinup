@@ -56,15 +56,15 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
   const MAX_DEPTH = 3;
 
   public function __construct(
-    readonly EntityRepositoryInterface $entity_repository,
-    readonly MenuLinkManagerInterface $menu_link_manager,
-    readonly MenuLinkTreeInterface $menu_tree,
-    readonly LinkGeneratorInterface $link_generator,
-    readonly OgAccessInterface $og_access,
-    readonly UrlGeneratorInterface $url_generator,
-    readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    EntityRepositoryInterface $entity_repository,
+    MenuLinkManagerInterface $menu_link_manager,
+    MenuLinkTreeInterface $menu_tree,
+    LinkGeneratorInterface $link_generator,
+    OgAccessInterface $og_access,
+    UrlGeneratorInterface $url_generator,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
     TimeInterface $time,
-    protected readonly UrlMatcherInterface $url_matcher,
+    protected UrlMatcherInterface $url_matcher,
   ) {
     parent::__construct($entity_repository, $menu_link_manager, $menu_tree, $link_generator, $og_access, $url_generator, $entity_type_bundle_info, $time);
   }

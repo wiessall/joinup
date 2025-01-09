@@ -25,8 +25,8 @@ class JoinupContentState extends State {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     readonly EntityTypeManagerInterface $entity_type_manager,
     readonly EntityFieldManagerInterface $entity_field_manager,
     protected readonly WorkflowManagerInterface $workflowManager,

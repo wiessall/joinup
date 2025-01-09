@@ -20,7 +20,7 @@ class ContactInformationTransitionGuard implements GuardInterface {
   use TransitionGuardTrait;
 
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected readonly AccountInterface $currentUser,
   ) {}
 
   /**

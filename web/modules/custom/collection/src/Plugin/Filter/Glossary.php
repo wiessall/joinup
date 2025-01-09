@@ -33,7 +33,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     $plugin_definition,
     protected readonly OgContextInterface $ogContext,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
