@@ -33,11 +33,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MediaVideoUrlWidget extends InlineEntityFormSimple {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
-    readonly array $third_party_settings,
+    array $third_party_settings,
     readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
     readonly EntityTypeManagerInterface $entity_type_manager,
     readonly EntityDisplayRepositoryInterface $entity_display_repository,

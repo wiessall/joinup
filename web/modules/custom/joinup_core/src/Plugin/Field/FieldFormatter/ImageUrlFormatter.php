@@ -30,12 +30,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ImageUrlFormatter extends ImageFormatter {
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
     string $label,
-    readonly string $view_mode,
+    string $view_mode,
     array $third_party_settings,
     readonly AccountInterface $current_user,
     readonly EntityStorageInterface $image_style_storage,

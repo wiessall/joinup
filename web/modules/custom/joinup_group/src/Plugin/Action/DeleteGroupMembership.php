@@ -35,7 +35,7 @@ class DeleteGroupMembership extends DeleteOgMembership {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     readonly array $plugin_definition,
     readonly OgAccessInterface $og_access,
     readonly PrivateTempStoreFactory $privateTempStoreFactory,

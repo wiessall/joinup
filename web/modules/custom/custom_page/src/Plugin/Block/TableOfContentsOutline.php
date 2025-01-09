@@ -54,8 +54,8 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly CustomPageOgMenuLinksManagerInterface $ogMenuManager,
     protected readonly MenuLinkTreeInterface $menuLinkTree,
     protected readonly MenuActiveTrailInterface $activeTrail,

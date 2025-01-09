@@ -16,8 +16,8 @@ class EuLoginMenuLink extends MenuLinkDefault {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     readonly StaticMenuLinkOverridesInterface $static_override,
     readonly AccountInterface $currentUser,
   ) {

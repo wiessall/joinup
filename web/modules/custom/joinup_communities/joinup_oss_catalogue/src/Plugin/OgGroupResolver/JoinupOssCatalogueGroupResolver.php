@@ -26,7 +26,7 @@ class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     readonly array $plugin_definition,
     readonly RouteMatchInterface $route_match,
     readonly GroupTypeManagerInterface $group_type_manager,

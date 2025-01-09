@@ -31,8 +31,8 @@ class ColorBehavior extends ParagraphsBehaviorBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     EntityFieldManagerInterface $entityFieldManager,
     protected readonly ThemeManagerInterface $themeManager,
   ) {

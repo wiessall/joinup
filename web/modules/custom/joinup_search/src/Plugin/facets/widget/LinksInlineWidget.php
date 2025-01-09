@@ -38,8 +38,8 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly CacheContextsManager $cacheContextsManager,
     protected readonly RequestStack $requestStack,
   ) {

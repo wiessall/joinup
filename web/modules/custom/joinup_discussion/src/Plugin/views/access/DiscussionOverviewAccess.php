@@ -26,8 +26,8 @@ class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDepe
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);

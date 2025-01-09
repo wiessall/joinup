@@ -24,8 +24,8 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     readonly BlockRepositoryInterface $block_repository,
     readonly EntityViewBuilderInterface $block_view_builder,
     readonly array $block_list_cache_tags,

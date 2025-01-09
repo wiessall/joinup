@@ -43,8 +43,8 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly JoinupMessageDeliveryInterface $messageDelivery,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly QueueFactory $queueFactory,

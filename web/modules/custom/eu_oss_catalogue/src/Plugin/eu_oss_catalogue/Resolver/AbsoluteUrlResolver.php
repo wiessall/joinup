@@ -28,8 +28,8 @@ class AbsoluteUrlResolver extends DefaultResolver {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManger,
     protected EuOssCataloguePluginManagerInterface $platformManager,

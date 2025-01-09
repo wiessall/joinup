@@ -47,8 +47,8 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly RevisionManagerInterface $revisionManager,
     protected readonly AccountProxyInterface $currentUser,

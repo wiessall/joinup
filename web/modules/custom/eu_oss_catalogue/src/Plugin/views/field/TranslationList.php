@@ -20,7 +20,7 @@ class TranslationList extends FieldPluginBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     readonly array $plugin_definition,
     protected readonly LanguageManagerInterface $languageManager,
   ) {

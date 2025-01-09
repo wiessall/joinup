@@ -34,9 +34,9 @@ class EifQualifiedRecommendation extends TextareaWidget {
   protected array $recommendationOptions;
 
   public function __construct(
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
-    readonly FieldDefinitionInterface $field_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
     array $third_party_settings,
     protected readonly EntityTypeManagerInterface $entityTypeManager,

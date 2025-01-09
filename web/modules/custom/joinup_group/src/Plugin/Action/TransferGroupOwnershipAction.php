@@ -46,7 +46,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
+    string $plugin_id,
     readonly array $plugin_definition,
     readonly PrivateTempStoreFactory $tempStoreFactory,
     protected readonly AccountInterface $currentUser,

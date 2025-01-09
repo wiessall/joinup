@@ -35,8 +35,8 @@ class IndexDistributionData extends ProcessorPluginBase {
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {

@@ -24,8 +24,8 @@ class VitalityIndexQueueWorker extends QueueWorkerBase implements ContainerFacto
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly VitalityIndexGeneratorInterface $vitalityIndexGenerator,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {

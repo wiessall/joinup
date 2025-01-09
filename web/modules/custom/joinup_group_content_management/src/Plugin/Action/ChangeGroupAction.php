@@ -73,8 +73,8 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
 
   public function __construct(
     array $configuration,
-    readonly string $plugin_id,
-    readonly mixed $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected readonly SelectionPluginManagerInterface $selectionPluginManager,
     protected readonly Renderer $renderer,
     protected readonly CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
