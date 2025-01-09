@@ -35,9 +35,6 @@ function joinup_search_theme($existing, $type, $theme, $path): array {
         'suffix_text' => '',
       ],
     ],
-    'joinup_search_global_search' => [
-      'variables' => ['filters' => [], 'template_suggestion' => ''],
-    ],
     'joinup_search_filter' => [
       'variables' => [
         'name' => '',
