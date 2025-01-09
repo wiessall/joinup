@@ -6,18 +6,18 @@ Feature: Pinning discussion entities
 
   Background:
     Given collection content:
-      | title                   | state     |
-      | Green Wrench collection | published |
+      | title                   |
+      | Green Wrench collection |
     Given solution content:
-      | title                | state     |
-      | Blue Wrench solution | published |
+      | title                |
+      | Blue Wrench solution |
 
   @javascript
   Scenario Outline: Pinned discussions should show a visual cue in discussions page.
     Given discussion content:
-      | title       | headline    | solution   | collection   | state     | pinned |
-      | Lantern FAQ | Lantern FAQ | <solution> | <collection> | published | yes    |
-      | Lantern TCA | Lantern TCA | <solution> | <collection> | published | no     |
+      | title       | headline    | solution   | collection   | pinned |
+      | Lantern FAQ | Lantern FAQ | <solution> | <collection> | yes    |
+      | Lantern TCA | Lantern TCA | <solution> | <collection> | no     |
 
     When I go to the discussions page of "<parent>"
     Then the "Lantern FAQ" tile should be marked as pinned

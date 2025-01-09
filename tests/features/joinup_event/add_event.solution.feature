@@ -6,13 +6,12 @@ Feature: "Add event" visibility options.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
     Given collection content:
-      | title                   | logo     | state     |
-      | Collective Ragged tower | logo.png | published |
+      | title                   | logo     |
+      | Collective Ragged tower | logo.png |
     Given solution content:
-      | title           | collection              | logo     | state     |
-      | Ragged Tower    | Collective Ragged tower | logo.png | published |
-      | Prince of Magic | Collective Ragged tower | logo.png | published |
-
+      | title           | collection              | logo     |
+      | Ragged Tower    | Collective Ragged tower | logo.png |
+      | Prince of Magic | Collective Ragged tower | logo.png |
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ragged Tower" solution
     Then I should not see the link "Add event"
@@ -35,11 +34,11 @@ Feature: "Add event" visibility options.
   @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
     Given collection content:
-      | title                           | logo     | state     |
-      | Collective The Luscious Bridges | logo.png | published |
+      | title                           | logo     |
+      | Collective The Luscious Bridges | logo.png |
     Given solution content:
-      | title                | collection                      | logo     | state     |
-      | The Luscious Bridges | Collective The Luscious Bridges | logo.png | published |
+      | title                | collection                      | logo     |
+      | The Luscious Bridges | Collective The Luscious Bridges | logo.png |
     And I am logged in as a facilitator of the "The Luscious Bridges" solution
     When I go to the homepage of the "The Luscious Bridges" solution
     And I click "Add event" in the plus button menu

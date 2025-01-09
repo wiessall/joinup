@@ -6,11 +6,11 @@ Feature: Asset distribution overview on solution.
 
   Scenario: Releases should be available in the overview page.
     Given collection content:
-      | title       | state     |
-      | End of Past | published |
+      | title       |
+      | End of Past |
     Given solution content:
-      | title            | collection  | description        | state     |
-      | Lovely Butterfly | End of Past | Sample description | published |
+      | title            | collection  |
+      | Lovely Butterfly | End of Past |
 
     # A solution with no releases or standalone distributions has no button.
     When I go to the homepage of the "Lovely Butterfly" solution
@@ -28,11 +28,11 @@ Feature: Asset distribution overview on solution.
       | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | 29-01-1995 12:06 | Lovely Butterfly | published |
       | The Child of the Past | text.pdf      | 1              | Notes 1       | 29-01-1996 12:05 | 29-01-1996 12:05 | Lovely Butterfly | published |
     And distribution content:
-      | title       | access url                          | creation date    | solution         | release               | state     |
-      | Linux       | test.zip                            | 28-01-1995 12:05 |                  | Thief in the Angels   | published |
-      | Windows     | http://www.example.org/download.php | 28-01-1995 12:06 |                  | The Child of the Past | published |
-      | User manual | test.zip                            | 28-01-1995 11:07 | Lovely Butterfly |                       | published |
-      | Solaris     | test.zip                            | 28-01-1995 12:08 |                  | Hidden spies          | published |
+      | title       | access url                          | creation date    | solution         | release               |
+      | Linux       | test.zip                            | 28-01-1995 12:05 |                  | Thief in the Angels   |
+      | Windows     | http://www.example.org/download.php | 28-01-1995 12:06 |                  | The Child of the Past |
+      | User manual | test.zip                            | 28-01-1995 11:07 | Lovely Butterfly |                       |
+      | Solaris     | test.zip                            | 28-01-1995 12:08 |                  | Hidden spies          |
 
     When I go to the homepage of the "Lovely Butterfly" solution
     And I click "Release history"

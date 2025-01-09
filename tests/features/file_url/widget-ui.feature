@@ -6,8 +6,8 @@ Feature: User interface for the File URL field
 
   Background:
     Given collection content:
-      | title            | state     |
-      | Regression tests | published |
+      | title            |
+      | Regression tests |
 
   @javascript
   Scenario: Interact with both the 'File upload' and 'External URL' options
@@ -41,8 +41,8 @@ Feature: User interface for the File URL field
 
   Scenario: User should be able to remove entity even document's entities do not exist
     Given solution content:
-      | title                      | documentation | state     | collection       |
-      | Solution without documents | text.pdf      | published | Regression tests |
+      | title                      | documentation | collection       |
+      | Solution without documents | text.pdf      | Regression tests |
     And I delete documents from "Solution without documents" solution
 
     Given I am logged in as a moderator

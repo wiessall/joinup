@@ -5,20 +5,20 @@ Feature:
   Background:
     # Mimic the "Interoperable Europe" collection.
     Given collection content:
-      | uri                                                            | title                | state     | topic      |
-      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published | Demography |
+      | uri                                                            | title                | topic      |
+      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | Demography |
 
   Scenario: Test that carousels content listing options are working correctly.
     Given collection content:
-      | title       | state     |
-      | Carousel c1 | published |
+      | title       |
+      | Carousel c1 |
     And news content:
-      | title       | collection           | content       | state     |
-      | Some news 1 | Interoperable Europe | Some content. | published |
-      | Some news 2 | Carousel c1          | Come content. | published |
+      | title       | collection           | content       |
+      | Some news 1 | Interoperable Europe | Some content. |
+      | Some news 2 | Carousel c1          | Come content. |
     And custom_page content:
-      | title         | collection           | state     |
-      | News carousel | Interoperable Europe | published |
+      | title         | collection           |
+      | News carousel | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -30,13 +30,13 @@ Feature:
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
     Given collection content:
-      | title       | state     |
-      | Carousel c1 | published |
+      | title       |
+      | Carousel c1 |
     And custom_page content:
-      | title       | collection           | content       | state     |
-      | Some page 1 | Interoperable Europe | Some content. | published |
-      | Some page 2 | Carousel c1          | Some content. | published |
-      | Some page 3 | Carousel c1          | Some content. | published |
+      | title       | collection           | content       |
+      | Some page 1 | Interoperable Europe | Some content. |
+      | Some page 2 | Carousel c1          | Some content. |
+      | Some page 3 | Carousel c1          | Some content. |
 
     When I am logged in as a moderator
     And I go to the "Interoperable Europe" collection
@@ -88,13 +88,13 @@ Feature:
 
   Scenario: Carousels should be ordered by creation date by default.
     Given news content:
-      | title       | collection           | content       | state     | created    |
-      | Some news 1 | Interoperable Europe | Some content. | published | 2 day ago  |
-      | Some news 2 | Interoperable Europe | Some content. | published | 3 days ago |
-      | Some news 3 | Interoperable Europe | Some content. | published | 1 days ago |
+      | title       | collection           | content       | created    |
+      | Some news 1 | Interoperable Europe | Some content. | 2 day ago  |
+      | Some news 2 | Interoperable Europe | Some content. | 3 days ago |
+      | Some news 3 | Interoperable Europe | Some content. | 1 days ago |
     And custom_page content:
-      | title                | collection           | state     |
-      | A carousel with news | Interoperable Europe | published |
+      | title                | collection           |
+      | A carousel with news | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "A carousel with news" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -106,13 +106,13 @@ Feature:
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | collection           | field_paragraphs_body | state     | created    | start date | end date   |
-      | Some event 1 | Interoperable Europe | Some content.         | published | 2 day ago  | 5 day ago  | 4 day ago  |
-      | Some event 2 | Interoperable Europe | Some content.         | published | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Interoperable Europe | Some content.         | published | 1 days ago | 7 days ago | 6 days ago |
+      | title        | collection           | field_paragraphs_body | created    | start date | end date   |
+      | Some event 1 | Interoperable Europe | Some content.         | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Interoperable Europe | Some content.         | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content.         | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
-      | title           | collection           | state     |
-      | Events carousel | Interoperable Europe | published |
+      | title           | collection           |
+      | Events carousel | Interoperable Europe |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Events carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:19:"entity_bundle\|event";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 

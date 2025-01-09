@@ -1,0 +1,15 @@
+diff --git a/src/Behat/Testwork/Cli/Application.php b/src/Behat/Testwork/Cli/Application.php
+index 25435a9b0..669cc5b8b 100644
+--- a/src/Behat/Testwork/Cli/Application.php
++++ b/src/Behat/Testwork/Cli/Application.php
+@@ -99,7 +99,9 @@ public function getDefaultInputDefinition(): InputDefinition
+      */
+     public function doRun(InputInterface $input, OutputInterface $output): int
+     {
+-        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
++        $isXdebugAllowed = $input->hasParameterOption('--xdebug') ||
++            (extension_loaded('xdebug') && xdebug_is_debugger_active());
++
+         if (!$isXdebugAllowed) {
+             $xdebugHandler = new XdebugHandler('behat');
+             $xdebugHandler->setPersistent();

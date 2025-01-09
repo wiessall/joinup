@@ -9,15 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
-use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
@@ -26,13 +20,7 @@ use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_insert(EntityInterface $entity): void {
-  // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-  if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface) {
-    joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
-  }
-  if ($entity instanceof GroupInterface) {
-    joinup_notification_dispatch_notification('create', NotificationEvents::RDF_ENTITY_CRUD, $entity);
-  }
+  joinup_notification_dispatch_notification('create', NotificationEvents::NODE_CREATE, $entity);
 }
 
 /**
@@ -51,17 +39,9 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  * @see https://www.drupal.org/node/2833084
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
-  // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-  if (
-    $entity->isNew()
-      || !($entity instanceof CommunityContentInterface
-      || $entity instanceof DistributionInterface
-      || $entity instanceof ReleaseInterface
-      || $entity instanceof GroupInterface
-    )) {
-    return;
+  if (!$entity->isNew() && $entity instanceof EntityWorkflowStateInterface && $entity->hasWorkflow()) {
+    $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
   }
-  $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
 }
 
 /**
@@ -70,17 +50,7 @@ function joinup_notification_node_presave(EntityInterface $entity): void {
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_update(EntityInterface $entity): void {
-  $event_name = match(TRUE) {
-    $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
-    // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-    $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
-    $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
-    $entity instanceof GroupInterface => NotificationEvents::RDF_ENTITY_CRUD,
-    default => NULL,
-  };
-  if ($event_name) {
-    joinup_notification_dispatch_notification('update', $event_name, $entity);
-  }
+  joinup_notification_dispatch_notification('update', NotificationEvents::NODE_UPDATE, $entity);
 }
 
 /**
@@ -92,37 +62,7 @@ function joinup_notification_node_update(EntityInterface $entity): void {
  * into the delete hooks which can lead into false data e.g. wrong state.
  */
 function joinup_notification_node_predelete(EntityInterface $entity): void {
-  // Avoid sending notifications when orphaned distributions are deleted.
-  if ($entity instanceof DistributionInterface) {
-    try {
-      $entity->getParent();
-    }
-    catch (MissingDistributionParentException $e) {
-      return;
-    }
-  }
-
-  $event_name = match(TRUE) {
-    $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
-    // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-    $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
-    $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
-    default => NULL,
-  };
-  if ($event_name) {
-    joinup_notification_dispatch_notification('delete', $event_name, $entity);
-  }
-
-  if ($entity instanceof GroupContentInterface) {
-    try {
-      $entity->getGroup();
-    }
-    catch (MissingGroupException $e) {
-      return;
-    }
-  }
-
-  joinup_notification_dispatch_notification('delete', NotificationEvents::RDF_ENTITY_CRUD, $entity);
+  joinup_notification_dispatch_notification('delete', NotificationEvents::NODE_DELETE, $entity);
 }
 
 /**

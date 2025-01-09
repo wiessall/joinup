@@ -6,8 +6,8 @@ Feature: Add community content
 
   Scenario Outline: Advanced content and group administration should not be accessible for group members
     Given collection content:
-      | title           | state     |
-      | The night shift | published |
+      | title           |
+      | The night shift |
 
     When I am logged in as a "<member type>" of the "The night shift" collection
     And I go to the homepage of the "The night shift" collection
@@ -38,8 +38,8 @@ Feature: Add community content
 
   Scenario Outline: Advanced content and group administration should not be accessible for moderators
     Given collection content:
-      | title           | state     |
-      | The night shift | published |
+      | title           |
+      | The night shift |
 
     When I am logged in as a "moderator"
     And I go to the homepage of the "The night shift" collection
@@ -71,8 +71,8 @@ Feature: Add community content
       | Username  | E-mail                     | First name | Family name    | Roles     |
       | Publisher | publisher-example@test.com | Publisher  | Georgakopoulos | moderator |
     And collection content:
-      | title               | state     |
-      | The afternoon shift | published |
+      | title               |
+      | The afternoon shift |
     And discussion content:
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
@@ -113,8 +113,8 @@ Feature: Add community content
 
   Scenario: Directly publishing community content sets the correct publication date.
     Given collection content:
-      | title        | description                  | logo     | state     |
-      | CC container | Community content container. | logo.png | published |
+      | title        | description                  | logo     |
+      | CC container | Community content container. | logo.png |
     And I am logged in as a "facilitator" of the "CC container" collection
 
     # Create a published discussion.
@@ -186,11 +186,11 @@ Feature: Add community content
 
   Scenario Outline: Community content type is indicated on the byline
     Given collection content:
-      | title           | state     |
-      | The night watch | published |
+      | title           |
+      | The night watch |
     And <content type> content:
-      | title                   | collection      | state     |
-      | The glorious revolution | The night watch | published |
+      | title                   | collection      |
+      | The glorious revolution | The night watch |
     When I go to the content page of the type "<content type>" with the title "The glorious revolution"
     Then I should see the text <label> in the "Page title" region
 
@@ -202,12 +202,12 @@ Feature: Add community content
 
   Scenario: Event content type is not indicated on the byline
     Given collection content:
-      | title           | state     |
-      | The night batch | published |
+      | title           |
+      | The night batch |
     And event content:
-      | title                    | collection      | state     | start date   | end date            | state     |
-      | Red glorious revolution  | The night batch | published | now +1 years | now +1 years +1 day | published |
-      | Blue glorious revolution | The night batch | published | now -1 years | now -1 years +1 day | published |
+      | title                    | collection      | start date   | end date            |
+      | Red glorious revolution  | The night batch | now +1 years | now +1 years +1 day |
+      | Blue glorious revolution | The night batch | now -1 years | now -1 years +1 day |
     When I go to the content page of the type "event" with the title "Red glorious revolution"
     And I should see the button "Add to Calendar"
     And I should see the link "Google"
@@ -227,8 +227,8 @@ Feature: Add community content
   @javascript @loggedErrors @uploadFiles:logo.png
   Scenario: Editor File dialog form does not trigger warning
     Given collection content:
-      | title                        | state     |
-      | The editor tester collection | published |
+      | title                        |
+      | The editor tester collection |
     And the site error reporting verbosity is "verbose"
 
     When I am logged in as a "facilitator" of the "The editor tester collection" collection

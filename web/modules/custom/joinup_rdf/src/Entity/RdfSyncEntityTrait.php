@@ -15,7 +15,7 @@ trait RdfSyncEntityTrait {
   public function getUri(): string {
     assert($this instanceof RdfSyncEntityInterface);
     $fieldName = \Drupal::getContainer()->get('rdf_sync.mapper')->getRdfUriFieldName(entity: $this);
-    return $this->get($fieldName)->value;
+    return $this->get($fieldName)->value ?? '';
   }
 
   /**
