@@ -47,7 +47,7 @@ function joinup_assessment_preprocess_views_view(array &$variables): void {
   if ($view->id() === 'assessment_reports' && $view->current_display === 'list') {
     $variables['header']['my_submissions'] = [
       '#type' => 'link',
-      '#title' => t('My submissions'),
+      '#title' => t('My assessments'),
       '#url' => Url::fromUserInput('/collection/assessments/assessment-reports/questionnaire/submissions'),
       '#attributes' => [
         'class' => ['m-3'],
