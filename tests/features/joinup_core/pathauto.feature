@@ -6,40 +6,40 @@ Feature:
 
   Scenario: Entities should have distinct pathauto aliases.
     Given collection content:
-      | title               | logo     | state     |
-      | Pathauto collection | logo.png | published |
+      | title               | logo     |
+      | Pathauto collection | logo.png |
     And solution content:
-      | title             | description       | state     | collection          |
-      | Pathauto solution | Pathauto solution | published | Pathauto collection |
+      | title             | description       | collection          |
+      | Pathauto solution | Pathauto solution | Pathauto collection |
     And release content:
-      | title            | release number | release notes    | is version of     | state     |
-      | Pathauto release | 23             | Pathauto release | Pathauto solution | published |
+      | title            | release number | release notes    | is version of     |
+      | Pathauto release | 23             | Pathauto release | Pathauto solution |
     And distribution content:
-      | title                 | description           | solution          | state     |
-      | Pathauto distribution | Pathauto distribution | Pathauto solution | published |
+      | title                 | description           | solution          |
+      | Pathauto distribution | Pathauto distribution | Pathauto solution |
     And licence content:
       | title            | description      |
       | Pathauto licence | Pathauto licence |
     And discussion content:
-      | title                 | body                  | collection          | solution          | state     |
-      | Pathauto discussion   | Pathauto discussion   | Pathauto collection |                   | published |
-      | Pathauto discussion 2 | Pathauto discussion 2 |                     | Pathauto solution | published |
+      | title                 | body                  | collection          | solution          |
+      | Pathauto discussion   | Pathauto discussion   | Pathauto collection |                   |
+      | Pathauto discussion 2 | Pathauto discussion 2 |                     | Pathauto solution |
     And document content:
-      | title               | field_paragraphs_body | collection          | solution          | state     |
-      | Pathauto document   | Pathauto document     | Pathauto collection |                   | published |
-      | Pathauto document 2 | Pathauto document 2   |                     | Pathauto solution | published |
+      | title               | field_paragraphs_body | collection          | solution          |
+      | Pathauto document   | Pathauto document     | Pathauto collection |                   |
+      | Pathauto document 2 | Pathauto document 2   |                     | Pathauto solution |
     And event content:
-      | title            | field_paragraphs_body | collection          | solution          | state     |
-      | Pathauto event   | Pathauto event        | Pathauto collection |                   | published |
-      | Pathauto event 2 | Pathauto event 2      |                     | Pathauto solution | published |
+      | title            | field_paragraphs_body | collection          | solution          |
+      | Pathauto event   | Pathauto event        | Pathauto collection |                   |
+      | Pathauto event 2 | Pathauto event 2      |                     | Pathauto solution |
     And news content:
-      | title           | body            | collection          | solution          | state     |
-      | Pathauto news   | Pathauto news   | Pathauto collection |                   | published |
-      | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution | published |
+      | title           | body            | collection          | solution          |
+      | Pathauto news   | Pathauto news   | Pathauto collection |                   |
+      | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution |
     And custom_page content:
-      | title                    | body          | collection          | solution          | state     |
-      | Pathauto collection page | Pathauto page | Pathauto collection |                   | published |
-      | Pathauto solution page   | Pathauto page |                     | Pathauto solution | published |
+      | title                    | body          | collection          | solution          |
+      | Pathauto collection page | Pathauto page | Pathauto collection |                   |
+      | Pathauto solution page   | Pathauto page |                     | Pathauto solution |
 
     When I go to the "Pathauto collection" collection
     Then the url should match "collection/pathauto-collection"

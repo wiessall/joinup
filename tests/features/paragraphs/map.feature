@@ -5,8 +5,8 @@ Feature:
 
   Background:
     Given collection content:
-      | title                 | state     | topic |
-      | Paragraphs collection | published | HR    |
+      | title                 | topic |
+      | Paragraphs collection | HR    |
 
   @javascript
   Scenario: Moderator can manage map.

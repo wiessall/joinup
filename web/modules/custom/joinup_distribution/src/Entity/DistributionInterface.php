@@ -35,6 +35,14 @@ interface DistributionInterface extends NodeInterface, RdfSyncEntityInterface, C
   public function getParent(): DistributionsParentInterface;
 
   /**
+   * Returns whether the entity has a parent.
+   *
+   * @return bool
+   *   TRUE if the entity has a parent.
+   */
+  public function hasParent(): bool;
+
+  /**
    * Checks whether the distribution parent is a solution rather than a release.
    *
    * @return bool

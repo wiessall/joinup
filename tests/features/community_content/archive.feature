@@ -5,11 +5,11 @@ Feature: Content archival.
     Given collection content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title           | state     | moderation |
-      | Some collection | published | yes        |
+      | title           | moderation |
+      | Some collection | yes        |
     Given discussion content:
-      | title           | state     | collection      | body | content | headline        | changed          |
-      | Test discussion | published | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
+      | title           | collection      | body | content | headline        | changed          |
+      | Test discussion | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
     When I am logged in as a moderator
     And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
@@ -34,11 +34,11 @@ Feature: Content archival.
     Given collection content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title           | state     | moderation |
-      | Some collection | published | yes        |
+      | title           | moderation |
+      | Some collection | yes        |
     And <type> content:
-      | title       | state     | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
-      | Test <type> | published | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
+      | title       | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
+      | Test <type> | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test <type>" <type>
@@ -71,8 +71,8 @@ Feature: Content archival.
       | title             | state    |
       | Cartridge cleaner | archived |
     Given <type> content:
-      | title                | state    | solution          | state    |
-      | Test archived <type> | archived | Cartridge cleaner | archived |
+      | title                | state    | solution          |
+      | Test archived <type> | archived | Cartridge cleaner |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test archived <type>" <type>
@@ -89,11 +89,11 @@ Feature: Content archival.
     Given <group type> content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title      | state     | moderation |
-      | Some group | published | yes        |
+      | title      | moderation |
+      | Some group | yes        |
     Given discussion content:
-      | title           | state     | <group type> | body | content | headline        |
-      | Test discussion | published | Some group   | Test | Test    | Test discussion |
+      | title           | <group type> | body | content | headline        |
+      | Test discussion | Some group   | Test | Test    | Test discussion |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
@@ -113,11 +113,11 @@ Feature: Content archival.
     Given <group type> content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title      | state     | moderation |
-      | Some group | published | yes        |
+      | title      | moderation |
+      | Some group | yes        |
     Given <type> content:
-      | title       | state     | <group type> | abstract | content | headline    | field_paragraphs_body |
-      | Test <type> | published | Some group   | Test     | Test    | Test <type> | Test paragraph        |
+      | title       | <group type> | abstract | content | headline    | field_paragraphs_body |
+      | Test <type> | Some group   | Test     | Test    | Test <type> | Test paragraph        |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"

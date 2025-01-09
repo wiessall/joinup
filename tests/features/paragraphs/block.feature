@@ -4,15 +4,15 @@ Feature: Block paragraph tests.
   @javascript
   Scenario: Recommended solutions
     Given collection content:
-      | title            | state     |
-      | Block collection | published |
+      | title            |
+      | Block collection |
     Given solution content:
-      | title        | collection       | state     |
-      | Early Omega  | Block collection | published |
-      | Snake Timely | Block collection | published |
+      | title        | collection       |
+      | Early Omega  | Block collection |
+      | Snake Timely | Block collection |
     And custom_page content:
-      | title                 | collection       | state     | abstract             |
-      | Recommended solutions | Block collection | published | Recommended abstract |
+      | title                 | collection       | abstract             |
+      | Recommended solutions | Block collection | Recommended abstract |
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Recommended solutions" title:
       | paragraph_block | views_block:recommended_solutions-recommended |
 

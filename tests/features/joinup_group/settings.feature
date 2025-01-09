@@ -11,15 +11,9 @@ Feature: Collections/Solutions settings
 
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
-    Given owner content:
-      | name          | owner type |
-      | Chico example | Company    |
-    And contact_information content:
-      | name            | email                       |
-      | Chico editorial | chico.editorial@example.com |
     And collection content:
-      | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information | state     |
-      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial     | published |
+      | title             | access url        | closed | creation date    | content creation         | moderation |
+      | Jillian Land Eels | http://spice.com/ | yes    | 28-01-1995 12:05 | facilitators and authors | yes        |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -79,11 +73,11 @@ Feature: Collections/Solutions settings
 
   Scenario: Testing group settings permissions
     Given collection content:
-      | title          | logo     | state     |
-      | Rally fanatics | logo.png | published |
+      | title          |
+      | Rally fanatics |
     And solution content:
-      | title        | state     | collection     |
-      | Klop mirubes | published | Rally fanatics |
+      | title        | collection     |
+      | Klop mirubes | Rally fanatics |
     And users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |

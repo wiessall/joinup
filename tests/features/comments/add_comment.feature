@@ -4,8 +4,8 @@ Feature: Add comments
 
   Background:
     Given collection content:
-      | title             | state     | closed |
-      | Gossip collection | published | no     |
+      | title             | closed |
+      | Gossip collection | no     |
     And users:
       | Username        | E-mail                 | Roles | First name | Family name |
       | Miss tell tales | tell.tales@example.com |       | Miss       | Tales       |
@@ -17,8 +17,8 @@ Feature: Add comments
   Scenario Outline: Make an authenticated comment, skips moderation.
 
     Given solution content:
-      | title                | collection        | state     |
-      | Gossip girl solution | Gossip collection | published |
+      | title                | collection        |
+      | Gossip girl solution | Gossip collection |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -87,9 +87,9 @@ Feature: Add comments
       | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
-      | recipient | Salma Coster                            |
+      | recipient | Salma Coster                                                 |
       | subject   | Interoperable Europe Portal: A new comment has been created. |
-      | body      | Salma Coster posted a comment in        |
+      | body      | Salma Coster posted a comment in                             |
 
     Examples:
       | content type | title           | state     | parent     | parent title         |
@@ -105,8 +105,8 @@ Feature: Add comments
   Scenario Outline: Make an authenticated comment at a community content using layout paragraphs, skips moderation.
 
     Given solution content:
-      | title                | collection        | state     |
-      | Gossip girl solution | Gossip collection | published |
+      | title                | collection        |
+      | Gossip girl solution | Gossip collection |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -175,9 +175,9 @@ Feature: Add comments
       | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
-      | recipient | Salma Coster                            |
+      | recipient | Salma Coster                                                 |
       | subject   | Interoperable Europe Portal: A new comment has been created. |
-      | body      | Salma Coster posted a comment in        |
+      | body      | Salma Coster posted a comment in                             |
 
     Examples:
       | content type | title     | state     | parent     | parent title      |
@@ -244,8 +244,8 @@ Feature: Add comments
   Scenario Outline: Comments are disallowed for anonymous users.
 
     Given collection content:
-      | title          | state     | closed |
-      | Shy collection | published | yes    |
+      | title          | closed |
+      | Shy collection | yes    |
     And <content type> content:
       | title   | body                                                | collection   | state   |
       | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |

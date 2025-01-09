@@ -6,9 +6,9 @@ Feature: "Add document" visibility options.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
     Given collection content:
-      | title                   | logo     | state     |
-      | Ring of Truth           | logo.png | published |
-      | The Storms of the Waves | logo.png | published |
+      | title                   | logo     |
+      | Ring of Truth           | logo.png |
+      | The Storms of the Waves | logo.png |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ring of Truth" collection
@@ -41,8 +41,8 @@ Feature: "Add document" visibility options.
       | Family name | Andries           |
       | E-mail      | eandr@example.com |
     And collection content:
-      | title                | logo     | state     |
-      | Hunter in the Swords | logo.png | published |
+      | title                | logo     |
+      | Hunter in the Swords | logo.png |
     And the following collection user membership:
       | collection           | user      | roles       |
       | Hunter in the Swords | napcheese | facilitator |
@@ -95,14 +95,14 @@ Feature: "Add document" visibility options.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3670
   Scenario: Remote URLs can be used in documents.
     Given collection content:
-      | title         | state     |
-      | Strong Lasers | published |
+      | title         |
+      | Strong Lasers |
     And licence content:
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
-      | title       | document type | short title | file type | file                   | abstract | field_paragraphs_body | licence               | state     | collection    |
-      | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | published | Strong Lasers |
+      | title       | document type | short title | file type | file                   | abstract | field_paragraphs_body | licence               | collection    |
+      | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
     And I go to the "Laser types" document
@@ -112,14 +112,14 @@ Feature: "Add document" visibility options.
 
   Scenario: Increase attachment file size limit in Documents.
     Given collection content:
-      | title      | state     |
-      | Red blaser | published |
+      | title      |
+      | Red blaser |
     And licence content:
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
-      | title            | document type | short title | abstract | field_paragraphs_body | licence               | state     | collection |
-      | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | published | Red blaser |
+      | title            | document type | short title | abstract | field_paragraphs_body | licence               | collection |
+      | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | Red blaser |
 
     When I am logged in as a facilitator of the "Red blaser" collection
     And I go to the "Red blaser types" document

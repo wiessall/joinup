@@ -6,8 +6,8 @@ Feature: "Event page" editing.
 
   Scenario: Add and remove map
     Given collection content:
-      | title  | logo     | state     |
-      | Heroes | logo.png | published |
+      | title  | logo     |
+      | Heroes | logo.png |
     And I am logged in as a facilitator of the "Heroes" collection
     When I go to the homepage of the "Heroes" collection
     And I click "Add event" in the plus button menu
@@ -35,14 +35,14 @@ Feature: "Event page" editing.
       | Username |
       | <user>   |
     And collection content:
-      | title        | description        | state     | moderation |
-      | <collection> | Sample description | published | yes        |
+      | title        | description        | moderation |
+      | <collection> | Sample description | yes        |
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
     And "event" content:
-      | title   | author | collection   | state     |
-      | <event> | <user> | <collection> | published |
+      | title   | author | collection   |
+      | <event> | <user> | <collection> |
     When I am logged in as "<user>"
     And I go to the "<event>" event
     Then I should see the link "Edit" in the "Entity actions" region
@@ -61,8 +61,8 @@ Feature: "Event page" editing.
       | Username       |
       | Krista Garrett |
     Given solution content:
-      | title                | description        | state     | moderation |
-      | Dreamer in the Snake | Sample description | published | no         |
+      | title                | description        | moderation |
+      | Dreamer in the Snake | Sample description | no         |
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |

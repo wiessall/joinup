@@ -5,8 +5,8 @@ Feature: Notifications are muted when entity is archived/unarchived.
 
   Background:
     Given collection content:
-      | title     | state     |
-      | Milky Way | published |
+      | title     |
+      | Milky Way |
     And users:
       | Username | E-mail            | First name | Family name  | Notification frequency |
       | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  |
@@ -25,8 +25,8 @@ Feature: Notifications are muted when entity is archived/unarchived.
 
   Scenario Outline: Updates to archive and unarchive state does not trigger notifications.
     Given <type> content:
-      | title            | state     | collection | body | content | headline    |
-      | Milky Way <type> | published | Milky Way  | Test | Test    | Test <type> |
+      | title            | collection | body | content | headline    |
+      | Milky Way <type> | Milky Way  | Test | Test    | Test <type> |
     And I mark all emails as read
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>

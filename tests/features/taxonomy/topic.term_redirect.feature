@@ -6,8 +6,8 @@ Feature: Topic terms are redirected to search page.
       | uri                                 | tid  | name     |
       | http://joinup.eu/ontology/topic#foo | 5000 | Foo term |
     And collection content:
-      | title          | state     | topic    |
-      | Bar collection | published | Foo term |
+      | title          | topic    |
+      | Bar collection | Foo term |
 
   Scenario Outline: Topic terms are redirected to search page.
     Given I go to "<inbound url>"

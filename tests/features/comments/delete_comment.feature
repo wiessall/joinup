@@ -4,16 +4,16 @@ Feature: Delete comments
 
   Background:
     Given collection content:
-      | title                 | logo     | state     |
-      | Semantic web fanatics | logo.png | published |
+      | title                 | logo     |
+      | Semantic web fanatics | logo.png |
     And users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
       | Vicky visitor        | vicky.visitor@example.com     | Vicky       | visitor     |
       | Do Re Mi Facilitator | doremifacilitator@example.com | Do Re Mi    | Facilitator |
     And news content:
-      | title                          | body                              | collection            | state     |
-      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics | published |
+      | title                          | body                              | collection            |
+      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics |
     And comments:
       | subject         | field_body       | author          | parent                         |
       | ADMS is awesome | Let's all use it | Tim Berners Lee | RDF Schemas for government use |
@@ -46,6 +46,6 @@ Feature: Delete comments
     Then I should see "Are you sure you want to delete the comment ADMS is awesome?"
     Then I press "Delete"
     Then the following email should have been sent:
-      | recipient | Tim Berners Lee                                                                                                                                                  |
-      | subject   | Interoperable Europe Portal: Your comment has been deleted.                                                                                                                            |
+      | recipient | Tim Berners Lee                                                                                                                                                   |
+      | subject   | Interoperable Europe Portal: Your comment has been deleted.                                                                                                       |
       | body      | Do Re Mi Facilitator deleted your comment in "RDF Schemas for government use". To avoid comment moderation in the future, please read our community guidelines at |
