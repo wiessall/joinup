@@ -133,6 +133,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  author_realname: true
   langcode: true
   og_audience: true
   path: true

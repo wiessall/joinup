@@ -135,6 +135,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  author_realname: true
   created: true
   field_shared_in: true
   field_site_featured: true
