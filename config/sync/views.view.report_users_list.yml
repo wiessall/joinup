@@ -1159,8 +1159,8 @@ display:
           admin_label: ''
           entity_type: user
           entity_field: status
-          plugin_id: user_tristate_status
-          operator: in
+          plugin_id: boolean
+          operator: '='
           value: {  }
           group: 1
           exposed: true
@@ -1184,7 +1184,6 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            reduce: false
           is_grouped: false
           group_info:
             label: ''

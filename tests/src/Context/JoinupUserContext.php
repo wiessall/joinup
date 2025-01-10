@@ -177,11 +177,10 @@ class JoinupUserContext extends RawDrupalContext {
     $allowed_statuses = [
       'active' => 1,
       'blocked' => 0,
-      'cancelled' => -1,
     ];
 
     if (!isset($allowed_statuses[$status])) {
-      throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked' or 'cancelled'.");
+      throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked'.");
     }
     $uids = \Drupal::entityQuery('user')->accessCheck(FALSE)
       ->condition('name', $name)
