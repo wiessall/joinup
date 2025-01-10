@@ -61,6 +61,7 @@ content:
     region: content
 hidden:
   abstract: true
+  author_realname: true
   body: true
   collections: true
   contact: true

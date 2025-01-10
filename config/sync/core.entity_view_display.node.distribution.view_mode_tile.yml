@@ -45,6 +45,7 @@ content:
     region: content
 hidden:
   access_url: true
+  author_realname: true
   download_count: true
   field_state: true
   file_size: true

@@ -62,6 +62,7 @@ content:
     weight: 50
     region: content
 hidden:
+  author_realname: true
   langcode: true
   private_message_link: true
   published_at: true

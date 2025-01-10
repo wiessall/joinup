@@ -117,6 +117,7 @@ content:
     weight: 2
     region: content
 hidden:
+  author_realname: true
   featured: true
   field_comments: true
   field_document_publication_date: true

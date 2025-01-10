@@ -119,4 +119,5 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  author_realname: true
   current_workflow_state: true

@@ -658,6 +658,7 @@ content:
     region: main
 hidden:
   abstract: true
+  author_realname: true
   closed_group: true
   collection_settings: true
   contact: true
