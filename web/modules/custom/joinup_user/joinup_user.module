@@ -16,7 +16,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
@@ -24,7 +23,6 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\Event\JoinupUserCancelEvent;
-use Drupal\joinup_user\JoinupUserViewsData;
 use Drupal\joinup_user\Plugin\Field\NodeAuthorRealname;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
@@ -680,7 +678,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
 /**
  * Implements hook_entity_view_alter().
  */
-function joinup_user_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+function joinup_user_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
   if ($entity->getEntityTypeId() !== 'node') {
     return;
   }
