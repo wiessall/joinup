@@ -14,26 +14,3 @@
  */
 
 declare(strict_types=1);
-
-/**
- * Unify the spatial coverage field.
- */
-function joinup_core_post_update_200100(): void {
-  $new_field = 'spatial_coverage';
-  $old_fields = [
-    'field_document_spatial_coverage',
-    'field_news_spatial_coverage',
-    'field_event_spatial_coverage',
-  ];
-
-  $database = \Drupal::database();
-  foreach ($old_fields as $old_field) {
-    $database->insert("node__{$new_field}")
-      ->from($database->select("node__{$old_field}", 'f')->fields('f'))
-      ->execute();
-
-    $database->insert("node_revision__{$new_field}")
-      ->from($database->select("node_revision__{$old_field}", 'f')->fields('f'))
-      ->execute();
-  }
-}

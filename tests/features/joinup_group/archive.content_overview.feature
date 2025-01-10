@@ -2,22 +2,16 @@
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
-    Given owner content:
-      | name       | owner type |
-      | Some owner | Company    |
-    And contact_information content:
-      | name         | email                    |
-      | Some contact | some-contact@example.com |
-    And <group type> content:
+    Given <group type> content:
       | title             | description | state     |
       | Some <group type> | Description | published |
       | Rare <group type> | Description | published |
     And event content:
-      | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state     |
-      | Event 1 | Event 1     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | published |
-      | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
-      | Event 3 | Event 3     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
-      | Event 4 | Event 4     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      |
+      | Event 1 | Event 1     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> |
+      | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
+      | Event 3 | Event 3     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
+      | Event 4 | Event 4     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> |
     And document content:
       | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state     |
       | Some document 1 | Document      | Some document 1 | Some body             | Luxembourg       | Some <group type> | published |
@@ -128,16 +122,10 @@ Feature: Global search with archive content
     And I should not see the "Some zip distribution" tile
 
   Scenario: Group content supports archived solutions.
-    Given owner content:
-      | name       |
-      | Erno Rubik |
-    And contact_information content:
-      | name       |
-      | Tom Kremer |
-    And collection content:
-      | title      | description                | topic             | owner      | contact information | state     |
-      | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |
-      | Speed cube | also known as speedsolving | Supplier exchange | Erno Rubik | Tom Kremer          | published |
+    Given collection content:
+      | title      |
+      | Rubik Cube |
+      | Speed cube |
     Given solution content:
       | title    | state     | collection | shared on  |
       | Megaminx | published | Rubik Cube | Speed cube |

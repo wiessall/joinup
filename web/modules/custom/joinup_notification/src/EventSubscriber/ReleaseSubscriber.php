@@ -38,7 +38,7 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class ReleaseRdfSubscriber extends NotificationSubscriberBase {
+class ReleaseSubscriber extends NotificationSubscriberBase {
 
   const string TEMPLATE_UPDATE_PUBLISHED = 'release_update';
   const string TEMPLATE_DELETE = 'release_delete';
@@ -91,12 +91,10 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[NotificationEvents::RDF_ENTITY_CRUD] = [
-      ['onUpdate'],
-      ['onDelete'],
+    return [
+      NotificationEvents::NODE_UPDATE => ['onUpdate'],
+      NotificationEvents::NODE_DELETE => ['onDelete'],
     ];
-
-    return $events;
   }
 
   /**
@@ -265,6 +263,11 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
       return FALSE;
     }
 
+    \assert($this->entity instanceof ReleaseInterface);
+    if (!$this->entity->hasGroup()) {
+      return FALSE;
+    }
+
     return TRUE;
   }
 
@@ -275,11 +278,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnReleases(): bool {
-    if ($this->entity->getEntityTypeId() !== 'node') {
-      return FALSE;
-    }
-
-    if ($this->entity->bundle() !== 'release') {
+    if (!$this->entity instanceof ReleaseInterface) {
       return FALSE;
     }
 

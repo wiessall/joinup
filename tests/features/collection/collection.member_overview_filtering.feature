@@ -15,8 +15,8 @@ Feature: Type something to filter the listing the member list
       | iambroke   | Nell       | Gibb        |           | iambroke@example.com   |
       | queenson   | Queen      | Emerson     |           | queenson@example.com   |
     And collection content:
-      | title         | description                    | state     | creation date |
-      | Coffee makers | Coffee is needed for survival. | published | 01-01-2018    |
+      | title         | creation date |
+      | Coffee makers | 01-01-2018    |
     And the following collection user memberships:
       | collection    | user       | roles       | created          | state   |
       | Coffee makers | emeritous  | owner       | 01-01-2018 00:00 | active  |

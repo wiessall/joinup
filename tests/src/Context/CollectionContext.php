@@ -115,7 +115,7 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $default_values = [
-      'state' => 'draft',
+      'state' => 'published',
       'abstract' => 'This is a test abstract.',
     ];
 

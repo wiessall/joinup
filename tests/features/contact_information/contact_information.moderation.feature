@@ -9,12 +9,9 @@ Feature: Contact Information moderation
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
-    And owner content:
-      | owner type | name               |
-      | Company    | Anglo-Saxon Museum |
     And collection content:
-      | title                        | description                                   | logo     | owner              | topic       | state |
-      | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | Anglo-Saxon Museum | E-inclusion | draft |
+      | title                        | description                                   | logo     | topic       | state |
+      | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | E-inclusion | draft |
     And collection user membership:
       | collection                   | user                  | roles       |
       | Games of the Anglo-Saxon age | Sæwine Cynebald       | facilitator |
@@ -24,6 +21,7 @@ Feature: Contact Information moderation
     When I am logged in as "Sæwine Cynebald"
     And I go to the homepage of the "Games of the Anglo-Saxon age" collection
     And I click "Edit" in the "Entity actions" region
+    And I press "Add new contact information"
     And I fill in "Name" with "Mildþryð Mildgyð"
     And I fill in "E-mail address" with "mildred@anglo-saxon-museum.co.uk"
     And I press "Create contact information"
@@ -114,11 +112,11 @@ Feature: Contact Information moderation
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |
     And contact_information content:
-      | name        | email            | author         |
-      | Secreteriat | info@example.com | Sown Carnberry |
+      | name        | email            | author         | state     |
+      | Secreteriat | info@example.com | Sown Carnberry | validated |
     And collection content:
-      | title                 | description        | logo     | owner       | contact information | state     |
-      | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         | published |
+      | title                 | description        | logo     | owner       | contact information |
+      | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         |
     And the following collection user memberships:
       | collection            | user            | roles       |
       | Saint Louis solutions | Sown Carnberry  |             |

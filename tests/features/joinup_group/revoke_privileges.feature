@@ -9,14 +9,14 @@ Feature: Revoke privileges from former and blocked members
       | Username  |
       | Lord Hong |
     And collection content:
-      | title             | state     |
-      | Interesting times | published |
+      | title             |
+      | Interesting times |
     And the following collection user memberships:
       | collection        | user      |
       | Interesting times | Lord Hong |
     And news content:
-      | title             | body               | author    | state     | collection        |
-      | Join the Red Army | Free the prisoners | Lord Hong | published | Interesting times |
+      | title             | body               | author    | collection        |
+      | Join the Red Army | Free the prisoners | Lord Hong | Interesting times |
 
   Scenario: A blocked user cannot edit their own group content.
     Given I am logged in as "Lord Hong"

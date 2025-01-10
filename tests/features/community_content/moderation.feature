@@ -6,11 +6,11 @@ Feature: Moderate community content
 
   Scenario: Content moderation overview
     Given collection content:
-      | title               | state     | content creation | moderation |
-      | Black hole research | published | members          | yes        |
+      | title               | content creation | moderation |
+      | Black hole research | members          | yes        |
     And solution content:
-      | title                 | state     |
-      | Survey For Supernovae | published |
+      | title                 | collection          |
+      | Survey For Supernovae | Black hole research |
     And users:
       | Username       | E-mail                   | First name | Family name |
       | Marco Farfarer | marco.farfar@example.com | Marco      | Farfarer    |
@@ -38,7 +38,7 @@ Feature: Moderate community content
       | Stellar flares                | Dim red dwarfs       |                     | Survey For Supernovae | published    | Marco Farfarer |
       | Upgrading CCD cameras         | Liquid cooled        |                     | Survey For Supernovae | archived     | Marco Farfarer |
     And document content:
-      | title                         | field_paragraphs_body         | collection          | solution              | state            |
+      | title                         | abstract                      | collection          | solution              | state            |
       | A multiwavelength study       | Optical and infrared          | Black hole research |                       | draft            |
       | X-Ray Transient V616          | Weak ¹²CO absorption          | Black hole research |                       | needs update     |
       | K-band spectroscopy           | Small amount of flux          | Black hole research |                       | proposed         |
@@ -303,8 +303,8 @@ Feature: Moderate community content
   Scenario: Filtering the content moderation overview
 
     Given collection content:
-      | title         | state     |
-      | Neutron stars | published |
+      | title         |
+      | Neutron stars |
 
     And discussion content:
       | title                       | body                  | collection    | state    |
@@ -377,8 +377,8 @@ Feature: Moderate community content
     Given user:
       | Username | leo |
     And collection content:
-      | title               | state     | moderation |
-      | Black hole research | published | yes        |
+      | title               | moderation |
+      | Black hole research | yes        |
     And the following collection user membership:
       | collection          | user |
       | Black hole research | leo  |

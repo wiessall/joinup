@@ -15,27 +15,24 @@ Feature: Collection homepage
     And owner content:
       | name          |
       | Bilbo Baggins |
-    And contact_information content:
-      | name        | email                   |
-      | Kalikatoura | kalikatoura@example.com |
     And collection content:
-      | title              | description        | owner         | contact information | logo     | moderation | content creation | state     | topic                            | published at      | modification date |
-      | Middle earth daily | Middle earth daily | Bilbo Baggins | Kalikatoura         | logo.png | yes        | members          | published | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
+      | title              | description        | owner         | contact information | logo     | moderation | content creation | topic                            | published at      | modification date |
+      | Middle earth daily | Middle earth daily | Bilbo Baggins | Contact name        | logo.png | yes        | members          | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
     And solution content:
-      | title        | collection         | description           | content creation | creation date     | state     | topic |
-      | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | published | Info  |
+      | title        | collection         | description           | content creation | creation date     | topic |
+      | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | Info  |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |
       | Middle earth daily | Boromir |             |
       | Middle earth daily | Legolas |             |
     And news content:
-      | title                                             | body                | topic             | collection         | state     | created           | changed  |
-      | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | published | 2014-10-17 8:34am | 2017-7-5 |
-      | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | published | 2014-10-17 8:31am | 2017-7-5 |
+      | title                                             | body                | topic             | collection         | created           | changed  |
+      | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | 2014-10-17 8:34am | 2017-7-5 |
+      | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | 2014-10-17 8:31am | 2017-7-5 |
     And event content:
-      | title                                    | short title      | field_paragraphs_body                     | collection         | created           | start date          | end date            | state     | topic             | changed  |
-      | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | published | Supplier exchange | 2017-7-5 |
+      | title                                    | short title      | field_paragraphs_body                     | collection         | created           | start date          | end date            | topic             | changed  |
+      | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange | 2017-7-5 |
 
   Scenario: The collection homepage shows the collection metrics.
     When I go to the homepage of the "Middle earth daily" collection
@@ -172,8 +169,8 @@ Feature: Collection homepage
   @javascript
   Scenario: The applied etranslate selectors correspond to the collection's landing page
     Given "custom_page" content:
-      | title               | collection         | state     |
-      | Custom Landing Page | Middle earth daily | published |
+      | title               | collection         |
+      | Custom Landing Page | Middle earth daily |
     Given I am not logged in
     When I go to the homepage of the "Middle earth daily" collection
     Then I should see a Webtools eTrans element
@@ -182,7 +179,7 @@ Feature: Collection homepage
       | Owner                    |
       | Bilbo Baggins            |
       | Contact information      |
-      | Kalikatoura              |
+      | Contact name             |
       | Middle earth daily       |
       | 2 News                   |
       | 1 Event                  |

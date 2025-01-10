@@ -6,11 +6,11 @@ Feature: Subscribing to a solution
 
   Background:
     Given collection content:
-      | title                  | abstract | description | closed | state     |
-      | Some parent collection | Abstract | Description | yes    | published |
+      | title                  | abstract | description | closed |
+      | Some parent collection | Abstract | Description | yes    |
     And solution content:
-      | title                      | state     | collection             |
-      | Some solution to subscribe | published | Some parent collection |
+      | title                      | collection             |
+      | Some solution to subscribe | Some parent collection |
     And users:
       | Username          |
       | Cornilius Darcias |

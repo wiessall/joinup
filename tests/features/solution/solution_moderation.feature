@@ -7,8 +7,8 @@ Feature: Solution moderation
   # Access checks are not being made here. They are run in the solution add feature.
   Scenario: 'Save as draft' and 'Propose' states are available but moderators should also see 'Publish' state.
     Given collection content:
-      | title                         | logo     | state     |
-      | Collection propose state test | logo.png | published |
+      | title                         |
+      | Collection propose state test |
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
@@ -32,13 +32,7 @@ Feature: Solution moderation
     And I should not see the link "Delete"
 
   Scenario: Test the moderation workflow available states.
-    Given owner content:
-      | name           | owner type |
-      | Angelos Agathe | Company    |
-    And contact_information content:
-      | name    | email               |
-      | Placide | Placide@example.com |
-    And users:
+    Given users:
       | Username         | Roles     |
       # Authenticated user.
       | Isabel Banks     |           |
@@ -49,14 +43,14 @@ Feature: Solution moderation
       # Facilitator of all the solutions.
       | William Curtis   |           |
     Given solution content:
-      | title                      | description                | logo     | owner          | contact information | state                 |
-      | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft                 |
-      | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed              |
-      | Rose of Doors              | Rose of Doors              | logo.png | Angelos Agathe | Placide             | published             |
-      | Time Bandit                | Time Bandit                | logo.png | Angelos Agathe | Placide             | draft_after_published |
-      | Fire Swords                | Fire Swords                | logo.png | Angelos Agathe | Placide             | archived              |
-      | The Guardian of the Stream | The Guardian of the Stream | logo.png | Angelos Agathe | Placide             | needs update          |
-      | Flames in the Swords       | Flames in the Swords       | logo.png | Angelos Agathe | Placide             | blacklisted           |
+      | title                      | description                | state                 |
+      | Azure Ship                 | Azure ship                 | draft                 |
+      | The Last Illusion          | The Last Illusion          | proposed              |
+      | Rose of Doors              | Rose of Doors              | published             |
+      | Time Bandit                | Time Bandit                | draft_after_published |
+      | Fire Swords                | Fire Swords                | archived              |
+      | The Guardian of the Stream | The Guardian of the Stream | needs update          |
+      | Flames in the Swords       | Flames in the Swords       | blacklisted           |
     And the following solution user memberships:
       | solution                   | user            | roles       |
       | Azure Ship                 | Franklin Walker | owner       |

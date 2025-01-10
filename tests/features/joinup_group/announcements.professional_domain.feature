@@ -3,8 +3,8 @@ Feature: Filter announcements by professional domain
 
   Scenario Outline: User can narrow down targeted users based on the business domains.
     Given <group> content:
-      | title         | state     |
-      | Pension funds | published |
+      | title         |
+      | Pension funds |
     And users:
       | Username | E-mail              | Professional domain                     | Status  |
       | Mogul    | mogul@example.com   | Demography, E-health, E-justice, HR, HR | active  |
