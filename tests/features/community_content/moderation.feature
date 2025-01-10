@@ -180,7 +180,6 @@ Feature: Moderate community content
     And I should not see the text "Black-body spectrum radiation"
 
     # Now repeat this for the solution.
-    And I break
     When I am logged in as a facilitator of the "Survey For Supernovae" solution
     And I go to the homepage of the "Survey For Supernovae" solution
     And I click "Moderate content" in the "Entity actions" region

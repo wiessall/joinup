@@ -852,7 +852,9 @@ Feature: Global search
     And I should see the text "The collection pull abstract." in the "Pull alpha" card
     And I should see the text "Random abstract." in the "Col for Sol javi" card
     And I should see the text "The solution pull abstract." in the "Solution pull" card
+    And I should not see the text "Abstract" in the "Solution pull" tile
     And I should see the text "This is the solution javi description" in the "Solution javi" card
+    And I should not see the text "Description" in the "Solution javi" tile
     And I should see the text "The solution roll abstract." in the "Solution roll" card
     And I should see the text "This is the solution net description" in the "Solution net" card
     And I should see the text "Lorem ipsum abstract" in the "Custom example abstract" card
