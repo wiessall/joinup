@@ -86,3 +86,33 @@ function joinup_core_deploy_200203(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['total'] ? $sandbox['progress'] / $sandbox['total'] : 1;
   return 'Deleted ' . $sandbox['progress'] . ' out of ' . $sandbox['total'] . ' users with status "cancelled".';
 }
+
+/**
+ * Re-setup the status column in the user field data table.
+ */
+function joinup_core_deploy_200203(array &$sandbox): string {
+  $field_name = 'status';
+  $entity_type = 'user';
+
+  // Load the entity definition update manager.
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  // Get the changes for the entity type and check if the field needs updating.
+  $updates = $definition_update_manager->getChangeList();
+  if (!isset($updates[$entity_type]['field_storage_definitions'][$field_name])) {
+    return 'No updates found for the user status field.';
+  }
+
+  $entity_type = $definition_update_manager->getEntityType($entity_type);
+  $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
+  $field = $entity_field_manager->getBaseFieldDefinitions($entity_type->id())[$field_name];
+
+  // Get the field storage definition.
+  $field_storage_definition = $field->getFieldStorageDefinition();
+
+  // Install the field storage definition.
+  /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $field_storage_definition */
+  $definition_update_manager->installFieldStorageDefinition($field_storage_definition->getName(), $entity_type->id(), 'user', $field_storage_definition);
+
+  return 'Updated the user status field.';
+}
