@@ -510,13 +510,9 @@ function joinup_user_user_cancel(array $edit, JoinupUserInterface $account, stri
       ->getStorage('comment')
       ->loadMultiple($cids);
 
-    foreach ($comments as $comment) {
-      $comment->setAuthorName($realname);
-      // For comments, set also the uid to 0 because if we allow them to change
-      // it, it will also change the author name of the comment.
-      $comment->set('uid', 0);
-      $comment->save();
-    }
+  // @todo Need to see what happens with this.
+  if (!empty($edit['user_cancel_notify'])) {
+    _user_mail_notify('status_canceled', $account);
   }
 }
 
