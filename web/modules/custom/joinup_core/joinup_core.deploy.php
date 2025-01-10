@@ -13,3 +13,76 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Sets nodes to anonymous and fills in the author_realname field.
+ */
+function joinup_core_deploy_200202(array &$sandbox) {
+  if (empty($sandbox['nids'])) {
+    $query = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->condition('status', -1);
+    $uids = $query->execute();
+
+    // Get all nodes with uid 0.
+    $query = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('uid', $uids, 'IN');
+
+    $sandbox['nids'] = $query->execute();
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['nids']);
+
+    if (empty($sandbox['nids'])) {
+      return 'No content were found of cancelled users.';
+    }
+  }
+
+  // During event updates, there are some, that their location cannot be
+  // resolved by the geocoder due to invalid input. This is not part of the
+  // deployment, so we disable the geocoder recalculation.
+  \Drupal::request()->attributes->set('geocoder_presave_disabled', TRUE);
+
+  $nids = array_splice($sandbox['nids'], 0, 10);
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $nodes = $node_storage->loadMultiple($nids);
+  foreach ($nodes as $node) {
+    $user = $node->getOwner();
+    $node->setOwnerId(0);
+    $node->set('author_realname', $user->getDisplayName());
+    $node->skip_notification = TRUE;
+    $node->save();
+  }
+
+  \Drupal::request()->attributes->set('geocoder_presave_disabled', FALSE);
+  $sandbox['progress'] += count($nids);
+  $sandbox['#finished'] = $sandbox['total'] ? $sandbox['progress'] / $sandbox['total'] : 1;
+  return 'Updated ' . $sandbox['progress'] . ' out of ' . $sandbox['total'] . ' nodes of a cancelled user.';
+}
+
+/**
+ * Delete cancelled users.
+ */
+function joinup_core_deploy_200203(array &$sandbox): string {
+  if (empty($sandbox['uids'])) {
+    // Get all users with status -1.
+    $query = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->condition('status', -1);
+    $sandbox['uids'] = $query->execute();
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['uids']);
+
+    if (empty($sandbox['uids'])) {
+      return 'No users with status -1 found.';
+    }
+  }
+
+  $uids = array_splice($sandbox['uids'], 0, 10);
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $user_storage->delete($user_storage->loadMultiple($uids));
+
+  $sandbox['progress'] += count($uids);
+  $sandbox['#finished'] = $sandbox['total'] ? $sandbox['progress'] / $sandbox['total'] : 1;
+  return 'Deleted ' . $sandbox['progress'] . ' out of ' . $sandbox['total'] . ' users with status "cancelled".';
+}

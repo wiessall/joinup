@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_requirements().
  *
@@ -55,4 +57,31 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Install the `author_realname` field on the `node` entity.
+ */
+function joinup_core_update_200201(): string {
+  // Install the `author_realname` field on the `node` entity.
+  $field_storage = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('author_realname', 'node');
+  if (!$field_storage) {
+    $field_storage = BaseFieldDefinition::create('string')
+      ->setLabel(t('Author realname'))
+      ->setDescription(t('The real name of the author of the node.'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDefaultValue('')
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+    \Drupal::entityDefinitionUpdateManager()
+      ->installFieldStorageDefinition('author_realname', 'node', 'node', $field_storage);
+  }
+
+  return 'The `author_realname` field has been installed on the `node` entity.';
 }
