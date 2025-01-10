@@ -20,13 +20,7 @@ services:
 
   Drupal\joinup_user\Routing\RouteSubscriber: { }
 
-  Drupal\joinup_user\Access\UserStatusAccessCheck:
-    tags:
-      - { name: access_check, applies_to: _user_status }
-
-  Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber: { }
-
-  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber: { }
+  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber: {  }
 
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
