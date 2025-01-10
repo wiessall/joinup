@@ -33,6 +33,7 @@ content:
     weight: 50
     region: content
 hidden:
+  author_realname: true
   field_state: true
   langcode: true
   owner_type: true

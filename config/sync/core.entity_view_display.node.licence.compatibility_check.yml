@@ -61,6 +61,7 @@ content:
     weight: 1
     region: content
 hidden:
+  author_realname: true
   deprecated: true
   langcode: true
   legal_type: true
