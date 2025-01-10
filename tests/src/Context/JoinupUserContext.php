@@ -156,7 +156,6 @@ class JoinupUserContext extends RawDrupalContext {
     self::convertObjectPropertyValues($user, 'status', [
       'blocked' => 0,
       'active' => 1,
-      'cancelled' => -1,
     ]);
   }
 
@@ -166,7 +165,7 @@ class JoinupUserContext extends RawDrupalContext {
    * @param string $name
    *   The user name.
    * @param string $status
-   *   The user status: 'active', 'blocked' or 'cancelled'.
+   *   The user status: 'active' or 'blocked'.
    *
    * @throws \Exception
    *   If an invalid status has been passed.
