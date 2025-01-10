@@ -323,7 +323,7 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
 function _ventuno_get_author(CommunityContentInterface $node): array {
   /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
-  $author = $node->get('uid')->entity;
+  $author = $node->get('author_realname')->getAuthor() ?? $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
 }
 
