@@ -36,6 +36,7 @@ mode: digest_message_header
 content: {  }
 hidden:
   abstract: true
+  author_realname: true
   closed_group: true
   collection_settings: true
   contact: true

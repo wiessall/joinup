@@ -69,6 +69,7 @@ content:
     weight: 50
     region: content
 hidden:
+  author_realname: true
   field_attachment: true
   field_custom_page_logo: true
   field_hide_title: true

@@ -41,6 +41,7 @@ mode: digest_message_header
 content: {  }
 hidden:
   abstract: true
+  author_realname: true
   body: true
   collections: true
   contact: true

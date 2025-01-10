@@ -104,6 +104,7 @@ content:
     weight: 3
     region: content
 hidden:
+  author_realname: true
   body: true
   collections: true
   contact: true

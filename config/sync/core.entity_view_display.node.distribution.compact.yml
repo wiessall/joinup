@@ -83,6 +83,7 @@ content:
     weight: 1
     region: content
 hidden:
+  author_realname: true
   description: true
   download_count: true
   field_state: true

@@ -35,6 +35,7 @@ content:
     weight: 1
     region: content
 hidden:
+  author_realname: true
   field_state: true
   langcode: true
   links: true
