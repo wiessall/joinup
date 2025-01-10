@@ -27,7 +27,6 @@ Feature: Contact form for solution
     # Anonymous case.
     When I am not logged in
     And I go to the homepage of the "Six exclusion advantages" solution
-    And I break
     Then I should see the link "John Revoked"
     # Page was rendered, but in the meantime, contact is changed on backend.
     Given there are no preexisting log records on the site
