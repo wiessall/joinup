@@ -6,13 +6,13 @@ Feature: Featuring content site-wide
 
   Background:
     Given collection content:
-      | title                | state     | featured |
-      | Tidy Neutron         | published | yes      |
-      | Reborn Eternal Gamma | published | no       |
+      | title                | featured |
+      | Tidy Neutron         | yes      |
+      | Reborn Eternal Gamma | no       |
     Given solution content:
-      | title                         | collection           | state     | featured |
-      | Opensource neutron generators | Tidy Neutron         | published | yes      |
-      | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | published | no       |
+      | title                         | collection           | featured |
+      | Opensource neutron generators | Tidy Neutron         | yes      |
+      | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | no       |
     And users:
       | Username        | E-mail                   | Roles     |
       | Niles Turner    | niles.turner@example.com |           |
@@ -28,9 +28,9 @@ Feature: Featuring content site-wide
 
   Scenario Outline: Moderators can feature and unfeature content site-wide.
     Given <content type> content:
-      | title                               | collection   | state     | featured |
-      | Ionizing radiation types            | Tidy Neutron | published | no       |
-      | Elementary particles standard model | Tidy Neutron | published | yes      |
+      | title                               | collection   | featured |
+      | Ionizing radiation types            | Tidy Neutron | no       |
+      | Elementary particles standard model | Tidy Neutron | yes      |
 
     When I am an anonymous user
     And I go to the homepage of the "Tidy Neutron" collection
@@ -92,11 +92,11 @@ Feature: Featuring content site-wide
     When I am an anonymous user
     And I visit the <content type> overview
     Then I should see the following tiles in the correct order:
-      | <featured>   |
-      | <unfeatured> |
+      | <featured>     |
+      | <unfeatured>   |
       # The Portal collection in installed by default.
       # @see \joinup_test_install()
-      | <extra entity>       |
+      | <extra entity> |
     And I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 

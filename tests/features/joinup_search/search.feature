@@ -338,7 +338,7 @@ Feature: Global search
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
     # The Portal collection is included
-    Then the page should show the tiles "The Portal, Solution alpha, Release Alpha"
+    Then the page should show the tiles "The Portal, Solution alpha, Release Alpha, Collection alpha, Col for Sol"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -852,7 +852,9 @@ Feature: Global search
     And I should see the text "The collection pull abstract." in the "Pull alpha" card
     And I should see the text "Random abstract." in the "Col for Sol javi" card
     And I should see the text "The solution pull abstract." in the "Solution pull" card
+    And I should not see the text "Abstract" in the "Solution pull" tile
     And I should see the text "This is the solution javi description" in the "Solution javi" card
+    And I should not see the text "Description" in the "Solution javi" tile
     And I should see the text "The solution roll abstract." in the "Solution roll" card
     And I should see the text "This is the solution net description" in the "Solution net" card
     And I should see the text "Lorem ipsum abstract" in the "Custom example abstract" card

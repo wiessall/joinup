@@ -86,8 +86,8 @@ Feature: Creation of owners through UI
       | name      | owner type |
       | Makinator | Company    |
     Given collection content:
-      | title    | state     | owner     |
-      | Jump Mak | published | Makinator |
+      | title    | owner     |
+      | Jump Mak | Makinator |
     When I am logged in as a "facilitator" of the "Jump Mak" collection
     Then I go to the edit form of the "Jump Mak" collection
     When I press "Remove" at the "Owner" field

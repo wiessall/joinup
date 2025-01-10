@@ -5,12 +5,6 @@ Feature: Collection membership administration
   I need to be able to manage collection members
 
   Background:
-    Given owner content:
-      | name         |
-      | James Wilson |
-    And contact_information content:
-      | name                                   | email                        |
-      | Princeton-Plainsboro Teaching Hospital | info@princeton-plainsboro.us |
     And users:
       | Username          | Roles     | E-mail                        | First name | Family name |
       # Authenticated user.
@@ -25,8 +19,8 @@ Feature: Collection membership administration
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
     And collection content:
-      | title             | description               | logo     | owner        | contact information                    | closed | state     |
-      | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
+      | title             | closed |
+      | Medical diagnosis | yes    |
     And the following collection user memberships:
       | collection        | user              | roles                      | state   |
       | Medical diagnosis | Lisa Cuddy        | administrator, facilitator | active  |
@@ -54,7 +48,7 @@ Feature: Collection membership administration
       | /collection/medical-diagnosis/members                                              |
     And the following email should have been sent:
       | recipient | Turkey Ham                                                                         |
-      | subject   | Interoperable Europe Portal: A user has requested to join your collection                               |
+      | subject   | Interoperable Europe Portal: A user has requested to join your collection          |
       | body      | Donald Duck has requested to join your collection "Medical diagnosis" as a member. |
 
   Scenario: Approve a membership
@@ -163,9 +157,9 @@ Feature: Collection membership administration
       | success messages                                                                       |
       | The member Kathie Cumbershot has been deleted from the 'Medical diagnosis' collection. |
     And the following email should have been sent:
-      | recipient | Kathie Cumbershot                                                               |
-      | subject   | Interoperable Europe Portal: Your request to join the collection Medical diagnosis was rejected      |
-      | body      | Lisa Cuddy has rejected your request to join the "Medical diagnosis" collection |
+      | recipient | Kathie Cumbershot                                                                               |
+      | subject   | Interoperable Europe Portal: Your request to join the collection Medical diagnosis was rejected |
+      | body      | Lisa Cuddy has rejected your request to join the "Medical diagnosis" collection                 |
 
     # Delete multiple members from collection.
     Given I check the box "Update the member Gregory House"
@@ -445,8 +439,8 @@ Feature: Collection membership administration
 
   Scenario: User needs to accept code of conduct on the confirmation form.
     Given custom_page content:
-      | title                 | collection        | state     |
-      | Medical diagnosis CoC | Medical diagnosis | published |
+      | title                 | collection        |
+      | Medical diagnosis CoC | Medical diagnosis |
     And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
 
     When I am logged in as "Lisa Cuddy"

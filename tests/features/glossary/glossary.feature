@@ -8,14 +8,14 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Username | Roles  |
       | <user>   | <role> |
     And collection content:
-      | title             | state     |
-      | A World of Things | published |
+      | title             |
+      | A World of Things |
     And the following collection user membership:
       | collection        | user   | roles     |
       | A World of Things | <user> | <og role> |
     And solution content:
-      | title          | collection        | state     |
-      | Things To Come | A World of Things | published |
+      | title          | collection        |
+      | Things To Come | A World of Things |
 
     Given I am logged in as <user>
     When I go to the "A World of Things" collection
@@ -140,36 +140,36 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
   Scenario: Glossary terms should be shown as links in collection content
     Given collection content:
-      | title                    | state     | description                                                                                       | abstract                              |
-      | Collection With Glossary | published | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> | The Alphabet is back and it's s/ashy. |
+      | title                    | description                                                                                       | abstract                              |
+      | Collection With Glossary | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> | The Alphabet is back and it's s/ashy. |
     And solution content:
-      | title            | description | state     | collection               |
-      | Under The Bridge | No Colors   | published | Collection With Glossary |
+      | title            | description | collection               |
+      | Under The Bridge | No Colors   | Collection With Glossary |
     And release content:
-      | title        | release number | release notes         | is version of    | state     |
-      | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge | published |
+      | title        | release number | release notes         | is version of    |
+      | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge |
     And distribution content:
-      | title   | description          | solution         | release      | access url         | state     |
-      | Distro1 | Alphabet & CLR       | Under The Bridge |              | http://example.com | published |
-      | Distro2 | Colors & ABC & colrs |                  | Summer of 69 | http://example.com | published |
+      | title   | description          | solution         | release      | access url         |
+      | Distro1 | Alphabet & CLR       | Under The Bridge |              | http://example.com |
+      | Distro2 | Colors & ABC & colrs |                  | Summer of 69 | http://example.com |
     And custom_page content:
-      | title    | body              | solution         | state     |
-      | Schedule | Colors everywhere | Under The Bridge | published |
+      | title    | body              | solution         |
+      | Schedule | Colors everywhere | Under The Bridge |
     And discussion content:
-      | title        | content                   | collection               | state     |
-      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
+      | title        | content                   | collection               |
+      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary |
     And document content:
-      | title             | abstract           | collection               | state     |
-      | Authentic Papyrus | Authentic abstract | Collection With Glossary | published |
+      | title             | abstract           | collection               |
+      | Authentic Papyrus | Authentic abstract | Collection With Glossary |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Authentic Papyrus" title:
       | field_body:value  | Alphabet is back |
       | field_body:format | content_editor   |
     And event content:
-      | title      | field_paragraphs_body             | solution         | state     |
-      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
+      | title      | field_paragraphs_body             | solution         |
+      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge |
     And news content:
-      | title         | field_paragraphs_body                      | solution         | state     |
-      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
+      | title         | field_paragraphs_body                      | solution         |
+      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge |
     And glossary content:
       | title    | synonyms  | summary                  | definition                  | collection               |
       | Alphabet | ABC       | Summary of Alphabet      | Long, long definition field | Collection With Glossary |
@@ -243,9 +243,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | mod      | moderator |
       | fac1     |           |
     And collection content:
-      | title                    | description                                                                                            | abstract                                                                                              | state     |
-      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again.  | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. | published |
-      | The Other Collection     | desc                                                                                                   | desc                                                                                                  | published |
+      | title                    | description                                                                                           | abstract                                                                                              |
+      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. |
+      | The Other Collection     | desc                                                                                                  | desc                                                                                                  |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
@@ -321,9 +321,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Username |
       | ben      |
     And collection content:
-      | title             | state     |
-      | A World of Things | published |
-      | Other collection  | published |
+      | title             |
+      | A World of Things |
+      | Other collection  |
 
     And the following collection user membership:
       | collection        | user | roles       |
@@ -417,8 +417,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Username | Roles     |
       | mod      | moderator |
     And collection content:
-      | title                    | description                                                                                                             | state     |
-      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
+      | title                    | description                                                                                                             |
+      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |
@@ -442,8 +442,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | fac      |           |
       | mod      | moderator |
     And collection content:
-      | title                    | description                   | abstract                         | state     | author | uri                      |
-      | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | published | auth   | http://collection-battle |
+      | title                    | description                   | abstract                         | author | uri                      |
+      | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | auth   | http://collection-battle |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |

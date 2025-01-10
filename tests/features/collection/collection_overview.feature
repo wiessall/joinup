@@ -8,10 +8,10 @@ Feature: Collections Overview
       | Madam Shirley | i.see.the.future@example.com |
     And collection content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
-      | title             | description                    | creation date     | state     |
-      | E-health          | Supports health-related fields | 2018-10-04 8:31am | published |
-      | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am | published |
-      | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am | published |
+      | title             | description                    | creation date     |
+      | E-health          | Supports health-related fields | 2018-10-04 8:31am |
+      | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am |
+      | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am |
     And owner content:
       | name                 | owner type |
       | Organisation example | Company    |
@@ -31,6 +31,8 @@ Feature: Collections Overview
       | Connecting Europe |
       # Created in 8:31am.
       | E-health          |
+      # Created 2015-01-01 08:00am.
+      | The Portal        |
 
     When I am an anonymous user
     And I visit the collection overview
@@ -83,14 +85,14 @@ Feature: Collections Overview
 
   Scenario: Custom pages should not be visible on the overview page
     Given collection content:
-      | title | logo     | moderation | topic      | spatial coverage | state     |
-      | Jira  | logo.png | no         | Demography | Belgium          | published |
+      | title | logo     | moderation |
+      | Jira  | logo.png | no         |
     And news content:
-      | title                             | body                             | collection | topic                   | spatial coverage | state     |
-      | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | published |
+      | title                             | body                             | collection |
+      | Jira will be down for maintenance | As always, during business hours | Jira       |
     And custom_page content:
-      | title            | body                                       | collection | state     |
-      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       | published |
+      | title            | body                                       | collection |
+      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       |
     When I go to the homepage of the "Jira" collection
     Then I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
@@ -98,12 +100,12 @@ Feature: Collections Overview
   @javascript
   Scenario: Feature icon should be visible for collection's content.
     Given collection content:
-      | title                   | state     |
-      | Service Management apps | published |
+      | title                   |
+      | Service Management apps |
     And news content:
-      | title  | collection              | state     | featured |
-      | Jira   | Service Management apps | published | yes      |
-      | Trello | Service Management apps | published | no       |
+      | title  | collection              | featured |
+      | Jira   | Service Management apps | yes      |
+      | Trello | Service Management apps | no       |
     When I go to the homepage of the "Service Management apps" collection
     Then the "Jira" tile should be marked as featured
     But the "Trello" "news" tile should not be marked as featured
@@ -115,17 +117,17 @@ Feature: Collections Overview
       | Luigi Plant       |
       | Yiannis Parios    |
     And collection content:
-      | title                       | state     | featured | author            |
-      | Enemies of the state        | published | yes      | Luigi Plant       |
-      | Fed up meatlovers           | published | no       | Carolina Mercedes |
-      | Ugly farmers                | published | yes      | Luigi Plant       |
-      | Yiannis Parios collection 1 | published | no       | Yiannis Parios    |
-      | Yiannis Parios collection 2 | published | no       | Yiannis Parios    |
-      | Yiannis Parios collection 3 | published | no       | Yiannis Parios    |
+      | title                       | featured | author            |
+      | Enemies of the state        | yes      | Luigi Plant       |
+      | Fed up meatlovers           | no       | Carolina Mercedes |
+      | Ugly farmers                | yes      | Luigi Plant       |
+      | Yiannis Parios collection 1 | no       | Yiannis Parios    |
+      | Yiannis Parios collection 2 | no       | Yiannis Parios    |
+      | Yiannis Parios collection 3 | no       | Yiannis Parios    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And collection content:
-      | title              | state     | featured |
-      | Biologic meatballs | published | no       |
+      | title              | featured |
+      | Biologic meatballs | no       |
 
     When I am logged in as "Yiannis Parios"
     And I visit the collection overview

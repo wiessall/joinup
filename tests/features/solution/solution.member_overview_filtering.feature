@@ -15,11 +15,11 @@ Feature: Type something to filter the listing the member list
       | brighty      | Lavonne    | Atkins      |           |
       | scanner      | Pucky      | Muck        |           |
     And collection content:
-      | title         | state     |
-      | Coffee lovers | published |
+      | title         |
+      | Coffee lovers |
     And solution content:
-      | title           | description                          | state     | collection    |
-      | Coffee grinders | Grind more coffee, make more coffee. | published | Coffee lovers |
+      | title           | collection    |
+      | Coffee grinders | Coffee lovers |
     And the following solution user memberships:
       | solution        | user         | roles       |
       | Coffee grinders | ledge        | owner       |

@@ -15,6 +15,7 @@
         "cfpinto/graphql": "^2.0",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "composer/installers": "^2",
+        "composer/spdx-licenses": "^1.5",
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
@@ -126,6 +127,12 @@
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
+        "npm-asset/dompurify": "^3.0.9",
+        "npm-asset/jquery-colorbox": "^1.6.4",
+        "npm-asset/jquery-jsonview": "^1.2.3",
+        "npm-asset/js-cookie": "^3.0.5",
+        "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
+        "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -186,15 +193,16 @@
             "php": "8.3"
         },
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
             "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
-            "openeuropa/composer-artifacts": true,
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": true
+            "oomphinc/composer-installers-extender": true,
+            "openeuropa/composer-artifacts": true,
+            "php-http/discovery": true,
+            "phpro/grumphp-shim": true,
+            "phpstan/extension-installer": true
         }
     },
     "autoload": {
@@ -238,7 +246,17 @@
         ]
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
+            "web/libraries/slick": [
+                "npm-asset/slick-carousel"
+            ],
+            "web/libraries/colorbox": [
+                "npm-asset/jquery-colorbox"
+            ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
             ],
@@ -249,7 +267,9 @@
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -292,12 +312,11 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "behat/behat": {
+                "Do not disable xdebug if an active session is found @see https://github.com/Behat/Behat/pull/1581": "resources/patch/php/behat/behat/1581.diff"
+            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
-            },
-            "drupal/autologout": {
-                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010-29.patch",
-                "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
             "drupal/cas_mock_server": {
                 "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
@@ -331,7 +350,6 @@
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
-                "Performance Degraded after update to twig 3.14.2 @see https://www.drupal.org/i/3487031": "resources/patch/php/drupal/core/3487031.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff",
                 "Add Views EntityReference filter to support better UX for exposed filters @see https://www.drupal.org/i/3347343": "resources/patch/php/drupal/core/3347343.diff"
             },
@@ -455,15 +473,10 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
             },
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
-            },
-            "drupal/tmgmt_ec_etranslation": {
-                "text-to-translate has a length limit, @see https://www.drupal.org/i/3483072": "resources/patch/php/drupal/tmgmt_ec_etranslation/3483072.patch",
-                "Wrong logic for base64 text detection": "resources/patch/php/drupal/tmgmt_ec_etranslation/3484303.patch"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
@@ -514,6 +527,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         },
         {
             "type": "package",

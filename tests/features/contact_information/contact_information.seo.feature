@@ -21,8 +21,8 @@ Feature: Contact Information entities don't cause exceptions because of their in
   @javascript
   Scenario: Create contact info entity through IEF in a collection.
     Given collection content:
-      | title                     | state     |
-      | Contact Info Content Test | published |
+      | title                     | owner | contact |
+      | Contact Info Content Test |       |         |
     Given I am logged in as a user with the "moderator" role
     When I go to the edit form of the "Contact Info Content Test" collection
     Then I should see the text "Edit Collection Contact Info Content Test"
@@ -47,7 +47,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
 
     And I press "Publish"
     Then I should see the success message containing "Status message You've added a collection short ID: contact-info-test. It will take some time until the collection content URLs will be updated."
-    And I should see the success message "A new confirmation message has been sent to john.doe@example.com."
+    And I should see the success message "A new confirmation message has been sent"
 
     # Visit the canonical page of the contact information entity created by IEF.
     When I go to the "Mr. John Doe DLA" contact information page

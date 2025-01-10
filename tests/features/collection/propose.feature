@@ -95,8 +95,8 @@ Feature: Proposing a collection
 
   Scenario: Propose a collection with a duplicate name
     Given collection content:
-      | title                  | state     |
-      | The Ratcatcher's Guild | published |
+      | title                  |
+      | The Ratcatcher's Guild |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:

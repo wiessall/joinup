@@ -5,18 +5,15 @@ Feature: Solution editing.
   I need to be able to edit solutions through UI.
 
   Background:
-    Given contact_information content:
-      | name         | email              |
-      | Seward Shawn | seward@example.com |
+    Given users:
+      | Username     | E-mail                   |
+      | Yancy Burton | yancy.burton@example.com |
     And owner content:
       | name      | owner type |
       | Acme inc. | Company    |
-    And users:
-      | Username     | E-mail                   |
-      | Yancy Burton | yancy.burton@example.com |
     And collection content:
-      | title              | state     |
-      | Collection example | published |
+      | title              |
+      | Collection example |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
@@ -24,8 +21,8 @@ Feature: Solution editing.
       | collection         | user         | roles       |
       | Collection example | Yancy Burton | facilitator |
     And solution content:
-      | title            | description       | logo     | contact information | owner     | state     |
-      | Another solution | Just another one. | logo.png | Seward Shawn        | Acme inc. | published |
+      | title            | logo     |
+      | Another solution | logo.png |
 
   @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
@@ -43,7 +40,7 @@ Feature: Solution editing.
       | E-mail address | yancyb@example.com |
     And I attach the file "logo.png" to "Logo"
     And I select "Flemish" from "Language"
-    And I select "EU and European Policies" from "Topic"
+    And I select "Statistics and Analysis" from "Topic"
     And I select "Logging Service" from "Solution type"
 
     # Click the button to select an existing owner.
@@ -81,9 +78,12 @@ Feature: Solution editing.
     Then I delete the "Solution A revised" solution
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
+    Given collection content:
+      | title              |
+      | Collection example |
     Given solution content:
-      | title      | description   | logo     | contact information | owner     | state     | solution type |
-      | Solution B | Second letter | logo.png | Seward Shawn        | Acme inc. | published | Citizen       |
+      | title      | collection         |
+      | Solution B | Collection example |
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Solution B" solution
     Then I should see the link "Edit"
