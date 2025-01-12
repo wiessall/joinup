@@ -125,7 +125,6 @@ content:
     weight: 8
     region: content
 hidden:
-  author_realname: true
   langcode: true
   links: true
   private_message_link: true

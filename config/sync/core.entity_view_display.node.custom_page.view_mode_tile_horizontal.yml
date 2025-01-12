@@ -114,7 +114,6 @@ content:
     weight: 2
     region: content
 hidden:
-  author_realname: true
   field_attachment: true
   field_hide_title: true
   field_keywords: true

@@ -123,7 +123,6 @@ content:
     weight: 0
     region: content
 hidden:
-  author_realname: true
   langcode: true
   links: true
   oss__documentation: true

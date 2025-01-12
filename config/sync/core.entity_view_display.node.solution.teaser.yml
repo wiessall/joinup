@@ -93,7 +93,6 @@ content:
     region: content
 hidden:
   abstract: true
-  author_realname: true
   collections: true
   contact: true
   content_creation: true

@@ -866,7 +866,6 @@ bundle: oss_solution
 mode: default
 content: {  }
 hidden:
-  author_realname: true
   description: true
   langcode: true
   links: true

@@ -334,7 +334,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  author_realname: true
   body: true
   created: true
   field_shared_in: true
