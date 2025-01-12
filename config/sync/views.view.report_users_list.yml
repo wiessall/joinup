@@ -390,8 +390,11 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: joinp_user_account_status
-          settings: {  }
+          type: boolean
+          settings:
+            format: custom
+            format_custom_false: Blocked
+            format_custom_true: Active
           group_column: value
           group_columns: {  }
           group_rows: true
