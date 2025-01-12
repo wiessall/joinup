@@ -157,7 +157,6 @@ mode: explore_item
 content: {  }
 hidden:
   abstract: true
-  author_realname: true
   closed_group: true
   collection_settings: true
   contact: true

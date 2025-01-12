@@ -99,7 +99,6 @@ content:
     region: content
 hidden:
   abstract: true
-  author_realname: true
   field_custom_page_logo: true
   field_hide_title: true
   field_keywords: true

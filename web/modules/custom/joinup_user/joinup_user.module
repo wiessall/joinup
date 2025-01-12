@@ -660,14 +660,8 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
         ->setTranslatable(TRUE)
         ->setSetting('max_length', 255)
         ->setDefaultValue('')
-        ->setDisplayOptions('form', [
-          'region' => 'hidden',
-        ])
-        ->setDisplayOptions('view', [
-          'region' => 'hidden',
-        ])
-        ->setDisplayConfigurable('form', TRUE)
-        ->setDisplayConfigurable('view', TRUE)
+        ->setDisplayConfigurable('form', FALSE)
+        ->setDisplayConfigurable('view', FALSE)
         ->setClass(NodeAuthorRealname::class),
     ];
   }

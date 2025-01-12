@@ -124,7 +124,6 @@ content:
     weight: 8
     region: content
 hidden:
-  author_realname: true
   download_count: true
   langcode: true
   links: true
