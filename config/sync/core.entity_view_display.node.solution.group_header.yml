@@ -108,7 +108,6 @@ content:
     region: content
 hidden:
   abstract: true
-  author_realname: true
   body: true
   contact: true
   content_creation: true

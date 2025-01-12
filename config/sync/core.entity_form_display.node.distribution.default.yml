@@ -92,7 +92,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  author_realname: true
   created: true
   file_size: true
   langcode: true

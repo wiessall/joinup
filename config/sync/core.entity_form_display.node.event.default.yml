@@ -251,7 +251,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  author_realname: true
   created: true
   field_event_coordinates: true
   field_shared_in: true

@@ -146,7 +146,6 @@ content:
     weight: 9
     region: content
 hidden:
-  author_realname: true
   featured: true
   field_keywords: true
   field_site_featured: true

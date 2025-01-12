@@ -50,7 +50,6 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
 hidden:
-  author_realname: true
   created: true
   field_state: true
   langcode: true

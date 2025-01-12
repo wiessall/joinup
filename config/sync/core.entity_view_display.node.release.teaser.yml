@@ -66,7 +66,6 @@ content:
     weight: 0
     region: content
 hidden:
-  author_realname: true
   description: true
   documentation: true
   field_keywords: true

@@ -88,7 +88,6 @@ content:
     weight: 1
     region: content
 hidden:
-  author_realname: true
   field_keywords: true
   langcode: true
   language: true
