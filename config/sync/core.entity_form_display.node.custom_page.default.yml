@@ -123,7 +123,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  author_realname: true
   created: true
   current_workflow_state: true
   og_audience: true

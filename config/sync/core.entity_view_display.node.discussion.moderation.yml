@@ -59,7 +59,6 @@ content:
     weight: 0
     region: content
 hidden:
-  author_realname: true
   featured: true
   field_attachment: true
   field_discussion_logo: true

@@ -64,7 +64,6 @@ content:
     weight: 0
     region: content
 hidden:
-  author_realname: true
   closed_group: true
   collection_settings: true
   contact: true

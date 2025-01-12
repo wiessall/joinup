@@ -57,7 +57,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  author_realname: true
   created: true
   current_workflow_state: true
   langcode: true

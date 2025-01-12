@@ -182,7 +182,6 @@ content:
     region: content
 hidden:
   abstract: true
-  author_realname: true
   featured: true
   field_keywords: true
   field_site_featured: true
