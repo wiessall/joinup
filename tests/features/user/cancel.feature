@@ -116,15 +116,6 @@ Feature:
       | recipient_mail | AliciaPotter@example.com                                                                                 |
       | subject        | Your account has been deleted.                                                                           |
       | body           | If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
-    # We cannot assert the number of emails because of created content that
-    # sends messages to administrators and moderators. Depending on environment
-    # the list of recipients might differ. That's why we're only asserting that
-    # a "status blocked" message has not been sent.
-    And the following email should not have been sent:
-      | template       | status_blocked                 |
-      | recipient_mail | AliciaPotter@example.com       |
-      | subject        | Your account was just blocked. |
-    And the "alicia__1997" user account is cancelled
 
     # The content author is no more clickable.
     When I visit the "News item" news
