@@ -127,6 +127,13 @@ function ventuno_preprocess_html(array &$variables): void {
   if ($variables['user']->isAuthenticated()) {
     $variables['#attached']['library'][] = 'ventuno/toolbar';
   }
+
+  // CKEditor5 stylesheets are not calculated dynamically for every route, but
+  // computed only based on the default theme settings. This means that on the
+  // pages where we use IOP theme, we still will use the ckeditor5-stylesheets
+  // from Ventuno's info.yml file. Hence we add a theme-specific class here what
+  // we replace in IOP.
+  $variables['html_attributes']->addClass('t-ventuno');
 }
 
 /**

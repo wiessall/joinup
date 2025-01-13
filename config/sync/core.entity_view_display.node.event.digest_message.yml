@@ -66,10 +66,11 @@ content:
     settings:
       timezone_override: ''
       separator: to
-      default_format: 'd m Y'
+      default_format: 'd F Y'
       day_diff_format: d
       month_diff_format: 'd F'
       year_diff_format: 'd F Y'
+      plain_text: true
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -84,11 +85,6 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 2
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
     region: content
 hidden:
   featured: true
@@ -112,6 +108,7 @@ hidden:
   field_topic: true
   flag_like: true
   langcode: true
+  links: true
   og_audience: true
   pinned_in: true
   private_message_link: true

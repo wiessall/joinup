@@ -37,6 +37,19 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/node_modules
 
+  test:
+    behat:
+      commands:
+        before:
+          - task: exec
+            command: |
+              if [ "${BEHATSUITE}" != "default" ]; then
+                ${drush.bin} search-api:clear published
+                ${drush.bin} search-api:rebuild-tracker published
+                ${drush.bin} search-api-index published
+                ${drush.bin} search-api:status published
+              fi
+
   install:
     clone:
       commands:
