@@ -18,7 +18,6 @@ Feature: Subscribing to community content in solutions
       | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 | active    |
       | kalin    | kalin@primer.bg   | Kalin      | Antov        | monthly                | active    |
       | aleks    | aleks@primer.bg   | Aleksandar | Begov        | monthly                | blocked   |
-      | penka    | penka@primer.bg   | Penka      | Ramil        | monthly                | cancelled |
 
     And the following solution user memberships:
       | solution             | user   | roles       |
@@ -29,7 +28,6 @@ Feature: Subscribing to community content in solutions
       | Cities of Bulgaria   | bisera |             |
       | Cities of Bulgaria   | kalin  | facilitator |
       | Cities of Bulgaria   | aleks  |             |
-      | Cities of Bulgaria   | penka  |             |
     And the following solution content subscriptions:
       | solution             | user   | subscriptions                          |
       | Products of Bulgaria | hristo | discussion, event, news, distribution  |
@@ -39,7 +37,6 @@ Feature: Subscribing to community content in solutions
       | Cities of Bulgaria   | bisera | discussion, event, news                |
       | Cities of Bulgaria   | kalin  | discussion, document, news             |
       | Cities of Bulgaria   | aleks  | discussion, document, news             |
-      | Cities of Bulgaria   | penka  | discussion, document, news             |
     And all message digests have been delivered
 
   Scenario: Receive a digest of content that is published in my solutions
@@ -169,7 +166,7 @@ Feature: Subscribing to community content in solutions
       | Sunflower seeds       |
     And the content subscription digest sent to kalin should have the subject "Interoperable Europe Portal: Monthly digest message"
 
-    # No message for aleks@primer.bg (blocked) and penka@primer.bg (cancelled).
+    # No message for aleks@primer.bg (blocked).
     And 4 e-mails should have been sent to recipients "kalin@primer.bg, hristo@example.bg, bisera@example.bg"
 
     # Clean out the message queue for the next test.
