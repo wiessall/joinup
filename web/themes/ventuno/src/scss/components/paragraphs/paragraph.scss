@@ -2,15 +2,7 @@
 
 .paragraph,
 .fieldset--textarea {
-  table {
-    td {
-      min-width: 100px;
-      vertical-align: top;
-    }
-    @include media-breakpoint-up(md) {
-      table-layout: fixed;
-    }
-  }
+  @include paragraph-table;
 
   figure {
     figcaption {

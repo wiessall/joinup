@@ -12,6 +12,9 @@ libraries:
   - ventuno/theme
   - ventuno/tables
 
+ckeditor5-stylesheets:
+  - assets/css/editor.layout-paragraphs.min.css
+
 libraries-extend:
   core/drupal.ajax:
     - ventuno/ajax-throbber
