@@ -208,9 +208,15 @@ function ventuno_theme_suggestions_joinup_release_releases_download_alter(array 
 function ventuno_preprocess_node__digest_message(&$variables): void {
   $node = $variables['node'];
   assert($node instanceof NodeInterface);
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $date_format = 'date_only_text_month';
 
-  $publicationTime = $node instanceof EntityPublicationTimeInterface
-    ? $node->getPublicationTime()
-    : NULL;
-  $variables['publication_timestamp'] = $publicationTime ?: $node->getCreatedTime();
+  // Digest item date.
+  $variables['digest_item_date'] = match (TRUE) {
+    isset($variables['content']['field_event_date']) => $variables['content']['field_event_date'],
+    isset($variables['content']['field_document_publication_date']) => $variables['content']['field_document_publication_date'],
+    $node instanceof EntityPublicationTimeInterface && $node->getPublicationTime() => $date_formatter->format($node->getPublicationTime(), $date_format),
+    default => $date_formatter->format($node->getCreatedTime(), $date_format),
+  };
 }

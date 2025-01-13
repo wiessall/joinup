@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup Reports module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function joinup_reports_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() !== 'report_users_list') {
+    return;
+  }
+
+  foreach ($view->result as $row) {
+    $lastAccess = $row->_entity->get('access')->getString();
+    if ($lastAccess === '0') {
+      $row->_entity->get('access')->setValue(NULL);
+    }
+  }
+}
