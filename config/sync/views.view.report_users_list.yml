@@ -1164,7 +1164,7 @@ display:
           entity_field: status
           plugin_id: boolean
           operator: '='
-          value: {  }
+          value: All
           group: 1
           exposed: true
           expose:
@@ -1187,18 +1187,26 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-          is_grouped: false
+          is_grouped: true
           group_info:
-            label: ''
+            label: 'User status'
             description: ''
-            identifier: ''
+            identifier: status
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: Active
+                operator: '='
+                value: '1'
+              2:
+                title: Blocked
+                operator: '='
+                value: '0'
       filter_groups:
         operator: AND
         groups:
