@@ -1174,12 +1174,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: numeric
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
+          plugin_id: entity_reference
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -1202,9 +1199,7 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1217,6 +1212,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          sub_handler: 'default:node'
+          widget: autocomplete
+          sub_handler_settings:
+            target_bundles:
+              collection: collection
+              solution: solution
+            sort:
+              field: title
+              direction: ASC
+            auto_create: false
+            auto_create_bundle: ''
         state_value:
           id: state_value
           table: message__state
