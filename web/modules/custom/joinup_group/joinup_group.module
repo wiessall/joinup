@@ -508,27 +508,7 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
 function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
   $view_id = $view->id();
-  $display = $view->current_display;
-
-  // Replaces a group text exposed filter with a dropdown.
-  if (($view_id === 'announcements' && $display === 'all') || ($view_id === 'media' && $display === 'media_page_list')) {
-    $form['group'] = [
-      '#title' => t('Group'),
-      '#type' => 'entity_autocomplete',
-      '#target_type' => 'node',
-      '#selection_handler' => 'default:node',
-      '#selection_settings' => [
-        'target_bundles' => ['collection', 'solution'],
-        'match_operator' => 'CONTAINS',
-        'match_limit' => 10,
-      ],
-      '#validate_reference' => FALSE,
-      '#maxlength' => 1024,
-      '#default_value' => !empty($form['group']['#default_value']) ? $storage->load($form['group']['#default_value']) : NULL,
-    ];
-  }
 
   // Adds result counts to the role options on the membership overview for
   // collections and solutions.
