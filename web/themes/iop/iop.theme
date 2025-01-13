@@ -121,11 +121,8 @@ function iop_preprocess_node(array &$variables): void {
     ]);
   }
 
-  // Disables the "Report" link for IOP except news and events.
-  $node = \Drupal::routeMatch()->getParameter('node');
-  if (!$node instanceof NodeInterface ||
-    !in_array($node->bundle(), ['news', 'event']) &&
-    isset($variables['content']['report'])) {
+  // Disables the "Report" link for IOP.
+  if (isset($variables['content']['report'])) {
     $variables['content']['report']['#access'] = FALSE;
   }
 
