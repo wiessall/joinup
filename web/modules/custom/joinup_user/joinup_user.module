@@ -651,7 +651,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
         ->setClass(UserBundle::class),
     ];
   }
-  elseif ($entityType->id() === 'node') {
+  elseif (in_array($entityType->id(), ['node', 'comment'])) {
     return [
       'author_realname' => BaseFieldDefinition::create('string')
         ->setLabel(t('Author full name'))
@@ -673,7 +673,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
  * Implements hook_entity_view_alter().
  */
 function joinup_user_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if ($entity->getEntityTypeId() !== 'node') {
+  if (!in_array($entity->getEntityTypeId(), ['node', 'comment'])) {
     return;
   }
 
