@@ -444,7 +444,7 @@ Feature: Assessments
     # Advanced search page.
     Given I am an anonymous user
     When I visit "/search"
-    Then I should see the following "Content types" facet items "Collections,Assessment reports,Custom pages" in this order
+    Then I should see the following "Content types" facet items "Collections,Assessment reports,Custom pages,User profiles" in this order
     When I click "Assessment reports"
 
     Then I should see the following tiles in the correct order:
