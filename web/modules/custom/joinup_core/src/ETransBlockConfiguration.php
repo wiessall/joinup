@@ -70,11 +70,11 @@ class ETransBlockConfiguration {
       ],
       CollectionInterface::class => [
         'include' => '.layout-content .layout',
-        'exclude' => '.block-field-blockrdf-entitycollectionfield-collection-content',
+        'exclude' => '.block-field-blocknodecollectionlisting-content',
       ],
       SolutionInterface::class => [
         'include' => '.layout-content .layout',
-        'exclude' => '.block-field-blockrdf-entitysolutionfield-is-content, .block-extra-field-blockrdf-entitysolutionrelated-solutions',
+        'exclude' => '.block-field-blocknodesolutionlisting-content, .block-extra-field-blocknodesolutionrelated-solutions',
       ],
     ],
     'routes' => [

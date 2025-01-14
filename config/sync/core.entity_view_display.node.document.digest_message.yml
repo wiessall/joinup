@@ -67,11 +67,11 @@ content:
     weight: 3
     region: content
   field_document_publication_date:
-    type: datetime_default
+    type: datetime_custom
     label: hidden
     settings:
       timezone_override: ''
-      format_type: date_only
+      date_format: 'd F Y'
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
