@@ -20,11 +20,6 @@ function ventuno_preprocess_comment(array &$variables): void {
   /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user_picture']['#user'];
 
-  $username = [
-    '#theme' => 'username',
-    '#account' => $user,
-  ];
-
   if ($comment->get('anonymize')->value) {
     $variables['author'] = ['#markup' => t('Anonymous user')];
     $variables['user_picture'] = [
@@ -40,7 +35,17 @@ function ventuno_preprocess_comment(array &$variables): void {
     }
   }
   else {
-    $variables['author'] = $username;
+    if ($user->isAnonymous()) {
+      $variables['author'] = ['#markup' => $comment->getAuthorName()];
+    }
+    else {
+      $username = [
+        '#theme' => 'username',
+        '#account' => $user,
+      ];
+      $variables['author'] = $username;
+    }
+
     $photo_target = $user->get('field_user_photo')->getValue();
     if ($photo_target) {
       $photo_target = $photo_target[0]['target_id'];
