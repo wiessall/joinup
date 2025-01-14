@@ -25,7 +25,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly Connection $mysql
+    protected readonly Connection $mysql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
