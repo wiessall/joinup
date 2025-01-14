@@ -29,7 +29,7 @@ third_party_settings:
 label_singular: 'assessment report'
 label_plural: 'assessment reports'
 label_count:
-  no_count_capitalize: "Assessment report\x03Assessment reports"
+  no_count_capitalize: !!binary QXNzZXNzbWVudCByZXBvcnQDQXNzZXNzbWVudCByZXBvcnRz
 name: 'Assessment report'
 type: assessment_report
 description: 'Interoperability assessment report'
