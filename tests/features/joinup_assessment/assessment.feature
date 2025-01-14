@@ -112,7 +112,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                                                    |
       | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
       | List the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
       | Identified effects on cross-border legal interoperability {Empty}                                                                       |
       | Identified effects on cross-border organisational interoperability {Empty}                                                              |
       | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
@@ -165,7 +165,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                                                    |
       | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
       | List the binding requirement(s) assessed. {Empty}                                                                                       |
-      | This data will potentially be processed by: {Empty}                                                                                     |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
       | Identified effects on cross-border legal interoperability {Empty}                                                                       |
       | Identified effects on cross-border organisational interoperability {Empty}                                                              |
       | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
@@ -278,7 +278,7 @@ Feature: Assessments
       | The binding requirements identified concern: {Empty}                                                               |
       | Specify the concerned function of trans-European digital public service(s): Defense                                |
       | List the binding requirement(s) assessed. {Empty}                                                                  |
-      | This data will potentially be processed by: {Empty}                                                                |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                            |
       | Identified effects on cross-border legal interoperability {Empty}                                                  |
       | Identified effects on cross-border organisational interoperability {Empty}                                         |
       | Identified effects on cross-border semantic interoperability {Empty}                                               |
@@ -385,8 +385,8 @@ Feature: Assessments
     When I go to "/collection/assessments/assessment-reports"
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
-    And I should not see the link "My submissions"
-    And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should not see the link "My assessments"
+    And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     And assessment_report content:
       | title         | state     | created              | organization         | collection                         |
       | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization |                                    |
@@ -405,8 +405,8 @@ Feature: Assessments
     When I go to the "Assessment reports" custom_page
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
-    And I should not see the link "My submissions"
-    And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should not see the link "My assessments"
+    And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     # Reports are shown in creation descending order in a 10 pager listing.
     And I should see the following tiles in the correct order:
       | Assessment 12 |
@@ -444,7 +444,7 @@ Feature: Assessments
     # Advanced search page.
     Given I am an anonymous user
     When I visit "/search"
-    Then I should see the following "Content types" facet items "Collections,Assessment reports,Custom pages" in this order
+    Then I should see the following "Content types" facet items "Collections,Assessment reports,Custom pages,User profiles" in this order
     When I click "Assessment reports"
 
     Then I should see the following tiles in the correct order:
@@ -463,5 +463,5 @@ Feature: Assessments
     When I go to "/collection/assessments/assessment-reports"
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
-    And I should see the link "My submissions"
-    And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
+    And I should see the link "My assessments"
+    And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"

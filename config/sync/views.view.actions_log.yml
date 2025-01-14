@@ -1578,13 +1578,13 @@ display:
           admin_label: ''
           entity_type: joinup_log
           entity_field: group
-          plugin_id: joinup_log_group
-          operator: '='
-          value: null
+          plugin_id: entity_reference
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
-            operator_id: ''
+            operator_id: group_op
             label: Group
             description: ''
             use_operator: false
@@ -1603,6 +1603,7 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1615,6 +1616,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          sub_handler: 'default:node'
+          widget: autocomplete
+          sub_handler_settings:
+            target_bundles:
+              collection: collection
+              solution: solution
+            sort:
+              field: _none
+              direction: ASC
+            auto_create: false
+            auto_create_bundle: ''
       filter_groups:
         operator: AND
         groups:
@@ -1666,8 +1679,7 @@ display:
         - request_format
         - url
         - user.permissions
-      tags:
-        - joinup_log_list
+      tags: {  }
   logs:
     id: logs
     display_title: Page
@@ -2359,13 +2371,13 @@ display:
           admin_label: ''
           entity_type: joinup_log
           entity_field: group
-          plugin_id: joinup_log_group
-          operator: '='
-          value: null
+          plugin_id: entity_reference
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
-            operator_id: ''
+            operator_id: group_op
             label: Group
             description: ''
             use_operator: false
@@ -2384,6 +2396,7 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -2396,6 +2409,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          sub_handler: 'default:node'
+          widget: autocomplete
+          sub_handler_settings:
+            target_bundles:
+              collection: collection
+              solution: solution
+            sort:
+              field: _none
+              direction: ASC
+            auto_create: false
+            auto_create_bundle: ''
       filter_groups:
         operator: AND
         groups:
@@ -2430,5 +2455,4 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags:
-        - joinup_log_list
+      tags: {  }

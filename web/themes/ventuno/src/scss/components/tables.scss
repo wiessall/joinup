@@ -18,3 +18,8 @@
     table-layout: fixed;
   }
 }
+
+// #ISAICP-9255 Sticky haders do not work inside responsive tables.
+.table.sticky-header.responsive-enabled thead {
+  position: static;
+}
