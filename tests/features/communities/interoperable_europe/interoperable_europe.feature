@@ -9,15 +9,13 @@ Feature:
     When I click "Discover more"
     Then I should see the heading "Joinup is becoming Interoperable Europe Portal"
     And the page should be rendered using the "Interoperable Europe" theme
-    # Uncomment this in ISAICP-9192.
-    # And I should not see the link "Report abusive content"
+    And I should not see the link "Report abusive content"
 
     # Test other pages.
     When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
     And I should see the heading "Initiatives"
     And I should see the heading "Join our community!"
-    And I should not see the link "Report abusive content"
 
     # Event.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
@@ -25,7 +23,6 @@ Feature:
     And I should see the text "Event"
     And I should not see the heading "Event"
     And I should see the link "more events"
-    And I should see the link "Report abusive content"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more events"
@@ -37,7 +34,6 @@ Feature:
     And I should see the text "News"
     And I should not see the heading "News"
     And I should see the link "more news"
-    And I should see the link "Report abusive content"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more news"
@@ -82,33 +78,23 @@ Feature:
     Then I should see the error message "Title field is required."
 
   @javascript
-  Scenario: Report link and eTranslate button are not available in IOP custom pages.
-    Given custom_page content:
-      | title    | collection           |
-      | IOP page | Interoperable Europe |
-
-    When I am logged in as a user with the authenticated role
-    And I go to the "IOP page" custom page
-    Then I should not see the link "Report abusive content"
-    And I should not see the button "Translate"
-
-  @javascript
-  Scenario Outline: Report link and eTranslate button are not available in IOP.
+  Scenario Outline: Visibility of Report link and eTranslate button.
     Given <type> content:
       | title      | collection           |
       | IOP <type> | Interoperable Europe |
 
-    When I am logged in as a user with the authenticated role
+    When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should not see the button "Translate"
+    And I should see the button "Translate"
 
     Examples:
-      | type       |
-      | news       |
-      | event      |
-      | discussion |
-      | document   |
+      | type        |
+      | news        |
+      | event       |
+      | discussion  |
+      | document    |
+      | custom_page |
 
   @javascript
   Scenario: Regression test that ensures that search bar works fine.
