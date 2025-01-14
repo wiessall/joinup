@@ -20,6 +20,17 @@ function ventuno_preprocess_comment(array &$variables): void {
   /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user_picture']['#user'];
 
+  if ($user->isAnonymous()) {
+    $variables['author'] = ['#markup' => $comment->getAuthorName()];
+  }
+  else {
+    $username = [
+      '#theme' => 'username',
+      '#account' => $user,
+    ];
+    $variables['author'] = $username;
+  }
+
   if ($comment->get('anonymize')->value) {
     $variables['author'] = ['#markup' => t('Anonymous user')];
     $variables['user_picture'] = [
@@ -29,23 +40,14 @@ function ventuno_preprocess_comment(array &$variables): void {
     ];
     // Check if the user has the 'administer comments' permission.
     if (\Drupal::currentUser()->hasPermission('administer comments')) {
-      // Add the user profile link in parentheses for moderators.
-      $user_profile_link = \Drupal::service('renderer')->render($username);
+      // Add the user profile link in parentheses for moderators or the name
+      // of the author if the user is anonymous - the user has been deleted and
+      // the author name has been saved in the comment.
+      $user_profile_link = $user->isAnonymous() ? $comment->getAuthorName() : \Drupal::service('renderer')->render($username);
       $variables['author']['#markup'] .= ' (' . $user_profile_link . ')';
     }
   }
   else {
-    if ($user->isAnonymous()) {
-      $variables['author'] = ['#markup' => $comment->getAuthorName()];
-    }
-    else {
-      $username = [
-        '#theme' => 'username',
-        '#account' => $user,
-      ];
-      $variables['author'] = $username;
-    }
-
     $photo_target = $user->get('field_user_photo')->getValue();
     if ($photo_target) {
       $photo_target = $photo_target[0]['target_id'];
