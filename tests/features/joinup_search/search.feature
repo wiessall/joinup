@@ -20,7 +20,6 @@ Feature: Global search
       | Dummy news 4         | Dummy title 4         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
     When I visit the search page
-    And this is an error in feature
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     # Create some archived content too.
