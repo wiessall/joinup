@@ -496,17 +496,28 @@ function joinup_user_user_cancel(array $edit, JoinupUserInterface $account, stri
       ->getStorage('node')
       ->userRevisionIds($account);
     node_mass_update($vids, ['author_realname' => $realname], NULL, TRUE, TRUE);
-  }
 
-  // @todo Need to see what happens with this.
-  if (!empty($edit['user_cancel_notify'])) {
-    _user_mail_notify('status_canceled', $account);
+    // Set also the author_realanme to comments created by the user and set the
+    // author to anonymous.
+    $cids = \Drupal::entityTypeManager()
+      ->getStorage('comment')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('uid', $account->id())
+      ->execute();
+
+    $comments = \Drupal::entityTypeManager()
+      ->getStorage('comment')
+      ->loadMultiple($cids);
+
+    foreach ($comments as $comment) {
+      $comment->setAuthorName($realname);
+      // For comments, set also the uid to 0 because if we allow them to change
+      // it, it will also change the author name of the comment.
+      $comment->set('uid', 0);
+      $comment->save();
+    }
   }
-  \Drupal::messenger()->addStatus(t('%name has been deleted.', ['%name' => $account->getDisplayName()]));
-  \Drupal::logger('user')->notice('Deleted user: %name %email.', [
-    '%name' => $account->getAccountName(),
-    '%email' => '<' . $account->getEmail() . '>',
-  ]);
 }
 
 /**
@@ -635,6 +646,16 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
     unset($implementations['joinup_user']);
     $implementations['joinup_user'] = $group;
   }
+
+  if ($hook === 'user_cancel' && isset($implementations['joinup_user'])) {
+    // Set the user_cancel of joinup_user to run before the user_cancel of user
+    // and comment modules in order to set the author realname while we still
+    // have information about who the entity belonged to, and before the
+    // respective modules anonymize them.
+    $group = $implementations['joinup_user'];
+    unset($implementations['joinup_user']);
+    $implementations = ['joinup_user' => $group] + $implementations;
+  }
 }
 
 /**
@@ -651,7 +672,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
         ->setClass(UserBundle::class),
     ];
   }
-  elseif (in_array($entityType->id(), ['node', 'comment'])) {
+  elseif ($entityType->id() === 'node') {
     return [
       'author_realname' => BaseFieldDefinition::create('string')
         ->setLabel(t('Author full name'))
@@ -673,7 +694,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
  * Implements hook_entity_view_alter().
  */
 function joinup_user_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if (!in_array($entity->getEntityTypeId(), ['node', 'comment'])) {
+  if ($entity->getEntityTypeId() !== 'node') {
     return;
   }
 

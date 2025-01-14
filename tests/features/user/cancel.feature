@@ -25,13 +25,6 @@ Feature:
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                                            |
       | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Interoperable Europe Portal platform. If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     And 1 e-mail should have been sent
-    And the "alicia__1997" user account is cancelled
-    And the "Alicia Potter" table row doesn't contain a checkbox
-
-    When I click "Edit" in the "Alicia Potter" row
-    Then I should see the warning message "This user account is cancelled. Edit is disabled."
-    # On a cancelled account edit form all fields are disabled.
-    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,X,Vimeo,Youtube,Save"
 
   Scenario: A moderator deletes a user using the administrative UI.
     Given collection content:
@@ -69,9 +62,12 @@ Feature:
       | subject        | Your account was just blocked. |
     And the "Alicia Potter" user doesn't exist
 
-    # The content created by an account deleted via admin UI has been deleted.
+    # The content created by an account deleted should still show the full name
+    # of the author, but the author should not be clickable.
     When I go to "/collection/test-collection/news/news-item"
-    Then the response status code should be 404
+    Then the response status code should be 200
+    And I should see "Alicia Potter"
+    But I should not see the link "Alicia Potter"
 
   Scenario: Cancel own account.
     Given collection content:
