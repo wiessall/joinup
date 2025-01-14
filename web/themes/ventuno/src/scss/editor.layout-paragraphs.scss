@@ -1,0 +1,20 @@
+@import "partials/core";
+
+.layout-paragraphs-component-form .ck {
+  @include paragraph-table;
+
+  figure.drupal-media:has(.media-video) {
+    display: block;
+    width: 100%;
+  }
+
+  @include media-breakpoint-up(md) {
+    figure[data-view-mode="media_library_full_width"] {
+      max-width: 100%;
+    }
+  }
+
+  @at-root .t-ventuno & .media-video {
+    @include ventuno-media-video;
+  }
+}

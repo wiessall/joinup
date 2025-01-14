@@ -6,41 +6,32 @@
  * @see template_preprocess_node()
  */
 #}
-{% if content.field_document_publication_date|render %}
-  {% set publication_date = content.field_document_publication_date|render %}
-{% elseif content.field_event_date|render %}
-  {% set publication_date = content.field_event_date|render %}
-{% endif %}
-
 {% if content.field_short_title|render %}
-  {% set node_title = content.field_short_title|render %}
+  {% set digest_item_title = content.field_short_title|render %}
 {% else %}
-  {% set node_title = label %}
+  {% set digest_item_title = label %}
 {% endif %}
 
 {% if content.field_news_logo|render|striptags|trim %}
-  {% set image_url = site_url ~ content.field_news_logo|render|striptags|trim %}
+  {% set digest_item_img = site_url ~ content.field_news_logo|render|striptags|trim %}
 {% elseif content.field_event_logo|render|striptags|trim %}
-  {% set image_url = site_url ~ content.field_event_logo|render|striptags|trim %}
+  {% set digest_item_img = site_url ~ content.field_event_logo|render|striptags|trim %}
 {% else %}
-  {% set image_url = site_url ~ '/' ~ directory ~ '/assets/images/digest-message/' ~ node.bundle ~ '_icon.png' %}
+  {% set digest_item_img = site_url ~ '/' ~ directory ~ '/assets/images/digest-message/' ~ node.bundle ~ '_icon.png' %}
 {% endif %}
 
-{% set description = content.abstract ?? content.body %}
-{% if content.description %}
-  {% set description = content.description %}
-{% endif %}
+{% set digest_item_body = content.description ?? content.abstract ?? content.body %}
 
 <table role="presentation">
   <tbody>
   <tr>
     <td class="bg-primary p-3">
-      <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ publication_date ?: publication_timestamp|format_date('date_only') }}</span>
+      <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ digest_item_date }}</span>
     </td>
   </tr>
   <tr>
     <td class="fs-lg fw-bold">
-      <a class="text-primary text-none" href="{{ url }}">{{ node_title }}</a>
+      <a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a>
     </td>
   </tr>
   <tr>
@@ -52,12 +43,10 @@
       <table role="presentation">
         <tbody>
         <tr>
-          {% if image_url %}
-            <td style="width: 200px;" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
-            <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
-          {% endif %}
+          <td style="width: 200px;" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ digest_item_img }}" width="200" alt=""/></a></td>
+          <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
           <td style="vertical-align: top;">
-            {{ description }}
+            {{ digest_item_body }}
           </td>
         </tr>
         </tbody>

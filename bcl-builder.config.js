@@ -1201,6 +1201,22 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Editor.
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/editor.layout-paragraphs.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/editor.layout-paragraphs.min.css`,
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // IOP
     // Components (SMACSS)
     {

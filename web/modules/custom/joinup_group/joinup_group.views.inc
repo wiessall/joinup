@@ -18,4 +18,8 @@ function joinup_group_views_data_alter(array &$data): void {
       'id' => 'joinup_group_announcement_edit_link',
     ],
   ];
+
+  // Enable entity_reference views filter plugin, used for exposed filter in
+  // announcements view.
+  $data['message__group']['group_target_id']['filter']['id'] = 'entity_reference';
 }

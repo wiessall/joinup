@@ -19,7 +19,6 @@ use Drupal\Core\Template\Attribute;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -130,39 +129,6 @@ function joinup_search_views_pre_execute(ViewExecutable $view): void {
   // method to ensure legacy support.
   // Selecting the entity_created option itself won't affect the query.
   $view->getQuery()->sort('entity_created', 'DESC');
-}
-
-/**
- * Implements hook_views_query_alter().
- *
- * @todo This is a temporary workaround.
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9100
- */
-function joinup_search_views_query_alter(ViewExecutable $view, QueryPluginBase $query): void {
-  if (($view->id() !== 'announcements' || $view->current_display !== 'all') && ($view->id() !== 'media' || $view->current_display !== 'media_page_list')) {
-    return;
-  }
-
-  $field_mapping = [
-    // Test affected: announcements.feature.
-    'announcements' => 'message__group.group_target_id',
-    // Test affected: image_library.feature.
-    'media' => 'media__og_audience.og_audience_target_id',
-  ];
-
-  // Clean the group filter if it is empty.
-  $conditions = &$query->where;
-  foreach ($conditions as $key => $condition_group) {
-    if (empty($condition_group['conditions'])) {
-      continue;
-    }
-
-    foreach ($condition_group['conditions'] as $subkey => $condition) {
-      if ($condition['field'] === $field_mapping[$view->id()] && $condition['value'] === NULL) {
-        unset($conditions[$key]['conditions'][$subkey]);
-      }
-    }
-  }
 }
 
 /**

@@ -10,9 +10,9 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
-use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\rdf_sync\RdfSyncConnectionInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,8 +25,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly Connection $mysql,
-    protected readonly RdfSyncConnectionInterface $sparql,
+    protected readonly Connection $mysql
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
@@ -34,14 +33,13 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('cache.default'),
       $container->get('date.formatter'),
       $container->get('datetime.time'),
       $container->get('entity_type.manager'),
-      $container->get('database'),
-      $container->get('rdf_sync.connection'),
+      $container->get('database')
     );
   }
 
@@ -83,36 +81,17 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    */
   public function generateData(array &$form, FormStateInterface $form_state): void {
     // Query to fetch all groups.
-    $ids_query = <<<QUERY
-SELECT * WHERE
-{
-    {
-        SELECT DISTINCT ?entity_id
-        FROM <http://joinup.eu/solution/published>
-        WHERE {
-            ?entity_id <http://joinup.eu/is/workflow_status> ?o .
-            FILTER (!regex(?o, "archived", "i"))
-        }
-    }
-    UNION
-    {
-        SELECT DISTINCT ?entity_id
-        FROM <http://joinup.eu/collection/published>
-        WHERE {
-            ?entity_id a ?bundle_uri .
-        }
-    }
-}
-QUERY;
-
-    // Initialize almost everything (some counters are not initialized here).
-    $query_results = $this->sparql->query($ids_query);
+    $storage = $this->entityTypeManager->getStorage('node');
+    $query = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('status', NodeInterface::PUBLISHED)
+      ->condition('field_state', 'archived', '<>')
+      ->condition('type', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN');
 
     $batch_operations = [];
-    foreach ($query_results->getArrayCopy() as $query_result) {
+    foreach ($query->execute() as $nid) {
       $batch_operations[] = [
         [$this, 'generateGroupStatistics'],
-        [$query_result->entity_id],
+        [$nid],
       ];
     }
 
@@ -136,33 +115,27 @@ QUERY;
    *   The batch context.
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
-    $rdf_storage = $this->entityTypeManager->getStorage('node');
+    $storage = $this->entityTypeManager->getStorage('node');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
-    $group = $rdf_storage->load((string) $entity_id);
+    $group = $storage->load($entity_id);
+
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query(
       $this->getGroupContentQuery(), [':parent_entity_id' => $entity_id]
     )->fetchAll();
     $group_content = [
-      // Node entities.
-      'custom_page' => ['active' => 0, 'archived' => 0],
-      'discussion' => ['active' => 0, 'archived' => 0],
-      'document' => ['active' => 0, 'archived' => 0],
-      'event' => ['active' => 0, 'archived' => 0],
-      'news' => ['active' => 0, 'archived' => 0],
-      'distribution' => 0,
-      // RDF entities.
-      'solution' => 0,
-      'release' => 0,
+      'custom_page' => ['published' => 0, 'archived' => 0],
+      'discussion' => ['published' => 0, 'archived' => 0],
+      'document' => ['published' => 0, 'archived' => 0],
+      'event' => ['published' => 0, 'archived' => 0],
+      'news' => ['published' => 0, 'archived' => 0],
+      'distribution' => ['published' => 0, 'archived' => 0],
+      'solution' => ['published' => 0, 'archived' => 0],
+      'release' => ['published' => 0, 'archived' => 0],
     ];
 
     foreach ($group_content_data as $data) {
       if (!isset($group_content[$data->type])) {
-        continue;
-      }
-
-      if (is_int($group_content[$data->type])) {
-        $group_content[$data->type] += $data->entities;
         continue;
       }
 
@@ -174,24 +147,20 @@ QUERY;
     // Get the group content ids.
     $content = $group->getGroupContentIds();
     $content_ids = [];
+    $content_ids[] = $group->id();
 
     array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
 
-    // For solutions, count releases and distributions.
-    if ($group instanceof SolutionInterface) {
-      foreach ($group->releases_and_distributions->referencedEntities() as $entity) {
-        $group_content[$entity->bundle()]++;
-      }
-      $content_ids[] = $group->id();
-    }
-    // For collections simply pass the number of solutions (affiliates).
-    else {
-      $group_content['solution'] = $group->field_ar_affiliates->count();
-    }
+    $description = $group->get($group->getDescriptionField())->value;
 
-    $description = $group->hasField('field_ar_description') ? $group->field_ar_description->value : $group->field_is_description->value;
+    $total_published = 0;
+    $total_archived = 0;
+    foreach ($group_content as $content_data) {
+      $total_published += $content_data['published'];
+      $total_archived += $content_data['archived'];
+    }
 
     // Add data to the final array.
     $context['results']['data'][$group->id()] = [
@@ -201,28 +170,16 @@ QUERY;
       'Last update date' => \Drupal::getContainer()
         ->get('date.formatter')
         ->format($group->getChangedTime(), 'c'),
-      'Custom pages' => $group_content['custom_page']['active'],
-      'Discussions' => $group_content['discussion']['active'],
-      'Documents' => $group_content['document']['active'],
-      'Events' => $group_content['event']['active'],
-      'News' => $group_content['news']['active'],
-      'Solutions' => $group_content['solution'],
-      'Releases' => $group_content['release'],
-      'Distributions' => $group_content['distribution'],
-      'Total number of items' =>
-      $group_content['custom_page']['active']
-      + $group_content['discussion']['active']
-      + $group_content['document']['active']
-      + $group_content['event']['active']
-      + $group_content['news']['active']
-      + $group_content['release']
-      + $group_content['distribution'],
-      'Total number of archived items' =>
-      $group_content['custom_page']['archived']
-      + $group_content['discussion']['archived']
-      + $group_content['document']['archived']
-      + $group_content['event']['archived']
-      + $group_content['news']['archived'],
+      'Custom pages' => $group_content['custom_page']['published'],
+      'Discussions' => $group_content['discussion']['published'],
+      'Documents' => $group_content['document']['published'],
+      'Events' => $group_content['event']['published'],
+      'News' => $group_content['news']['published'],
+      'Solutions' => $group_content['solution']['published'],
+      'Releases' => $group_content['release']['published'],
+      'Distributions' => $group_content['distribution']['published'],
+      'Total number of items' => $total_published,
+      'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => str_word_count(strip_tags($description)),
       'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,

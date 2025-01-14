@@ -54,6 +54,9 @@ field.formatter.settings.daterange_condensed:
     year_diff_format:
       type: date_format
       label: 'Different years format'
+    plain_text:
+      type: boolean
+      label: 'Render as plain text'
 
 field.formatter.settings.addtocall_daterange_condensed:
   type: field.formatter.settings.addtocal_view
