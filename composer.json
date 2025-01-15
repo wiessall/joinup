@@ -28,8 +28,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "~10.3.0",
-        "drupal/core-recommended": "~10.3.0",
+        "drupal/core-composer-scaffold": "~10.4.1",
+        "drupal/core-recommended": "~10.4.1",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -324,7 +324,7 @@
                 "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/php/drupal/core/2381293-10.3.x-240.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
-                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065-10.3.x-155.diff",
+                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065-10.4.x-156.diff",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/i/2786587 @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.patch",
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
@@ -347,8 +347,7 @@
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
-                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff",
-                "Add Views EntityReference filter to support better UX for exposed filters @see https://www.drupal.org/i/3347343": "resources/patch/php/drupal/core/3347343.diff"
+                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -378,12 +377,9 @@
                 "Creation of dynamic property deprecated in PHP 8.2 @see https://www.drupal.org/i/3376919": "resources/patch/php/drupal/error_page/3376919.patch"
             },
             "drupal/facets": {
-                "Facets breaks all AJAX views that uses pagers even without facets @see https://www.drupal.org/i/3379445": "resources/patch/php/drupal/facets/3379445.patch",
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Config validation error for facets_processor.* @see https://www.drupal.org/project/facets/issues/3459093": "resources/patch/php/drupal/facets/3459093.patch",
-                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch",
-                "Facets - Critical - Cross Site Scripting - SA-CONTRIB-2024-047 @see https://www.drupal.org/sa-contrib-2024-047": "resources/patch/php/drupal/facets/sa-contrib-2024-047.patch"
+                "Typeerror: Return value must be of type string, none returned in getCount #see https://www.drupal.org/i/3488396": "resources/patch/php/drupal/facets/3488396.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
