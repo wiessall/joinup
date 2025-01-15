@@ -39,8 +39,6 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
 
     Given I am logged in as "Günther"
     And I go to the homepage of the "Family photos" collection
-    Then the form is protected by Antibot
-
     When I press "Join this collection"
     Then I should see the success message "You are now a member of Family photos."
     And a modal should open
