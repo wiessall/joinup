@@ -414,22 +414,22 @@ index 4af6932e45..1ebc583aff 100644
  
  /**
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 19615ef0db..88d07e76c1 100644
+index 0caf62d735..ec280b9778 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -454,6 +454,7 @@ ntfs
- nyan
+@@ -422,6 +422,7 @@ nyan
  nyancat
  nyans
+ nyholm
 +obst
  oembed
  omittable
  onecol
 diff --git a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-index 858ed98d65..f998fb5520 100644
+index 8848121372..a8eee9fcfb 100644
 --- a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-@@ -94,6 +94,9 @@ protected function getExpectedDocument() {
+@@ -93,6 +93,9 @@ protected function getExpectedDocument() {
            'display_submitted' => TRUE,
            'help' => NULL,
            'langcode' => 'en',
@@ -515,18 +515,18 @@ index 47894ee83a..74fe1bbe62 100644
   * Implements hook_removed_post_updates().
   */
 diff --git a/core/modules/node/src/Entity/NodeType.php b/core/modules/node/src/Entity/NodeType.php
-index a6a826f629..f0364ac623 100644
+index 934b4a2c38..a7071d8c39 100644
 --- a/core/modules/node/src/Entity/NodeType.php
 +++ b/core/modules/node/src/Entity/NodeType.php
-@@ -3,6 +3,7 @@
- namespace Drupal\node\Entity;
+@@ -4,6 +4,7 @@
  
+ use Drupal\Core\Config\Action\Attribute\ActionMethod;
  use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 +use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
  use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
  use Drupal\node\NodeTypeInterface;
- 
-@@ -52,11 +53,16 @@
+@@ -54,11 +55,16 @@
   *     "new_revision",
   *     "preview_mode",
   *     "display_submitted",
