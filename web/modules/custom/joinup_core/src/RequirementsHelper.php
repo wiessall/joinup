@@ -13,8 +13,7 @@ readonly class RequirementsHelper {
 
   public function __construct(
     protected Connection $sqlConnection,
-  ) {
-  }
+  ) {}
 
   /**
    * Fetches node entries with faulty forward published revisions.
