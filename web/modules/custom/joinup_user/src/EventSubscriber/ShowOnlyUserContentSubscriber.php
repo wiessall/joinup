@@ -27,8 +27,7 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected AccountInterface $currentUser,
     protected MessengerInterface $messenger,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -19,8 +19,7 @@ readonly class GroupReport {
     protected TranslatableMarkup $title,
     protected Url $url,
     protected ?TranslatableMarkup $description,
-  ) {
-  }
+  ) {}
 
   /**
    * Returns the machine name of the group report.
