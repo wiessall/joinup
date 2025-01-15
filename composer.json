@@ -312,12 +312,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/addtocal": {
-                "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
-            },
-            "drupal/cas_mock_server": {
-                "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
-            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.3.x-115.diff",
@@ -359,9 +353,6 @@
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
-            },
-            "drupal/embed_block": {
-                "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
