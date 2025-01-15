@@ -81,7 +81,8 @@ class ContentNegotiationTest extends JoinupExistingSiteTestBase {
     $this->assertEquals(406, $this->getSession()->getStatusCode());
     $this->assertEquals('Not acceptable format: rdfxml', $this->getBody());
     // Not cached.
-    $this->assertNull($this->getSession()->getResponseHeader('X-Drupal-Cache'));
+    $this->assertEquals('UNCACHEABLE (no cacheability)', $this->getSession()
+      ->getResponseHeader('X-Drupal-Cache'));
   }
 
   /**
