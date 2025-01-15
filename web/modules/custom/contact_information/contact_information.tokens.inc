@@ -43,7 +43,7 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
 
   foreach ($tokens as $name => $original) {
     if ($name === 'confirmation-entities') {
-      $gids = $confirmation->getProperty('groups');
+      $gids = $confirmation->getProperty('groups') ?? [];
       $groups = array_filter(
         \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($gids),
         fn (EntityInterface $entity): bool => $entity instanceof GroupInterface,
