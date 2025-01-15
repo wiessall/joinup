@@ -195,14 +195,6 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
 }
 
 /**
- * Implements hook_theme_suggestions_HOOK_alter() for the joinup_release_releases_download hook.
- */
-function ventuno_theme_suggestions_joinup_release_releases_download_alter(array &$suggestions, array $variables): void {
-  $original_theme_hook = $variables['theme_hook_original'];
-  $suggestions[] = $original_theme_hook;
-}
-
-/**
  * Implements hook_preprocess_HOOK() for node--digest-message.html.twig.
  */
 function ventuno_preprocess_node__digest_message(&$variables): void {
