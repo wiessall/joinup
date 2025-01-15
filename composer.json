@@ -97,7 +97,7 @@
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
         "drupal/search_api": "^1.27",
-        "drupal/search_api_autocomplete": "^1.7",
+        "drupal/search_api_autocomplete": "1.9.0",
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
         "drupal/simple_block": "^1.3",
