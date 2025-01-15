@@ -52,6 +52,7 @@ content:
       day_diff_format: d
       month_diff_format: d/m
       year_diff_format: d/m/Y
+      plain_text: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

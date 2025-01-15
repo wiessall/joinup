@@ -22,7 +22,7 @@ elements: |-
     '#next_button_label': Next
     general_info_intro:
       '#type': processed_text
-      '#text': "<h2><strong>This section collects general information on your interoperability assessment.</strong></h2><p>Please complete the form below by entering accurate and up-to date information in all the required fields. You can 'Save' the current progress of the report or you can 'Submit' it once finalised. The report will be published on the Portal after the European Commission has checked that it complies with the assessment guidelines.</p>"
+      '#text': '<p>This section collects general information on your interoperability assessment.</p>'
       '#format': content_editor
     report_provider:
       '#type': processed_text
@@ -51,7 +51,6 @@ elements: |-
         'Czech Republic': 'Czech Republic'
         Germany: Germany
         Denmark: Denmark
-        England: England
         Spain: Spain
         Finland: Finland
         France: France
@@ -194,8 +193,9 @@ elements: |-
       '#options':
         'Yes': 'Yes'
         'No': 'No'
-      '#options__properties': ''
       '#required': true
+      '#wrapper_type': form_element
+      '#options__properties': ''
     reference_of_the_linked_assessment:
       '#type': textfield
       '#title': 'Reference of the linked assessment'
@@ -215,11 +215,11 @@ elements: |-
     '#next_button_label': Next
     intro_section_three:
       '#type': processed_text
-      '#text': '<p>This section collects information on the assessed binding requirements.</p><p><a>The concept of ‘B</a>inding requirements’ is defined in Article&nbsp;2(15) IEA&nbsp;as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;&nbsp;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and&nbsp;</li><li>which has an effect on cross-border interoperability.</li></ul><p>When assessing if a requirement is ‘binding’ according to the IEA, one essential factor is whether the requirement has consequences for other organisations taking part in the provision of the public service (i.e., an effect on cross-border interoperability). For instance, a technical requirement that becomes mandatory only for the deciding party but <strong>still limits the choices left to others</strong> can be considered a binding requirement.</p><p>Binding requirements will usually arise from legislation. A binding requirement in a law could, for example, concern:</p><ul><li>the collection, processing, generation, exchange or sharing of data between Union entities or public sector bodies (e.g.&nbsp;a regulation on public registries);</li><li>the automation or digitalisation of public services (e.g.&nbsp;the use of AI in a public service or a digital driving licence);</li><li>the use of new or existing network and information systems (e.g.&nbsp;the use of the ‘once-only’ technical system from Single Digital Gateway Regulation: Regulation (EU) 2018/1724&nbsp;).</li></ul><p>For more information please consult the guidelines.</p>'
+      '#text': '<p>This section collects information on the assessed binding requirements.</p><p>The concept of ‘Binding requirements’ is defined in Article 2(15) IEA as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and </li><li>which has an effect on cross-border interoperability.</li></ul><p>For more information please consult the guidelines.</p>'
       '#format': content_editor
     trans_european_digital_public_services_concerned:
       '#type': processed_text
-      '#text': '<h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA. In other words, the services are:</p><p>‘<em>Digital services&nbsp;provided by Union entities or public sector bodies&nbsp;to one another or to natural or legal persons in the Union, and&nbsp;requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ &nbsp; –&nbsp; Article 2(2) IEA</p>'
+      '#text': '<h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA.</p><p>‘<em>Digital services provided by Union entities or public sector bodies to one another or to natural or legal persons in the Union, and requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ – Article 2(2) IEA</p>'
       '#format': content_editor
     horizontal_rule:
       '#type': webform_horizontal_rule
@@ -227,8 +227,8 @@ elements: |-
       '#type': radios
       '#title': 'The binding requirements identified concern:'
       '#options':
-        'One or few specific trans-European digital public services': 'One or few specific trans-European digital public services'
-        'Potentially many trans-European digital public services': 'Potentially many trans-European digital public services'
+        'Limited trans-European digital public services (1-5 specific TEDP services)': 'Limited trans-European digital public services (1-5 specific TEDP services)'
+        'Potentially many trans-European digital public services (6 or more TEDP services)': 'Potentially many trans-European digital public services (6 or more TEDP services)'
       '#options__properties': ''
     trans_european_digital_public_service_concerned:
       '#type': textfield
@@ -237,7 +237,7 @@ elements: |-
       '#states':
         visible:
           ':input[name="binding_requirements_identified_concern"]':
-            value: 'One or few specific trans-European digital public services'
+            value: 'Limited trans-European digital public services (1-5 specific TEDP services)'
       '#multiple__sorting': false
       '#multiple__operations': false
       '#multiple__add_more_input': false
@@ -289,7 +289,7 @@ elements: |-
           '#options':
             Data: Data
             Systems: Systems
-          '#title': 'Select all relevant '
+          '#title': 'Binding requirement affects (select all relevant)'
     stakeholders_affected:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -297,7 +297,7 @@ elements: |-
       '#format': content_editor
     data_processed_by:
       '#type': checkboxes
-      '#title': 'This data will potentially be processed by:'
+      '#title': 'Select the groups of stakeholders to which binding requirement(s) are relevant:'
       '#options':
         'Local public sector body': 'Local public sector body'
         'Regional public sector body': 'Regional public sector body'
@@ -318,7 +318,6 @@ elements: |-
       '#multiple__add': false
       '#multiple__add_more_input': false
       '#multiple__add_more_button_label': 'Add country'
-      '#wrapper_type': form_element
       '#label_attributes':
         class:
           - mb-0
@@ -338,7 +337,6 @@ elements: |-
             'Czech Republic': 'Czech Republic'
             Germany: Germany
             Denmark: Denmark
-            England: England
             Spain: Spain
             Finland: Finland
             France: France
@@ -366,7 +364,7 @@ elements: |-
       '#format': content_editor
     interoperable_europe_identification:
       '#type': processed_text
-      '#text': '<p>The Interoperable Europe Act requires the identification of effects on cross-border interoperability, i.e., on the legal, organisational, semantic and technical interoperability of digital public services that exchange data across borders.</p><p>Taking the EIF as the main starting point for your assessment means considering the extent to which the proposed requirements enable or hinder interoperability. This could also show whether additional requirements are needed. As explained above, it is necessary to keep in mind that <strong>the assessment does not need to show the way towards full interoperability, but it should help detect ways towards&nbsp;</strong><em><strong>more&nbsp;</strong></em><strong>interoperability.</strong></p><p>As such, the identification should take into account the European Interoperability Framework with the dimensions mentioned above.</p><p>Please tick the most appropriate and provide a brief description.</p>'
+      '#text': '<p>The Interoperable Europe Act requires the identification of effects on cross-border interoperability, i.e., on the legal, organisational, semantic and technical interoperability of digital public services that exchange data across borders.</p><p>Taking the EIF as the main starting point for your assessment means considering the extent to which the proposed requirements enable or hinder interoperability. This could also show whether additional requirements are needed. As explained above, it is necessary to keep in mind that <strong>the assessment does not need to show the way towards full interoperability, but it should help detect ways towards </strong><em><strong>more </strong></em><strong>interoperability.</strong></p><p>Please tick the most appropriate and provide a brief description.</p>'
       '#format': content_editor
     identified_effects_cross_border_legal:
       '#type': webform_custom_composite
