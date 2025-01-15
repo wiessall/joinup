@@ -749,37 +749,39 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: status_op
-            label: Status
-            description: ''
+            operator_id: ''
+            label: Active
+            description: null
             use_operator: false
             operator: status_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: status
-            required: false
+            required: true
             remember: false
-            multiple: true
+            multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              interoperability_validator: '0'
-              moderator: '0'
-              administrator: '0'
-              developer: '0'
-          is_grouped: false
+          is_grouped: true
           group_info:
-            label: ''
+            label: Status
             description: ''
-            identifier: ''
+            identifier: status
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: Active
+                operator: '='
+                value: '1'
+              2:
+                title: Blocked
+                operator: '='
+                value: '0'
         default_langcode:
           id: default_langcode
           table: users_field_data
