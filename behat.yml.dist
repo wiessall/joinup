@@ -313,8 +313,7 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-i'
-
-    default:
+    group_other:
       contexts: *contexts
       paths: *paths
       filters:

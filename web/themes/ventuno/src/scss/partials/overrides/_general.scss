@@ -4,15 +4,9 @@
     display: inline-block;
   }
 
-  // Dirty hack to make videos responsive and half width.
   .drupal-media:has(.media-video),
   .media-video {
-    width: 100%;
-    max-width: 648px;
-    margin-bottom: $spacer;
-    iframe {
-      max-width: 100%;
-    }
+    @include ventuno-media-video;
   }
 }
 
