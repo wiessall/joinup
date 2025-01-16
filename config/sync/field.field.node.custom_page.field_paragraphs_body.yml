@@ -12,6 +12,7 @@ dependencies:
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.entity_reference
+    - paragraphs.paragraphs_type.events_calendar
     - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
@@ -44,6 +45,9 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
+      heading: heading
+      text: text
+      image: image
       accordion: accordion
       call_to_action: call_to_action
       carousel: carousel
@@ -52,111 +56,112 @@ settings:
       content_listing: content_listing
       entity_reference: entity_reference
       github_feed: github_feed
-      heading: heading
       iframe: iframe
-      image: image
       layout: layout
       json_map: json_map
       poll: poll
+      events_calendar: events_calendar
       quote: quote
       simple_paragraph: simple_paragraph
       social_media: social_media
       testimony: testimony
       tiles: tiles
-      text: text
       video: video
       webform: webform
       image_gallery: image_gallery
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -38
+        weight: -39
         enabled: false
       2_column_featured_left:
-        weight: -34
-        enabled: false
-      2_column_featured_right:
-        weight: -33
-        enabled: false
-      2_column_layout:
-        weight: -37
-        enabled: false
-      3_column_layout:
         weight: -35
         enabled: false
-      accordion:
-        weight: -58
-        enabled: true
-      accordion_item:
-        weight: -57
+      2_column_featured_right:
+        weight: -34
         enabled: false
-      block:
-        weight: -53
-        enabled: true
-      call_to_action:
-        weight: -56
-        enabled: true
-      carousel:
-        weight: -55
-        enabled: true
-      configurable_listing:
-        weight: -54
-        enabled: true
-      content_listing:
-        weight: -52
-        enabled: true
-      entity_reference:
-        weight: -51
-        enabled: true
-      github_feed:
-        weight: -50
-        enabled: true
-      heading:
-        weight: -61
-        enabled: true
-      iframe:
-        weight: -49
-        enabled: true
-      image:
-        weight: -59
-        enabled: true
-      image_gallery:
-        weight: -32
-        enabled: true
-      json_map:
-        weight: -47
-        enabled: true
-      layout:
-        weight: -48
-        enabled: true
-      poll:
-        weight: -46
-        enabled: true
-      quote:
-        weight: -45
-        enabled: true
-      simple_paragraph:
-        weight: -44
-        enabled: true
-      social_media:
-        weight: -43
-        enabled: true
-      testimony:
-        weight: -42
-        enabled: true
-      text:
+      2_column_layout:
+        weight: -38
+        enabled: false
+      3_column_layout:
+        weight: -36
+        enabled: false
+      accordion:
         weight: -60
         enabled: true
+      accordion_item:
+        weight: -59
+        enabled: false
+      block:
+        weight: -55
+        enabled: true
+      call_to_action:
+        weight: -58
+        enabled: true
+      carousel:
+        weight: -57
+        enabled: true
+      configurable_listing:
+        weight: -56
+        enabled: true
+      content_listing:
+        weight: -54
+        enabled: true
+      entity_reference:
+        weight: -53
+        enabled: true
+      events_calendar:
+        weight: -47
+        enabled: true
+      github_feed:
+        weight: -52
+        enabled: true
+      heading:
+        weight: -63
+        enabled: true
+      iframe:
+        weight: -51
+        enabled: true
+      image:
+        weight: -61
+        enabled: true
+      image_gallery:
+        weight: -33
+        enabled: true
+      json_map:
+        weight: -49
+        enabled: true
+      layout:
+        weight: -50
+        enabled: true
+      poll:
+        weight: -48
+        enabled: true
+      quote:
+        weight: -46
+        enabled: true
+      simple_paragraph:
+        weight: -45
+        enabled: true
+      social_media:
+        weight: -44
+        enabled: true
+      testimony:
+        weight: -43
+        enabled: true
+      text:
+        weight: -62
+        enabled: true
       tile:
-        weight: -41
+        weight: -42
         enabled: false
       tiles:
-        weight: -40
+        weight: -41
         enabled: true
       video:
-        weight: -39
+        weight: -40
         enabled: true
       webform:
-        weight: -36
+        weight: -37
         enabled: true
 field_type: entity_reference_revisions
