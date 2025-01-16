@@ -18,8 +18,8 @@ use Drush\Commands\DrushCommands;
 class EuOssVitalityIndexCommands extends DrushCommands {
 
   public function __construct(
-    protected VitalityIndexGeneratorInterface $vitalityIndexGenerator,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly VitalityIndexGeneratorInterface $vitalityIndexGenerator,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct();
   }

@@ -30,15 +30,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     FieldDefinitionInterface $field_definition,
     array $settings,
-    $label,
-    $view_mode,
+    string $label,
+    string $view_mode,
     array $third_party_settings,
-    protected FileUrlHandler $fileUrlHandler,
-    protected FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly FileUrlHandler $fileUrlHandler,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }

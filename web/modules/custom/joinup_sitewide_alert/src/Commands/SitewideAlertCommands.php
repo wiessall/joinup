@@ -14,14 +14,8 @@ use Drush\Commands\DrushCommands;
  */
 class SitewideAlertCommands extends DrushCommands {
 
-  /**
-   * Constructs a new instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
-    public EntityTypeManagerInterface $entityTypeManager,
+    public readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct();
   }

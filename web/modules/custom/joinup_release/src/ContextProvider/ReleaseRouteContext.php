@@ -20,22 +20,9 @@ class ReleaseRouteContext implements ContextProviderInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The route match object.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected RouteMatchInterface $routeMatch;
-
-  /**
-   * Constructs a new ReleaseRouteContext.
-   *
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The route match object.
-   */
-  public function __construct(RouteMatchInterface $route_match) {
-    $this->routeMatch = $route_match;
-  }
+  public function __construct(
+    protected readonly RouteMatchInterface $routeMatch,
+  ) {}
 
   /**
    * {@inheritdoc}

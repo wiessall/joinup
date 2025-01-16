@@ -33,28 +33,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class IndexDistributionData extends ProcessorPluginBase {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\File\FileUrlGeneratorInterface $fileUrlGenerator
-   *   The file URL generator service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
-    protected FileUrlGeneratorInterface $fileUrlGenerator,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

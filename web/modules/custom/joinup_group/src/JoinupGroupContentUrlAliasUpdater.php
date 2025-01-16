@@ -10,15 +10,11 @@ use Drupal\joinup_group\Queue\JoinupGroupQueueFactory;
 /**
  * Default implementation of 'joinup_group.url_alias_updater' service.
  */
-class JoinupGroupContentUrlAliasUpdater implements JoinupGroupContentUrlAliasUpdaterInterface {
+readonly class JoinupGroupContentUrlAliasUpdater implements JoinupGroupContentUrlAliasUpdaterInterface {
 
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
-   *   The queue factory service.
-   */
-  public function __construct(protected JoinupGroupQueueFactory $queueFactory) {}
+  public function __construct(
+    protected JoinupGroupQueueFactory $queueFactory,
+  ) {}
 
   /**
    * {@inheritdoc}

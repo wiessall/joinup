@@ -15,17 +15,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber to handle revisions on workflow-enabled entities.
  */
-class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
+readonly class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new WorkflowTransitionEventSubscriber object.
-   *
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revisionManager
-   *   The revision manager.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   The workflow helper.
-   */
-  public function __construct(protected RevisionManagerInterface $revisionManager, protected WorkflowHelperInterface $workflowHelper) {}
+  public function __construct(
+    protected RevisionManagerInterface $revisionManager,
+    protected WorkflowHelperInterface $workflowHelper,
+  ) {}
 
   /**
    * {@inheritdoc}

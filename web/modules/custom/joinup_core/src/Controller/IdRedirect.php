@@ -15,14 +15,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class IdRedirect extends ControllerBase {
 
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
-   *   The RDF Sync mapper service.
-   */
   public function __construct(
-    protected RdfSyncMapper $mapper,
+    protected readonly RdfSyncMapper $mapper,
   ) {}
 
   /**

@@ -28,22 +28,9 @@ class ContextualLinksHelper {
   use TraversingTrait;
   use UtilityTrait;
 
-  /**
-   * The Drupal context object.
-   *
-   * @var \Drupal\DrupalExtension\Context\RawDrupalContext
-   */
-  protected $context;
-
-  /**
-   * Constructs a ContextualLinksHelper object.
-   *
-   * @param \Drupal\DrupalExtension\Context\RawDrupalContext $context
-   *   The Drupal context.
-   */
-  public function __construct(RawDrupalContext $context) {
-    $this->context = $context;
-  }
+  public function __construct(
+    protected readonly RawDrupalContext $context,
+  ) {}
 
   /**
    * Relays method calls to the context object.

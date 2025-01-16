@@ -16,11 +16,7 @@ use Matomo\ReportingApi\QueryResult;
  */
 class TestQuery extends Query {
 
-  /**
-   * Constructs a new TestQuery.
-   */
-  public function __construct() {
-  }
+  public function __construct() {}
 
   /**
    * {@inheritdoc}

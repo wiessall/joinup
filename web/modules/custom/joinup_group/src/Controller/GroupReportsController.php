@@ -24,14 +24,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GroupReportsController extends ControllerBase {
 
-  /**
-   * Constructs a GroupReportsController object.
-   *
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-   *   The event dispatcher.
-   */
   public function __construct(
-    protected EventDispatcherInterface $dispatcher,
+    protected readonly EventDispatcherInterface $dispatcher,
   ) {}
 
   /**

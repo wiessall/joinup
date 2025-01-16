@@ -13,14 +13,8 @@ use EasyRdf\Sparql\Result;
 /**
  * Contains helper methods to handle and import vocabularies from fixtures.
  */
-class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
+readonly class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
 
-  /**
-   * Constructs a VocabularyFixturesHelper.
-   *
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $connection
-   *   The SPARQL connection service.
-   */
   public function __construct(
     protected RdfSyncConnectionInterface $connection,
   ) {}

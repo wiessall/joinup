@@ -26,64 +26,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to discussion CRUD operations.
  */
-class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
+readonly class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The Joinup subscribe service.
-   *
-   * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
-   */
-  protected $subscribeService;
-
-  /**
-   * The Joinup message delivery service.
-   *
-   * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
-   */
-  protected $messageDelivery;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The logger channel factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected $loggerFactory;
-
-  /**
-   * Constructs a new event subscriber object.
-   *
-   * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscribe_service
-   *   The Joinup subscribe service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Joinup message delivery service.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   The logger channel factory.
-   */
-  public function __construct(JoinupDiscussionSubscriptionInterface $subscribe_service, JoinupMessageDeliveryInterface $message_delivery, AccountProxyInterface $current_user, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactoryInterface $logger_factory) {
-    $this->subscribeService = $subscribe_service;
-    $this->messageDelivery = $message_delivery;
-    $this->currentUser = $current_user;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->loggerFactory = $logger_factory;
-  }
+  public function __construct(
+    protected JoinupDiscussionSubscriptionInterface $subscribeService,
+    protected JoinupMessageDeliveryInterface $messageDelivery,
+    protected AccountProxyInterface $currentUser,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerChannelFactoryInterface $loggerFactory,
+  ) {}
 
   /**
    * {@inheritdoc}

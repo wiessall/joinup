@@ -23,23 +23,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DownloadTrackingController extends ControllerBase {
 
-  /**
-   * Instantiates a new DownloadTrackingController object.
-   *
-   * @param \Drupal\node\NodeStorageInterface $nodeStorage
-   *   The RDF entity storage.
-   * @param \Drupal\Core\Entity\ContentEntityStorageInterface $eventStorage
-   *   The download event entity storage.
-   * @param \Drupal\file_url\FileUrlHandler $fileUrlHandler
-   *   The file URL handler service.
-   * @param \Drupal\file\FileUsage\FileUsageInterface $fileUsage
-   *   The file usage service.
-   */
   public function __construct(
-    protected NodeStorageInterface $nodeStorage,
-    protected ContentEntityStorageInterface $eventStorage,
-    protected FileUrlHandler $fileUrlHandler,
-    protected FileUsageInterface $fileUsage,
+    protected readonly NodeStorageInterface $nodeStorage,
+    protected readonly ContentEntityStorageInterface $eventStorage,
+    protected readonly FileUrlHandler $fileUrlHandler,
+    protected readonly FileUsageInterface $fileUsage,
   ) {}
 
   /**

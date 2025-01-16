@@ -27,53 +27,14 @@ use Matomo\ReportingApi\QueryInterface;
  */
 class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberBase {
 
-  /**
-   * The Matomo query factory.
-   *
-   * @var \Drupal\matomo_reporting_api\MatomoQueryFactoryInterface
-   */
-  protected $matomoQueryFactory;
-
-  /**
-   * The logger factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected $loggerFactory;
-
-  /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * Parameters used to query Matomo data, keyed by statistics type.
-   *
-   * @var array[]
-   */
-  protected $matomoQueryParameters = [];
-
-  /**
-   * Constructs a new RefreshCachedMatomoDataEventSubscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The system time service.
-   * @param \Drupal\matomo_reporting_api\MatomoQueryFactoryInterface $matomoQueryFactory
-   *   The Matomo query factory.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
-   *   The logger factory.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, TimeInterface $time, MatomoQueryFactoryInterface $matomoQueryFactory, ConfigFactoryInterface $configFactory, LoggerChannelFactoryInterface $loggerFactory) {
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    TimeInterface $time,
+    protected readonly MatomoQueryFactoryInterface $matomoQueryFactory,
+    protected readonly ConfigFactoryInterface $configFactory,
+    protected readonly LoggerChannelFactoryInterface $loggerFactory,
+  ) {
     parent::__construct($entityTypeManager, $time);
-    $this->matomoQueryFactory = $matomoQueryFactory;
-    $this->configFactory = $configFactory;
-    $this->loggerFactory = $loggerFactory;
   }
 
   /**

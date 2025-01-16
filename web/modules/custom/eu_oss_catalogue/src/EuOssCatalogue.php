@@ -25,32 +25,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerManager
-   *   The EC OSS Catalogue provider plugin manager.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EC OSS Catalogue parser plugin manager.
-   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
-   *   The queue factory service.
-   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   The event dispatcher service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue channel logger.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   */
   public function __construct(
-    protected EuOssCataloguePluginManagerInterface $providerManager,
-    protected EuOssCataloguePluginManagerInterface $parserManager,
-    protected QueueFactory $queueFactory,
-    protected EventDispatcherInterface $eventDispatcher,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelInterface $logger,
-    protected TimeInterface $time,
+    protected readonly EuOssCataloguePluginManagerInterface $providerManager,
+    protected readonly EuOssCataloguePluginManagerInterface $parserManager,
+    protected readonly QueueFactory $queueFactory,
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly TimeInterface $time,
   ) {}
 
   /**

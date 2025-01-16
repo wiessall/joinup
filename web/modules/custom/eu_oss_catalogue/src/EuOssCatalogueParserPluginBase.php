@@ -29,28 +29,10 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    */
   protected array $resolver;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $resolverManager
-   *   The EU OSS Catalogue resolver plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU catalogue logger channel.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
-   *   The language manager service.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EuOssCataloguePluginManagerInterface $resolverManager,
     protected LoggerChannelInterface $logger,

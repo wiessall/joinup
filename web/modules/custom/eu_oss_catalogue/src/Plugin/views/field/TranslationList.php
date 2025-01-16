@@ -18,35 +18,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TranslationList extends FieldPluginBase {
 
-  /**
-   * Constructs TranslationList.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param array $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
-   *   The language manager.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    array $pluginDefinition,
-    protected LanguageManagerInterface $languageManager,
+    string $plugin_id,
+    readonly array $plugin_definition,
+    protected readonly LanguageManagerInterface $languageManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('language_manager')
     );
   }
