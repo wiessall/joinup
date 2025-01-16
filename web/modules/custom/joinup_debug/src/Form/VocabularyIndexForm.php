@@ -17,17 +17,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class VocabularyIndexForm extends FormBase {
 
-  /**
-   * Constructs a new VocabularyIndexForm object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
-   *   The entity type bundle info.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\search_api\Task\IndexTaskManagerInterface $indexTaskManager
-   *   The index task manager.
-   */
-  public function __construct(protected EntityTypeBundleInfoInterface $bundleInfo, protected EntityTypeManagerInterface $entityTypeManager, protected IndexTaskManagerInterface $indexTaskManager) {}
+  public function __construct(
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly IndexTaskManagerInterface $indexTaskManager,
+  ) {}
 
   /**
    * {@inheritdoc}

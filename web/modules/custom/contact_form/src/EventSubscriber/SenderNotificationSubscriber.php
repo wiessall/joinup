@@ -17,22 +17,9 @@ class SenderNotificationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Mail manager service.
-   *
-   * @var \Drupal\Core\Mail\MailManagerInterface
-   */
-  protected $mailManager;
-
-  /**
-   * Constructs a new \Drupal\contact\MailHandler object.
-   *
-   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
-   *   Mail manager service.
-   */
-  public function __construct(MailManagerInterface $mail_manager) {
-    $this->mailManager = $mail_manager;
-  }
+  public function __construct(
+    protected readonly MailManagerInterface $mailManager,
+  ) {}
 
   /**
    * {@inheritdoc}

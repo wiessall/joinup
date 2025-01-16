@@ -23,28 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SearchApiFieldDeriver extends FacetSourceDeriverBase {
 
-  /**
-   * The entity field manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * Constructs a new SearchApiFieldDeriver.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The string translation manager.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, TranslationInterface $string_translation) {
-    $this->entityFieldManager = $entity_field_manager;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->stringTranslation = $string_translation;
-  }
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    protected EntityFieldManagerInterface $entityFieldManager,
+    TranslationInterface $stringTranslation,
+  ) {}
 
   /**
    * {@inheritdoc}

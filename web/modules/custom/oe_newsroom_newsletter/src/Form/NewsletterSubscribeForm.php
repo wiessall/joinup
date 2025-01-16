@@ -19,19 +19,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class NewsletterSubscribeForm extends FormBase {
 
-  /**
-   * The subscriber factory.
-   *
-   * @var \Drupal\oe_newsroom_newsletter\SubscriberFactoryInterface
-   */
-  protected $subscriberFactory;
-
-  /**
-   * Constructs a NewsletterSubscribeForm.
-   */
-  public function __construct(SubscriberFactory $subscriberFactory) {
-    $this->subscriberFactory = $subscriberFactory;
-  }
+  public function __construct(
+    protected readonly SubscriberFactory $subscriberFactory,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -95,39 +85,47 @@ class NewsletterSubscribeForm extends FormBase {
     $universe = $form_state->getValue('universe');
     $service_id = $form_state->getValue('service_id');
     try {
-      $this->subscriberFactory->get()->subscribe($email, $universe, $service_id);
-      $this->messenger()->addStatus($this->t('Thank you for subscribing to our newsletter.'));
-      $this->getLogger('oe_newsroom_newsletter')->info('@email subscribed to the newsletter with service ID @service_id and universe @universe.', [
-        '@email' => $email,
-        '@universe' => $universe,
-        '@service_id' => $service_id,
-      ]);
+      $this->subscriberFactory->get()
+        ->subscribe($email, $universe, $service_id);
+      $this->messenger()
+        ->addStatus($this->t('Thank you for subscribing to our newsletter.'));
+      $this->getLogger('oe_newsroom_newsletter')
+        ->info('@email subscribed to the newsletter with service ID @service_id and universe @universe.', [
+          '@email' => $email,
+          '@universe' => $universe,
+          '@service_id' => $service_id,
+        ]);
     }
     catch (BadResponseException $e) {
-      $this->messenger()->addError($this->t('An error occurred. Please try again later.'));
-      $this->getLogger('oe_newsroom_newsletter')->error('Exception thrown while subscribing @email to the newsletter with service ID @service_id and universe @universe: @exception.', [
-        '@email' => $email,
-        '@universe' => $universe,
-        '@service_id' => $service_id,
-        '@exception' => $e->getMessage(),
-      ]);
+      $this->messenger()
+        ->addError($this->t('An error occurred. Please try again later.'));
+      $this->getLogger('oe_newsroom_newsletter')
+        ->error('Exception thrown while subscribing @email to the newsletter with service ID @service_id and universe @universe: @exception.', [
+          '@email' => $email,
+          '@universe' => $universe,
+          '@service_id' => $service_id,
+          '@exception' => $e->getMessage(),
+        ]);
     }
     catch (InvalidEmailAddressException $e) {
       $this->messenger()->addError($this->t('E-mail address is invalid.'));
-      $this->getLogger('oe_newsroom_newsletter')->notice('Newsroom rejected invalid email address @email for the newsletter with service ID @service_id and universe @universe: @exception.', [
-        '@email' => $email,
-        '@universe' => $universe,
-        '@service_id' => $service_id,
-        '@exception' => $e->getMessage(),
-      ]);
+      $this->getLogger('oe_newsroom_newsletter')
+        ->notice('Newsroom rejected invalid email address @email for the newsletter with service ID @service_id and universe @universe: @exception.', [
+          '@email' => $email,
+          '@universe' => $universe,
+          '@service_id' => $service_id,
+          '@exception' => $e->getMessage(),
+        ]);
     }
     catch (EmailAddressAlreadySubscribedException $e) {
-      $this->messenger()->addStatus($this->t('You are already subscribed to our newsletter.'));
-      $this->getLogger('oe_newsroom_newsletter')->notice('@email is already registered to the newsletter with service ID @service_id and universe @universe.', [
-        '@email' => $email,
-        '@universe' => $universe,
-        '@service_id' => $service_id,
-      ]);
+      $this->messenger()
+        ->addStatus($this->t('You are already subscribed to our newsletter.'));
+      $this->getLogger('oe_newsroom_newsletter')
+        ->notice('@email is already registered to the newsletter with service ID @service_id and universe @universe.', [
+          '@email' => $email,
+          '@universe' => $universe,
+          '@service_id' => $service_id,
+        ]);
     }
   }
 

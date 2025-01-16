@@ -30,9 +30,9 @@ class TranslationRequester extends QueueWorkerBase implements ContainerFactoryPl
   public function __construct(
     array $configuration,
     string $plugin_id,
-    array $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected JobBuilderInterface $jobBuilder,
+    readonly array $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly JobBuilderInterface $jobBuilder,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

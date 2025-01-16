@@ -17,20 +17,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Joinup subscribe service.
-   *
-   * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
-   */
-  protected $subscribeService;
-
-  /**
-   * The Joinup message delivery service.
-   *
-   * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
-   */
-  protected $messageDelivery;
-
-  /**
    * The comment entity.
    *
    * @var \Drupal\comment\CommentInterface
@@ -58,17 +44,10 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    */
   protected $recipients;
 
-  /**
-   * Constructs a new event subscriber object.
-   *
-   * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscribe_service
-   *   The Joinup subscribe service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Joinup message delivery service.
-   */
-  public function __construct(JoinupDiscussionSubscriptionInterface $subscribe_service, JoinupMessageDeliveryInterface $message_delivery) {
-    $this->subscribeService = $subscribe_service;
-    $this->messageDelivery = $message_delivery;
+  public function __construct(
+    protected JoinupDiscussionSubscriptionInterface $subscribeService,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+  ) {
   }
 
   /**

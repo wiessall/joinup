@@ -20,32 +20,10 @@ class PermissionGenerationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The entity field manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * The permissions helper service.
-   *
-   * @var \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface
-   */
-  protected $permissionsHelper;
-
-  /**
-   * Creates a StateMachineOgSubscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager service.
-   * @param \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface $permissions_helper
-   *   The permissions helper service.
-   */
-  public function __construct(EntityFieldManagerInterface $entity_field_manager, StateMachinePermissionsHelperInterface $permissions_helper) {
-    $this->entityFieldManager = $entity_field_manager;
-    $this->permissionsHelper = $permissions_helper;
-  }
+  public function __construct(
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
+    protected readonly StateMachinePermissionsHelperInterface $permissionsHelper,
+  ) {}
 
   /**
    * {@inheritdoc}

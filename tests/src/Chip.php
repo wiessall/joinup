@@ -18,33 +18,12 @@ use Behat\Mink\Element\NodeElement;
  * the DOM as a visible text element (with JS enabled) or as a hidden form
  * element (with JS disabled).
  */
-class Chip {
+readonly class Chip {
 
-  /**
-   * The Mink element representing the chip in the document.
-   *
-   * @var \Behat\Mink\Element\NodeElement
-   */
-  protected NodeElement $element;
-
-  /**
-   * Whether or not the element can be visually interacted with.
-   *
-   * @var bool
-   */
-  protected bool $isVisible;
-
-  /**
-   * Constructs a new Chip.
-   *
-   * @param \Behat\Mink\Element\NodeElement $element
-   *   The Mink element that represents the chip in the document.
-   * @param bool $isVisible
-   *   Whether or not the element can be visually interacted with.
-   */
-  public function __construct(NodeElement $element, bool $isVisible) {
-    $this->element = $element;
-    $this->isVisible = $isVisible;
+  public function __construct(
+    protected NodeElement $element,
+    protected bool $isVisible,
+  ) {
   }
 
   /**

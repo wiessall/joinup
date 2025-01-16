@@ -22,7 +22,11 @@ class AdmsValidationResult {
    */
   protected $errors = [];
 
-  public function __construct(Result $result, string $graph_uri, RdfSyncConnectionInterface $sparql) {
+  public function __construct(
+    Result $result,
+    string $graph_uri,
+    RdfSyncConnectionInterface $sparql,
+  ) {
     $skipped_rules = [100, 101, 102, 103];
     foreach ($result as $error) {
       if (!in_array($error->Rule_ID->getValue(), $skipped_rules)) {

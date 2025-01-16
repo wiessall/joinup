@@ -12,34 +12,12 @@ use Drupal\Core\Theme\ThemeManagerInterface;
 /**
  * Default implementation of 'joinup_core.local_task_links_helper' service.
  */
-class LocalTaskLinksHelper implements LocalTaskLinksHelperInterface {
+readonly class LocalTaskLinksHelper implements LocalTaskLinksHelperInterface {
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The theme manager service.
-   *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface
-   */
-  protected ThemeManagerInterface $themeManager;
-
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
-   *   The theme manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ThemeManagerInterface $theme_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->themeManager = $theme_manager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected ThemeManagerInterface $themeManager,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -24,19 +24,10 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a ShowOnlyUserContentSubscriber.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   */
   public function __construct(
     protected AccountInterface $currentUser,
     protected MessengerInterface $messenger,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}
