@@ -22,27 +22,15 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
   const STATE_KEY = 'oe_newsroom_newsletter.mock_subscriptions';
 
   /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected StateInterface $state;
-
-  /**
    * The list of registered service application keys.
    *
    * @var array
    */
   protected array $settings;
 
-  /**
-   * Constructs a new NewsletterSubscriber object.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(StateInterface $state) {
-    $this->state = $state;
+  public function __construct(
+    protected readonly StateInterface $state,
+  ) {
     $this->settings = [];
     $settings = Settings::get('oe_newsroom_universe_keys');
     if (!empty($settings) && $settings = json_decode($settings)) {

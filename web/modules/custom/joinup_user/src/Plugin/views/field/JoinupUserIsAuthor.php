@@ -19,9 +19,9 @@ class JoinupUserIsAuthor extends Boolean {
 
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

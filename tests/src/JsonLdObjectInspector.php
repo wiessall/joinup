@@ -28,23 +28,6 @@ final class JsonLdObjectInspector {
    */
   protected array $jsonLdNodes = [];
 
-  /**
-   * Constructs a new JsonLdObjectInspector instance.
-   *
-   * @param \stdClass $jsonLd
-   *   The JSON-LD object to inspect.
-   * @param string|null $property
-   *   A property to filter the discovered objects. Value can be specified in
-   *   "$value". Optional.
-   * @param string|null $value
-   *   The expected value the specified property to not filter out a JSON-LD
-   *   object. Optional. If "$property" is set and "$value" is NULL, then
-   *   objects which have the specified property will be filtered out.
-   * @param string|null $subProperty
-   *   The sub-property to filter for. Works similar way as "$property".
-   *
-   * @throws \Exception
-   */
   public function __construct(
     \stdClass $jsonLd,
     ?string $property = NULL,

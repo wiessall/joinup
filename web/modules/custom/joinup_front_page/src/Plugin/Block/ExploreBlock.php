@@ -36,22 +36,12 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    */
   protected string $viewMode = 'explore_item';
 
-  /**
-   * Constructs a new ExploreItemBlock instance.
-   *
-   * @param array $configuration
-   *   The plugin configuration, i.e. an array with configuration values keyed
-   *   by configuration option name. The special key 'context' may be used to
-   *   initialize the defined contexts by setting it to an array of context
-   *   values keyed by context names.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity manager.
-   */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 

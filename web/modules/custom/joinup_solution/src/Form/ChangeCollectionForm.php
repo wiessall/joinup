@@ -35,22 +35,10 @@ class ChangeCollectionForm extends FormBase {
    */
   protected $logger;
 
-  /**
-   * Constructs a new form object.
-   *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStoreFactory
-   *   The private tempstore factory.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selectionPluginManager
-   *   The selection plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
-   *   The logger channel factory service.
-   */
   public function __construct(
-    PrivateTempStoreFactory $privateTempStoreFactory,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected SelectionPluginManagerInterface $selectionPluginManager,
+    readonly PrivateTempStoreFactory $privateTempStoreFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly SelectionPluginManagerInterface $selectionPluginManager,
     LoggerChannelFactoryInterface $loggerFactory,
   ) {
     $this->tempStore = $privateTempStoreFactory->get('change_collection');

@@ -16,22 +16,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class ReleaseCacheContext implements CacheContextInterface {
 
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected RequestStack $requestStack;
-
-  /**
-   * Constructs a new ReleaseCacheContext service.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   */
-  public function __construct(RequestStack $request_stack) {
-    $this->requestStack = $request_stack;
-  }
+  public function __construct(
+    protected readonly RequestStack $requestStack,
+  ) {}
 
   /**
    * {@inheritdoc}

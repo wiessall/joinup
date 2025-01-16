@@ -63,29 +63,13 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
    */
   public const string WORKFLOW_ID = 'solution_workflow';
 
-  /**
-   * Constructs a ChangeSolutionStateAction instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   The temporary store factory.
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The current user account proxy.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   The (state machine) workflow manager.
-   */
   public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected PrivateTempStoreFactory $tempStoreFactory,
-    protected AccountProxyInterface $currentUser,
-    protected WorkflowManagerInterface $workflowManager,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly WorkflowManagerInterface $workflowManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

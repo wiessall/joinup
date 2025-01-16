@@ -19,22 +19,9 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The currently logged in user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * Constructs a JoinupGroupOgSubscriber.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged in user.
-   */
-  public function __construct(AccountInterface $currentUser) {
-    $this->currentUser = $currentUser;
-  }
+  public function __construct(
+    protected readonly AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

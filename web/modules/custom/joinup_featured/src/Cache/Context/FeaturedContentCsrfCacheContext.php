@@ -24,24 +24,9 @@ use Drupal\Core\Cache\Context\CacheContextInterface;
  * want to lose the ability to detect regressions in cacheability of important
  * pages such as the collections / solutions overviews and homepages.
  */
-class FeaturedContentCsrfCacheContext implements CacheContextInterface {
+readonly class FeaturedContentCsrfCacheContext implements CacheContextInterface {
 
-  /**
-   * The CSRF token generator.
-   *
-   * @var \Drupal\Core\Access\CsrfTokenGenerator
-   */
-  protected $csrfTokenGenerator;
-
-  /**
-   * Constructs a new FeaturedContentCsrfCacheContext.
-   *
-   * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator
-   *   The CSRF token generator.
-   */
-  public function __construct(CsrfTokenGenerator $csrf_token_generator) {
-    $this->csrfTokenGenerator = $csrf_token_generator;
-  }
+  public function __construct(protected CsrfTokenGenerator $csrfTokenGenerator) {}
 
   /**
    * {@inheritdoc}

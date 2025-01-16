@@ -19,7 +19,6 @@ use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -52,16 +51,14 @@ class SubscribeToCollectionForm extends FormBase {
   protected const string COC_CHECKBOX_KEY = 'code_of_conduct_agreed';
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected MembershipManagerInterface $membershipManager,
-    MessengerInterface $messenger,
-    protected FormBuilderInterface $formBuilder,
-    protected TimeInterface $time,
-    protected EventDispatcherInterface $eventDispatcher,
-    protected PathValidatorInterface $pathValidator,
-  ) {
-    $this->messenger = $messenger;
-  }
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected $messenger,
+    protected readonly FormBuilderInterface $formBuilder,
+    protected readonly TimeInterface $time,
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly PathValidatorInterface $pathValidator,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -11,24 +11,11 @@ use Drupal\joinup_discussion\Entity\DiscussionInterface;
  */
 class DiscussionUpdateEvent extends DiscussionEventBase {
 
-  /**
-   * A list of changed fields.
-   *
-   * @var array
-   */
-  protected $changedFields;
-
-  /**
-   * Creates a new discussion event object.
-   *
-   * @param \Drupal\joinup_discussion\Entity\DiscussionInterface $node
-   *   The discussion node subject of event.
-   * @param array $changed_fields
-   *   A list of changed fields, keyed by field name.
-   */
-  public function __construct(DiscussionInterface $node, array $changed_fields) {
+  public function __construct(
+    DiscussionInterface $node,
+    protected readonly array $changedFields,
+  ) {
     parent::__construct($node);
-    $this->changedFields = $changed_fields;
   }
 
   /**

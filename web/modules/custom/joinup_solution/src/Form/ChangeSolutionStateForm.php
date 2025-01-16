@@ -32,23 +32,11 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
    */
   protected ?PrivateTempStore $privateTempStore;
 
-  /**
-   * Constructs a new ChangeSolutionStateForm instance.
-   *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   The temp store factory.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   The workflow state manager.
-   * @param \Drupal\Core\DestructableInterface|null $postRequestIndexer
-   *   Search API's post request indexer service, if it is available.
-   */
   public function __construct(
-    protected PrivateTempStoreFactory $tempStoreFactory,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected WorkflowManagerInterface $workflowManager,
-    protected ?DestructableInterface $postRequestIndexer,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly WorkflowManagerInterface $workflowManager,
+    protected readonly ?DestructableInterface $postRequestIndexer,
   ) {}
 
   /**

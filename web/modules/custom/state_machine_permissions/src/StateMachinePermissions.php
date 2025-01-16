@@ -16,13 +16,9 @@ class StateMachinePermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a state machine permissions object.
-   *
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   The workflow manager.
-   */
-  public function __construct(protected WorkflowManagerInterface $workflowManager) {}
+  public function __construct(
+    protected readonly WorkflowManagerInterface $workflowManager,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -46,60 +46,14 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
    */
   protected ?array $config;
 
-  /**
-   * The entity type manager.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The config factory service.
-   */
-  protected ConfigFactory $configFactory;
-
-  /**
-   * The current user service.
-   */
-  protected AccountProxy $currentUser;
-
-  /**
-   * The membership manager service.
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The workflow helper service.
-   */
-  protected WorkflowHelperInterface $workflowHelper;
-
-  /**
-   * The message delivery service.
-   */
-  protected JoinupMessageDeliveryInterface $messageDelivery;
-
-  /**
-   * Constructs a new CommunityContentSubscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Config\ConfigFactory $config_factory
-   *   The config factory service.
-   * @param \Drupal\Core\Session\AccountProxy $current_user
-   *   The current user service.
-   * @param \Drupal\og\MembershipManagerInterface $og_membership_manager
-   *   The og membership manager service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper
-   *   The workflow helper service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The message delivery service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactory $config_factory, AccountProxy $current_user, MembershipManagerInterface $og_membership_manager, WorkflowHelperInterface $workflow_helper, JoinupMessageDeliveryInterface $message_delivery) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->configFactory = $config_factory;
-    $this->currentUser = $current_user;
-    $this->membershipManager = $og_membership_manager;
-    $this->workflowHelper = $workflow_helper;
-    $this->messageDelivery = $message_delivery;
-  }
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly ConfigFactory $configFactory,
+    protected readonly AccountProxy $currentUser,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly WorkflowHelperInterface $workflowHelper,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+  ) {}
 
   /**
    * Initializes the necessary data to be shared by the methods.
@@ -113,7 +67,8 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
   protected function initialize(NotificationEvent $event): void {
     $this->entity = $event->getEntity();
     $this->operation = $event->getOperation();
-    $this->config = $this->configFactory->get($this->getConfigurationName())->get($this->operation);
+    $this->config = $this->configFactory->get($this->getConfigurationName())
+      ->get($this->operation);
   }
 
   /**
@@ -140,7 +95,8 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
     $uids_to_skip = array_unique([0, $this->currentUser->id()]);
     $message_data = [];
 
-    if (!empty($user_data['owner']) && $entity->getOwnerId() !== $this->currentUser->id() && !$entity->getOwner()->isAnonymous()) {
+    if (!empty($user_data['owner']) && $entity->getOwnerId() !== $this->currentUser->id() && !$entity->getOwner()
+      ->isAnonymous()) {
       $message_data[$entity->getOwnerId()] = $user_data['owner'];
       $uids_to_skip[] = $entity->getOwnerId();
     }
@@ -298,14 +254,19 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
     $arguments['@entity:bundle'] = $entity->bundle();
     // Check for canonical to prevent error with "Message" entity type.
     if ($entity->hasLinkTemplate('canonical')) {
-      $arguments['@entity:url'] = $entity->toUrl('canonical')->setAbsolute()->toString();
+      $arguments['@entity:url'] = $entity->toUrl('canonical')
+        ->setAbsolute()
+        ->toString();
     }
-    $arguments['@user:my_subscriptions'] = Url::fromRoute('joinup_subscription.my_subscriptions')->setAbsolute()->toString();
+    $arguments['@user:my_subscriptions'] = Url::fromRoute('joinup_subscription.my_subscriptions')
+      ->setAbsolute()
+      ->toString();
 
     $arguments += MessageArgumentGenerator::getActorArguments();
     $arguments += MessageArgumentGenerator::getContactFormUrlArgument();
 
-    $arguments['@site:legal_notice_url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])->toString();
+    $arguments['@site:legal_notice_url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])
+      ->toString();
 
     return $arguments;
   }
@@ -346,10 +307,10 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
    * If a file is provided here it will be loaded during the initialization of
    * the event subscriber.
    *
-   * @see \Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase::initialize()
-   *
    * @return string
    *   The optional configuration file name.
+   *
+   * @see \Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase::initialize()
    */
   protected function getConfigurationName(): string {
     return '';
@@ -371,7 +332,8 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
     if ($entity->isPublished()) {
       return TRUE;
     }
-    $published = $this->entityTypeManager->getStorage('node')->load($entity->id());
+    $published = $this->entityTypeManager->getStorage('node')
+      ->load($entity->id());
     return !empty($published) && $published->isPublished();
   }
 

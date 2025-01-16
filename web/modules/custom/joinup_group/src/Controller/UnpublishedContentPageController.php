@@ -17,17 +17,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UnpublishedContentPageController extends ControllerBase {
 
-  /**
-   * Constructs a new UnpublishedContentPageController object.
-   *
-   * @param \Drupal\Core\Block\BlockManagerInterface $block_plugin_manager
-   *   The block plugin manager service.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Joinup group manager service.
-   */
-  public function __construct(protected BlockManagerInterface $block_plugin_manager, protected RendererInterface $renderer, protected JoinupGroupManagerInterface $group_manager) {}
+  public function __construct(
+    protected readonly BlockManagerInterface $block_plugin_manager,
+    protected readonly RendererInterface $renderer,
+    protected readonly JoinupGroupManagerInterface $group_manager,
+  ) {}
 
   /**
    * {@inheritdoc}

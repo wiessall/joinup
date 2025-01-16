@@ -17,22 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupLegalVersionsForm extends FormBase {
 
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * Builds a new form instance.
-   *
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   */
-  public function __construct(RendererInterface $renderer) {
-    $this->renderer = $renderer;
-  }
+  public function __construct(
+    protected readonly RendererInterface $renderer,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -122,13 +109,15 @@ class JoinupLegalVersionsForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $document */
     $document = $form_state->get('legal_document');
-    if ($document->getPublishedVersion()->id() != $form_state->getValue('version')) {
+    if ($document->getPublishedVersion()
+      ->id() != $form_state->getValue('version')) {
       $version = EntityLegalDocumentVersion::load($form_state->getValue('version'));
       $document->setPublishedVersion($version);
-      $this->messenger()->addStatus($this->t('%document %version has been published.', [
-        '%document' => $document->label(),
-        '%version' => $version->label(),
-      ]));
+      $this->messenger()
+        ->addStatus($this->t('%document %version has been published.', [
+          '%document' => $document->label(),
+          '%version' => $version->label(),
+        ]));
       return;
     }
     $this->messenger()->addStatus($this->t('No changes have been made.'));

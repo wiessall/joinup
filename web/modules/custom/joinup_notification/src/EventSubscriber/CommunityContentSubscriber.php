@@ -56,24 +56,6 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    */
   protected bool $hasPublished;
 
-  /**
-   * Constructs a new CommunityContentSubscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   The config factory service.
-   * @param \Drupal\Core\Session\AccountProxy $currentUser
-   *   The current user service.
-   * @param \Drupal\og\MembershipManager $ogMembershipManager
-   *   The og membership manager service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   The workflow helper service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
-   *   The message deliver service.
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revisionManager
-   *   The revision manager service.
-   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     ConfigFactory $configFactory,

@@ -22,13 +22,9 @@ class EuOssPostFetchEvent extends Event {
    */
   protected ?string $cancellationReason;
 
-  /**
-   * Constructs a new event instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\Model\Project $project
-   *   The project value object.
-   */
-  public function __construct(protected Project $project) {}
+  public function __construct(
+    protected readonly Project $project,
+  ) {}
 
   /**
    * Returns the fetched solution.

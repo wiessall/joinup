@@ -24,8 +24,7 @@ class RdfExportController extends ControllerBase {
     #[Autowire(service: 'rdf_sync.mapper')]
     protected RdfSyncMapper $rdfSyncMapper,
     protected EntityRepositoryInterface $entityRepository,
-  ) {
-  }
+  ) {}
 
   /**
    * Provides the title callback.
