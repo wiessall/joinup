@@ -20,6 +20,13 @@ function ventuno_preprocess_comment(array &$variables): void {
   /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user_picture']['#user'];
 
+  $uid = $comment->getOwnerId();
+  $service = \Drupal::getContainer()->get('joinup_user.fullname');
+  if ($uid && !$comment->getOwner()->id() && $service->isUserDeleted($uid)) {
+    // A deleted user.
+    $user = $service->getDeletedUser($uid);
+  }
+
   if ($user->isAnonymous()) {
     $variables['author'] = ['#markup' => $comment->getAuthorName()];
   }

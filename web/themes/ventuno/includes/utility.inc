@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
@@ -321,9 +322,12 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
  *   Renderable array that contains the author.
  */
 function _ventuno_get_author(CommunityContentInterface $node): array {
-  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
-  $author = $node->get('author_realname')->getAuthor() ?? $node->get('uid')->entity;
+  if (!$author = $node->get('uid')->entity) {
+    $service = \Drupal::getContainer()->get('joinup_user.fullname');
+    $uid = $node->get('uid')->target_id;
+    $author = $node->get('uid')->target_id == 0 ? new AnonymousUserSession() : $service->getDeletedUser($uid);
+  }
   return $view_builder->view($author, 'inline');
 }
 
