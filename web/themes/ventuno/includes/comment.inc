@@ -40,10 +40,8 @@ function ventuno_preprocess_comment(array &$variables): void {
     ];
     // Check if the user has the 'administer comments' permission.
     if (\Drupal::currentUser()->hasPermission('administer comments')) {
-      // Add the user profile link in parentheses for moderators or the name
-      // of the author if the user is anonymous - the user has been deleted and
-      // the author name has been saved in the comment.
-      $user_profile_link = $user->isAnonymous() ? $comment->getAuthorName() : \Drupal::service('renderer')->render($username);
+      // Add the user profile link in parentheses for moderators.
+      $user_profile_link = \Drupal::service('renderer')->render($username);
       $variables['author']['#markup'] .= ' (' . $user_profile_link . ')';
     }
   }
