@@ -51,34 +51,16 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected Client $client;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   The plugin configuration.
-   * @param string $pluginId
-   *   The plugin ID.
-   * @param array $pluginDefinition
-   *   The plugin definition.
-   * @param \Psr\Http\Client\ClientInterface $httpClient
-   *   The HTTP client.
-   * @param \Drupal\Core\Site\Settings $settings
-   *   The Drupal settings.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache backend.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
     protected LoggerChannelInterface $logger,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $httpClient, $settings, $logger);
   }
 
   /**

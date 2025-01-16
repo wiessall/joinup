@@ -21,20 +21,9 @@ class AnnouncementsController extends ControllerBase {
 
   use AnnouncementsAccessTrait;
 
-  /**
-   * The class resolver service.
-   */
-  protected ClassResolverInterface $classResolver;
-
-  /**
-   * Constructs a new controller class instance.
-   *
-   * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
-   *   The class resolver service.
-   */
-  public function __construct(ClassResolverInterface $class_resolver) {
-    $this->classResolver = $class_resolver;
-  }
+  public function __construct(
+    protected readonly ClassResolverInterface $classResolver,
+  ) {}
 
   /**
    * {@inheritdoc}

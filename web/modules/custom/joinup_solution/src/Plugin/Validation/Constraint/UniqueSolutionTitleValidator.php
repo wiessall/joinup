@@ -23,13 +23,9 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueSolutionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
-  /**
-   * Constructs a new validator instance.
-   *
-   * @param \Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface $solutionTitleHelper
-   *   The solution title duplicate helper service.
-   */
-  public function __construct(protected SolutionTitleDuplicateHelperInterface $solutionTitleHelper) {}
+  public function __construct(
+    protected readonly SolutionTitleDuplicateHelperInterface $solutionTitleHelper,
+  ) {}
 
   /**
    * {@inheritdoc}

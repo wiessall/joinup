@@ -16,7 +16,7 @@ use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 /**
  * Job builder service.
  */
-class JobBuilder implements JobBuilderInterface {
+readonly class JobBuilder implements JobBuilderInterface {
 
   /**
    * Target language.

@@ -23,22 +23,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GroupNodeController extends ControllerBase {
 
-  /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access handler.
-   */
-  public function __construct(OgAccessInterface $og_access) {
-    $this->ogAccess = $og_access;
-  }
+  public function __construct(
+    protected readonly OgAccessInterface $ogAccess,
+  ) {}
 
   /**
    * {@inheritdoc}

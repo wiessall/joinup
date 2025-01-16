@@ -13,28 +13,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 class AddGroupContentEvent extends Event {
 
   /**
-   * The group entity.
-   *
-   * @var \Drupal\joinup_group\Entity\GroupInterface
-   */
-  protected $group;
-
-  /**
    * A list of render arrays, each representing a menu item.
    *
    * @var array[]
    */
   protected $items = [];
 
-  /**
-   * Constructs a new event instance.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group entity.
-   */
-  public function __construct(GroupInterface $group) {
-    $this->group = $group;
-  }
+  public function __construct(
+    protected readonly GroupInterface $group,
+  ) {}
 
   /**
    * Returns the group.

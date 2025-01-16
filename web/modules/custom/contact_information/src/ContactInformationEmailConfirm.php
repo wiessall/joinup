@@ -14,21 +14,13 @@ use Drupal\joinup_group\JoinupGroupHelper;
 /**
  * Default implementation for 'contact_information.email_confirm' service.
  */
-class ContactInformationEmailConfirm implements ContactInformationEmailConfirmInterface {
+readonly class ContactInformationEmailConfirm implements ContactInformationEmailConfirmInterface {
 
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
-   *   The email confirmer service.
-   *
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) {}
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RendererInterface $renderer,
+    protected EmailConfirmerManagerInterface $emailConfirmer,
+  ) {}
 
   /**
    * {@inheritdoc}

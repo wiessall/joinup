@@ -23,7 +23,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @FacetsWidget(
  *   id = "links_inline",
  *   label = @Translation("List of links with wrapper text"),
- *   description = @Translation("A widget that shows some of the results with prefix and suffix text"),
+ *   description = @Translation("A widget that shows some of the results with
+ *   prefix and suffix text"),
  * )
  */
 class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPluginInterface {
@@ -35,38 +36,14 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
    */
   const DEFAULT_CACHE_CONTEXTS = ['url.path', 'url.query_args'];
 
-  /**
-   * The cache contexts manager service.
-   *
-   * @var \Drupal\Core\Cache\Context\CacheContextsManager
-   */
-  protected $cacheContextsManager;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Cache\Context\CacheContextsManager $cache_contexts_manager
-   *   The cache contexts manager service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CacheContextsManager $cache_contexts_manager, RequestStack $request_stack) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly CacheContextsManager $cacheContextsManager,
+    protected readonly RequestStack $requestStack,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->cacheContextsManager = $cache_contexts_manager;
-    $this->requestStack = $request_stack;
   }
 
   /**

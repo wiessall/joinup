@@ -24,15 +24,10 @@ class TransitionPermissionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  /**
-   * Instantiates a PermissionGuard plugin.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged-in user.
-   * @param \Drupal\joinup_workflow\WorkflowHelper $workflowHelper
-   *   The workflow helper service.
-   */
-  public function __construct(protected AccountInterface $currentUser, protected WorkflowHelper $workflowHelper) {}
+  public function __construct(
+    protected readonly AccountInterface $currentUser,
+    protected readonly WorkflowHelper $workflowHelper,
+  ) {}
 
   /**
    * {@inheritdoc}

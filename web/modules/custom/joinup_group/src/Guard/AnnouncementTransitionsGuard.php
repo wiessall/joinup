@@ -15,22 +15,11 @@ use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 /**
  * Limits the allowed transitions based on transition permissions.
  */
-class AnnouncementTransitionsGuard implements GuardInterface {
+readonly class AnnouncementTransitionsGuard implements GuardInterface {
 
-  /**
-   * The group manager service.
-   */
-  protected JoinupGroupManagerInterface $groupManager;
-
-  /**
-   * Constructs a new guard service instance.
-   *
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The group manager service.
-   */
-  public function __construct(JoinupGroupManagerInterface $group_manager) {
-    $this->groupManager = $group_manager;
-  }
+  public function __construct(
+    protected JoinupGroupManagerInterface $groupManager,
+  ) {}
 
   /**
    * {@inheritdoc}

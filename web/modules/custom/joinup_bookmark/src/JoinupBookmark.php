@@ -17,14 +17,8 @@ class JoinupBookmark implements JoinupBookmarkInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs an instance of the joinup_bookmark service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged-in user.
-   */
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected readonly AccountInterface $currentUser,
   ) {
   }
 

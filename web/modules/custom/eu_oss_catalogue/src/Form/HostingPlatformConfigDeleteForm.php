@@ -14,14 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class HostingPlatformConfigDeleteForm extends EntityDeleteForm {
 
-  /**
-   * Constructs a hosting platform config delete form.
-   *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   Entity field manager.
-   */
   public function __construct(
-    protected EntityFieldManagerInterface $entityFieldManager,
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
   ) {
   }
 

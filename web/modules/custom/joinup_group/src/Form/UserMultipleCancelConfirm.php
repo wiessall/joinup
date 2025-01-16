@@ -23,38 +23,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
 
-  /**
-   * The group manager service.
-   *
-   * @var \Drupal\joinup_group\JoinupGroupManagerInterface
-   */
-  protected $groupManager;
-
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
-
-  /**
-   * Constructs a new UserMultipleCancelConfirm.
-   *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   The temp store factory.
-   * @param \Drupal\user\UserStorageInterface $user_storage
-   *   The user storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $joinup_group_manager
-   *   The Joinup group manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The entity type bundle info service.
-   */
-  public function __construct(PrivateTempStoreFactory $temp_store_factory, UserStorageInterface $user_storage, EntityTypeManagerInterface $entity_type_manager, JoinupGroupManagerInterface $joinup_group_manager, EntityTypeBundleInfoInterface $bundle_info) {
+  public function __construct(
+    PrivateTempStoreFactory $temp_store_factory,
+    UserStorageInterface $user_storage,
+    EntityTypeManagerInterface $entity_type_manager,
+    protected JoinupGroupManagerInterface $groupManager,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
+  ) {
     parent::__construct($temp_store_factory, $user_storage, $entity_type_manager);
-    $this->groupManager = $joinup_group_manager;
-    $this->bundleInfo = $bundle_info;
   }
 
   /**

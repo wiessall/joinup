@@ -16,14 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class TcaFormBase extends FormBase {
 
-  /**
-   * Constructs a TcaFormBase object.
-   *
-   * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
-   *   The block manager service.
-   */
   public function __construct(
-    protected BlockManagerInterface $blockManager,
+    protected readonly BlockManagerInterface $blockManager,
   ) {}
 
   /**

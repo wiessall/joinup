@@ -17,22 +17,9 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * Constructs a new subscriber instance.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   */
-  public function __construct(AccountInterface $current_user) {
-    $this->currentUser = $current_user;
-  }
+  public function __construct(
+    readonly AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

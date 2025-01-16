@@ -14,31 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EuLoginMenuLink extends MenuLinkDefault {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * Creates a new menu link instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Menu\StaticMenuLinkOverridesInterface $static_override
-   *   The static override storage.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, AccountInterface $current_user) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    readonly StaticMenuLinkOverridesInterface $static_override,
+    readonly AccountInterface $currentUser,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $static_override);
-
-    $this->currentUser = $current_user;
   }
 
   /**
@@ -83,7 +66,6 @@ class EuLoginMenuLink extends MenuLinkDefault {
   /**
    * {@inheritdoc}
    */
-  public function deleteLink() {
-  }
+  public function deleteLink() {}
 
 }

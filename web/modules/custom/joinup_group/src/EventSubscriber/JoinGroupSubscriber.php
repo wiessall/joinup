@@ -30,32 +30,13 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
   public const string ID_COOKIE_NAME = 'join_group';
   public const string MODAL_SUBSCRIBE_COOKIE_NAME = 'join_group_modal';
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The messenger service.
-   */
-  protected MessengerInterface $messenger;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   */
-  public function __construct(TimeInterface $time, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, MessengerInterface $messenger) {
+  public function __construct(
+    TimeInterface $time,
+    RequestStack $request_stack,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MessengerInterface $messenger,
+  ) {
     parent::__construct($time, $request_stack);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->messenger = $messenger;
   }
 
   /**

@@ -37,9 +37,9 @@ class GroupHeaderBlock extends BlockBase implements ContainerFactoryPluginInterf
   public function __construct(
     array $configuration,
     string $plugin_id,
-    array $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RouteMatchInterface $routeMatch,
+    readonly array $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

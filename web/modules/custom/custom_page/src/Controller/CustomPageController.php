@@ -22,20 +22,9 @@ class CustomPageController implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The file URL generator.
-   */
-  protected FileUrlGeneratorInterface $urlGenerator;
-
-  /**
-   * Constructs a new CustomPageController.
-   *
-   * @param \Drupal\Core\File\FileUrlGeneratorInterface $url_generator
-   *   The file URL generator.
-   */
-  public function __construct(FileUrlGeneratorInterface $url_generator) {
-    $this->urlGenerator = $url_generator;
-  }
+  public function __construct(
+    protected readonly FileUrlGeneratorInterface $urlGenerator,
+  ) {}
 
   /**
    * {@inheritdoc}

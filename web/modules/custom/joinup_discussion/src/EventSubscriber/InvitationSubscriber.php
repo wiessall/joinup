@@ -20,32 +20,10 @@ class InvitationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The subscription service.
-   *
-   * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
-   */
-  protected $joinupSubscription;
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * Constructs a new InvitationSubscriber.
-   *
-   * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $joinupSubscription
-   *   The subscription service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   */
-  public function __construct(JoinupDiscussionSubscriptionInterface $joinupSubscription, MessengerInterface $messenger) {
-    $this->joinupSubscription = $joinupSubscription;
-    $this->messenger = $messenger;
-  }
+  public function __construct(
+    protected readonly JoinupDiscussionSubscriptionInterface $joinupSubscription,
+    protected readonly MessengerInterface $messenger,
+  ) {}
 
   /**
    * {@inheritdoc}
