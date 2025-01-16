@@ -1,0 +1,10 @@
+uuid: d11fd568-d20f-4120-b706-d3a506130b98
+langcode: en
+status: true
+dependencies: {  }
+id: events_calendar
+label: 'Events calendar'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

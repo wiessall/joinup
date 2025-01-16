@@ -1,0 +1,26 @@
+uuid: b215ae2f-5b5c-4893-a7a0-811f1ecfc167
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.events_calendar.paragraph_block
+    - paragraphs.paragraphs_type.events_calendar
+  module:
+    - block_field
+    - template_suggestion
+id: paragraph.events_calendar.default
+targetEntityType: paragraph
+bundle: events_calendar
+mode: default
+content:
+  paragraph_block:
+    type: block_field
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
