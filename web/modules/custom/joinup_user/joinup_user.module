@@ -11,7 +11,6 @@ use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -20,12 +19,9 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_notification\MessageArgumentGenerator;
-use Drupal\joinup_user\Event\JoinupUserCancelEvent;
-use Drupal\joinup_user\Plugin\Field\NodeAuthorRealname;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
-use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
 /**
@@ -426,6 +422,8 @@ function joinup_user_invalidate_user_cache_tags(OgMembershipInterface $entity): 
  * Disallow access to the cancellation method.
  */
 function joinup_user_form_user_multiple_cancel_confirm_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Cancelling an account with deletion is permitted in the administrative UI.
+  $form['user_cancel_method']['#default_value'] = 'user_cancel_delete';
   joinup_user_alter_account_cancel_form($form);
 }
 
@@ -473,44 +471,6 @@ function joinup_user_alter_account_cancel_form(array &$form): void {
   $form['user_cancel_notify']['#default_value'] = TRUE;
   $form['user_cancel_notify']['#access'] = FALSE;
   $form['actions']['cancel']['#title'] = t('Go back');
-}
-
-/**
- * Implements hook_user_cancel().
- */
-function joinup_user_user_cancel(array $edit, JoinupUserInterface $account, string $method): void {
-  if ($method === 'user_cancel_reassign') {
-    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
-    $event_dispatcher = \Drupal::service('event_dispatcher');
-    $event = new JoinupUserCancelEvent($account);
-    // Let subscribers react on user cancellation.
-    $event_dispatcher->dispatch($event, 'joinup_user.cancel');
-
-    // Set the author_realname field for the nodes of the user to be deleted.
-    $realname = $account->getDisplayName();
-    \Drupal::moduleHandler()->loadInclude('node', 'inc', 'node.admin');
-    $vids = \Drupal::entityTypeManager()
-      ->getStorage('node')
-      ->userRevisionIds($account);
-    node_mass_update($vids, ['author_realname' => $realname], NULL, TRUE, TRUE);
-
-    // Set also the author_realanme to comments created by the user and set the
-    // author to anonymous.
-    $cids = \Drupal::entityTypeManager()
-      ->getStorage('comment')
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('uid', $account->id())
-      ->execute();
-
-    $comments = \Drupal::entityTypeManager()
-      ->getStorage('comment')
-      ->loadMultiple($cids);
-
-  // @todo Need to see what happens with this.
-  if (!empty($edit['user_cancel_notify'])) {
-    _user_mail_notify('status_canceled', $account);
-  }
 }
 
 /**
@@ -609,11 +569,7 @@ function joinup_user_entity_presave(EntityInterface $entity): void {
 function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
   $variables['name_full'] = $account->getDisplayName();
-  $variables['name'] = Unicode::truncate($account->getDisplayName(), 24, FALSE, TRUE);
-
-  if ($account->cancelled === TRUE) {
-    $variables['extra'] = '';
-  }
+  $variables['name'] = Unicode::truncate($variables['name_full'], 24, FALSE, TRUE);
 }
 
 /**
@@ -631,14 +587,6 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
     $implementations['joinup_user'] = $group;
   }
 
-  if ($hook === 'user_cancel' && isset($implementations['joinup_user'])) {
-    // Set the user_cancel of joinup_user to run before the user_cancel of user
-    // and comment modules in order to set the author realname while we still
-    // have information about who the entity belonged to, and before the
-    // respective modules anonymize them.
-    $group = $implementations['joinup_user'];
-    unset($implementations['joinup_user']);
-    $implementations = ['joinup_user' => $group] + $implementations;
   }
 }
 
@@ -646,58 +594,23 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
  * Implements hook_entity_base_field_info().
  */
 function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): array {
-  if ($entityType->id() === 'user') {
-    return [
-      'type' => BaseFieldDefinition::create('string')
-        ->setLabel(t('Bundle'))
-        ->setDescription(t('User bundle (<code>user<code>) to be used by SAPI / facets'))
-        ->setComputed(TRUE)
-        ->setName('type')
-        ->setClass(UserBundle::class),
-    ];
-  }
-  elseif ($entityType->id() === 'node') {
-    return [
-      'author_realname' => BaseFieldDefinition::create('string')
-        ->setLabel(t('Author full name'))
-        ->setDescription(t('The full name of the author of the node. Used for cancelled users.'))
-        ->setRevisionable(TRUE)
-        ->setTranslatable(TRUE)
-        ->setSetting('max_length', 255)
-        ->setDefaultValue('')
-        ->setDisplayConfigurable('form', FALSE)
-        ->setDisplayConfigurable('view', FALSE)
-        ->setClass(NodeAuthorRealname::class),
-    ];
+  if ($entityType->id() !== 'user') {
+    return [];
   }
 
-  return [];
+  return [
+    'type' => BaseFieldDefinition::create('string')
+      ->setLabel(t('Bundle'))
+      ->setDescription(t('User bundle (<code>user<code>) to be used by SAPI / facets'))
+      ->setComputed(TRUE)
+      ->setName('type')
+      ->setClass(UserBundle::class),
+  ];
 }
 
 /**
- * Implements hook_entity_view_alter().
  */
-function joinup_user_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if ($entity->getEntityTypeId() !== 'node') {
-    return;
-  }
 
-  if (
-    $entity->getOwnerId() === 0
-    || empty($display->getComponent('uid'))
-  ) {
-    return;
-  }
 
-  if (!isset($build['uid'])) {
-    return;
-  }
 
-  if ($entity->get('author_realname')->isEmpty()) {
-    return;
-  }
-
-  $build['uid'][0]['#account'] = User::create([
-    'name' => $entity->get('author_realname')->value,
-  ]);
 }
