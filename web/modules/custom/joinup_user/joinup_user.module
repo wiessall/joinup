@@ -475,38 +475,11 @@ function joinup_user_alter_account_cancel_form(array &$form): void {
 
 /**
  * Implements hook_user_format_name_alter().
- *
- * Replaces the username with a concatenation of the user's first and last name.
- * If either the first name or last name is known then this will be returned. If
- * neither are known this will fall back to the username.
- *
- * The first name and last name are both required during user registration so in
- * normal usage the combination of first name and last name will always be
- * returned. Incomplete data may be present in migrated legacy accounts.
  */
-function joinup_user_user_format_name_alter(&$name, $account): void {
+function joinup_user_user_format_name_alter(string &$name, AccountInterface $account): void {
   // Skip if the user is anonymous.
-  if ($account->isAnonymous()) {
-    return;
-  }
-
-  // Load the full user object if needed.
-  if (!$account instanceof UserInterface) {
-    $account = User::load($account->id());
-  }
-
-  // Default to the account name.
-  $name = $account->getAccountName();
-
-  /** @var \Drupal\user\UserInterface $account */
-  $name_components = [];
-  foreach (['field_user_first_name', 'field_user_family_name'] as $field_name) {
-    if (!$account->get($field_name)->isEmpty()) {
-      $name_components[] = $account->get($field_name)->value;
-    }
-  }
-  if (!empty($name_components)) {
-    $name = implode(' ', $name_components);
+  if ($account->isAuthenticated()) {
+    $name = \Drupal::getContainer()->get('joinup_user.fullname')->getFullname($account);
   }
 }
 
