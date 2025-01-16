@@ -1,0 +1,74 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\joinup_user;
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * Interface of 'joinup_user.fullname' service.
+ */
+interface JoinupUserFullnameInterface {
+
+  /**
+   * Table storing the relation between UID and user full name.
+   */
+  public const string TABLE = 'joinup_user_fullname';
+
+  /**
+   * Acts after a new user has been inserted.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   */
+  public function onUserInsert(UserInterface $account): void;
+
+  /**
+   * Acts after a user has been updated.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   */
+  public function onUserUpdate(UserInterface $account): void;
+
+  /**
+   * Acts after a user has been deleted.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   */
+  public function onUserDelete(UserInterface $account): void;
+
+  /**
+   * Computes the user's full name.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account.
+   */
+  public function getFullname(AccountInterface $account): string;
+
+  /**
+   * Checks whether a user has been deleted.
+   *
+   * @param \Drupal\user\UserInterface|int|string $accountOrAccountId
+   *   The user account entity instance or ID.
+   *
+   * @return bool
+   *   Whether the user has been deleted.
+   */
+  public function isUserDeleted(UserInterface|int|string $accountOrAccountId): bool;
+
+  /**
+   * Creates a pseudo-user based only on its deleted account UID.
+   *
+   * @param int|string $uid
+   *   The ID of the user that has been deleted.
+   *
+   * @return \Drupal\user\UserInterface
+   *   A mocked user entity instance.
+   */
+  public function getDeletedUser(int|string $uid): UserInterface;
+
+}
