@@ -426,10 +426,10 @@ display:
       pager:
         type: calendar_month
         options:
-          offset: 0
-          display_reset: 0
-          use_previous_next: 1
+          display_reset: false
+          use_previous_next: true
           label_format: 'F Y'
+          offset: 0
       style:
         type: calendar_month
         options:
@@ -479,10 +479,10 @@ display:
       pager:
         type: calendar_week
         options:
-          offset: 0
-          display_reset: 0
-          use_previous_next: 1
+          display_reset: false
+          use_previous_next: true
           label_format: '\w\e\e\k W  - F Y'
+          offset: 0
       style:
         type: calendar_week
         options:
