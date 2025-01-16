@@ -12,6 +12,7 @@ dependencies:
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.entity_reference
+    - paragraphs.paragraphs_type.events_calendar
     - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
@@ -58,6 +59,7 @@ settings:
       layout: layout
       json_map: json_map
       poll: poll
+      events_calendar: events_calendar
       quote: quote
       simple_paragraph: simple_paragraph
       social_media: social_media
@@ -70,19 +72,19 @@ settings:
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -38
-        enabled: false
-      2_column_featured_left:
-        weight: -34
-        enabled: false
-      2_column_featured_right:
-        weight: -33
-        enabled: false
-      2_column_layout:
         weight: -37
         enabled: false
+      2_column_featured_left:
+        weight: -33
+        enabled: false
+      2_column_featured_right:
+        weight: -32
+        enabled: false
+      2_column_layout:
+        weight: -36
+        enabled: false
       3_column_layout:
-        weight: -35
+        weight: -34
         enabled: false
       accordion:
         weight: -58
@@ -108,6 +110,9 @@ settings:
       entity_reference:
         weight: -51
         enabled: true
+      events_calendar:
+        weight: -45
+        enabled: true
       github_feed:
         weight: -50
         enabled: true
@@ -121,7 +126,7 @@ settings:
         weight: -59
         enabled: true
       image_gallery:
-        weight: -32
+        weight: -31
         enabled: true
       json_map:
         weight: -47
@@ -133,30 +138,30 @@ settings:
         weight: -46
         enabled: true
       quote:
-        weight: -45
-        enabled: true
-      simple_paragraph:
         weight: -44
         enabled: true
-      social_media:
+      simple_paragraph:
         weight: -43
         enabled: true
+      social_media:
+        weight: 42
+        enabled: true
       testimony:
-        weight: -42
+        weight: 41
         enabled: true
       text:
         weight: -60
         enabled: true
       tile:
-        weight: -41
+        weight: -40
         enabled: false
       tiles:
-        weight: -40
-        enabled: true
-      video:
         weight: -39
         enabled: true
-      webform:
+      video:
         weight: -36
+        enabled: true
+      webform:
+        weight: -35
         enabled: true
 field_type: entity_reference_revisions
