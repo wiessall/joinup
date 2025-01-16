@@ -25,3 +25,5 @@ services:
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
   Drupal\joinup_user\JoinupUserNotificationHelperInterface: '@joinup_user.notification_helper'
+  joinup_user.fullname:
+    class: Drupal\joinup_user\JoinupUserFullname
