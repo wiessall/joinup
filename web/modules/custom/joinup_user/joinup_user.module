@@ -560,6 +560,10 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
     $implementations['joinup_user'] = $group;
   }
 
+  if ($hook === 'user_predelete') {
+    // Preserve deleted user content.
+    unset($implementations['node']);
+    unset($implementations['comment']);
   }
 }
 
