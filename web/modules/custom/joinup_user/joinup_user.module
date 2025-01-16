@@ -10,6 +10,8 @@ declare(strict_types=1);
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -606,4 +608,12 @@ function joinup_user_user_delete(UserInterface $account): void {
   \Drupal::getContainer()->get('joinup_user.fullname')->onUserDelete($account);
 }
 
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_user_user_access(UserInterface $account): AccessResultInterface {
+  // Forbid access to a deleted user mocked entity instance.
+  $isUserDeleted = \Drupal::getContainer()->get('joinup_user.fullname')->isUserDeleted($account);
+  return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
+    ->addCacheableDependency($account);
 }
