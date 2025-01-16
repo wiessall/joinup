@@ -20,8 +20,6 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_notification\MessageArgumentGenerator;
-use Drupal\joinup_user\Entity\JoinupUser;
-use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\Event\JoinupUserCancelEvent;
 use Drupal\joinup_user\Plugin\Field\NodeAuthorRealname;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
@@ -43,17 +41,16 @@ function joinup_user_notify_on_account_change(array $form, FormStateInterface $f
   $form_object = $form_state->getFormObject();
   $account = $form_object->getEntity() ?? NULL;
 
-  // Sanity check. If we don't get a user object for some reason there is
-  // nothing to do.
-  if (!$account instanceof JoinupUserInterface) {
+  // Sanity check. Don't get a user object? There's nothing to do.
+  if (!$account instanceof UserInterface) {
     return;
   }
 
   // If the status of the user changed, do not send an e-mail as it is already
   // handled. We are sending messages for account activation and blocking.
-  /** @var \Drupal\joinup_user\Entity\JoinupUserInterface $original_account */
   $original_account = \Drupal::entityTypeManager()->getStorage('user')
     ->loadUnchanged($account->id());
+  assert($original_account instanceof UserInterface);
   if ($original_account->isActive() !== (bool) $form_state->getValue('status')) {
     return;
   }
@@ -586,15 +583,6 @@ function joinup_user_local_tasks_alter(&$local_tasks): void {
   if (isset($local_tasks['user.login'])) {
     $local_tasks['user.login']['title'] = t('Sign in');
   }
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function joinup_user_entity_type_alter(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $entity_type */
-  $entity_type = $entity_types['user'];
-  $entity_type->setClass(JoinupUser::class);
 }
 
 /**
