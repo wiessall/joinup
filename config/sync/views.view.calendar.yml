@@ -381,21 +381,21 @@ display:
         type: calendar_month
         options:
           offset: 0
-          display_reset: 1
+          display_reset: 0
           use_previous_next: 1
-          label_format: F
+          label_format: 'F Y'
       style:
         type: calendar_month
         options:
           grouping: {  }
           row_class: ''
-          default_row_class: true
+          default_row_class: false
           calendar_fields:
             field_event_date: field_event_date
           calendar_display_rows: false
           calendar_weekday_start: true
           calendar_timestamp: 'this month'
-          calendar_title: '[date:custom:F Y]'
+          calendar_title: ''
           calendar_row_title: ''
       row:
         type: fields
@@ -434,21 +434,21 @@ display:
         type: calendar_week
         options:
           offset: 0
-          display_reset: 1
+          display_reset: 0
           use_previous_next: 1
-          label_format: F
+          label_format: '\w\e\e\k W  - F Y'
       style:
         type: calendar_week
         options:
           grouping: {  }
           row_class: ''
-          default_row_class: true
+          default_row_class: false
           calendar_fields:
             field_event_date: field_event_date
           calendar_display_rows: false
           calendar_weekday_start: true
           calendar_timestamp: 'this month'
-          calendar_title: '[date:custom:\W\e\e\k W - F Y]'
+          calendar_title: ''
           calendar_row_title: ''
           calendar_work_week: false
       row:
