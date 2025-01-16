@@ -7,7 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\joinup_user\JoinupUserFullnameInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_requirements().
@@ -60,28 +61,132 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Install the `author_realname` field on the `node` entity.
+ * Create the  user full name table.
  */
-function joinup_core_update_200201(): string {
-  // Install the `author_realname` field on the `node` entity.
-  $field_storage = \Drupal::entityDefinitionUpdateManager()
-    ->getFieldStorageDefinition('author_realname', 'node');
-  if (!$field_storage) {
-    $field_storage = BaseFieldDefinition::create('string')
-      ->setLabel(t('Author realname'))
-      ->setDescription(t('The real name of the author of the node.'))
-      ->setRevisionable(TRUE)
-      ->setTranslatable(TRUE)
-      ->setSetting('max_length', 255)
-      ->setDefaultValue('')
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE);
-    \Drupal::entityDefinitionUpdateManager()
-      ->installFieldStorageDefinition('author_realname', 'node', 'node', $field_storage);
+function joinup_core_update_200201(): void {
+  \Drupal::database()->schema()->createTable(JoinupUserFullnameInterface::TABLE, [
+    'fields' => [
+      'uid' => [
+        'description' => 'The {users}.uid.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'deleted' => [
+        'description' => 'Whether the user is deleted.',
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'fullname' => [
+        'description' => 'The user full name.',
+        'type' => 'varchar',
+        'length' => 200,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['uid'],
+    'indexes' => [
+      'deleted' => ['deleted'],
+      'fullname' => ['fullname'],
+    ],
+    'foreign keys' => [
+      'data_user' => [
+        'table' => 'users',
+        'columns' => [
+          'uid' => 'uid',
+        ],
+      ],
+    ],
+  ]);
+}
+
+/**
+ * Fill the user full name table.
+ */
+function joinup_core_update_200202(?array &$sandbox = NULL): string {
+  $service = \Drupal::getContainer()->get('joinup_user.fullname');
+
+  if (empty($sandbox['data'])) {
+    $db = \Drupal::database();
+    $sql = <<<SQL
+      SELECT u.uid, u.status, n1.field_user_first_name_value, n2.field_user_family_name_value
+      FROM {users_field_data} u
+      LEFT JOIN {user__field_user_first_name} n1 ON (u.uid = n1.entity_id)
+      LEFT JOIN {user__field_user_family_name} n2 ON (u.uid = n2.entity_id)
+      WHERE u.uid > 0
+      SQL;
+    $sandbox['data'] = $db->query($sql)->fetchAll(\PDO::FETCH_NUM);
+    $sandbox['count'] = count($sandbox['data']);
+    $sandbox['progress'] = 0;
   }
 
-  return 'The `author_realname` field has been installed on the `node` entity.';
+  $data = array_splice($sandbox['data'], 0, 250);
+  foreach ($data as [$uid, $status, $firstName, $familyName]) {
+    $account = User::create([
+      'uid' => $uid,
+      'field_user_first_name' => $firstName,
+      'field_user_family_name' => $familyName,
+    ]);
+    $service->onUserInsert($account);
+    if ($status == -1) {
+      $service->onUserDelete($account);
+    }
+  }
+  $sandbox['progress'] += count($data);
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']} accounts";
+}
+
+/**
+ * Remove cancelled users.
+ */
+function joinup_core_update_200203(?array &$sandbox = NULL): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('user');
+  if (!isset($sandbox['uids'])) {
+    $sandbox['uids'] = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('status', -1)
+      ->execute();
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['uids']);
+  }
+
+  $uids = array_splice($sandbox['uids'], 0, 25);
+  $storage->delete($storage->loadMultiple($uids));
+  $sandbox['progress'] += count($uids);
+
+  $sandbox['#finished'] = (int) empty($sandbox['uids']);
+  return "Deleted {$sandbox['progress']} out of {$sandbox['count']} cancelled users";
+}
+
+/**
+ * Re-setup the status column in the user field data table.
+ */
+function joinup_core_update_200204(): string {
+  $fieldName = 'status';
+  $entityTypeId = 'user';
+
+  // Load the entity definition update manager.
+  $definitionUpdateManager = \Drupal::entityDefinitionUpdateManager();
+
+  // Get the changes for the entity type and check if the field needs updating.
+  $updates = $definitionUpdateManager->getChangeList();
+  if (!isset($updates[$entityTypeId]['field_storage_definitions'][$fieldName])) {
+    return 'No updates found for the user status field.';
+  }
+
+  $entityTypeId = $definitionUpdateManager->getEntityType($entityTypeId);
+  $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
+  $field = $entity_field_manager->getBaseFieldDefinitions($entityTypeId->id())[$fieldName];
+
+  // Get the field storage definition.
+  $field_storage_definition = $field->getFieldStorageDefinition();
+
+  // Install the field storage definition.
+  /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $field_storage_definition */
+  $definitionUpdateManager->installFieldStorageDefinition($field_storage_definition->getName(), $entityTypeId->id(), 'user', $field_storage_definition);
+
+  return 'Updated the user status field.';
 }
