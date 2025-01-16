@@ -11,10 +11,10 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserNotificationHelperInterface;
 use Drupal\role_delegation\Plugin\views\field\RoleDelegationUserBulkForm;
 use Drupal\system\ActionConfigEntityInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -160,7 +160,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
    *
    * @param \Drupal\system\ActionConfigEntityInterface $action
    *   The action being taken.
-   * @param \Drupal\joinup_user\Entity\JoinupUserInterface[] $users
+   * @param \Drupal\user\UserInterface[] $users
    *   The user accounts affected by the action.
    */
   protected function notifyAffectedUsers(ActionConfigEntityInterface $action, array $users): void {
@@ -171,11 +171,9 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
 
     foreach ($users as $user) {
       // Sanity check. PHP doesn't have support for typed arrays yet.
-      if (!$user instanceof JoinupUserInterface) {
-        continue;
+      if ($user instanceof UserInterface) {
+        $this->notificationHelper->notifyOnAccountChange($user);
       }
-
-      $this->notificationHelper->notifyOnAccountChange($user);
     }
   }
 
