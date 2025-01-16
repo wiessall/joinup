@@ -1,0 +1,58 @@
+diff --git a/config/schema/calendar_view.views.schema.yml b/config/schema/calendar_view.views.schema.yml
+index bf2fa1874d95f684a6e04a518ff6ad0a7eaad340..0d8f45e91eab46191df1983548c62a0b7a542bed 100644
+--- a/config/schema/calendar_view.views.schema.yml
++++ b/config/schema/calendar_view.views.schema.yml
+@@ -35,6 +35,48 @@ calendar_view.view_style:
+       label: 'Title attribute for each result'
+       nullable: true
+ 
++views.pager.calendar_week:
++  type: mapping
++  label: 'Pager options for calendar week'
++  mapping:
++    display_reset:
++      type: boolean
++      label: 'Display reset'
++      nullable: true
++    use_previous_next:
++      type: boolean
++      label: 'Use previous/next'
++      nullable: true
++    label_format:
++      type: string
++      label: 'Label format'
++      nullable: true
++    offset:
++      type: integer
++      label: 'Offset'
++      nullable: true
++
++views.pager.calendar_month:
++  type: mapping
++  label: 'Pager options'
++  mapping:
++    display_reset:
++      type: boolean
++      label: 'Display reset'
++      nullable: true
++    use_previous_next:
++      type: boolean
++      label: 'Use previous/next'
++      nullable: true
++    label_format:
++      type: string
++      label: 'Label format'
++      nullable: true
++    offset:
++      type: integer
++      label: 'Offset'
++      nullable: true
++
+ views.style.calendar_month:
+   type: calendar_view.view_style
+   label: 'Calendar by month'
+@@ -47,3 +89,4 @@ views.style.calendar_week:
+       type: boolean
+       label: 'Hide weekend'
+       nullable: true
++
