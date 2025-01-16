@@ -1,12 +1,12 @@
 diff --git a/modules/oe_webtools_maps/config/install/oe_webtools_maps.settings.yml b/modules/oe_webtools_maps/config/install/oe_webtools_maps.settings.yml
 new file mode 100644
-index 00000000..c145e4dc
+index 0000000..c145e4d
 --- /dev/null
 +++ b/modules/oe_webtools_maps/config/install/oe_webtools_maps.settings.yml
 @@ -0,0 +1 @@
 +map_version: '3.0'
 diff --git a/modules/oe_webtools_maps/config/schema/oe_webtools_maps.schema.yml b/modules/oe_webtools_maps/config/schema/oe_webtools_maps.schema.yml
-index f7f43ded..45fc8f0e 100644
+index f7f43de..45fc8f0 100644
 --- a/modules/oe_webtools_maps/config/schema/oe_webtools_maps.schema.yml
 +++ b/modules/oe_webtools_maps/config/schema/oe_webtools_maps.schema.yml
 @@ -1,3 +1,11 @@
@@ -23,7 +23,7 @@ index f7f43ded..45fc8f0e 100644
    label: Webtools Map formatter settings
 diff --git a/modules/oe_webtools_maps/oe_webtools_maps.links.menu.yml b/modules/oe_webtools_maps/oe_webtools_maps.links.menu.yml
 new file mode 100644
-index 00000000..9b1fd818
+index 0000000..9b1fd81
 --- /dev/null
 +++ b/modules/oe_webtools_maps/oe_webtools_maps.links.menu.yml
 @@ -0,0 +1,5 @@
@@ -34,7 +34,7 @@ index 00000000..9b1fd818
 +  parent: system.admin_config_system
 diff --git a/modules/oe_webtools_maps/oe_webtools_maps.permissions.yml b/modules/oe_webtools_maps/oe_webtools_maps.permissions.yml
 new file mode 100644
-index 00000000..a50c62f8
+index 0000000..a50c62f
 --- /dev/null
 +++ b/modules/oe_webtools_maps/oe_webtools_maps.permissions.yml
 @@ -0,0 +1,2 @@
@@ -42,7 +42,7 @@ index 00000000..a50c62f8
 +  title: 'Administer Webtools Maps'
 diff --git a/modules/oe_webtools_maps/oe_webtools_maps.routing.yml b/modules/oe_webtools_maps/oe_webtools_maps.routing.yml
 new file mode 100644
-index 00000000..f21752df
+index 0000000..f21752d
 --- /dev/null
 +++ b/modules/oe_webtools_maps/oe_webtools_maps.routing.yml
 @@ -0,0 +1,7 @@
@@ -55,7 +55,7 @@ index 00000000..f21752df
 +    _permission: 'administer webtools maps'
 diff --git a/modules/oe_webtools_maps/src/Form/WebtoolsMapsSettingsForm.php b/modules/oe_webtools_maps/src/Form/WebtoolsMapsSettingsForm.php
 new file mode 100644
-index 00000000..522933a6
+index 0000000..522933a
 --- /dev/null
 +++ b/modules/oe_webtools_maps/src/Form/WebtoolsMapsSettingsForm.php
 @@ -0,0 +1,59 @@
@@ -119,10 +119,10 @@ index 00000000..522933a6
 +
 +}
 diff --git a/modules/oe_webtools_maps/src/Plugin/Field/FieldFormatter/WebtoolsMapFormatter.php b/modules/oe_webtools_maps/src/Plugin/Field/FieldFormatter/WebtoolsMapFormatter.php
-index c10ffd7a..4cf1ef1e 100644
+index c10ffd7..b166125 100644
 --- a/modules/oe_webtools_maps/src/Plugin/Field/FieldFormatter/WebtoolsMapFormatter.php
 +++ b/modules/oe_webtools_maps/src/Plugin/Field/FieldFormatter/WebtoolsMapFormatter.php
-@@ -4,10 +4,14 @@
+@@ -4,10 +4,14 @@ declare(strict_types=1);
  
  namespace Drupal\oe_webtools_maps\Plugin\Field\FieldFormatter;
  
@@ -137,7 +137,7 @@ index c10ffd7a..4cf1ef1e 100644
  
  /**
   * Displays a Geofield as a map using the Webtools Maps service.
-@@ -22,6 +26,60 @@
+@@ -22,6 +26,60 @@ use Drupal\oe_webtools_maps\Component\Render\JsonEncoded;
   */
  class WebtoolsMapFormatter extends FormatterBase {
  
@@ -198,7 +198,7 @@ index c10ffd7a..4cf1ef1e 100644
    /**
     * {@inheritdoc}
     */
-@@ -71,11 +129,13 @@ public function settingsSummary() {
+@@ -71,11 +129,13 @@ class WebtoolsMapFormatter extends FormatterBase {
     */
    public function viewElements(FieldItemListInterface $items, $langcode) {
      $element = [];
@@ -213,7 +213,58 @@ index c10ffd7a..4cf1ef1e 100644
          'map' => [
            'zoom' => $this->getSetting('zoom_level'),
            'center' => [
-@@ -129,6 +189,10 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+@@ -87,27 +147,29 @@ class WebtoolsMapFormatter extends FormatterBase {
+ 
+       if ($this->getSetting('show_marker')) {
+         $data_array['layers'] = [
+-          [
+-            'markers' => [
+-              'type' => 'FeatureCollection',
+-              'features' => [
+-                [
+-                  'type' => 'Feature',
+-                  'properties' => [
+-                    'name' => $this->t('Coordinates'),
+-                    'description' => $this->t('Longitude: @lon, Latitude: @lat', [
+-                      '@lon' => $item->get('lon')->getValue(),
+-                      '@lat' => $item->get('lat')->getValue(),
+-                    ]),
+-                  ],
+-                  'geometry' => [
+-                    'type' => 'Point',
+-                    'coordinates' => [
+-                      // Even though in other places the Latitude (lat) comes
+-                      // first and the Longitude (lon) second, this array
+-                      // requires these values to be reversed.
+-                      $item->get('lon')->getValue(),
+-                      $item->get('lat')->getValue(),
++          'markers' => [
++            [
++              'data' => [
++                'type' => 'FeatureCollection',
++                'features' => [
++                  [
++                    'type' => 'Feature',
++                    'properties' => [
++                      'name' => $this->t('Coordinates'),
++                      'description' => $this->t('Longitude: @lon, Latitude: @lat', [
++                        '@lon' => $item->get('lon')->getValue(),
++                        '@lat' => $item->get('lat')->getValue(),
++                      ]),
++                    ],
++                    'geometry' => [
++                      'type' => 'Point',
++                      'coordinates' => [
++                        // Even though in other places the Latitude (lat) comes
++                        // first and the Longitude (lon) second, this array
++                        // requires these values to be reversed.
++                        $item->get('lon')->getValue(),
++                        $item->get('lat')->getValue(),
++                      ],
+                     ],
+                   ],
+                 ],
+@@ -129,6 +191,10 @@ class WebtoolsMapFormatter extends FormatterBase {
        $element['#attached'] = [
          'library' => ['oe_webtools/drupal.webtools-smartloader'],
        ];
@@ -226,7 +277,7 @@ index c10ffd7a..4cf1ef1e 100644
      return $element;
 diff --git a/modules/oe_webtools_maps/tests/src/Functional/ConfigurationTest.php b/modules/oe_webtools_maps/tests/src/Functional/ConfigurationTest.php
 new file mode 100644
-index 00000000..3d8389ae
+index 0000000..3d8389a
 --- /dev/null
 +++ b/modules/oe_webtools_maps/tests/src/Functional/ConfigurationTest.php
 @@ -0,0 +1,128 @@
