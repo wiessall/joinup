@@ -8,6 +8,51 @@
 declare(strict_types=1);
 
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
+use Drupal\joinup_user\JoinupUserFullnameInterface;
+
+/**
+ * Implements hook_schema().
+ */
+function joinup_user_schema(): array {
+  return [
+    JoinupUserFullnameInterface::TABLE => [
+      'fields' => [
+        'uid' => [
+          'description' => 'The {users}.uid.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'deleted' => [
+          'description' => 'Whether the user is deleted.',
+          'type' => 'int',
+          'size' => 'small',
+          'not null' => TRUE,
+          'default' => 0,
+        ],
+        'fullname' => [
+          'description' => 'The user full name.',
+          'type' => 'varchar',
+          'length' => 200,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['uid'],
+      'indexes' => [
+        'deleted' => ['deleted'],
+        'fullname' => ['fullname'],
+      ],
+      'foreign keys' => [
+        'data_user' => [
+          'table' => 'users',
+          'columns' => [
+            'uid' => 'uid',
+          ],
+        ],
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_install().
