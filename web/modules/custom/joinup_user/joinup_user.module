@@ -586,8 +586,24 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
 }
 
 /**
+ * Implements hook_entity_insert().
  */
+function joinup_user_user_insert(UserInterface $account): void {
+  \Drupal::getContainer()->get('joinup_user.fullname')->onUserInsert($account);
+}
 
+/**
+ * Implements hook_entity_insert().
+ */
+function joinup_user_user_update(UserInterface $account): void {
+  \Drupal::getContainer()->get('joinup_user.fullname')->onUserUpdate($account);
+}
 
+/**
+ * Implements hook_entity_insert().
+ */
+function joinup_user_user_delete(UserInterface $account): void {
+  \Drupal::getContainer()->get('joinup_user.fullname')->onUserDelete($account);
+}
 
 }
