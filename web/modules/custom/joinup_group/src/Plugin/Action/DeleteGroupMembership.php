@@ -33,23 +33,15 @@ class DeleteGroupMembership extends DeleteOgMembership {
    */
   protected $privateTempStore;
 
-  /**
-   * Constructs a new action plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $private_temp_store_factory
-   *   The private tempstore factory service.
-   */
-  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, OgAccessInterface $og_access, PrivateTempStoreFactory $private_temp_store_factory) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    readonly array $plugin_definition,
+    readonly OgAccessInterface $og_access,
+    readonly PrivateTempStoreFactory $privateTempStoreFactory,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $og_access);
-    $this->privateTempStore = $private_temp_store_factory->get('joinup_group.og_membership_delete_action');
+    $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
   }
 
   /**

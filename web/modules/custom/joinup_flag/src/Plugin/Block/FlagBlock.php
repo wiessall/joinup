@@ -25,28 +25,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a LikeBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   *   Route match service.
-   * @param \Drupal\flag\FlagServiceInterface $flagService
-   *   Flag service.
-   */
   public function __construct(
     array $configuration,
-    string $pluginId,
-    mixed $pluginDefinition,
-    protected RouteMatchInterface $routeMatch,
-    protected FlagServiceInterface $flagService,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly RouteMatchInterface $routeMatch,
+    protected readonly FlagServiceInterface $flagService,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

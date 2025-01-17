@@ -28,24 +28,11 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
     'hosting_platform',
   ];
 
-  /**
-   * Constructs a new plugin manager instance.
-   *
-   * @param \Traversable $namespaces
-   *   An object that implements \Traversable which contains the root paths
-   *   keyed by the corresponding namespace to look for plugin implementations.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cacheBackend
-   *   Cache backend instance to use.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   The module handler to invoke the alter hook with.
-   * @param string $type
-   *   The type of plugins: provider, parser, resolver.
-   */
   public function __construct(
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler,
-    protected string $type,
+    protected readonly string $type,
   ) {
     \assert(in_array($type, static::PLUGIN_TYPES, TRUE));
 

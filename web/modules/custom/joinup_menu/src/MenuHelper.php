@@ -30,12 +30,12 @@ class MenuHelper implements MenuHelperInterface {
   use RedirectDestinationTrait;
 
   public function __construct(
-    protected LoggerChannelFactoryInterface $logger,
-    protected MenuLinkTreeInterface $menuLinkTree,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RequestStack $requestStack,
-    protected PathMatcherInterface $pathMatcher,
-    protected RdfSyncMapperInterface $mapper,
+    protected readonly LoggerChannelFactoryInterface $logger,
+    protected readonly MenuLinkTreeInterface $menuLinkTree,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RequestStack $requestStack,
+    protected readonly PathMatcherInterface $pathMatcher,
+    protected readonly RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
@@ -79,6 +79,7 @@ class MenuHelper implements MenuHelperInterface {
     $anonymous_links[] = [
       'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
+      'attributes' => ['class' => ['sign-in-link']],
     ];
 
     // Generate a link button that opens the "Get started" popover.

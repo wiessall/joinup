@@ -13,24 +13,11 @@ use Drupal\user\UserInterface;
 /**
  * Overrides some configs for testing purposes.
  */
-class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverrideInterface {
+readonly class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverrideInterface {
 
-  /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * Constructs a new overrider instance.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory service.
-   */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
-  }
+  public function __construct(
+    protected ConfigFactoryInterface $configFactory,
+  ) {}
 
   /**
    * {@inheritdoc}

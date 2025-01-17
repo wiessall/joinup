@@ -22,32 +22,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupGroupPageDisplayVariant extends BlockPageVariant {
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\block\BlockRepositoryInterface $block_repository
-   *   The block repository.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $block_view_builder
-   *   The block view builder.
-   * @param string[] $block_list_cache_tags
-   *   The Block entity type list cache tags.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, BlockRepositoryInterface $block_repository, EntityViewBuilderInterface $block_view_builder, array $block_list_cache_tags, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    readonly BlockRepositoryInterface $block_repository,
+    readonly EntityViewBuilderInterface $block_view_builder,
+    readonly array $block_list_cache_tags,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $block_repository, $block_view_builder, $block_list_cache_tags);
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**

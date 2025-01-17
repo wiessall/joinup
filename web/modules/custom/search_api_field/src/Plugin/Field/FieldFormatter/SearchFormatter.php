@@ -40,87 +40,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The filter plugin manager.
-   *
-   * @var \Drupal\search_api_field\Plugin\FilterPluginManagerInterface
-   */
-  protected $filterPluginManager;
-
-  /**
-   * The search_api logger channel.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
-   * The query parse mode manager.
-   *
-   * @var \Drupal\search_api\ParseMode\ParseModePluginManager
-   */
-  protected $parseModeManager;
-
-  /**
-   * The current request object.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected $request;
-
-  /**
-   * The pager manager.
-   *
-   * @var \Drupal\Core\Pager\PagerManagerInterface
-   */
-  protected $pagerManager;
-
-  /**
-   * Constructs a SearchFormatter object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request object.
-   * @param \Drupal\search_api\ParseMode\ParseModePluginManager $parse_mode_manager
-   *   The query parse mode manager.
-   * @param \Drupal\search_api_field\Plugin\FilterPluginManagerInterface $filter_plugin_manager
-   *   The filter plugin manager.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The search_api logger channel.
-   * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
-   *   The pager manager.
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, Request $request, ParseModePluginManager $parse_mode_manager, FilterPluginManagerInterface $filter_plugin_manager, LoggerChannelInterface $logger, PagerManagerInterface $pager_manager) {
+  public function __construct(
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    string $label,
+    string $view_mode,
+    array $third_party_settings,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly Request $request,
+    protected readonly ParseModePluginManager $parseModeManager,
+    protected readonly FilterPluginManagerInterface $filterPluginManager,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly PagerManagerInterface $pagerManager,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-
-    $this->entityTypeManager = $entity_type_manager;
-    $this->filterPluginManager = $filter_plugin_manager;
-    $this->parseModeManager = $parse_mode_manager;
-    $this->request = $request;
-    $this->logger = $logger;
-    $this->pagerManager = $pager_manager;
   }
 
   /**

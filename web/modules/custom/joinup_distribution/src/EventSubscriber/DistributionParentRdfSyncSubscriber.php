@@ -16,16 +16,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Listens to normalization of entities for RDF format encoding.
  */
-final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterface {
+final readonly class DistributionParentRdfSyncSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
-   *   The mapper service.
-   * @param \Drupal\Core\File\FileUrlGeneratorInterface $fileUrlGenerator
-   *   The file URL generator service.
-   */
   public function __construct(
     protected RdfSyncMapper $mapper,
     protected FileUrlGeneratorInterface $fileUrlGenerator,

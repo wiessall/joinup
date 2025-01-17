@@ -14,34 +14,12 @@ use Drupal\message\MessageInterface;
 /**
  * Service that assists in creating and retrieving messages for invitations.
  */
-class InvitationMessageHelper implements InvitationMessageHelperInterface {
+readonly class InvitationMessageHelper implements InvitationMessageHelperInterface {
 
-  /**
-   * The entity message helper service.
-   *
-   * @var \Drupal\joinup_notification\EntityMessageHelperInterface
-   */
-  protected $entityMessageHelper;
-
-  /**
-   * The helper service for delivering messages.
-   *
-   * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
-   */
-  protected $messageDelivery;
-
-  /**
-   * Constructs a new InvitationMessageHelper service.
-   *
-   * @param \Drupal\joinup_notification\EntityMessageHelperInterface $entityMessageHelper
-   *   The entity message helper service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
-   *   The helper service for delivering messages.
-   */
-  public function __construct(EntityMessageHelperInterface $entityMessageHelper, JoinupMessageDeliveryInterface $messageDelivery) {
-    $this->entityMessageHelper = $entityMessageHelper;
-    $this->messageDelivery = $messageDelivery;
-  }
+  public function __construct(
+    protected EntityMessageHelperInterface $entityMessageHelper,
+    protected JoinupMessageDeliveryInterface $messageDelivery,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -90,11 +68,13 @@ class InvitationMessageHelper implements InvitationMessageHelperInterface {
         'hash' => InvitationAcceptanceForm::generateHash($invitation, $action),
       ];
       $url_options = ['absolute' => TRUE];
-      $arguments["@invitation:{$action}_url"] = Url::fromRoute('joinup_invite.update_invitation', $url_arguments, $url_options)->toString();
+      $arguments["@invitation:{$action}_url"] = Url::fromRoute('joinup_invite.update_invitation', $url_arguments, $url_options)
+        ->toString();
     }
 
     $arguments['@invitation:role'] = '';
-    if (!$invitation->hasField('field_invitation_og_role') || $invitation->get('field_invitation_og_role')->isEmpty()) {
+    if (!$invitation->hasField('field_invitation_og_role') || $invitation->get('field_invitation_og_role')
+      ->isEmpty()) {
       return $arguments;
     }
     // Field is not empty so at least one value exists.

@@ -11,24 +11,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Reacts on user cancelling.
  */
-class JoinupEuLoginUserCancelSubscriber implements EventSubscriberInterface {
+readonly class JoinupEuLoginUserCancelSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The authmap service.
-   *
-   * @var \Drupal\externalauth\AuthmapInterface
-   */
-  protected $authmap;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\externalauth\AuthmapInterface $authmap
-   *   The authmap service.
-   */
-  public function __construct(AuthmapInterface $authmap) {
-    $this->authmap = $authmap;
-  }
+  public function __construct(
+    protected AuthmapInterface $authmap,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -3,9 +3,15 @@
  * Licence comparison functionality.
  */
 
-((drupalSettings) => {
+((Drupal, once, drupalSettings) => {
   Drupal.behaviors.licenceComparison = {
     attach() {
+      // Ensure the licence_filter_block is present.
+      const selector = ".block-licence-filter-block";
+      if (!once("licence-comparison", selector).length) {
+        return;
+      }
+
       // Disable or enable all compare checkboxes.
       function disableCheckboxes(state) {
         document
@@ -156,4 +162,4 @@
       checkCompareStatus();
     },
   };
-})(drupalSettings);
+})(Drupal, once, drupalSettings);

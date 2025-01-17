@@ -17,9 +17,11 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Redirects topic term canonical to search page.
  */
-class TopicRedirectRequestSubscriber implements EventSubscriberInterface {
+readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterface {
 
-  public function __construct(protected RouterInterface $router) {}
+  public function __construct(
+    protected RouterInterface $router,
+  ) {}
 
   /**
    * Redirects topic term canonical to search page.

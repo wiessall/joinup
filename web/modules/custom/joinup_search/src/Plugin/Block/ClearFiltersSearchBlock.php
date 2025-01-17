@@ -23,25 +23,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new ProposedEntitiesBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   */
   public function __construct(
     array $configuration,
-    string $pluginId,
-    $pluginDefinition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected RequestStack $requestStack,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

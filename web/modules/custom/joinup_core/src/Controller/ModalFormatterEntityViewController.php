@@ -19,14 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @see \Drupal\joinup_core\Plugin\Field\FieldFormatter\MoreInModalFormatter
  */
-class ModalFormatterEntityViewController implements ContainerInjectionInterface {
+readonly class ModalFormatterEntityViewController implements ContainerInjectionInterface {
 
-  /**
-   * Constructs a new ModalFormatterEntityViewController instance.
-   *
-   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $displayRepository
-   *   The entity display repository.
-   */
   public function __construct(
     protected EntityDisplayRepositoryInterface $displayRepository,
   ) {}

@@ -19,26 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogueHostingPlatformPluginBase implements PluginFormInterface, ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   The plugin configuration.
-   * @param string $plugin_id
-   *   The plugin ID.
-   * @param array $plugin_definition
-   *   The plugin definition.
-   * @param \Psr\Http\Client\ClientInterface $httpClient
-   *   The HTTP client.
-   * @param \Drupal\Core\Site\Settings $settings
-   *   The Drupal settings.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
     protected LoggerChannelInterface $logger,

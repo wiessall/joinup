@@ -24,18 +24,6 @@ abstract class GroupFormBase extends InviteFormBase {
    */
   protected OgRoleInterface $role;
 
-  /**
-   * Constructs a new InviteToGroupForm object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
-   *   The invitation message helper service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
-   * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
-   *   The og membership manager service.
-   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,

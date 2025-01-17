@@ -20,20 +20,10 @@ trait WrapperHandlerTrait {
    */
   protected array $settings;
 
-  /**
-   * Constructs a new Monolog handler instance.
-   *
-   * @param string $type
-   *   The type of handler, 'mail' or 'telegram'.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Lock\LockBackendInterface|null $lockBackend
-   *   The lock backend service.
-   */
   public function __construct(
-    string $type,
-    StateInterface $state,
-    protected ?LockBackendInterface $lockBackend = NULL,
+    readonly string $type,
+    readonly StateInterface $state,
+    protected readonly ?LockBackendInterface $lockBackend = NULL,
   ) {
     $this->settings = $state->get('joinup.log_alerts', [$type => []])[$type] + static::getDefaultSettings();
     parent::__construct(...$this->settings);

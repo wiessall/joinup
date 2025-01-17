@@ -21,29 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UserCancelForm extends CoreUserCancelForm {
 
-  /**
-   * The group manager service.
-   *
-   * @var \Drupal\joinup_group\JoinupGroupManagerInterface
-   */
-  protected $groupManager;
-
-  /**
-   * Instantiates a new UserCancelForm class.
-   *
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   The entity repository service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Joinup group manager.
-   */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, JoinupGroupManagerInterface $group_manager) {
+  public function __construct(
+    EntityRepositoryInterface $entity_repository,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    TimeInterface $time,
+    protected JoinupGroupManagerInterface $groupManager,
+  ) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
-
-    $this->groupManager = $group_manager;
   }
 
   /**

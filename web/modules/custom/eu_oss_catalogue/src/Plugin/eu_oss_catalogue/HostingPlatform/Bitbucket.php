@@ -37,13 +37,10 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected Client $bitbucketClient;
 
-  /**
-   * {@inheritdoc}
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     ClientInterface $httpClient,
     Settings $settings,
     LoggerChannelInterface $logger,
