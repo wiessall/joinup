@@ -79,6 +79,7 @@ class MenuHelper implements MenuHelperInterface {
     $anonymous_links[] = [
       'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
+      'attributes' => ['class' => ['sign-in-link']],
     ];
 
     // Generate a link button that opens the "Get started" popover.

@@ -45,21 +45,6 @@ settings:
       layout: layout
     negate: 0
     target_bundles_drag_drop:
-      1_column_layout:
-        weight: -59
-        enabled: false
-      2_column_featured_left:
-        weight: -58
-        enabled: false
-      2_column_featured_right:
-        weight: -57
-        enabled: false
-      2_column_layout:
-        weight: -56
-        enabled: false
-      3_column_layout:
-        weight: -55
-        enabled: false
       accordion:
         weight: -54
         enabled: false
