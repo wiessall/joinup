@@ -24,44 +24,25 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @OgGroupResolver(
  *   id = "joinup_group_content_management",
  *   label = "Group content management resolver",
- *   description = @Translation("Checks if the current route is an entity path that belongs to a group entity."),
+ *   description = @Translation("Checks if the current route is an entity path
+ *   that belongs to a group entity."),
  * )
  */
 class JoinupGroupContentManagementResolver extends RouteGroupResolver {
 
   use ViewsBulkOperationsFormTrait;
 
-  /**
-   * Constructor for JoinupGroupContentManagementResolver plugin.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   *   The route match service.
-   * @param \Drupal\og\GroupTypeManagerInterface $groupTypeManager
-   *   The group type manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   User private temporary storage factory.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   */
   public function __construct(
     array $configuration,
-    string $pluginId,
-    mixed $pluginDefinition,
+    string $plugin_id,
+    mixed $plugin_definition,
     RouteMatchInterface $routeMatch,
     GroupTypeManagerInterface $groupTypeManager,
     EntityTypeManagerInterface $entityTypeManager,
-    protected PrivateTempStoreFactory $tempStoreFactory,
-    protected AccountInterface $currentUser,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly AccountInterface $currentUser,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $routeMatch, $groupTypeManager, $entityTypeManager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $routeMatch, $groupTypeManager, $entityTypeManager);
   }
 
   /**
@@ -129,7 +110,8 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
       return NULL;
     }
 
-    return $this->entityTypeManager->getStorage('node')->load($data['arguments'][0]);
+    return $this->entityTypeManager->getStorage('node')
+      ->load($data['arguments'][0]);
   }
 
   /**

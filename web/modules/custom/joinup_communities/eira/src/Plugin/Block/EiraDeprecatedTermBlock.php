@@ -21,38 +21,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EiraDeprecatedTermBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Drupal\Core\Routing\CurrentRouteMatch definition.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a new EiraDeprecatedTermBlock.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
-   *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $current_route_match, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly CurrentRouteMatch $currentRouteMatch,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentRouteMatch = $current_route_match;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**

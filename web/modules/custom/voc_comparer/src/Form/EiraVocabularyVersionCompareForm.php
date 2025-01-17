@@ -18,23 +18,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EiraVocabularyVersionCompareForm extends FormBase {
 
-  /**
-   * Constructs a new VocabularyVersionCompareForm.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $databaseCache
-   *   The cache backend service.
-   * @param \Drupal\joinup_rdf\VocabularyFixturesHelperInterface $fixtureImporter
-   *   The vocabulary fixtures helper service.
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
-   *   The SPARQL database connection.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected CacheBackendInterface $databaseCache,
-    protected VocabularyFixturesHelperInterface $fixtureImporter,
-    protected RdfSyncConnectionInterface $sparql,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly CacheBackendInterface $databaseCache,
+    protected readonly VocabularyFixturesHelperInterface $fixtureImporter,
+    protected readonly RdfSyncConnectionInterface $sparql,
   ) {}
 
   /**

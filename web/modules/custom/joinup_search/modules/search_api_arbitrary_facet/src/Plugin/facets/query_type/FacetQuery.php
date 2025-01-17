@@ -26,35 +26,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class FacetQuery extends SearchApiString implements ContainerFactoryPluginInterface {
 
   /**
-   * The arbitrary facet plugin manager.
-   *
-   * @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager
-   */
-  protected $arbitraryFacetPluginManager;
-
-  /**
    * The arbitrary facet plugin instance that is used in this plugin.
    *
    * @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface
    */
   protected $arbitraryFacetPluginInstance;
 
-  /**
-   * Constructs a FacetQuery object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager $arbitrary_facet_plugin_manager
-   *   The arbitrary facet plugin manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ArbitraryFacetManager $arbitrary_facet_plugin_manager) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected ArbitraryFacetManager $arbitraryFacetPluginManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->arbitraryFacetPluginManager = $arbitrary_facet_plugin_manager;
   }
 
   /**

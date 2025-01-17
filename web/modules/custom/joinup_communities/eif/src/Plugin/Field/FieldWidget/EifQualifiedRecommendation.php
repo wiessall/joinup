@@ -33,25 +33,9 @@ class EifQualifiedRecommendation extends TextareaWidget {
    */
   protected array $recommendationOptions;
 
-  /**
-   * Constructs a new widget plugin instance.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the widget.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the widget is associated.
-   * @param array $settings
-   *   The widget settings.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     FieldDefinitionInterface $field_definition,
     array $settings,
     array $third_party_settings,

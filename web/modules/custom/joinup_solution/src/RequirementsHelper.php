@@ -9,14 +9,8 @@ use Drupal\rdf_sync\RdfSyncConnectionInterface;
 /**
  * Implements helper methods related to installation requirements for solutions.
  */
-class RequirementsHelper {
+readonly class RequirementsHelper {
 
-  /**
-   * Constructs a new RequirementsHelper.
-   *
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
-   *   The SPARQL connection class.
-   */
   public function __construct(
     protected RdfSyncConnectionInterface $sparql,
   ) {}

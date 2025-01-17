@@ -14,7 +14,7 @@ use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
  *
  * @internal
  */
-final class JoinupOssCatalogueImagecacheWarmer {
+final readonly class JoinupOssCatalogueImagecacheWarmer {
 
   /**
    * Fields to check for new values.
@@ -26,13 +26,9 @@ final class JoinupOssCatalogueImagecacheWarmer {
     'oss_screenshots',
   ];
 
-  /**
-   * Constructs a new JoinupOssCatalogueImagecacheWarmer instance.
-   *
-   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
-   *   The queue factory service.
-   */
-  public function __construct(protected QueueFactory $queueFactory) {}
+  public function __construct(
+    protected QueueFactory $queueFactory,
+  ) {}
 
   /**
    * Queues image URLs found in the OSS Solution node to be downloaded.
@@ -95,12 +91,14 @@ final class JoinupOssCatalogueImagecacheWarmer {
     }
 
     $original = $this->getOriginal($ossSolution);
-    $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)->isEmpty();
+    $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)
+      ->isEmpty();
     $originalField = $original?->get($fieldName);
 
     if (
       $originalFieldIsEmpty ||
-      $field->hasAffectingChanges($originalField, $ossSolution->language()->getId())
+      $field->hasAffectingChanges($originalField, $ossSolution->language()
+        ->getId())
     ) {
       $originalValues = $originalFieldIsEmpty
         ? []
@@ -125,7 +123,8 @@ final class JoinupOssCatalogueImagecacheWarmer {
     $values = [];
     foreach ($fieldItemList as $item) {
       assert($item instanceof FieldItemInterface);
-      $mainValue = $item->get($item->getDataDefinition()->getMainPropertyName())->getValue();
+      $mainValue = $item->get($item->getDataDefinition()->getMainPropertyName())
+        ->getValue();
       if (!is_string($mainValue)) {
         continue;
       }

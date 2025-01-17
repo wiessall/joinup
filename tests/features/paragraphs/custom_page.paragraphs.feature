@@ -158,11 +158,6 @@ Feature:
     And I should see the link "Video"
     And I should see the link "Webform"
 
-    And I should not see the link "1 column layout"
-    And I should not see the link "2 column layout"
-    And I should not see the link "2 column with featured media on the left"
-    And I should not see the link "2 column with featured media on the right"
-    And I should not see the link "3 column layout"
     And I should not see the link "Configurable listing"
 
     Examples:

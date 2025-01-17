@@ -23,7 +23,12 @@ function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_s
  */
 function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array $variables): void {
   if (isset($variables['element']['#joinup_parent'])) {
-    $suggestions[] = 'form_element__' . $variables['element']['#joinup_parent'];
+    $sanitized_suggestion = strtr($variables['element']['#joinup_parent'], [
+      '.' => '_',
+      '-' => '_',
+    ]);
+
+    $suggestions[] = 'form_element__' . $sanitized_suggestion;
   }
 }
 
@@ -97,8 +102,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
-  $id = $variables['element']['#id'];
-  $suggestions[] = $id;
+  $suggestions[] = 'form__' . strtr($variables['element']['#id'], '-', '_');
 }
 
 /**
@@ -192,7 +196,14 @@ function ventuno_theme_suggestions_input_alter(array &$suggestions, array $varia
  */
 function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
   if (isset($variables['element']['#name'])) {
-    $suggestions[] = 'select__' . $variables['element']['#name'];
+    $sanitized_suggestion = strtr($variables['element']['#name'], [
+      '.' => '_',
+      '-' => '_',
+      '[' => '_',
+      ']' => '_',
+    ]);
+
+    $suggestions[] = 'select__' . $sanitized_suggestion;
   }
 }
 

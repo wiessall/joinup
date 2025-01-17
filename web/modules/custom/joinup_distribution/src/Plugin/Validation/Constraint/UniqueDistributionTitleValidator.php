@@ -18,12 +18,6 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueDistributionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
-  /**
-   * The parent distribution resolver service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {}

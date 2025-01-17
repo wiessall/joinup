@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,36 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CompatibilityDocumentListBuilder extends EntityListBuilder {
 
-  /**
-   * The redirect destination service.
-   *
-   * @var \Drupal\Core\Routing\RedirectDestinationInterface
-   */
-  protected $redirectDestination;
-
-  /**
-   * The licence compatibility plugin manager.
-   *
-   * @var \Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager
-   */
-  protected $pluginManager;
-
-  /**
-   * Constructs a new CompatibilityDocumentListBuilder object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type definition.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
-   *   The entity storage class.
-   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
-   *   The redirect destination service.
-   * @param \Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager $plugin_manager
-   *   The licence compatibility rule plugin manager.
-   */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, RedirectDestinationInterface $redirect_destination, JoinupLicenceCompatibilityRulePluginManager $plugin_manager) {
+  public function __construct(
+    readonly EntityTypeInterface $entity_type,
+    EntityStorageInterface $storage,
+    protected $redirectDestination,
+    protected readonly JoinupLicenceCompatibilityRulePluginManager $pluginManager,
+  ) {
     parent::__construct($entity_type, $storage);
-    $this->redirectDestination = $redirect_destination;
-    $this->pluginManager = $plugin_manager;
   }
 
   /**
@@ -69,9 +45,10 @@ class CompatibilityDocumentListBuilder extends EntityListBuilder {
       CompatibilityDocument::populate();
     }
     catch (\Exception $e) {
-      $this->messenger()->addError($this->t('An error occurred while trying to populate the compatibility documents: %error', [
-        '%error' => $e->getMessage(),
-      ]));
+      $this->messenger()
+        ->addError($this->t('An error occurred while trying to populate the compatibility documents: %error', [
+          '%error' => $e->getMessage(),
+        ]));
     }
 
     return ['table' => parent::render()];

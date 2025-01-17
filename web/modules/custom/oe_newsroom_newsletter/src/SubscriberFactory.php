@@ -19,34 +19,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * $config['oe_newsroom_newsletter.subscriber']['class'] = 'Drupal\my_module\MySubscriber';
  * @endcode
  */
-class SubscriberFactory implements SubscriberFactoryInterface {
+readonly class SubscriberFactory implements SubscriberFactoryInterface {
 
-  /**
-   * The service container.
-   *
-   * @var \Symfony\Component\DependencyInjection\ContainerInterface
-   */
-  protected ContainerInterface $container;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected ConfigFactoryInterface $configFactory;
-
-  /**
-   * Constructs a new SubscriberFactory object.
-   *
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The current service container.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The configuration factory.
-   */
-  public function __construct(ContainerInterface $container, ConfigFactoryInterface $configFactory) {
-    $this->container = $container;
-    $this->configFactory = $configFactory;
-  }
+  public function __construct(
+    protected ContainerInterface $container,
+    protected ConfigFactoryInterface $configFactory,
+  ) {}
 
   /**
    * {@inheritdoc}

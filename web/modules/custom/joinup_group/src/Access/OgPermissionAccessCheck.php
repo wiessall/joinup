@@ -14,18 +14,11 @@ use Symfony\Component\Routing\Route;
 /**
  * OG permission access check.
  */
-class OgPermissionAccessCheck implements AccessInterface {
+readonly class OgPermissionAccessCheck implements AccessInterface {
 
-  /**
-   * Constructs a OgPermissionAccessCheck instance.
-   *
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The group manager service.
-   */
   public function __construct(
     protected JoinupGroupManagerInterface $groupManager,
-  ) {
-  }
+  ) {}
 
   /**
    * Checks access.

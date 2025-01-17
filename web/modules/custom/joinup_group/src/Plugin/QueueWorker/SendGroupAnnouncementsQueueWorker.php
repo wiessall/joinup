@@ -37,46 +37,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The message delivery service.
-   */
-  protected JoinupMessageDeliveryInterface $messageDelivery;
-
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The queue factory service.
-   */
-  protected QueueFactory $queueFactory;
-
-  /**
    * Static cache for message entity storage.
    */
   protected EntityStorageInterface $storage;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The message delivery service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
-   *   The queue factory service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, JoinupMessageDeliveryInterface $message_delivery, EntityTypeManagerInterface $entity_type_manager, QueueFactory $queue_factory) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly QueueFactory $queueFactory,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->messageDelivery = $message_delivery;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -98,7 +71,8 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    */
   public function processItem($data): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
-    if (!$announcement = $this->getMessageStorage()->load($data['announcement'])) {
+    if (!$announcement = $this->getMessageStorage()
+      ->load($data['announcement'])) {
       // The entity might have been deleted in the meantime.
       return;
     }

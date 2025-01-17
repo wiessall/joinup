@@ -40,44 +40,17 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
     'user_remove_role_action.moderator',
   ];
 
-  /**
-   * Constructs a new JoinupUserBulkForm Views field plugin.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
-   *   The language manager.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
-   *   The entity repository.
-   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $routeMatch
-   *   The route match.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The currently logged in user.
-   * @param \Drupal\joinup_user\JoinupUserNotificationHelperInterface $notificationHelper
-   *   The notification helper for the Joinup User module.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     EntityTypeManagerInterface $entityTypeManager,
     LanguageManagerInterface $languageManager,
     MessengerInterface $messenger,
     EntityRepositoryInterface $entityRepository,
     ResettableStackedRouteMatchInterface $routeMatch,
     AccountInterface $currentUser,
-    protected JoinupUserNotificationHelperInterface $notificationHelper,
+    protected readonly JoinupUserNotificationHelperInterface $notificationHelper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager, $languageManager, $messenger, $entityRepository, $routeMatch, $currentUser);
   }

@@ -15,20 +15,10 @@ use Drupal\collection\Form\JoinCollectionForm;
  */
 class CollectionLazyBuilders implements TrustedCallbackInterface {
 
-  /**
-   * Constructs a new CollectionLazyBuilders object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
-   *   The form builder service.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The currently logged-in user.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected FormBuilderInterface $formBuilder,
-    protected AccountInterface $account,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly FormBuilderInterface $formBuilder,
+    protected readonly AccountInterface $account,
   ) {}
 
   /**

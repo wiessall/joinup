@@ -15,22 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class BundleAutocompleteDeriver extends DeriverBase implements ContainerDeriverInterface {
 
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  private $entityTypeBundleInfo;
-
-  /**
-   * Instantiates a new BundleAutocompleteDeriver class.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle info service.
-   */
-  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info) {
-    $this->entityTypeBundleInfo = $entity_type_bundle_info;
-  }
+  public function __construct(
+    protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+  ) {}
 
   /**
    * {@inheritdoc}

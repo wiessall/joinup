@@ -32,25 +32,14 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
   use StringTranslationTrait;
 
   /**
-   * The time keeping service.
-   */
-  protected TimeInterface $time;
-
-  /**
    * The current request.
    */
   protected Request $currentRequest;
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   */
-  public function __construct(TimeInterface $time, RequestStack $request_stack) {
-    $this->time = $time;
+  public function __construct(
+    protected readonly TimeInterface $time,
+    readonly RequestStack $request_stack,
+  ) {
     $this->currentRequest = $request_stack->getCurrentRequest();
   }
 

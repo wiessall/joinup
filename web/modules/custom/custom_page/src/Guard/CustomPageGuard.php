@@ -14,16 +14,11 @@ use Drupal\state_machine\WorkflowManagerInterface;
 /**
  * Guard class for custom page entity.
  */
-class CustomPageGuard implements GuardInterface {
+readonly class CustomPageGuard implements GuardInterface {
 
-  /**
-   * Constructs a new CustomPageGuard object.
-   *
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   Workflow manager.
-   */
-  public function __construct(protected WorkflowManagerInterface $workflowManager) {
-  }
+  public function __construct(
+    protected WorkflowManagerInterface $workflowManager,
+  ) {}
 
   /**
    * {@inheritdoc}

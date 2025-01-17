@@ -10,58 +10,28 @@ use Drupal\oe_webtools_analytics\AnalyticsEventInterface;
 use Drupal\oe_webtools_analytics\Event\AnalyticsEvent;
 use Drupal\og\OgContextInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Subscriber that acts on visitor analytics being collected for reporting.
  */
-class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+readonly class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
 
   /**
    * The current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $currentRequest;
+  protected Request $currentRequest;
 
-  /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $routeMatch;
-
-  /**
-   * The OG context service.
-   *
-   * @var \Drupal\og\OgContextInterface
-   */
-  protected $ogContext;
-
-  /**
-   * Constructs a new WebtoolsAnalyticsSubscriber.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The http request stack.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $routeMatch
-   *   The current route match.
-   * @param \Drupal\og\OgContextInterface $ogContext
-   *   The OG context service.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, RequestStack $requestStack, CurrentRouteMatch $routeMatch, OgContextInterface $ogContext) {
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RequestStack $requestStack,
+    protected CurrentRouteMatch $routeMatch,
+    protected OgContextInterface $ogContext,
+  ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
-    $this->routeMatch = $routeMatch;
-    $this->ogContext = $ogContext;
   }
 
   /**

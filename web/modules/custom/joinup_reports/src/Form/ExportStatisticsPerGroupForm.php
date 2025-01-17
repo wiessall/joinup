@@ -21,11 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
   public function __construct(
-    protected CacheBackendInterface $cache,
+    protected readonly CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected Connection $mysql,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly Connection $mysql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
