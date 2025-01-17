@@ -11,6 +11,7 @@ dependencies:
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.entity_reference
+    - paragraphs.paragraphs_type.events_calendar
     - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
@@ -61,6 +62,7 @@ settings:
       layout: layout
       json_map: json_map
       poll: poll
+      events_calendar: events_calendar
       quote: quote
       simple_paragraph: simple_paragraph
       social_media: social_media
@@ -72,78 +74,81 @@ settings:
     negate: 0
     target_bundles_drag_drop:
       accordion:
-        weight: -58
-        enabled: true
-      accordion_item:
-        weight: -57
-        enabled: false
-      block:
-        weight: -33
-        enabled: false
-      call_to_action:
-        weight: -56
-        enabled: true
-      carousel:
-        weight: -55
-        enabled: true
-      configurable_listing:
-        weight: -54
-        enabled: true
-      content_listing:
-        weight: -53
-        enabled: true
-      entity_reference:
-        weight: -52
-        enabled: true
-      github_feed:
-        weight: -51
-        enabled: true
-      heading:
-        weight: -61
-        enabled: true
-      iframe:
         weight: -50
         enabled: true
-      image:
-        weight: -59
-        enabled: true
-      image_gallery:
-        weight: -32
-        enabled: true
-      json_map:
+      accordion_item:
+        weight: -49
+        enabled: false
+      block:
+        weight: -29
+        enabled: false
+      call_to_action:
         weight: -48
         enabled: true
-      layout:
-        weight: -49
-        enabled: true
-      poll:
+      carousel:
         weight: -47
         enabled: true
-      quote:
+      configurable_listing:
         weight: -46
         enabled: true
-      simple_paragraph:
+      content_listing:
         weight: -45
         enabled: true
-      social_media:
+      entity_reference:
         weight: -44
         enabled: true
-      testimony:
+      events_calendar:
+        weight: -38
+        enabled: true
+      github_feed:
         weight: -43
         enabled: true
-      text:
-        weight: -60
+      heading:
+        weight: -53
         enabled: true
-      tile:
+      iframe:
         weight: -42
-        enabled: false
-      tiles:
-        weight: -41
         enabled: true
-      video:
+      image:
+        weight: -51
+        enabled: true
+      image_gallery:
+        weight: -28
+        enabled: true
+      json_map:
         weight: -40
         enabled: true
-      webform:
+      layout:
+        weight: -41
+        enabled: true
+      poll:
+        weight: -39
+        enabled: true
+      quote:
         weight: -37
+        enabled: true
+      simple_paragraph:
+        weight: -36
+        enabled: true
+      social_media:
+        weight: -35
+        enabled: true
+      testimony:
+        weight: -34
+        enabled: true
+      text:
+        weight: -52
+        enabled: true
+      tile:
+        weight: -33
+        enabled: false
+      tiles:
+        weight: -32
+        enabled: true
+      video:
+        weight: -31
+        enabled: true
+      webform:
+        weight: -30
         enabled: true
 field_type: entity_reference_revisions
