@@ -2008,6 +2008,26 @@ class JoinupContext extends RawDrupalContext {
         Error::logException(\Drupal::logger('cron'), $e);
       }
     }
+
+    // Because we are deleting the users but keep the UID in the content's
+    // uid field, OG is cleaning up the records from the og_membership table
+    // because the the UID is now still there on user deletion. We also need
+    // to clean up entities from the og_membership table that the users no
+    // longer exist.
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    $query->leftJoin('og_membership', 'ogm', 'n.nid = ogm.entity_id');
+    $query->fields('n', ['nid']);
+    $query->isNull('ogm.id');
+    // Avoid deleting default content that belong to the anonymous user in
+    // tests.
+    $query->condition('n.uid', 0, '>');
+    $nids = $query->execute()->fetchCol();
+
+    if (!empty($nids)) {
+      $storage = \Drupal::entityTypeManager()->getStorage('node');
+      $nodes = $storage->loadMultiple($nids);
+      $storage->delete($nodes);
+    }
   }
 
   /**
