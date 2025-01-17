@@ -2038,19 +2038,26 @@ class JoinupContext extends RawDrupalContext {
         Error::logException(\Drupal::logger('cron'), $e);
       }
     }
+  }
 
+  /**
+   * Cleans up orphaned group content in non clone group.
+   *
+   * @AfterScenario ~@group-clone
+   */
+  public function cleanGroupContentClean(AfterScenarioScope $event): void {
     // Because we are deleting the users but keep the UID in the content's
     // uid field, OG is cleaning up the records from the og_membership table
     // because the the UID is now still there on user deletion. We also need
     // to clean up entities from the og_membership table that the users no
     // longer exist.
     $query = \Drupal::database()->select('node_field_data', 'n');
-    $query->leftJoin('og_membership', 'ogm', 'n.nid = ogm.entity_id');
+    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
     $query->fields('n', ['nid']);
-    $query->isNull('ogm.id');
-    // Avoid deleting default content that belong to the anonymous user in
-    // tests.
-    $query->condition('n.uid', 0, '>');
+    $query->isNull('u.uid');
+    // Avoid deleting default content that belong to the anonymous user or user
+    // 1 in tests.
+    $query->condition('n.uid', 1, '>');
     $nids = $query->execute()->fetchCol();
 
     if (!empty($nids)) {
