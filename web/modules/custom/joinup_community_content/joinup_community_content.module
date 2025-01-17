@@ -102,6 +102,12 @@ function joinup_community_content_form_node_form_alter(&$form, FormStateInterfac
     return;
   }
 
+  $form['custom_notice'] = [
+    '#type' => 'markup',
+    '#markup' => '<div class="custom-notice"> Before submitting your contribution, please ensure it adheres to the Portal’s <a href="https://interoperable-europe.ec.europa.eu/contribution-rules"> contribution rules.</a></div>',
+    '#weight' => -10,
+  ];
+
   // Attach a form process handler that will change the label of the description
   // field for uploaded files on the community content forms. This would
   // otherwise conflict with the already existing "Description" field on Events.
