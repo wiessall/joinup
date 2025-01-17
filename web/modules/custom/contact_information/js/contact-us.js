@@ -3,18 +3,20 @@
  * Opens a contact form dialog for users re-routed to EU Login.
  */
 
-((Drupal, cookies) => {
+((Drupal, once, cookies) => {
   Drupal.behaviors.contactInformationDialog = {
-    attach(context) {
-      // Only interested in the document context.
-      if (context !== document) {
+    attach() {
+      // We only want to check this on initial page load.
+      if (!once("contact-information-dialog", "html").length) {
         return;
       }
-      const cookie = cookies.get("email_contact_info");
+
       // If there's no cookie, there's nothing more we can do.
+      const cookie = cookies.get("email_contact_info");
       if (cookie === undefined) {
         return;
       }
+
       const contactInfoId = decodeURIComponent(cookie);
       const contactInfoElement = document.querySelector(
         `[data-joinup-contact-info-id="${contactInfoId}"]`,
@@ -27,8 +29,9 @@
           contactInfoLink.click();
         }
       }
+
       // Remove the cookie.
       cookies.remove("email_contact_info");
     },
   };
-})(Drupal, window.Cookies);
+})(Drupal, once, window.Cookies);

@@ -12,38 +12,55 @@ import Glide, {
 } from "@glidejs/glide/dist/glide.modular.esm.js";
 import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
-(() => {
-  Drupal.behaviors.glide = {
-    attach() {
-      const tabs = document.querySelectorAll(".explore-block button.nav-link");
-      // Mount only the visible slide
-      function mountSlide() {
-        const slides = document.querySelectorAll(".tab-pane.active .glide");
-        slides.forEach((slide) => {
-          const glide = new Glide(slide, {
-            rewind: false,
-            bound: true,
-            dragThreshold: false,
-            gap: 24,
-            perView: 4,
-            wrapperWidth: 300,
-            breakpoints: {
-              1199: { perView: 3 },
-              991: { perView: 2 },
-              767: { perView: 1 },
-            },
-          }).mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
+((Drupal, once) => {
+  Drupal.behaviors.exploreBlock = {
+    attach(context) {
+      // Initializes the Glide slider.
+      const initializeGlide = (glideElement) => {
+        if (glideElement.classList.contains("glide-initialized")) {
+          return;
+        }
 
-          glide.update({ wrapperWidth: 300 });
-        });
-      }
-      // when switching tabs, mount visible slide again (otherwise slides are buggy)
-      for (let i = 0; i < tabs.length; i++) {
-        tabs[i].addEventListener("click", () => {
-          mountSlide();
-        });
-      }
-      mountSlide();
+        const glideInstance = new Glide(glideElement, {
+          rewind: false,
+          bound: true,
+          dragThreshold: false,
+          gap: 24,
+          perView: 4,
+          wrapperWidth: 300,
+          breakpoints: {
+            1199: { perView: 3 },
+            991: { perView: 2 },
+            767: { perView: 1 },
+          },
+        }).mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
+
+        glideInstance.update({ wrapperWidth: 300 });
+        glideElement.classList.add("glide-initialized");
+      };
+
+      once("explore-block", ".explore-block", context).forEach(
+        (exploreBlock) => {
+          // Init the slider for the active tab.
+          const activeTab = exploreBlock.querySelector(
+            ".tab-pane.active .glide",
+          );
+          if (activeTab) initializeGlide(activeTab);
+
+          // Listen for tabs becoming active and initialize Glide.
+          // Needed for Glide to accurately calculate the available space/width.
+          const tabs = exploreBlock.querySelectorAll(".nav-link");
+          tabs.forEach((tabLink) => {
+            const target = tabLink.getAttribute("data-bs-target");
+            const tabPane = exploreBlock.querySelector(target);
+
+            tabLink.addEventListener("shown.bs.tab", () => {
+              const glide = tabPane.querySelector(".glide");
+              if (glide) initializeGlide(glide);
+            });
+          });
+        },
+      );
     },
   };
-})();
+})(Drupal, once);

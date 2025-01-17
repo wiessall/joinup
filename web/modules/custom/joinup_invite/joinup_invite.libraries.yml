@@ -1,6 +1,8 @@
 invite_autocomplete:
   js:
-    js/autocomplete.js: {}
+    js/invite_autocomplete.js: {}
   dependencies:
     - core/drupal
+    - core/once
+    - core/jquery
     - core/drupal.autocomplete

@@ -3,15 +3,18 @@ filter:
     js/filter.js: {}
   dependencies:
     - core/drupal
+    - core/once
 
 comparator:
   js:
     js/comparator.js: {}
   dependencies:
     - core/drupal
+    - core/once
 
 compatibility-checker:
   js:
     js/compatibility_checker.js: {}
   dependencies:
     - core/drupal
+    - core/once
