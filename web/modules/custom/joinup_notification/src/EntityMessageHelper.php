@@ -32,24 +32,11 @@ use Drupal\message\MessageInterface;
  * @see \Drupal\joinup_invite\InvitationMessageHelper
  * @see \Drupal\joinup_notification\JoinupMessageDelivery
  */
-class EntityMessageHelper implements EntityMessageHelperInterface {
+readonly class EntityMessageHelper implements EntityMessageHelperInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a new InvitationMessageHelper service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
-    $this->entityTypeManager = $entityTypeManager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -87,7 +74,8 @@ class EntityMessageHelper implements EntityMessageHelperInterface {
     $query->sort('created', $order);
     $result = $query->execute();
 
-    return $result ? $this->getMessageEntityStorage()->loadMultiple($result) : [];
+    return $result ? $this->getMessageEntityStorage()
+      ->loadMultiple($result) : [];
   }
 
   /**

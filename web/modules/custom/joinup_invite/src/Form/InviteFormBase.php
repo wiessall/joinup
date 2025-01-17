@@ -67,22 +67,11 @@ abstract class InviteFormBase extends FormBase {
    */
   protected ContentEntityInterface $entity;
 
-  /**
-   * Constructs a new InviteFormBase object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
-   *   The invitation message helper service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected InvitationMessageHelperInterface $invitationMessageHelper,
     protected LoggerChannelInterface $logger,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

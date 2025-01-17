@@ -12,15 +12,10 @@ use Drupal\search_api\IndexInterface;
  */
 class AlterQueryPresetsDescriptionEvent extends Event {
 
-  /**
-   * Constructs a new AlterQueryPresetsDescriptionEvent object.
-   *
-   * @param array $description
-   *   The description of the query presets.
-   * @param \Drupal\search_api\IndexInterface $index
-   *   The search API index.
-   */
-  public function __construct(protected array $description, protected IndexInterface $index) {}
+  public function __construct(
+    protected array $description,
+    protected readonly IndexInterface $index,
+  ) {}
 
   /**
    * Returns the description of the query presets.

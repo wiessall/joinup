@@ -18,8 +18,8 @@ use Drush\Commands\DrushCommands;
 class EuOssTranslationCommands extends DrushCommands {
 
   public function __construct(
-    protected JobBuilderInterface $jobBuilder,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly JobBuilderInterface $jobBuilder,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct();
   }

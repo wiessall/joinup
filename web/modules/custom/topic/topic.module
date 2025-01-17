@@ -173,8 +173,6 @@ function topic_theme(): array {
  *
  * Allows access to the creation of the configurable listing paragraph only for
  * the topic meta entity.
- * Also, for the topic meta entity, dissallow the creation of the 2 column
- * layouts with featured sections and the 3 column layout.
  */
 function topic_paragraph_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
   if (\Drupal::routeMatch()->getRouteName() !== 'entity.meta_entity.edit_form') {
@@ -188,9 +186,6 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
     }
 
     $denied_paragraphs = [
-      '2_column_featured_left',
-      '2_column_featured_right',
-      '3_column',
       'accordion',
       'call_to_action',
       'carousel',

@@ -195,22 +195,20 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
 }
 
 /**
- * Implements hook_theme_suggestions_HOOK_alter() for the joinup_release_releases_download hook.
- */
-function ventuno_theme_suggestions_joinup_release_releases_download_alter(array &$suggestions, array $variables): void {
-  $original_theme_hook = $variables['theme_hook_original'];
-  $suggestions[] = $original_theme_hook;
-}
-
-/**
  * Implements hook_preprocess_HOOK() for node--digest-message.html.twig.
  */
 function ventuno_preprocess_node__digest_message(&$variables): void {
   $node = $variables['node'];
   assert($node instanceof NodeInterface);
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $date_format = 'date_only_text_month';
 
-  $publicationTime = $node instanceof EntityPublicationTimeInterface
-    ? $node->getPublicationTime()
-    : NULL;
-  $variables['publication_timestamp'] = $publicationTime ?: $node->getCreatedTime();
+  // Digest item date.
+  $variables['digest_item_date'] = match (TRUE) {
+    isset($variables['content']['field_event_date']) => $variables['content']['field_event_date'],
+    isset($variables['content']['field_document_publication_date']) => $variables['content']['field_document_publication_date'],
+    $node instanceof EntityPublicationTimeInterface && $node->getPublicationTime() => $date_formatter->format($node->getPublicationTime(), $date_format),
+    default => $date_formatter->format($node->getCreatedTime(), $date_format),
+  };
 }

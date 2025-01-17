@@ -33,22 +33,9 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
    */
   protected $group;
 
-  /**
-   * The time keeping service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $time;
-
-  /**
-   * Constructs a JoinGroupAnonymousRedirectForm.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   */
-  public function __construct(TimeInterface $time) {
-    $this->time = $time;
-  }
+  public function __construct(
+    protected readonly TimeInterface $time,
+  ) {}
 
   /**
    * {@inheritdoc}

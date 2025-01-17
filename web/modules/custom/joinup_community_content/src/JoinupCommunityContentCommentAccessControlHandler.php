@@ -21,24 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessControlHandler implements EntityHandlerInterface {
 
-  /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * Constructs a new access control handler instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The comment entity type object.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
-   */
-  public function __construct(EntityTypeInterface $entity_type, OgAccessInterface $og_access) {
+  public function __construct(
+    readonly EntityTypeInterface $entity_type,
+    readonly OgAccessInterface $ogAccess,
+  ) {
     parent::__construct($entity_type);
-    $this->ogAccess = $og_access;
   }
 
   /**

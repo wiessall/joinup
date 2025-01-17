@@ -26,20 +26,21 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'separator' => 'to',
       'default_format' => 'd m Y',
       'day_diff_format' => 'd',
       'month_diff_format' => 'd F',
       'year_diff_format' => 'd F Y',
+      'plain_text' => FALSE,
     ] + parent::defaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form = parent::settingsForm($form, $form_state);
 
     $form['separator'] = [
@@ -77,6 +78,13 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
       '#default_value' => $this->getSetting('year_diff_format'),
     ];
 
+    $form['plain_text'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Render as plain text'),
+      '#description' => $this->t('Omits the ISO date attributes.'),
+      '#default_value' => $this->getSetting('plain_text'),
+    ];
+
     $form['help_text'] = [
       '#markup' => $this->t('See <a href="http://php.net/manual/function.date.php" target="_blank">the documentation for PHP date formats</a>.'),
     ];
@@ -87,12 +95,15 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = parent::settingsSummary();
 
     if ($separator = $this->getSetting('separator')) {
       $summary[] = $this->t('Separator: %separator', ['%separator' => $separator]);
     }
+
+    $plain_text = $this->getSetting('plain_text');
+    $summary[] = $this->t('Plain text: %value', ['%value' => $plain_text ? $this->t('yes') : $this->t('no')]);
 
     return $summary;
   }
@@ -100,9 +111,10 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = [];
     $separator = $this->getSetting('separator');
+    $plain_text = $this->getSetting('plain_text');
 
     foreach ($items as $delta => $item) {
       if (!empty($item->start_date) && !empty($item->end_date)) {
@@ -114,7 +126,9 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
         // If the two dates formatted with the default format are the same,
         // render only one.
         if ($this->formatDate($start_date) === $this->formatDate($end_date)) {
-          $elements[$delta] = $this->buildDateWithIsoAttribute($start_date);
+          $elements[$delta] = $plain_text
+            ? $this->buildDate($start_date)
+            : $this->buildDateWithIsoAttribute($start_date);
           continue;
         }
 
@@ -133,9 +147,9 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
         }
 
         $elements[$delta] = [
-          'start_date' => $this->buildDateWithIsoAttribute($start_date, $format),
+          'start_date' => $plain_text ? $this->buildDate($start_date, $format) : $this->buildDateWithIsoAttribute($start_date, $format),
           'separator' => ['#plain_text' => ' ' . $separator . ' '],
-          'end_date' => $this->buildDateWithIsoAttribute($end_date),
+          'end_date' => $plain_text ? $this->buildDate($end_date) : $this->buildDateWithIsoAttribute($end_date),
         ];
       }
     }
@@ -146,27 +160,34 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatDate($date, $format = NULL) {
-    $format = $format ? $format : $this->getSetting('default_format');
+  protected function formatDate($date, $format = NULL): string {
+    $format = $format ?: $this->getSetting('default_format');
     $timezone = $this->getSetting('timezone_override');
     return $this->dateFormatter->format($date->getTimestamp(), 'custom', $format, $timezone != '' ? $timezone : NULL);
   }
 
   /**
-   * Creates a render array from a date object with ISO date attribute.
-   *
-   * @param \Drupal\Core\Datetime\DrupalDateTime $date
-   *   A date object.
-   * @param null|string $format
-   *   The format of the displayed date. NULL to use the default one.
-   *
-   * @return array
-   *   A render array.
+   * {@inheritdoc}
    */
-  protected function buildDateWithIsoAttribute(DrupalDateTime $date, $format = NULL): array {
-    $format = $format ? $format : $this->getSetting('year_diff_format');
+  protected function buildDate(DrupalDateTime $date, ?string $format = NULL): array {
+    $this->setTimeZone($date);
+    return [
+      '#markup' => $this->formatDate($date, $format),
+      '#cache' => [
+        'contexts' => [
+          'timezone',
+        ],
+      ],
+    ];
+  }
 
-    if ($this->getFieldSetting('datetime_type') == DateTimeItem::DATETIME_TYPE_DATE) {
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildDateWithIsoAttribute(DrupalDateTime $date, ?string $format = NULL): array {
+    $format = $format ?: $this->getSetting('year_diff_format');
+
+    if ($this->getFieldSetting('datetime_type') === DateTimeItem::DATETIME_TYPE_DATE) {
       // A date without time will pick up the current time, use the default.
       $date->setDefaultDateTime();
     }
@@ -176,7 +197,7 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
 
     $this->setTimeZone($date);
 
-    $build = [
+    return [
       '#theme' => 'time',
       '#text' => $this->formatDate($date, $format),
       '#html' => FALSE,
@@ -189,8 +210,6 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
         ],
       ],
     ];
-
-    return $build;
   }
 
 }

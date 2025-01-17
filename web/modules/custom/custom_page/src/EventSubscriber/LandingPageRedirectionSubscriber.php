@@ -14,18 +14,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Event Subscriber for redirecting custom nodes to landing route.
  */
-class LandingPageRedirectionSubscriber implements EventSubscriberInterface {
+readonly class LandingPageRedirectionSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs landing page redirection.
-   *
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $routeMatch
-   *   Route match.
-   */
   public function __construct(
     protected CurrentRouteMatch $routeMatch,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

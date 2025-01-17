@@ -26,28 +26,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class AbsoluteUrlResolver extends DefaultResolver {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManger
-   *   The language manager service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The EU OSS Catalogue code hosting platform plugin manager.
-   * @param \GuzzleHttp\ClientInterface $httpClient
-   *   The HTTP client.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManger,
     protected EuOssCataloguePluginManagerInterface $platformManager,

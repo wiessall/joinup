@@ -23,38 +23,16 @@ use Symfony\Component\Routing\RouteCollection;
 class StateMachineRevisionsRouteSubscriber extends RouteSubscriberBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The entity field manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
    * Static cache a map of entity types.
    *
    * @var bool[]
    */
   protected $entityTypes;
 
-  /**
-   * Constructs a new StateMachineRevisionsRouteSubscriber.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->entityFieldManager = $entity_field_manager;
-  }
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
+  ) {}
 
   /**
    * {@inheritdoc}

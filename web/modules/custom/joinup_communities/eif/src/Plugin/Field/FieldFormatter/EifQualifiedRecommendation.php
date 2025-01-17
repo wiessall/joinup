@@ -24,33 +24,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EifQualifiedRecommendation extends TextDefaultFormatter {
 
-  /**
-   * Constructs a FormatterBase object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
-    $plugin_id,
-    $plugin_definition,
+    string $plugin_id,
+    mixed $plugin_definition,
     FieldDefinitionInterface $field_definition,
     array $settings,
-    $label,
-    $view_mode,
+    string $label,
+    string $view_mode,
     array $third_party_settings,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {

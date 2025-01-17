@@ -9,24 +9,11 @@ use Drupal\Core\Database\Connection;
 /**
  * Implements helper methods related to the requirements.
  */
-class RequirementsHelper {
+readonly class RequirementsHelper {
 
-  /**
-   * The SQL connection class for the primary database storage.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $sqlConnection;
-
-  /**
-   * Constructs a new RequirementsHelper.
-   *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The SQL connection class for the primary database storage.
-   */
-  public function __construct(Connection $connection) {
-    $this->sqlConnection = $connection;
-  }
+  public function __construct(
+    protected Connection $sqlConnection,
+  ) {}
 
   /**
    * Fetches node entries with faulty forward published revisions.

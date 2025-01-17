@@ -14,15 +14,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Facets search subscriber.
  */
-class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
+readonly class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new FacetsConvertsSearchApiAlter object.
-   *
-   * @param \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager $arbitraryFacetManager
-   *   The Arbitrary facet plugin manager.
-   */
-  public function __construct(protected ArbitraryFacetManager $arbitraryFacetManager) {}
+  public function __construct(
+    protected ArbitraryFacetManager $arbitraryFacetManager,
+  ) {}
 
   /**
    * {@inheritdoc}

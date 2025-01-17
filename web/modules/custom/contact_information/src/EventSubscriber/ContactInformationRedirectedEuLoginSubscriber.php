@@ -16,24 +16,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(TimeInterface $time, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    TimeInterface $time,
+    RequestStack $request_stack,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($time, $request_stack);
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**

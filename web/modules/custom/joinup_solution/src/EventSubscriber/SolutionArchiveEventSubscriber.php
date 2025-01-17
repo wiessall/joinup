@@ -20,20 +20,10 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a new SolutionArchiveEventSubscriber instance.
-   *
-   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
-   *   The queue factory.
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The current user account proxy.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   */
   public function __construct(
-    protected QueueFactory $queueFactory,
-    protected AccountProxyInterface $currentUser,
-    protected MessengerInterface $messenger,
+    protected readonly QueueFactory $queueFactory,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly MessengerInterface $messenger,
   ) {}
 
   /**

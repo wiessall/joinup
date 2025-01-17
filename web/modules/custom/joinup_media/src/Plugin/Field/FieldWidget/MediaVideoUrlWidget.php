@@ -32,16 +32,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class MediaVideoUrlWidget extends InlineEntityFormSimple {
 
-  /**
-   * The OG context service.
-   *
-   * @var \Drupal\og\OgContextInterface
-   */
-  protected OgContextInterface $ogContext;
-
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository, OgContextInterface $og_context) {
+  public function __construct(
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    array $third_party_settings,
+    readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    readonly EntityTypeManagerInterface $entity_type_manager,
+    readonly EntityDisplayRepositoryInterface $entity_display_repository,
+    protected readonly OgContextInterface $ogContext,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
-    $this->ogContext = $og_context;
   }
 
   /**
@@ -122,11 +124,12 @@ class MediaVideoUrlWidget extends InlineEntityFormSimple {
    * Lookup for an existing remote_video entity.
    */
   protected function lookupEntity(string $url): ?MediaInterface {
-    $existing_entity = $this->entityTypeManager->getStorage('media')->loadByProperties([
-      'bundle' => 'remote_video',
-      'media_oembed_video' => $url,
-      'og_audience' => $this->ogContext->getGroup()?->id(),
-    ]);
+    $existing_entity = $this->entityTypeManager->getStorage('media')
+      ->loadByProperties([
+        'bundle' => 'remote_video',
+        'media_oembed_video' => $url,
+        'og_audience' => $this->ogContext->getGroup()?->id(),
+      ]);
     return $existing_entity ? reset($existing_entity) : NULL;
   }
 

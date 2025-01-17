@@ -11,14 +11,8 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 /**
  * Default class for the 'joinup_solution.title_duplicate_helper' service.
  */
-class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterface {
+readonly class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterface {
 
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {}

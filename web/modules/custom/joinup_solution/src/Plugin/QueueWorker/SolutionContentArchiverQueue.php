@@ -48,32 +48,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     DistributionInterface::class,
   ];
 
-  /**
-   * Constructs a new SolutionContentArchiverQueue instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   Logger channel of solutions.
-   * @param \Drupal\Core\Session\AccountSwitcherInterface $accountSwitcher
-   *   The account switcher service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   The workflow helper service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelInterface $logger,
-    protected AccountSwitcherInterface $accountSwitcher,
-    protected WorkflowHelperInterface $workflowHelper,
+    string $pluginId,
+    mixed $pluginDefinition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly LoggerChannelInterface $logger,
+    protected readonly AccountSwitcherInterface $accountSwitcher,
+    protected readonly WorkflowHelperInterface $workflowHelper,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

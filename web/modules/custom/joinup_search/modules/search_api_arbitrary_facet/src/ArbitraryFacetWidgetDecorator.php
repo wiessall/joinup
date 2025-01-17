@@ -27,32 +27,23 @@ class ArbitraryFacetWidgetDecorator implements WidgetPluginInterface, ContainerF
    *
    * @var \Drupal\facets\Widget\WidgetPluginInterface
    */
-  protected $original;
+  protected WidgetPluginInterface $original;
 
   /**
    * The arbitrary facet plugin manager.
    *
    * @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager
    */
-  protected $arbitraryFacetManager;
+  protected ArbitraryFacetManager $arbitraryFacetManager;
 
-  /**
-   * Constructs decorated widget object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Cache\Context\CacheContextsManager $cache_contexts_manager
-   *   The cache contexts manager service.
-   * @param \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager $arbitrary_facet_manager
-   *   The arbitrary facet plugin manager.
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The dependency injection container.
-   */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, CacheContextsManager $cache_contexts_manager, ArbitraryFacetManager $arbitrary_facet_manager, ContainerInterface $container) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    array $plugin_definition,
+    CacheContextsManager $cache_contexts_manager,
+    ArbitraryFacetManager $arbitrary_facet_manager,
+    ContainerInterface $container,
+  ) {
     // Instantiate the decorated object.
     $class = $plugin_definition['decorated_class'];
 

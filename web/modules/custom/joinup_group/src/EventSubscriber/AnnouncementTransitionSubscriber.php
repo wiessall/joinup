@@ -20,51 +20,13 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The mail manager service.
-   */
-  protected MailManagerInterface $mailManager;
-
-  /**
-   * The language manager service.
-   */
-  protected LanguageManagerInterface $languageManager;
-
-  /**
-   * The Joinup message delivery service.
-   */
-  protected JoinupMessageDeliveryInterface $messageDelivery;
-
-  /**
-   * The queue factory service.
-   */
-  protected QueueFactory $queueFactory;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
-   *   The mail manager service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Joinup message delivery service.
-   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
-   *   The queue factory service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, JoinupMessageDeliveryInterface $message_delivery, QueueFactory $queue_factory) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->mailManager = $mail_manager;
-    $this->languageManager = $language_manager;
-    $this->messageDelivery = $message_delivery;
-    $this->queueFactory = $queue_factory;
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MailManagerInterface $mailManager,
+    protected readonly LanguageManagerInterface $languageManager,
+    protected readonly JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly QueueFactory $queueFactory,
+  ) {
   }
 
   /**

@@ -28,24 +28,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UnarchiveAction extends StateActionBase {
 
-  /**
-   * Constructs object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   Workflow helper.
-   */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected RendererInterface $renderer, protected EntityTypeManagerInterface $entityTypeManager, protected WorkflowHelperInterface $workflowHelper) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly RendererInterface $renderer,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly WorkflowHelperInterface $workflowHelper,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

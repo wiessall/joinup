@@ -37,13 +37,6 @@ class CommunityContentAuthorCacheContext extends UserCacheContextBase implements
   const NO_CONTEXT = 'none';
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Static cache of queried cache contexts.
    *
    * @var string[][]
@@ -57,18 +50,11 @@ class CommunityContentAuthorCacheContext extends UserCacheContextBase implements
     return t('Community content author');
   }
 
-  /**
-   * Constructs a new CommunityContentAuthorCacheContext object.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
-  public function __construct(AccountInterface $user, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    AccountInterface $user,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($user);
-
-    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
