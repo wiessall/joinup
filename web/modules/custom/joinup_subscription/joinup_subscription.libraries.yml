@@ -1,6 +1,6 @@
 subscriptions:
-  version: 1.x
   js:
     js/subscriptions.js: {}
   dependencies:
+    - core/drupal
     - core/once

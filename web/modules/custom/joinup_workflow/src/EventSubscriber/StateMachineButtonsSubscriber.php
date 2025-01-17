@@ -14,15 +14,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Alters buttons labels for the state machine.
  */
-final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
+final readonly class StateMachineButtonsSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new StateMachineButtonsSubscriber object.
-   *
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The current logged-in user.
-   */
-  public function __construct(protected AccountProxyInterface $currentUser) {}
+  public function __construct(
+    protected AccountProxyInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

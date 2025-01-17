@@ -12,44 +12,13 @@ use Drupal\joinup_user\Entity\JoinupUserInterface;
 /**
  * Service to assist with sending notifications about actions taken on users.
  */
-class JoinupUserNotificationHelper implements JoinupUserNotificationHelperInterface {
+readonly class JoinupUserNotificationHelper implements JoinupUserNotificationHelperInterface {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * The mail manager service.
-   *
-   * @var \Drupal\Core\Mail\MailManagerInterface
-   */
-  protected $mailManager;
-
-  /**
-   * Constructs a JoinupUserNotificationHelper service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
-   *   The mail manager service.
-   */
-  public function __construct(AccountInterface $current_user, MessengerInterface $messenger, MailManagerInterface $mail_manager) {
-    $this->currentUser = $current_user;
-    $this->messenger = $messenger;
-    $this->mailManager = $mail_manager;
-  }
+  public function __construct(
+    protected AccountInterface $currentUser,
+    protected MessengerInterface $messenger,
+    protected MailManagerInterface $mailManager,
+  ) {}
 
   /**
    * {@inheritdoc}

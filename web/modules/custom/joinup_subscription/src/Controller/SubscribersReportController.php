@@ -24,20 +24,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SubscribersReportController extends ControllerBase {
 
-  /**
-   * Constructs a new SubscribersReportController.
-   *
-   * @param \Drupal\Core\Database\Connection $sqlConnection
-   *   The SQL connection.
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
-   *   The SPARQL connection.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   */
   public function __construct(
-    protected Connection $sqlConnection,
-    protected RdfSyncConnectionInterface $sparqlConnection,
-    protected RequestStack $requestStack,
+    protected readonly Connection $sqlConnection,
+    protected readonly RdfSyncConnectionInterface $sparqlConnection,
+    protected readonly RequestStack $requestStack,
   ) {}
 
   /**
@@ -131,7 +121,8 @@ class SubscribersReportController extends ControllerBase {
         '#url' => Url::fromRoute('joinup_subscription.subscribers_report_download'),
         '#attributes' => ['class' => ['button', 'button--primary']],
         '#title' => $this->t('Download CSV'),
-        '#access' => $this->currentUser()->hasPermission('download subscribers report'),
+        '#access' => $this->currentUser()
+          ->hasPermission('download subscribers report'),
       ],
     ];
   }
@@ -223,7 +214,8 @@ INNER JOIN {og_membership__subscription_bundles} b ON m.id = b.entity_id
 $where_clause
 GROUP BY m.entity_id;
 SQL;
-    $subscribers = $this->sqlConnection->query($query, $query_args)->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
+    $subscribers = $this->sqlConnection->query($query, $query_args)
+      ->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
 
     // Prepare the data array with empty values to be filled in.
     $data = array_fill_keys(array_keys($subscribers), [
@@ -242,7 +234,8 @@ INNER JOIN {og_membership__subscription_bundles} b ON m.id = b.entity_id
 $where_clause
 GROUP BY m.entity_id, b.subscription_bundles_bundle;
 SQL;
-    $subscribers_by_bundle = $this->sqlConnection->query($query, $query_args)->fetchAll(\PDO::FETCH_NUM);
+    $subscribers_by_bundle = $this->sqlConnection->query($query, $query_args)
+      ->fetchAll(\PDO::FETCH_NUM);
     foreach ($subscribers_by_bundle as [$entity_id, $count, $bundle]) {
       $data[$entity_id][$bundle] = $count;
     }

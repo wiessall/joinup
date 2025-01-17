@@ -15,24 +15,13 @@ use Drupal\og_menu\OgMenuInstanceInterface;
 /**
  * Manages the OG Menu links of custom pages.
  */
-class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterface {
+readonly class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterface {
 
-  /**
-   * Builds a new custom page OG menu links updater service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menuLinkManager
-   *   The menu link manager service.
-   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
-   *   Group menu manger.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected GroupMenuManagerInterface $groupMenuManager,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -21,17 +21,9 @@ class AcceptanceTasksForm extends FormBase {
 
   use MessageDigestTrait;
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
-   *   The queue service.
-   * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queueManager
-   *   The queue manager.
-   */
   public function __construct(
-    protected QueueFactory $queueFactory,
-    protected QueueWorkerManagerInterface $queueManager,
+    protected readonly QueueFactory $queueFactory,
+    protected readonly QueueWorkerManagerInterface $queueManager,
   ) {
   }
 

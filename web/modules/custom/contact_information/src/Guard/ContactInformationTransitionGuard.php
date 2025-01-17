@@ -19,13 +19,9 @@ class ContactInformationTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  /**
-   * Constructs an instance of the ContactInformationFulfillmentGuard service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged in user.
-   */
-  public function __construct(protected AccountInterface $currentUser) {}
+  public function __construct(
+    protected readonly AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

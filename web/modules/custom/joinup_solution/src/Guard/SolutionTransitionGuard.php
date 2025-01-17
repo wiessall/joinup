@@ -19,7 +19,9 @@ class SolutionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  public function __construct(protected AccountInterface $currentUser) {}
+  public function __construct(
+    protected readonly AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}

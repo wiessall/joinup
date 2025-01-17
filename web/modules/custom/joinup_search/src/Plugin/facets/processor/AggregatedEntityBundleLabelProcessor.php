@@ -22,46 +22,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @FacetsProcessor(
  *   id = "aggregated_entity_bundle_label",
  *   label = @Translation("Transform aggregated entity bundle into label"),
- *   description = @Translation("Replaces the bundle machine name with its label in aggregated fields. Use only on aggregated bundle field."),
- *   stages = {
+ *   description = @Translation("Replaces the bundle machine name with its
+ *   label in aggregated fields. Use only on aggregated bundle field."), stages
+ *   = {
  *     "build" = 5
  *   }
  * )
  */
 class AggregatedEntityBundleLabelProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
-
-  /**
-   * Constructs a new object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The entity type bundle info service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $bundle_info) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->bundleInfo = $bundle_info;
   }
 
   /**

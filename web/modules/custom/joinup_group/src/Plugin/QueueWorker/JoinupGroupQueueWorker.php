@@ -26,46 +26,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
-
-  /**
    * The group content queue.
    *
    * @var \Drupal\joinup_group\Queue\JoinupGroupQueue
    */
   protected $groupContentQueue;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The entity type bundle info service.
-   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
-   *   The queue factory service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $bundle_info, QueueFactory $queue_factory) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    readonly QueueFactory $queue_factory,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->bundleInfo = $bundle_info;
     $this->groupContentQueue = $queue_factory->get('joinup_group:group_content_update');
   }
 

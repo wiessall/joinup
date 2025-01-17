@@ -28,34 +28,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ArchiveAction extends StateActionBase {
 
-  /**
-   * Constructs object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   The workflow helper service.
-   */
   public function __construct(
     array $configuration,
-    string $pluginId,
-    $pluginDefinition,
-    protected RendererInterface $renderer,
-    protected TimeInterface $time,
-    protected AccountInterface $currentUser,
-    protected WorkflowHelperInterface $workflowHelper,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly RendererInterface $renderer,
+    protected readonly TimeInterface $time,
+    protected readonly AccountInterface $currentUser,
+    protected readonly WorkflowHelperInterface $workflowHelper,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

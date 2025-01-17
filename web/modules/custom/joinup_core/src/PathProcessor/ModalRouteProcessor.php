@@ -15,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Path processor which construct and reveals nice field view paths.
  */
-class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPathProcessorInterface {
+readonly class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPathProcessorInterface {
 
   /**
    * Separator to be used in the human friendly path.
@@ -39,10 +39,9 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
    */
   protected RouterInterface $router;
 
-  /**
-   * Constructs a new ModalRouteProcessor instance.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * Injects Path alias module's path processor.
