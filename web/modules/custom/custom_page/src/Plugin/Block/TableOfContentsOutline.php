@@ -32,27 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TableOfContentsOutline extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The og menu manager for custom pages.
-   *
-   * @var \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
-   */
-  protected $ogMenuManager;
-
-  /**
-   * The menu tree manager service.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
-   */
-  protected $menuLinkTree;
-
-  /**
-   * The active trail service.
-   *
-   * @var \Drupal\Core\Menu\MenuActiveTrailInterface
-   */
-  protected $activeTrail;
-
-  /**
    * The active link.
    *
    * @var \Drupal\Core\Menu\MenuLinkInterface|null
@@ -73,27 +52,15 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
    */
   protected $ogMenuInstance;
 
-  /**
-   * Constructs a new RecommendedContentBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $og_menu_manager
-   *   The og menu manager for custom pages.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
-   *   The menu tree manager service.
-   * @param \Drupal\Core\Menu\MenuActiveTrailInterface $active_trail
-   *   The active trail service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CustomPageOgMenuLinksManagerInterface $og_menu_manager, MenuLinkTreeInterface $menu_link_tree, MenuActiveTrailInterface $active_trail) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly CustomPageOgMenuLinksManagerInterface $ogMenuManager,
+    protected readonly MenuLinkTreeInterface $menuLinkTree,
+    protected readonly MenuActiveTrailInterface $activeTrail,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->ogMenuManager = $og_menu_manager;
-    $this->menuLinkTree = $menu_link_tree;
-    $this->activeTrail = $active_trail;
   }
 
   /**

@@ -25,37 +25,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class NewsletterSubscribeFormFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The form builder.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  protected $formBuilder;
-
-  /**
-   * Constructs a new NewsletterSubscribeFormFormatter object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder.
-   */
-  public function __construct(string $plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, string $label, string $view_mode, array $third_party_settings, FormBuilderInterface $form_builder) {
+  public function __construct(
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    string $label,
+    string $view_mode,
+    array $third_party_settings,
+    protected readonly FormBuilderInterface $formBuilder,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-
-    $this->formBuilder = $form_builder;
   }
 
   /**

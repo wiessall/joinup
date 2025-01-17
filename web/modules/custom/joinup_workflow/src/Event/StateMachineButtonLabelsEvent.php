@@ -19,44 +19,11 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class StateMachineButtonLabelsEvent extends Event implements StateMachineButtonLabelsEventInterface {
 
-  /**
-   * The entity having its state machine buttons relabeled.
-   *
-   * @var \Drupal\joinup_workflow\EntityWorkflowStateInterface
-   */
-  protected $entity;
-
-  /**
-   * The allowed transitions for the entity in its current workflow state.
-   *
-   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition[]
-   */
-  protected $transitions;
-
-  /**
-   * The current workflow state.
-   *
-   * @var string
-   */
-  protected $stateId;
-
-  /**
-   * Constructs a new StateMachineButtonLabelsEvent.
-   *
-   * @param \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity
-   *   The entity that is being edited and wants to know which labels to use for
-   *   their workflow transition buttons.
-   * @param \Drupal\state_machine\Plugin\Workflow\WorkflowTransition[] $transitions
-   *   The workflow transitions which are allowed for the current user in the
-   *   current workflow state of the entity.
-   * @param string $state_id
-   *   The current workflow state.
-   */
-  public function __construct(EntityWorkflowStateInterface $entity, array $transitions, string $state_id) {
-    $this->entity = $entity;
-    $this->transitions = $transitions;
-    $this->stateId = $state_id;
-  }
+  public function __construct(
+    protected readonly EntityWorkflowStateInterface $entity,
+    protected array $transitions,
+    protected readonly string $stateId,
+  ) {}
 
   /**
    * {@inheritdoc}

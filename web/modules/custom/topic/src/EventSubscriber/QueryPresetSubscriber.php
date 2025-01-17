@@ -16,13 +16,9 @@ class QueryPresetSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a QueryPresetSubscriber object.
-   *
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   *   The current route match.
-   */
-  public function __construct(protected RouteMatchInterface $routeMatch) {}
+  public function __construct(
+    protected readonly RouteMatchInterface $routeMatch,
+  ) {}
 
   /**
    * Alters the description for the query preset.

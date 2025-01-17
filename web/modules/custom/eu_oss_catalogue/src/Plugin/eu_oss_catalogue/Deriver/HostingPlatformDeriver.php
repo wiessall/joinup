@@ -17,14 +17,8 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a new deriver instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**

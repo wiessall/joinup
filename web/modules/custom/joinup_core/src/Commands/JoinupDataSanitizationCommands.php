@@ -27,11 +27,11 @@ use Symfony\Component\Console\Input\InputInterface;
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
 
   public function __construct(
-    protected Connection $db,
-    protected EntityFieldManagerInterface $entityFieldManager,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected KeyValueFactoryInterface $keyValue,
-    protected FieldTypePluginManagerInterface $fieldTypePluginManager,
+    protected readonly Connection $db,
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly KeyValueFactoryInterface $keyValue,
+    protected readonly FieldTypePluginManagerInterface $fieldTypePluginManager,
   ) {
     parent::__construct();
   }

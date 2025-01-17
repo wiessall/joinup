@@ -16,22 +16,9 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueFieldValueInBundleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Creates a new UniqueFieldValueInBundleValidator instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
-    $this->entityTypeManager = $entityTypeManager;
-  }
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}

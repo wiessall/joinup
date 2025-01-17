@@ -21,20 +21,8 @@ use Drupal\user\EntityOwnerInterface;
 /**
  * Provides helper methods for discovering fields, workflows and permissions.
  */
-class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInterface {
+readonly class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInterface {
 
-  /**
-   * Constructs a StateMachinePermissionsHelper object.
-   *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   The entity field manager service.
-   * @param \Drupal\state_machine\WorkflowGroupManagerInterface $workflowGroupManager
-   *   The workflow group manager service.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   The workflow manager service.
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The og access service.
-   */
   public function __construct(
     protected EntityFieldManagerInterface $entityFieldManager,
     protected WorkflowGroupManagerInterface $workflowGroupManager,

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * User role logger.
  */
-class UserRoleLogger implements ContainerInjectionInterface {
+readonly class UserRoleLogger implements ContainerInjectionInterface {
 
   public function __construct(
     protected LoggerChannelInterface $logger,

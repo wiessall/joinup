@@ -14,20 +14,8 @@ use Drupal\rdf_sync\RdfSyncConnectionInterface;
  *
  * This class is to be used for update purposes only.
  */
-class VocabularyManager {
+readonly class VocabularyManager {
 
-  /**
-   * Constructs a VocabularyManager object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlEndpoint
-   *   The SPARQL endpoint connection.
-   * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $metaEntityRepository
-   *   The meta_entity.repository service.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,

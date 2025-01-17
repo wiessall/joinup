@@ -15,7 +15,7 @@ use Drupal\eu_oss_catalogue\Model\GitUri;
  *
  * @internal
  */
-final class ApiGuesser implements ApiGuesserInterface {
+final readonly class ApiGuesser implements ApiGuesserInterface {
 
   /**
    * Storage key in State API.
@@ -24,16 +24,6 @@ final class ApiGuesser implements ApiGuesserInterface {
    */
   protected const STATE_STORAGE_KEY = 'eu_oss_catalogue.api_guesser.guessed';
 
-  /**
-   * Construct a new ApiGuesser instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $hostingPlatformManager
-   *   The hosting platform plugin manager.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel to use.
-   */
   public function __construct(
     protected EuOssCataloguePluginManagerInterface $hostingPlatformManager,
     protected StateInterface $state,

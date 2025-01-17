@@ -30,12 +30,12 @@ class MenuHelper implements MenuHelperInterface {
   use RedirectDestinationTrait;
 
   public function __construct(
-    protected LoggerChannelFactoryInterface $logger,
-    protected MenuLinkTreeInterface $menuLinkTree,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RequestStack $requestStack,
-    protected PathMatcherInterface $pathMatcher,
-    protected RdfSyncMapperInterface $mapper,
+    protected readonly LoggerChannelFactoryInterface $logger,
+    protected readonly MenuLinkTreeInterface $menuLinkTree,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RequestStack $requestStack,
+    protected readonly PathMatcherInterface $pathMatcher,
+    protected readonly RdfSyncMapperInterface $mapper,
   ) {}
 
   /**

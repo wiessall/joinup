@@ -32,34 +32,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new UserUnpublishedBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user proxy.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $currentRouteMatch
-   *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revisionManager
-   *   The revision manager service.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
-    protected AccountInterface $currentUser,
-    protected RouteMatchInterface $currentRouteMatch,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RevisionManagerInterface $revisionManager,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly AccountInterface $currentUser,
+    protected readonly RouteMatchInterface $currentRouteMatch,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RevisionManagerInterface $revisionManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**

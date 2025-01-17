@@ -11,18 +11,8 @@ use GuzzleHttp\ClientInterface;
 /**
  * Fetches feeds from GitHub.
  */
-class GitHubFeed implements GitHubFeedInterface {
+readonly class GitHubFeed implements GitHubFeedInterface {
 
-  /**
-   * Constructs a new GitHubFeed object.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory.
-   * @param \GuzzleHttp\ClientInterface $client
-   *   The Guzzle client.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger channel factory.
-   */
   public function __construct(
     protected ConfigFactoryInterface $configFactory,
     protected ClientInterface $client,

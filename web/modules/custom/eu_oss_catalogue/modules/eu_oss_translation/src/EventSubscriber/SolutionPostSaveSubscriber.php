@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Solution post save.
  */
-class SolutionPostSaveSubscriber implements EventSubscriberInterface {
+readonly class SolutionPostSaveSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected QueueFactory $queue,

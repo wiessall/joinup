@@ -34,22 +34,6 @@ class InviteToDiscussionForm extends InviteFormBase {
    */
   const TEMPLATE_DISCUSSION_INVITE = 'discussion_invite';
 
-  /**
-   * Constructs a new InviteToDiscussionForm object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
-   *   The helper service for creating messages for invitations.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   The event dispatcher.
-   * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscription
-   *   The subscription service.
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The OG access service.
-   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,
