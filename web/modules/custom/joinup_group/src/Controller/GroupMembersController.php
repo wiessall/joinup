@@ -27,20 +27,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GroupMembersController extends ControllerBase {
 
-  /**
-   * The OG access service.
-   */
-  protected OgAccessInterface $ogAccess;
-
-  /**
-   * Constructs a new OgAdminMembersController object.
-   *
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The OG access service.
-   */
-  public function __construct(OgAccessInterface $ogAccess) {
-    $this->ogAccess = $ogAccess;
-  }
+  public function __construct(
+    protected readonly OgAccessInterface $ogAccess,
+  ) {}
 
   /**
    * {@inheritdoc}

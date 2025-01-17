@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Migrates media videos to oEmbed.
  */
-final class MediaOembedMigrate implements ContainerInjectionInterface {
+final readonly class MediaOembedMigrate implements ContainerInjectionInterface {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,

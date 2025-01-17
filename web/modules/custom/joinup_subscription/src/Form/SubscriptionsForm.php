@@ -27,52 +27,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SubscriptionsForm extends FormBase {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
-
-  /**
-   * The Joinup group manager service.
-   *
-   * @var \Drupal\joinup_group\JoinupGroupManagerInterface
-   */
-  protected JoinupGroupManagerInterface $groupManager;
-
-  /**
-   * The OG membership manager.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * Constructs a new MySubscriptionsForm.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityTypeBundleInfo
-   *   The entity type bundle info service.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Joinup group manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The OG membership manager.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, JoinupGroupManagerInterface $groupManager, MembershipManagerInterface $membershipManager) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->entityTypeBundleInfo = $entityTypeBundleInfo;
-    $this->groupManager = $groupManager;
-    $this->membershipManager = $membershipManager;
-  }
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+    protected readonly JoinupGroupManagerInterface $groupManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+  ) {}
 
   /**
    * {@inheritdoc}

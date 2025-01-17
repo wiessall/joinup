@@ -17,34 +17,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class OutdatedContentThresholdForm extends ConfigFormBase {
 
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The entity type bundle info service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeBundleInfoInterface $bundle_info, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    readonly ConfigFactoryInterface $config_factory,
+    readonly EntityTypeBundleInfoInterface $bundleInfo,
+    readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($config_factory);
-    $this->bundleInfo = $bundle_info;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**

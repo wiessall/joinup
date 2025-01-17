@@ -24,11 +24,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DashboardForm extends FormBase {
 
   public function __construct(
-    protected StateInterface $state,
-    protected CacheBackendInterface $pageCache,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RdfSyncConnectionInterface $rdfSyncConnection,
-    protected Connection $db,
+    protected readonly StateInterface $state,
+    protected readonly CacheBackendInterface $pageCache,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RdfSyncConnectionInterface $rdfSyncConnection,
+    protected readonly Connection $db,
   ) {}
 
   /**

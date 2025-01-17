@@ -3,7 +3,7 @@
  * Draws the OSS Solution vitality index chart.
  */
 
-((once) => {
+((Drupal, once) => {
   Drupal.behaviors.joinupEuOssCatalogueVitalityIndexChart = {
     attach(context) {
       once(
@@ -77,4 +77,4 @@
       });
     },
   };
-})(once);
+})(Drupal, once);

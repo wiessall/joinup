@@ -10,7 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 /**
  * Represents a cached SPARQL read-only endpoint.
  */
-class CachedSparqlReadOnlyEndpoint {
+readonly class CachedSparqlReadOnlyEndpoint {
 
   public function __construct(
     protected SparqlReadOnlyEndpointInterface $sparqlReadOnlyEndpoint,

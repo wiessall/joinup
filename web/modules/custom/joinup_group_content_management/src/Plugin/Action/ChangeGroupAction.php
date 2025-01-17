@@ -71,32 +71,14 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    */
   protected array $pageMenuLinks = [];
 
-  /**
-   * Constructs a new 'joinup_change_group' action plugin.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selectionPluginManager
-   *   The selection plugin manager service.
-   * @param \Drupal\Core\Render\Renderer $renderer
-   *   The renderer service.
-   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager
-   *   The custom pages OG menu links manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    protected SelectionPluginManagerInterface $selectionPluginManager,
-    protected Renderer $renderer,
-    protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly SelectionPluginManagerInterface $selectionPluginManager,
+    protected readonly Renderer $renderer,
+    protected readonly CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

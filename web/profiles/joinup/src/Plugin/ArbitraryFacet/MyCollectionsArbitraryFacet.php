@@ -20,29 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class MyCollectionsArbitraryFacet extends ArbitraryFacetBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * Constructs a new MyCollectionsArbitraryFacet.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly AccountProxyInterface $currentUser,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->currentUser = $current_user;
   }
 
   /**

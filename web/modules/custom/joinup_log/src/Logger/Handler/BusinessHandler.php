@@ -27,9 +27,9 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
   protected array $records = [];
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected JoinupGroupManagerInterface $groupManager,
-    protected LogMessageParserInterface $parser,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly JoinupGroupManagerInterface $groupManager,
+    protected readonly LogMessageParserInterface $parser,
     Level $level = Level::Debug,
     bool $bubble = TRUE,
   ) {

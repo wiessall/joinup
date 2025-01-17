@@ -31,24 +31,11 @@ class UserPhotoCacheContext extends UserCacheContextBase implements CacheContext
    */
   const NO_PHOTO = 'no-user-photo';
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a UserPhotoCacheContext object.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
-  public function __construct(AccountInterface $user, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    AccountInterface $user,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($user);
-    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**

@@ -38,20 +38,10 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    */
   protected GroupInterface $group;
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The OG access service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStoreFactory
-   *   The private tempstore factory service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
-    protected OgAccessInterface $ogAccess,
-    protected PrivateTempStoreFactory $privateTempStoreFactory,
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly OgAccessInterface $ogAccess,
+    protected readonly PrivateTempStoreFactory $privateTempStoreFactory,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
   }

@@ -17,17 +17,9 @@ use Drush\Commands\DrushCommands;
  */
 class EuOssCatalogueCommands extends DrushCommands {
 
-  /**
-   * Constructs a new Drush commands class instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueInterface $euOssCatalogueService
-   *   The EU OSS Catalogue service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
-   *   The EU OSS Catalogue provider plugin manager service.
-   */
   public function __construct(
-    protected EuOssCatalogueInterface $euOssCatalogueService,
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    protected readonly EuOssCatalogueInterface $euOssCatalogueService,
+    protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {
     parent::__construct();
   }

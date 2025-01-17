@@ -3,9 +3,14 @@
  * Eif filter functionality.
  */
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.eifFilter = {
     attach() {
+      // We only want to check this on initial page load.
+      if (!once("eif-filter", "html").length) {
+        return;
+      }
+
       function checkEifCategories() {
         const eifTile = document.querySelectorAll(".eif-tile");
         // Remove hidden class before further processing.
@@ -53,6 +58,7 @@
         }
         counter.textContent = solutionsCount;
       }
+
       // Trigger if eif filter is clicked.
       document.querySelectorAll(".eif-filter__item button").forEach((el) => {
         el.addEventListener("click", (e) => {
@@ -73,10 +79,8 @@
         });
       }
 
-      // Filter on window load. Needed for eif search filter.
-      window.onload = () => {
-        checkEifCategories();
-      };
+      // Filter on initial page load.
+      checkEifCategories();
     },
   };
-})();
+})(Drupal, once);

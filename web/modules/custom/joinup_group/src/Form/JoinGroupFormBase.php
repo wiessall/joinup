@@ -10,7 +10,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -28,34 +27,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterface {
 
   use MembershipCreateTrait;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The access manager service.
-   *
-   * @var \Drupal\Core\Access\AccessManagerInterface
-   */
-  protected AccessManagerInterface $accessManager;
-
-  /**
-   * The form builder.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  protected FormBuilderInterface $formBuilder;
 
   /**
    * The group to join.
@@ -78,27 +49,13 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     return 'join_group_form';
   }
 
-  /**
-   * Constructs a JoinGroupFormBase.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The membership manager service.
-   * @param \Drupal\Core\Access\AccessManagerInterface $access_manager
-   *   The access manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, AccessManagerInterface $access_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $membership_manager;
-    $this->accessManager = $access_manager;
-    $this->messenger = $messenger;
-    $this->formBuilder = $form_builder;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected AccessManagerInterface $accessManager,
+    protected $messenger,
+    protected FormBuilderInterface $formBuilder,
+  ) {}
 
   /**
    * {@inheritdoc}

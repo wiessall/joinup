@@ -13,22 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class FileFields extends ControllerBase {
 
-  /**
-   * The entity field manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * Constructs a new FileFields controller.
-   *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager.
-   */
-  public function __construct(EntityFieldManagerInterface $entity_field_manager) {
-    $this->entityFieldManager = $entity_field_manager;
-  }
+  public function __construct(
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
+  ) {}
 
   /**
    * {@inheritdoc}

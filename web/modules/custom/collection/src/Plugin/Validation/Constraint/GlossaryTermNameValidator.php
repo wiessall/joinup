@@ -16,13 +16,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class GlossaryTermNameValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
-  /**
-   * Constructs a new constraint validator instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(protected readonly EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}

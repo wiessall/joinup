@@ -19,7 +19,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *   id = "add_content_block",
  *   admin_label = @Translation("Add content"),
  *   context_definitions = {
- *     "og" = @ContextDefinition("entity", label = @Translation("Organic group"))
+ *     "og" = @ContextDefinition("entity", label = @Translation("Organic
+ *   group"))
  *   },
  * )
  */
@@ -27,28 +28,13 @@ class AddContentBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
   use GroupPluginCacheTrait;
 
-  /**
-   * The event dispatcher service.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher service.
-   */
-  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EventDispatcherInterface $eventDispatcher,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**

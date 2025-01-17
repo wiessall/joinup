@@ -13,15 +13,11 @@ use Symfony\Component\Routing\Route;
 /**
  * Converts a list of SPDX IDs into a list of Joinup licences.
  */
-class SpdxIdsParamConverter implements ParamConverterInterface {
+readonly class SpdxIdsParamConverter implements ParamConverterInterface {
 
-  /**
-   * Constructs a new param converter service instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}

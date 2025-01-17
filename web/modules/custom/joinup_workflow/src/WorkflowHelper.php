@@ -31,29 +31,13 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a WorkflowHelper.
-   *
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The service that contains the current user.
-   * @param \Drupal\Core\Session\AccountSwitcherInterface $accountSwitcher
-   *   The account switcher interface.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   The entity field manager.
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The membership manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   */
   public function __construct(
-    protected AccountProxyInterface $currentUser,
-    protected AccountSwitcherInterface $accountSwitcher,
-    protected EntityFieldManagerInterface $entityFieldManager,
-    protected MembershipManagerInterface $membershipManager,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected TimeInterface $time,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly AccountSwitcherInterface $accountSwitcher,
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly TimeInterface $time,
   ) {}
 
   /**

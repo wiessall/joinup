@@ -21,19 +21,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class OssSoftwareBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new OssFooterBlock.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
-   *   The form builder.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected FormBuilderInterface $formBuilder) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly FormBuilderInterface $formBuilder,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
