@@ -25,21 +25,6 @@ settings:
       tile: tile
     negate: 0
     target_bundles_drag_drop:
-      1_column_layout:
-        weight: 27
-        enabled: false
-      2_column_featured_left:
-        weight: 28
-        enabled: false
-      2_column_featured_right:
-        weight: 29
-        enabled: false
-      2_column_layout:
-        weight: 30
-        enabled: false
-      3_column_layout:
-        weight: 31
-        enabled: false
       accordion:
         weight: 32
         enabled: false

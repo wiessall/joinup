@@ -71,21 +71,6 @@ settings:
       image_gallery: image_gallery
     negate: 0
     target_bundles_drag_drop:
-      1_column_layout:
-        weight: -39
-        enabled: false
-      2_column_featured_left:
-        weight: -35
-        enabled: false
-      2_column_featured_right:
-        weight: -34
-        enabled: false
-      2_column_layout:
-        weight: -38
-        enabled: false
-      3_column_layout:
-        weight: -36
-        enabled: false
       accordion:
         weight: -60
         enabled: true
