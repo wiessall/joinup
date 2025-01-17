@@ -14,14 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EuOssCatalogueController extends ControllerBase {
 
-  /**
-   * Constructs a new controller class instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
-   *   The EU OSS Catalogue providers plugin manager.
-   */
   public function __construct(
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {}
 
   /**

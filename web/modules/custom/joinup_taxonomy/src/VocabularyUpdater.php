@@ -106,29 +106,13 @@ class VocabularyUpdater {
    */
   private const RESULT = ['inserted' => 0, 'updated' => 0, 'deleted' => 0];
 
-  /**
-   * Constructs a new service instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $fieldManager
-   *   The entity field manager service.
-   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypeManager
-   *   The field type plugin manager service.
-   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
-   *   The RDF sync mapper service.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   The event dispatcher service.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected EntityFieldManagerInterface $fieldManager,
-    protected FieldTypePluginManagerInterface $fieldTypeManager,
-    protected RdfSyncMapper $mapper,
-    protected Connection $database,
-    protected EventDispatcherInterface $eventDispatcher,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityFieldManagerInterface $fieldManager,
+    protected readonly FieldTypePluginManagerInterface $fieldTypeManager,
+    protected readonly RdfSyncMapper $mapper,
+    protected readonly Connection $database,
+    protected readonly EventDispatcherInterface $eventDispatcher,
   ) {}
 
   /**

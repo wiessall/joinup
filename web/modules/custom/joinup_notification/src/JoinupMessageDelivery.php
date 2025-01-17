@@ -12,7 +12,7 @@ use Drupal\user\UserInterface;
 /**
  * Provides a service class for creating and delivering messages.
  */
-class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
+readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
 
   /**
    * A list of message digest notifier plugin IDs.
@@ -25,22 +25,9 @@ class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
     'monthly' => 'message_digest:monthly',
   ];
 
-  /**
-   * The message notifier service.
-   *
-   * @var \Drupal\message_notify\MessageNotifier
-   */
-  protected $messageNotifier;
-
-  /**
-   * Constructs a new Joinup deliver service object.
-   *
-   * @param \Drupal\message_notify\MessageNotifier $message_notifier
-   *   The message notifier service.
-   */
-  public function __construct(MessageNotifier $message_notifier) {
-    $this->messageNotifier = $message_notifier;
-  }
+  public function __construct(
+    protected MessageNotifier $messageNotifier,
+  ) {}
 
   /**
    * {@inheritdoc}

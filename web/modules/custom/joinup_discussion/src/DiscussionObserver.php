@@ -16,16 +16,11 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
  *
  * @see \Drupal\changed_fields\ObserverInterface
  */
-class DiscussionObserver implements ObserverInterface {
+readonly class DiscussionObserver implements ObserverInterface {
 
-  /**
-   * Builds a new discussion observer.
-   *
-   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $eventDispatcher
-   *   The event dispatcher service.
-   */
-  public function __construct(protected ContainerAwareEventDispatcher $eventDispatcher) {
-  }
+  public function __construct(
+    protected ContainerAwareEventDispatcher $eventDispatcher,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\taxonomy\TermInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
@@ -111,13 +110,9 @@ function joinup_test_install($is_syncing): void {
 
     ]);
     $collection->save();
-    \Drupal::state()->set('joinup_test.joinup_collection.created', TRUE);
 
-    $indexes = ContentEntity::getIndexesForEntity($collection);
-    foreach ($indexes as $index) {
-      $index->setOption('index_directly', TRUE);
-      $index->trackItemsUpdated('entity:node', [$collection->id() . ':en']);
-    }
+    \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
+    \Drupal::state()->set('joinup_test.joinup_collection.created', TRUE);
   }
 }
 

@@ -20,38 +20,24 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
    */
   protected EuOssCatalogueParserInterface $parser;
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS Catalogue parser plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    string $plugin_id,
+    mixed $plugin_definition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
     );

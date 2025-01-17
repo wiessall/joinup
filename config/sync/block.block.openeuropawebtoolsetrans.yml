@@ -36,5 +36,5 @@ visibility:
       - entity.taxonomy_term.delete_form
   request_path:
     id: request_path
-    negate: false
-    pages: "/interoperable-europe/news/*\r\n/interoperable-europe/event/*\r\n"
+    negate: true
+    pages: /interoperable-europe

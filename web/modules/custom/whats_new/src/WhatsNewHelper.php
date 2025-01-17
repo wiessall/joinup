@@ -14,64 +14,15 @@ use Drupal\user\UserDataInterface;
 /**
  * Helper service for the whats_new module.
  */
-class WhatsNewHelper implements WhatsNewHelperInterface {
+readonly class WhatsNewHelper implements WhatsNewHelperInterface {
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The user data service.
-   *
-   * @var \Drupal\user\UserDataInterface
-   */
-  protected $userData;
-
-  /**
-   * The cache tag invalidator service.
-   *
-   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
-   */
-  protected $invalidator;
-
-  /**
-   * The path alias manager service.
-   *
-   * @var \Drupal\path_alias\AliasManagerInterface
-   */
-  protected $aliasManager;
-
-  /**
-   * Constructs a WhatsNewHelper object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user object.
-   * @param \Drupal\user\UserDataInterface $user_data
-   *   The user data service.
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $invalidator
-   *   The cache tag invalidator service.
-   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
-   *   The path alias manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, UserDataInterface $user_data, CacheTagsInvalidatorInterface $invalidator, AliasManagerInterface $alias_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
-    $this->userData = $user_data;
-    $this->invalidator = $invalidator;
-    $this->aliasManager = $alias_manager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected AccountProxyInterface $currentUser,
+    protected UserDataInterface $userData,
+    protected CacheTagsInvalidatorInterface $invalidator,
+    protected AliasManagerInterface $aliasManager,
+  ) {}
 
   /**
    * {@inheritdoc}

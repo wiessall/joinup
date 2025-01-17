@@ -47,32 +47,14 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   protected Request $currentRequest;
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory service.
-   * @param \Drupal\user\UserDataInterface $userData
-   *   The user data service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\externalauth\Authmap $authmap
-   *   The authmap service.
-   */
   public function __construct(
-    ConfigFactoryInterface $configFactory,
-    protected UserDataInterface $userData,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    RequestStack $requestStack,
-    protected MessengerInterface $messenger,
-    protected StateInterface $state,
-    protected Authmap $authmap,
+    readonly ConfigFactoryInterface $configFactory,
+    protected readonly UserDataInterface $userData,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    readonly RequestStack $requestStack,
+    protected readonly MessengerInterface $messenger,
+    protected readonly StateInterface $state,
+    protected readonly Authmap $authmap,
   ) {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
     $this->casSettings = $configFactory->get('cas.settings');

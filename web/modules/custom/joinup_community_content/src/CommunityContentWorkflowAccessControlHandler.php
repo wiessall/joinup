@@ -23,24 +23,8 @@ use Drupal\og\MembershipManagerInterface;
  *
  * @todo Describe the permissions here or in a readme.
  */
-class CommunityContentWorkflowAccessControlHandler {
+readonly class CommunityContentWorkflowAccessControlHandler {
 
-  /**
-   * Constructs a new CommunityContentWorkflowAccessControlHandler.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The OG membership manager service.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged in user.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The configuration factory service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
-   *   The workflow helper service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger service.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MembershipManagerInterface $membershipManager,

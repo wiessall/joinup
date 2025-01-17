@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class QueryForm extends FormBase {
 
   public function __construct(
-    protected SparqlFormatManager $sparqlFormatManager,
+    protected readonly SparqlFormatManager $sparqlFormatManager,
   ) {}
 
   /**

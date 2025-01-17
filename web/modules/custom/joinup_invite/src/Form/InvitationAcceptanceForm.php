@@ -52,8 +52,8 @@ class InvitationAcceptanceForm extends FormBase {
   const string ACTION_REJECT = 'reject';
 
   public function __construct(
-    protected EventDispatcherInterface $eventDispatcher,
-    protected CurrentRouteMatch $currentRouteMatch,
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly CurrentRouteMatch $currentRouteMatch,
   ) {}
 
   /**

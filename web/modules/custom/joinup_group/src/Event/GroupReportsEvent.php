@@ -13,28 +13,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 class GroupReportsEvent extends Event implements GroupReportsEventInterface {
 
   /**
-   * The group for which the group reports are being collected.
-   *
-   * @var \Drupal\joinup_group\Entity\GroupInterface
-   */
-  protected $group;
-
-  /**
    * The group reports that have been added by event subscribers.
    *
    * @var \Drupal\joinup_group\Event\GroupReport[]
    */
   protected $groupReports;
 
-  /**
-   * Constructs a GroupReportsEvent.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group for which the group reports are being collected.
-   */
-  public function __construct(GroupInterface $group) {
-    $this->group = $group;
-  }
+  public function __construct(
+    protected readonly GroupInterface $group,
+  ) {}
 
   /**
    * {@inheritdoc}

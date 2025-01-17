@@ -33,7 +33,11 @@ class FilterPluginManager extends DefaultPluginManager implements FilterPluginMa
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    \Traversable $namespaces,
+    CacheBackendInterface $cache_backend,
+    ModuleHandlerInterface $module_handler,
+  ) {
     parent::__construct('Plugin/SearchApiField/Filter', $namespaces, $module_handler, FilterPluginInterface::class, SearchApiFieldFilter::class);
 
     $this->alterInfo('search_api_field_filter_info');
