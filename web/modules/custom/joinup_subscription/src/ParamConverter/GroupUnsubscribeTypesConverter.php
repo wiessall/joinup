@@ -17,22 +17,11 @@ use Symfony\Component\Routing\Route;
  * This converter runs after paramconverter.entity, so the group and user
  * parameters are already converted at this point.
  */
-class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
+readonly class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
 
-  /**
-   * The OG membership manager service.
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * Constructs a new parameter converter service instance.
-   *
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The OG membership manager service.
-   */
-  public function __construct(MembershipManagerInterface $membership_manager) {
-    $this->membershipManager = $membership_manager;
-  }
+  public function __construct(
+    protected MembershipManagerInterface $membershipManager,
+  ) {}
 
   /**
    * {@inheritdoc}

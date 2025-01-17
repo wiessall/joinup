@@ -12,9 +12,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Response subscriber to handle finished responses for the anonymous user.
  */
-class EndpointResponseSubscriber implements EventSubscriberInterface {
+readonly class EndpointResponseSubscriber implements EventSubscriberInterface {
 
-  public function __construct(protected EndpointTracker $endpointTracker) {}
+  public function __construct(
+    protected EndpointTracker $endpointTracker,
+  ) {}
 
   /**
    * {@inheritdoc}

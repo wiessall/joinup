@@ -19,18 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Listens to normalization of release entities for RDF format encoding.
  */
-final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
+final readonly class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
-   *   The mapper service.
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
-   *   The SPARQL connection.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory.
-   */
   public function __construct(
     protected RdfSyncMapper $mapper,
     protected RdfSyncConnectionInterface $sparqlConnection,

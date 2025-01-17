@@ -20,13 +20,7 @@ class CollectionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  /**
-   * Instantiates a CollectionFulfillmentGuard service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged-in user.
-   */
-  public function __construct(protected AccountInterface $currentUser) {}
+  public function __construct(protected readonly AccountInterface $currentUser) {}
 
   /**
    * {@inheritdoc}

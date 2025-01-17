@@ -27,14 +27,8 @@ class HostingPlatformConfigForm extends EntityForm {
 
   use AjaxFormHelperTrait;
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The code hosting platform plugin manager.
-   */
   public function __construct(
-    protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected readonly EuOssCataloguePluginManagerInterface $platformManager,
   ) {}
 
   /**

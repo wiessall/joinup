@@ -31,26 +31,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   ]
 class JoinupContent extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Creates a new JoinupContent instance.
-   *
-   * @param array $configuration
-   *   The plugin configuration.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   *   Route match service.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected RouteMatchInterface $routeMatch,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

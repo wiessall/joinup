@@ -7,50 +7,29 @@
 
 namespace Drupal\custom_page\ProxyClass {
 
-    /**
+  use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+  use Symfony\Component\DependencyInjection\ContainerInterface;
+
+  /**
      * Provides a proxy class for \Drupal\custom_page\CustomPageOgMenuLinksManager.
      *
      * @see \Drupal\Component\ProxyBuilder
      */
     class CustomPageOgMenuLinksManager implements \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
     {
+        use DependencySerializationTrait;
 
-        use \Drupal\Core\DependencyInjection\DependencySerializationTrait;
+      /**
+       * The real proxied service, after it was lazy loaded.
+       *
+       * @var \Drupal\custom_page\CustomPageOgMenuLinksManager
+       */
+      protected $service;
 
-        /**
-         * The id of the original proxied service.
-         *
-         * @var string
-         */
-        protected $drupalProxyOriginalServiceId;
-
-        /**
-         * The real proxied service, after it was lazy loaded.
-         *
-         * @var \Drupal\custom_page\CustomPageOgMenuLinksManager
-         */
-        protected $service;
-
-        /**
-         * The service container.
-         *
-         * @var \Symfony\Component\DependencyInjection\ContainerInterface
-         */
-        protected $container;
-
-        /**
-         * Constructs a ProxyClass Drupal proxy object.
-         *
-         * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-         *   The container.
-         * @param string $drupalProxyOriginalServiceId
-         *   The service ID of the original service.
-         */
-        public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container, $drupalProxyOriginalServiceId)
-        {
-            $this->container = $container;
-            $this->drupalProxyOriginalServiceId = $drupalProxyOriginalServiceId;
-        }
+      public function __construct(
+          readonly ContainerInterface $container,
+          readonly string $drupalProxyOriginalServiceId,
+        ) {}
 
         /**
          * Lazy loads the real service from the container.

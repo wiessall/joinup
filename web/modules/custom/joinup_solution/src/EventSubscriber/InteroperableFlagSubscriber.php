@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Interoperable flag subscriber.
  */
-class InteroperableFlagSubscriber implements EventSubscriberInterface {
+readonly class InteroperableFlagSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected ContentEntityTrackingManager $trackingManager,

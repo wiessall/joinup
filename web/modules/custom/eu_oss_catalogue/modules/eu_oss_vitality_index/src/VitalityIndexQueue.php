@@ -12,7 +12,7 @@ use Drupal\Core\Queue\QueueInterface;
 /**
  * Implements Vitality index queue service.
  */
-class VitalityIndexQueue implements VitalityIndexQueueInterface {
+readonly class VitalityIndexQueue implements VitalityIndexQueueInterface {
 
   /**
    * Queue name.

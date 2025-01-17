@@ -22,13 +22,10 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * Constructs a ContentCreationOgSubscriber object.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected AccountProxyInterface $currentUser,
-    protected MembershipManagerInterface $ogMembershipManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly MembershipManagerInterface $ogMembershipManager,
   ) {}
 
   /**

@@ -15,17 +15,9 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
  */
 class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
 
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Plugin\Context\ContextProviderInterface $releaseContext
-   *   The asset release route context service.
-   */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
-    protected ContextProviderInterface $releaseContext,
+    protected readonly ContextProviderInterface $releaseContext,
   ) {
     parent::__construct($entityTypeManager);
   }

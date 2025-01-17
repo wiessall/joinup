@@ -15,13 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class SparqlConsoleForm extends FormBase {
 
-  /**
-   * The SPARQL endpoint.
-   *
-   * @var \Drupal\rdf_sync\RdfSyncConnectionInterface $endpoint
-   *   The SPARQL endpoint.
-   */
-  public function __construct(protected RdfSyncConnectionInterface $endpoint) {}
+  public function __construct(
+    protected readonly RdfSyncConnectionInterface $endpoint,
+  ) {}
 
   /**
    * {@inheritdoc}

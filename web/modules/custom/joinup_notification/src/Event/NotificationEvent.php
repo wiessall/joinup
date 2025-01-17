@@ -13,38 +13,16 @@ use Symfony\Contracts\EventDispatcher\Event;
 class NotificationEvent extends Event {
 
   /**
-   * The operation string.
-   *
-   * @var string
-   */
-  protected $operation;
-
-  /**
-   * The entity object.
-   *
-   * @var \Drupal\Core\Entity\EntityInterface
-   */
-  protected $entity;
-
-  /**
    * If the event succeeded.
    *
    * @var bool
    */
   protected $success = TRUE;
 
-  /**
-   * Constructs a notification event object.
-   *
-   * @param string $operation
-   *   The operation.
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity object.
-   */
-  public function __construct(string $operation, EntityInterface $entity) {
-    $this->operation = $operation;
-    $this->entity = $entity;
-  }
+  public function __construct(
+    protected string $operation,
+    protected EntityInterface $entity,
+  ) {}
 
   /**
    * Returns the operation string.

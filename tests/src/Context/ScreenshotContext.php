@@ -20,15 +20,9 @@ use Behat\MinkExtension\Context\RawMinkContext;
  */
 class ScreenshotContext extends RawMinkContext {
 
-  /**
-   * Constructs a new ScreenshotContext context.
-   *
-   * @param string $localDir
-   *   Directory where the screenshots are saved.
-   *
-   * @see behat.yml.dist
-   */
-  public function __construct(protected readonly string $localDir) {}
+  public function __construct(
+    protected readonly string $localDir,
+  ) {}
 
   /**
    * Saves a screenshot under a given name.

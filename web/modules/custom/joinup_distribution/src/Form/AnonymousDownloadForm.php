@@ -30,20 +30,10 @@ class AnonymousDownloadForm extends FormBase {
    */
   protected FileInterface $file;
 
-  /**
-   * Instantiates a new AnonymousDownloadForm object.
-   *
-   * @param \Drupal\node\NodeStorageInterface $nodeStorage
-   *   The RDF entity storage.
-   * @param \Drupal\Core\Entity\ContentEntityStorageInterface $eventStorage
-   *   The download event entity storage.
-   * @param \Drupal\file\FileUsage\FileUsageInterface $fileUsage
-   *   The file usage service.
-   */
   public function __construct(
-    protected NodeStorageInterface $nodeStorage,
-    protected ContentEntityStorageInterface $eventStorage,
-    protected FileUsageInterface $fileUsage,
+    protected readonly NodeStorageInterface $nodeStorage,
+    protected readonly ContentEntityStorageInterface $eventStorage,
+    protected readonly FileUsageInterface $fileUsage,
   ) {}
 
   /**

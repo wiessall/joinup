@@ -8,9 +8,12 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiBaseFacetSource;
+use Drupal\facets\QueryType\QueryTypePluginManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\ResultSetInterface;
+use Drupal\search_api\Utility\QueryHelper;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -34,25 +37,11 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
   protected $configFactory;
 
   /**
-   * The current path stack.
-   *
-   * @var \Drupal\Core\Path\CurrentPathStack
-   */
-  protected $currentPathStack;
-
-  /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface|null
    */
   protected $entityTypeManager;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
 
   /**
    * The typed data manager.
@@ -61,14 +50,16 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
    */
   protected $typedDataManager;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, $query_type_plugin_manager, $search_results_cache, RequestStack $request_stack, CurrentPathStack $current_path_stack) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    readonly array $plugin_definition,
+    readonly QueryTypePluginManager $query_type_plugin_manager,
+    readonly QueryHelper $search_results_cache,
+    protected readonly RequestStack $requestStack,
+    protected readonly CurrentPathStack $currentPathStack,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $query_type_plugin_manager, $search_results_cache);
-
-    $this->currentPathStack = $current_path_stack;
-    $this->requestStack = $request_stack;
   }
 
   /**

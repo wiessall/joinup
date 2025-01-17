@@ -12,24 +12,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to config save event.
  */
-class OutdatedContentConfigSubscriber implements EventSubscriberInterface {
+readonly class OutdatedContentConfigSubscriber implements EventSubscriberInterface {
 
-  /**
-   * The entity field manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * Constructs a new event subscriber instance.
-   *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager service.
-   */
-  public function __construct(EntityFieldManagerInterface $entity_field_manager) {
-    $this->entityFieldManager = $entity_field_manager;
-  }
+  public function __construct(
+    protected EntityFieldManagerInterface $entityFieldManager,
+  ) {}
 
   /**
    * {@inheritdoc}

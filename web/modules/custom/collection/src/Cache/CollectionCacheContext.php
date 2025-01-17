@@ -14,15 +14,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * Cache context ID: 'collection'.
  */
-class CollectionCacheContext implements CacheContextInterface {
+readonly class CollectionCacheContext implements CacheContextInterface {
 
-  /**
-   * Constructs a new CollectionCacheContext service.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   */
-  public function __construct(protected RequestStack $requestStack) {}
+  public function __construct(
+    protected RequestStack $requestStack,
+  ) {}
 
   /**
    * {@inheritdoc}

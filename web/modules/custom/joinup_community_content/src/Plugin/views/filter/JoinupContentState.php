@@ -23,32 +23,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupContentState extends State {
 
-  /**
-   * Constructs a new joinup content state object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
-   *   The workflow manager service.
-   * @param \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper
-   *   State machine permissions helper.
-   */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    EntityFieldManagerInterface $entity_field_manager,
-    protected WorkflowManagerInterface $workflowManager,
-    protected StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper,
+    string $plugin_id,
+    mixed $plugin_definition,
+    readonly EntityTypeManagerInterface $entity_type_manager,
+    readonly EntityFieldManagerInterface $entity_field_manager,
+    protected readonly WorkflowManagerInterface $workflowManager,
+    protected readonly StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager);
   }

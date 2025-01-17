@@ -20,54 +20,15 @@ use Drupal\og\OgMembershipInterface;
 /**
  * Helper methods related to the Joinup groups.
  */
-class JoinupGroupManager implements JoinupGroupManagerInterface {
+readonly class JoinupGroupManager implements JoinupGroupManagerInterface {
 
-  /**
-   * The entity type manager.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The OG membership manager service.
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The current user.
-   */
-  protected AccountInterface $currentUser;
-
-  /**
-   * The OG access service.
-   */
-  protected OgAccessInterface $ogAccess;
-
-  /**
-   * The Organic Groups context service.
-   */
-  protected OgContextInterface $ogContext;
-
-  /**
-   * Constructs a JoinupRelationshipManager object.
-   *
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The OG membership manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\og\OgContextInterface $og_context
-   *   The Organic Groups context service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
-   */
-  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, OgContextInterface $og_context, AccountInterface $current_user, OgAccessInterface $og_access) {
-    $this->membershipManager = $membershipManager;
-    $this->entityTypeManager = $entityTypeManager;
-    $this->ogContext = $og_context;
-    $this->currentUser = $current_user;
-    $this->ogAccess = $og_access;
-  }
+  public function __construct(
+    protected MembershipManagerInterface $membershipManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected OgContextInterface $ogContext,
+    protected AccountInterface $currentUser,
+    protected OgAccessInterface $ogAccess,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -132,7 +93,7 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
     }
 
     return $site_access
-        // Check the OG permission.
+      // Check the OG permission.
       ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
       ->addCacheableDependency($group)
       ->addCacheContexts(['og_role']);

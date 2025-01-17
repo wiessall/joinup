@@ -18,24 +18,11 @@ use Drupal\Core\Url;
  */
 class CanInviteToDiscussionCacheContext extends UserCacheContextBase implements CacheContextInterface {
 
-  /**
-   * The current route match service.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $routeMatch;
-
-  /**
-   * Constructs a new CanInviteToDiscussionCacheContext service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The current user.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The current route match service.
-   */
-  public function __construct(AccountInterface $user, RouteMatchInterface $route_match) {
+  public function __construct(
+    AccountInterface $user,
+    protected readonly RouteMatchInterface $routeMatch,
+  ) {
     parent::__construct($user);
-    $this->routeMatch = $route_match;
   }
 
   /**

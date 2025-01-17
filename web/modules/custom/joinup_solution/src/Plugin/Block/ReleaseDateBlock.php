@@ -30,26 +30,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class ReleaseDateBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a release date.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
-   *   The route match service.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
-   *   The date/time formatter service.
-   */
   public function __construct(
     array $configuration,
     string $pluginId,
     mixed $pluginDefinition,
-    protected RouteMatchInterface $routeMatch,
-    protected DateFormatterInterface $dateFormatter,
+    protected readonly RouteMatchInterface $routeMatch,
+    protected readonly DateFormatterInterface $dateFormatter,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

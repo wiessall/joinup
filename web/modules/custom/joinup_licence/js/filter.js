@@ -6,9 +6,15 @@
  * items and hides tiles accordingly, updates visible tiles counter.
  */
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.licenceFilter = {
     attach() {
+      // Ensure the licence_filter_block is present.
+      const selector = ".block-licence-filter-block";
+      if (!once("licence-filter", selector).length) {
+        return;
+      }
+
       function checkLicenceCategories() {
         const licenceTile = document.querySelectorAll(".licence-tile");
 
@@ -135,7 +141,9 @@
         licenceSearchInput.value = "";
         checkLicenceCategories();
       });
+
+      // Filter on initial page load.
       checkLicenceCategories();
     },
   };
-})();
+})(Drupal, once);

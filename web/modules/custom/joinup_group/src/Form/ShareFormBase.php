@@ -41,29 +41,13 @@ abstract class ShareFormBase extends FormBase {
    */
   protected FieldableEntityInterface $entity;
 
-  /**
-   * Constructs a new ShareContentFormBase object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The OG membership manager.
-   * @param \Drupal\og\OgRoleManagerInterface $roleManager
-   *   The OG role manager service.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user account.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
-   *   The bundle info service.
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $invalidator
-   *   The cache tag invalidator service.
-   */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-    protected MembershipManagerInterface $membershipManager,
-    protected OgRoleManagerInterface $roleManager,
-    protected AccountInterface $currentUser,
-    protected EntityTypeBundleInfoInterface $bundleInfo,
-    protected CacheTagsInvalidatorInterface $invalidator,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly OgRoleManagerInterface $roleManager,
+    protected readonly AccountInterface $currentUser,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    protected readonly CacheTagsInvalidatorInterface $invalidator,
   ) {}
 
   /**

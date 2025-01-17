@@ -12,22 +12,9 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 abstract class DiscussionEventBase extends Event {
 
-  /**
-   * The discussion node.
-   *
-   * @var \Drupal\joinup_discussion\Entity\DiscussionInterface
-   */
-  protected $node;
-
-  /**
-   * Creates a new discussion event object.
-   *
-   * @param \Drupal\joinup_discussion\Entity\DiscussionInterface $node
-   *   The discussion node subject of event.
-   */
-  public function __construct(DiscussionInterface $node) {
-    $this->node = $node;
-  }
+  public function __construct(
+    protected DiscussionInterface $node,
+  ) {}
 
   /**
    * Returns the discussion node.

@@ -22,39 +22,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EventsArbitraryFacet extends ArbitraryFacetBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The facet date handler helper service.
-   *
-   * @var \Drupal\facets\Utility\FacetsDateHandler
-   */
-  protected $facetDateHandler;
-
-  /**
-   * Constructs a new EventsArbitraryFacet object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user.
-   * @param \Drupal\facets\Utility\FacetsDateHandler $facets_date_handler
-   *   The facet date handler helper service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user, FacetsDateHandler $facets_date_handler) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly FacetsDateHandler $facetDateHandler,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->currentUser = $current_user;
-    $this->facetDateHandler = $facets_date_handler;
   }
 
   /**

@@ -36,29 +36,12 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
    */
   protected OgMembershipInterface|null $membership = NULL;
 
-  /**
-   * Constructs a new confirmation form object.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   * @param \Drupal\Core\Action\ActionManager $actionPluginManager
-   *   The action plugin manager.
-   * @param \Drupal\og\MembershipManagerInterface $membershipManager
-   *   The OG membership manager.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
-   *   The tempstore factory.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   If the entity storage of 'og_membership' is not found.
-   */
   public function __construct(
-    protected AccountInterface $currentUser,
-    protected RendererInterface $renderer,
-    protected ActionManager $actionPluginManager,
-    protected MembershipManagerInterface $membershipManager,
-    protected PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly AccountInterface $currentUser,
+    protected readonly RendererInterface $renderer,
+    protected readonly ActionManager $actionPluginManager,
+    protected readonly MembershipManagerInterface $membershipManager,
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
   ) {
     $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
 

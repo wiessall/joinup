@@ -12,16 +12,11 @@ use Drupal\og_menu\OgMenuInstanceInterface;
 /**
  * Provides implementation of "joinup_group.group_menu_manager" service.
  */
-class GroupMenuManager implements GroupMenuManagerInterface {
+readonly class GroupMenuManager implements GroupMenuManagerInterface {
 
-  /**
-   * Builds a new custom group menu manager service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}

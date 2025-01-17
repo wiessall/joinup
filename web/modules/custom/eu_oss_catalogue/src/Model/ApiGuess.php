@@ -9,14 +9,6 @@ namespace Drupal\eu_oss_catalogue\Model;
  */
 class ApiGuess {
 
-  /**
-   * Constructs a new value object.
-   *
-   * @param string $pluginId
-   *   The guessed code hosting platform plugin ID.
-   * @param string $baseUrl
-   *   The code hosting platform base URL.
-   */
   public function __construct(
     public readonly string $pluginId,
     public readonly string $baseUrl,

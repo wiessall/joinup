@@ -17,20 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GroupSettingsController extends ControllerBase {
 
-  /**
-   * The OG access service.
-   */
-  protected OgAccessInterface $ogAccess;
-
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
-   */
-  public function __construct(OgAccessInterface $og_access) {
-    $this->ogAccess = $og_access;
-  }
+  public function __construct(
+    protected readonly OgAccessInterface $ogAccess,
+  ) {}
 
   /**
    * {@inheritdoc}

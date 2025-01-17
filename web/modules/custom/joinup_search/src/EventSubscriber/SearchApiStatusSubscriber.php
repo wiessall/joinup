@@ -16,15 +16,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Alter a search query when status 'archived' is enabled.
  */
-class SearchApiStatusSubscriber implements EventSubscriberInterface {
+readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
 
-  /**
-   * Constructs a new SearchApiStatusSubscriber object.
-   *
-   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facetManager
-   *   The facet manager.
-   */
-  public function __construct(protected DefaultFacetManager $facetManager) {}
+  public function __construct(
+    protected DefaultFacetManager $facetManager,
+  ) {}
 
   /**
    * {@inheritdoc}
