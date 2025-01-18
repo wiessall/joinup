@@ -1,0 +1,472 @@
+diff --git a/core/lib/Drupal/Core/Layout/LayoutDefault.php b/core/lib/Drupal/Core/Layout/LayoutDefault.php
+index bd3780987a..af53e46687 100644
+--- a/core/lib/Drupal/Core/Layout/LayoutDefault.php
++++ b/core/lib/Drupal/Core/Layout/LayoutDefault.php
+@@ -3,12 +3,14 @@
+ namespace Drupal\Core\Layout;
+ 
+ use Drupal\Component\Utility\NestedArray;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Plugin\ContextAwarePluginAssignmentTrait;
+ use Drupal\Core\Plugin\ContextAwarePluginTrait;
+ use Drupal\Core\Plugin\PluginBase;
+ use Drupal\Core\Plugin\PluginFormInterface;
+ use Drupal\Core\Plugin\PreviewAwarePluginInterface;
++use Drupal\Core\Render\Element;
+ 
+ /**
+  * Provides a default class for Layout plugins.
+@@ -44,20 +46,45 @@ public function __construct(array $configuration, $plugin_id, $plugin_definition
+    * {@inheritdoc}
+    */
+   public function build(array $regions) {
++    $cacheable_metadata = new CacheableMetadata();
+     // Ensure $build only contains defined regions and in the order defined.
+     $build = [];
+     foreach ($this->getPluginDefinition()->getRegionNames() as $region_name) {
+       if (array_key_exists($region_name, $regions)) {
+-        $build[$region_name] = $regions[$region_name];
++        foreach ($regions[$region_name] as $uuid => $block) {
++          // Remove empty blocks from the list but retain their cache metadata.
++          if (Element::isEmpty($block)) {
++            $cacheable_metadata->addCacheableDependency(CacheableMetadata::createFromRenderArray($block));
++            unset($regions[$region_name][$uuid]);
++          }
++        }
++        if (!empty($regions[$region_name])) {
++          $build[$region_name] = $regions[$region_name];
++        }
+       }
+     }
++
++    // Check for presence of layout_builder_tempstore parameter option.
++    // _layout_builder and _admin_route didn't offer complete coverage.
++    $temp_store = FALSE;
++    if (!empty(\Drupal::routeMatch()->getRouteObject()->getOption('parameters')) && isset(\Drupal::routeMatch()->getRouteObject()->getOption('parameters')['section_storage'])) {
++      $temp_store = \Drupal::routeMatch()->getRouteObject()->getOption('parameters')['section_storage']['layout_builder_tempstore'];
++    }
++
++    // Only add the theme info if there is something to render.
++    if ($build || $temp_store) {
++      $build['#theme'] = $this->pluginDefinition->getThemeHook();
++      if ($library = $this->pluginDefinition->getLibrary()) {
++        $build['#attached']['library'][] = $library;
++      }
++    }
++
++    // Always add the relevant metadata.
+     $build['#in_preview'] = $this->inPreview;
+     $build['#settings'] = $this->getConfiguration();
+     $build['#layout'] = $this->pluginDefinition;
+-    $build['#theme'] = $this->pluginDefinition->getThemeHook();
+-    if ($library = $this->pluginDefinition->getLibrary()) {
+-      $build['#attached']['library'][] = $library;
+-    }
++    $cacheable_metadata->applyTo($build);
++
+     return $build;
+   }
+ 
+diff --git a/core/modules/field_layout/tests/src/Unit/FieldLayoutBuilderTest.php b/core/modules/field_layout/tests/src/Unit/FieldLayoutBuilderTest.php
+index 34d78abdba..360216df4c 100644
+--- a/core/modules/field_layout/tests/src/Unit/FieldLayoutBuilderTest.php
++++ b/core/modules/field_layout/tests/src/Unit/FieldLayoutBuilderTest.php
+@@ -4,8 +4,10 @@
+ 
+ namespace Drupal\Tests\field_layout\Unit;
+ 
++use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\field_layout\Display\EntityDisplayWithLayoutInterface;
+ use Drupal\field_layout\FieldLayoutBuilder;
+ use Drupal\Core\Layout\LayoutPluginManagerInterface;
+@@ -13,6 +15,8 @@
+ use Drupal\Core\Layout\LayoutDefinition;
+ use Drupal\Tests\UnitTestCase;
+ use Prophecy\Argument;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\Routing\Route;
+ 
+ /**
+  * @coversDefaultClass \Drupal\field_layout\FieldLayoutBuilder
+@@ -72,6 +76,11 @@ protected function setUp(): void {
+     $this->entityFieldManager = $this->prophesize(EntityFieldManagerInterface::class);
+ 
+     $this->fieldLayoutBuilder = new FieldLayoutBuilder($this->layoutPluginManager->reveal(), $this->entityFieldManager->reveal());
++
++    \Drupal::setContainer(new ContainerBuilder());
++    $route_matcher = $this->prophesize(RouteMatchInterface::class);
++    $route_matcher->getRouteObject()->willReturn(new Route('layout_builder.add_section'));
++    \Drupal::getContainer()->set('current_route_match', $route_matcher->reveal());
+   }
+ 
+   /**
+@@ -145,17 +154,22 @@ public function testBuildView(): void {
+             '#markup' => 'Test1',
+           ],
+         ],
+-        '#in_preview' => FALSE,
+-        '#settings' => [
+-          'label' => '',
+-        ],
+-        '#layout' => $this->pluginDefinition,
+         '#theme' => 'layout__twocol',
+         '#attached' => [
+           'library' => [
+             'field_layout/drupal.layout.twocol',
+           ],
+         ],
++        '#in_preview' => FALSE,
++        '#settings' => [
++          'label' => '',
++        ],
++        '#layout' => $this->pluginDefinition,
++        '#cache' => [
++          'contexts' => [],
++          'tags' => [],
++          'max-age' => CacheBackendInterface::CACHE_PERMANENT,
++        ],
+       ],
+     ];
+     $this->fieldLayoutBuilder->buildView($build, $display->reveal());
+@@ -246,17 +260,22 @@ public function testBuildForm(): void {
+           '#process' => ['\Drupal\Core\Render\Element\RenderElementBase::processGroup'],
+           '#pre_render' => ['\Drupal\Core\Render\Element\RenderElementBase::preRenderGroup'],
+         ],
+-        '#in_preview' => FALSE,
+-        '#settings' => [
+-          'label' => '',
+-        ],
+-        '#layout' => $this->pluginDefinition,
+         '#theme' => 'layout__twocol',
+         '#attached' => [
+           'library' => [
+             'field_layout/drupal.layout.twocol',
+           ],
+         ],
++        '#in_preview' => FALSE,
++        '#settings' => [
++          'label' => '',
++        ],
++        '#layout' => $this->pluginDefinition,
++        '#cache' => [
++          'contexts' => [],
++          'tags' => [],
++          'max-age' => CacheBackendInterface::CACHE_PERMANENT,
++        ],
+       ],
+     ];
+     $this->fieldLayoutBuilder->buildForm($build, $display->reveal());
+diff --git a/core/modules/layout_builder/tests/modules/layout_builder_test/src/Plugin/Layout/LayoutBuilderTestPlugin.php b/core/modules/layout_builder/tests/modules/layout_builder_test/src/Plugin/Layout/LayoutBuilderTestPlugin.php
+index c0b16b56b7..38abb0b34e 100644
+--- a/core/modules/layout_builder/tests/modules/layout_builder_test/src/Plugin/Layout/LayoutBuilderTestPlugin.php
++++ b/core/modules/layout_builder/tests/modules/layout_builder_test/src/Plugin/Layout/LayoutBuilderTestPlugin.php
+@@ -24,12 +24,11 @@ class LayoutBuilderTestPlugin extends LayoutDefault {
+    * {@inheritdoc}
+    */
+   public function build(array $regions) {
+-    $build = parent::build($regions);
+-    $build['main']['#attributes']['class'][] = 'go-birds';
++    $regions['main']['#attributes']['class'][] = 'go-birds';
+     if ($this->inPreview) {
+-      $build['main']['#attributes']['class'][] = 'go-birds-preview';
++      $regions['main']['#attributes']['class'][] = 'go-birds-preview';  
+     }
+-    return $build;
++    return parent::build($regions);
+   }
+ 
+ }
+diff --git a/core/modules/layout_builder/tests/src/Functional/LayoutBuilderTest.php b/core/modules/layout_builder/tests/src/Functional/LayoutBuilderTest.php
+index 1f62f0a38b..744d435bf1 100644
+--- a/core/modules/layout_builder/tests/src/Functional/LayoutBuilderTest.php
++++ b/core/modules/layout_builder/tests/src/Functional/LayoutBuilderTest.php
+@@ -199,11 +199,12 @@ public function testLayoutBuilderUi(): void {
+     $assert_session->buttonExists('Add section');
+     $page->pressButton('Add section');
+     $page->pressButton('Save');
++    // Since the section is empty nothing should render.
+     $assert_session->pageTextNotContains('The first node body');
+     $assert_session->pageTextNotContains('Powered by Drupal');
+     $assert_session->pageTextNotContains('Extra, Extra read all about it.');
+     $assert_session->pageTextNotContains('Placeholder for the "Extra label" field');
+-    $assert_session->pageTextContains(sprintf('Yes, I can access the entity %s in two column', Node::load(1)->label()));
++    $assert_session->pageTextNotContains(sprintf('Yes, I can access the entity %s in two column', Node::load(1)->label()));
+ 
+     // Assert that overrides cannot be turned off while overrides exist.
+     $this->drupalGet("$field_ui_prefix/display/default");
+diff --git a/core/modules/layout_builder/tests/src/Functional/LayoutSectionTest.php b/core/modules/layout_builder/tests/src/Functional/LayoutSectionTest.php
+index 3988454611..538345fc35 100644
+--- a/core/modules/layout_builder/tests/src/Functional/LayoutSectionTest.php
++++ b/core/modules/layout_builder/tests/src/Functional/LayoutSectionTest.php
+@@ -303,6 +303,10 @@ protected function assertLayoutSection($expected_selector, $expected_content, st
+     // Find the given selector.
+     foreach ((array) $expected_selector as $selector) {
+       $element = $this->cssSelect($selector);
++      if (empty($expected_content)) {
++        $this->assertEmpty($element);
++        continue;
++      }
+       $this->assertNotEmpty($element);
+     }
+ 
+diff --git a/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderFieldLayoutCompatibilityTest.php b/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderFieldLayoutCompatibilityTest.php
+index 613d76acbd..567b9fe3fe 100644
+--- a/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderFieldLayoutCompatibilityTest.php
++++ b/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderFieldLayoutCompatibilityTest.php
+@@ -65,14 +65,14 @@ public function testCompatibility(): void {
+ 
+     // The rendered entity has now changed. The non-configurable field is shown
+     // outside the layout, the configurable field is not shown at all, and the
+-    // layout itself is rendered (but empty).
++    // layout itself is not rendered.
+     $new_expected_fields = [
+       'field field--name-name field--type-string field--label-hidden field__item',
+       'clearfix text-formatted field field--name-test-display-non-configurable field--type-text field--label-above',
+       'clearfix text-formatted field field--name-test-display-multiple field--type-text field--label-above',
+     ];
+     $this->assertFieldAttributes($this->entity, $new_expected_fields);
+-    $this->assertNotEmpty($this->cssSelect('.layout--onecol'));
++    $this->assertEmpty($this->cssSelect('.layout--onecol'));
+ 
+     // Removing the layout restores the original rendering of the entity.
+     $field_list->removeAllSections();
+diff --git a/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderInstallTest.php b/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderInstallTest.php
+index 6baa0f769d..208556ba49 100644
+--- a/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderInstallTest.php
++++ b/core/modules/layout_builder/tests/src/Kernel/LayoutBuilderInstallTest.php
+@@ -43,14 +43,14 @@ public function testCompatibility(): void {
+ 
+     // The rendered entity has now changed. The non-configurable field is shown
+     // outside the layout, the configurable field is not shown at all, and the
+-    // layout itself is rendered (but empty).
++    // layout itself is not rendered.
+     $new_expected_fields = [
+       'field field--name-name field--type-string field--label-hidden field__item',
+       'clearfix text-formatted field field--name-test-display-non-configurable field--type-text field--label-above',
+       'clearfix text-formatted field field--name-test-display-multiple field--type-text field--label-above',
+     ];
+     $this->assertFieldAttributes($this->entity, $new_expected_fields);
+-    $this->assertNotEmpty($this->cssSelect('.layout--onecol'));
++    $this->assertEmpty($this->cssSelect('.layout--onecol'));
+ 
+     // Removing the layout restores the original rendering of the entity.
+     $this->entity->get(OverridesSectionStorage::FIELD_NAME)->removeAllSections();
+diff --git a/core/modules/layout_discovery/tests/src/Kernel/LayoutTest.php b/core/modules/layout_discovery/tests/src/Kernel/LayoutTest.php
+index f27f709820..667271c968 100644
+--- a/core/modules/layout_discovery/tests/src/Kernel/LayoutTest.php
++++ b/core/modules/layout_discovery/tests/src/Kernel/LayoutTest.php
+@@ -105,7 +105,9 @@ public static function renderLayoutData() {
+       [],
+       [
+         'content' => [
+-          '#markup' => 'This is the content',
++          'block-uuid-first' => [
++            '#markup' => 'This is the content',
++          ],            
+         ],
+       ],
+       $html,
+@@ -125,10 +127,14 @@ public static function renderLayoutData() {
+       [],
+       [
+         'top' => [
+-          '#process' => [[static::class, 'processCallback']],
++          'block-uuid-first' => [
++            '#process' => [[static::class, 'processCallback']],
++          ],            
+         ],
+         'bottom' => [
+-          '#markup' => 'This is the bottom',
++          'block-uuid-second' => [
++            '#markup' => 'This is the bottom',
++          ],            
+         ],
+       ],
+       $html,
+@@ -148,10 +154,14 @@ public static function renderLayoutData() {
+       [],
+       [
+         'top' => [
+-          '#markup' => 'This is the top',
++          'block-uuid-first' => [
++            '#markup' => 'This is the top',
++          ],            
+         ],
+         'bottom' => [
+-          '#markup' => 'This is the bottom',
++          'block-uuid-second' => [
++            '#markup' => 'This is the bottom',
++          ],            
+         ],
+       ],
+       $html,
+@@ -171,10 +181,14 @@ public static function renderLayoutData() {
+       [],
+       [
+         'top' => [
+-          '#markup' => 'This is the top',
++          'block-uuid-first' => [
++            '#markup' => 'This is the top',
++          ],            
+         ],
+         'bottom' => [
+-          '#markup' => 'This is the bottom',
++          'block-uuid-second' => [
++            '#markup' => 'This is the bottom',
++          ],            
+         ],
+       ],
+       $html,
+@@ -194,10 +208,14 @@ public static function renderLayoutData() {
+       [],
+       [
+         'left' => [
+-          '#markup' => 'This is the left',
++          'block-uuid-first' => [
++            '#markup' => 'This is the left',
++          ],            
+         ],
+         'right' => [
+-          '#markup' => 'This is the right',
++          'block-uuid-second' => [
++            '#markup' => 'This is the right',
++          ],
+         ],
+       ],
+       $html,
+@@ -220,7 +238,9 @@ public static function renderLayoutData() {
+       ],
+       [
+         'main' => [
+-          '#markup' => 'Main region',
++          'block-uuid-first' => [
++            '#markup' => 'Main region',
++          ],            
+         ],
+       ],
+       $html,
+diff --git a/core/tests/Drupal/Tests/Core/Layout/LayoutDefaultTest.php b/core/tests/Drupal/Tests/Core/Layout/LayoutDefaultTest.php
+index 7ab62f52c1..8bd57d567b 100644
+--- a/core/tests/Drupal/Tests/Core/Layout/LayoutDefaultTest.php
++++ b/core/tests/Drupal/Tests/Core/Layout/LayoutDefaultTest.php
+@@ -4,9 +4,13 @@
+ 
+ namespace Drupal\Tests\Core\Layout;
+ 
++use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Layout\LayoutDefault;
+ use Drupal\Core\Layout\LayoutDefinition;
++use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\Tests\UnitTestCase;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\Routing\Route;
+ 
+ /**
+  * @coversDefaultClass \Drupal\Core\Layout\LayoutDefault
+@@ -19,6 +23,11 @@ class LayoutDefaultTest extends UnitTestCase {
+    * @dataProvider providerTestBuild
+    */
+   public function testBuild($regions, $expected): void {
++    \Drupal::setContainer(new ContainerBuilder());
++    $route_matcher = $this->prophesize(RouteMatchInterface::class);
++    $route_matcher->getRouteObject()->willReturn(new Route('layout_builder.add_section'));
++    \Drupal::getContainer()->set('current_route_match', $route_matcher->reveal());
++
+     $definition = new LayoutDefinition([
+       'theme_hook' => 'layout',
+       'library' => 'core/drupal',
+@@ -37,33 +46,52 @@ public function testBuild($regions, $expected): void {
+         'label' => '',
+       ],
+       '#layout' => $definition,
+-      '#theme' => 'layout',
+-      '#attached' => [
+-        'library' => [
+-          'core/drupal',
+-        ],
++      '#cache' => [
++        'contexts' => [],
++        'tags' => [],
++        'max-age' => Cache::PERMANENT,      
+       ],
+     ];
+ 
+     $layout = new LayoutDefault([], '', $definition);
+-    $this->assertSame($expected, $layout->build($regions));
++    $this->assertEquals($expected, $layout->build($regions));
+   }
+ 
+   /**
+    * Provides test data for ::testBuild().
+    */
+   public static function providerTestBuild() {
+-    $data = [];
++    // Sections with only empty blocks are not printed, but their cache info is.
++    $data['empty_blocks'] = [
++      [
++        'right' => [
++          ['#cache' => ['max-age' => 4133]],
++        ],
++      ],
++      [
++        '#cache' => [
++          'contexts' => [],
++          'tags' => [],
++          'max-age' => 4133,
++        ],
++      ],
++    ];      
+     // Empty regions are not added.
+     $data['right_only'] = [
+       [
+         'right' => [
+-          'foo' => 'bar',
++          ['foo' => 'bar'],
+         ],
+       ],
+       [
+         'right' => [
+-          'foo' => 'bar',
++          ['foo' => 'bar'],
++        ],
++        '#theme' => 'layout',
++        '#attached' => [
++          'library' => [
++            'core/drupal',
++          ],            
+         ],
+       ],
+     ];
+@@ -71,18 +99,24 @@ public static function providerTestBuild() {
+     $data['switched_order'] = [
+       [
+         'right' => [
+-          'foo' => 'bar',
++          ['foo' => 'bar'],
+         ],
+         'left' => [
+-          'foo' => 'baz',
++          ['foo' => 'baz'],
+         ],
+       ],
+       [
+         'left' => [
+-          'foo' => 'baz',
++          ['foo' => 'baz'],
+         ],
+         'right' => [
+-          'foo' => 'bar',
++          ['foo' => 'bar'],
++        ],
++        '#theme' => 'layout',
++        '#attached' => [
++          'library' => [
++            'core/drupal',
++          ],
+         ],
+       ],
+     ];
