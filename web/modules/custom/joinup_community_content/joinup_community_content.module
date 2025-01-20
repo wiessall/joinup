@@ -102,9 +102,14 @@ function joinup_community_content_form_node_form_alter(&$form, FormStateInterfac
     return;
   }
 
-  $form['custom_notice'] = [
+  $form['contribution_notice'] = [
     '#type' => 'markup',
-    '#markup' => '<div class="custom-notice"> Before submitting your contribution, please ensure it adheres to the Portal’s <a href="https://interoperable-europe.ec.europa.eu/contribution-rules"> contribution rules.</a></div>',
+    '#markup' => t('Before submitting your contribution, please ensure it adheres to the Portal’s <a href=":url">contribution rules</a>.', [
+      ':url' => Url::fromUri('internal:/contribution-rules')
+        ->toString(),
+    ]),
+    '#prefix' => '<div class="contribution-notice">',
+    '#suffix' => '</div>',
     '#weight' => -10,
   ];
 
