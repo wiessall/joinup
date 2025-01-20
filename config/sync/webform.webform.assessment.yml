@@ -47,21 +47,21 @@ elements: |-
         Austria: Austria
         Belgium: Belgium
         Bulgaria: Bulgaria
+        Croatia: Croatia
         Cyprus: Cyprus
         'Czech Republic': 'Czech Republic'
-        Germany: Germany
         Denmark: Denmark
-        Spain: Spain
+        Estonia: Estonia
         Finland: Finland
         France: France
+        Germany: Germany
         Greece: Greece
-        Croatia: Croatia
         Hungary: Hungary
         Ireland: Ireland
         Italy: Italy
+        Latvia: Latvia
         Lithuania: Lithuania
         Luxembourg: Luxembourg
-        Latvia: Latvia
         Malta: Malta
         Netherlands: Netherlands
         Poland: Poland
@@ -69,6 +69,7 @@ elements: |-
         Romania: Romania
         'Slovak Republic': 'Slovak Republic'
         Slovenia: Slovenia
+        Spain: Spain
         Sweden: Sweden
       '#states':
         visible:
@@ -333,21 +334,21 @@ elements: |-
             Austria: Austria
             Belgium: Belgium
             Bulgaria: Bulgaria
+            Croatia: Croatia
             Cyprus: Cyprus
             'Czech Republic': 'Czech Republic'
-            Germany: Germany
             Denmark: Denmark
-            Spain: Spain
+            Estonia: Estonia
             Finland: Finland
             France: France
+            Germany: Germany
             Greece: Greece
-            Croatia: Croatia
             Hungary: Hungary
             Ireland: Ireland
             Italy: Italy
+            Latvia: Latvia
             Lithuania: Lithuania
             Luxembourg: Luxembourg
-            Latvia: Latvia
             Malta: Malta
             Netherlands: Netherlands
             Poland: Poland
@@ -355,6 +356,7 @@ elements: |-
             Romania: Romania
             'Slovak Republic': 'Slovak Republic'
             Slovenia: Slovenia
+            Spain: Spain
             Sweden: Sweden
           '#title': 'Choose a country'
     cross_border_interoperability_effects:
