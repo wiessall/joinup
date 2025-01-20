@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-a @javascript
 Feature:
   As a Portal's collection owner or facilitator,
   I want to add a calendar with all Portal's events in my collection,
