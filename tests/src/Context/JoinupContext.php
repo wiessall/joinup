@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
@@ -2038,32 +2039,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Cleans up orphaned content in non clone group.
-   *
-   * @AfterScenario ~@group-clone
-   *
-   * @todo Remove this in ISAICP-9358
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
-   */
-  public function cleanLeftoverContent(AfterScenarioScope $event): void {
-    // Delete data that are not created through the behat API.
-    $query = \Drupal::database()->select('node_field_data', 'n');
-    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
-    $query->fields('n', ['nid']);
-    $query->isNull('u.uid');
-    // Avoid deleting default content that belong to the anonymous user or user
-    // 1 in tests.
-    $query->condition('n.uid', 1, '>');
-    $nids = $query->execute()->fetchCol();
-
-    if (!empty($nids)) {
-      $storage = \Drupal::entityTypeManager()->getStorage('node');
-      $nodes = $storage->loadMultiple($nids);
-      $storage->delete($nodes);
-    }
-  }
-
-  /**
    * Assert that a given attribute is not set for a given element in a region.
    *
    * @Then I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)
@@ -3022,6 +2997,96 @@ class JoinupContext extends RawDrupalContext {
    */
   public function insulateScenario(): void {
     $this->getMink()->stopSessions();
+  }
+
+  /**
+   * A list of entities to cleanup.
+   *
+   * @var string[]
+   */
+  const array CLEANUP_ENTITY_TYPES = [
+    'comment',
+    'entity_legal_document_acceptance',
+    'entity_legal_document_version',
+    'media',
+    'menu_link_content',
+    'message',
+    'meta_entity',
+    'node',
+    'node',
+    'ogmenu_instance',
+    'path_alias',
+    'taxonomy_term',
+    'user',
+    'user',
+  ];
+
+  /**
+   * Stores most recent IDs of entity types that should be cleaned up.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
+   *   The scenario scope.
+   *
+   * @BeforeScenario
+   */
+  public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
+    foreach (self::CLEANUP_ENTITY_TYPES as $entity_type) {
+      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
+      $id_key = $entity_type->getKey('id');
+      $state_key = 'behat_cleanup_' . $entity_type->id();
+      $id = \Drupal::state()->get($state_key, NULL);
+      // Escape early if there is a value in the database, as it means that the
+      // test ended abruptly, and by keeping it, we clean entities from the
+      // previous executions as well.
+      if ($id !== NULL) {
+        continue;
+      }
+
+      // Get the latest ID of the entity type in the database.
+      $ids = \Drupal::entityQuery($entity_type->id())
+        ->accessCheck(FALSE)
+        ->sort($id_key, 'DESC')
+        ->range(0, 1)
+        ->execute();
+
+      // Store the ID in the state.
+      \Drupal::state()->set($state_key, $ids ? reset($ids) : 0);
+    }
+  }
+
+  /**
+   * Cleans up entities created during the scenario.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The scenario scope.
+   *
+   * @AfterScenario
+   */
+  public function afterScenarioCleanupEntities(AfterScenarioScope $scope): void {
+    foreach (self::CLEANUP_ENTITY_TYPES as $entity_type) {
+      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
+      $id_key = $entity_type->getKey('id');
+      $state_key = 'behat_cleanup_' . $entity_type->id();
+      $id = \Drupal::state()->get($state_key, NULL);
+      if ($id === NULL) {
+        continue;
+      }
+
+      // Delete all entities created during the scenario.
+      $ids = \Drupal::entityQuery($entity_type->id())
+        ->accessCheck(FALSE)
+        ->condition($id_key, $id, '>')
+        ->execute();
+
+      if ($ids) {
+        $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
+        $entities = $storage->loadMultiple($ids);
+        $storage->delete($entities);
+      }
+
+      // Reset the state.
+      \Drupal::state()->delete($state_key);
+    }
   }
 
 }
