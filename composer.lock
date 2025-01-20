@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "64a785d8ec7813940003166fbd5b5d4a",
+    "content-hash": "8f48cdcb57b8ae00a32b75b2fb1f9e4a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7182,25 +7182,26 @@
         },
         {
             "name": "drupal/private_message",
-            "version": "3.0.4",
+            "version": "4.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message.git",
-                "reference": "3.0.4"
+                "reference": "4.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.4.zip",
-                "reference": "3.0.4",
-                "shasum": "954e2faeb07b8ee962bdcc937bffe8c6e3fc3e68"
+                "url": "https://ftp.drupal.org/files/projects/private_message-4.0.0-alpha1.zip",
+                "reference": "4.0.0-alpha1",
+                "shasum": "0b80cb93c4cbc59b899d67a245109077ad8c0cd7"
             },
             "require": {
-                "drupal/core": "^10 || ^11",
+                "drupal/core": "^10.3 || ^11",
                 "drupal/message": "^1.0",
                 "drupal/message_notify": "^1.0",
                 "php": ">=8.1"
             },
             "require-dev": {
+                "drupal/coder": "8.3.26",
                 "drupal/message_notify": "*",
                 "drupal/rules": "^4.0",
                 "drupal/symfony_mailer_lite": "^2.0",
@@ -7209,11 +7210,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.4",
-                    "datestamp": "1732206629",
+                    "version": "4.0.0-alpha1",
+                    "datestamp": "1737363714",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -25412,17 +25413,24 @@
             "time": "2021-07-07T17:59:50+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "drupal/private_message",
+            "version": "4.0.0.0-alpha1",
+            "alias": "3.0.5",
+            "alias_normalized": "3.0.5.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/block_field": 5,
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
-        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
+        "drupal/masquerade": 5,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
