@@ -1,1528 +1,669 @@
 /**
  * @file
  * Configures BCL builder to generate assets.
+ *
+ * @see https://github.com/openeuropa/bootstrap-component-library/tree/development/builder
  */
 const path = require("path");
 
-const outputFolder = path.resolve(__dirname);
-const nodeModules = "./node_modules";
+const isProd = process.env.NODE_ENV === "production";
 
-const ventuno = "web/themes/ventuno/";
-const iop = "web/themes/iop/";
+// Project paths configuration.
+const paths = {
+  baseDir: path.resolve(__dirname),
+  nodeModules: path.resolve(__dirname, "node_modules"),
+  themes: {
+    ventuno: path.resolve(__dirname, "web/themes/ventuno/"),
+    iop: path.resolve(__dirname, "web/themes/iop/"),
+  },
+};
 
-// SCSS includePaths
-const includePaths = [nodeModules];
+/**
+ * Helper to build BCL builder objects (scripts / styles).
+ *
+ * @param {Object} params
+ *   Object containing:
+ *   - {string} sourceFolder: Base folder for entry paths.
+ *   - {string} destFolder: Base folder for dest paths.
+ *   - {Object} defaultOptions: Default options applied to all objects.
+ *   - {Array<Object>} objects: Array of config objects, each with:
+ *     - {string} entry: Path to the source file, from sourceFolder.
+ *     - {string} dest: Path to the destination file, from destFolder.
+ *     - {Object} options: Optional object-specific options merged with defaults.
+ *
+ * @return {Array<Object>}
+ *   Array of resolved objects.
+ */
+const buildAssetEntries = ({
+  sourceFolder,
+  destFolder,
+  defaultOptions,
+  objects,
+}) =>
+  objects.map(({ entry, dest, options = {} }) => ({
+    entry: path.resolve(sourceFolder, entry),
+    dest: path.resolve(destFolder, dest),
+    options: {
+      ...defaultOptions,
+      ...options,
+    },
+  }));
 
 module.exports = {
   scripts: [
-    // Ventuno
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/ajax-throbber.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/ajax-throbber.js`),
-      options: {
+    // Ventuno.
+    ...buildAssetEntries({
+      sourceFolder: path.resolve(paths.themes.ventuno, "src/js/"),
+      destFolder: path.resolve(paths.themes.ventuno, "assets/js/"),
+      defaultOptions: {
         minify: true,
-        sourceMap: true,
+        sourceMap: !isProd,
       },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/alert.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/alert.js`),
-      options: {
+      objects: [
+        {
+          entry: "ajax-throbber.js",
+          dest: "ajax-throbber.js",
+        },
+        {
+          entry: "alert.js",
+          dest: "alert.js",
+        },
+        {
+          entry: "checkbox.js",
+          dest: "checkbox.js",
+        },
+        {
+          entry: "navbar-hover-dropdown.js",
+          dest: "navbar-hover-dropdown.js",
+        },
+        {
+          entry: "mmenu-nav.js",
+          dest: "mmenu-nav.js",
+        },
+        {
+          entry: "explore-block.js",
+          dest: "explore-block.js",
+        },
+        {
+          entry: "fieldset-show-more.js",
+          dest: "fieldset-show-more.js",
+        },
+        {
+          entry: "highlight-invalid-fields.js",
+          dest: "highlight-invalid-fields.js",
+        },
+        {
+          entry: "carousel.js",
+          dest: "carousel.js",
+        },
+        {
+          entry: "paragraph-inline-img.js",
+          dest: "paragraph-inline-img.js",
+        },
+        {
+          entry: "responsive-tables.js",
+          dest: "responsive-tables.js",
+        },
+        {
+          entry: "searchbox-focus.js",
+          dest: "searchbox-focus.js",
+        },
+        {
+          entry: "shared-entity.js",
+          dest: "shared-entity.js",
+        },
+        {
+          entry: "show-accordion-invalid-fields.js",
+          dest: "show-accordion-invalid-fields.js",
+        },
+        {
+          entry: "toggle-text-seemore-btn.js",
+          dest: "toggle-text-seemore-btn.js",
+        },
+        {
+          entry: "tour-first-balloon.js",
+          dest: "tour-first-balloon.js",
+        },
+        {
+          entry: "og-navigation.js",
+          dest: "og-navigation.js",
+        },
+        {
+          entry: "sticky-groupheader.js",
+          dest: "sticky-groupheader.js",
+        },
+      ],
+    }),
+    // IOP.
+    ...buildAssetEntries({
+      sourceFolder: path.resolve(paths.themes.iop, "src/js/"),
+      destFolder: path.resolve(paths.themes.iop, "assets/js/"),
+      defaultOptions: {
         minify: true,
-        sourceMap: true,
+        sourceMap: !isProd,
       },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/checkbox.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/checkbox.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/navbar-hover-dropdown.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/navbar-hover-dropdown.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/mmenu-nav.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/mmenu-nav.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/explore-block.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/explore-block.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/fieldset-show-more.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/fieldset-show-more.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/highlight-invalid-fields.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/highlight-invalid-fields.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/carousel.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/carousel.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/paragraph-inline-img.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/paragraph-inline-img.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/responsive-tables.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/responsive-tables.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/searchbox-focus.js`),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/searchbox-focus.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/shared-entity.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/shared-entity.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/show-accordion-invalid-fields.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/show-accordion-invalid-fields.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/toggle-text-seemore-btn.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/toggle-text-seemore-btn.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/tour-first-balloon.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/tour-first-balloon.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/og-navigation.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/og-navigation.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/sticky-groupheader.js`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/sticky-groupheader.js`,
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    // IOP
-    {
-      entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),
-      dest: path.resolve(outputFolder, `${iop}assets/js/glide.js`),
-      options: {
-        name: "glide",
-        minify: true,
-        sourceMap: true,
-      },
-    },
+      objects: [
+        {
+          entry: "glide.js",
+          dest: "glide.js",
+        },
+      ],
+    }),
   ],
   styles: [
-    // Ventuno
-    // Base (SMACSS)
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/01-base.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/base.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Layout (SMACSS)
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/02-layout.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/layout.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Components (SMACSS)
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/full-width-bg.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/full-width-bg.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/03-components.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/components.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Emails
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/emails/mail.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: false,
-      },
-    },
-    // Theme (SMACSS)
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/04-theme.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/theme.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Pages
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/homepage.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/homepage.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/oss-landing.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-landing.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/oss-solution-full.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-solution-full.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/searchpage.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/searchpage.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/licence-comparer.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/licence-comparer.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/pages/glossary.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/glossary.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/pages/group.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/group.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Components
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/abstract.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/abstract.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/accordion.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/accordion.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/actions-menu.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/actions-menu.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/alert.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/alert.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/modules/align-module.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/align-module.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/badge.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/badge.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/button-group.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/button-group.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/close.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/close.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/comments.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/comments.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/eif-filter.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/eif-filter.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/etrans.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/etrans.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/ajax-throbber.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/ajax-throbber.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/fieldset-show-more.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/fieldset-show-more.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/footer.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/footer.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/form-simple-checkboxes.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/form-simple-checkboxes.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/forms.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/forms.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/webform.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/webform.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/group-banner.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/group-banner.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/header-topic.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/header-topic.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/ief-entity-table.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/ief-entity-table.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/layout-block.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/layout-block.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/licence-filter.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/licence-filter.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/listing-grid.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/listing-grid.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/menu--og--navigation.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/menu--og--navigation.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/modals.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/modals.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/nav.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/nav.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/mmenu.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/mmenu.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/navbar-search.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/navbar-search.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/navbar.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/navbar.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/navigation-bottom.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/navigation-bottom.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/page-title.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/page-title.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/pagination.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/pagination.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/carousel.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/image-gallery.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/image-gallery.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/oss-solution-indicator.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-solution-indicator.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/oss-solution-screenshots-carousel.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-solution-screenshots-carousel.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--heading.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--heading.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--layout.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--layout.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--poll.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--social-media.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--social-media.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--testimony.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--tiles.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--tiles.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--video.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--video.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/releases.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/releases.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/share-content-form.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/share-content-form.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/see-more.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/see-more.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/spinners.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/spinners.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/table-files.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/table-files.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/tabledrag.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/tabledrag.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/tables.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tables.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/tabs.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tabs.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/tile.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tile.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/timeline.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/timeline.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/toolbar.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/toolbar.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/tour.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tour.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/user--group-header.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/user--group-header.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Layout Paragraphs - buidler UI.
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/layout-paragraphs--builder.min.css`,
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Editor.
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/editor.layout-paragraphs.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/editor.layout-paragraphs.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // IOP
-    // Components (SMACSS)
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/03-components.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/components.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // Theme (SMACSS)
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/04-theme.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/theme.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // Pages
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/pages/landing.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/landing.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/pages/listing.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/listing.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // Components
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/accordion-faq.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/accordion-faq.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/call-to-action.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/call-to-action.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/components/join.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/join.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/navbar.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${iop}assets/css/navbar.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/page-header.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${iop}assets/css/page-header.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--call-to-action.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--call-to-action.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--carousel.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--carousel.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--image.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--image.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--layout.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--testimony.scss`,
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--testimony.min.css`,
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, `${iop}src/scss/components/tile.scss`),
-      dest: path.resolve(outputFolder, `${iop}assets/css/tile.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/pagination.scss`,
-      ),
-      dest: path.resolve(outputFolder, `${iop}assets/css/pagination.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
+    // Ventuno.
+    ...buildAssetEntries({
+      sourceFolder: path.resolve(paths.themes.ventuno, "src/scss/"),
+      destFolder: path.resolve(paths.themes.ventuno, "assets/css/"),
+      defaultOptions: {
+        includePaths: [paths.nodeModules],
+        minify: true,
+        sourceMap: isProd ? false : "file",
+      },
+      objects: [
+        // Base (SMACSS)
+        {
+          entry: "01-base.scss",
+          dest: "base.min.css",
+        },
+        // Layout (SMACSS)
+        {
+          entry: "02-layout.scss",
+          dest: "layout.min.css",
+        },
+        // Components (SMACSS)
+        {
+          entry: "components/full-width-bg.scss",
+          dest: "full-width-bg.min.css",
+        },
+        {
+          entry: "03-components.scss",
+          dest: "components.min.css",
+        },
+        // Emails
+        {
+          entry: "emails/mail.scss",
+          dest: "emails/mail.min.css",
+        },
+        // Theme (SMACSS)
+        {
+          entry: "04-theme.scss",
+          dest: "theme.min.css",
+        },
+        // Pages
+        {
+          entry: "pages/homepage.scss",
+          dest: "homepage.min.css",
+        },
+        {
+          entry: "pages/oss-landing.scss",
+          dest: "oss-landing.min.css",
+        },
+        {
+          entry: "pages/oss-solution-full.scss",
+          dest: "oss-solution-full.min.css",
+        },
+        {
+          entry: "pages/searchpage.scss",
+          dest: "searchpage.min.css",
+        },
+        {
+          entry: "pages/licence-comparer.scss",
+          dest: "licence-comparer.min.css",
+        },
+        {
+          entry: "pages/glossary.scss",
+          dest: "glossary.min.css",
+        },
+        {
+          entry: "pages/group.scss",
+          dest: "group.min.css",
+        },
+        // Components
+        {
+          entry: "components/abstract.scss",
+          dest: "abstract.min.css",
+        },
+        {
+          entry: "components/accordion.scss",
+          dest: "accordion.min.css",
+        },
+        {
+          entry: "components/actions-menu.scss",
+          dest: "actions-menu.min.css",
+        },
+        {
+          entry: "components/alert.scss",
+          dest: "alert.min.css",
+        },
+        {
+          entry: "modules/align-module.scss",
+          dest: "align-module.min.css",
+        },
+        {
+          entry: "components/badge.scss",
+          dest: "badge.min.css",
+        },
+        {
+          entry: "components/button-group.scss",
+          dest: "button-group.min.css",
+        },
+        {
+          entry: "components/close.scss",
+          dest: "close.min.css",
+        },
+        {
+          entry: "components/comments.scss",
+          dest: "comments.min.css",
+        },
+        {
+          entry: "components/eif-filter.scss",
+          dest: "eif-filter.min.css",
+        },
+        {
+          entry: "components/etrans.scss",
+          dest: "etrans.min.css",
+        },
+        {
+          entry: "components/ajax-throbber.scss",
+          dest: "ajax-throbber.min.css",
+        },
+        {
+          entry: "components/fieldset-show-more.scss",
+          dest: "fieldset-show-more.min.css",
+        },
+        {
+          entry: "components/footer.scss",
+          dest: "footer.min.css",
+        },
+        {
+          entry: "components/form-simple-checkboxes.scss",
+          dest: "form-simple-checkboxes.min.css",
+        },
+        {
+          entry: "components/forms.scss",
+          dest: "forms.min.css",
+        },
+        {
+          entry: "components/webform.scss",
+          dest: "webform.min.css",
+        },
+        {
+          entry: "components/group-banner.scss",
+          dest: "group-banner.min.css",
+        },
+        {
+          entry: "components/header-topic.scss",
+          dest: "header-topic.min.css",
+        },
+        {
+          entry: "components/ief-entity-table.scss",
+          dest: "ief-entity-table.min.css",
+        },
+        {
+          entry: "components/layout-block.scss",
+          dest: "layout-block.min.css",
+        },
+        {
+          entry: "components/licence-filter.scss",
+          dest: "licence-filter.min.css",
+        },
+        {
+          entry: "components/listing-grid.scss",
+          dest: "listing-grid.min.css",
+        },
+        {
+          entry: "components/menu--og--navigation.scss",
+          dest: "menu--og--navigation.min.css",
+        },
+        {
+          entry: "components/modals.scss",
+          dest: "modals.min.css",
+        },
+        {
+          entry: "components/nav.scss",
+          dest: "nav.min.css",
+        },
+        {
+          entry: "components/mmenu.scss",
+          dest: "mmenu.min.css",
+        },
+        {
+          entry: "components/navbar-search.scss",
+          dest: "navbar-search.min.css",
+        },
+        {
+          entry: "components/navbar.scss",
+          dest: "navbar.min.css",
+        },
+        {
+          entry: "components/navigation-bottom.scss",
+          dest: "navigation-bottom.min.css",
+        },
+        {
+          entry: "components/page-title.scss",
+          dest: "page-title.min.css",
+        },
+        {
+          entry: "components/pagination.scss",
+          dest: "pagination.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph.scss",
+          dest: "paragraph.min.css",
+        },
+        {
+          entry: "components/carousel.scss",
+          dest: "carousel.min.css",
+        },
+        {
+          entry: "components/image-gallery.scss",
+          dest: "image-gallery.min.css",
+        },
+        {
+          entry: "components/oss-solution-indicator.scss",
+          dest: "oss-solution-indicator.min.css",
+        },
+        {
+          entry: "components/oss-solution-screenshots-carousel.scss",
+          dest: "oss-solution-screenshots-carousel.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--heading.scss",
+          dest: "paragraph--heading.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--layout.scss",
+          dest: "paragraph--layout.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--poll.scss",
+          dest: "paragraph--poll.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--social-media.scss",
+          dest: "paragraph--social-media.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--testimony.scss",
+          dest: "paragraph--testimony.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--tiles.scss",
+          dest: "paragraph--tiles.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--video.scss",
+          dest: "paragraph--video.min.css",
+        },
+        {
+          entry: "components/releases.scss",
+          dest: "releases.min.css",
+        },
+        {
+          entry: "components/share-content-form.scss",
+          dest: "share-content-form.min.css",
+        },
+        {
+          entry: "components/see-more.scss",
+          dest: "see-more.min.css",
+        },
+        {
+          entry: "components/spinners.scss",
+          dest: "spinners.min.css",
+        },
+        {
+          entry: "components/table-files.scss",
+          dest: "table-files.min.css",
+        },
+        {
+          entry: "components/tabledrag.scss",
+          dest: "tabledrag.min.css",
+        },
+        {
+          entry: "components/tables.scss",
+          dest: "tables.min.css",
+        },
+        {
+          entry: "components/tabs.scss",
+          dest: "tabs.min.css",
+        },
+        {
+          entry: "components/tile.scss",
+          dest: "tile.min.css",
+        },
+        {
+          entry: "components/timeline.scss",
+          dest: "timeline.min.css",
+        },
+        {
+          entry: "components/toolbar.scss",
+          dest: "toolbar.min.css",
+        },
+        {
+          entry: "components/tour.scss",
+          dest: "tour.min.css",
+        },
+        {
+          entry: "components/user--group-header.scss",
+          dest: "user--group-header.min.css",
+        },
+        // Layout Paragraphs - buidler UI.
+        {
+          entry: "components/layout-paragraphs--builder.scss",
+          dest: "layout-paragraphs--builder.min.css",
+        },
+        // Editor.
+        {
+          entry: "editor.layout-paragraphs.scss",
+          dest: "editor.layout-paragraphs.min.css",
+        },
+      ],
+    }),
+    // IOP.
+    ...buildAssetEntries({
+      sourceFolder: path.resolve(paths.themes.iop, "src/scss/"),
+      destFolder: path.resolve(paths.themes.iop, "assets/css/"),
+      defaultOptions: {
+        includePaths: [paths.nodeModules],
+        minify: true,
+        sourceMap: isProd ? false : "file",
+      },
+      objects: [
+        // Components (SMACSS)
+        {
+          entry: "03-components.scss",
+          dest: "components.min.css",
+        },
+        // Theme (SMACSS)
+        {
+          entry: "04-theme.scss",
+          dest: "theme.min.css",
+        },
+        // Pages
+        {
+          entry: "pages/landing.scss",
+          dest: "landing.min.css",
+        },
+        {
+          entry: "pages/listing.scss",
+          dest: "listing.min.css",
+        },
+        // Components
+        {
+          entry: "components/accordion-faq.scss",
+          dest: "accordion-faq.min.css",
+        },
+        {
+          entry: "components/call-to-action.scss",
+          dest: "call-to-action.min.css",
+        },
+        {
+          entry: "components/join.scss",
+          dest: "join.min.css",
+        },
+        {
+          entry: "components/navbar.scss",
+          dest: "navbar.min.css",
+        },
+        {
+          entry: "components/page-header.scss",
+          dest: "page-header.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--call-to-action.scss",
+          dest: "paragraph--call-to-action.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--carousel.scss",
+          dest: "paragraph--carousel.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--image.scss",
+          dest: "paragraph--image.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--layout.scss",
+          dest: "paragraph--layout.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--testimony.scss",
+          dest: "paragraph--testimony.min.css",
+        },
+        {
+          entry: "components/tile.scss",
+          dest: "tile.min.css",
+        },
+        {
+          entry: "components/pagination.scss",
+          dest: "pagination.min.css",
+        },
+      ],
+    }),
   ],
   copy: [
     // Bootstrap: fonts
     {
       from: [
-        path.resolve(nodeModules, "@openeuropa/bcl-theme-joinup/fonts/*.css"),
+        path.resolve(
+          paths.nodeModules,
+          "@openeuropa/bcl-theme-joinup/fonts/*.css",
+        ),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/css/fonts`),
+      to: path.resolve(paths.themes.ventuno, "assets/css/fonts"),
       options: { up: true },
     },
     {
       from: [
         path.resolve(
-          nodeModules,
+          paths.nodeModules,
           "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*",
         ),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/css/fonts/files`),
+      to: path.resolve(paths.themes.ventuno, "assets/css/fonts/files"),
       options: { up: true },
     },
     // Bootstrap: scripts
     {
       from: [
         path.resolve(
-          nodeModules,
+          paths.nodeModules,
           "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js",
         ),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/js`),
+      to: path.resolve(paths.themes.ventuno, "assets/js"),
       options: { up: true },
     },
     // Bootstrap: icons
     {
       from: [
-        path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/*.svg"),
+        path.resolve(
+          paths.nodeModules,
+          "@openeuropa/bcl-bootstrap/icons/*.svg",
+        ),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/icons`),
+      to: path.resolve(paths.themes.ventuno, "assets/icons"),
       options: { up: true },
     },
     // Third party files
     {
       from: [
-        path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
+        path.resolve(
+          paths.nodeModules,
+          "@glidejs/glide/dist/css/glide.core.min.css",
+        ),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/css`),
+      to: path.resolve(paths.themes.ventuno, "assets/css"),
       options: { up: true },
     },
     // IOP
     // Bootstrap: fonts
     {
       from: [
-        path.resolve(nodeModules, "@openeuropa/bcl-theme-joinup/fonts/*.css"),
+        path.resolve(
+          paths.nodeModules,
+          "@openeuropa/bcl-theme-joinup/fonts/*.css",
+        ),
       ],
-      to: path.resolve(outputFolder, `${iop}assets/css/fonts`),
+      to: path.resolve(paths.themes.iop, "assets/css/fonts"),
       options: { up: true },
     },
     {
       from: [
         path.resolve(
-          nodeModules,
+          paths.nodeModules,
           "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*",
         ),
       ],
-      to: path.resolve(outputFolder, `${iop}assets/css/fonts/files`),
+      to: path.resolve(paths.themes.iop, "assets/css/fonts/files"),
       options: { up: true },
     },
     // Bootstrap: scripts
     {
       from: [
         path.resolve(
-          nodeModules,
+          paths.nodeModules,
           "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js",
         ),
       ],
-      to: path.resolve(outputFolder, `${iop}assets/js`),
+      to: path.resolve(paths.themes.iop, "assets/js"),
       options: { up: true },
     },
     // Third party files
     {
       from: [
-        path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
+        path.resolve(
+          paths.nodeModules,
+          "@glidejs/glide/dist/css/glide.core.min.css",
+        ),
       ],
-      to: path.resolve(outputFolder, `${iop}assets/css`),
+      to: path.resolve(paths.themes.iop, "assets/css"),
       options: { up: true },
     },
     {
       from: [
-        path.resolve(nodeModules, "priority-plus/dist/priority-plus.js"),
-        path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
+        path.resolve(paths.nodeModules, "priority-plus/dist/priority-plus.js"),
+        path.resolve(paths.nodeModules, "priority-plus/dist/priority-plus.css"),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
+      to: path.resolve(paths.themes.ventuno, "assets/lib/priority-plus"),
       options: { up: true },
     },
     {
       from: [
-        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.js"),
-        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.css"),
+        path.resolve(paths.nodeModules, "mmenu-light/dist/mmenu-light.js"),
+        path.resolve(paths.nodeModules, "mmenu-light/dist/mmenu-light.css"),
       ],
-      to: path.resolve(outputFolder, `${ventuno}assets/lib/mmenu-light`),
+      to: path.resolve(paths.themes.ventuno, "assets/lib/mmenu-light"),
       options: { up: true },
     },
   ],
   sprite: [
     {
-      entry: path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/"),
-      dest: path.resolve(outputFolder, `${ventuno}assets/icons`),
+      entry: path.resolve(
+        paths.nodeModules,
+        "@openeuropa/bcl-bootstrap/icons/",
+      ),
+      dest: path.resolve(paths.themes.ventuno, "assets/icons"),
       options: {
         file: "icons.svg",
         list: [
