@@ -6,15 +6,15 @@
  * @see template_preprocess_node()
  */
 #}
-{% if content.field_short_title %}
+{% if content.field_short_title|stripped_length %}
   {% set digest_item_title = content.field_short_title|render %}
 {% else %}
   {% set digest_item_title = label %}
 {% endif %}
 
-{% if content.field_news_logo %}
+{% if content.field_news_logo|stripped_length %}
   {% set digest_item_img = site_url ~ content.field_news_logo|render|striptags|trim %}
-{% elseif content.field_event_logo %}
+{% elseif content.field_event_logo|stripped_length %}
   {% set digest_item_img = site_url ~ content.field_event_logo|render|striptags|trim %}
 {% else %}
   {% set digest_item_img = site_url ~ '/' ~ directory ~ '/assets/images/digest-message/' ~ node.bundle ~ '_icon.png' %}
