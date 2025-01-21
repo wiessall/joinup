@@ -8,7 +8,7 @@
     attach(context) {
       once(
         "cardinality-one",
-        "input.js-joinup-private-message-cardinality",
+        "input[data-drupal-selector='edit-members-target-id']",
         context,
       ).forEach((inputMemberElement) => {
         inputMemberElement.addEventListener("keydown", (event) => {
