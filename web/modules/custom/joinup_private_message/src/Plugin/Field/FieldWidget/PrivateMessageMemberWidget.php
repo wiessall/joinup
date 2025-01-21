@@ -85,7 +85,7 @@ class PrivateMessageMemberWidget extends EntityReferenceAutocompleteWidget {
     }
 
     $currentUserId = \Drupal::currentUser()->id();
-    if (joinup_private_message_block_exists_between_users((string) $currentUserId, $targetId)) {
+    if (joinup_private_message_block_exists_between_users((int) $currentUserId, (int) $targetId)) {
       $form_state->setError($element, t('You cannot send messages to a user that has blocked you, or was blocked by you.'));
     }
   }
