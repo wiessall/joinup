@@ -66,7 +66,7 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       if ($current_route_name !== 'private_message.private_message_create') {
         /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
         $thread = $form_state->getBuildInfo()['args'][0];
-        $members = $thread->getMembersId();
+        $members = $thread->getMemberIds();
         if (count($members) !== 2) {
           // Failsafe in case something went wrong and the database is in an
           // inconsistent state.
@@ -136,12 +136,12 @@ function joinup_private_message_add_form_validate(array &$form, FormStateInterfa
     return;
   }
 
-  $members = array_slice($thread->getMembersId(), 0, 2);
+  $members = array_slice($thread->getMemberIds(), 0, 2);
   if (count($members) !== 2) {
     $form_state->setError($form, t('Something went wrong. Please, refresh the page.'));
   }
 
-  $is_banned = joinup_private_message_block_exists_between_users(...$thread->getMembersId());
+  $is_banned = joinup_private_message_block_exists_between_users(...$thread->getMemberIds());
   if ($is_banned) {
     $form_state->setError($form, \Drupal::config('private_message.settings')->get('ban_message'));
   }
