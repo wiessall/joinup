@@ -34,7 +34,7 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
     if (!empty($private_message_ban)) {
       $this->ban = $private_message_ban;
       $this->bannedUser = $private_message_ban->getTarget();
-      return parent::buildForm($form, $form_state, $this->bannedUser->id());
+      return parent::buildForm($form, $form_state, $this->bannedUser);
     }
     return parent::buildForm($form, $form_state);
   }
