@@ -1,0 +1,85 @@
+diff --git a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
+index 93b516eb6137393ec05c3951884e1fcfe3e1461b..07da3350c3fce720f4f08b8230e571bded0ab0ea 100644
+--- a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
++++ b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
+@@ -7,6 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\duration_field\Service\DurationServiceInterface;
+ use Drupal\private_message\Plugin\PrivateMessageConfigForm\PrivateMessageConfigFormBase;
+ use Drupal\private_message\Plugin\PrivateMessageConfigForm\PrivateMessageConfigFormPluginInterface;
++use Drupal\user\Entity\Role;
++use Drupal\user\RoleInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+
+ /**
+@@ -55,7 +57,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+   /**
+    * {@inheritdoc}
+    */
+-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): PrivateMessageConfigFormBase {
+     return new static(
+       $configuration,
+       $plugin_id,
+@@ -65,6 +67,13 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+     );
+   }
+
++  /**
++   * {@inheritdoc}
++   */
++  public function getName(): string {
++    return (string) $this->pluginDefinition['name'];
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -78,7 +87,16 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+
+     $group_class = 'group-order-weight';
+
+-    $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
++    // Get the roles that can use private messaging.
++    $use_pm_permission = 'use private messaging system';
++    $roles = array_filter(
++      Role::loadMultiple(),
++      fn(RoleInterface $role): bool => $role->hasPermission($use_pm_permission),
++    );
++    $roles = array_map(function (RoleInterface $role) {
++      return $role->label();
++    }, $roles);
++
+     $items = [];
+     $weight_level = 0;
+     foreach ($roles as $role_id => $role_name) {
+diff --git a/src/Service/PrivateMessageFloodService.php b/src/Service/PrivateMessageFloodService.php
+index b9faf41fad8f11814f6863e6ab0427d0e2ede170..ca94431a822bbc0a415dcf53d3b4280e05262e09 100644
+--- a/src/Service/PrivateMessageFloodService.php
++++ b/src/Service/PrivateMessageFloodService.php
+@@ -4,6 +4,8 @@ namespace Drupal\private_message_flood\Service;
+
+ use DateInterval;
+ use DateTime;
++use Drupal\user\Entity\Role;
++use Drupal\user\RoleInterface;
+ use Exception;
+ use Drupal\Component\Datetime\TimeInterface;
+ use Drupal\Core\Session\AccountProxyInterface;
+@@ -137,7 +139,16 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+    *   ordered highest to lowest priority.
+    */
+   private function getRoleInfo() {
+-    $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
++    // Get the roles that can use private messaging.
++    $use_pm_permission = 'use private messaging system';
++    $roles = array_filter(
++      Role::loadMultiple(),
++      fn(RoleInterface $role): bool => $role->hasPermission($use_pm_permission),
++    );
++    $roles = array_map(function (RoleInterface $role) {
++      return $role->label();
++    }, $roles);
++
+     $items = [];
+     foreach (array_keys($roles) as $role_id) {
+       $role_info = $this->configFactory->get('private_message_flood.role.' . $role_id)->get();
