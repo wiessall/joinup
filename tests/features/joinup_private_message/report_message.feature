@@ -76,7 +76,7 @@ Feature: Private message report.
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
 
-  @javascript @teste
+  @javascript
   Scenario: Validation works for blocked users.
     Given users:
       | Username  | First name | Family name | E-mail                |
