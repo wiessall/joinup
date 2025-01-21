@@ -418,15 +418,15 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
 /**
  * Returns whether a private message block exists between two users.
  *
- * @param string $user1
+ * @param int $user1
  *   The first user ID.
- * @param string $user2
+ * @param int $user2
  *   The second user ID.
  *
  * @return bool
  *   TRUE if a block exists, FALSE otherwise.
  */
-function joinup_private_message_block_exists_between_users(string $user1, string $user2): bool {
+function joinup_private_message_block_exists_between_users(int $user1, int $user2): bool {
   $query = \Drupal::entityQuery('private_message_ban')
     ->accessCheck(FALSE);
   $andGroup12 = $query->andConditionGroup()
