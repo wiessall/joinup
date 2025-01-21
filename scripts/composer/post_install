@@ -5,7 +5,7 @@ set -e
 # Run NPM install only if it's not bypassed or when building the distribution.
 if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
-  npm ci --no-progress --loglevel=error
+  npm ci --no-progress
 fi
 
 source scripts/composer/download_licences
