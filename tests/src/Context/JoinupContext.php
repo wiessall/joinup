@@ -3073,11 +3073,18 @@ class JoinupContext extends RawDrupalContext {
       }
 
       // Delete all entities created during the scenario.
-      $ids = \Drupal::entityQuery($entity_type->id())
+      $query = \Drupal::entityQuery($entity_type->id())
         ->accessCheck(FALSE)
-        ->condition($id_key, $id, '>')
-        ->execute();
+        ->condition($id_key, $id, '>');
 
+      if ($entity_type->id() === 'meta_entity') {
+        // Avoid interfering with the @topic afterScenario as that hook deletes
+        // but also recreates the meta entities.
+        // @see \Drupal\joinup\Context\JoinupContext::resetTopicMetaEntity.
+        $query->condition('type', 'topic', '<>');
+      }
+
+      $ids = $query->execute();
       if ($ids) {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $entities = $storage->loadMultiple($ids);
