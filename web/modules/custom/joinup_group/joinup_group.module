@@ -27,6 +27,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -1035,9 +1036,35 @@ function joinup_group_mail_alter(array &$message): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $message['params']['message_entity'];
     $arguments = $announcement->getArguments();
-    $message += array_combine(array_map(function (string $key): string {
-      return ltrim($key, '@');
-    }, array_keys($arguments)), $arguments);
+    $message += array_combine(
+      array_map(
+        function (string $key): string {
+          return ltrim($key, '@');
+        },
+        array_keys($arguments)
+      ),
+      array_map(
+        function ($value) use ($announcement) {
+          // Check if the value contains a callback.
+          if (is_array($value) && isset($value['callback']) && is_callable($value['callback'])) {
+            // Ensure $message is an instance of MessageInterface.
+            if (!$announcement instanceof AnnouncementInterface) {
+              throw new \InvalidArgumentException('Expected MessageInterface, got ' . gettype($announcement));
+            }
+
+            // Resolve the callback and pass the announcement
+            // if 'pass message' is TRUE.
+            return $value['pass message'] ?? FALSE
+              ? call_user_func($value['callback'], $announcement)
+              : call_user_func($value['callback']);
+          }
+
+          // Return the value as is if no callback exists.
+          return $value;
+        },
+        $arguments
+      )
+    );
   }
 }
 
