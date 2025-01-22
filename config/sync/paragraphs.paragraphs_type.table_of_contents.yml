@@ -1,0 +1,12 @@
+uuid: 90b6e6a9-c55d-4830-880b-72664e314703
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:6bb67e2a-06c1-4b8d-ac31-424353b11c16'
+id: table_of_contents
+label: 'Table of Contents'
+icon_uuid: 6bb67e2a-06c1-4b8d-ac31-424353b11c16
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktbGlzdC11bCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01IDExLjVhLjUuNSAwIDAgMSAuNS0uNWg5YS41LjUgMCAwIDEgMCAxaC05YS41LjUgMCAwIDEtLjUtLjVtMC00YS41LjUgMCAwIDEgLjUtLjVoOWEuNS41IDAgMCAxIDAgMWgtOWEuNS41IDAgMCAxLS41LS41bTAtNGEuNS41IDAgMCAxIC41LS41aDlhLjUuNSAwIDAgMSAwIDFoLTlhLjUuNSAwIDAgMS0uNS0uNW0tMyAxYTEgMSAwIDEgMCAwLTIgMSAxIDAgMCAwIDAgMm0wIDRhMSAxIDAgMSAwIDAtMiAxIDEgMCAwIDAgMCAybTAgNGExIDEgMCAxIDAgMC0yIDEgMSAwIDAgMCAwIDIiLz4KPC9zdmc+'
+description: ''
+behavior_plugins: {  }
