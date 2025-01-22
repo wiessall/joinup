@@ -440,6 +440,9 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
+            "drupal/private_message": {
+                "Fix indexes of array of messages in getMessages @see https://www.drupal.org/i/3501286": "resources/patch/php/drupal/private_message/3501286.diff"
+            },
             "drupal/private_message_flood": {
                 "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"
             },
