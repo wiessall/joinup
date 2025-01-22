@@ -385,6 +385,10 @@ module.exports = {
           dest: "paragraph--social-media.min.css",
         },
         {
+          entry: 'components/paragraphs/paragraph--table-of-contents.scss',
+          dest: 'paragraph--table-of-contents.min.css',
+        },
+        {
           entry: "components/paragraphs/paragraph--testimony.scss",
           dest: "paragraph--testimony.min.css",
         },
