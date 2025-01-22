@@ -67,4 +67,3 @@ Feature:
     Then I see the "Dummy Event" showing in the Calendar
     And I click "Dummy Event"
     Then I should be on the "Dummy Event" content page
-
