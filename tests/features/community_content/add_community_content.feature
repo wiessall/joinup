@@ -46,7 +46,7 @@ Feature: Add community content
     And I click "Add <content type>"
     Then I should see the heading "Add <content type>"
     And the following fields <author field present> be present "Authored by"
-    Then I should see the text "Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
+    Then I should see the text "Allowed types: <extensions>."
     But I should not see the following lines of text:
       | Authored on                  |
       | Create new revision          |
@@ -59,12 +59,12 @@ Feature: Add community content
       | Sticky at top of lists       |
 
     Examples:
-      | content type | author field present |
-      | custom page  | should not           |
-      | discussion   | should               |
-      | document     | should               |
-      | event        | should               |
-      | news         | should               |
+      | content type | author field present | extensions                                                                                                                                                                                                                                                                                                                                                        |
+      | custom page  | should not           | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip     |
+      | discussion   | should               | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip     |
+      | document     | should               | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip     |
+      | event        | should               | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip ics |
+      | news         | should               | azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip     |
 
   Scenario Outline: Publishing community content for the first time sets the publication date
     Given users:

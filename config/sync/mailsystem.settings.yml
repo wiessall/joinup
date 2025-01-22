@@ -9,3 +9,7 @@ modules:
     none:
       sender: symfony_mailer_lite
       formatter: symfony_mailer_lite
+  webform:
+    none:
+      sender: mime_mail
+      formatter: mime_mail
