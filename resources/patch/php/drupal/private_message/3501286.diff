@@ -1,0 +1,13 @@
+diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
+index dc5e291eaf881d594268ff10ca56f14eeb06edf2..307746f0f2d5338aa95308bce46ced8b408a3169 100644
+--- a/src/Entity/PrivateMessageThread.php
++++ b/src/Entity/PrivateMessageThread.php
+@@ -122,7 +122,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+    * {@inheritdoc}
+    */
+   public function getMessages(bool $includeBlocked = FALSE): array {
+-    $messages = $this->get('private_messages')->referencedEntities();
++    $messages = array_values($this->get('private_messages')->referencedEntities());
+     if ($includeBlocked) {
+       return $messages;
+     }
