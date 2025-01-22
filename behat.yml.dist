@@ -23,6 +23,7 @@
         - .globan
   - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\BootstrapContext
+  - Drupal\joinup\Context\CalendarContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
