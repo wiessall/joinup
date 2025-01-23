@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\paragraphs\ParagraphInterface;
@@ -102,7 +103,6 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
     $paragraphs = $field_item_list->getEntity()
       ->get($field_item_list->getName())
       ->referencedEntities();
-    $url = $field_item_list->getEntity()->toUrl();
     $headings = array_filter($paragraphs, function ($paragraph) use ($max_level) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
@@ -111,18 +111,17 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
       return $paragraph->bundle() === 'heading' && $level <= $max_level;
     });
 
-    return array_map(function ($paragraph) use ($url) {
+    return array_map(function($paragraph) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
 
-      $paragraph_url = clone $url;
-      $paragraph_url->setOption('fragment', 'paragraph-' . $paragraph->id());
-
       return [
         'level' => $level - 1,
-        'name' => Link::fromTextAndUrl($paragraph->get('paragraph_heading')
-          ->getString(), $paragraph_url)->toRenderable(),
+        'name' => Link::fromTextAndUrl(
+          $paragraph->get('paragraph_heading')->getString(),
+          Url::fromRoute('<none>', [], ['fragment' => 'paragraph-' . $paragraph->id()])
+        )->toRenderable(),
       ];
     }, $headings);
   }
