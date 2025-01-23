@@ -57,7 +57,7 @@
           </svg>
           <span class="text-primary">{{ additional_content.field_event_date }}</span>
         </div>
-        {% if additional_content.field_event_location|stripped_length %}
+        {% if additional_content.field_event_location|render|striptags %}
           <div class="page-title__headline d-flex align-items-center mt-2">
             <svg class="page-title__headline-icon bi icon--m text-brand me-2">
               <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>

@@ -343,8 +343,7 @@
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
                 "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff",
-                "Empty layout sections get rendered @see https://www.drupal.org/i/3065418": "resources/patch/php/drupal/core/3065418.patch",
-                "[meta] Themes improperly check renderable arrays when determining visibility @see https://www.drupal.org/i/953034": "resources/patch/php/drupal/core/953034.patch"
+                "Empty layout sections get rendered @see https://www.drupal.org/i/3065418": "resources/patch/php/drupal/core/3065418.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
