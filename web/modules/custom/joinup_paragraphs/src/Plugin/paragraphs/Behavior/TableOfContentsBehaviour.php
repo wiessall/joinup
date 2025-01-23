@@ -28,7 +28,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
   /**
    * Default max heading level.
    */
-  const string DEFAULT_MAX_LEVEL = 'h4';
+  const string DEFAULT_MAX_LEVEL = 'h5';
 
   /**
    * {@inheritdoc}
