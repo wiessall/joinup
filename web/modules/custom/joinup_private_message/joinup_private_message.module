@@ -420,6 +420,19 @@ function joinup_private_message_user_predelete(UserInterface $entity): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ *
+ * @todo Remove once https://www.drupal.org/i/3501786 is in.
+ */
+function joinup_private_message_preprocess_block(&$variables): void {
+  if ($variables['plugin_id'] == 'private_message_inbox_block') {
+    if (isset($variables['content']['no_threads'])) {
+      unset($variables['content']['no_threads']);
+    }
+  }
+}
+
+/**
  * Returns whether a private message block exists between two users.
  *
  * @param int $user1
