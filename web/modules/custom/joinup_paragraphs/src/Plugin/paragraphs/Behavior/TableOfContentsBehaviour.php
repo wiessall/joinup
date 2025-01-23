@@ -163,13 +163,13 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
   /**
    * Generates nested list of links.
    *
-   * @param array
+   * @param array $data
    *   Flat list.
    *
    * @return array
    *   Nested list.
    */
-  protected function generateNestedListOfLinks($data): array {
+  protected function generateNestedListOfLinks(array $data): array {
     $nested = [];
     $parents = [&$nested];
 
