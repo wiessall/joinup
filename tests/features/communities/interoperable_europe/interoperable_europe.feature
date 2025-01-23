@@ -6,11 +6,13 @@ Feature:
 
   Scenario: Moderator and facilitator check the three dots permissions.
     Given I am logged in as a moderator
-    Then I visit "/interoperable-europe"
+    Then I go to the "Interoperable Europe" collection
     And I should see the link "Settings" in the "Entity actions" region
 
     When I am logged in as a facilitator of the "Interoperable Europe" collection
-    Then I visit "/interoperable-europe"
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
+    When I go to the "Interoperable Europe" collection
     And I should see the link "Settings" in the "Entity actions" region
 
   Scenario: Anonymous visiting the landing page.
