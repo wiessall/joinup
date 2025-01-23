@@ -87,7 +87,7 @@
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
-        "drupal/private_message": "4.0.0-alpha1 as 3.0.5",
+        "drupal/private_message": "4.0.0-alpha2 as 3.0.6",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
@@ -401,7 +401,7 @@
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch",
-                "Remove caching in https://www.drupal.org/project/private_message_floodHoneypotService::getProtectedForms preventing proper invalidation @see https://www.drupal.org/i/3481399": "resources/patch/php/drupal/honeypot/3481399.patch"
+                "Remove caching in HoneypotService::getProtectedForms preventing proper invalidation @see https://www.drupal.org/i/3481399": "resources/patch/php/drupal/honeypot/3481399.patch"
             },
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
@@ -440,9 +440,6 @@
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
-            },
-            "drupal/private_message": {
-                "Fix indexes of array of messages in getMessages @see https://www.drupal.org/i/3501286": "resources/patch/php/drupal/private_message/3501286.diff"
             },
             "drupal/private_message_flood": {
                 "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"

@@ -1,5 +1,5 @@
 diff --git a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
-index 93b516eb6137393ec05c3951884e1fcfe3e1461b..7a0e7aa5b91a242ce8f6ef7ba425d62bb01d617a 100644
+index 93b516eb6137393ec05c3951884e1fcfe3e1461b..c5c86f0bb1d220873e5ba2b865c636f3f4bfc4b1 100644
 --- a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
 +++ b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
 @@ -7,6 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
@@ -16,32 +16,26 @@ index 93b516eb6137393ec05c3951884e1fcfe3e1461b..7a0e7aa5b91a242ce8f6ef7ba425d62b
     * {@inheritdoc}
     */
 -  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): PrivateMessageConfigFormBase {
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
      return new static(
        $configuration,
        $plugin_id,
-@@ -68,7 +70,14 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+@@ -68,7 +70,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
    /**
     * {@inheritdoc}
     */
 -  public function buildForm(FormStateInterface $formState) {
-+  public function getName(): string {
-+    return (string) $this->pluginDefinition['name'];
-+  }
-+
-+  /**
-+   * {@inheritdoc}
-+   */
 +  public function buildForm(FormStateInterface $formState): array {
 
      $form['header'] = [
        '#prefix' => '<p>',
-@@ -78,7 +87,16 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+@@ -78,7 +80,17 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
 
      $group_class = 'group-order-weight';
 
 -    $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
 +    // Get the roles that can use private messaging.
++    // @todo use the new Private message method once https://drupal.org/i/3501731 is in.
 +    $use_pm_permission = 'use private messaging system';
 +    $roles = array_filter(
 +      Role::loadMultiple(),
@@ -54,7 +48,7 @@ index 93b516eb6137393ec05c3951884e1fcfe3e1461b..7a0e7aa5b91a242ce8f6ef7ba425d62b
      $items = [];
      $weight_level = 0;
      foreach ($roles as $role_id => $role_name) {
-@@ -197,7 +215,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+@@ -197,7 +209,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
    /**
     * {@inheritdoc}
     */
@@ -63,7 +57,7 @@ index 93b516eb6137393ec05c3951884e1fcfe3e1461b..7a0e7aa5b91a242ce8f6ef7ba425d62b
      foreach ($formState->getValue(['private_message_flood_settings', 'roles']) as $rid => $data) {
        if (isset($data['values'], $data['values']['details'], $data['values']['details']['elements'], $data['values']['details']['elements']['type'])) {
          if (!empty($data['values']['details']['elements']['type']) && empty($data['values']['details']['elements']['limit'])) {
-@@ -213,7 +231,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+@@ -213,7 +225,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
    /**
     * {@inheritdoc}
     */
@@ -73,7 +67,7 @@ index 93b516eb6137393ec05c3951884e1fcfe3e1461b..7a0e7aa5b91a242ce8f6ef7ba425d62b
      foreach ($values['roles'] as $rid => $data) {
        $duration = $data['values']['details']['elements']['duration'];
 diff --git a/src/Service/PrivateMessageFloodService.php b/src/Service/PrivateMessageFloodService.php
-index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516bf75e2f8 100644
+index b9faf41fad8f11814f6863e6ab0427d0e2ede170..1cce8f7defe19039238312e2d755474cfa3de6cf 100644
 --- a/src/Service/PrivateMessageFloodService.php
 +++ b/src/Service/PrivateMessageFloodService.php
 @@ -4,6 +4,8 @@ namespace Drupal\private_message_flood\Service;
@@ -103,12 +97,13 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      if (empty($this->configData[$user->id()])) {
        $this->configData[$user->id()] = [
          'limit' => 0,
-@@ -137,7 +139,16 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -137,7 +139,17 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
     *   ordered highest to lowest priority.
     */
    private function getRoleInfo() {
 -    $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
 +    // Get the roles that can use private messaging.
++    // @todo use the new Private message method once https://drupal.org/i/3501731 is in.
 +    $use_pm_permission = 'use private messaging system';
 +    $roles = array_filter(
 +      Role::loadMultiple(),
@@ -121,7 +116,7 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      $items = [];
      foreach (array_keys($roles) as $role_id) {
        $role_info = $this->configFactory->get('private_message_flood.role.' . $role_id)->get();
-@@ -163,7 +174,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -163,7 +175,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
     *   0 if they're equal.
     *   -1 if b is bigger.
     */
@@ -130,7 +125,7 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      if ($a === $b) {
        return 0;
      }
-@@ -174,7 +185,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -174,7 +186,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
    /**
     * {@inheritdoc}
     */
@@ -139,7 +134,7 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      if (empty($user)) {
        $user = $this->currentUser;
      }
-@@ -185,7 +196,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -185,7 +197,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
    /**
     * {@inheritdoc}
     */
@@ -148,7 +143,7 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      if (empty($user)) {
        $user = $this->currentUser;
      }
-@@ -235,7 +246,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -235,7 +247,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
    /**
     * {@inheritdoc}
     */
@@ -157,7 +152,7 @@ index b9faf41fad8f11814f6863e6ab0427d0e2ede170..b0683d237553c4d19519001aef782516
      if (empty($user)) {
        $user = $this->currentUser;
      }
-@@ -246,7 +257,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+@@ -246,7 +258,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
    /**
     * {@inheritdoc}
     */
