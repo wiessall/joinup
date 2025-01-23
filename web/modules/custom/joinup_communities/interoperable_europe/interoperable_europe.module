@@ -7,8 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\block\BlockInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
 /**
@@ -30,4 +35,29 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
       }
     }
   }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function interoperable_europe_block_access(BlockInterface $block, string $operation, AccountInterface $account): AccessResultInterface {
+  if (
+    $operation === 'view' &&
+    $block->id() === 'iop_three_dots_menu'
+  ) {
+    $group = \Drupal::service('joinup_group.group_manager')->getGroupFromContext();
+    if (
+      $group instanceof GroupInterface &&
+      $group->uuid() === InteroperableEuropeCollectionInterface::COLLECTION_UUID
+    ) {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
+      return AccessResult::forbiddenIf(empty($allowed_transitions))
+        ->cachePerPermissions()
+        ->cachePerUser();
+    }
+  }
+
+  return AccessResult::neutral();
 }
