@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_notification;
 
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Url;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\message\Entity\Message;
 use Drupal\message\MessageInterface;
 use Drupal\message_notify\MessageNotifier;
@@ -26,7 +29,8 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
   ];
 
   public function __construct(
-    protected MessageNotifier $messageNotifier,
+    protected readonly MessageNotifier $messageNotifier,
+    protected readonly CacheTagsInvalidatorInterface $cacheTagsInvalidator,
   ) {}
 
   /**
@@ -162,6 +166,14 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
     }
 
     return array_reduce($recipients_metadata, function (bool $success, array $recipient_metadata) use ($message): bool {
+      if ($message instanceof AnnouncementInterface) {
+        $account = user_load_by_mail($recipient_metadata['options']['mail']);
+        $message->setArguments($message->getArguments() + static::getAnnouncementTokenMappings());
+        $message->setOwner($account);
+      }
+
+      // Make sure we're the message build is not cached.
+      $this->cacheTagsInvalidator->invalidateTags($message->getCacheTagsToInvalidate());
       return $this->messageNotifier->send($message, $recipient_metadata['options'], $recipient_metadata['notifier']) && $success;
     }, TRUE);
   }
@@ -197,6 +209,75 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    */
   protected function accountIsValid(UserInterface $account): bool {
     return !$account->isAnonymous() && !empty($account->getEmail());
+  }
+
+  /**
+   * Get announcement token mappings.
+   */
+  protected static function getAnnouncementTokenMappings(): array {
+    return [
+      '@recipient_name' => [
+        'pass message' => TRUE,
+        'callback' => [static::class, 'getRecipientName'],
+      ],
+      '@recipient_profile' => [
+        'pass message' => TRUE,
+        'callback' => [static::class, 'getRecipientProfile'],
+      ],
+      '@recipient_profile_edit' => [
+        'pass message' => TRUE,
+        'callback' => [static::class, 'getRecipientProfileEdit'],
+      ],
+      '@recipient_subscriptions' => [
+        'pass message' => TRUE,
+        'callback' => [static::class, 'getRecipientSubscriptions'],
+      ],
+      '@recipient_unsubscribe' => [
+        'pass message' => TRUE,
+        'callback' => [static::class, 'getRecipientUnsubscribe'],
+      ],
+    ];
+  }
+
+  /**
+   * Get recipient name.
+   */
+  public static function getRecipientName(MessageInterface $message): string {
+    return $message->getOwner()->getDisplayName();
+  }
+
+  /**
+   * Get recipient profile.
+   */
+  public static function getRecipientProfile(MessageInterface $message): string {
+    return $message->getOwner()->toUrl()->setAbsolute()->toString();
+  }
+
+  /**
+   * Get recipient profile edit link.
+   */
+  public static function getRecipientProfileEdit(MessageInterface $message): string {
+    return $message->getOwner()->toUrl('edit-form')->setAbsolute()->toString();
+  }
+
+  /**
+   * Get recipient subscriptions.
+   */
+  public static function getRecipientSubscriptions(MessageInterface $message): string {
+    return Url::fromRoute('joinup_subscription.subscriptions', [
+      'user' => $message->getOwner()->id(),
+    ])->setAbsolute()->toString();
+  }
+
+  /**
+   * Get recipient unsubscribe link.
+   */
+  public static function getRecipientUnsubscribe(MessageInterface $message): string {
+    return Url::fromRoute('joinup_subscription.unsubscribe', [
+      'user' => $message->getOwner()->id(),
+      'group' => $message->getGroup()->id(),
+      'types' => 'announcements',
+    ])->setAbsolute()->toString();
   }
 
 }
