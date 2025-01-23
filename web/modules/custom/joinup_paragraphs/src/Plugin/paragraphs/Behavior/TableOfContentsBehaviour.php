@@ -103,7 +103,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
       ->get($field_item_list->getName())
       ->referencedEntities();
     $url = $field_item_list->getEntity()->toUrl();
-    $headings = array_filter($paragraphs, function($paragraph) use ($max_level) {
+    $headings = array_filter($paragraphs, function ($paragraph) use ($max_level) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
@@ -111,7 +111,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
       return $paragraph->bundle() === 'heading' && $level <= $max_level;
     });
 
-    return array_map(function($paragraph) use ($url) {
+    return array_map(function ($paragraph) use ($url) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
