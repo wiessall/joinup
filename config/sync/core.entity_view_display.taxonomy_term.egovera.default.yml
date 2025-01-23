@@ -1,0 +1,26 @@
+uuid: 1e148924-ed2a-404a-9c22-e70c50ce8282
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.egovera.extra_properties
+    - taxonomy.vocabulary.egovera
+  module:
+    - text
+id: taxonomy_term.egovera.default
+targetEntityType: taxonomy_term
+bundle: egovera
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  extra_properties: true
+  langcode: true
+  search_api_excerpt: true
+  uri: true
