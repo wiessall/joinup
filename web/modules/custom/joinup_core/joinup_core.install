@@ -162,7 +162,7 @@ function joinup_core_update_200203(?array &$sandbox = NULL): string {
 }
 
 /**
- * Re-setup the status column in the user field data table.
+ * Restore the user status field storage definition.
  */
 function joinup_core_update_200204(): string {
   $fieldName = 'status';
