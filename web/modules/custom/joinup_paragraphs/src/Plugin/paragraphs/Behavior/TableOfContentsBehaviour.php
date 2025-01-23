@@ -39,86 +39,6 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
   /**
    * {@inheritdoc}
    */
-  public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
-    $build['list'] = [
-      '#title' => $this->t('Tasks'),
-      '#theme' => 'item_list',
-      '#items' => $this->generateItems($paragraph),
-    ];
-    dpm($build['list']);
-  }
-
-  protected function generateItems(ParagraphInterface $paragraph): array {
-    $max_level =
-      $this->getLevel(
-        $paragraph->getBehaviorSetting($this->getPluginId(), 'max_level', self::DEFAULT_MAX_LEVEL)
-      );
-
-    $headings = $this->getHeadingParagraphs($paragraph, $max_level);
-    $entity = $paragraph->_referringItem?->getParent()?->getEntity();
-
-    $last_level = 2;
-    $items = [];
-    foreach ($headings as $headings_paragraph) {
-      $heading_level = $this->getLevel(
-        $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
-      );
-
-      $url = $entity->toUrl()
-        ->setOption('fragment', 'paragraph-' . $headings_paragraph->id());
-      if ($last_level == $heading_level) {
-        $items[] = Link::fromTextAndUrl($headings_paragraph->get('paragraph_heading')
-          ->getString(), $url);
-        $items[] = [
-          '#theme' => 'item_list',
-          '#items' => $items,
-        ];
-      }
-
-      $last_level = $heading_level;
-    }
-
-    return $items;
-  }
-
-  /**
-   * Gets heading paragraphs.
-   *
-   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
-   *   ToC paragraph.
-   *
-   * @return \Drupal\paragraphs\ParagraphInterface[]
-   *   Heading paragraphs.
-   */
-  protected function getHeadingParagraphs(ParagraphInterface $paragraph, int $max_level): array {
-    if (!isset($paragraph->_referringItem)) {
-      return [];
-    }
-    $field_item_list = $paragraph->_referringItem?->getParent();
-    if (!$field_item_list instanceof EntityReferenceFieldItemListInterface) {
-      return [];
-    }
-
-    $field_name = $field_item_list->getName();
-    $entity = $field_item_list->getEntity();
-
-    return array_filter($entity->get($field_name)
-      ->referencedEntities(), function($paragraph) use ($max_level) {
-      $heading_level = $this->getLevel(
-        $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
-      );
-
-      return $paragraph->bundle() === 'heading' && $max_level >= $heading_level;
-    });
-  }
-
-  protected function getLevel(string $level): int {
-    return (int) str_replace('h', '', $level);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildBehaviorForm(ParagraphInterface $paragraph, array &$form, FormStateInterface $form_state): array {
     $form['max_level'] = [
       '#type' => 'select',
@@ -142,6 +62,176 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
     $level = $paragraph->getBehaviorSetting($this->getPluginId(), 'max_level', self::DEFAULT_MAX_LEVEL);
 
     return [$this->t('Max heading level : @level', ['@level' => $level])];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
+    $data = $this->generateFlatListOfLinks($paragraph);
+    $data = $this->addMissingLevels($data);
+    $data = $this->generateNestedListOfLinks($data);
+
+    $build['list'] = $this->renderedItems($data);
+    $build['list']['#title'] = $this->t('ToC');
+  }
+
+  /**
+   * Generates flat list of links.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $toc
+   *   ToC paragraph.
+   *
+   * @return array
+   *   Links.
+   */
+  protected function generateFlatListOfLinks(ParagraphInterface $toc): array {
+    $max_level =
+      $this->getLevel(
+        $toc->getBehaviorSetting($this->getPluginId(), 'max_level', self::DEFAULT_MAX_LEVEL)
+      );
+
+    if (!isset($toc->_referringItem)) {
+      return [];
+    }
+    $field_item_list = $toc->_referringItem->getParent();
+    if (!$field_item_list instanceof EntityReferenceFieldItemListInterface) {
+      return [];
+    }
+
+    $paragraphs = $field_item_list->getEntity()
+      ->get($field_item_list->getName())
+      ->referencedEntities();
+    $url = $field_item_list->getEntity()->toUrl();
+    $headings = array_filter($paragraphs, function($paragraph) use ($max_level) {
+      $level = $this->getLevel(
+        $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
+      );
+
+      return $paragraph->bundle() === 'heading' && $level <= $max_level;
+    });
+
+    return array_map(function($paragraph) use ($url) {
+      $level = $this->getLevel(
+        $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
+      );
+
+      $paragraph_url = clone $url;
+      $paragraph_url->setOption('fragment', 'paragraph-' . $paragraph->id());
+
+      return [
+        'level' => $level - 1,
+        'name' => Link::fromTextAndUrl($paragraph->get('paragraph_heading')
+          ->getString(), $paragraph_url)->toRenderable(),
+      ];
+    }, $headings);
+  }
+
+  /**
+   * Adds missing levels to the dataset.
+   *
+   * If there are gaps in the levels, this function fills them with placeholders
+   * (name = NULL).
+   *
+   * @param array $data
+   *   Flat data with 'name' and 'level' keys.
+   *
+   * @return array
+   *   The dataset with missing levels filled.
+   */
+  protected function addMissingLevels(array $data): array {
+    $filled_data = [];
+    $max_level = 0;
+
+    foreach ($data as $item) {
+      $current_level = $item['level'];
+
+      while (++$max_level < $current_level) {
+        $filled_data[] = [
+          'name' => NULL,
+          'level' => $max_level,
+        ];
+      }
+
+      $filled_data[] = $item;
+      $max_level = $current_level;
+    }
+
+    return $filled_data;
+  }
+
+  /**
+   * Generates nested list of links.
+   *
+   * @param $data
+   *   Flat list.
+   *
+   * @return array
+   *   Nested list.
+   */
+  protected function generateNestedListOfLinks($data): array {
+    $nested = [];
+    $parents = [&$nested];
+
+    foreach ($data as $item) {
+      $level = $item['level'];
+
+      $parents = array_slice($parents, 0, $level);
+
+      $current = [
+        'heading' => $item['name'],
+        'children' => [],
+      ];
+      $parents[$level - 1][] = $current;
+
+      $parents[$level] = &$parents[$level - 1][count($parents[$level - 1]) - 1]['children'];
+    }
+
+    return $nested;
+  }
+
+  /**
+   * Recursively build a render array for a nested item_list.
+   *
+   * @param array $items
+   *   The nested array of items with 'name' and 'children' keys.
+   *
+   * @return array
+   *   A render array for the nested list.
+   */
+  protected function renderedItems(array $items): array {
+    $rendered_items = [];
+
+    foreach ($items as $item) {
+      $list_item = [];
+      if (isset($item['heading'])) {
+        $list_item['heading'] = $item['heading'];
+      }
+      if (!empty($item['children'])) {
+        $list_item['children'] = $this->renderedItems($item['children']);
+      }
+
+      $rendered_items[] = $list_item;
+    }
+
+    return [
+      '#theme' => 'item_list',
+      '#items' => $rendered_items,
+      '#list_type' => 'ul',
+    ];
+  }
+
+  /**
+   * Transforms level to number.
+   *
+   * @param string $level
+   *   Level setting.
+   *
+   * @return int
+   *   Level.
+   */
+  protected function getLevel(string $level): int {
+    return (int) str_replace('h', '', $level);
   }
 
 }
