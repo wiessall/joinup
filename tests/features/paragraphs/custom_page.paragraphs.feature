@@ -85,6 +85,7 @@ Feature:
     And I should see the link "Quote"
     But I should not see the link "Simple paragraph"
     And I should see the link "Tiles"
+    And I should see the link "Table of Contents"
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
@@ -101,6 +102,7 @@ Feature:
       | Poll              |
       | Quote             |
       | Social media      |
+      | Table of Contents |
       | Testimony         |
       | Tiles             |
       | Video             |
@@ -127,6 +129,7 @@ Feature:
     And I should see the link "Quote"
     But I should not see the link "Simple paragraph"
     And I should see the link "Tiles"
+    And I should see the link "Table of Contents"
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
@@ -153,6 +156,7 @@ Feature:
     And I should see the link "Quote"
     But I should not see the link "Simple paragraph"
     And I should see the link "Tiles"
+    And I should see the link "Table of Contents"
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
