@@ -74,7 +74,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
     $data = $this->generateNestedListOfLinks($data);
 
     $build['list'] = $this->renderedItems($data);
-    $build['list']['#title'] = $this->t('ToC');
+    $build['list']['#title'] = $paragraph->get('paragraph_title')->getString();
   }
 
   /**
@@ -111,7 +111,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
       return $paragraph->bundle() === 'heading' && $level <= $max_level;
     });
 
-    return array_map(function($paragraph) {
+    return array_map(function ($paragraph) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
