@@ -163,7 +163,7 @@ class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
   /**
    * Generates nested list of links.
    *
-   * @param $data
+   * @param array
    *   Flat list.
    *
    * @return array
