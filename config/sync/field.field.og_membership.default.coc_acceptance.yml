@@ -1,0 +1,24 @@
+uuid: 6f0529ab-f96c-405a-95d8-0a8199713bbf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.og_membership.coc_acceptance
+    - og.og_membership_type.default
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: og_membership.default.coc_acceptance
+field_name: coc_acceptance
+entity_type: og_membership
+bundle: default
+label: 'Code of Conduct acceptance'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp
