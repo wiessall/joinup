@@ -1,0 +1,11 @@
+uuid: f79940cc-6d6d-4615-a96e-48949c646f0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.egovera
+id: taxonomy_term.egovera
+target_entity_type_id: taxonomy_term
+target_bundle: egovera
+default_langcode: site_default
+language_alterable: false
