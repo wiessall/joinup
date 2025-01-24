@@ -18,7 +18,7 @@
     width: 100%;
     padding: $spacer * 0.5; // 8px
     text-align: left;
-    word-break: break-word;
+    overflow-wrap: break-word;
     color: inherit; // Resets
     border: 0; // Resets
     background: none; // Resets
