@@ -15,7 +15,7 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
- * Provides a paragraphs behaviour plugin for ToC.
+ * Provides a paragraphs behavior plugin for ToC.
  *
  * @ParagraphsBehavior(
  *   id = "table_of_content",
