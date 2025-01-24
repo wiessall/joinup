@@ -15,11 +15,8 @@ services:
     class: Drupal\joinup_core\LocalTaskLinksHelper
     arguments: ['@entity_type.manager', '@theme.manager']
 
-  joinup_core.outdated_content.config.sunscriber:
-    class: Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber
+  Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber:
     arguments: ['@entity_field.manager']
-    tags:
-      - { name: event_subscriber }
 
   path_processor.joinup_core:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
@@ -36,11 +33,8 @@ services:
       - { name: path_processor_inbound, priority: 0 }
       - { name: path_processor_outbound, priority: 0 }
 
-  joinup_core.event_subscriber:
-    class: Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber
+  Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber:
     arguments: ['@logger.channel.joinup_core']
-    tags:
-      - { name: event_subscriber }
 
   # Prevent errors in twigc by implementing the missing get_dummy_text function,
   # which is referenced in BCL component templates.

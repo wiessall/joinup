@@ -3,13 +3,8 @@ services:
     class: Drupal\search_api_field\Plugin\FilterPluginManager
     parent: default_plugin_manager
 
-  search_api_field.event_subscriber:
-    class: Drupal\search_api_field\EventSubscriber\MaxAgeSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\search_api_field\EventSubscriber\MaxAgeSubscriber: { }
 
-  search_api_field.search_api_subscriber:
-    class: Drupal\search_api_field\EventSubscriber\SearchApiSubscriber
+  Drupal\search_api_field\EventSubscriber\SearchApiSubscriber:
     arguments: [ '@facets.manager' ]
-    tags:
-      - { name: event_subscriber }
+

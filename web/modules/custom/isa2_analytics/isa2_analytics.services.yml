@@ -1,6 +1,3 @@
 services:
-  isa2_analytics.oe_webtools_analytics_subscriber:
-    class: Drupal\isa2_analytics\EventSubscriber\WebtoolsAnalyticsSubscriber
+  Drupal\isa2_analytics\EventSubscriber\WebtoolsAnalyticsSubscriber:
     arguments: ['@entity_type.manager', '@request_stack', '@current_route_match', '@og.context']
-    tags:
-      - { name: event_subscriber }

@@ -8,8 +8,6 @@ services:
       - '@plugin.manager.tmgmt.source'
       - '@config.factory'
 
-  eu_oss_translation.solution_post_save_subscriber:
-    class: Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber
+  Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber:
     arguments: [ '@queue' ]
-    tags:
-      - { name: event_subscriber }
+
