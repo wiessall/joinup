@@ -30,6 +30,11 @@ libraries-extend:
     - ventuno/alert
 
 libraries-override:
+  calendar_view/calendar:
+    css:
+      component:
+        css/calendar-view.css: false
+        css/calendar-view.default.css: false
   core/jquery.once: false
   oe_bootstrap_theme/style: false
   oe_bootstrap_theme/bcl: false
