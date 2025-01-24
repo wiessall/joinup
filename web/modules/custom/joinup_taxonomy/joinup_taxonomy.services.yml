@@ -16,5 +16,7 @@ services:
       - { name: event_subscriber }
   joinup_taxonomy.prepare_vocabulary_graph.subscriber:
     class: Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber
+    arguments:
+      - '@database'
     tags:
       - { name: event_subscriber }

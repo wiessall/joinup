@@ -25,7 +25,7 @@ topic:
     children:
       - name: 'Demography'
       - name: 'E-inclusion'
-eira:
+solution_type:
   - name: 'Category 1'
     children:
       - name: 'Public Service Provider'
