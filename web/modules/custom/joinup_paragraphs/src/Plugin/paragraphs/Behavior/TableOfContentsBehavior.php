@@ -18,12 +18,12 @@ use Drupal\paragraphs\ParagraphsBehaviorBase;
  * Provides a paragraphs behaviour plugin for ToC.
  *
  * @ParagraphsBehavior(
- *   id = "table_of_content_behavior",
+ *   id = "table_of_content",
  *   label = @Translation("Table of Content"),
  *   description = @Translation("Configurable table of content"),
  * )
  */
-class TableOfContentsBehaviour extends ParagraphsBehaviorBase {
+class TableOfContentsBehavior extends ParagraphsBehaviorBase {
 
   /**
    * Default max heading level.
