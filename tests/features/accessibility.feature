@@ -16,9 +16,9 @@ Feature: Accessibility
       | /collection/govtechconnect/news/register-govtech-connect-govtech4all-webinar                                                    |
       | /collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news/validator-plugin-guide                 |
       | /collection/joinup                                                                                                              |
-      | /collection/portal/about                                                                                                    |
-      | /collection/portal/faq                                                                                                      |
-      | /collection/portal/interoperability-solutions                                                                               |
+      | /collection/portal/about                                                                                                        |
+      | /collection/portal/faq                                                                                                          |
+      | /collection/portal/interoperability-solutions                                                                                   |
       | /collection/nifo-national-interoperability-framework-observatory/news/publication-2022-digital-public-administration-factsheets |
       | /collection/open-data/news/discover-new-series-webinars-data-providers                                                          |
       | /collection/open-data/news/register-finals-eu-datathon-2022                                                                     |
@@ -38,3 +38,10 @@ Feature: Accessibility
       | /search?f[0]=type:collection                                                                                                    |
       | /search?f[0]=type:event                                                                                                         |
       | /search?f[0]=type:news                                                                                                          |
+
+  Scenario: Check accessibility standards webtools maps.
+    Given I visit "/collection/open-source-observatory-osor/event/pass-salt-conference"
+    Then I click on element ".leaflet-marker-icon"
+    And I wait for CSS animations to finish
+    And the page should contain the html text 'role="dialog" aria-label="Press ESC to close this panel." tabindex="0"'
+    Then the page meets accessibility standards
