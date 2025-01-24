@@ -5,7 +5,6 @@ dependencies:
   module:
     - blazy
     - editor
-    - embed_block
     - image
     - linkit
     - markdown_easy
@@ -34,12 +33,6 @@ filters:
     provider: editor
     status: false
     weight: -47
-    settings: {  }
-  embed_block:
-    id: embed_block
-    provider: embed_block
-    status: false
-    weight: -46
     settings: {  }
   filter_align:
     id: filter_align
