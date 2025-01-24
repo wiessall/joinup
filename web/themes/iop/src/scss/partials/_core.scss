@@ -29,3 +29,14 @@
 
 // Bootstrap mixins
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
+
+// Ensure %heading is extended or replaced, or patch the source package issue.
+%heading {
+  margin-top: 0; // 1
+  margin-bottom: $headings-margin-bottom;
+  color: $headings-color;
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+  font-style: $headings-font-style;
+  line-height: $headings-line-height;
+}
