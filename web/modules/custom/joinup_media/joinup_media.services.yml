@@ -1,5 +1,3 @@
 services:
-  joinup_media.route_subscriber:
-    class: Drupal\joinup_media\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_media\Routing\RouteSubscriber: { }
+

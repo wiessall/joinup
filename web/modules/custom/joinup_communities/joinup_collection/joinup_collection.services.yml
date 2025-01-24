@@ -1,10 +1,4 @@
 services:
-  joinup_collection.route_subscriber:
-    class: Drupal\joinup_collection\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
-  joinup_collection.membership_notification.subscriber:
-    class: Drupal\joinup_collection\EventSubscriber\MembershipNotificationSubscriber
+  Drupal\joinup_collection\Routing\RouteSubscriber: { }
+  Drupal\joinup_collection\EventSubscriber\MembershipNotificationSubscriber:
     parent: joinup_notification.notification_subscriber_base
-    tags:
-      - { name: event_subscriber }

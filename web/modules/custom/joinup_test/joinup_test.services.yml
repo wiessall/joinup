@@ -1,6 +1,3 @@
 services:
-  joinup_test.search_api_finish_request_subscriber:
-    class: Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber
+  Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber:
     arguments: ['@search_api.post_request_indexing']
-    tags:
-      - { name: event_subscriber }

@@ -1,27 +1,10 @@
 services:
-  joinup_search.search_api_field_tag_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiFieldTagSubscriber
-    tags:
-      - { name: event_subscriber }
-  joinup_search.search_api_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiExcludeCurrentCustomPage
-    tags:
-      - { name: event_subscriber }
-  joinup_search.search_api_field_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder
+  Drupal\joinup_search\EventSubscriber\SearchApiFieldTagSubscriber: { }
+  Drupal\joinup_search\EventSubscriber\SearchApiExcludeCurrentCustomPage: { }
+  Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder:
     arguments: ['@facets.utility.date_handler']
-    tags:
-      - { name: event_subscriber }
-  joinup_search.search_api_indexing_items_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiIndexingItemsSubscriber
-    tags:
-      - { name: event_subscriber }
-  joinup_search.search_api_status_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber
+  Drupal\joinup_search\EventSubscriber\SearchApiIndexingItemsSubscriber: { }
+  Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber:
     arguments: ['@facets.manager']
-    tags:
-      - { name: event_subscriber }
-  joinup_search.global_search_api_alter:
-    class: Drupal\joinup_search\EventSubscriber\JoinupGlobalSearchApiAlter
-    tags:
-      - {name: 'event_subscriber'}
+  Drupal\joinup_search\EventSubscriber\JoinupGlobalSearchApiAlter: { }
+

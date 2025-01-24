@@ -1,8 +1,5 @@
 services:
-  joinup_poll.route_subscriber:
-    class: Drupal\joinup_poll\Routing\PollRouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_poll\Routing\PollRouteSubscriber: { }
   access_check.joinup_poll.ajax_request:
     class: Drupal\joinup_poll\Access\AjaxRequestAccessCheck
     tags:
