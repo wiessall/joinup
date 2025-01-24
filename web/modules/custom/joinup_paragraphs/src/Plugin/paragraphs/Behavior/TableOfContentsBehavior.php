@@ -120,6 +120,7 @@ class TableOfContentsBehavior extends ParagraphsBehaviorBase {
         'level' => $level - 1,
         'name' => Link::fromTextAndUrl(
           $paragraph->get('paragraph_heading')->getString(),
+          /* @see joinup_paragraphs_preprocess_paragraph__heading */
           Url::fromRoute('<none>', [], ['fragment' => 'paragraph-' . $paragraph->id()])
         )->toRenderable(),
       ];
