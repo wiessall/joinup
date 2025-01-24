@@ -102,5 +102,54 @@ altered before being imported into the Portal.
 
 ## Notes
 
-1. All 3 vocabularies are using the same namespace, which is
-`http://data.europa.eu/dr8`.
+All 3 vocabularies are using the same namespace, which is
+`http://data.europa.eu/dr8`. That means that there are going to be overrides in
+the `rdf_sync_uri`. Keeping the sequence of import to be EIRA > Solution type >
+eGovERA, we are making sure that the EIRA vocabulary is correctly set, and
+any possible override of the Solution type and eGovERA vocabularies is
+reflected back to the EIRA vocabulary, putting the burden to the EIRA team to
+maintain a proper structure of the file.
+
+Thus, it is suggested that any update in the EIRA or eGovERA vocabularies would
+result in re-importing all 3 vocabularies as below:
+```php
+<?php
+
+use EasyRdf\Graph;
+
+/**
+ * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
+ */
+function joinup_core_deploy_200200(): void {
+  // Clean entities of bundle `eira` and `solution_type` from the
+  // `rdf_sync_uri` table.
+  \Drupal::database()
+    ->delete('rdf_sync_uri')
+    ->condition('bundle', ['eira', 'solution_type'], 'IN')
+    ->execute();
+
+  // Import EIRA first.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA v6.1.0_SKOS.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('eira', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+
+  // Import the simplified EIRA 6.0.0.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+
+  // Import eGovERA.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/eGovERA.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+}
+```

@@ -32,6 +32,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         ['alterFileType'],
         ['alterOwnerType'],
         ['alterEira'],
+        ['alterEgovEra'],
         ['alterSolutionType'],
       ],
     ];
@@ -207,7 +208,36 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Performs alterations for the eGovEra vocabulary.
+   *
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
+   */
+  public function alterEgovEra(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid !== 'egovera') {
+      return;
+    }
+
+    // Remove resources that are already in the `rdf_sync_uri` table.
+    $graph = $event->getGraph();
+    $query = $this->database->select('rdf_sync_uri', 'r');
+    $query->fields('r', ['uri']);
+    $query->condition('r.bundle', 'eira');
+    $result = $query->execute();
+    $existingUris = $result->fetchCol();
+
+    foreach ($graph->resources() as $resource) {
+      if (in_array($resource->getUri(), $existingUris, TRUE)) {
+        $graph->deleteEntireResource($resource);
+      }
+    }
+  }
+
+  /**
    * Alters the graph for the solution_type vocabulary.
+   *
+   * This runs _after_ the EIRA alterations to ensure that the EIRA alterations
+   * get rid of the _Properties terms first.
    *
    * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
    *   The event.
@@ -309,6 +339,11 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         // Create a backwards connection from the children to the parent.
         $graph->addResource($member, 'skos:broaderTransitive', $resource);
       }
+
+      $label = $resource->getLiteral('skos:prefLabel');
+      if ($label && $label->getValue() === 'EIRA Properties') {
+        $graph->deleteEntireResource($resource);
+      }
     }
 
     // Add the link to all skos:Concept type elements so that they are all
@@ -321,11 +356,6 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       case 'http://data.europa.eu/dr8/ArchitecturePrinciple':
         $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Privacy', TRUE);
         $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Security', TRUE);
-        break;
-
-      case 'http://data.europa.eu/dr8/AuthenticationMiddlewareApplicationComponent':
-        $this->deleteLiteralContainingText($resource, 'skos:prefLabel', 'Authentication Middleware', TRUE);
-        $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: Inspired in Gartner');
         break;
 
       case 'http://data.europa.eu/dr8/AdministrativeSimplification':
@@ -362,6 +392,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    * Fetches a list of solution type URIs that are used by the solution type.
    *
    * @return string[]
+   *   The list of URIs.
    */
   protected function lookupUsedSolutionTypeLabels(): array {
     $query = $this->database->select('taxonomy_term_field_data', 't');
