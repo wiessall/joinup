@@ -27,3 +27,31 @@ function joinup_core_deploy_200200(): void {
     ->registerVocabulary('egovera', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
     ->update();
 }
+
+/**
+ * Deploy the solution type (simplified EIRA 6.0.0) vocabulary.
+ */
+function joinup_core_deploy_200201(): void {
+  // Clean entities of bundle `eira` and `solution_type` from the
+  // `rdf_sync_uri` table.
+  \Drupal::database()
+    ->delete('rdf_sync_uri')
+    ->condition('bundle', ['eira', 'solution_type'], 'IN')
+    ->execute();
+
+  // Import EIRA first.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA v6.1.0_SKOS.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('eira', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+
+  // Import the simplified EIRA 6.0.0.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+}
