@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_taxonomy\EventSubscriber;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Database\Connection;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
+use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
@@ -15,6 +17,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Listens to graph preparation event.
  */
 class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
+
+  public function __construct(protected Connection $database) {}
 
   /**
    * {@inheritdoc}
@@ -28,6 +32,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         ['alterFileType'],
         ['alterOwnerType'],
         ['alterEira'],
+        ['alterSolutionType'],
       ],
     ];
   }
@@ -184,7 +189,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function alterEira(PrepareVocabularyGraphEvent $event): void {
-    if (!in_array($event->vid, ['egovera', 'eira'])) {
+    if (!in_array($event->vid, ['egovera', 'eira', 'solution_type'])) {
       return;
     }
     $graph = $event->getGraph();
@@ -197,105 +202,180 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
     RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
 
     foreach ($graph->resources() as $resource) {
-      if (str_ends_with($resource->getUri(), '_Properties')) {
-        // For EIRA_SKOS, after version 6, they have added all extra properties
-        // of the EIRA terms as separate terms in the graph. To properly handle
-        // these secondary terms in the website, we extract the extra-properties
-        // and inject them, as a Json serialized array, into the main term.
-        $namespaces = $rows = [];
-        $mainResource = $resource->getResource('skos:related');
-        foreach ($resource->propertyUris() as $propertyUri) {
-          $shortenedProperty = RdfNamespace::shorten($propertyUri);
-          // Do not store the skos:topConceptOf and skos:related properties.
-          if (in_array($shortenedProperty, ['skos:topConceptOf', 'skos:related'], TRUE)) {
-            continue;
-          }
-          $prefix = RdfNamespace::prefixOfUri($propertyUri);
-          $namespaces[$prefix] = [
-            'namespace' => $prefix . ':',
-            'uri' => RdfNamespace::get($prefix),
-          ];
-          foreach ($graph->all($resource, $shortenedProperty) as $object) {
-            $rows[] = [
-              'property' => $shortenedProperty,
-              'value' => $object->toRdfPhp(),
-            ];
-          }
-        }
+      $this->performEiraAlterations($graph, $resource);
+    }
+  }
 
-        // Inject properties in the main term.
-        $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
-          'namespaces' => $namespaces,
-          'rows' => $rows,
-        ]));
-        $graph->deleteSingleProperty($mainResource, $resource->getUri());
+  /**
+   * Alters the graph for the solution_type vocabulary.
+   *
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
+   */
+  public function alterSolutionType(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid !== 'solution_type') {
+      return;
+    }
 
-        // We've extracted what we need. Drop this resource and jump to next.
+    $usedTerms = $this->lookupUsedSolutionTypeLabels();
+    $graph = $event->getGraph();
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    // Replace the `dc` namespace with `dct` - requested by the client.
+    RdfNamespace::delete('dc');
+    RdfNamespace::delete('dcterms');
+    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
+    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
+
+    foreach ($graph->resources() as $resource) {
+      if ($resource->isA('skos:Collection')) {
+        // Do not deal with term groups yet.
+        continue;
+      }
+
+      $label = $resource->getLiteral('skos:prefLabel');
+      if ($label && !in_array($label->getValue(), $usedTerms, TRUE)) {
         $graph->deleteEntireResource($resource);
         continue;
       }
 
+      $this->performEiraAlterations($graph, $resource);
+    }
+
+    // Now that we have removed all unused terms, we can remove all empty
+    // term groups.
+    foreach ($graph->resources() as $resource) {
       if ($resource->isA('skos:Collection')) {
-        // Add the skos:Concept type to all collection elements so that they are
-        // listed as parent terms.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3216
-        $graph->addType($resource, 'skos:Concept');
-
-        foreach ($graph->allResources($resource, 'skos:member') as $member) {
-          // Create a backwards connection from the children to the parent.
-          $graph->addResource($member, 'skos:broaderTransitive', $resource);
-        }
-      }
-
-      // Add the link to all skos:Concept type elements so that they are all
-      // considered as children of the vocabulary regardless of their depth.
-      if ($resource->isA('skos:Concept')) {
-        $graph->addResource($resource, 'skos:topConceptOf', 'http://data.europa.eu/dr8');
-      }
-
-      // Fix resources with multiple labels or descriptions. Actually, these
-      // resources are defined multiple times in EIRA_SKOS.rdf file which is a
-      // bug. We're keeping the values currently used in production.
-      switch ($resource->getUri()) {
-        case 'http://data.europa.eu/dr8/ArchitecturePrinciple':
-          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Privacy', TRUE);
-          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Security', TRUE);
-          break;
-
-        case 'http://data.europa.eu/dr8/AuthenticationMiddlewareApplicationComponent':
-          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', 'Authentication Middleware', TRUE);
-          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: Inspired in Gartner');
-          break;
-
-        case 'http://data.europa.eu/dr8/AdministrativeSimplification':
-          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Harmonised rules on eligibility and durability');
-          break;
-
-        case 'http://data.europa.eu/dr8/ClientrequestforserviceApplicationEvent':
-          $this->deleteLiteralContainingText($resource, 'skos:definition', 'https://www.techtarget.com/searchenterprisedesktop/definition/client');
-          break;
-
-        case 'http://data.europa.eu/dr8/HostingFacility':
-          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: DIGIT C Infrastructure Services Provision');
-      }
-
-      // The object of `owl:deprecated` predicate is stored as string even, in
-      // fact, it's semantically a boolean. Do here the correct cast to boolean.
-      if ($graph->hasProperty($resource, 'owl:deprecated')) {
-        /** @var \EasyRdf\Literal $object */
-        foreach ($graph->allLiterals($resource, 'owl:deprecated') as $object) {
-          $value = match($object->getValue()) {
-            'true' => TRUE,
-            'false' => FALSE,
-            default => NULL,
-          };
-          $graph->deleteLiteral($resource, 'owl:deprecated', $object->getValue());
-          if ($value !== NULL) {
-            $graph->addLiteral($resource, 'owl:deprecated', new Literal($value, NULL, 'xsd:boolean'));
-          }
+        $members = $graph->allResources($resource, 'skos:member');
+        if (empty($members)) {
+          $graph->deleteEntireResource($resource);
         }
       }
     }
+  }
+
+  /**
+   * Handles special cases of the EIRA vocabulary.
+   *
+   * @param \EasyRdf\Graph $graph
+   *   The graph.
+   * @param \EasyRdf\Resource $resource
+   *   The resource.
+   */
+  protected function performEiraAlterations(Graph $graph, Resource $resource): void {
+    if (str_ends_with($resource->getUri(), '_Properties')) {
+      // For EIRA_SKOS, after version 6, they have added all extra properties
+      // of the EIRA terms as separate terms in the graph. To properly handle
+      // these secondary terms in the website, we extract the extra-properties
+      // and inject them, as a Json serialized array, into the main term.
+      $namespaces = $rows = [];
+      $mainResource = $resource->getResource('skos:related');
+      foreach ($resource->propertyUris() as $propertyUri) {
+        $shortenedProperty = RdfNamespace::shorten($propertyUri);
+        // Do not store the skos:topConceptOf and skos:related properties.
+        if (in_array($shortenedProperty, ['skos:topConceptOf', 'skos:related'], TRUE)) {
+          continue;
+        }
+        $prefix = RdfNamespace::prefixOfUri($propertyUri);
+        $namespaces[$prefix] = [
+          'namespace' => $prefix . ':',
+          'uri' => RdfNamespace::get($prefix),
+        ];
+        foreach ($graph->all($resource, $shortenedProperty) as $object) {
+          $rows[] = [
+            'property' => $shortenedProperty,
+            'value' => $object->toRdfPhp(),
+          ];
+        }
+      }
+
+      // Inject properties in the main term.
+      $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
+        'namespaces' => $namespaces,
+        'rows' => $rows,
+      ]));
+      $graph->deleteSingleProperty($mainResource, $resource->getUri());
+
+      // We've extracted what we need. Drop this resource and jump to next.
+      $graph->deleteEntireResource($resource);
+    }
+
+    if ($resource->isA('skos:Collection')) {
+      // Add the skos:Concept type to all collection elements so that they are
+      // listed as parent terms.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3216
+      $graph->addType($resource, 'skos:Concept');
+
+      foreach ($graph->allResources($resource, 'skos:member') as $member) {
+        // Create a backwards connection from the children to the parent.
+        $graph->addResource($member, 'skos:broaderTransitive', $resource);
+      }
+    }
+
+    // Add the link to all skos:Concept type elements so that they are all
+    // considered as children of the vocabulary regardless of their depth.
+    if ($resource->isA('skos:Concept')) {
+      $graph->addResource($resource, 'skos:topConceptOf', 'http://data.europa.eu/dr8');
+    }
+
+    switch ($resource->getUri()) {
+      case 'http://data.europa.eu/dr8/ArchitecturePrinciple':
+        $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Privacy', TRUE);
+        $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Security', TRUE);
+        break;
+
+      case 'http://data.europa.eu/dr8/AuthenticationMiddlewareApplicationComponent':
+        $this->deleteLiteralContainingText($resource, 'skos:prefLabel', 'Authentication Middleware', TRUE);
+        $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: Inspired in Gartner');
+        break;
+
+      case 'http://data.europa.eu/dr8/AdministrativeSimplification':
+        $this->deleteLiteralContainingText($resource, 'skos:definition', 'Harmonised rules on eligibility and durability');
+        break;
+
+      case 'http://data.europa.eu/dr8/ClientrequestforserviceApplicationEvent':
+        $this->deleteLiteralContainingText($resource, 'skos:definition', 'https://www.techtarget.com/searchenterprisedesktop/definition/client');
+        break;
+
+      case 'http://data.europa.eu/dr8/HostingFacility':
+        $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: DIGIT C Infrastructure Services Provision');
+    }
+
+    // The object of `owl:deprecated` predicate is stored as string even, in
+    // fact, it's semantically a boolean. Do here the correct cast to boolean.
+    if ($graph->hasProperty($resource, 'owl:deprecated')) {
+      /** @var \EasyRdf\Literal $object */
+      foreach ($graph->allLiterals($resource, 'owl:deprecated') as $object) {
+        $value = match($object->getValue()) {
+          'true' => TRUE,
+          'false' => FALSE,
+          default => NULL,
+        };
+        $graph->deleteLiteral($resource, 'owl:deprecated', $object->getValue());
+        if ($value !== NULL) {
+          $graph->addLiteral($resource, 'owl:deprecated', new Literal($value, NULL, 'xsd:boolean'));
+        }
+      }
+    }
+  }
+
+  /**
+   * Fetches a list of solution type URIs that are used by the solution type.
+   *
+   * @return string[]
+   */
+  protected function lookupUsedSolutionTypeLabels(): array {
+    $query = $this->database->select('taxonomy_term_field_data', 't');
+    $query->distinct();
+    $query->fields('r', ['uri']);
+    $query->condition('t.vid', 'eira');
+    $query->condition('r.entity_type', 'taxonomy_term');
+    $query->innerJoin('node__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
+    $query->leftJoin('rdf_sync_uri', 'r', 't.tid = r.entity_id');
+    $result = $query->execute();
+
+    return array_map(function ($row) {
+      return $row->uri;
+    }, $result->fetchAllAssoc('uri'));
   }
 
   /**
