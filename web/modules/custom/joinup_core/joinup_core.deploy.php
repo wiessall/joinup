@@ -17,21 +17,9 @@ declare(strict_types=1);
 use EasyRdf\Graph;
 
 /**
- * Deploy the eGovERA vocabulary.
+ * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
  */
 function joinup_core_deploy_200200(): void {
-  $graph = new Graph();
-  $graph->parseFile('../resources/vocab/eGovERA.rdf');
-  \Drupal::service('joinup_taxonomy.vocabulary_updater')
-    ->registerGraph('http://data.europa.eu/dr8', $graph)
-    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
-    ->update();
-}
-
-/**
- * Deploy the solution type (simplified EIRA 6.0.0) vocabulary.
- */
-function joinup_core_deploy_200201(): void {
   // Clean entities of bundle `eira` and `solution_type` from the
   // `rdf_sync_uri` table.
   \Drupal::database()
@@ -53,5 +41,12 @@ function joinup_core_deploy_200201(): void {
   \Drupal::service('joinup_taxonomy.vocabulary_updater')
     ->registerGraph('http://data.europa.eu/dr8', $graph)
     ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/eGovERA.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
     ->update();
 }
