@@ -397,6 +397,10 @@ module.exports = {
           dest: "paragraph--video.min.css",
         },
         {
+          entry: "components/paragraphs/paragraph--events-calendar.scss",
+          dest: "paragraph--events-calendar.min.css",
+        },
+        {
           entry: "components/releases.scss",
           dest: "releases.min.css",
         },
