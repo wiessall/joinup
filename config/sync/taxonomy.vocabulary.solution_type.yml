@@ -3,11 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_taxonomy
     - rdf_sync
 third_party_settings:
+  joinup_taxonomy:
+    locked: true
   rdf_sync:
     type: 'http://data.europa.eu/dr8'
-    uri_plugin: topic
+    uri_plugin: null
     fields:
       vid:
         target_id:
