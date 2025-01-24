@@ -71,11 +71,19 @@ class PrivateMessageReportForm extends FormBase {
     ];
 
     $form['report'] = [
-      '#type' => 'textarea',
+      '#type' => 'text_format',
       '#title' => $this->t('Report'),
-      '#description' => $this->t('Enter your report message.'),
+      '#format' => 'plain_text',
+      '#allowed_formats' => ['plain_text'],
       '#required' => TRUE,
     ];
+
+    // Hide text format guidelines.
+    $form['#after_build'][] = function (array $element) {
+      unset($element['report']['format']['guidelines']);
+      unset($element['report']['format']['help']);
+      return $element;
+    };
 
     $form['block_sender'] = [
       '#type' => 'checkbox',
@@ -145,7 +153,16 @@ class PrivateMessageReportForm extends FormBase {
     $this->messenger()->deleteByType(MessengerInterface::TYPE_ERROR);
     $report = $form_state->getValue('report');
     $blockSender = $form_state->getValue('block_sender');
+
     $message = $form_state->getValue('private_message');
+    assert($message instanceof PrivateMessageInterface);
+
+    // Update custom fields in private message entity.
+    $message
+      ->set('report', $report)
+      ->set('report_timestamp', $this->time->getCurrentTime())
+      ->save();
+
     $sender = $message->getOwner();
     $params = [
       'sender' => $sender,
@@ -169,10 +186,6 @@ class PrivateMessageReportForm extends FormBase {
           '%name' => $sender->getDisplayName(),
         ]));
     }
-    // Update custom fields in private message entity.
-    $message->set('report', $report);
-    $message->set('report_timestamp', $this->time->getCurrentTime());
-    $message->save();
   }
 
   /**
