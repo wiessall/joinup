@@ -80,46 +80,36 @@ class CalendarContext extends RawDrupalContext implements Context {
   }
 
   /**
-   * Selects the next month repeatedly until a specific month is reached.
-   *
-   * @param string $month
-   *   The name of the month.
-   *
-   * @When I select the next month repeatedly until I reach :month
-   */
-  public function iSelectTheNextMonthRepeatedlyUntilIreach(string $month): void {
-    $month = strtoupper($month);
-    for ($i = 0; $i < 12; $i++) {
-      $this->assertSession()->elementExists('css', '.pager__next')->click();
-      $this->waitForAjax();
-      $page = $this->getSession()->getPage();
-      $calendar_element = $page->find('css', '.pager__current');
-      if ($calendar_element && str_contains($calendar_element->getText(), $month)) {
-        return;
-      }
-    }
-  }
-
-  /**
-   * Selects the next month repeatedly until a specific week is reached.
+   * Navigates through calendar.
    *
    * @param string $date
    *   The selected date.
+   * @param int $maxAttempts
+   *   The maximum attempts for clicking selected pager link.
+   * @param string $pagerSelector
+   *   The pager selector: previous or next.
    *
-   * @When I select the next week repeatedly until I reach :date
+   * @When I navigate calendar using :pagerSelector maximum :maxAttempts times until the date :date is displayed
    */
-  public function iSelectTheNextWeekRepeatedlyUntilIreach(string $date): void {
-    for ($i = 0; $i < 52; $i++) {
-      $this->assertSession()->elementExists('css', '.pager__next')->click();
+  public function iNavigateCalendarUsingMaximumTimesUntilTheDateIsDisplayed(string $date, int $maxAttempts, string $pagerSelector): void {
+    $timestamp = strtotime($date);
+    $locator = '.calendar-view-day time[datetime^="' . $date . '"]';
+    $pagerSelector = strtolower($pagerSelector);
+    $pagerSelector = '.pager__' . $pagerSelector;
+    if (!$timestamp) {
+      throw new \Exception(sprintf('"%s" is not correct date value.', $date));
+    }
+
+    while ($maxAttempts--) {
+      $this->assertSession()->elementExists('css', $pagerSelector)->click();
       $this->waitForAjax();
-      $page = $this->getSession()->getPage();
-      $locator = '.calendar-view-day time[datetime^="' . $date . '"]';
-      $calendar_element = $page->find('css', $locator);
-      if ($calendar_element) {
+
+      if ($this->getSession()->getPage()->find('css', $locator)) {
         return;
       }
     }
-    throw new \Exception("No element for date " . $date . " was found. Please use format Y-m-d.");
+
+    throw new \Exception(sprintf('Unable to find the element matching "%s".', $date));
   }
 
   /**
@@ -133,17 +123,12 @@ class CalendarContext extends RawDrupalContext implements Context {
   public function iSeeTheEventShowingInTheCalendar(string $event): void {
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', '.calendar-view-day');
-    $eventElement = NULL;
-    foreach ($elements as $element) {
-      if (str_contains($element->getText(), $event)) {
-        $eventElement = $element;
-        break;
-      }
-    }
+    $eventElement = current(array_filter($elements, fn($element) => str_contains($element->getText(), $event))) ?: NULL;
 
     if (!$eventElement) {
-      throw new \Exception(sprintf("Element with class 'calendar-view-day' containing text '%s' was not found.", $event));
+      throw new \Exception(sprintf("Unable to locate an element containing the text '%s'.", $event));
     }
+
   }
 
 }

@@ -36,7 +36,7 @@ Feature:
     And I press "Publish"
     Then I should be on the Page content page
     Then I should see the calendar showing all days of current month
-    And I select the next month repeatedly until I reach December
+    When I navigate calendar using "next" maximum 12 times until the date "2025-12-01" is displayed
     Then I see the "Dummy Event" showing in the Calendar
     Then I see the "Dummy Event 2" showing in the Calendar
     Then I see the "Dummy Event 3" showing in the Calendar
@@ -63,7 +63,7 @@ Feature:
     And I press "Publish"
     Then I should be on the "Page 2" content page
     Then I should see the calendar showing all days of current week
-    And I select the next week repeatedly until I reach "2025-12-15"
+    When I navigate calendar using "next" maximum 52 times until the date "2025-12-15" is displayed
     Then I see the "Dummy Event" showing in the Calendar
     And I click "Dummy Event"
     Then I should be on the "Dummy Event" content page
