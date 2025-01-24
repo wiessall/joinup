@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.og_membership.default.coc_acceptance
+    - field.field.og_membership.default.coc_document
     - field.field.og_membership.default.og_membership_request
     - og.og_membership_type.default
 _core:
@@ -20,6 +22,8 @@ content:
     weight: 0
     region: content
 hidden:
+  coc_acceptance: true
+  coc_document: true
   roles: true
   search_api_excerpt: true
   state: true

@@ -1,0 +1,21 @@
+uuid: decc6c78-ba06-4040-99bb-17b83f81fe48
+langcode: en
+status: true
+dependencies:
+  module:
+    - entity_reference_revisions
+    - node
+    - og
+id: og_membership.coc_document
+field_name: coc_document
+entity_type: og_membership
+type: entity_reference_revisions
+settings:
+  target_type: node
+module: entity_reference_revisions
+locked: false
+cardinality: 1
+translatable: false
+indexes: { }
+persist_with_no_fields: false
+custom_storage: false
