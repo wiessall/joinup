@@ -533,16 +533,16 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     return [
       'path' => $response['path'],
       'repository' => [
-        'rootRef' => $response['default_branch'],
+        'rootRef' => $response['default_branch'] ?? NULL,
         'blobs' => ['nodes' => []],
       ],
       'id' => (string) $response['id'],
-      'description' => $response['description'],
+      'description' => $response['description'] ?? NULL,
       'archived' => $response['archived'] ?? FALSE,
-      'forksCount' => $response['forks_count'],
-      'starCount' => $response['star_count'],
+      'forksCount' => $response['forks_count'] ?? NULL,
+      'starCount' => $response['star_count'] ?? NULL,
       'openIssuesCount' => $response['open_issues'] ?? NULL,
-      'avatarUrl' => $response['avatar_url'],
+      'avatarUrl' => $response['avatar_url'] ?? NULL,
     ];
   }
 

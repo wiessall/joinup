@@ -249,6 +249,13 @@ Run the following, to fetch from
 Fetch solutions from Dutch catalogue
 ```bash
 ./vendor/bin/drush eu-oss:fetch dutch_catalogue
+```
+
+Run the following, to fetch from
+Fetch solutions from French catalogue
+```bash
+./vendor/bin/drush eu-oss:fetch awesome_code_gouv_fr
+```
 
 This command queries the Developers Italia provider endpoint, fetches the data
 and populates the queue. Later, the cronjob is triggering the queue worker which
