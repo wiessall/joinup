@@ -100,10 +100,7 @@ class TableOfContentsBehavior extends ParagraphsBehaviorBase {
       return [];
     }
 
-    $paragraphs = $field_item_list->getEntity()
-      ->get($field_item_list->getName())
-      ->referencedEntities();
-    $headings = array_filter($paragraphs, function ($paragraph) use ($max_level) {
+    $headings = array_filter($field_item_list->referencedEntities(), function($paragraph) use ($max_level) {
       $level = $this->getLevel(
         $paragraph->getBehaviorSetting('heading_behavior', 'level', self::DEFAULT_MAX_LEVEL)
       );
