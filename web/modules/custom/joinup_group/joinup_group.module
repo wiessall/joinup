@@ -30,6 +30,7 @@ use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\GroupMembership;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\GroupDeleteForm;
@@ -81,6 +82,10 @@ function joinup_group_theme($existing, $type, $theme, $path): array {
 function joinup_group_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['message']['announcement'])) {
     $bundles['message']['announcement']['class'] = Announcement::class;
+  }
+
+  if (!empty($bundles['og_membership']['default'])) {
+    $bundles['og_membership']['default']['class'] = GroupMembership::class;
   }
 }
 
