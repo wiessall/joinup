@@ -6,8 +6,6 @@ services:
       - '@current_user'
       - '@logger.channel.sparql_endpoint'
       - '@config.factory'
-  sparql_endpoint.endpoint_response_subscriber:
-    class: Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber
+  Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber:
     arguments: [ '@sparql_endpoint.endpoint_tracker' ]
-    tags:
-      - { name: 'event_subscriber' }
+

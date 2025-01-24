@@ -1,5 +1,2 @@
 services:
-  eira.extra_properties.normalizer.subscriber:
-    class: Drupal\eira\EventSubscriber\NormalizeSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\eira\EventSubscriber\NormalizeSubscriber: { }

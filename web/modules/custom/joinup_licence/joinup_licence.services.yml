@@ -8,15 +8,9 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: paramconverter }
-  joinup_licence.group_add_content.subscriber:
-    class: Drupal\joinup_licence\EventSubscriber\LicenceGroupSubscriber
+  Drupal\joinup_licence\EventSubscriber\LicenceGroupSubscriber:
     arguments: ['@entity_type.manager']
-    tags:
-      - { name: event_subscriber }
   plugin.manager.joinup_licence_compatibility_rule:
     class: Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager
     parent: default_plugin_manager
-  joinup_licence.prepare_vocabulary_graph.subscriber:
-    class: Drupal\joinup_licence\EventSubscriber\SpdxVocabularySubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_licence\EventSubscriber\SpdxVocabularySubscriber: { }

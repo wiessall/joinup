@@ -1,5 +1,2 @@
 services:
-  joinup_paragraphs.tiles_restriction_subscriber:
-    class: Drupal\joinup_paragraphs\EventSubscriber\TilesParagraphRestrictionSubscriber
-    tags:
-      - { name: 'event_subscriber' }
+  Drupal\joinup_paragraphs\EventSubscriber\TilesParagraphRestrictionSubscriber: { }

@@ -3,31 +3,13 @@ services:
     class: Drupal\topic\PathProcessor\TopicPathProcessor
     tags:
       - { name: path_processor_outbound, priority: 1001 }
-
   topic.vocabulary_manager:
     class: Drupal\topic\VocabularyManager
     arguments: ['@entity_type.manager', '@database', '@rdf_sync.connection', '@meta_entity.repository']
-
-  topic.event_subscriber:
-    class: Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber
+  Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber:
     arguments: ['@entity_type.manager']
-    tags:
-      - { name: event_subscriber }
-
-  topic.query_preset_subscriber:
-    class: Drupal\topic\EventSubscriber\QueryPresetSubscriber
+  Drupal\topic\EventSubscriber\QueryPresetSubscriber:
     arguments: ['@current_route_match']
-    tags:
-      - { name: event_subscriber }
-
-  topic.topic_route_subscriber:
-    class: Drupal\topic\Routing\TopicRouteSubscriber
-    tags:
-      - { name: event_subscriber }
-
-  topic.request_subscriber:
-    class: Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber
-    arguments:
-      - '@router'
-    tags:
-      - { name: event_subscriber }
+  Drupal\topic\Routing\TopicRouteSubscriber: { }
+  Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber:
+    arguments: ['@router']
