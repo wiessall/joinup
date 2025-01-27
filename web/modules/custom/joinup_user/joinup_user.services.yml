@@ -13,15 +13,24 @@ services:
     arguments: ['@current_route_match']
     tags:
       - { name: 'context_provider' }
-  Drupal\joinup_user\Routing\RouteSubscriber: { }
+  joinup_user.route_subscriber:
+    class: Drupal\joinup_user\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
   joinup_user.user_cancelled.access_checker:
     class: Drupal\joinup_user\Access\UserStatusAccessCheck
     tags:
       - { name: access_check, applies_to: _user_status }
-  Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber:
+  joinup_user.user_cancel:
+    class: Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber
     arguments: ['@entity_type.manager', '@og.membership_manager', '@user.data', '@password_generator']
-  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber:
+    tags:
+      - { name: 'event_subscriber' }
+  joinup_user.show_only_user_content_subscriber:
+    class: Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber
     arguments: ['@current_user', '@messenger']
+    tags:
+      - { name: event_subscriber }
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
     arguments: ['@current_user', '@messenger', '@plugin.manager.mail']
