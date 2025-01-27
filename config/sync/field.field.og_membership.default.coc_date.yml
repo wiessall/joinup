@@ -1,20 +1,20 @@
-uuid: 6f0529ab-f96c-405a-95d8-0a8199713bbf
+uuid: 07dc4f4c-dce4-4206-98f6-cd7cf7bf645c
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.og_membership.coc_acceptance
+    - field.storage.og_membership.coc_date
     - og.og_membership_type.default
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: og_membership.default.coc_acceptance
-field_name: coc_acceptance
+id: og_membership.default.coc_date
+field_name: coc_date
 entity_type: og_membership
 bundle: default
-label: 'Code of Conduct acceptance'
+label: 'Code of Conduct date'
 description: ''
 required: false
 translatable: false

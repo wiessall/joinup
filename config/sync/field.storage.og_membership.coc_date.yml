@@ -1,18 +1,18 @@
-uuid: afb8f107-1bf7-47db-a3a3-57075b2e92d3
+uuid: 9c73ec92-8855-4c9c-8833-5997656f8592
 langcode: en
 status: true
 dependencies:
   module:
     - og
-id: og_membership.coc_acceptance
-field_name: coc_acceptance
+id: og_membership.coc_date
+field_name: coc_date
 entity_type: og_membership
 type: timestamp
-settings: { }
+settings: {  }
 module: core
 locked: false
 cardinality: 1
-translatable: false
-indexes: { }
+translatable: true
+indexes: {  }
 persist_with_no_fields: false
 custom_storage: false
