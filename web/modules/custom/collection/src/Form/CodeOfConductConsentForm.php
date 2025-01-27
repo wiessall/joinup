@@ -117,7 +117,7 @@ class CodeOfConductConsentForm extends FormBase {
     $access = AccessResult::allowedIf(
       $node->hasCodeOfConductToAccept() &&
       $membership instanceof CodeOfConductMembershipInterface &&
-      !$membership->isLastDocumentRevisionAccepted($node))
+      !$membership->isLastDocumentRevisionAccepted())
       ->cachePerUser()
       ->addCacheContexts(['og_group_context'])
       ->addCacheTags(Cache::buildTags('og-group-content', $node->getCacheTags()));
