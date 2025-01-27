@@ -1,8 +1,20 @@
 services:
-  Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber:
+  joinup_eulogin.cas.subscriber:
+    class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber
     arguments: ['@config.factory', '@user.data', '@entity_type.manager', '@request_stack', '@messenger', '@state', '@externalauth.authmap']
-  Drupal\joinup_eulogin\Routing\JoinupEuLoginRouteSubscriber: { }
-  Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber:
+    tags:
+      - { name: 'event_subscriber' }
+  joinup_eulogin.route.subscriber:
+    class: Drupal\joinup_eulogin\Routing\JoinupEuLoginRouteSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+  joinup_eulogin.anonymous_403.subscriber:
+    class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber
     arguments: ['@current_user']
-  Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginUserCancelSubscriber:
+    tags:
+      - { name: event_subscriber }
+  joinup_eulogin.user_cancel:
+    class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginUserCancelSubscriber
     arguments: ['@externalauth.authmap']
+    tags:
+      - { name: 'event_subscriber' }
