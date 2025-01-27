@@ -10,7 +10,6 @@ dependencies:
     - blazy
     - joinup_collection
     - editor
-    - embed_block
     - image
     - joinup_core
     - linkit
@@ -47,12 +46,6 @@ filters:
     provider: editor
     status: true
     weight: -46
-    settings: {  }
-  embed_block:
-    id: embed_block
-    provider: embed_block
-    status: false
-    weight: -42
     settings: {  }
   filter_add_empty_alt_attribute:
     id: filter_add_empty_alt_attribute
