@@ -15,13 +15,13 @@ interface CodeOfConductMembershipInterface {
    * Checks if the latest revision of the Code of Conduct has been accepted.
    *
    * This verifies whether the user has explicitly accepted the most
-   * recent revision of the Code of Conduct for a given collection enti
+   * recent revision of the Code of Conduct for a given collection entiy.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $collection
    *   Collection entity.
    *
    * @return bool
-   *  TRUE if the latest document revision is accepted, FALSE otherwise.
+   *   TRUE if the latest document revision is accepted, FALSE otherwise.
    */
   public function isLastDocumentRevisionAccepted(CollectionInterface $collection): bool;
 
