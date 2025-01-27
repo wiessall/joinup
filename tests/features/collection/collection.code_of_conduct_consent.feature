@@ -18,7 +18,6 @@ Feature:
       | collection     | user             | state  |
       | Knowledge Hive | Cedric Hawthorne | active |
 
-
   Scenario: User can accept the latest version of Code of Conduct
     Given I am logged in as "Cedric Hawthorne"
 
