@@ -307,6 +307,7 @@ class SubscribeToCollectionForm extends FormBase {
     if ($membership instanceof CodeOfConductMembershipInterface &&
       $codeOfConduct = $collection->getCodeOfConduct()) {
       $membership->setAcceptedDocument($codeOfConduct);
+      $membership->save();
     }
 
     $subscribe = (bool) $form_state->getValue('subscribe');
