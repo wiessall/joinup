@@ -72,6 +72,25 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the Code of Conduct consent page of a collection.
+   *
+   * @param string $collection
+   *   The title of the collection.
+   *
+   * @When I visit the :collection Code of Conduct consent page
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function visitCodeOfConductConsentPage(string $collection): void {
+    $entity = $this->getEntityByLabel('node', $collection, 'collection');
+
+    $url = Url::fromRoute('collection.code_of_conduct_consent', [
+      'node' => $entity->id(),
+    ]);
+    $this->visitPath($url->toString());
+  }
+
+  /**
    * Checks that the user is on the given collection homepage.
    *
    * @param string $collection
