@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
-use Drupal\collection\Entity\CodeOfConductMembershipInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
@@ -13,6 +11,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\node\NodeInterface;
 
 /**
