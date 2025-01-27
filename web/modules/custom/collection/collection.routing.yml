@@ -26,3 +26,17 @@ entity.node.glossary:
         type: entity:node
         bundle:
           - collection
+collection.code_of_conduct_consent:
+  path: '/node/{node}/code-of-conduct-consent'
+  defaults:
+    _form: '\Drupal\collection\Form\CodeOfConductConsentForm'
+    _title: 'Important information'
+  requirements:
+    _custom_access: '\Drupal\collection\Form\CodeOfConductConsentForm::access'
+    _user_is_logged_in: 'TRUE'
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection

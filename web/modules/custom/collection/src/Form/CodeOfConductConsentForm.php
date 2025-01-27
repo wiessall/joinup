@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_group\Form;
+namespace Drupal\collection\Form;
 
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
@@ -11,20 +13,18 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_group\Entity\CodeOfConductMembershipInterface;
 use Drupal\node\NodeInterface;
 
 /**
  * Form for accepting new Code of Conduct document.
  */
-class CodeOfConductAcceptanceForm extends FormBase {
+class CodeOfConductConsentForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'joinup_group_acceptance_form';
+    return 'collection_code_of_conduct_form';
   }
 
   /**
@@ -58,7 +58,7 @@ class CodeOfConductAcceptanceForm extends FormBase {
       '#type' => 'checkbox',
       '#required' => TRUE,
       '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of conduct</a> of @label.', $args),
-      '#required_error' => $this->t('You must accept the <a href=":url">Code of conduct</a>', $args),
+      '#required_error' => $this->t('You must accept the <a href=":url" target="_blank">Code of conduct</a>', $args),
     ];
 
     $form['actions'] = [
@@ -95,6 +95,8 @@ class CodeOfConductAcceptanceForm extends FormBase {
     $membership->setAcceptedDocument($codeOfConduct);
     $membership->save();
 
+    $this->messenger()
+      ->addStatus($this->t('Thank you for confirming your agreement to the Code of Conduct.'));
     $form_state->setRedirect('entity.node.canonical', ['node' => $collection->id()]);
   }
 
@@ -112,8 +114,10 @@ class CodeOfConductAcceptanceForm extends FormBase {
   public function access(CollectionInterface $node, AccountInterface $account): AccessResultInterface {
     $membership = $node->getMembership((int) $account->id());
 
-    $access = AccessResult::allowedIf($node->hasCodeOfConductToAccept() && $membership &&
-      !$membership->isLastRevisionAccepted($node))
+    $access = AccessResult::allowedIf(
+      $node->hasCodeOfConductToAccept() &&
+      $membership instanceof CodeOfConductMembershipInterface &&
+      !$membership->isLastDocumentRevisionAccepted($node))
       ->cachePerUser()
       ->addCacheContexts(['og_group_context'])
       ->addCacheTags(Cache::buildTags('og-group-content', $node->getCacheTags()));
