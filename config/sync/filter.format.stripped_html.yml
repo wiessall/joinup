@@ -6,7 +6,6 @@ dependencies:
     - blazy
     - joinup_collection
     - editor
-    - embed_block
     - image
     - linkit
     - markdown_easy
@@ -43,12 +42,6 @@ filters:
     provider: editor
     status: false
     weight: -37
-    settings: {  }
-  embed_block:
-    id: embed_block
-    provider: embed_block
-    status: false
-    weight: -36
     settings: {  }
   filter_autop:
     id: filter_autop
