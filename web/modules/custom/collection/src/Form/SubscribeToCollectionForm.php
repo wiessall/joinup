@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
-use Drupal\collection\Entity\CodeOfConductMembershipInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
@@ -24,6 +23,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
