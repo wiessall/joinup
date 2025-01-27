@@ -17,8 +17,6 @@ interface CodeOfConductMembershipInterface {
    *
    * @param \Drupal\collection\Entity\CollectionInterface $node
    *   Collection entity.
-   *
-   * @return bool
    */
   public function isLastRevisionAccepted(CollectionInterface $node): bool;
 

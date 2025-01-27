@@ -15,8 +15,6 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
 
   /**
    * Gets the document field name.
-   *
-   * @return string
    */
   protected function getDocumentFieldName(): string {
     return 'coc_document';
