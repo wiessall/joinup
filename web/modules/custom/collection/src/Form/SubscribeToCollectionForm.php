@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
@@ -301,6 +302,11 @@ class SubscribeToCollectionForm extends FormBase {
         ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
         : $this->t('You have been joined to %collection.', $parameters);
       $this->messenger()->addStatus($message);
+    }
+
+    if ($membership instanceof CodeOfConductMembershipInterface &&
+      $codeOfConduct = $collection->getCodeOfConduct()) {
+      $membership->setAcceptedDocument($codeOfConduct);
     }
 
     $subscribe = (bool) $form_state->getValue('subscribe');
