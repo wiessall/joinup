@@ -43,9 +43,9 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   /**
    * {@inheritdoc}
    */
-  public function isLastDocumentRevisionAccepted(CollectionInterface $collection): bool {
-    $codeOfConduct = $collection->getCodeOfConduct();
-    if (!$codeOfConduct) {
+  public function isLastDocumentRevisionAccepted(): bool {
+    $collection = $this->getGroup();
+    if (!$collection || !$codeOfConduct = $collection->getCodeOfConduct()) {
       return FALSE;
     }
 
