@@ -29,6 +29,6 @@ interface CodeOfConductMembershipInterface {
    * @return self
    *   The membership instance.
    */
-  public function setAcceptedRevisionId(NodeInterface $codeOfConduct): self;
+  public function setAcceptedDocument(NodeInterface $codeOfConduct): self;
 
 }

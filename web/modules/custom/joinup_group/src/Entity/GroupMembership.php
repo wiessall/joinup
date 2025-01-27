@@ -55,9 +55,9 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   /**
    * {@inheritdoc}
    */
-  public function setAcceptedRevisionId(NodeInterface $codeOfConduct): self {
+  public function setAcceptedDocument(NodeInterface $codeOfConduct): self {
     return $this
-      ->set('coc_acceptance', \Drupal::time()->getCurrentTime())
+      ->set('coc_date', \Drupal::time()->getCurrentTime())
       ->set($this->getDocumentFieldName(),
         [
           'target_id' => $codeOfConduct->id(),

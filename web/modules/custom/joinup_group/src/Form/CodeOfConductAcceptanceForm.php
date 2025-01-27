@@ -92,7 +92,7 @@ class CodeOfConductAcceptanceForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
 
-    $membership->setAcceptedRevisionId($codeOfConduct);
+    $membership->setAcceptedDocument($codeOfConduct);
     $membership->save();
 
     $form_state->setRedirect('entity.node.canonical', ['node' => $collection->id()]);
