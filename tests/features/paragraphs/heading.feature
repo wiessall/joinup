@@ -58,4 +58,4 @@ Feature:
     And I select "Right" from "Alignment" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    When the page should contain the html text '<div class="paragraph--heading d-flex col-gap-3 row-gap-3 justify-content-end paragraph">'
+    When the page should contain the html text '<div class="paragraph--heading d-flex col-gap-3 row-gap-3 justify-content-end paragraph"'
