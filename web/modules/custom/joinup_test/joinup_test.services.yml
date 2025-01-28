@@ -1,3 +1,5 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber:
     arguments: ['@search_api.post_request_indexing']
