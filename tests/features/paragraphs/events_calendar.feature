@@ -11,10 +11,11 @@ Feature:
       | Collection 2     |
       | Collection 3     |
     And event content:
-      | title         | short title | field_paragraphs_body                    | collection       | start date          | end date            | field_event_contact_email |
-      | Dummy Event   | Short       | This is some dummy content like foo:bar. | Le Event Heureux | 2025-12-15T11:12:12 | 2025-12-15T11:12:12 | reach.me@example.com      |
-      | Dummy Event 2 | Short       | random text                              | Collection 2     | 2025-12-16T11:12:12 | 2025-12-16T11:12:12 | reach.me@example.com      |
-      | Dummy Event 3 | Short       | internal meeting                         | Collection 3     | 2025-12-17T11:12:12 | 2025-12-17T11:12:12 | reach.me@example.com      |
+      | title          | short title | field_paragraphs_body                    | collection       | start date          | end date            | field_event_contact_email |
+      | Archived Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | 2024-12-15T11:12:12 | 2024-12-15T11:12:12 | reach.me@example.com      |
+      | Upcoming Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | 2025-12-15T11:12:12 | 2025-12-15T11:12:12 | reach.me@example.com      |
+      | Dummy Event 2  | Short       | random text                              | Collection 2     | 2025-12-16T11:12:12 | 2025-12-16T11:12:12 | reach.me@example.com      |
+      | Dummy Event 3  | Short       | internal meeting                         | Collection 3     | 2025-12-17T11:12:12 | 2025-12-17T11:12:12 | reach.me@example.com      |
 
   Scenario: Test that Events calendar with a specific event is working correctly in monthly mode
     When I am logged in as a facilitator of the "Le Event Heureux" collection
@@ -36,19 +37,21 @@ Feature:
     And I press "Publish"
     Then I should be on the Page content page
     Then I should see the calendar showing all days of current month
-    When I navigate calendar using "next" maximum 12 times until the date "2025-12-01" is displayed
-    Then I see the "Dummy Event" showing in the Calendar
+    When I navigate the calendar to "2024-12-01"
+    Then I see the "Archived Event" showing in the Calendar
+    When I navigate the calendar to "2025-12-01"
+    Then I see the "Upcoming Event" showing in the Calendar
     Then I see the "Dummy Event 2" showing in the Calendar
     Then I see the "Dummy Event 3" showing in the Calendar
-    And I click "Dummy Event"
-    Then I should be on the "Dummy Event" content page
+    And I click "Upcoming Event"
+    Then I should be on the "Upcoming Event" content page
 
   Scenario: Test that Events calendar with a specific event is working correctly in weekly mode.
     When I am logged in as a facilitator of the "Le Event Heureux" collection
     And I go to the "Le Event Heureux" collection
     And I click "Add custom page" in the plus button menu
     When I fill in the following:
-      | Title    | Page 2                          |
+      | Title    | Page 2                         |
       | Abstract | Abstract pages Events calendar |
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
@@ -63,7 +66,9 @@ Feature:
     And I press "Publish"
     Then I should be on the "Page 2" content page
     Then I should see the calendar showing all days of current week
-    When I navigate calendar using "next" maximum 52 times until the date "2025-12-15" is displayed
-    Then I see the "Dummy Event" showing in the Calendar
-    And I click "Dummy Event"
-    Then I should be on the "Dummy Event" content page
+    When I navigate the calendar to "2024-12-15"
+    Then I see the "Archived Event" showing in the Calendar
+    When I navigate the calendar to "2025-12-15"
+    Then I see the "Upcoming Event" showing in the Calendar
+    And I click "Upcoming Event"
+    Then I should be on the "Upcoming Event" content page
