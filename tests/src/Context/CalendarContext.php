@@ -80,35 +80,65 @@ class CalendarContext extends RawDrupalContext implements Context {
   }
 
   /**
-   * Navigates through calendar.
+   * Navigates the calendar to selected date.
+   *
+   * Examples:
+   *  - I navigate the calendar to "2025-12-15".
+   *  - I navigate the calendar to "2024-12-15".
    *
    * @param string $date
-   *   The selected date.
-   * @param int $maxAttempts
-   *   The maximum attempts for clicking selected pager link.
-   * @param string $pagerSelector
-   *   The pager selector: previous or next.
+   *   The date string. This should either be in the format "DD-MM-YYYY"
+   *   for dates, "HH:MM:SS" for time, or a relative date format.
    *
-   * @When I navigate calendar using :pagerSelector maximum :maxAttempts times until the date :date is displayed
+   * @When I navigate the calendar to :date
    */
-  public function iNavigateCalendarUsingMaximumTimesUntilTheDateIsDisplayed(string $date, int $maxAttempts, string $pagerSelector): void {
-    $timestamp = strtotime($date);
-    $locator = '.calendar-view-day time[datetime^="' . $date . '"]';
-    $pagerSelector = strtolower($pagerSelector);
-    $pagerSelector = '.pager__' . $pagerSelector;
-    if (!$timestamp) {
-      throw new \Exception(sprintf('"%s" is not correct date value.', $date));
-    }
+  public function iNavigateTheCalendarTo(string $date): void {
+    $pagerSelector = $this->getPagerByDate($date);
+    $dateFormatted = date("Y-m-d", strtotime($date));
+    $xpath = sprintf('//div[contains(@class, "calendar-view-day")]//time[starts-with(@datetime, "%s")]', $dateFormatted);
+    $this->navigateCalendar($xpath, $dateFormatted, 300, $pagerSelector);
+  }
 
-    while ($maxAttempts--) {
+  /**
+   * Returns pager selector dependently on passed date.
+   *
+   * @param string $date
+   *   Passed date string.
+   *
+   * @throws \Exception
+   */
+  private function getPagerByDate(string $date): string {
+    $passedTimestamp = strtotime($date);
+    $currentTimestamp = strtotime(date('Y-m-d'));
+    if ($passedTimestamp !== FALSE) {
+      return ($passedTimestamp < $currentTimestamp) ? '.pager__previous' : '.pager__next';
+    }
+    throw new \Exception('Invalid value. Use valid date string (ex. 2025-02-01)',);
+  }
+
+  /**
+   * Navigate through a calendar and look for a specific element.
+   *
+   * @param string $xpath
+   *   The XPath expression to locate the target element.
+   * @param string $date
+   *   The date.
+   * @param int $maxAttempts
+   *   The maximum number of pager clicks to attempt.
+   * @param string $pagerSelector
+   *   The CSS selector for the pager control.
+   *
+   * @throws \Exception
+   *   If the target element is not found after all attempts.
+   */
+  public function navigateCalendar(string $xpath, string $date, int $maxAttempts, string $pagerSelector): void {
+    while ($maxAttempts-- > 0) {
       $this->assertSession()->elementExists('css', $pagerSelector)->click();
       $this->waitForAjax();
-
-      if ($this->getSession()->getPage()->find('css', $locator)) {
+      if ($this->getSession()->getPage()->find('xpath', $xpath)) {
         return;
       }
     }
-
     throw new \Exception(sprintf('Unable to find the element matching "%s".', $date));
   }
 
@@ -128,7 +158,6 @@ class CalendarContext extends RawDrupalContext implements Context {
     if (!$eventElement) {
       throw new \Exception(sprintf("Unable to locate an element containing the text '%s'.", $event));
     }
-
   }
 
 }
