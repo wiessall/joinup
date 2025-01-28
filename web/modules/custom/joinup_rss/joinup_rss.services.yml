@@ -1,2 +1,4 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_rss\Routing\RouteSubscriber: { }

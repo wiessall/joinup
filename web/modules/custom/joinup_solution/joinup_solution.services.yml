@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_solution\EventSubscriber\SolutionOgSubscriber: { }
   cache_context.solution_owner:
     class: 'Drupal\joinup_solution\Cache\Context\SolutionOwnerCacheContext'

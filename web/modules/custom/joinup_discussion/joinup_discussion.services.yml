@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   cache_context.can_invite_to_discussion:
     class: Drupal\joinup_discussion\Cache\CanInviteToDiscussionCacheContext
     arguments: ['@current_user', '@current_route_match']
@@ -19,4 +21,3 @@ services:
   Drupal\joinup_discussion\EventSubscriber\DiscussionSearchApiStatusSubscriber:
     arguments: [ '@facets.manager' ]
   Drupal\joinup_discussion\EventSubscriber\SharedContentForDiscussionsSubscriber: { }
-

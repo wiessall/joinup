@@ -1,3 +1,5 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_news\EventSubscriber\JoinupNewsEventSubscriber:
     arguments: ['@path_processor_manager']
