@@ -87,10 +87,10 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        report:
-          id: report
+        report__value:
+          id: report__value
           table: private_messages
-          field: report
+          field: report__value
           relationship: none
           group_type: group
           admin_label: ''
@@ -139,7 +139,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: basic_string
+          type: text_default
           settings: {  }
           group_column: value
           group_columns: {  }

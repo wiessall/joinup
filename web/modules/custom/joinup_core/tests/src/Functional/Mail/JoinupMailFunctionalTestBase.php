@@ -40,7 +40,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'cas',
     'cas_mock_server',
     'collection',
-    'embed_block',
     'editor',
     'field',
     'filter',

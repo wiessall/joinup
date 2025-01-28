@@ -137,7 +137,6 @@ class PrivateMessageReportForm extends FormBase {
       );
     }
     else {
-      $this->submitForm($form, $form_state);
       $response->addCommand(new RedirectCommand(
         Url::fromRoute('private_message.private_message_page')->toString()
       ));
