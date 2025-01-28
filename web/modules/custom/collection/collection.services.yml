@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   cache_context.collection:
     class: Drupal\collection\Cache\CollectionCacheContext
     arguments: ['@request_stack']
