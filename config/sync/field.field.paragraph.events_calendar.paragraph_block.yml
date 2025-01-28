@@ -7,6 +7,10 @@ dependencies:
     - paragraphs.paragraphs_type.events_calendar
   module:
     - block_field
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: paragraph.events_calendar.paragraph_block
 field_name: paragraph_block
 entity_type: paragraph
@@ -23,4 +27,5 @@ settings:
     plugin_ids:
       'views_block:calendar-by_month': 'views_block:calendar-by_month'
       'views_block:calendar-by_week': 'views_block:calendar-by_week'
+      'views_block:events_calendar-upcoming_events_block': 'views_block:events_calendar-upcoming_events_block'
 field_type: block_field
