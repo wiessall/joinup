@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\contact_form\EventSubscriber\NotificationSubscriber:
     parent: joinup_notification.notification_subscriber_base
   Drupal\contact_form\EventSubscriber\SenderNotificationSubscriber:

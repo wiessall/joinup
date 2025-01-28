@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_taxonomy.vocabulary_updater:
     class: Drupal\joinup_taxonomy\VocabularyUpdater
     arguments:

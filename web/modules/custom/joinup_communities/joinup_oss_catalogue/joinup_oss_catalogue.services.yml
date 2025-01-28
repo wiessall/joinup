@@ -1,6 +1,7 @@
 services:
   _defaults:
     autowire: true
+    autoconfigure: true
 
   joinup_oss_catalogue.access_checker:
     class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck

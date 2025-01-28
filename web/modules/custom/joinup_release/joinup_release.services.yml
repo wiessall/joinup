@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_release.release_route_context:
     class: Drupal\joinup_release\ContextProvider\ReleaseRouteContext
     arguments: ['@current_route_match']

@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_cas_mock_server.config_overrider:
     class: Drupal\joinup_cas_mock_server\Config\JoinupCasMockServerConfigOverrider
     arguments: ['@config.factory']

@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_notification.entity_message_helper:
     class: Drupal\joinup_notification\EntityMessageHelper
     arguments: ['@entity_type.manager']
@@ -24,4 +26,3 @@ services:
     parent: joinup_notification.notification_subscriber_base
   Drupal\joinup_notification\EventSubscriber\OgMembershipSubscriber:
     parent: joinup_notification.notification_subscriber_base
-

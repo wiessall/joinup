@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   state_machine_permissions.helper:
     class: Drupal\state_machine_permissions\StateMachinePermissionsHelper
     arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow', '@og.access']

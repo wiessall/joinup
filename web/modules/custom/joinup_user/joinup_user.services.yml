@@ -3,6 +3,8 @@ parameters:
   security.enable_super_user: false
 
 services:
+  _defaults:
+    autoconfigure: true
   cache_context.user.photo:
     class: Drupal\joinup_user\Cache\Context\UserPhotoCacheContext
     arguments: ['@current_user', '@entity_type.manager']
