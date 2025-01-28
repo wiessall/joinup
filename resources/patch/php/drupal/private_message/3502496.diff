@@ -1,26 +1,35 @@
 diff --git a/js/private_message_inbox_block.js b/js/private_message_inbox_block.js
-index 5a8842b455d207add621604695e3041f2b201186..d6600a97b287790927c0e41da1a893936377b343 100644
+index 5a8842b455d207add621604695e3041f2b201186..8962ec07d092c0287b6da17cd1818a15a9cfb3ea 100644
 --- a/js/private_message_inbox_block.js
 +++ b/js/private_message_inbox_block.js
-@@ -86,7 +86,7 @@
-         submit: { ids },
-       })
+@@ -88,6 +88,8 @@
          .execute()
--        .always(() => {
-+        .then(() => {
+         .always(() => {
            this.loadingNewInProgress = false;
++        })
++        .then(() => {
            this.scheduleInboxUpdate();
          });
+     }
 diff --git a/js/private_message_thread.js b/js/private_message_thread.js
-index 3be8914c58ce67c15c30a07cb8c20f17283144dc..8eb8db539a87618a0784a9326d11442604450c31 100644
+index 3be8914c58ce67c15c30a07cb8c20f17283144dc..8c9ee6ad497a5a8887a2cc1f5ba4c2c963cb06fd 100644
 --- a/js/private_message_thread.js
 +++ b/js/private_message_thread.js
-@@ -129,7 +129,7 @@
-         submit: { threadid: this.getThreadId(), messageid: newestId },
-       })
+@@ -131,6 +131,8 @@
          .execute()
--        .always(() => {
-+        .then(() => {
+         .always(() => {
            this.loadingNewInProgress = false;
++        })
++        .then(() => {
            this.scheduleThreadUpdate();
          });
+     }
+@@ -201,6 +203,8 @@
+         .execute()
+         .always(() => {
+           this.loadingThreadInProgress = false;
++        })
++        .then(() => {
+           this.scheduleThreadUpdate();
+
+           // Emit the new thread ID for other scripts.
