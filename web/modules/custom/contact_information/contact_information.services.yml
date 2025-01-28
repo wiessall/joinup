@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   contact_information.fulfillment_guard:
     class: Drupal\contact_information\Guard\ContactInformationTransitionGuard
     arguments: ['@current_user']

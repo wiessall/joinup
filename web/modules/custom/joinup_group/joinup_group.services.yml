@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]

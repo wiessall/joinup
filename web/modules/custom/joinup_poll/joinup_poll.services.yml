@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_poll\Routing\PollRouteSubscriber: { }
   access_check.joinup_poll.ajax_request:
     class: Drupal\joinup_poll\Access\AjaxRequestAccessCheck

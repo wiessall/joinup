@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   monolog.handler.business_handler:
     class: Drupal\joinup_log\Logger\Handler\BusinessHandler
     arguments: [ '@entity_type.manager', '@joinup_group.group_manager', '@logger.log_message_parser' ]

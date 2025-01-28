@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_subscription.discussion_subscription:
     class: Drupal\joinup_subscription\JoinupDiscussionSubscription
     arguments: ['@entity_type.manager', '@flag']

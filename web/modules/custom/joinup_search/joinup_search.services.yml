@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_search\EventSubscriber\SearchApiFieldTagSubscriber: { }
   Drupal\joinup_search\EventSubscriber\SearchApiExcludeCurrentCustomPage: { }
   Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder:
@@ -7,4 +9,3 @@ services:
   Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber:
     arguments: ['@facets.manager']
   Drupal\joinup_search\EventSubscriber\JoinupGlobalSearchApiAlter: { }
-

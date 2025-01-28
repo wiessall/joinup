@@ -1,5 +1,6 @@
 services:
-
+  _defaults:
+    autoconfigure: true
   joinup_core.joinup_version:
     class: Drupal\joinup_core\JoinupVersion
 
