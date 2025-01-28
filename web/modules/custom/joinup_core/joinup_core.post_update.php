@@ -14,3 +14,20 @@
  */
 
 declare(strict_types=1);
+
+use Drupal\Core\Config\Entity\ConfigEntityUpdater;
+use Drupal\filter\FilterFormatInterface;
+
+/**
+ * Remove embed_block filter from formats before uninstalling module.
+ */
+function joinup_core_post_update_200200(array &$sandbox): void {
+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'filter_format', function (FilterFormatInterface $format): bool {
+    $plugin_id = 'embed_block';
+    if ($format->filters($plugin_id)) {
+      $format->removeFilter($plugin_id);
+      return TRUE;
+    }
+    return FALSE;
+  });
+}
