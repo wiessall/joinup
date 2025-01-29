@@ -1,0 +1,15 @@
+uuid: 25bb7305-4fd8-4b64-899f-079dd35268eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.table_of_contents.paragraph_title
+    - paragraphs.paragraphs_type.table_of_contents
+id: paragraph.table_of_contents.default
+targetEntityType: paragraph
+bundle: table_of_contents
+mode: default
+content: {  }
+hidden:
+  paragraph_title: true
+  search_api_excerpt: true

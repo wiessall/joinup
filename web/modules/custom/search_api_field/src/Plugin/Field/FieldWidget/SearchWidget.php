@@ -728,10 +728,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       }
 
       $operator = isset($matches[3]) ? trim($matches[3]) : '=';
-      if (!in_array($operator, ['=', '<>', 'IN', 'NOT IN'])) {
+      if (!in_array($operator, ['=', '<>', 'IN', 'NOT IN', '<', '>'])) {
         $form_state->setError($element, $this->t('Invalid operator specified: %operator. Allowed operators are @operators.', [
           '%operator' => $operator,
-          '@operators' => "'=', '<>', 'IN', 'NOT IN'",
+          '@operators' => "'=', '<>', 'IN', 'NOT IN', '<', '>'",
         ]));
       }
     }
