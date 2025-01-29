@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   Drupal\joinup_private_message\EventSubscriber\RequestSubscriber:
     arguments: [ '@current_route_match', '@private_message_flood.service' ]
   Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber: { }
