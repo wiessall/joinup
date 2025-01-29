@@ -150,6 +150,9 @@
   .username a {
     color: $brand-darker;
   }
+  article {
+    padding: 0 !important;
+  }
 }
 
 #load-previous-threads-button-wrapper {
