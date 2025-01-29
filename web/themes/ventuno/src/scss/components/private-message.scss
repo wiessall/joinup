@@ -190,7 +190,7 @@
     border: 1px solid $gray-300;
   }
   .private-message-wrapper {
-    display: flex;
+    display: flex !important;
     flex-flow: wrap;
     justify-content: end;
     &:not(:last-child) {
