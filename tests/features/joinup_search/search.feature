@@ -874,3 +874,22 @@ Feature: Global search
     And I should see the "Col for Sol net" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
     And I should see the text "Loky and Rocky." in the "Col for Sol net" card
+
+  @javascript
+  Scenario: Check topics filter for users.
+    Given users:
+      | Username  | E-mail              | First name | Family name | Professional domain |
+      | lyleu      | lyle.u@example.com | Lyle       | Uname       | Demography          |
+      | kyleu      | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
+
+    When I visit the search page
+    # The Portal collection is included
+    Then I should see the text "SEARCH RESULTS (4)"
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political (3), Demography (2), E-inclusion (1)"
+    When I check the "User profiles (3)" checkbox from the "Content types" facet
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political (2), Demography (1), E-inclusion (1)"
+    And I should see the "Lyle Uname" tile
+    And I should see the "Kyle Freeman" tile
+    When I check the "Demography (1)" checkbox from the "topic" facet
+    And I should see the "Lyle Uname" tile
+    And I should not see the "Kyle Freeman" tile

@@ -1,15 +1,13 @@
 services:
   _defaults:
     autowire: true
+    autoconfigure: true
 
   joinup_oss_catalogue.access_checker:
     class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck
     tags:
       - { name: access_check, applies_to: _oss_access_check }
-  joinup_oss_catalogue.route_subscriber:
-    class: Drupal\joinup_oss_catalogue\OssRouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_oss_catalogue\OssRouteSubscriber: { }
 
   joinup_oss_catalogue.oss_solution.imagecache_warmer:
     class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer

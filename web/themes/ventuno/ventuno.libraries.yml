@@ -404,6 +404,11 @@ paragraph__social_media:
     theme:
       assets/css/paragraph--social-media.min.css: { minified: true }
 
+paragraph__table_of_contents:
+  css:
+    theme:
+      assets/css/paragraph--table-of-contents.min.css: { minified: true }
+
 paragraph__testimony:
   css:
     theme:
