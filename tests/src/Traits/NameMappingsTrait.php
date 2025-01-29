@@ -445,6 +445,7 @@ trait NameMappingsTrait {
       'OSS category' => 'oss_category',
       'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',
+      'OSS software type' => 'oss_software_type',
       'OSS catalog' => 'oss_source',
     ];
 
