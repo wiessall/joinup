@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Annotation;
 
+use Attribute;
 use Drupal\Component\Annotation\Plugin;
 use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a code hosting platform plugin.
- *
- * @see plugin_api
- *
- * @Annotation
  */
+#[Attribute(Attribute::TARGET_CLASS)]
 class EuOssCatalogueHostingPlatform extends Plugin {
 
   /**
@@ -24,7 +22,7 @@ class EuOssCatalogueHostingPlatform extends Plugin {
   /**
    * The label of the plugin.
    *
-   * @ingroup plugin_translatable
+   * This property is translatable.
    */
   public Translation $label;
 

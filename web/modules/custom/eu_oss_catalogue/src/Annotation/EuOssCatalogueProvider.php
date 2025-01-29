@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Annotation;
 
+use Attribute;
 use Drupal\Component\Annotation\Plugin;
 use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a EU OSS Catalogue provider.
- *
- * @see plugin_api
- *
- * @Annotation
  */
+#[Attribute(Attribute::TARGET_CLASS)]
 class EuOssCatalogueProvider extends Plugin {
 
   /**
@@ -24,7 +22,7 @@ class EuOssCatalogueProvider extends Plugin {
   /**
    * The label of the plugin.
    *
-   * @ingroup plugin_translatable
+   * This property is translatable.
    */
   public Translation $label;
 
@@ -36,7 +34,7 @@ class EuOssCatalogueProvider extends Plugin {
   /**
    * A short description of the provider plugin.
    *
-   * @ingroup plugin_translatable
+   * This property is translatable.
    */
   public ?Translation $description = NULL;
 
