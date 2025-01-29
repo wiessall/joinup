@@ -24,6 +24,7 @@ dependencies:
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.social_media
+    - paragraphs.paragraphs_type.table_of_contents
     - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.tiles
@@ -64,6 +65,7 @@ settings:
       quote: quote
       simple_paragraph: simple_paragraph
       social_media: social_media
+      table_of_contents: table_of_contents
       testimony: testimony
       tiles: tiles
       video: video
@@ -131,20 +133,23 @@ settings:
       social_media:
         weight: -44
         enabled: true
-      testimony:
+      table_of_contents:
         weight: -43
+        enabled: true
+      testimony:
+        weight: -42
         enabled: true
       text:
         weight: -62
         enabled: true
       tile:
-        weight: -42
+        weight: -41
         enabled: false
       tiles:
-        weight: -41
+        weight: -40
         enabled: true
       video:
-        weight: -40
+        weight: -39
         enabled: true
       webform:
         weight: -37
