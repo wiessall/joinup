@@ -102,6 +102,7 @@ Feature:
       | Github feed       |
       | Map               |
       | Poll              |
+      | Events calendar   |
       | Quote             |
       | Social media      |
       | Table of Contents |
