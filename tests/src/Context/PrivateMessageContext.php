@@ -225,8 +225,10 @@ class PrivateMessageContext extends RawDrupalContext {
     $texts = $table->getColumn(0);
 
     foreach ($texts as $text) {
-      if (!str_contains($messageText, $text)) {
-        throw new \Exception(sprintf('The text "%s" was not found in any private message.', $text));
+      $offset = strpos($messageText, $text, $offset ?? 0);
+      $offset = ($offset === FALSE) ? FALSE : $offset + 1;
+      if ($offset === FALSE) {
+        throw new \Exception(sprintf('The text "%s" was not found in private messages in the given sequence.', $text));
       }
     }
   }

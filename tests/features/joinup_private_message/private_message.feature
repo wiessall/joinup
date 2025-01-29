@@ -188,13 +188,19 @@ Feature: Private messages
   @javascript
   Scenario: User can view a selected thread.
     Given the following private messages:
-      | owner   | recipient | message |
-      | alice_m | bob_rolls | Hello 2 |
-      | alice_m | bob_rolls | Hello 1 |
+      | owner     | recipient | message |
+      | alice_m   | bob_rolls | Hello 1 |
+      | bob_rolls | alice_m   | Hello 2 |
+      | alice_m   | bob_rolls | Hello 3 |
 
     When I am logged in as "alice_m"
     And I visit the "alice_m" "bob_rolls" thread
     Then I should see the following texts in private messages:
       | Hello 1 |
       | Hello 2 |
+      | Hello 3 |
+    And I should see the following texts in private messages:
+      | You       |
+      | Bob Rolls |
+      | You       |
     And the page meets accessibility standards
