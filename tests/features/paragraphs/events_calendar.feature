@@ -37,9 +37,9 @@ Feature:
     And I press "Publish"
     Then I should be on the Page content page
     Then I should see the calendar showing all days of current month
-    When I navigate the calendar to "2024-12-01"
+    When I navigate the calendar to "2024-12-01" in month mode
     Then I see the "Archived Event" showing in the Calendar
-    When I navigate the calendar to "2025-12-01"
+    When I navigate the calendar to "2025-12-01" in month mode
     Then I see the "Upcoming Event" showing in the Calendar
     Then I see the "Dummy Event 2" showing in the Calendar
     Then I see the "Dummy Event 3" showing in the Calendar
@@ -66,9 +66,9 @@ Feature:
     And I press "Publish"
     Then I should be on the "Page 2" content page
     Then I should see the calendar showing all days of current week
-    When I navigate the calendar to "2024-12-15"
+    When I navigate the calendar to "2024-12-15" in week mode
     Then I see the "Archived Event" showing in the Calendar
-    When I navigate the calendar to "2025-12-15"
+    When I navigate the calendar to "2025-12-15" in week mode
     Then I see the "Upcoming Event" showing in the Calendar
     And I click "Upcoming Event"
     Then I should be on the "Upcoming Event" content page

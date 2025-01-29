@@ -83,20 +83,40 @@ class CalendarContext extends RawDrupalContext implements Context {
    * Navigates the calendar to selected date.
    *
    * Examples:
-   *  - I navigate the calendar to "2025-12-15".
-   *  - I navigate the calendar to "2024-12-15".
+   *   - I navigate the calendar to "2025-12-15".
+   *   - I navigate the calendar to "2024-12-15".
    *
    * @param string $date
    *   The date string. This should either be in the format "DD-MM-YYYY"
-   *   for dates, "HH:MM:SS" for time, or a relative date format.
+   *    for dates, "HH:MM:SS" for time, or a relative date format.
+   * @param string $mode
+   *   Calendar mode: month or week.
    *
-   * @When I navigate the calendar to :date
+   * @throws \DateMalformedStringException
+   *
+   * @When I navigate the calendar to :date in :mode mode
    */
-  public function iNavigateTheCalendarTo(string $date): void {
+  public function iNavigateTheCalendarTo(string $date, string $mode): void {
     $pagerSelector = $this->getPagerByDate($date);
     $dateFormatted = date("Y-m-d", strtotime($date));
-    $xpath = sprintf('//div[contains(@class, "calendar-view-day")]//time[starts-with(@datetime, "%s")]', $dateFormatted);
-    $this->navigateCalendar($xpath, $dateFormatted, 300, $pagerSelector);
+    $currentDate = $this->getFirstDateFromNavigatedSection();
+    switch (strtolower($mode)) {
+      case 'month':
+        $maxAttempts = $this->calculateMonthDifference($currentDate, $dateFormatted);
+        break;
+
+      case 'week':
+        $maxAttempts = $this->calculateWeekDifference($currentDate, $dateFormatted);
+        break;
+
+      default:
+        throw new \Exception('Invalid value. Use "week" or "month".');
+    }
+    if (!$this->isDateVisibleOnCurrentPage($dateFormatted)) {
+      $maxAttempts = ($maxAttempts === 0) ? 1 : $maxAttempts;
+      $xpath = sprintf('//div[contains(@class, "calendar-view-day")]//time[starts-with(@datetime, "%s")]', $dateFormatted);
+      $this->navigateCalendar($xpath, $dateFormatted, $maxAttempts, $pagerSelector);
+    }
   }
 
   /**
@@ -114,6 +134,73 @@ class CalendarContext extends RawDrupalContext implements Context {
       return ($passedTimestamp < $currentTimestamp) ? '.pager__previous' : '.pager__next';
     }
     throw new \Exception('Invalid value. Use valid date string (ex. 2025-02-01)',);
+  }
+
+  /**
+   * Gets first date from current calendar page.
+   *
+   * @throws \Exception
+   */
+  private function getFirstDateFromNavigatedSection(): string {
+    $timeElement = $this->getSession()
+      ->getPage()
+      ->find('xpath', "(//div[@class='calendar-view-day']/time[@class='calendar-view-day__number'])[1]");
+    if (!$timeElement) {
+      throw new \Exception("Time element not found.");
+    }
+    $datetimeValue = $timeElement->getAttribute('datetime');
+    return preg_replace('/UTC.*$/', '', $datetimeValue);
+  }
+
+  /**
+   * Calculated interval between dates in months.
+   *
+   * @param string $startDate
+   *   Begin of time interval.
+   * @param string $endDate
+   *   The end of time interval.
+   *
+   * @throws \DateMalformedStringException
+   */
+  private function calculateMonthDifference(string $startDate, string $endDate): int {
+    $startDateTime = new DateTime($startDate);
+    $endDateTime = new DateTime($endDate);
+    $interval = $startDateTime->diff($endDateTime);
+    return ($interval->y * 12) + $interval->m;
+  }
+
+  /**
+   * Calculated interval between dates in weeks.
+   *
+   * @param string $startDate
+   *   Begin of time interval.
+   * @param string $endDate
+   *   The end of time interval.
+   *
+   * @throws \DateMalformedStringException
+   */
+  private function calculateWeekDifference(string $startDate, string $endDate): int {
+    $startDateTime = new DateTime($startDate);
+    $endDateTime = new DateTime($endDate);
+    $interval = $startDateTime->diff($endDateTime);
+    $days = $interval->days;
+    $quotient = intdiv($days, 7);
+    return ($days % 7 === 0) ? $quotient : $quotient + 1;
+  }
+
+  /**
+   * Checks if the date is visible on current calendar page.
+   *
+   * @param string $date
+   *   The date expected to be found on current calendar page.
+   */
+  private function isDateVisibleOnCurrentPage(string $date): bool {
+    $xpath = sprintf('//div[contains(@class, "calendar-view-day")]//time[starts-with(@datetime, "%s")]', $date);
+    $timeElement = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (NULL === $timeElement) {
+      return FALSE;
+    }
+    return TRUE;
   }
 
   /**
