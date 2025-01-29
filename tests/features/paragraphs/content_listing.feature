@@ -63,3 +63,24 @@ Feature:
       | Some event 1 |
       | Some event 2 |
       | Some event 3 |
+
+  Scenario: Events can be filtered by date.
+    Given event content:
+      | title                         | collection  | start date          | end date            |
+      | Quantum Horizons Conference   | Roman ruins | 2025-01-12 12:00:00 | 2025-01-12 13:00:00 |
+      | Lumina Night Festival         | Roman ruins | 2025-02-15 12:00:00 | 2025-02-15 13:00:00 |
+      | Stardust Gala Evening         | Roman ruins | 2025-02-16 12:00:00 | 2025-02-16 13:00:00 |
+      | Global Tech Innovators Summit | Roman ruins | 2025-03-18 12:00:00 | 2025-03-18 13:00:00 |
+    And custom_page content:
+      | title           | collection  |
+      | February events | Roman ruins |
+    And I append content listing to "field_paragraphs_body" field in "node" entity with following "February events" title with:
+    """
+    a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:59:"field_event_date|2025-01-31|>
+    field_event_date|2025-03-01|<";s:5:"limit";s:2:"10";}
+    """
+
+    When I go to the "February events" custom page
+    Then I should see the following tiles in the correct order:
+      | Lumina Night Festival |
+      | Stardust Gala Evening |

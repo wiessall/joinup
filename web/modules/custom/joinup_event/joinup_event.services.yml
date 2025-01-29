@@ -1,10 +1,6 @@
 services:
-  joinup_event.event_subscriber:
-    class: Drupal\joinup_event\EventSubscriber\JoinupEventEventSubscriber
+  _defaults:
+    autoconfigure: true
+  Drupal\joinup_event\EventSubscriber\JoinupEventEventSubscriber:
     arguments: ['@path_processor_manager']
-    tags:
-      - { name: event_subscriber }
-  joinup_event.upcoming_events_sort_overwrite_subscriber:
-    class: Drupal\joinup_event\EventSubscriber\UpcomingEventsSortOverwriteSubscriber
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_event\EventSubscriber\UpcomingEventsSortOverwriteSubscriber: { }
