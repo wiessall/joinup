@@ -15,7 +15,7 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   /**
    * Code of Conduct document field name.
    */
-  protected const string COC_DOCUMENT_FILED = 'coc_document';
+  protected const string COC_DOCUMENT_FIELD = 'coc_document';
 
   /**
    * Code of Conduct date field name.
@@ -32,7 +32,7 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
    *   The first field value as an array, or NULL if the field is empty.
    */
   protected function getAcceptedDocument(): ?array {
-    $fieldDocument = $this->get(self::COC_DOCUMENT_FILED);
+    $fieldDocument = $this->get(self::COC_DOCUMENT_FIELD);
     if ($fieldDocument->isEmpty()) {
       return NULL;
     }
@@ -63,7 +63,7 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   public function setAcceptedDocument(NodeInterface $codeOfConduct): self {
     return $this
       ->set(self::COC_DATE, \Drupal::time()->getCurrentTime())
-      ->set(self::COC_DOCUMENT_FILED,
+      ->set(self::COC_DOCUMENT_FIELD,
         [
           'target_id' => $codeOfConduct->id(),
           'target_revision_id' => $codeOfConduct->getRevisionId(),
