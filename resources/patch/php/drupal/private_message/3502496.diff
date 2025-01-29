@@ -1,0 +1,35 @@
+diff --git a/js/private_message_inbox_block.js b/js/private_message_inbox_block.js
+index 5a8842b455d207add621604695e3041f2b201186..8962ec07d092c0287b6da17cd1818a15a9cfb3ea 100644
+--- a/js/private_message_inbox_block.js
++++ b/js/private_message_inbox_block.js
+@@ -88,6 +88,8 @@
+         .execute()
+         .always(() => {
+           this.loadingNewInProgress = false;
++        })
++        .then(() => {
+           this.scheduleInboxUpdate();
+         });
+     }
+diff --git a/js/private_message_thread.js b/js/private_message_thread.js
+index 3be8914c58ce67c15c30a07cb8c20f17283144dc..8c9ee6ad497a5a8887a2cc1f5ba4c2c963cb06fd 100644
+--- a/js/private_message_thread.js
++++ b/js/private_message_thread.js
+@@ -131,6 +131,8 @@
+         .execute()
+         .always(() => {
+           this.loadingNewInProgress = false;
++        })
++        .then(() => {
+           this.scheduleThreadUpdate();
+         });
+     }
+@@ -201,6 +203,8 @@
+         .execute()
+         .always(() => {
+           this.loadingThreadInProgress = false;
++        })
++        .then(() => {
+           this.scheduleThreadUpdate();
+
+           // Emit the new thread ID for other scripts.
