@@ -102,6 +102,17 @@ function joinup_community_content_form_node_form_alter(&$form, FormStateInterfac
     return;
   }
 
+  $form['contribution_notice'] = [
+    '#type' => 'markup',
+    '#markup' => t('Before submitting your contribution, please ensure it adheres to the Portal’s <a href=":url">contribution rules</a>.', [
+      ':url' => Url::fromUri('internal:/contribution-rules')
+        ->toString(),
+    ]),
+    '#prefix' => '<div class="contribution-notice">',
+    '#suffix' => '</div>',
+    '#weight' => -10,
+  ];
+
   // Attach a form process handler that will change the label of the description
   // field for uploaded files on the community content forms. This would
   // otherwise conflict with the already existing "Description" field on Events.

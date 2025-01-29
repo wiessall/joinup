@@ -1,0 +1,11 @@
+@import "../../partials/core";
+
+.paragraph--table-of-contents {
+  > ul {
+    padding-left: 0;
+  }
+
+  ul {
+    list-style: none;
+  }
+}
