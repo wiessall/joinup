@@ -243,7 +243,25 @@ class CalendarContext extends RawDrupalContext implements Context {
     $eventElement = current(array_filter($elements, fn($element) => str_contains($element->getText(), $event))) ?: NULL;
 
     if (!$eventElement) {
-      throw new \Exception(sprintf("Unable to locate an element containing the text '%s'.", $event));
+      throw new \Exception(sprintf("Event '%s' is NOT visible in the calendar as expected.", $event));
+    }
+  }
+
+  /**
+   * Verifies that a specific event is visible in the calendar.
+   *
+   * @param string $event
+   *   The name of the event.
+   *
+   * @Then I not see the :event showing in the Calendar
+   */
+  public function iNotSeeTheEventShowingInTheCalendar(string $event): void {
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', '.calendar-view-day');
+    $eventElement = current(array_filter($elements, fn($element) => str_contains($element->getText(), $event))) || NULL;
+
+    if ($eventElement) {
+      throw new \Exception(sprintf("The event '%s' was found in the calendar, but it should NOT be visible.", $event));
     }
   }
 
