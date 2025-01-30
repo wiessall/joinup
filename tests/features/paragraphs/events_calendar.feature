@@ -12,7 +12,7 @@ Feature:
       | Collection 3     |
     And event content:
       | title          | short title | field_paragraphs_body                    | collection       | start date   | end date             | field_event_contact_email |
-      | Archived Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | now -1 month | now -1 month         | reach.me@example.com      |
+      | Archived Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | now -1 month | now -1 month +1 day  | reach.me@example.com      |
       | Upcoming Event | Short       | This is some dummy content like foo:bar. | Le Event Heureux | now +1 month | now +1 month +2 days | reach.me@example.com      |
       | Dummy Event 2  | Short       | random text                              | Collection 2     | now +1 week  | now +2 week          | reach.me@example.com      |
       | Dummy Event 3  | Short       | internal meeting                         | Collection 3     | now -1 week  | now -1 week +1 day   | reach.me@example.com      |
@@ -107,6 +107,18 @@ Feature:
     When I go to "/upcoming-events"
     Then I should see the text "Upcoming events" in the "Page title" region
     And I should see the text "Check out our 2025 events"
+    And I should see the following tiles in the correct order:
+      | Upcoming Event 1 |
+      | Dummy Event 2    |
+      | Dummy Event 4    |
+      | Upcoming Event   |
+
+    # Check 24hours page cache.
+    And event content:
+      | title      | short title | field_paragraphs_body                    | collection       | start date  | end date    | field_event_contact_email |
+      | No Event 1 | Short       | This is some dummy content like foo:bar. | Le Event Heureux | now +2 day  | now +5 day  | reach.me@example.com      |
+      | No Event 3 | Short       | This is some dummy content like foo:bar. | Le Event Heureux | now +12 day | now +14 day | reach.me@example.com      |
+    When I go to "/upcoming-events"
     And I should see the following tiles in the correct order:
       | Upcoming Event 1 |
       | Dummy Event 2    |

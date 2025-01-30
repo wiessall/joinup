@@ -128,9 +128,9 @@ display:
       cache:
         type: time
         options:
-          results_lifespan: 0
+          results_lifespan: -1
           results_lifespan_custom: 86400
-          output_lifespan: 0
+          output_lifespan: -1
           output_lifespan_custom: 86400
       empty:
         area_text_custom:
@@ -276,6 +276,9 @@ display:
     display_plugin: block
     position: 2
     display_options:
+      cache:
+        type: tag
+        options: {  }
       arguments:
         og_audience_target_id:
           id: og_audience_target_id
@@ -311,6 +314,7 @@ display:
           break_phrase: false
           not: false
       defaults:
+        cache: false
         arguments: false
       display_extenders:
         metatag_display_extender:
