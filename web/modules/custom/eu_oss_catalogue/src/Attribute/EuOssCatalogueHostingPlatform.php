@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Annotation;
+namespace Drupal\eu_oss_catalogue\Attribute;
 
 use Attribute;
 use Drupal\Component\Annotation\Plugin;
@@ -50,5 +50,18 @@ class EuOssCatalogueHostingPlatform extends Plugin {
    * @see \Drupal\eu_oss_catalogue\ApiGuesser
    */
   public int $weight = 0;
+
+  /**
+   * @param string $id
+   * @param \Drupal\Core\Annotation\Translation $label
+   * @param string|null $baseUrl
+   * @param int $weight
+   */
+  public function __construct(string $id, Translation $label, ?string $baseUrl, int $weight) {
+    $this->id = $id;
+    $this->label = $label;
+    $this->baseUrl = $baseUrl;
+    $this->weight = $weight;
+  }
 
 }

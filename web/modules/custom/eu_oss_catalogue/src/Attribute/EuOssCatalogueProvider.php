@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Annotation;
+namespace Drupal\eu_oss_catalogue\Attribute;
 
 use Attribute;
 use Drupal\Component\Annotation\Plugin;
@@ -42,5 +42,20 @@ class EuOssCatalogueProvider extends Plugin {
    * The config entity type ID that configures this plugin, if any.
    */
   public ?string $configuredBy = NULL;
+
+  /**
+   * @param string $id
+   * @param \Drupal\Core\Annotation\Translation $label
+   * @param string $parser
+   * @param \Drupal\Core\Annotation\Translation|null $description
+   * @param string|null $configuredBy
+   */
+  public function __construct(string $id, Translation $label, string $parser, ?Translation $description, ?string $configuredBy) {
+    $this->id = $id;
+    $this->label = $label;
+    $this->parser = $parser;
+    $this->description = $description;
+    $this->configuredBy = $configuredBy;
+  }
 
 }
