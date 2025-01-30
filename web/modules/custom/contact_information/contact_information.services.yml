@@ -1,16 +1,20 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   contact_information.fulfillment_guard:
     class: Drupal\contact_information\Guard\ContactInformationTransitionGuard
-    arguments: ['@current_user']
     tags:
       - { name: state_machine.guard, group: contact_information }
+
   contact_information.email_confirm:
     class: Drupal\contact_information\ContactInformationEmailConfirm
     arguments: ['@entity_type.manager', '@renderer', '@email_confirmer']
-  Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber:
-    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager']
+
+  Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber: { }
+
   Drupal\contact_information\EventSubscriber\ContactInformationContactFormRouteSubscriber: { }
-  Drupal\contact_information\EventSubscriber\ExceptionSubscriber:
-    arguments: ['@current_route_match','@logger.factory']
+
+  Drupal\contact_information\EventSubscriber\ExceptionSubscriber: { }
