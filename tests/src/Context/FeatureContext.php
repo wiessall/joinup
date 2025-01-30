@@ -1139,7 +1139,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that multiple lines of text appear on the page in a specific order.
+   * Checks that multiple lines of text appear in a specific order.
    *
    * Provide data in the following format:
    * | Text 1 |
@@ -1148,14 +1148,22 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of texts.
+   * @param string|null $region
+   *   The region where to look. If none is given,
+   *   it will search in the page.
    *
    * @Then I (should )see the following lines of text in the correct order:
+   * @Then I (should )see the following lines of text in the correct order in :region:
    */
-  public function assertPageTextOrder(TableNode $table): void {
+  public function assertPageTextOrder(TableNode $table, string $region = NULL): void {
     $session = $this->getSession();
 
+    $regionObj = $region
+      ? $this->getRegion($region)
+      : $this->getSession()->getPage();
+    $actual_text = $regionObj->getText();
+
     $expected_order = $table->getColumn(0);
-    $actual_text = $session->getPage()->getText();
 
     $not_found = [];
     foreach ($expected_order as $substring) {
