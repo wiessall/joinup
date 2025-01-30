@@ -12,6 +12,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Psr\Log\LogLevel;
@@ -19,12 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Taxonomy term resolver.
- *
- * @EuOssCatalogueResolver(
- *   id = "taxonomy_term",
- *   label = "Taxonomy term",
- * )
  */
+#[EuOssCatalogueResolver(id: "taxonomy_term", label: "Taxonomy term")]
 class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPluginInterface {
 
   public function __construct(
