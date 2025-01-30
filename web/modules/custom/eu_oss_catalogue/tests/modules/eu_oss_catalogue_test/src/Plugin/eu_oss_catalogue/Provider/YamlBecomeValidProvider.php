@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
+
 /**
  * Provider to be used in testing.
  *

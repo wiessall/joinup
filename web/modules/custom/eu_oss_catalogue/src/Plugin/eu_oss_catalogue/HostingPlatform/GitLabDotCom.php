@@ -21,7 +21,7 @@ use Psr\Log\LogLevel;
 /**
  * Git code hosting platform for gitlab.com repositories.
  */
-#[EuOssCatalogueHostingPlatform(id: "gitlab_com", label: "GitLab (gitlab.com)",baseUrl: "https://gitlab.com", weight: -10)]
+#[EuOssCatalogueHostingPlatform(id: "gitlab_com", label: "GitLab (gitlab.com)", baseUrl: "https://gitlab.com", weight: -10)]
 class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
