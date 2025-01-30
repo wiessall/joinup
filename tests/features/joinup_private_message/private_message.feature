@@ -43,7 +43,7 @@ Feature: Private messages
     When I fill in "Reply" with "Another private message from Bob to Alice."
     And I press "Send"
     Then I should see 2 private messages
-    Then I see the following lines of text in the correct order in "Private messages conversation":
+    And I see the following lines of text in the correct order in "Private messages conversation":
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
     When I click "New message"
