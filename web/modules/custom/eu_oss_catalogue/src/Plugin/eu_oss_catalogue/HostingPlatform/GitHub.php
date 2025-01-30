@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueHostingPlatform;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
@@ -27,14 +28,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Git code hosting platform for github.com.
- *
- * @EuOssCatalogueHostingPlatform(
- *   id = "github",
- *   label = @Translation("GitHub"),
- *   baseUrl = "https://github.com",
- *   weight = -10,
- * )
  */
+#[EuOssCatalogueHostingPlatform(id: "github", label: "GitHub",baseUrl: "https://github.com", weight: -10)]
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   protected const PULLREQUEST_FILTER = ['states' => State::OPEN];

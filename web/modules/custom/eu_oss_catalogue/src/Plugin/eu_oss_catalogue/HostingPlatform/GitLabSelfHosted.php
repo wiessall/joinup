@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueHostingPlatform;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
@@ -14,12 +15,8 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Git code hosting platform for self-hosted GitLab repositories.
- *
- * @EuOssCatalogueHostingPlatform(
- *   id = "gitlab_self_hosted",
- *   label = @Translation("GitLab (self hosted)"),
- * )
  */
+#[EuOssCatalogueHostingPlatform(id: "gitlab_self_hosted", label: "GitLab (self hosted)")]
 class GitLabSelfHosted extends GitLabDotCom {
 
   /**

@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueHostingPlatform;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
@@ -19,14 +20,8 @@ use Psr\Log\LogLevel;
 
 /**
  * Git code hosting platform for gitlab.com repositories.
- *
- * @EuOssCatalogueHostingPlatform(
- *   id = "gitlab_com",
- *   label = @Translation("GitLab (gitlab.com)"),
- *   baseUrl = "https://gitlab.com",
- *   weight = -10,
- * )
  */
+#[EuOssCatalogueHostingPlatform(id: "gitlab_com", label: "GitLab (gitlab.com)",baseUrl: "https://gitlab.com", weight: -10)]
 class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**

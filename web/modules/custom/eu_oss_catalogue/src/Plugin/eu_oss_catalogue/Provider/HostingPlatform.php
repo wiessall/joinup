@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -18,16 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Code hosting platform provider plugin.
- *
- * @EuOssCatalogueProvider(
- *   id = "hosting_platform",
- *   label = @Translation("Hosting platform"),
- *   description = @Translation("Code hosting platform"),
- *   parser = "publiccode_yml",
- *   deriver = "\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver",
- *   configuredBy = "hosting_platform",
- * )
  */
+#[EuOssCatalogueProvider(id: "hosting_platform", label: "Hosting platform", parser: "publiccode_yml", description: "Code hosting platform", configuredBy: "hosting_platform")]
 class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   /**

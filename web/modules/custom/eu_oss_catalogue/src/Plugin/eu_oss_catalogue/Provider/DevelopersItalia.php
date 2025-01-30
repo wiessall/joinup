@@ -9,6 +9,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -27,6 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   parser = "publiccode_yml",
  * )
  */
+#[EuOssCatalogueProvider(id: "developers_italia", label: "Developers Italia", parser: "publiccode_yml", description: "Italian National OSS Catalogue, by https://developers.italia.it website.")]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
   /**
