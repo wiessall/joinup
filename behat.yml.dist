@@ -227,6 +227,8 @@ default:
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
         Other unpublished block: '#block-ventuno-unpublished-other'
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
+        Private messages inbox: '#block-ventuno-privatemessage-inbox .private-message-thread--full-container'
+        Private messages conversation: '#private-message-page .private-message-thread-messages'
       drupal:
         drupal_root: ${joinup.site_dir}
       drush:
