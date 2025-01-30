@@ -27,8 +27,7 @@ class EuOssCatalogueResolver extends Plugin {
   public Translation $label;
 
   /**
-   * @param string $id
-   * @param \Drupal\Core\Annotation\Translation $label
+   * {@inheritdoc}
    */
   public function __construct(string $id, Translation $label) {
     $this->id = $id;
