@@ -1,5 +1,4 @@
 services:
-  moderation.event_subscriber:
-    class: Drupal\moderation\EventSubscriber\ModerationEventSubscriber
-    tags:
-      - { name: 'event_subscriber' }
+  _defaults:
+    autoconfigure: true
+  Drupal\moderation\EventSubscriber\ModerationEventSubscriber: { }

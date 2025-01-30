@@ -1,0 +1,29 @@
+uuid: 9b9f4de0-df02-40eb-9ee6-436a01b8596e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.extra_properties
+    - taxonomy.vocabulary.egovera
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/eira/properties'
+      type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.egovera.extra_properties
+field_name: extra_properties
+entity_type: taxonomy_term
+bundle: egovera
+label: 'Extra properties'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

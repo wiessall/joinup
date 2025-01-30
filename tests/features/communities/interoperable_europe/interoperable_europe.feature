@@ -4,10 +4,22 @@ Feature:
   As a content editor
   I want to manage a dedicated collection and landing page
 
+  Scenario: Moderator and facilitator check the three dots permissions.
+    Given I am logged in as a moderator
+    Then I go to the "Interoperable Europe" collection
+    And I should see the link "Settings" in the "Entity actions" region
+
+    When I am logged in as a facilitator of the "Interoperable Europe" collection
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
+    When I go to the "Interoperable Europe" collection
+    And I should see the link "Settings" in the "Entity actions" region
+
   Scenario: Anonymous visiting the landing page.
     Given I am on the homepage
     When I click "Discover more"
     Then I should see the heading "Joinup is becoming Interoperable Europe Portal"
+    And I should not see the "Entity actions" region
     And the page should be rendered using the "Interoperable Europe" theme
     And I should not see the link "Report abusive content"
 
@@ -47,6 +59,7 @@ Feature:
     Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
+    And I should not see the "Entity actions" region
     And the page should be rendered using the "Interoperable Europe" theme
 
     # Check IOPE footer

@@ -1,14 +1,8 @@
 services:
+  _defaults:
+    autoconfigure: true
   joinup_invite.invitation_message_helper:
     class: Drupal\joinup_invite\InvitationMessageHelper
     arguments: ['@joinup_notification.entity_message_helper', '@joinup_notification.message_delivery']
-  joinup_invite.invite_subscriber:
-    class: Drupal\joinup_invite\EventSubscriber\InvitationSubscriber
-    arguments:
-     - '@entity_type.manager'
-     - '@og.membership_manager'
-     - '@messenger'
-     - '@logger.channel.group_membership'
-     - '@current_user'
-    tags:
-      - { name: event_subscriber }
+  Drupal\joinup_invite\EventSubscriber\InvitationSubscriber:
+    arguments: ['@entity_type.manager', '@og.membership_manager', '@messenger', '@logger.channel.group_membership', '@current_user']
