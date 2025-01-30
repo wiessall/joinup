@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Git code hosting platform for github.com.
  */
-#[EuOssCatalogueHostingPlatform(id: "github", label: "GitHub",baseUrl: "https://github.com", weight: -10)]
+#[EuOssCatalogueHostingPlatform(id: "github", label: "GitHub", baseUrl: "https://github.com", weight: -10)]
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   protected const PULLREQUEST_FILTER = ['states' => State::OPEN];
