@@ -1,5 +1,4 @@
 services:
-  joinup_reports.reporting_route_subscriber:
-    class: Drupal\joinup_reports\Routing\ReportingRouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  _defaults:
+    autoconfigure: true
+  Drupal\joinup_reports\Routing\ReportingRouteSubscriber: { }
