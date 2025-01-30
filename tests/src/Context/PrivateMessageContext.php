@@ -201,47 +201,6 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that multiple texts are present in given order in private messages.
-   *
-   * Example table format:
-   * | Message one     |
-   * | Message 2 reply |
-   * | Another message |
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table node containing the texts to be checked.
-   *   Each row should contain one text string.
-   * @param string $section
-   *   The section where to look for the texts.
-   *   One of 'inbox' or 'conversation'.
-   *
-   * @throws \Exception
-   *   Thrown when any of the specified texts are not
-   *   found in the given sequence in the private messages or
-   *   the section is not valid.
-   *
-   * @Then I should see the following texts in private messages :section:
-   */
-  public function iShouldSeeTheFollowingTextsInPrivateMessages(TableNode $table, string $section): void {
-    $messagesContainer = match ($section) {
-      'inbox' => $this->getThreadsContainer(),
-      'conversation' => $this->getMessagesContainer(),
-      default => throw new \Exception("The section '$section' must be 'inbox' or 'conversation'."),
-    };
-    $messageText = $messagesContainer->getText();
-    $texts = $table->getColumn(0);
-
-    foreach ($texts as $text) {
-      $offset = strpos($messageText, $text, $offset ?? 0);
-      $offset = ($offset === FALSE) ? FALSE : $offset + 1;
-      if ($offset === FALSE) {
-        $error = 'The text "%s" was not found in private messages "%s" in the given sequence.';
-        throw new \Exception(sprintf($error, $text, $section));
-      }
-    }
-  }
-
-  /**
    * Clicks on a private message thread card with the specified subject.
    *
    * @param string $subject
