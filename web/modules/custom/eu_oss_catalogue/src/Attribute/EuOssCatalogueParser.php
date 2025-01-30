@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Annotation;
+namespace Drupal\eu_oss_catalogue\Attribute;
 
 use Attribute;
 use Drupal\Component\Annotation\Plugin;
@@ -25,5 +25,14 @@ class EuOssCatalogueParser extends Plugin {
    * This property is translatable.
    */
   public Translation $label;
+
+  /**
+   * @param string $id
+   * @param \Drupal\Core\Annotation\Translation $label
+   */
+  public function __construct(string $id, Translation $label) {
+    $this->id = $id;
+    $this->label = $label;
+  }
 
 }
