@@ -1155,7 +1155,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the following lines of text in the correct order:
    * @Then I (should )see the following lines of text in the correct order in :region:
    */
-  public function assertPageTextOrder(TableNode $table, string $region = NULL): void {
+  public function assertPageTextOrder(TableNode $table, ?string $region = NULL): void {
     $session = $this->getSession();
 
     $regionObj = $region

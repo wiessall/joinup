@@ -43,7 +43,7 @@ Feature: Private messages
     When I fill in "Reply" with "Another private message from Bob to Alice."
     And I press "Send"
     Then I should see 2 private messages
-    And I should see the following texts in private messages conversation:
+    Then I see the following lines of text in the correct order in "Private messages conversation":
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
     When I click "New message"
@@ -53,17 +53,17 @@ Feature: Private messages
     And I fill in "Message" with "A private message from Bob to Joan."
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
-    And I should see the following texts in private messages inbox:
+    And I see the following lines of text in the correct order in "Private messages inbox":
       | A private message from Bob to Joan.        |
       | Another private message from Bob to Alice. |
     When I click "Joan Tiff" in thread message card
     Then I should see 1 private message
-    And I should see the following texts in private messages conversation:
+    And I see the following lines of text in the correct order in "Private messages conversation":
       | A private message from Bob to Joan. |
     When I click "Alice Miller" in thread message card
     And I wait until the page contains the text "A private message from Alice to Bob."
     Then I should see 2 private messages
-    And I should see the following texts in private messages conversation:
+    And I see the following lines of text in the correct order in "Private messages conversation":
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
     # Regression test for ISAICP-9130: second click impacts modal.
@@ -107,7 +107,7 @@ Feature: Private messages
     And I am on the homepage
     Then I open the account menu
     And I click "My messages"
-    And I should see the following texts in private messages inbox:
+    And I see the following lines of text in the correct order in "Private messages inbox":
       | Joan Tiff    |
       | Alice Miller |
 
@@ -195,11 +195,11 @@ Feature: Private messages
 
     When I am logged in as "alice_m"
     And I visit the "alice_m" "bob_rolls" thread
-    Then I should see the following texts in private messages conversation:
+    Then I see the following lines of text in the correct order in "Private messages conversation":
       | Hello 1 |
       | Hello 2 |
       | Hello 3 |
-    And I should see the following texts in private messages conversation:
+    Then I see the following lines of text in the correct order in "Private messages conversation":
       | You       |
       | Bob Rolls |
       | You       |
