@@ -336,6 +336,15 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      cache:
+        type: time
+        options:
+          results_lifespan: -1
+          results_lifespan_custom: 86400
+          output_lifespan: -1
+          output_lifespan_custom: 86400
+      defaults:
+        cache: false
       display_extenders:
         metatag_display_extender:
           metatags: {  }
