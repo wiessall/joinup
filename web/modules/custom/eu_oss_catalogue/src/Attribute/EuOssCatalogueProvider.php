@@ -44,11 +44,7 @@ class EuOssCatalogueProvider extends Plugin {
   public ?string $configuredBy = NULL;
 
   /**
-   * @param string $id
-   * @param \Drupal\Core\Annotation\Translation $label
-   * @param string $parser
-   * @param \Drupal\Core\Annotation\Translation|null $description
-   * @param string|null $configuredBy
+   * {@inheritdoc}
    */
   public function __construct(string $id, Translation $label, string $parser, ?Translation $description, ?string $configuredBy) {
     $this->id = $id;
