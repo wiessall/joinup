@@ -52,10 +52,7 @@ class EuOssCatalogueHostingPlatform extends Plugin {
   public int $weight = 0;
 
   /**
-   * @param string $id
-   * @param \Drupal\Core\Annotation\Translation $label
-   * @param string|null $baseUrl
-   * @param int $weight
+   * {@inheritdoc}
    */
   public function __construct(string $id, Translation $label, ?string $baseUrl, int $weight) {
     $this->id = $id;
