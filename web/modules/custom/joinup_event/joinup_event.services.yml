@@ -1,6 +1,9 @@
 services:
+
   _defaults:
     autoconfigure: true
-  Drupal\joinup_event\EventSubscriber\JoinupEventEventSubscriber:
-    arguments: ['@path_processor_manager']
+    autowire: true
+
+  Drupal\joinup_event\EventSubscriber\JoinupEventEventSubscriber: { }
+
   Drupal\joinup_event\EventSubscriber\UpcomingEventsSortOverwriteSubscriber: { }

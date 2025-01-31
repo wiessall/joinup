@@ -1,4 +1,5 @@
 services:
+
   _defaults:
     autowire: true
     autoconfigure: true
@@ -7,12 +8,11 @@ services:
     class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck
     tags:
       - { name: access_check, applies_to: _oss_access_check }
+
   Drupal\joinup_oss_catalogue\OssRouteSubscriber: { }
 
   joinup_oss_catalogue.oss_solution.imagecache_warmer:
     class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer
-    arguments:
-      - '@queue'
 
   # TODO: Remove this service in ISAICP-9053.
   joinup_oss_catalogue.killswitch_check:
