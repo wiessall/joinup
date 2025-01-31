@@ -33,7 +33,8 @@ database:
 timezone: Europe/Brussels
 additional_hostnames: [ ]
 additional_fqdns: [ ]
-use_dns_when_possible: true
+project_tld: ddev.local
+use_dns_when_possible: false
 composer_version: "2"
 web_environment: [ ]
 disable_settings_management: true
