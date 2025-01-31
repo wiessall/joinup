@@ -7,6 +7,7 @@ services:
   joinup_subscription.discussion_subscription:
     class: Drupal\joinup_subscription\JoinupDiscussionSubscription
     arguments: ['@entity_type.manager', '@flag']
+  Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface: '@joinup_subscription.discussion_subscription'
 
   Drupal\joinup_subscription\EventSubscriber\JoinupSubscriptionSubscriber: { }
 
