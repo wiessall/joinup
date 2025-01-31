@@ -1,28 +1,38 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   joinup_notification.entity_message_helper:
     class: Drupal\joinup_notification\EntityMessageHelper
-    arguments: ['@entity_type.manager']
+
   joinup_notification.message_delivery:
     class: Drupal\joinup_notification\JoinupMessageDelivery
     arguments: ['@message_notify.sender', '@cache_tags.invalidator']
   Drupal\joinup_notification\JoinupMessageDeliveryInterface: '@joinup_notification.message_delivery'
+
   joinup_notification.notification_subscriber_base:
     abstract: true
     arguments: ['@entity_type.manager', '@config.factory', '@current_user', '@og.membership_manager', '@joinup_workflow.workflow_helper', '@joinup_notification.message_delivery']
+
   Drupal\joinup_notification\EventSubscriber\CommunityContentSubscriber:
     parent: joinup_notification.notification_subscriber_base
-    arguments: ['@state_machine_revisions.revision_manager']
+
   Drupal\joinup_notification\EventSubscriber\CollectionSubscriber:
     parent: joinup_notification.notification_subscriber_base
+
   Drupal\joinup_notification\EventSubscriber\SolutionNotificationSubscriber:
     parent: joinup_notification.notification_subscriber_base
+
   Drupal\joinup_notification\EventSubscriber\ReleaseSubscriber:
     parent: joinup_notification.notification_subscriber_base
+
   Drupal\joinup_notification\EventSubscriber\DistributionSubscriber:
     parent: joinup_notification.notification_subscriber_base
+
   Drupal\joinup_notification\EventSubscriber\CommentSubscriber:
     parent: joinup_notification.notification_subscriber_base
+
   Drupal\joinup_notification\EventSubscriber\OgMembershipSubscriber:
     parent: joinup_notification.notification_subscriber_base
