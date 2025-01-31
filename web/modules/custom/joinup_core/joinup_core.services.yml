@@ -1,23 +1,22 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   joinup_core.joinup_version:
     class: Drupal\joinup_core\JoinupVersion
 
   logger.channel.joinup_core:
     parent: logger.channel_base
-    arguments: ['joinup_core']
 
   joinup_core.requirements_helper:
     class: Drupal\joinup_core\RequirementsHelper
-    arguments: ['@database']
 
   joinup_core.local_task_links_helper:
     class: Drupal\joinup_core\LocalTaskLinksHelper
-    arguments: ['@entity_type.manager', '@theme.manager']
 
-  Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber:
-    arguments: ['@entity_field.manager']
+  Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber: { }
 
   path_processor.joinup_core:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
@@ -26,8 +25,6 @@ services:
 
   path_processor.joinup_core.field_more_in_modal:
     class: Drupal\joinup_core\PathProcessor\ModalRouteProcessor
-    arguments:
-      - '@entity_type.manager'
     calls:
       - [setAliasProcessor, ['@?path_alias.path_processor']]
     tags:

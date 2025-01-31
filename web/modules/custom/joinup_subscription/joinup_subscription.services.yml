@@ -1,12 +1,17 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   joinup_subscription.discussion_subscription:
     class: Drupal\joinup_subscription\JoinupDiscussionSubscription
     arguments: ['@entity_type.manager', '@flag']
+
   Drupal\joinup_subscription\EventSubscriber\JoinupSubscriptionSubscriber: { }
-  Drupal\joinup_subscription\EventSubscriber\GroupContentSubscriptionSubscriber:
-    arguments: ['@entity_type.manager', '@joinup_notification.message_delivery', '@logger.factory']
+
+  Drupal\joinup_subscription\EventSubscriber\GroupContentSubscriptionSubscriber: { }
+
   joinup_subscription.group_unsubscribe_types.param_converter:
     class: Drupal\joinup_subscription\ParamConverter\GroupUnsubscribeTypesConverter
     arguments: ['@og.membership_manager']

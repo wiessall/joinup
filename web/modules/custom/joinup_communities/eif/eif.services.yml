@@ -1,5 +1,7 @@
 services:
+
   _defaults:
     autoconfigure: true
+
   eif.normalizer.subscriber:
     class: Drupal\eif\EventSubscriber\EifNormalizeSubscriber
