@@ -98,15 +98,15 @@ class CalendarContext extends RawDrupalContext implements Context {
    */
   public function iNavigateTheCalendarTo(string $date, string $mode): void {
     $pagerSelector = $this->getPagerByDate($date);
-    $dateFormatted = date("Y-m-d", strtotime($date));
-    $currentDate = $this->getFirstDateFromNavigatedSection();
+    $dateTimestamp = strtotime($date);
+    $dateFormatted = date("Y-m-d", $dateTimestamp);
     switch (strtolower($mode)) {
       case 'month':
-        $maxAttempts = $this->calculateMonthDifference($currentDate, $dateFormatted);
+        $maxAttempts = $this->calculateMonthDifference($dateTimestamp);
         break;
 
       case 'week':
-        $maxAttempts = $this->calculateWeekDifference($currentDate, $dateFormatted);
+        $maxAttempts = $this->calculateWeekDifference($dateTimestamp);
         break;
 
       default:
@@ -137,55 +137,51 @@ class CalendarContext extends RawDrupalContext implements Context {
   }
 
   /**
-   * Gets first date from current calendar page.
+   * Calculated interval between dates in months.
+   *
+   * @param int $endTimestamp
+   *   The end of time interval.
    *
    * @throws \Exception
    */
-  private function getFirstDateFromNavigatedSection(): string {
+  private function calculateMonthDifference(int $endTimestamp): int {
+    $timeElement = $this->getSession()
+      ->getPage()
+      ->find('xpath', "//div[contains(@class, 'view-id-calendar')]//li[contains(@class, 'pager__current')]");
+    if (!$timeElement) {
+      throw new \Exception("Time element not found.");
+    }
+    $startDate = strtotime($timeElement->getText());
+    $startYear = (int) date('Y', $startDate);
+    $startMonth = (int) date('m', $startDate);
+    $endYear = (int) date('Y', $endTimestamp);
+    $endMonth = (int) date('m', $endTimestamp);
+
+    return abs((($endYear - $startYear) * 12) + ($endMonth - $startMonth));
+  }
+
+  /**
+   * Calculated interval between dates in weeks.
+   *
+   * @param int $endTimestamp
+   *   The end of time interval.
+   *
+   * @throws \Exception
+   */
+  private function calculateWeekDifference(int $endTimestamp): int {
     $timeElement = $this->getSession()
       ->getPage()
       ->find('xpath', "(//div[@class='calendar-view-day']/time[@class='calendar-view-day__number'])[1]");
     if (!$timeElement) {
       throw new \Exception("Time element not found.");
     }
-    $datetimeValue = $timeElement->getAttribute('datetime');
-    return preg_replace('/UTC.*$/', '', $datetimeValue);
-  }
+    $startTimestamp = strtotime(preg_replace('/UTC.*$/', '', $timeElement->getAttribute('datetime')));
 
-  /**
-   * Calculated interval between dates in months.
-   *
-   * @param string $startDate
-   *   Begin of time interval.
-   * @param string $endDate
-   *   The end of time interval.
-   *
-   * @throws \DateMalformedStringException
-   */
-  private function calculateMonthDifference(string $startDate, string $endDate): int {
-    $startDateTime = new DateTime($startDate);
-    $endDateTime = new DateTime($endDate);
-    $interval = $startDateTime->diff($endDateTime);
-    return ($interval->y * 12) + $interval->m;
-  }
-
-  /**
-   * Calculated interval between dates in weeks.
-   *
-   * @param string $startDate
-   *   Begin of time interval.
-   * @param string $endDate
-   *   The end of time interval.
-   *
-   * @throws \DateMalformedStringException
-   */
-  private function calculateWeekDifference(string $startDate, string $endDate): int {
-    $startDateTime = new DateTime($startDate);
-    $endDateTime = new DateTime($endDate);
-    $interval = $startDateTime->diff($endDateTime);
-    $days = $interval->days;
+    // Convert seconds to days.
+    $days = (int) round(($endTimestamp - $startTimestamp) / (60 * 60 * 24));
     $quotient = intdiv($days, 7);
-    return ($days % 7 === 0) ? $quotient : $quotient + 1;
+
+    return abs(($days % 7 === 0) ? $quotient : $quotient + 1);
   }
 
   /**
