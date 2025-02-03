@@ -203,4 +203,10 @@ Feature: Private messages
       | You       |
       | Bob Rolls |
       | You       |
+    When I am logged in as "bob_rolls"
+    And I visit the "alice_m" "bob_rolls" thread
+    Then I see the following lines of text in the correct order in "Private messages conversation":
+      | Alice Miller |
+      | You          |
+      | Alice Miller |
     And the page meets accessibility standards
