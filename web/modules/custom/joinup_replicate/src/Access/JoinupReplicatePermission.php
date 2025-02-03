@@ -14,6 +14,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Enhanced permission access check.
@@ -24,6 +25,7 @@ use Drupal\og\OgMembershipInterface;
 readonly class JoinupReplicatePermission implements AccessInterface {
 
   public function __construct(
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
   ) {}
 

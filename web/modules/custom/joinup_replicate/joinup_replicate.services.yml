@@ -1,4 +1,5 @@
 services:
+
   _defaults:
     autoconfigure: true
     autowire: true
@@ -16,7 +17,5 @@ services:
 
   access_check.joinup_replicate.permission:
     class: Drupal\joinup_replicate\Access\JoinupReplicatePermission
-    arguments:
-      $membershipManager: '@og.membership_manager'
     tags:
       - { name: access_check, applies_to: _joinup_replicate_permission }
