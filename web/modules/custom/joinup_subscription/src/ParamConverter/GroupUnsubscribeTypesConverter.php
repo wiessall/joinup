@@ -9,6 +9,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Route;
 readonly class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
 
   public function __construct(
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
   ) {}
 
