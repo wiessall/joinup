@@ -1,6 +1,9 @@
 services:
+
+  _defaults:
+    autowire: true
+
   joinup_sitewide_alert.commands:
     class: \Drupal\joinup_sitewide_alert\Commands\SitewideAlertCommands
-    arguments: ['@entity_type.manager']
     tags:
       - { name: drush.command }

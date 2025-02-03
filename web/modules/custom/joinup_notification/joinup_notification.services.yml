@@ -6,6 +6,7 @@ services:
 
   joinup_notification.entity_message_helper:
     class: Drupal\joinup_notification\EntityMessageHelper
+  Drupal\joinup_notification\EntityMessageHelperInterface: '@joinup_notification.entity_message_helper'
 
   joinup_notification.message_delivery:
     class: Drupal\joinup_notification\JoinupMessageDelivery
