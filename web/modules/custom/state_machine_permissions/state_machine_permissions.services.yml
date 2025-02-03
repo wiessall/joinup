@@ -1,14 +1,18 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   state_machine_permissions.helper:
     class: Drupal\state_machine_permissions\StateMachinePermissionsHelper
     arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow', '@og.access']
+  Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface: '@state_machine_permissions.helper'
+
   Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber:
     class: Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber
-    arguments: ['@entity_field.manager', '@state_machine_permissions.helper']
+
   state_machine_permissions.fulfillment_guard:
     class: Drupal\state_machine_permissions\Guard\TransitionPermissionGuard
-    arguments: ['@current_user', '@joinup_workflow.workflow_helper']
     tags:
       - { name: state_machine.guard }

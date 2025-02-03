@@ -3,27 +3,31 @@ parameters:
   security.enable_super_user: false
 
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   cache_context.user.photo:
     class: Drupal\joinup_user\Cache\Context\UserPhotoCacheContext
-    arguments: ['@current_user', '@entity_type.manager']
     tags:
       - { name: cache.context}
+
   joinup_user.user_route_context:
     class: Drupal\joinup_user\ContextProvider\UserRouteContext
-    arguments: ['@current_route_match']
     tags:
       - { name: 'context_provider' }
+
   Drupal\joinup_user\Routing\RouteSubscriber: { }
+
   joinup_user.user_cancelled.access_checker:
     class: Drupal\joinup_user\Access\UserStatusAccessCheck
     tags:
       - { name: access_check, applies_to: _user_status }
-  Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber:
-    arguments: ['@entity_type.manager', '@og.membership_manager', '@user.data', '@password_generator']
-  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber:
-    arguments: ['@current_user', '@messenger']
+
+  Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber: { }
+
+  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber: { }
+
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
-    arguments: ['@current_user', '@messenger', '@plugin.manager.mail']
