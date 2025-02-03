@@ -39,7 +39,8 @@ class JoinupUserFullname implements JoinupUserFullnameInterface {
     assert($original instanceof UserInterface);
     if (
       $original->get('field_user_first_name')->value !== $account->get('field_user_first_name')->value ||
-      $original->get('field_user_family_name')->value !== $account->get('field_user_family_name')->value
+      $original->get('field_user_family_name')->value !== $account->get('field_user_family_name')->value ||
+      $original->getAccountName() !== $account->getAccountName()
     ) {
       $this->updateTable($account);
       $this->cacheTagsInvalidator->invalidateTags($account->getCacheTags());
