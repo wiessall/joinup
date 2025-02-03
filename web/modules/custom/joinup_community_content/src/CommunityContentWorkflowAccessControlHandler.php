@@ -17,6 +17,7 @@ use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\node\NodeStorageInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\MembershipManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Access handler for entities with a workflow.
@@ -27,6 +28,7 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
     protected AccountInterface $currentUser,
     protected ConfigFactoryInterface $configFactory,
