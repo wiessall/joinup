@@ -123,3 +123,43 @@ Feature:
     When I visit the "Disqus" discussion
     Then I should see "Alicia Potter"
     Then I should not see the link "Alicia Potter"
+
+  Scenario Outline:
+    Given collection content:
+      | title          |
+      | Macroeconomics |
+    Given <content type> content:
+      | title                 | author       | collection     |
+      | Canada hit by tariffs | alicia__1997 | Macroeconomics |
+    And users:
+      | Username | E-mail          | First name | Family name |
+      | viviene  | viv@example.com | Viviene    | De Québec   |
+    And comments:
+      | message  | author  | parent                |
+      | Too much | viviene | Canada hit by tariffs |
+
+    # Authors of node & comment are linked because their accounts exist.
+    When I visit the "Canada hit by tariffs" <content type>
+    Then I should see the link "Alicia Potter"
+    And I should see the link "Viviene De Québec"
+
+    # Author of comment lacks a link because the account has been deleted.
+    When I delete the "viviene" user
+    And I reload the page
+    Then I should see "Viviene De Québec"
+    But I should not see the link "Viviene De Québec"
+
+    # Authors of node & comment lack links because their accounts were deleted.
+    When I delete the "alicia__1997" user
+    And I reload the page
+    Then I should see "Alicia Potter"
+    But I should not see the link "Alicia Potter"
+    And I should see "Viviene De Québec"
+    But I should not see the link "Viviene De Québec"
+
+    Examples:
+      | content type |
+      | discussion   |
+      | document     |
+      | event        |
+      | news         |
