@@ -2044,6 +2044,9 @@ class JoinupContext extends RawDrupalContext {
    * Cleans up orphaned group content in non clone group.
    *
    * @AfterScenario ~@group-clone
+   *
+   * @todo Remove this in ISAICP-9358
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
    */
   public function cleanGroupContentClean(AfterScenarioScope $event): void {
     // Because we are deleting the users but keep the UID in the content's
