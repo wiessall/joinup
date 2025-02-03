@@ -30,6 +30,11 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   protected bool $disableSpamProtection = TRUE;
 
+  /**
+   * Stores the latest UID from joinup_user_fullname before running tests.
+   */
+  protected int $fullNameUid;
+
   use ConfigTestTrait;
 
   /**
@@ -43,6 +48,11 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       $this->overrideConfig('antibot.settings', 'form_ids', NULL);
       $this->overrideConfig('honeypot.settings', 'form_settings', []);
     }
+
+    // Register the highest UID from {joinup_user_fullname} table.
+    $this->fullNameUid = (int) \Drupal::database()
+      ->query("SELECT MAX(uid) FROM {joinup_user_fullname}")
+      ->fetchField();
   }
 
   /**
@@ -76,6 +86,10 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
     // Cleanup the cas mock server.
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
+
+    \Drupal::database()->delete('joinup_user_fullname')
+      ->condition('uid', $this->fullNameUid, '>')
+      ->execute();
 
     parent::tearDown();
 
