@@ -12,6 +12,7 @@ use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\GroupPermission;
 use Drupal\og\OgAccessInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,6 +26,7 @@ class EventSubscriber implements EventSubscriberInterface {
     protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
     protected readonly AccountInterface $currentUser,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
   ) {}
 

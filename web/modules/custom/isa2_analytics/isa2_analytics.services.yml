@@ -4,5 +4,4 @@ services:
     autoconfigure: true
     autowire: true
 
-  Drupal\isa2_analytics\EventSubscriber\WebtoolsAnalyticsSubscriber:
-    arguments: ['@entity_type.manager', '@request_stack', '@current_route_match', '@og.context']
+  Drupal\isa2_analytics\EventSubscriber\WebtoolsAnalyticsSubscriber: { }
