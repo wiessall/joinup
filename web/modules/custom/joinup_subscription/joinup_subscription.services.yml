@@ -15,6 +15,5 @@ services:
 
   joinup_subscription.group_unsubscribe_types.param_converter:
     class: Drupal\joinup_subscription\ParamConverter\GroupUnsubscribeTypesConverter
-    arguments: ['@og.membership_manager']
     tags:
       - { name: paramconverter, priority: -10 }
