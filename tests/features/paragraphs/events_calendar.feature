@@ -79,18 +79,39 @@ Feature:
     Then I should be on the "Upcoming week Event" content page
 
   Scenario: Test upcoming events page and paragraph.
-    Given event content:
+    Given custom_page content:
+      | title                  | Abstract                         | collection        |
+      | Future events calendar | Abstract future events calendar  | Le Event Heureux  |
+      | Upcoming events        | Upcoming events page             |                   |
+    And event content:
       | title            | collection       | start date          | end date           |
       | Upcoming Event 1 | Le Event Heureux | now +1 day          | now +5 day         |
       | Upcoming Event 3 | Le Event Heureux | now -12 day         | now -14 day        |
       | Dummy Event 4    | Collection two   | now +1 week +1 day  | now +1 week +2 day |
       | Dummy Event 5    | Collection two   | now -1 week         | now +2 week        |
     When I am logged in as a facilitator of the "Le Event Heureux" collection
-    And I go to the "Le Event Heureux" collection
-    And I click "Add custom page" in the plus button menu
-    When I fill in the following:
-      | Title    | Future events calendar          |
-      | Abstract | Abstract future events calendar |
+    Then I go to the edit form of the "Future events calendar" "custom page"
+    And I select "HR" from "Topic"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
+    And a modal should open
+    And I click "Events calendar"
+    And I select "Upcoming events" from "Block"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the text "Future events calendar" in the "Page title" region
+    And I should see the following tiles in the correct order:
+      | Upcoming Event 1     |
+      | Upcoming week Event  |
+      | Upcoming month event |
+
+    When I am logged in as a moderator
+    Then I visit "/admin/custom-landing-pages/add"
+    And I fill in "Upcoming events" for "Title"
+    And I fill in "Upcoming events page" for "Abstract"
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
@@ -102,17 +123,8 @@ Feature:
     And I select "Upcoming events" from "Block"
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
-    Then I should see the text "Future events calendar" in the "Page title" region
-    And I should see the text "Upcoming events"
-    And I should see the text "Check out our 2025 events"
-    And I should see the following tiles in the correct order:
-      | Upcoming Event 1     |
-      | Upcoming week Event  |
-      | Upcoming month event |
-
-    When I go to "/upcoming-events"
-    Then I should see the text "Upcoming events" in the "Page title" region
-    And I should see the text "Check out our 2025 events"
+    Then I should see the message "Custom page Upcoming events has been created."
+    And I should see the text "Upcoming events" in the "Page title" region
     And I should see the following tiles in the correct order:
       | Upcoming Event 1           |
       | Dummy upcoming week event  |
