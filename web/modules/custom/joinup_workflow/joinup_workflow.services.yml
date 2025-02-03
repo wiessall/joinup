@@ -6,12 +6,10 @@ services:
 
   joinup_workflow.workflow_helper:
     class: Drupal\joinup_workflow\WorkflowHelper
-    arguments: ['@current_user', '@account_switcher', '@entity_field.manager', '@og.membership_manager', '@entity_type.manager', '@datetime.time']
   Drupal\joinup_workflow\WorkflowHelperInterface: '@joinup_workflow.workflow_helper'
 
-  Drupal\joinup_workflow\EventSubscriber\WorkflowOgEventSubscriber:
+  Drupal\joinup_workflow\EventSubscriber\WorkflowOgEventSubscriber: { }
     # Provides access and permissions event handling related to the workflows.
-    arguments: ['@entity_type.manager', '@current_user', '@og.membership_manager']
 
   Drupal\joinup_workflow\EventSubscriber\StateMachineButtonsSubscriber: {}
 

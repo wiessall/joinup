@@ -1,6 +1,8 @@
 services:
+
   _defaults:
     autoconfigure: true
+
   plugin.manager.search_api_field.filter:
     class: Drupal\search_api_field\Plugin\FilterPluginManager
     parent: default_plugin_manager
