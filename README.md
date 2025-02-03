@@ -263,12 +263,12 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 
 ### Locally exposed services
 
-* https://joinup.ddev.site, http://joinup.ddev.site — The website
-* http://joinup.ddev.site:8890/sparql — The SPARQL endpoint
-* http://joinup.ddev.site:8983 — The Solr admin UI
-* https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 — The Selenium
+* https://joinup.ddev.local, http://joinup.ddev.local — The website
+* http://joinup.ddev.local:8890/sparql — The SPARQL endpoint
+* http://joinup.ddev.local:8983 — The Solr admin UI
+* https://joinup.ddev.local:7900, http://joinup.ddev.local:7910 — The Selenium
   tests viewer
-* https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 — The mailcatcher
+* https://joinup.ddev.local:8026, http://joinup.ddev.local:8025 — The mailcatcher
   UI (Mailpit)
 * To connect locally to MySQL, you'll need to find the port as this is
   dynamically allocated each time. Run:
@@ -365,7 +365,7 @@ during development. Mailpit is optional, as the default setup of Interoperable E
 use the devel mail server which stores the emails as text messages in the tmp
 directory. However, Mailpit is more convenient to use, as it provides a web UI
 to view the emails.
-You can access the Mailpit UI at https://joinup.ddev.site:8026.
+You can access the Mailpit UI at https://joinup.ddev.local:8026.
 
 ### Additional information
 
