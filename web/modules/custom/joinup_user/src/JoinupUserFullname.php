@@ -69,7 +69,7 @@ class JoinupUserFullname implements JoinupUserFullnameInterface {
       $fullname = trim((string) $this->t('@first_name @family_name', [
         '@first_name' => $account->get('field_user_first_name')->value,
         '@family_name' => $account->get('field_user_family_name')->value,
-      ]));
+      ], ['context' => 'fullname']));
     }
     else {
       // Deleted user?
