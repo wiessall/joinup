@@ -70,8 +70,8 @@ readonly class CachedSparqlReadOnlyEndpoint {
     }
     catch (\Exception $e) {
       return new SparqlResponse(
-        $e->getCode(),
-        'Error: ' . $e->getMessage()
+        $e->getCode() ?: 500,
+        'An unexpected error occurred while processing the request.'
       );
     }
 
