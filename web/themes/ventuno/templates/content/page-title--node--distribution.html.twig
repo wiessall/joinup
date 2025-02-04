@@ -8,13 +8,13 @@
 
 {% block metadata %}
   <div class="fs-sm mb-3 d-flex">
-    {% if additional_content.file_size|render|striptags|trim %}
+    {% if additional_content.file_size|stripped_length %}
       {{ additional_content.file_size }}
     {% endif %}
-    {% if additional_content.file_size|render|striptags|trim and additional_content.licence|render|striptags|trim %}
+    {% if additional_content.file_size|stripped_length and additional_content.licence|stripped_length %}
       <span class="mx-1">|</span>
     {% endif %}
-    {% if additional_content.licence|render|striptags|trim %}
+    {% if additional_content.licence|stripped_length %}
       <span class="me-1">Licence:</span> {{ additional_content.licence }}
     {% endif %}
   </div>
