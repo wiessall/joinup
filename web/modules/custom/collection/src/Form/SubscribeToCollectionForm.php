@@ -201,7 +201,7 @@ class SubscribeToCollectionForm extends FormBase {
   }
 
   /**
-   * Adds the necessary code of conduct form elements to the form.
+   * Adds the necessary Code of Conduct form elements to the form.
    *
    * @param \Drupal\node\NodeInterface|null $collection
    *   The collection.
@@ -227,17 +227,17 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To validate your membership and send it for approval, please tick the box agreeing with the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label.',
+        'To validate your membership and send it for approval, please tick the box agreeing with the <a href=":code-of-conduct-url" target="_blank">Code of Conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label.',
         $codeOfConductArgs,
       ),
       '#weight' => -5,
     ];
     $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a> of @group-label.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=":code-of-conduct-url" target="_blank">Code of Conduct</a> of @group-label.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
-      '#required_error' => $this->t('You must agree to the <a href=":code-of-conduct-url">Code of conduct</a> before asking for membership.', $codeOfConductArgs),
+      '#required_error' => $this->t('You must agree to the <a href=":code-of-conduct-url">Code of Conduct</a> before asking for membership.', $codeOfConductArgs),
       '#weight' => -3,
     ];
 

@@ -43,7 +43,7 @@ class CodeOfConductConsentForm extends FormBase {
     $form['safe'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To ensure safe and respectful environment for all members of @label, we are introducing a <a href=":url" target="_blank">Code of conduct</a>.', $args
+        'To ensure safe and respectful environment for all members of @label, we are introducing a <a href=":url" target="_blank">Code of Conduct</a>.', $args
       ),
     ];
 
@@ -57,8 +57,8 @@ class CodeOfConductConsentForm extends FormBase {
     $form['accept'] = [
       '#type' => 'checkbox',
       '#required' => TRUE,
-      '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of conduct</a> of @label.', $args),
-      '#required_error' => $this->t('You must accept the <a href=":url" target="_blank">Code of conduct</a>', $args),
+      '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of Conduct</a> of @label.', $args),
+      '#required_error' => $this->t('You must accept the <a href=":url" target="_blank">Code of Conduct</a>', $args),
     ];
 
     $form['actions'] = [

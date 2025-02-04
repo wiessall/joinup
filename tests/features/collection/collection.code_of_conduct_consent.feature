@@ -13,7 +13,7 @@ Feature:
     Given custom_page content:
       | title              | collection     |
       | Agreement of usage | Knowledge Hive |
-    And the "code of conduct" setting of the "Knowledge Hive" collection is set to "Agreement of usage" "custom page"
+    And the "Code of Conduct" setting of the "Knowledge Hive" collection is set to "Agreement of usage" "custom page"
     And users:
       | Username         | E-mail                       | First name | Family name |
       | Cedric Hawthorne | cedric.hawthorne@example.com | Cedric     | Hawthorne   |
@@ -33,13 +33,13 @@ Feature:
     When I visit the "Knowledge Hive" Code of Conduct consent page
     Then I should see the heading "Important information"
     And I should see the following lines of text:
-      | To ensure safe and respectful environment for all members of Knowledge Hive, we are introducing a Code of conduct. |
+      | To ensure safe and respectful environment for all members of Knowledge Hive, we are introducing a Code of Conduct. |
       | If you wish to maintain your membership in Knowledge Hive, please confirm below:                                   |
 
     When I press "Accept"
-    Then I should see the error message "You must accept the Code of conduct"
+    Then I should see the error message "You must accept the Code of Conduct"
 
-    When I check "I have read and agree to the Code of conduct of Knowledge Hive."
+    When I check "I have read and agree to the Code of Conduct of Knowledge Hive."
     And I press "Accept"
     Then I should see the success message "Thank you for confirming your agreement to the Code of Conduct."
 
