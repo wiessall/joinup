@@ -75,9 +75,13 @@ file_type:
 representation_technique:
   - name: 'Datalog'
   - name: 'Human Language'
+  - name: 'Business Process Modeling Notation'
+    uri: 'http://purl.org/adms/representationtechnique/BPMN'
 licence_type:
   - name: 'Public domain'
     uri: 'http://purl.org/adms/licence/PD'
+  - name: 'Nominal cost'
+    uri: 'http://purl.org/adms/licencetype/NominalCost'
 legal_type:
   - name: 'Can'
     children:
