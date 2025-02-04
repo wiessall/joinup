@@ -25,7 +25,7 @@ Feature: Solution homepage
       | Some archived dist. | Initial draft of the protocol.                     | 2018-10-04 7:59am | http://a.b.c.pdf | Information sharing protocol |                   | 0         | archived  |
       | Source code         | Source code for the Fireproof tool.                | 2018-10-04 8:03am | test.zip         |                              | Fireproof         | 432       | published |
       # One distribution directly attached to the "Security audit tools" solution.
-      | Code of conduct     | Code of conduct for contributing to this software. | 2018-10-04 8:14am | http://a.b/c.zip | Security audit tools         |                   | 740       | published |
+      | Code of Conduct     | Code of Conduct for contributing to this software. | 2018-10-04 8:14am | http://a.b/c.zip | Security audit tools         |                   | 740       | published |
     And news content:
       | title                       | body                                | created           | topic                   | spatial coverage | solution                     | state     |
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
@@ -54,7 +54,7 @@ Feature: Solution homepage
     And I should not see the "ZIP version" tile
     # Unrelated content should not be shown.
     And I should not see the "Fireproof" tile
-    And I should not see the "Code of conduct" tile
+    And I should not see the "Code of Conduct" tile
     # Nor the solution itself should be shown.
     And I should not see the "Information sharing protocol" tile
     And I should not see the text "Downloads: 1667"
@@ -100,7 +100,7 @@ Feature: Solution homepage
     When I go to the homepage of the "Security audit tools" solution
     Then I should see the "Fireproof" tile
     And I should see the text "v0.1" in the "Fireproof" tile
-    And I should see the "Code of conduct" tile
+    And I should see the "Code of Conduct" tile
     But I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
     And I should not see the text "Downloads: 1172"

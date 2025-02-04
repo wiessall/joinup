@@ -25,7 +25,7 @@ Feature: Joining a collection as an anonymous user
     And custom_page content:
       | title                 | collection     |
       | CoC of CoC collection | CoC collection |
-    And the "code of conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
+    And the "Code of Conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
 
   Scenario: Joining collections without JavaScript
     Given the following legal document version:
@@ -69,7 +69,7 @@ Feature: Joining a collection as an anonymous user
     And the "CoC collection" collection should have 0 active member
     And the "CoC collection" collection should have 0 pending member
     And a modal should open
-    And I check "I have read and agree to the Code of conduct"
+    And I check "I have read and agree to the Code of Conduct"
     And I press "Confirm" in the "Modal buttons" region
     Then the "CoC collection" collection should have 1 pending member
 

@@ -98,7 +98,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
     );
 
     if ($this->group->hasCodeOfConductToAccept()) {
-      // Membership is created only after user accepted the code of conduct
+      // Membership is created only after user accepted the Code of Conduct
       // document.
       return;
     }
