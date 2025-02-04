@@ -11,6 +11,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -45,10 +46,14 @@ function joinup_private_message_preprocess_private_message(&$variables): void {
     $variables['created']['#markup'] = date($format, $created);
   }
   elseif ($variables['view_mode'] === 'default') {
-    $is_owner = $private_message->getOwnerId() === \Drupal::currentUser()->id();
+    $user = \Drupal::currentUser();
+    $is_owner = $private_message->getOwnerId() === $user->id();
     $owner = $is_owner ? t('You') : $private_message->getOwner()
       ->getDisplayName();
     $variables['owner']['#markup'] = $owner;
+
+    $cache_metadata = (new CacheableMetadata())->addCacheableDependency($user);
+    $cache_metadata->applyTo($variables['owner']);
   }
 }
 
