@@ -8,7 +8,7 @@
 services:
   selenium-chrome:
     # Keep this version in sync with .opts.yml.
-    image: selenium/standalone-chromium:4.23
+    image: selenium/standalone-chromium:4.28.1
     container_name: ddev-${DDEV_SITENAME}-selenium-chrome
     expose:
       #      The internal noVNC port, which operates over HTTP so it can be exposed
