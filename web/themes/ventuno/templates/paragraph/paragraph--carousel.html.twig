@@ -50,11 +50,11 @@
   <div class="glide__outer overflow-hidden p-2">
     <div class="glide">
       <div class="d-flex flex-wrap align-items-baseline justify-content-end">
-        {% if content.paragraph_heading|render|striptags|trim is not empty %}
+        {% if content.paragraph_heading|stripped_length %}
           <h2 class="carousel__title mt-0 mb-3">{{ content.paragraph_heading }}</h2>
         {% endif %}
 
-        {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
+        {% if content.paragraph_carousel_action|stripped_length %}
           {% set link = content.paragraph_carousel_action[0] %}
           {% set link = link|merge({'#options': {attributes: {class: ['btn', 'btn-secondary', 'mb-3', 'ms-3']}}}) %}
           {{ link }}
