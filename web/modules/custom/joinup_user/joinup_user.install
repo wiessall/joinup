@@ -33,7 +33,7 @@ function joinup_user_schema(): array {
         'fullname' => [
           'description' => 'The user full name.',
           'type' => 'varchar',
-          'length' => 200,
+          'length' => 255,
           'not null' => TRUE,
         ],
       ],
