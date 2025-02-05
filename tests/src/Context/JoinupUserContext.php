@@ -264,7 +264,7 @@ class JoinupUserContext extends RawDrupalContext {
   public function registerHighestUid(): void {
     // Register the highest UID from {joinup_user_fullname} table.
     $this->fullNameUid = (int) \Drupal::database()
-      ->query("SELECT MAX(uid) FROM {joinup_user_fullname}")
+      ->query("SELECT MAX(uid) FROM {joinup_user_full_name}")
       ->fetchField();
   }
 
@@ -274,7 +274,7 @@ class JoinupUserContext extends RawDrupalContext {
    * @AfterScenario @api
    */
   public function deleteTestFullNameEntries(): void {
-    \Drupal::database()->delete('joinup_user_fullname')
+    \Drupal::database()->delete('joinup_user_full_name')
       ->condition('uid', $this->fullNameUid, '>')
       ->execute();
   }

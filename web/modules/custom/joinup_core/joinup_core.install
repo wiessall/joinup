@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_user\JoinupUserFullnameInterface;
+use Drupal\joinup_user\JoinupUserFullNameInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -60,7 +60,7 @@ function joinup_core_requirements($phase): array {
  * Create the  user full name table.
  */
 function joinup_core_update_200201(): void {
-  \Drupal::database()->schema()->createTable(JoinupUserFullnameInterface::TABLE, [
+  \Drupal::database()->schema()->createTable(JoinupUserFullNameInterface::TABLE, [
     'fields' => [
       'uid' => [
         'description' => 'The {users}.uid.',
@@ -75,7 +75,7 @@ function joinup_core_update_200201(): void {
         'not null' => TRUE,
         'default' => 0,
       ],
-      'fullname' => [
+      'full_name' => [
         'description' => 'The user full name.',
         'type' => 'varchar',
         'length' => 200,
@@ -85,7 +85,7 @@ function joinup_core_update_200201(): void {
     'primary key' => ['uid'],
     'indexes' => [
       'deleted' => ['deleted'],
-      'fullname' => ['fullname'],
+      'full_name' => ['full_name'],
     ],
     'foreign keys' => [
       'data_user' => [
@@ -102,7 +102,7 @@ function joinup_core_update_200201(): void {
  * Fill the user full name table.
  */
 function joinup_core_update_200202(?array &$sandbox = NULL): string {
-  $service = \Drupal::getContainer()->get('joinup_user.fullname');
+  $service = \Drupal::getContainer()->get('joinup_user.full_name');
 
   if (empty($sandbox['data'])) {
     $db = \Drupal::database();
