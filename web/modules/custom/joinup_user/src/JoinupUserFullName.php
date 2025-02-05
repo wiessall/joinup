@@ -7,21 +7,22 @@ namespace Drupal\joinup_user;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Default implementation of 'joinup_user.full_name' service.
  */
 class JoinupUserFullName implements JoinupUserFullNameInterface {
 
-  use StringTranslationTrait;
-
   public function __construct(
     protected Connection $database,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly CacheTagsInvalidatorInterface $cacheTagsInvalidator,
+    #[Autowire(service: 'logger.channel.user')]
+    protected readonly LoggerChannelInterface $logger,
   ) {}
 
   /**
@@ -62,28 +63,20 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
    * {@inheritdoc}
    */
   public function getFullName(AccountInterface $account): string {
-    $uid = $account->id();
+    $fullName = $this->database->select(self::TABLE)
+      ->fields(self::TABLE, ['full_name'])
+      ->condition('uid', $account->id())
+      ->execute()
+      ->fetchField();
 
-    if ($account = $this->entityTypeManager->getStorage('user')->load($uid)) {
-      // Pass to string translation so that we can also localize the full name
-      // for languages where the family name comes first (e.g., Hungarian).
-      $fullName = trim((string) $this->t('@first_name @family_name', [
-        '@first_name' => $account->get('field_user_first_name')->value,
-        '@family_name' => $account->get('field_user_family_name')->value,
-      ], ['context' => 'full_name']));
-    }
-    else {
-      // Deleted user?
-      $fullName = $this->database->select(self::TABLE)
-        ->fields(self::TABLE, ['full_name'])
-        ->condition('uid', $uid)
-        ->condition('deleted', 1)
-        ->execute()
-        ->fetchField();
+    if (!$fullName) {
+      $this->logger->error('User with ID @uid is missing a joinup_user_full_name table entry', [
+        '@uid' => $account->id(),
+      ]);
+      return '';
     }
 
-    // Default to the account name.
-    return $fullName ?: $account->getAccountName();
+    return $fullName;
   }
 
   /**
@@ -111,9 +104,11 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
    *   The user account entity instance.
    */
   protected function updateTable(UserInterface $account): void {
+    $fullName = trim($account->get('field_user_first_name')->value . ' ' . $account->get('field_user_family_name')->value);
+    $fullName = $fullName ?: $account->getAccountName();
     $this->database->merge(self::TABLE)
       ->keys(['uid' => $account->id()])
-      ->fields(['full_name' => $account->getDisplayName()])
+      ->fields(['full_name' => $fullName])
       ->execute();
   }
 
