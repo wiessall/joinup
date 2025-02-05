@@ -27,6 +27,11 @@ class JoinupUserContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
+   * Stores the latest UID from joinup_user_full_name before running tests.
+   */
+  protected int $fullNameUid;
+
+  /**
    * Navigates to the canonical page display of a collection.
    *
    * @param string $user
@@ -249,6 +254,29 @@ class JoinupUserContext extends RawDrupalContext {
       // @see https://www.drupal.org/project/drupal/issues/2548095
       'base_url' => $GLOBALS['base_url'],
     ])->toString();
+  }
+
+  /**
+   * Registers the higher full name table UID for cleaning up after scenario.
+   *
+   * @BeforeScenario @api
+   */
+  public function registerHighestUid(): void {
+    // Register the highest UID from {joinup_user_fullname} table.
+    $this->fullNameUid = (int) \Drupal::database()
+      ->query("SELECT MAX(uid) FROM {joinup_user_fullname}")
+      ->fetchField();
+  }
+
+  /**
+   * Deletes {joinup_user_fullname} entries created during the test.
+   *
+   * @AfterScenario @api
+   */
+  public function deleteTestFullNameEntries(): void {
+    \Drupal::database()->delete('joinup_user_fullname')
+      ->condition('uid', $this->fullNameUid, '>')
+      ->execute();
   }
 
 }
