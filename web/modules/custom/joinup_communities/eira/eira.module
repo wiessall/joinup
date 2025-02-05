@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\eira\Entity\Term\Egovera;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
 function eira_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
-  if ($entity->bundle() !== 'eira') {
+  if (!in_array($entity->bundle(), ['egovera', 'eira'])) {
     return;
   }
 
@@ -23,4 +24,14 @@ function eira_taxonomy_term_view(array &$build, EntityInterface $entity, EntityV
     return;
   }
   $build['description'][0]['#format'] = 'eira_format';
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function eira_entity_bundle_info_alter(array &$bundles): void {
+  if (isset($bundles['taxonomy_term']['egovera'])) {
+    // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
+    $bundles['taxonomy_term']['egovera']['class'] = Egovera::class;
+  }
 }
