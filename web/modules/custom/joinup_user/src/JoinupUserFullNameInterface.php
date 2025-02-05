@@ -52,13 +52,13 @@ interface JoinupUserFullNameInterface {
   /**
    * Checks whether a user has been deleted.
    *
-   * @param \Drupal\user\UserInterface|int|string $accountOrAccountId
-   *   The user account entity instance or ID.
+   * @param int|string $uid
+   *   The user account ID.
    *
    * @return bool
    *   Whether the user has been deleted.
    */
-  public function isUserDeleted(UserInterface|int|string $accountOrAccountId): bool;
+  public function isUserDeleted(int|string $uid): bool;
 
   /**
    * Creates a pseudo-user based only on its deleted account UID.
