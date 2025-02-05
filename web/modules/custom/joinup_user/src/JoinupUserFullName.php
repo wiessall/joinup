@@ -89,8 +89,7 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
   /**
    * {@inheritdoc}
    */
-  public function isUserDeleted(UserInterface|int|string $accountOrAccountId): bool {
-    $uid = $accountOrAccountId instanceof UserInterface ? $accountOrAccountId->id() : $accountOrAccountId;
+  public function isUserDeleted(int|string $uid): bool {
     return (bool) $this->database->select(self::TABLE)
       ->fields(self::TABLE, ['deleted'])
       ->condition('uid', $uid)
