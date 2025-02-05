@@ -51,7 +51,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
     // Register the highest UID from {joinup_user_fullname} table.
     $this->fullNameUid = (int) \Drupal::database()
-      ->query("SELECT MAX(uid) FROM {joinup_user_fullname}")
+      ->query("SELECT MAX(uid) FROM {joinup_user_full_name}")
       ->fetchField();
   }
 
@@ -87,7 +87,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Cleanup the cas mock server.
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
 
-    \Drupal::database()->delete('joinup_user_fullname')
+    \Drupal::database()->delete('joinup_user_full_name')
       ->condition('uid', $this->fullNameUid, '>')
       ->execute();
 

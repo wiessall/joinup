@@ -8,14 +8,14 @@
 declare(strict_types=1);
 
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
-use Drupal\joinup_user\JoinupUserFullnameInterface;
+use Drupal\joinup_user\JoinupUserFullNameInterface;
 
 /**
  * Implements hook_schema().
  */
 function joinup_user_schema(): array {
   return [
-    JoinupUserFullnameInterface::TABLE => [
+    JoinupUserFullNameInterface::TABLE => [
       'fields' => [
         'uid' => [
           'description' => 'The {users}.uid.',
@@ -30,7 +30,7 @@ function joinup_user_schema(): array {
           'not null' => TRUE,
           'default' => 0,
         ],
-        'fullname' => [
+        'full_name' => [
           'description' => 'The user full name.',
           'type' => 'varchar',
           'length' => 255,
@@ -40,7 +40,7 @@ function joinup_user_schema(): array {
       'primary key' => ['uid'],
       'indexes' => [
         'deleted' => ['deleted'],
-        'fullname' => ['fullname'],
+        'full_name' => ['full_name'],
       ],
       'foreign keys' => [
         'data_user' => [

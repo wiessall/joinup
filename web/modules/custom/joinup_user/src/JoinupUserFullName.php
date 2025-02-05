@@ -12,9 +12,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
 
 /**
- * Default implementation of 'joinup_user.fullname' service.
+ * Default implementation of 'joinup_user.full_name' service.
  */
-class JoinupUserFullname implements JoinupUserFullnameInterface {
+class JoinupUserFullName implements JoinupUserFullNameInterface {
 
   use StringTranslationTrait;
 
@@ -61,21 +61,21 @@ class JoinupUserFullname implements JoinupUserFullnameInterface {
   /**
    * {@inheritdoc}
    */
-  public function getFullname(AccountInterface $account): string {
+  public function getFullName(AccountInterface $account): string {
     $uid = $account->id();
 
     if ($account = $this->entityTypeManager->getStorage('user')->load($uid)) {
       // Pass to string translation so that we can also localize the full name
       // for languages where the family name comes first (e.g., Hungarian).
-      $fullname = trim((string) $this->t('@first_name @family_name', [
+      $fullName = trim((string) $this->t('@first_name @family_name', [
         '@first_name' => $account->get('field_user_first_name')->value,
         '@family_name' => $account->get('field_user_family_name')->value,
-      ], ['context' => 'fullname']));
+      ], ['context' => 'full_name']));
     }
     else {
       // Deleted user?
-      $fullname = $this->database->select(self::TABLE)
-        ->fields(self::TABLE, ['fullname'])
+      $fullName = $this->database->select(self::TABLE)
+        ->fields(self::TABLE, ['full_name'])
         ->condition('uid', $uid)
         ->condition('deleted', 1)
         ->execute()
@@ -83,7 +83,7 @@ class JoinupUserFullname implements JoinupUserFullnameInterface {
     }
 
     // Default to the account name.
-    return $fullname ?: $account->getAccountName();
+    return $fullName ?: $account->getAccountName();
   }
 
   /**
@@ -114,7 +114,7 @@ class JoinupUserFullname implements JoinupUserFullnameInterface {
   protected function updateTable(UserInterface $account): void {
     $this->database->merge(self::TABLE)
       ->keys(['uid' => $account->id()])
-      ->fields(['fullname' => $account->getDisplayName()])
+      ->fields(['full_name' => $account->getDisplayName()])
       ->execute();
   }
 

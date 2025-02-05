@@ -8,14 +8,14 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Interface of 'joinup_user.fullname' service.
+ * Interface of 'joinup_user.full_name' service.
  */
-interface JoinupUserFullnameInterface {
+interface JoinupUserFullNameInterface {
 
   /**
    * Table storing the relation between UID and user full name.
    */
-  public const string TABLE = 'joinup_user_fullname';
+  public const string TABLE = 'joinup_user_full_name';
 
   /**
    * Acts after a new user has been inserted.
@@ -47,7 +47,7 @@ interface JoinupUserFullnameInterface {
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account.
    */
-  public function getFullname(AccountInterface $account): string;
+  public function getFullName(AccountInterface $account): string;
 
   /**
    * Checks whether a user has been deleted.

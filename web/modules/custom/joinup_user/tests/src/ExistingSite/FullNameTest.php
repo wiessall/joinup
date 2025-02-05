@@ -5,40 +5,40 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\joinup_user\JoinupUserFullnameInterface;
+use Drupal\joinup_user\JoinupUserFullNameInterface;
 use Drupal\user\UserInterface;
 
 /**
- * @coversDefaultClass \Drupal\joinup_user\JoinupUserFullname
+ * @coversDefaultClass \Drupal\joinup_user\JoinupUserFullName
  * @group joinup_user
  */
-class FullnameTest extends JoinupExistingSiteTestBase {
+class FullNameTest extends JoinupExistingSiteTestBase {
 
   /**
    * @covers ::onUserInsert
    * @covers ::onUserUpdate
    * @covers ::onUserDelete
-   * @covers ::getFullname
+   * @covers ::getFullName
    * @covers ::isUserDeleted
-   * @covers ::getDeletedUser*
+   * @covers ::getDeletedUser
    * @covers \joinup_user_user_access
-   * @dataProvider fullnameCases
+   * @dataProvider fullNameCases
    *
    * @param array $initialName
    *   Initial username, first name, family name, expected full name.
    * @param array $updatedName
    *   Updated username, first name, family name, expected full name.
    */
-  public function testFullname(array $initialName, array $updatedName): void {
-    [$username, $firstName, $familyName, $expectedFullname] = $initialName;
+  public function testFullName(array $initialName, array $updatedName): void {
+    [$username, $firstName, $familyName, $expectedFullName] = $initialName;
     $account = $this->createUser([], $username, FALSE, [
       'field_user_first_name' => $firstName,
       'field_user_family_name' => $familyName,
     ]);
-    $this->assertSame($expectedFullname, $account->getDisplayName());
-    $this->assertFullnameStoredForExistingAccount($account, $expectedFullname);
+    $this->assertSame($expectedFullName, $account->getDisplayName());
+    $this->assertFullNameStoredForExistingAccount($account, $expectedFullName);
 
-    [$username, $firstName, $familyName, $expectedFullname] = $updatedName;
+    [$username, $firstName, $familyName, $expectedFullName] = $updatedName;
     $account
       ->set('field_user_first_name', $firstName)
       ->set('field_user_family_name', $familyName);
@@ -47,17 +47,17 @@ class FullnameTest extends JoinupExistingSiteTestBase {
     }
     $account->save();
 
-    $this->assertSame($expectedFullname, $account->getDisplayName());
-    $this->assertFullnameStoredForExistingAccount($account, $expectedFullname);
+    $this->assertSame($expectedFullName, $account->getDisplayName());
+    $this->assertFullNameStoredForExistingAccount($account, $expectedFullName);
 
     $account->delete();
-    $this->assertFullnameStoredForDeletedAccount($account, $expectedFullname);
+    $this->assertFullNameStoredForDeletedAccount($account, $expectedFullName);
 
     $deletedAccount = \Drupal::getContainer()
-      ->get('joinup_user.fullname')
+      ->get('joinup_user.full_name')
       ->getDeletedUser($account->id());
     $this->assertInstanceOf(UserInterface::class, $deletedAccount);
-    $this->assertSame($expectedFullname, $deletedAccount->getDisplayName());
+    $this->assertSame($expectedFullName, $deletedAccount->getDisplayName());
 
     $this->assertFalse($deletedAccount->access('view'));
     $this->assertFalse($deletedAccount->access('update'));
@@ -65,17 +65,17 @@ class FullnameTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Provides test cases for self::testFullname().
+   * Provides test cases for self::testFullName().
    *
    * @return array[][]
    *   List of test cases. Each case is a tuple of arrays. The first element is
    *   the initial name values, the second element represents the updated name
    *   values. Both are arrays with four elements: username, first name, family
-   *   name and expected full name
+   *   name and expected full name.
    *
-   * @see self::testFullname()
+   * @see self::testFullName()
    */
-  public static function fullnameCases(): array {
+  public static function fullNameCases(): array {
     return [
       'none' => [
         ['get a name', NULL, NULL, 'get a name'],
@@ -104,8 +104,8 @@ class FullnameTest extends JoinupExistingSiteTestBase {
    * @param string $fullName
    *   The user's full name.
    */
-  protected function assertFullnameStoredForExistingAccount(UserInterface $user, string $fullName): void {
-    $this->storedFullnameHelper((int) $user->id(), $fullName, FALSE);
+  protected function assertFullNameStoredForExistingAccount(UserInterface $user, string $fullName): void {
+    $this->storedFullnNameHelper((int) $user->id(), $fullName, FALSE);
   }
 
   /**
@@ -116,8 +116,8 @@ class FullnameTest extends JoinupExistingSiteTestBase {
    * @param string $fullName
    *   The user's full name.
    */
-  protected function assertFullnameStoredForDeletedAccount(UserInterface $user, string $fullName): void {
-    $this->storedFullnameHelper((int) $user->id(), $fullName, TRUE);
+  protected function assertFullNameStoredForDeletedAccount(UserInterface $user, string $fullName): void {
+    $this->storedFullnNameHelper((int) $user->id(), $fullName, TRUE);
   }
 
   /**
@@ -130,11 +130,11 @@ class FullnameTest extends JoinupExistingSiteTestBase {
    * @param bool $deleted
    *   Whether the user has been deleted.
    */
-  protected function storedFullnameHelper(int $uid, string $fullName, bool $deleted): void {
-    $record = \Drupal::database()->select(JoinupUserFullnameInterface::TABLE)
-      ->fields(JoinupUserFullnameInterface::TABLE)
+  protected function storedFullnNameHelper(int $uid, string $fullName, bool $deleted): void {
+    $record = \Drupal::database()->select(JoinupUserFullNameInterface::TABLE)
+      ->fields(JoinupUserFullNameInterface::TABLE)
       ->condition('uid', $uid)
-      ->condition('fullname', $fullName)
+      ->condition('full_name', $fullName)
       ->condition('deleted', $deleted)
       ->execute()
       ->fetch();
