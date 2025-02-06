@@ -10,6 +10,7 @@ use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine\WorkflowManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Guard class for custom page entity.
@@ -17,6 +18,7 @@ use Drupal\state_machine\WorkflowManagerInterface;
 readonly class CustomPageGuard implements GuardInterface {
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.workflow')]
     protected WorkflowManagerInterface $workflowManager,
   ) {}
 

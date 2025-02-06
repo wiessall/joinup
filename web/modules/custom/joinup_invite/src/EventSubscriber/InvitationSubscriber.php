@@ -14,6 +14,7 @@ use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,6 +26,7 @@ class InvitationSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected readonly MessengerInterface $messenger,
     protected readonly LoggerChannelInterface $logger,

@@ -34,8 +34,7 @@ services:
 
   Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber:
 
-  Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber:
-    arguments: [ '@search_api.entity_datasource.tracking_manager', '@logger.channel.group_membership', '@current_user' ]
+  Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }
 
   logger.channel.solution:
     parent: logger.channel_base

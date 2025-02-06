@@ -11,6 +11,7 @@ use Drupal\message\Entity\Message;
 use Drupal\message\MessageInterface;
 use Drupal\message_notify\MessageNotifier;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a service class for creating and delivering messages.
@@ -29,6 +30,7 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
   ];
 
   public function __construct(
+    #[Autowire(service: 'message_notify.sender')]
     protected readonly MessageNotifier $messageNotifier,
     protected readonly CacheTagsInvalidatorInterface $cacheTagsInvalidator,
   ) {}

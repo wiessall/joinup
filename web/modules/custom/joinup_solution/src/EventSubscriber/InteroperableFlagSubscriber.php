@@ -12,6 +12,7 @@ use Drupal\flag\Event\UnflaggingEvent;
 use Drupal\flag\FlaggingInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -20,6 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class InteroperableFlagSubscriber implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
     protected ContentEntityTrackingManager $trackingManager,
     protected LoggerChannelInterface $logger,
     protected AccountInterface $currentUser,

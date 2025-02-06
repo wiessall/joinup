@@ -10,7 +10,6 @@ services:
 
   joinup_notification.message_delivery:
     class: Drupal\joinup_notification\JoinupMessageDelivery
-    arguments: ['@message_notify.sender', '@cache_tags.invalidator']
   Drupal\joinup_notification\JoinupMessageDeliveryInterface: '@joinup_notification.message_delivery'
 
   joinup_notification.notification_subscriber_base:

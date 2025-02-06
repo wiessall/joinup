@@ -11,7 +11,6 @@ services:
 
   topic.vocabulary_manager:
     class: Drupal\topic\VocabularyManager
-    arguments: ['@entity_type.manager', '@database', '@rdf_sync.connection', '@meta_entity.repository']
 
   Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber: { }
 

@@ -2,6 +2,7 @@ services:
 
   _defaults:
     autoconfigure: true
+    autowire: true
 
   plugin.manager.search_api_field.filter:
     class: Drupal\search_api_field\Plugin\FilterPluginManager
@@ -9,5 +10,4 @@ services:
 
   Drupal\search_api_field\EventSubscriber\MaxAgeSubscriber: { }
 
-  Drupal\search_api_field\EventSubscriber\SearchApiSubscriber:
-    arguments: [ '@facets.manager' ]
+  Drupal\search_api_field\EventSubscriber\SearchApiSubscriber: { }
