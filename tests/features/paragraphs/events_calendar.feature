@@ -126,6 +126,7 @@ Feature:
     Then I should see the message "Custom page Upcoming events has been created."
     And I should see the text "Upcoming events" in the "Page title" region
     And I should see the following tiles in the correct order:
+      | Dummy Event 5              |
       | Upcoming Event 1           |
       | Dummy upcoming week event  |
       | Upcoming week Event        |
