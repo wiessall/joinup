@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\comment\CommentAccessControlHandler;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -124,15 +125,27 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
   /**
    * {@inheritdoc}
    */
-  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    $commented_entity = $context['commented_entity'] ?? NULL;
+  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResultInterface {
+    $access_result = parent::checkCreateAccess($account, $context, $entity_bundle);
+    \assert($access_result instanceof AccessResultInterface);
 
-    if ($commented_entity instanceof ArchivableEntityInterface && $commented_entity->isArchived()) {
-      return AccessResult::forbidden('Commented entity is archived')
+    // Restrict access if the commented entity is archived.
+    $commented_entity = $context['commented_entity'] ?? NULL;
+    if ($commented_entity instanceof ArchivableEntityInterface) {
+      $access_result = $access_result
+        ->orIf(AccessResult::forbiddenIf($commented_entity->isArchived()))
         ->addCacheableDependency($commented_entity);
     }
 
-    return parent::checkCreateAccess($account, $context, $entity_bundle);
+    // Restrict access if the commented entity is in an archived collection.
+    if ($commented_entity instanceof CollectionContentInterface) {
+      $collection = $commented_entity->getCollection();
+      $access_result = $access_result
+        ->orIf(AccessResult::forbiddenIf($collection->isArchived()))
+        ->addCacheableDependency($collection);
+    }
+
+    return $access_result;
   }
 
 }
