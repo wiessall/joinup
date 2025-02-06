@@ -1,0 +1,13 @@
+uuid: 40b6ec7f-f863-4431-85ce-f1fb71eeca5c
+langcode: en
+status: true
+dependencies:
+  module:
+    - private_message
+_core:
+  default_config_hash: oFIXnx5sHjxyZL1448nGFA3zxzF4MKDrqpuMkJaXAFc
+id: private_message_thread.inbox
+label: Inbox
+description: ''
+targetEntityType: private_message_thread
+cache: true

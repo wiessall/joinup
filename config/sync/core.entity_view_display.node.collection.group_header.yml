@@ -114,6 +114,7 @@ hidden:
   node_collection_listing_content_top: true
   og_group: true
   owner: true
+  private_message_link: true
   published_at: true
   read_more: true
   report: true

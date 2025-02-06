@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Twig template extension for private messages page with sidebar.
+#}
+{% extends 'page.html.twig' %}
+
+{% block page_content %}
+  <div class="row align-items-stretch">
+    {{ page.content.ventuno_pagetitle }}
+    <div class="layout-sidebar col-12 col-lg-3">
+      {{ page.sidebar }}
+    </div>
+    <div class="layout-content col-lg-9">
+      {{ page.content|without(page.content.ventuno_pagetitle) }}
+    </div>
+  </div>
+{% endblock %}

@@ -51,7 +51,6 @@ Feature: Administer media.
       | The Video           | Remote video    | Unpublished | Mars  | joe    |
 
     When I type "Venus" in the "group" autocomplete field
-    Then I wait until the page contains the text "Venus"
     And I pick "Venus" from the autocomplete suggestions
     And I press "Filter"
     Then the "media admin" table should contain the following columns:
