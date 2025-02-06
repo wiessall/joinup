@@ -32,8 +32,7 @@ services:
       - { name: path_processor_inbound, priority: 0 }
       - { name: path_processor_outbound, priority: 0 }
 
-  Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber:
-    arguments: ['@logger.channel.joinup_core']
+  Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber: { }
 
   # Prevent errors in twigc by implementing the missing get_dummy_text function,
   # which is referenced in BCL component templates.

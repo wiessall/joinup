@@ -9,7 +9,7 @@ use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
-use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final readonly class DistributionParentRdfSyncSubscriber implements EventSubscriberInterface {
 
   public function __construct(
-    protected RdfSyncMapper $mapper,
+    protected RdfSyncMapperInterface $mapper,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
   ) {}
 

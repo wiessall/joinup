@@ -6,24 +6,22 @@ services:
 
   custom_page.og_menu_links_manager:
     class: Drupal\custom_page\CustomPageOgMenuLinksManager
-    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@joinup_group.group_menu_manager']
     lazy: true
+  Drupal\custom_page\CustomPageOgMenuLinksManagerInterface: '@custom_page.og_menu_links_manager'
 
   custom_page.provider:
     class: Drupal\custom_page\CustomPageProvider
-    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@custom_page.og_menu_links_manager', '@joinup_group.group_menu_manager']
+  Drupal\custom_page\CustomPageProviderInterface: '@custom_page.provider'
 
   Drupal\custom_page\Routing\RouteSubscriber: { }
 
-  Drupal\custom_page\EventSubscriber\CustomPageGroupSubscriber:
+  Drupal\custom_page\EventSubscriber\CustomPageGroupSubscriber: { }
 
   Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition: { }
 
   custom_page.custom_page_guard:
     class: Drupal\custom_page\Guard\CustomPageGuard
-    arguments: ['@plugin.manager.workflow']
     tags:
       - { name: state_machine.guard, group: custom_page, priority: 5}
 
-  Drupal\custom_page\EventSubscriber\LandingPageRedirectionSubscriber:
-    arguments: ['@current_route_match']
+  Drupal\custom_page\EventSubscriber\LandingPageRedirectionSubscriber: { }

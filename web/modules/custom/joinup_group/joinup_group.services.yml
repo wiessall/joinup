@@ -21,7 +21,6 @@ services:
 
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context', '@current_user', '@og.access']
   Drupal\joinup_group\JoinupGroupManagerInterface: '@joinup_group.group_manager'
 
   Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber: { }
