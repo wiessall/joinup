@@ -6,6 +6,7 @@ namespace Drupal\adms_validator;
 
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use EasyRdf\Graph;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * The ADMSv2 validator service.
@@ -20,6 +21,7 @@ class AdmsValidator implements AdmsValidatorInterface {
   protected $validationQuery;
 
   public function __construct(
+    #[Autowire(service: 'rdf_sync.connection')]
     protected readonly RdfSyncConnectionInterface $sparqlEndpoint,
   ) {}
 

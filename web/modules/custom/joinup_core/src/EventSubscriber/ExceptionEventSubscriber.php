@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\EventSubscriber;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final readonly class ExceptionEventSubscriber implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'logger.channel.joinup_core')]
     protected LoggerChannelInterface $logger,
   ) {}
 

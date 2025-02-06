@@ -8,6 +8,7 @@ services:
     class: Drupal\joinup_release\ContextProvider\ReleaseRouteContext
     tags:
       - { name: 'context_provider' }
+  Drupal\Core\Plugin\Context\ContextProviderInterface: '@joinup_release.release_route_context'
 
   cache_context.release:
     class: Drupal\joinup_release\Cache\ReleaseCacheContext

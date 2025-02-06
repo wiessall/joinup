@@ -22,7 +22,6 @@ services:
     tags:
       - { name: access_check, applies_to: _joinup_discussion_overview }
 
-  Drupal\joinup_discussion\EventSubscriber\DiscussionSearchApiStatusSubscriber:
-    arguments: [ '@facets.manager' ]
+  Drupal\joinup_discussion\EventSubscriber\DiscussionSearchApiStatusSubscriber: { }
 
   Drupal\joinup_discussion\EventSubscriber\SharedContentForDiscussionsSubscriber: { }

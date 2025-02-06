@@ -16,6 +16,7 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgContextInterface;
 use Drupal\og\OgMembershipInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Helper methods related to the Joinup groups.
@@ -23,10 +24,13 @@ use Drupal\og\OgMembershipInterface;
 readonly class JoinupGroupManager implements JoinupGroupManagerInterface {
 
   public function __construct(
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.context')]
     protected OgContextInterface $ogContext,
     protected AccountInterface $currentUser,
+    #[Autowire(service: 'og.access')]
     protected OgAccessInterface $ogAccess,
   ) {}
 
