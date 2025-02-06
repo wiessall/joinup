@@ -6,6 +6,7 @@ namespace Drupal\sparql_endpoint;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Represents a cached SPARQL read-only endpoint.
@@ -59,10 +60,18 @@ readonly class CachedSparqlReadOnlyEndpoint {
     try {
       $endpointResponse = $this->sparqlReadOnlyEndpoint->query($query, $accept);
     }
-    catch (\Exception $e) {
+    catch (RequestException $e) {
       return new SparqlResponse(
         $e->getCode(),
-        $e->getResponse()->getBody()->getContents()
+        $e->getResponse() ? $e->getResponse()
+          ->getBody()
+          ->getContents() : 'No response available'
+      );
+    }
+    catch (\Exception $e) {
+      return new SparqlResponse(
+        $e->getCode() ?: 500,
+        'An unexpected error occurred while processing the request.'
       );
     }
 
