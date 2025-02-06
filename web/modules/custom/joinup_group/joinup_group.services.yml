@@ -7,6 +7,7 @@ services:
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
+  Drupal\Core\Logger\LoggerChannelInterface: '@logger.channel.group_membership'
 
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'

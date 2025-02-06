@@ -9,6 +9,7 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -19,6 +20,7 @@ class SearchApiSubscriber implements EventSubscriberInterface {
   use StringTranslationTrait;
 
   public function __construct(
+    #[Autowire(service: 'facets.manager')]
     protected DefaultFacetManager $facetManager,
   ) {}
 

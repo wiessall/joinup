@@ -17,6 +17,7 @@ use Drupal\og\OgAccessInterface;
 use Drupal\state_machine\WorkflowGroupManagerInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
 use Drupal\user\EntityOwnerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides helper methods for discovering fields, workflows and permissions.
@@ -25,8 +26,11 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
 
   public function __construct(
     protected EntityFieldManagerInterface $entityFieldManager,
+    #[Autowire(service: 'plugin.manager.workflow_group')]
     protected WorkflowGroupManagerInterface $workflowGroupManager,
+    #[Autowire(service: 'plugin.manager.workflow')]
     protected WorkflowManagerInterface $workflowManager,
+    #[Autowire(service: 'og.access')]
     protected OgAccessInterface $ogAccess,
   ) {}
 

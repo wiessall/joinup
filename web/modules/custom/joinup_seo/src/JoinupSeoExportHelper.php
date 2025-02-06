@@ -6,6 +6,7 @@ namespace Drupal\joinup_seo;
 
 use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -21,6 +22,7 @@ readonly class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   protected const SERIALIZATION_FORMAT = 'jsonld';
 
   public function __construct(
+    #[Autowire(service: 'serializer')]
     protected SerializerInterface $serializer,
     protected ExtensionPathResolver $extensionPathResolver,
   ) {}
