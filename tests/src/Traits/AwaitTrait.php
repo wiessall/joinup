@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementHtmlException;
@@ -175,6 +176,15 @@ trait AwaitTrait {
    */
   protected function waitForModalToClose(): void {
     $this->waitForNoElement('css', '.ui-dialog-content');
+  }
+
+  /**
+   * Waits for autocomplete results to appear.
+   */
+  protected function waitForAutocomplete(): void {
+    $this->getSession()->getPage()->waitFor(3, static fn(DocumentElement $page): bool =>
+      $page->find('css', '.ui-autocomplete li')?->isVisible() === TRUE
+    );
   }
 
 }

@@ -19,6 +19,7 @@ trait UserTrait {
    */
   protected static function userFieldAliases(): array {
     return [
+      'ID' => 'uid',
       'Username' => 'name',
       'Password' => 'pass',
       'E-mail' => 'mail',

@@ -428,6 +428,17 @@ paragraph__events_calendar:
     theme:
       assets/css/paragraph--events-calendar.min.css: { minified: true }      
 
+private-message:
+  css:
+    theme:
+      assets/css/private-message.min.css: { minified: true }
+  js:
+    assets/js/private-message.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
+
 releases:
   css:
     theme:

@@ -1,0 +1,41 @@
+joinup_private_message.private_message_settings_page:
+  path: '/user/messages/settings'
+  defaults:
+    _form: '\Drupal\joinup_private_message\Form\PrivateMessageSettingsForm'
+    _title: 'Private Messages'
+  requirements:
+    _permission: 'use private messaging system'
+joinup_private_message.unblock:
+  path: '/user/messages/settings/unblock/{private_message_ban}'
+  defaults:
+    _form: '\Drupal\joinup_private_message\Form\ConfirmUnblockUserForm'
+    _title: 'Unblock user'
+  requirements:
+    _permission: 'use private messaging system'
+  options:
+    parameters:
+      private_message_ban:
+        type: entity:private_message_ban
+joinup_private_message.report:
+  path: '/user/messages/message/{private_message}/report'
+  defaults:
+    _form: '\Drupal\joinup_private_message\Form\PrivateMessageReportForm'
+    _title: 'Report and block sender'
+  requirements:
+    _permission: 'use private messaging system'
+    _custom_access: '\Drupal\joinup_private_message\Form\PrivateMessageReportForm::access'
+  options:
+    parameters:
+      private_message:
+        type: entity:private_message
+joinup_private_message.unreport:
+  path: '/user/messages/message/{private_message}/unreport'
+  defaults:
+    _form: '\Drupal\joinup_private_message\Form\PrivateMessageUnreportForm'
+    _title: 'Flag as OK'
+  requirements:
+    _permission: 'administer private messages'
+  options:
+    parameters:
+      private_message:
+        type: entity:private_message
