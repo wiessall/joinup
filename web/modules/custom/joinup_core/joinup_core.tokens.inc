@@ -21,13 +21,6 @@ function joinup_core_token_info(): array {
           'description' => t('Generates a universally unique identifier.'),
         ],
       ],
-      'view' => [
-        'current_year' => [
-          'name' => t('Current Year'),
-          'description' => t('The current year.'),
-        ],
-      ],
-
     ],
   ];
 }
@@ -45,14 +38,6 @@ function joinup_core_tokens($type, $tokens, array $data, array $options, Bubblea
       foreach ($tokens as $name => $original) {
         if ($name === 'uuid') {
           $replacements[$original] = $uuid_service->generate();
-        }
-      }
-      break;
-
-    case 'view':
-      foreach ($tokens as $name => $original) {
-        if ($name === 'current_year') {
-          $replacements[$original] = date('Y');
         }
       }
       break;
