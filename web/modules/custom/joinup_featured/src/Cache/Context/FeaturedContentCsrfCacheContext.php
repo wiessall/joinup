@@ -29,7 +29,7 @@ readonly class FeaturedContentCsrfCacheContext implements CacheContextInterface 
 
   public function __construct(
     #[Autowire(service: 'csrf_token')]
-    protected CsrfTokenGenerator $csrfTokenGenerator
+    protected CsrfTokenGenerator $csrfTokenGenerator,
   ) {}
 
   /**
