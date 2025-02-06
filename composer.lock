@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98fe0184a5325da66c14ccacec4cf417",
+    "content-hash": "82c2fc502b6d9adac4da9955f8fcff8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7231,17 +7231,17 @@
         },
         {
             "name": "drupal/private_message",
-            "version": "4.0.0-alpha3",
+            "version": "4.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message.git",
-                "reference": "4.0.0-alpha3"
+                "reference": "4.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message-4.0.0-alpha3.zip",
-                "reference": "4.0.0-alpha3",
-                "shasum": "81106537c32b3968818ee0f5c2f1c27821c6b326"
+                "url": "https://ftp.drupal.org/files/projects/private_message-4.0.0-alpha4.zip",
+                "reference": "4.0.0-alpha4",
+                "shasum": "6a03e335f6a0924d75945d879dcd1799e0519cf4"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11",
@@ -7259,8 +7259,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0-alpha3",
-                    "datestamp": "1738148384",
+                    "version": "4.0.0-alpha4",
+                    "datestamp": "1738835305",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -25465,7 +25465,7 @@
     "aliases": [
         {
             "package": "drupal/private_message",
-            "version": "4.0.0.0-alpha3",
+            "version": "4.0.0.0-alpha4",
             "alias": "3.0.6",
             "alias_normalized": "3.0.6.0"
         }
