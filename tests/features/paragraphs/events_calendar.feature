@@ -35,7 +35,7 @@ Feature:
     And I click "Choose component"
     And a modal should open
     And I click "Events calendar"
-    And I select "Calendar: Calendar by month" from "Block"
+    And I select "Calendar by month" from "Block"
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
     Then I should be on the Page content page
@@ -64,7 +64,7 @@ Feature:
     And I click "Choose component"
     And a modal should open
     And I click "Events calendar"
-    And I select "Calendar: Calendar by week" from "Block"
+    And I select "Calendar by week" from "Block"
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
     Then I should be on the "Page 2" content page
@@ -99,7 +99,7 @@ Feature:
     And I click "Choose component"
     And a modal should open
     And I click "Events calendar"
-    And I select "Upcoming events" from "Block"
+    And I select "Upcoming events (Group view)" from "Block"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the text "Future events calendar" in the "Page title" region

@@ -504,6 +504,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
+      block_description: 'Calendar by month'
     cache_metadata:
       max-age: -1
       contexts:
@@ -558,6 +559,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
+      block_description: 'Calendar by week'
     cache_metadata:
       max-age: -1
       contexts:
