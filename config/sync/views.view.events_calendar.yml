@@ -263,12 +263,9 @@ display:
     display_plugin: block
     position: 2
     display_options:
-      cache:
-        type: tag
-        options: {  }
       arguments: {  }
       defaults:
-        cache: false
+        cache: true
         arguments: false
       display_extenders:
         metatag_display_extender:
@@ -290,9 +287,6 @@ display:
     display_plugin: block
     position: 2
     display_options:
-      cache:
-        type: tag
-        options: {  }
       arguments:
         og_audience_target_id:
           id: og_audience_target_id
@@ -328,7 +322,7 @@ display:
           break_phrase: false
           not: false
       defaults:
-        cache: false
+        cache: true
         arguments: false
       display_extenders:
         metatag_display_extender:
