@@ -14,7 +14,7 @@ Feature:
       | Old month event             | Le Event Heureux | now -2 month         | now -2 month +1 day  |
       | Upcoming month event        | Le Event Heureux | now +1 month         | now +1 month +2 day  |
       | Old week event              | Le Event Heureux | now -1 week          | now -1 week +2 day   |
-      | Upcoming week Event         | Le Event Heureux | now +1 week          | now +1 week +1 day   |
+      | Upcoming week Event         | Le Event Heureux | now +1 week          | now +2 week +1 day   |
       | Dummy old month event       | Collection two   | now -2 month         | now -2 month +1 day  |
       | Dummy upcoming month event  | Collection two   | now +1 month + 1 day | now +1 month +2 day  |
       | Dummy old week event        | Collection two   | now -1 week          | now -1 week +2 day   |
@@ -43,7 +43,7 @@ Feature:
     When I navigate the calendar to "now -2 month" in month mode
     Then I see the "Old month event" showing in the Calendar
     And I see the "Dummy old month event" showing in the Calendar
-    When I navigate the calendar to "now +2 month" in month mode
+    When I navigate the calendar to "now +1 month" in month mode
     Then I see the "Upcoming month event" showing in the Calendar
     And I see the "Dummy upcoming month event" showing in the Calendar
     And I click "Upcoming month event"
