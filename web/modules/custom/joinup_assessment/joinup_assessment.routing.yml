@@ -1,3 +1,17 @@
+# Collection routing definition
+entity.node.subscribe:
+  path: /node/{node}/subscribe
+  defaults:
+    _form: \Drupal\joinup_assessment\Form\SubscribeToCollectionForm
+    _title_callback: Drupal\joinup_assessment\Form\SubscribeToCollectionForm::title
+  requirements:
+    _custom_access: \Drupal\joinup_assessment\Form\SubscribeToCollectionForm::access
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection
 joinup_assessment.moderation:
   path: /collection/assessments/assessment-reports/questionnaire/{submission}/moderate
   defaults:
