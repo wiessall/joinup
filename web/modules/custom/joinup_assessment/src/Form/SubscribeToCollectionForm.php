@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\collection\Form;
+namespace Drupal\joinup_assessment\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;
@@ -24,6 +24,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -305,6 +306,13 @@ class SubscribeToCollectionForm extends FormBase {
     $subscribe = (bool) $form_state->getValue('subscribe');
     if ($subscribe) {
       $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+      // Remove the 'assessment_report' subscription for all collections,
+      // except the assessment collection.
+      if ($collection->uuid() !== AssessmentInterface::GROUP_UUID) {
+        $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+          return $bundle['bundle'] !== 'assessment_report';
+        }));
+      }
       $membership
         ->set('announcements', TRUE)
         ->set('subscription_bundles', $subscription_bundles)
