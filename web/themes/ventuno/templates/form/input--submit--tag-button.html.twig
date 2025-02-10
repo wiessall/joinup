@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override for a submit button #type form element.
+ *
+ * Usually a submit button is rendered with input--submit.html.twig.
+ * By adding the extra_suggestion "tag_button" we ensure the usage of
+ * this template with the tag <button>.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ */
+#}
+{% if attributes.disabled == 'disabled' %}
+  {% set attributes = attributes.addClass(['disabled']) %}
+{% endif %}
+
+<button{{ attributes.addClass(['btn']) }}>{{ _context.element['#value'] }}</button>

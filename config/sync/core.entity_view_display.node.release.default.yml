@@ -7,8 +7,8 @@ dependencies:
     - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
-    - field.field.node.release.og_audience
     - field.field.node.release.language
+    - field.field.node.release.og_audience
     - field.field.node.release.process_status
     - field.field.node.release.release_number
     - field.field.node.release.solution_data
@@ -93,6 +93,7 @@ hidden:
   language: true
   links: true
   og_audience: true
+  private_message_link: true
   process_status: true
   published_at: true
   release_number: true
