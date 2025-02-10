@@ -112,6 +112,7 @@ class SubscriptionsForm extends FormBase {
         $form['groups'][$group->id()] = [
           '#type' => 'container',
           '#id' => 'group-' . $clean_group_id,
+          '#uuid' => $group->uuid(),
           '#attributes' => [
             'class' => ['group-subscription'],
           ],
