@@ -78,6 +78,7 @@ hidden:
   field_topic: true
   langcode: true
   og_audience: true
+  private_message_link: true
   published_at: true
   search_api_excerpt: true
   share_link: true

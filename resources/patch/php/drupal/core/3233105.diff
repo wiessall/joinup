@@ -1,0 +1,163 @@
+diff --git a/core/modules/views/src/Plugin/views/cache/Time.php b/core/modules/views/src/Plugin/views/cache/Time.php
+index 648c157bf48b78cf35c5b497cb77d3e7ff661ec0..b9eddb3d91b80412cee4f3b0af0bf8fd6226f442 100644
+--- a/core/modules/views/src/Plugin/views/cache/Time.php
++++ b/core/modules/views/src/Plugin/views/cache/Time.php
+@@ -22,6 +22,11 @@
+ )]
+ class Time extends CachePluginBase {
+ 
++  /**
++   * Time-based lifespan custom.
++   */
++  const LIFESPAN_CUSTOM = -1;
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -80,7 +85,8 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+     parent::buildOptionsForm($form, $form_state);
+     $options = [60, 300, 1800, 3600, 21600, 518400];
+     $options = array_map([$this->dateFormatter, 'formatInterval'], array_combine($options, $options));
+-    $options = [0 => $this->t('Never cache')] + $options + ['custom' => $this->t('Custom')];
++    // Use LIFESPAN_CUSTOM for custom timed-based since configuration expects an integer.
++    $options = [0 => $this->t('Never cache')] + $options + [static::LIFESPAN_CUSTOM => $this->t('Custom')];
+ 
+     $form['results_lifespan'] = [
+       '#type' => 'select',
+@@ -98,7 +104,7 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+       '#default_value' => $this->options['results_lifespan_custom'],
+       '#states' => [
+         'visible' => [
+-          ':input[name="cache_options[results_lifespan]"]' => ['value' => 'custom'],
++          ':input[name="cache_options[results_lifespan]"]' => ['value' => static::LIFESPAN_CUSTOM],
+         ],
+       ],
+     ];
+@@ -118,7 +124,7 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+       '#default_value' => $this->options['output_lifespan_custom'],
+       '#states' => [
+         'visible' => [
+-          ':input[name="cache_options[output_lifespan]"]' => ['value' => 'custom'],
++          ':input[name="cache_options[output_lifespan]"]' => ['value' => static::LIFESPAN_CUSTOM],
+         ],
+       ],
+     ];
+@@ -128,7 +134,7 @@ public function validateOptionsForm(&$form, FormStateInterface $form_state) {
+     $custom_fields = ['output_lifespan', 'results_lifespan'];
+     foreach ($custom_fields as $field) {
+       $cache_options = $form_state->getValue('cache_options');
+-      if ($cache_options[$field] == 'custom' && !is_numeric($cache_options[$field . '_custom'])) {
++      if ($cache_options[$field] == static::LIFESPAN_CUSTOM && !is_numeric($cache_options[$field . '_custom'])) {
+         $form_state->setError($form[$field . '_custom'], $this->t('Custom time values must be numeric.'));
+       }
+     }
+@@ -141,7 +147,7 @@ public function summaryTitle() {
+   }
+ 
+   protected function getLifespan($type) {
+-    $lifespan = $this->options[$type . '_lifespan'] == 'custom' ? $this->options[$type . '_lifespan_custom'] : $this->options[$type . '_lifespan'];
++    $lifespan = $this->options[$type . '_lifespan'] == static::LIFESPAN_CUSTOM ? $this->options[$type . '_lifespan_custom'] : $this->options[$type . '_lifespan'];
+     return $lifespan;
+   }
+ 
+diff --git a/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_cache.yml b/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_cache.yml
+index b029203289b46621b5c00381c755260a46f72d29..b2d9ff29d0a192fc3ca6690c35eb604cbd303d28 100644
+--- a/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_cache.yml
++++ b/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_cache.yml
+@@ -73,3 +73,27 @@ display:
+     cache_metadata:
+       contexts:
+         - views_test_cache_context
++
++  page_3:
++    display_plugin: page
++    id: page_3
++    display_options:
++      defaults:
++        filters: false
++        cache: false
++      cache:
++        type: time
++        options:
++          results_lifespan: -1
++          results_lifespan_custom: 10
++          output_lifespan: -1
++          output_lifespan_custom: 15
++      filters:
++        test_cache_context:
++          id: test_cache_context
++          table: views_test_data
++          field: test_cache_context
++          relationship: none
++    cache_metadata:
++      contexts:
++        - views_test_cache_context
+diff --git a/core/modules/views/tests/src/Functional/Plugin/views/Cache/TimeTest.php b/core/modules/views/tests/src/Functional/Plugin/views/Cache/TimeTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..5abd8247fbff57dbd1e7feae73494104a39a54c4
+--- /dev/null
++++ b/core/modules/views/tests/src/Functional/Plugin/views/Cache/TimeTest.php
+@@ -0,0 +1,63 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\views\Functional\Plugin\views\Cache;
++
++use Drupal\Tests\views\Functional\ViewTestBase;
++use Drupal\views\Tests\ViewTestData;
++
++/**
++ * Tests pluggable access for views.
++ *
++ * @group views
++ */
++class TimeTest extends ViewTestBase {
++
++  /**
++   * Views used by this test.
++   *
++   * @var array
++   */
++  public static $testViews = ['test_cache'];
++
++  /**
++   * Modules to enable.
++   *
++   * @var array
++   */
++  protected static $modules = ['node', 'views_ui'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
++    parent::setUp($import_test_views, $modules);
++
++    $this->enableViewsTestModule();
++
++    ViewTestData::createTestViews(static::class, ['views_test_data']);
++
++    $admin_user = $this->drupalCreateUser([
++      'administer views',
++    ]);
++    $this->drupalLogin($admin_user);
++  }
++
++  /**
++   * Tests view time cache custom setting.
++   */
++  public function testCustomTimeCache() {
++    $this->drupalGet('admin/structure/views/view/test_cache/edit/page_3');
++    $this->assertSession()->statusCodeEquals(200);
++
++    $this->assertSession()->linkExists('10 sec/15 sec');
++
++    $this->clickLink('10 sec/15 sec');
++    $this->assertTrue($this->assertSession()->optionExists('cache_options[results_lifespan]', 'Custom')->isSelected());
++    $this->assertTrue($this->assertSession()->optionExists('cache_options[output_lifespan]', 'Custom')->isSelected());
++  }
++
++}

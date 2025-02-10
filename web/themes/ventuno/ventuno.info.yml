@@ -30,6 +30,11 @@ libraries-extend:
     - ventuno/alert
 
 libraries-override:
+  calendar_view/calendar:
+    css:
+      component:
+        css/calendar-view.css: false
+        css/calendar-view.default.css: false
   core/jquery.once: false
   oe_bootstrap_theme/style: false
   oe_bootstrap_theme/bcl: false
@@ -53,6 +58,10 @@ libraries-override:
   layout_builder/twocol_section: false
   layout_builder/threecol_section: false
   layout_builder/fourcol_section: false
+  private_message/notification_block_style:
+    css:
+      theme:
+        css/private_message_notification_block.css: false
 
 regions:
   search_bar: 'Search bar'

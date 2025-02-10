@@ -52,6 +52,7 @@ Feature: User authentication
       | admin/tmgmt/settings                                |
       | announcements                                       |
       | dashboard                                           |
+      | dashboard/private-message-report                    |
       | licence                                             |
       | media/add                                           |
       | media/add/collection_logo                           |
@@ -140,6 +141,7 @@ Feature: User authentication
       | admin/tmgmt/settings                                |
       | announcements                                       |
       | dashboard                                           |
+      | dashboard/private-message-report                    |
       | licence                                             |
       | media/add                                           |
       | media/add/collection_logo                           |
