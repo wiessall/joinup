@@ -602,8 +602,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @Then I should see the following paragraph types in the modal in order:
    */
   public function iShouldSeeParagraphTypesInTheModalInOrder(TableNode $table): void {
-    $this->waitForModalToOpen();
-
     // Get expected order from the table.
     $expectedOrder = array_map(function ($row) {
       return $row[0];

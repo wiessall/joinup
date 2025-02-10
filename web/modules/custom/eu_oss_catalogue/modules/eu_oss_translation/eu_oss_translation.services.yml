@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autoconfigure: true
   eu_oss_translation.job_builder:
     class: Drupal\eu_oss_translation\JobBuilder
     arguments:
@@ -8,8 +10,5 @@ services:
       - '@plugin.manager.tmgmt.source'
       - '@config.factory'
 
-  eu_oss_translation.solution_post_save_subscriber:
-    class: Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber
+  Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber:
     arguments: [ '@queue' ]
-    tags:
-      - { name: event_subscriber }

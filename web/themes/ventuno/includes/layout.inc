@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
+use Drupal\block\Entity\Block;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
@@ -30,8 +31,9 @@ function ventuno_preprocess_page(array &$variables): void {
     $variables['discover_more_url'] = $news_page->toUrl()->toString();
   }
 
+  $current_user = \Drupal::currentUser();
   // Export the username to display in the header.
-  $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
+  $variables['user_name'] = $current_user->getDisplayName();
 
   /** @var \Drupal\joinup_bookmark\JoinupBookmarkInterface $joinupBookmark */
   $joinupBookmark = \Drupal::service('joinup_bookmark.bookmark');
@@ -81,6 +83,16 @@ function ventuno_preprocess_page(array &$variables): void {
     if (array_key_exists("page_manager.$pageManagerPageId", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))) {
       $variables['#attached']['library'][] = "ventuno/page_manager.$pageManagerPageId";
     }
+  }
+
+  $block = Block::load('ventuno_privatemessagenotification');
+
+  if ($block && $current_user->isAuthenticated()) {
+    $block_content = \Drupal::entityTypeManager()
+      ->getViewBuilder('block')
+      ->view($block);
+
+    $variables['private_message'] = $block_content;
   }
 }
 

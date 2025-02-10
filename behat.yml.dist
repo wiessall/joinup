@@ -23,6 +23,7 @@
         - .globan
   - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\BootstrapContext
+  - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
@@ -212,6 +213,7 @@ default:
         Pager: 'nav.pager'
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
+        Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
         SevenHeader: '.region-header'
@@ -225,6 +227,8 @@ default:
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
         Other unpublished block: '#block-ventuno-unpublished-other'
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
+        Private messages inbox: '#block-ventuno-privatemessage-inbox .private-message-thread--full-container'
+        Private messages conversation: '#private-message-page .private-message-thread-messages'
       drupal:
         drupal_root: ${joinup.site_dir}
       drush:

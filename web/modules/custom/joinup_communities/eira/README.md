@@ -125,7 +125,7 @@ function joinup_core_deploy_200200(): void {
   // `rdf_sync_uri` table.
   \Drupal::database()
     ->delete('rdf_sync_uri')
-    ->condition('bundle', ['eira', 'solution_type'], 'IN')
+    ->condition('bundle', ['eira', 'solution_type', 'egovera'], 'IN')
     ->execute();
 
   // Import EIRA first.

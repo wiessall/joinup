@@ -34,3 +34,14 @@
 @import "mixins/full-width-background-colors";
 @import "mixins/general.mixins";
 @import "mixins/paragraph.mixins";
+
+// Ensure %heading is extended or replaced, or patch the source package issue.
+%heading {
+  margin-top: 0; // 1
+  margin-bottom: $headings-margin-bottom;
+  color: $headings-color;
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+  font-style: $headings-font-style;
+  line-height: $headings-line-height;
+}
