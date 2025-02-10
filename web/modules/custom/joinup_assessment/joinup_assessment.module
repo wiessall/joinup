@@ -137,11 +137,9 @@ function joinup_assessment_preprocess_page_title(array &$variables): void {
  */
 function joinup_assessment_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   if ($form_id === 'joinup_subscription_my_subscriptions') {
-    if ($assessment = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID)) {
-      foreach ($form['groups'] as $key => &$group) {
-        if (is_int($key) && $key !== (int) $assessment->id() && isset($group['options']['node|assessment_report'])) {
-          unset($group['options']['node|assessment_report']);
-        }
+    foreach ($form['groups'] as $key => &$group) {
+      if (is_int($key) && $group['#uuid'] !== AssessmentInterface::GROUP_UUID && isset($group['options']['node|assessment_report'])) {
+        unset($group['options']['node|assessment_report']);
       }
     }
   }
