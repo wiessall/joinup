@@ -1,0 +1,26 @@
+uuid: 2d95ae48-76d0-48b0-98e6-414e7fbb859b
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_private_message
+    - private_message
+_core:
+  default_config_hash: xVcdSTtn_Hdh0KwHYne9Hi3t1-vEq5TUN-taN_bm49w
+id: private_message_thread.private_message_thread.default
+targetEntityType: private_message_thread
+bundle: private_message_thread
+mode: default
+content:
+  members:
+    type: joinup_private_message_member_widget
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  subject: true

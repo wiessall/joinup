@@ -1,5 +1,4 @@
 services:
-  joinup_media.route_subscriber:
-    class: Drupal\joinup_media\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  _defaults:
+    autoconfigure: true
+  Drupal\joinup_media\Routing\RouteSubscriber: { }

@@ -69,27 +69,6 @@ Feature:
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
     And a modal should open
-    Then I should not see the link "Layout"
-    And I should see the link "Accordion"
-    And I should not see the link "Block"
-    And I should see the link "Call to action(s)"
-    And I should see the link "Carousel"
-    And I should see the link "Content listing"
-    But I should not see the link "Entity reference"
-    And I should not see the link "Github feed"
-    And I should see the link "Heading"
-    But I should not see the link "IFrame"
-    And I should see the link "Image"
-    And I should see the link "Poll"
-    And I should not see the link "Map"
-    And I should see the link "Quote"
-    But I should not see the link "Simple paragraph"
-    And I should see the link "Tiles"
-    And I should see the link "Testimony"
-    And I should see the link "Text"
-    And I should see the link "Video"
-    And I should not see the link "Webform"
-
     Then I should see the following paragraph types in the modal in order:
       | Heading           |
       | Text              |
@@ -101,6 +80,7 @@ Feature:
       | Poll              |
       | Quote             |
       | Social media      |
+      | Table of Contents |
       | Testimony         |
       | Tiles             |
       | Video             |
@@ -111,54 +91,52 @@ Feature:
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
     And a modal should open
-    Then I should not see the link "Layout"
-    And I should see the link "Accordion"
-    And I should not see the link "Block"
-    And I should see the link "Call to action(s)"
-    And I should see the link "Carousel"
-    And I should see the link "Content listing"
-    But I should not see the link "Entity reference"
-    And I should see the link "Github feed"
-    And I should see the link "Heading"
-    But I should not see the link "IFrame"
-    And I should see the link "Image"
-    And I should see the link "Poll"
-    And I should see the link "Map"
-    And I should see the link "Quote"
-    But I should not see the link "Simple paragraph"
-    And I should see the link "Tiles"
-    And I should see the link "Testimony"
-    And I should see the link "Text"
-    And I should see the link "Video"
-    And I should not see the link "Webform"
+    Then I should see the following paragraph types in the modal in order:
+      | Heading           |
+      | Text              |
+      | Image             |
+      | Accordion         |
+      | Call to action(s) |
+      | Carousel          |
+      | Content listing   |
+      | Github feed       |
+      | Map               |
+      | Poll              |
+      | Quote             |
+      | Social media      |
+      | Table of Contents |
+      | Testimony         |
+      | Tiles             |
+      | Video             |
+      | Image gallery     |
 
     # Moderator.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
     And a modal should open
-    Then I should not see the link "Layout"
-    And I should see the link "Accordion"
-    And I should see the link "Block"
-    And I should see the link "Call to action(s)"
-    And I should see the link "Carousel"
-    And I should see the link "Content listing"
-    And I should see the link "Entity reference"
-    And I should see the link "Github feed"
-    And I should see the link "Heading"
-    And I should see the link "IFrame"
-    And I should see the link "Image"
-    And I should see the link "Poll"
-    And I should see the link "Map"
-    And I should see the link "Quote"
-    But I should not see the link "Simple paragraph"
-    And I should see the link "Tiles"
-    And I should see the link "Testimony"
-    And I should see the link "Text"
-    And I should see the link "Video"
-    And I should see the link "Webform"
-
-    And I should not see the link "Configurable listing"
+    Then I should see the following paragraph types in the modal in order:
+      | Heading           |
+      | Text              |
+      | Image             |
+      | Accordion         |
+      | Call to action(s) |
+      | Carousel          |
+      | Block             |
+      | Content listing   |
+      | Entity reference  |
+      | Github feed       |
+      | IFrame            |
+      | Map               |
+      | Poll              |
+      | Quote             |
+      | Social media      |
+      | Table of Contents |
+      | Testimony         |
+      | Tiles             |
+      | Video             |
+      | Webform           |
+      | Image gallery     |
 
     Examples:
       | group type |

@@ -13,41 +13,46 @@ Feature: Creating content and commenting on archived collection
     And collection content:
       | title               | abstract            | description         | logo     | topic                   |
       | The Willing Consort | The Willing Consort | The Willing Consort | logo.png | Statistics and Analysis |
+    Given solution content:
+      | title               | collection          |
+      | The Loyal Companion | The Willing Consort |
     And the following collection user memberships:
       | collection          | user        | roles              |
       | The Willing Consort | Karl Fields | owner, facilitator |
 
-  Scenario: 'Comment form' should not be accessible on an archived collection content.
-    Given discussion content:
-      | title               | collection          |
-      | The Weeping's Stars | The Willing Consort |
+  Scenario Outline: 'Comment form' should not be accessible on an archived collection content.
+    Given <content_type> content:
+      | title            | collection   | solution   |
+      | Commented entity | <collection> | <solution> |
     When I am logged in as "Lee Reeves"
-    And I go to the "The Weeping's Stars" discussion
-    Then the following fields should be present "Create comment"
-    And I should see the button "Post comment"
+    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I should see a ".comment-form" element
 
+    # Archive the collection.
     When I am logged in as "Karl Fields"
-    And I go to the "The Willing Consort" collection
-    And I click "Edit"
+    And I go to the "edit-form" content page of the type "collection" with the title "The Willing Consort"
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "The Willing Consort" collection
-    And I click "Edit"
+    And I go to the "edit-form" content page of the type "collection" with the title "The Willing Consort"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
-    And I go to the "The Weeping's Stars" discussion
-    Then the following fields should not be present "Create comment"
-    And I should not see the button "Post comment"
+    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I should not see a ".comment-form" element
 
     When I am logged in as "Lee Reeves"
-    And I go to the "The Weeping's Stars" discussion
-    Then the following fields should not be present "Create comment"
-    And I should not see the button "Post comment"
+    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I should not see a ".comment-form" element
 
     When I am not logged in
-    And I go to the "The Weeping's Stars" discussion
-    Then the following fields should not be present "Your name, Email, Create comment"
-    And I should not see the button "Post comment"
+    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I should not see a ".comment-form" element
+
+    Examples:
+      | content_type | collection          | solution            |
+      | discussion   | The Willing Consort |                     |
+      | news         | The Willing Consort |                     |
+      | discussion   |                     | The Loyal Companion |
+      | news         |                     | The Loyal Companion |
 
   Scenario: 'Add community content' menu items should not be visible in the archived connection.
     When I am logged in as "Karl Fields"

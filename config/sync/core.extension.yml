@@ -34,6 +34,7 @@ module:
   diff: 0
   digital_size_formatter: 0
   dropsolid_purge: 0
+  duration_field: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
@@ -42,7 +43,6 @@ module:
   eira: 0
   email_confirmer: 0
   email_contact: 0
-  embed_block: 0
   entity_legal: 0
   entity_print: 0
   entity_reference_revisions: 0
@@ -116,6 +116,7 @@ module:
   joinup_oss_catalogue: 0
   joinup_paragraphs: 0
   joinup_poll: 0
+  joinup_private_message: 0
   joinup_publication_date: 0
   joinup_rdf: 0
   joinup_release: 0
@@ -191,6 +192,9 @@ module:
   path_alias: 0
   pluginreference: 0
   poll: 0
+  private_message: 0
+  private_message_flood: 0
+  private_message_notify: 0
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0

@@ -103,6 +103,7 @@ hidden:
   deprecated: true
   langcode: true
   links: true
+  private_message_link: true
   published_at: true
   report: true
   search_api_excerpt: true

@@ -404,6 +404,11 @@ paragraph__social_media:
     theme:
       assets/css/paragraph--social-media.min.css: { minified: true }
 
+paragraph__table_of_contents:
+  css:
+    theme:
+      assets/css/paragraph--table-of-contents.min.css: { minified: true }
+
 paragraph__testimony:
   css:
     theme:
@@ -418,6 +423,17 @@ paragraph__video:
   css:
     theme:
       assets/css/paragraph--video.min.css: { minified: true }
+
+private-message:
+  css:
+    theme:
+      assets/css/private-message.min.css: { minified: true }
+  js:
+    assets/js/private-message.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
 
 releases:
   css:

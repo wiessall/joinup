@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbd23d92d8bed837a2d407d2b340cd44",
+    "content-hash": "82c2fc502b6d9adac4da9955f8fcff8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3418,6 +3418,71 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/dropsolid_purge",
                 "issues": "http://drupal.org/project/issues/dropsolid_purge"
+            }
+        },
+        {
+            "name": "drupal/duration_field",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/duration_field.git",
+                "reference": "8.x-2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/duration_field-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "7cda4d9c8d07da32af16e2b8cd9849e2e2173b11"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.1",
+                    "datestamp": "1668979037",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jay Friendly (jaypan)",
+                    "homepage": "https://www.drupal.org/u/jaypan",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "jaypan",
+                    "homepage": "https://www.drupal.org/user/324696"
+                },
+                {
+                    "name": "sickness29",
+                    "homepage": "https://www.drupal.org/user/2586096"
+                }
+            ],
+            "description": "Creates a duration Field API field, that collects a period of time, whether that be hours, minutes, seconds, days, months, years, or any combination of those.",
+            "homepage": "https://drupal.org/project/duration_field",
+            "keywords": [
+                "Drupal",
+                "Duration",
+                "Field",
+                "Field API"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/duration_field",
+                "issues": "https://www.drupal.org/project/issues/duration_field"
             }
         },
         {
@@ -7162,6 +7227,142 @@
             "homepage": "https://www.drupal.org/project/poll",
             "support": {
                 "source": "https://git.drupalcode.org/project/poll"
+            }
+        },
+        {
+            "name": "drupal/private_message",
+            "version": "4.0.0-alpha4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/private_message.git",
+                "reference": "4.0.0-alpha4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/private_message-4.0.0-alpha4.zip",
+                "reference": "4.0.0-alpha4",
+                "shasum": "6a03e335f6a0924d75945d879dcd1799e0519cf4"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11",
+                "drupal/message": "^1.0",
+                "drupal/message_notify": "^1.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "drupal/coder": "8.3.26",
+                "drupal/message_notify": "*",
+                "drupal/rules": "^4.0",
+                "drupal/symfony_mailer_lite": "^2.0",
+                "drush/drush": "^12.5 || ^13.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.0.0-alpha4",
+                    "datestamp": "1738835305",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jay Friendly (Jaypan)",
+                    "homepage": "https://www.jaypan.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "artem_sylchuk",
+                    "homepage": "https://www.drupal.org/user/2511902"
+                },
+                {
+                    "name": "bohart",
+                    "homepage": "https://www.drupal.org/user/289861"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "edutrul",
+                    "homepage": "https://www.drupal.org/user/1621444"
+                },
+                {
+                    "name": "heddn",
+                    "homepage": "https://www.drupal.org/user/1463982"
+                },
+                {
+                    "name": "jaypan",
+                    "homepage": "https://www.drupal.org/user/324696"
+                },
+                {
+                    "name": "phjou",
+                    "homepage": "https://www.drupal.org/user/3344054"
+                }
+            ],
+            "description": "A private message system for users to send messages to each other.",
+            "homepage": "https://drupal.org/project/private_message",
+            "support": {
+                "source": "https://git.drupalcode.org/project/private_message",
+                "issues": "https://drupal.org/project/issues/private_message"
+            }
+        },
+        {
+            "name": "drupal/private_message_flood",
+            "version": "2.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/private_message_flood.git",
+                "reference": "2.0.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha3.zip",
+                "reference": "2.0.0-alpha3",
+                "shasum": "098342c7017faa52966479a41615b172e3f15e58"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/duration_field": "^2.",
+                "drupal/private_message": "^2. || ^3."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-alpha3",
+                    "datestamp": "1696324712",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jay Friendly (Jaypan)",
+                    "homepage": "https://www.jaypan.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jaypan",
+                    "homepage": "https://www.drupal.org/user/324696"
+                }
+            ],
+            "description": "Adds flood protection to the Private Message module.",
+            "homepage": "https://drupal.org/project/private_message_flood",
+            "support": {
+                "source": "https://cgit.drupalcode.org/private_message_flood",
+                "issues": "https://drupal.org/project/issues/private_message_flood"
             }
         },
         {
@@ -25261,7 +25462,14 @@
             "time": "2021-07-07T17:59:50+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "drupal/private_message",
+            "version": "4.0.0.0-alpha4",
+            "alias": "3.0.6",
+            "alias_normalized": "3.0.6.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/block_field": 5,
@@ -25271,6 +25479,7 @@
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
         "drupal/node_revision_delete": 5,
+        "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
     },

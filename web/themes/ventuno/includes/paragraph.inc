@@ -15,7 +15,11 @@ use Drupal\paragraphs\ParagraphInterface;
  */
 function ventuno_preprocess_paragraph(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/paragraph';
-  $variables['#attached']['library'][] = 'ventuno/paragraph__' . $variables['paragraph']->bundle();
+  $bundle_library = 'paragraph__' . $variables['paragraph']->bundle();
+  if (array_key_exists($bundle_library, \Drupal::service('library.discovery')
+    ->getLibrariesByExtension('ventuno'))) {
+    $variables['#attached']['library'][] = 'ventuno/' . $bundle_library;
+  }
   $variables['attributes']['class'][] = 'paragraph--' . str_replace('_', '-', $variables['paragraph']->bundle());
 
   if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
