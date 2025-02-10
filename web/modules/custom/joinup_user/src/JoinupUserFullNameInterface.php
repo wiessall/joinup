@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user;
 
+use Drupal\Core\DestructableInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
 /**
  * Interface of 'joinup_user.full_name' service.
  */
-interface JoinupUserFullNameInterface {
+interface JoinupUserFullNameInterface extends DestructableInterface {
 
   /**
    * Table storing the relation between UID and user full name.

@@ -28,3 +28,5 @@ services:
 
   joinup_user.full_name:
     class: Drupal\joinup_user\JoinupUserFullName
+    tags:
+      - { name: needs_destruction }
