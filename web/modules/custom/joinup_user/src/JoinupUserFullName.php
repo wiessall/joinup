@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -16,6 +17,13 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Default implementation of 'joinup_user.full_name' service.
  */
 class JoinupUserFullName implements JoinupUserFullNameInterface {
+
+  /**
+   * List of user account for which to clear the cache.
+   *
+   * @var \Drupal\user\UserInterface[]
+   */
+  protected array $stack = [];
 
   public function __construct(
     protected Connection $database,
@@ -44,7 +52,7 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
       $original->getAccountName() !== $account->getAccountName()
     ) {
       $this->updateTable($account);
-      $this->cacheTagsInvalidator->invalidateTags($account->getCacheTags());
+      $this->invalidateCacheTags($account);
     }
   }
 
@@ -56,7 +64,7 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
       ->fields(['deleted' => 1])
       ->condition('uid', $account->id())
       ->execute();
-    $this->cacheTagsInvalidator->invalidateTags($account->getCacheTags());
+    $this->invalidateCacheTags($account);
   }
 
   /**
@@ -94,7 +102,9 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
    * {@inheritdoc}
    */
   public function getDeletedUser(int|string $uid): UserInterface {
-    return $this->entityTypeManager->getStorage('user')->create(['uid' => $uid]);
+    $account = $this->entityTypeManager->getStorage('user')->create(['uid' => $uid]);
+    // Also set the full name as username.
+    return $account->set('name', $this->getFullName($account));
   }
 
   /**
@@ -110,6 +120,44 @@ class JoinupUserFullName implements JoinupUserFullNameInterface {
       ->keys(['uid' => $account->id()])
       ->fields(['full_name' => $fullName])
       ->execute();
+  }
+
+  /**
+   * Invalidates the cache after updating or deleting an account.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   */
+  protected function invalidateCacheTags(UserInterface $account): void {
+    $this->cacheTagsInvalidator->invalidateTags($account->getCacheTags());
+    $this->stack[] = $account;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function destruct(): void {
+    // Clear cache of entities authored by this user.
+    foreach ($this->entityTypeManager->getDefinitions() as $entityTypeId => $entityType) {
+      if (!$entityType->entityClassImplements(EntityOwnerInterface::class)) {
+        continue;
+      }
+
+      $storage = $this->entityTypeManager->getStorage($entityTypeId);
+      if (!$key = $entityType->getKey('owner')) {
+        continue;
+      }
+
+      foreach ($this->stack as $account) {
+        $ids = $storage->getQuery()->accessCheck(FALSE)
+          ->condition($key, $account->id())
+          ->execute();
+        if ($ids) {
+          $storage->resetCache($ids);
+        }
+      }
+    }
+    $this->stack = [];
   }
 
 }
