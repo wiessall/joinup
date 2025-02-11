@@ -7,7 +7,6 @@ services:
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
-  Drupal\Core\Logger\LoggerChannelInterface: '@logger.channel.group_membership'
 
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'
@@ -15,8 +14,7 @@ services:
     tags:
       - { name: 'cache.context'}
 
-  joinup_group.achived_collection.access_check:
-    class: Drupal\joinup_group\Access\ArchivedGroupAccessCheck
+  Drupal\joinup_group\Access\ArchivedGroupAccessCheck:
     tags:
       - { name: access_check, applies_to: _archived_group }
 
@@ -53,22 +51,19 @@ services:
 
   Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber: { }
 
-  joinup_group.state_machine.transition_guard:
-    class: Drupal\joinup_group\Guard\AnnouncementTransitionsGuard
+  Drupal\joinup_group\Guard\AnnouncementTransitionsGuard:
     tags:
       - { name: state_machine.guard, group: announcement }
 
   Drupal\joinup_group\EventSubscriber\AnnouncementTransitionSubscriber: { }
 
-  joinup_group.announcements_enabled.access_checker:
-    class: Drupal\joinup_group\Access\AnnouncementsAccessCheck
+  Drupal\joinup_group\Access\AnnouncementsAccessCheck:
     calls:
       - [setJoinupGroupManager, ['@joinup_group.group_manager']]
     tags:
       - { name: access_check, applies_to: _joinup_group_announcements }
 
-  joinup_group.og_permission:
-    class: Drupal\joinup_group\Access\OgPermissionAccessCheck
+  Drupal\joinup_group\Access\OgPermissionAccessCheck:
     tags:
       - { name: access_check, applies_to: _og_permission }
 

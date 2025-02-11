@@ -29,6 +29,7 @@ class InvitationSubscriber implements EventSubscriberInterface {
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected readonly MessengerInterface $messenger,
+    #[Autowire(service: 'logger.channel.group_membership')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly AccountInterface $currentUser,
   ) {}

@@ -4,13 +4,13 @@ services:
     autoconfigure: true
     autowire: true
 
-  contact_information.fulfillment_guard:
-    class: Drupal\contact_information\Guard\ContactInformationTransitionGuard
+  Drupal\contact_information\Guard\ContactInformationTransitionGuard:
     tags:
       - { name: state_machine.guard, group: contact_information }
 
   contact_information.email_confirm:
     class: Drupal\contact_information\ContactInformationEmailConfirm
+  Drupal\contact_information\ContactInformationEmailConfirmInterface: '@contact_information.email_confirm'
 
   Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber: { }
 

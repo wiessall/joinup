@@ -23,6 +23,7 @@ readonly class InteroperableFlagSubscriber implements EventSubscriberInterface {
   public function __construct(
     #[Autowire(service: 'search_api.entity_datasource.tracking_manager')]
     protected ContentEntityTrackingManager $trackingManager,
+    #[Autowire(service: 'logger.channel.group_membership')]
     protected LoggerChannelInterface $logger,
     protected AccountInterface $currentUser,
   ) {}

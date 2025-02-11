@@ -5,3 +5,4 @@ services:
 
   whats_new.helper:
     class: Drupal\whats_new\WhatsNewHelper
+  Drupal\whats_new\WhatsNewHelperInterface: '@whats_new.helper'

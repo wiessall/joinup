@@ -4,5 +4,4 @@ services:
     autoconfigure: true
     autowire: true
 
-  adms_validator.validator:
-    class: Drupal\adms_validator\AdmsValidator
+  Drupal\adms_validator\AdmsValidator: { }

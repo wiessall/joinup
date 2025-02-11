@@ -12,8 +12,7 @@ services:
     tags:
       - { name: 'cache.context'}
 
-  joinup_solution.fulfillment_guard:
-    class: Drupal\joinup_solution\Guard\SolutionTransitionGuard
+  Drupal\joinup_solution\Guard\SolutionTransitionGuard:
     tags:
       # Priority 5 will set it to be executed before the generic guard of the
       # state_machine_permissions module.
@@ -23,7 +22,8 @@ services:
     class: Drupal\joinup_solution\RequirementsHelper
 
   joinup_solution.title_duplicate_helper:
-    class: 'Drupal\joinup_solution\SolutionTitleDuplicateHelper'
+    class: Drupal\joinup_solution\SolutionTitleDuplicateHelper
+  Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface: '@joinup_solution.title_duplicate_helper'
 
   Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber:
 
