@@ -423,6 +423,10 @@ paragraph__video:
   css:
     theme:
       assets/css/paragraph--video.min.css: { minified: true }
+paragraph__events_calendar:
+  css:
+    theme:
+      assets/css/paragraph--events-calendar.min.css: { minified: true }      
 
 private-message:
   css:

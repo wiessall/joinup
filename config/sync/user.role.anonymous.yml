@@ -58,6 +58,7 @@ permissions:
   - 'view paragraph content configurable_listing'
   - 'view paragraph content content_listing'
   - 'view paragraph content entity_reference'
+  - 'view paragraph content events_calendar'
   - 'view paragraph content github_feed'
   - 'view paragraph content heading'
   - 'view paragraph content iframe'

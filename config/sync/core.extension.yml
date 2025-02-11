@@ -11,6 +11,7 @@ module:
   block_field: 0
   breakpoint: 0
   cached_computed_field: 0
+  calendar_view: 0
   cas: 0
   cas_attributes: 0
   changed_fields: 0
@@ -223,7 +224,6 @@ module:
   search_api_solr: 0
   search_api_solr_autocomplete: 0
   search_api_spellcheck: 0
-  semic: 0
   serialization: 0
   simple_block: 0
   simple_sitemap: 0

@@ -1,0 +1,40 @@
+diff --git a/config/schema/calendar_view.views.schema.yml b/config/schema/calendar_view.views.schema.yml
+index bf2fa1874d95f684a6e04a518ff6ad0a7eaad340..dfc53f8779e91cc1875c92ad216c6fab44978ff1 100644
+--- a/config/schema/calendar_view.views.schema.yml
++++ b/config/schema/calendar_view.views.schema.yml
+@@ -35,6 +35,35 @@ calendar_view.view_style:
+       label: 'Title attribute for each result'
+       nullable: true
+ 
++views.pager.calendar_base:
++  type: mapping
++  label: 'Base pager options for calendar views'
++  mapping:
++    display_reset:
++      type: boolean
++      label: 'Display reset'
++      nullable: true
++    use_previous_next:
++      type: boolean
++      label: 'Use previous/next'
++      nullable: true
++    label_format:
++      type: string
++      label: 'Label format'
++      nullable: true
++    offset:
++      type: integer
++      label: 'Offset'
++      nullable: true
++
++views.pager.calendar_week:
++  type: views.pager.calendar_base
++  label: 'Pager options for calendar week'
++
++views.pager.calendar_month:
++  type: views.pager.calendar_base
++  label: 'Pager options for calendar month'
++
+ views.style.calendar_month:
+   type: calendar_view.view_style
+   label: 'Calendar by month'
