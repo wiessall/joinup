@@ -7,7 +7,6 @@ namespace Drupal\joinup_featured\Cache\Context;
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\Context\CacheContextInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Cache context for CSRF protected links for (un)pinning content.
@@ -28,7 +27,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 readonly class FeaturedContentCsrfCacheContext implements CacheContextInterface {
 
   public function __construct(
-    #[Autowire(service: 'csrf_token')]
     protected CsrfTokenGenerator $csrfTokenGenerator,
   ) {}
 

@@ -19,8 +19,7 @@ services:
 
   Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition: { }
 
-  custom_page.custom_page_guard:
-    class: Drupal\custom_page\Guard\CustomPageGuard
+  Drupal\custom_page\Guard\CustomPageGuard:
     tags:
       - { name: state_machine.guard, group: custom_page, priority: 5}
 

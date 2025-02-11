@@ -17,8 +17,7 @@ services:
 
   Drupal\collection\EventSubscriber\CollectionEventSubscriber: { }
 
-  joinup_collection.fulfillment_guard:
-    class: Drupal\collection\Guard\CollectionTransitionGuard
+  Drupal\collection\Guard\CollectionTransitionGuard:
     tags:
       - { name: state_machine.guard, group: collection }
 

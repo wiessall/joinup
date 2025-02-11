@@ -15,7 +15,6 @@ services:
     decorates: replicate_actions.replicate_entity_edit
     public: false
 
-  access_check.joinup_replicate.permission:
-    class: Drupal\joinup_replicate\Access\JoinupReplicatePermission
+  Drupal\joinup_replicate\Access\JoinupReplicatePermission:
     tags:
       - { name: access_check, applies_to: _joinup_replicate_permission }

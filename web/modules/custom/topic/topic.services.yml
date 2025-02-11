@@ -4,8 +4,7 @@ services:
     autoconfigure: true
     autowire: true
 
-  topic.path_processor:
-    class: Drupal\topic\PathProcessor\TopicPathProcessor
+  Drupal\topic\PathProcessor\TopicPathProcessor:
     tags:
       - { name: path_processor_outbound, priority: 1001 }
 

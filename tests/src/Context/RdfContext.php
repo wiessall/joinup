@@ -230,7 +230,7 @@ class RdfContext extends RawDrupalContext {
     // Copy the data to a new graph to avoid deleting the original data.
     $sparqlEndpoint->query("ADD <$graphUri> TO GRAPH <http://adms-validation>");
     /** @var \Drupal\adms_validator\AdmsValidatorInterface $validator */
-    $validator = \Drupal::service('adms_validator.validator');
+    $validator = \Drupal::service('Drupal\adms_validator\AdmsValidator');
     $result = $validator->validateByGraphUri('http://adms-validation');
     $sparqlEndpoint->query('CLEAR GRAPH <http://adms-validation>');
     Assert::assertTrue($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');

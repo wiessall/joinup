@@ -12,7 +12,6 @@ services:
 
   Drupal\joinup_subscription\EventSubscriber\GroupContentSubscriptionSubscriber: { }
 
-  joinup_subscription.group_unsubscribe_types.param_converter:
-    class: Drupal\joinup_subscription\ParamConverter\GroupUnsubscribeTypesConverter
+  Drupal\joinup_subscription\ParamConverter\GroupUnsubscribeTypesConverter:
     tags:
       - { name: paramconverter, priority: -10 }
