@@ -1,0 +1,32 @@
+uuid: a6c7ac6f-3059-4b20-8ef5-2ae0296ad085
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_block
+    - paragraphs.paragraphs_type.events_calendar
+  module:
+    - block_field
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: paragraph.events_calendar.paragraph_block
+field_name: paragraph_block
+entity_type: paragraph
+bundle: events_calendar
+label: Block
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  selection: blocks
+  selection_settings:
+    plugin_ids:
+      'views_block:calendar-by_month': 'views_block:calendar-by_month'
+      'views_block:calendar-by_week': 'views_block:calendar-by_week'
+      'views_block:events_calendar-upcoming_events_block': 'views_block:events_calendar-upcoming_events_block'
+      'views_block:events_calendar-upcoming_events_block_group': 'views_block:events_calendar-upcoming_events_block_group'
+field_type: block_field
