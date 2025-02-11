@@ -326,9 +326,11 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       // Remove the 'assessment_report' subscription for all collections,
       // except the assessment collection.
       if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
-        $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
-          return $bundle !== 'assessment_report';
-        }));
+        foreach ($subscription_bundles as $key => $bundles) {
+          $subscription_bundles[$key] = array_values(array_filter($bundles, function ($bundle) {
+            return $bundle !== 'assessment_report';
+          }));
+        }
       }
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
