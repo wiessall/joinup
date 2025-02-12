@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
@@ -72,6 +73,9 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     if (!$value) {
       return;
     }
+
+    // Remove empty term names.
+    $value = NestedArray::filter($value);
 
     // Get a flat list of all term names regardless of the language.
     $allTermNames = array_values(array_merge(...array_values($value)));
