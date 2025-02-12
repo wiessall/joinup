@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_subscription\Form;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -324,7 +323,7 @@ class SubscriptionsForm extends FormBase {
     if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
       $excluded_bundles = ['assessment_report'];
       $subscription_bundles['node'] = array_values(array_filter($subscription_bundles['node'], function ($item) use ($excluded_bundles) {
-        return !in_array($item, $excluded_bundles, true);
+        return !in_array($item, $excluded_bundles, TRUE);
       }));
     }
     foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {

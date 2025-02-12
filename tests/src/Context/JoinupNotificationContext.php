@@ -331,6 +331,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
     }
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
+
     foreach ($mails as $mail) {
       $body = ($mail['body'] instanceof MarkupInterface) ? $this->formatMailBodyMarkup($mail['body']) : $this->formatMailBodyText($mail['body']);
       foreach ($lines_of_text as $text) {

@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\EventSubscriber;
 
-use Drupal\collection\Entity\Collection;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase;
-use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
 
