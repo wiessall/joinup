@@ -27,6 +27,7 @@
     has_parent ? 'form-wrapper',
   ]
 %}
-{% if children|stripped_length %}
-  <div{{ attributes.addClass(classes) }}>{{ children }}</div>
+{% set _children = children|render %}
+{% if _children|striptags|trim %}
+  <div{{ attributes.addClass(classes) }}>{{ _children }}</div>
 {% endif %}

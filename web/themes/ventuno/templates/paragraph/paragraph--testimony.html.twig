@@ -52,11 +52,13 @@
     </div>
     <figcaption class="testimony__figcaption">
       <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
-      {% if content.paragraph_testimony_bio|stripped_length %}
-        <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
+      {% set _paragraph_testimony_bio = content.paragraph_testimony_bio|render %}
+      {% if _paragraph_testimony_bio|striptags|trim is not empty %}
+        <p class="testimony__bio">{{_paragraph_testimony_bio }}</p>
       {% endif %}
-      {% if content.paragraph_testimony_source|stripped_length %}
-        <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
+      {% set _paragraph_testimony_source = content.paragraph_testimony_source|render %}
+      {% if _paragraph_testimony_source|striptags|trim is not empty %}
+        <cite class="testimony__cite">{{ _paragraph_testimony_source }}</cite>
       {% endif %}
     </figcaption>
   </figure>
