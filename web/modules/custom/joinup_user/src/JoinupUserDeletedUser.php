@@ -14,9 +14,9 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Default implementation of 'joinup_user.full_name' service.
+ * Default implementation of 'joinup_user.deleted_user' service.
  */
-class JoinupUserFullName implements JoinupUserFullNameInterface {
+class JoinupUserDeletedUser implements JoinupUserDeletedUserInterface {
 
   /**
    * List of user account for which to clear the cache.

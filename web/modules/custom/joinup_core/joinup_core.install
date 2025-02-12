@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_user\JoinupUserFullNameInterface;
+use Drupal\joinup_user\JoinupUserDeletedUserInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -60,7 +60,7 @@ function joinup_core_requirements($phase): array {
  * Create the  user full name table.
  */
 function joinup_core_update_200201(): void {
-  \Drupal::database()->schema()->createTable(JoinupUserFullNameInterface::TABLE, [
+  \Drupal::database()->schema()->createTable(JoinupUserDeletedUserInterface::TABLE, [
     'fields' => [
       'uid' => [
         'description' => 'The {users}.uid.',
@@ -102,7 +102,7 @@ function joinup_core_update_200201(): void {
  * Fill the user full name table.
  */
 function joinup_core_update_200202(?array &$sandbox = NULL): string {
-  $service = \Drupal::getContainer()->get('joinup_user.full_name');
+  $service = \Drupal::getContainer()->get('joinup_user.deleted_user');
 
   if (empty($sandbox['data'])) {
     $db = \Drupal::database();

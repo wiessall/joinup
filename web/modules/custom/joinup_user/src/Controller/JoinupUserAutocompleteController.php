@@ -11,7 +11,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityAutocompleteMatcherInterface;
 use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\joinup_user\JoinupUserFullNameInterface;
+use Drupal\joinup_user\JoinupUserDeletedUserInterface;
 use Drupal\system\Controller\EntityAutocompleteController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -116,7 +116,7 @@ class JoinupUserAutocompleteController extends EntityAutocompleteController {
     $limit = isset($selectionSettings['match_limit']) ? (int) $selectionSettings['match_limit'] : 10;
     $includeAnonymous = !empty($selectionSettings['include_anonymous']) ?? TRUE;
 
-    $query = $this->db->select(JoinupUserFullNameInterface::TABLE, 'fullname')
+    $query = $this->db->select(JoinupUserDeletedUserInterface::TABLE, 'fullname')
       ->fields('fullname', ['uid', 'full_name'])
       ->orderBy('fullname.full_name')
       ->range(0, $limit);
