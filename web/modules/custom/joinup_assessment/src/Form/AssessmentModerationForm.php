@@ -240,7 +240,7 @@ class AssessmentModerationForm extends FormBase {
     ]);
 
     assert($assessmentReport instanceof AssessmentReportInterface);
-    $assessmentReport->save();
+    $assessmentReport->setPublished()->save();
     return $assessmentReport;
   }
 
