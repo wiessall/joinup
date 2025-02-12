@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Override of private-message_thread.html.twig to display a thread in Inbox.
+ */
+#}
+<div{{ attributes }}>
+  <div class="fw-bold">{{ content.members|render|striptags|trim }}</div>
+  {{ content|without('clear_history_link', 'delete_link', 'members') }}
+  <div class="private_message_thread_inbox_links">
+    {{ content.delete_link }}
+    {{ content.clear_history_link }}
+  </div>
+</div>

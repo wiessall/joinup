@@ -1,0 +1,26 @@
+uuid: 13ed1d09-019f-443e-877b-67c8e757393d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.events_calendar.paragraph_block
+    - paragraphs.paragraphs_type.events_calendar
+  module:
+    - block_field
+id: paragraph.events_calendar.default
+targetEntityType: paragraph
+bundle: events_calendar
+mode: default
+content:
+  paragraph_block:
+    type: block_field_default
+    weight: 0
+    region: content
+    settings:
+      plugin_id: ''
+      settings: {  }
+      configuration_form: hidden
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

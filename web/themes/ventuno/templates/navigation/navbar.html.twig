@@ -315,6 +315,9 @@
             </li>
           {% endif %}
         {% endfor %}
+        {% if private_message %}
+          {{ private_message }}
+        {% endif %}
       </ul>
     </nav>
   </div>

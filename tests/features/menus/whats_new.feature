@@ -93,7 +93,6 @@ Feature:
     And I fill in "Menu link title" with "What is new you say?"
     And I check "Live link"
     When I type "Some t" in the "Link" autocomplete field
-    Then I wait until the page contains the text "Some title"
     And I pick "Some title" from the "Link" autocomplete suggestions
     And I press "Save"
     Then I should see the success message "The menu link has been saved."
