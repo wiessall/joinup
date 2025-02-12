@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\EventSubscriber;
 
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -103,25 +105,24 @@ class AssessmentSubscriber extends NotificationSubscriberBase {
 
     $arguments['@actor:full_name'] = $actor->getDisplayName();
 
-    // Add arguments related to the parent collection or solution.
-    $parent = JoinupGroupHelper::getGroup($entity);
-    if (!empty($parent)) {
-      $arguments += MessageArgumentGenerator::getGroupArguments($parent);
+    $collection = $entity->get('og_audience')->entity;
+    $arguments = [
+      '@group:title' => $collection->label(),
+      '@group:bundle' => $collection->bundle(),
+    ];
+    // If the role is not yet set, get it from the parent collection|solution.
+    if (empty($arguments['@actor:role'])) {
+      $membership = $this->membershipManager->getMembership($collection, $actor->id());
+      if (!empty($membership)) {
+        $roleNames = array_map(function (OgRoleInterface $og_role) {
+          return $og_role->getName();
+        }, $membership->getRoles());
 
-      // If the role is not yet set, get it from the parent collection|solution.
-      if (empty($arguments['@actor:role'])) {
-        $membership = $this->membershipManager->getMembership($parent, $actor->id());
-        if (!empty($membership)) {
-          $roleNames = array_map(function (OgRoleInterface $og_role) {
-            return $og_role->getName();
-          }, $membership->getRoles());
-
-          if (in_array('administrator', $roleNames)) {
-            $arguments['@actor:role'] = $this->t('Owner');
-          }
-          elseif (in_array('facilitator', $roleNames)) {
-            $arguments['@actor:role'] = $this->t('Facilitator');
-          }
+        if (in_array('administrator', $roleNames)) {
+          $arguments['@actor:role'] = $this->t('Owner');
+        }
+        elseif (in_array('facilitator', $roleNames)) {
+          $arguments['@actor:role'] = $this->t('Facilitator');
         }
       }
     }

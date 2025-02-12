@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -140,10 +141,6 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
     foreach ($form['groups'] as $key => &$group) {
       if (is_int($key) && $group['#uuid'] !== AssessmentInterface::GROUP_UUID && isset($group['options']['node|assessment_report'])) {
         unset($group['options']['node|assessment_report']);
-        $subscriptions = $group['options']['submit']['#attributes']['data-joinup-subscriptions'];
-        // Replace only the first occurrence of "false".
-        $subscriptions = preg_replace('/\bfalse,\b/', '', $subscriptions, 1);
-        $group['options']['submit']['#attributes']['data-joinup-subscriptions'] = $subscriptions;
       }
     }
   }
