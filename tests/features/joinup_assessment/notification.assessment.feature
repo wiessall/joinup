@@ -1,4 +1,4 @@
-@api @group-e @demoAssessment
+@api @group-i @demoAssessment
 Feature: Notification test for the assessment.
 
   Scenario: Notifications should be sent whenever a assessment is created.
@@ -43,5 +43,5 @@ Feature: Notification test for the assessment.
     When I select the radio button "Publish report"
     And I press "Submit"
     And the email sent to "AA member" with subject "Interoperable Europe Portal: Content has been published" contains the following lines of text:
-      | AA Notify Moderator has published the new assessment_report - "Assessment report                                  |
-      | in the collection: "Interoperability assessments space You can access the new content at the following link: http |
+      | AA Notify Moderator has published the new assessment_report - "Assessment report # |
+      | You can access the new content at the following link: http                         |
