@@ -29,5 +29,5 @@
 %}
 {% set _children = children|render %}
 {% if _children|striptags|trim %}
-  <div{{ attributes.addClass(classes) }}>{{ _children }}</div>
+  <div{{ attributes.addClass(classes) }}>{{ _children|raw }}</div>
 {% endif %}
