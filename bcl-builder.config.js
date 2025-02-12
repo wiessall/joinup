@@ -101,6 +101,10 @@ module.exports = {
           dest: "paragraph-inline-img.js",
         },
         {
+          entry: "private-message.js",
+          dest: "private-message.js",
+        },
+        {
           entry: "responsive-tables.js",
           dest: "responsive-tables.js",
         },
@@ -353,6 +357,10 @@ module.exports = {
           dest: "paragraph.min.css",
         },
         {
+          entry: "components/private-message.scss",
+          dest: "private-message.min.css",
+        },
+        {
           entry: "components/carousel.scss",
           dest: "carousel.min.css",
         },
@@ -399,6 +407,10 @@ module.exports = {
         {
           entry: "components/paragraphs/paragraph--video.scss",
           dest: "paragraph--video.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--events-calendar.scss",
+          dest: "paragraph--events-calendar.min.css",
         },
         {
           entry: "components/releases.scss",
@@ -685,6 +697,7 @@ module.exports = {
           "card-list.svg",
           "caret-down-fill.svg",
           "chat.svg",
+          "chat-dots.svg",
           "chat-left-text.svg",
           "chat-square.svg",
           "check-circle.svg",

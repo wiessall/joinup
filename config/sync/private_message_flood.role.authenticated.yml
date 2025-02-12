@@ -1,0 +1,4 @@
+limit: 50
+type: post
+duration: P1D
+weight: -10

@@ -23,6 +23,7 @@
         "drupal/autologout": "^2.0",
         "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
+        "drupal/calendar_view": "^2.1",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
@@ -87,6 +88,8 @@
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
+        "drupal/private_message": "4.0.0-alpha4 as 3.0.6",
+        "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_sync": "^1.0",
@@ -313,6 +316,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/calendar_view": {
+                "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
+            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.3.x-115.diff",
@@ -340,9 +346,12 @@
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
-                "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
+                "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/3098560.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
-                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff"
+                "Can only intentionally re-render an entity with references 20 times @see https://www.drupal.org/i/2940605": "resources/patch/php/drupal/core/2940605.diff",
+                "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
+                "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff",
+                "Time-based custom caching is broken since configuration expects an integer @see https://www.drupal.org/i/3233105": "resources/patch/php/drupal/core/3233105.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -436,6 +445,9 @@
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
+            },
+            "drupal/private_message_flood": {
+                "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"

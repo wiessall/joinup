@@ -1,0 +1,282 @@
+@import "../partials/core";
+@import "buttons";
+
+// Need to define this css variable for normal users.
+:root {
+  --drupal-displace-offset-top: 0px;
+}
+
+// Private message module.
+#private-message-page #private-message-thread-dimmer {
+  background-color: $white;
+}
+.private-message-notification {
+  position: relative;
+  top: -0.8rem;
+  left: -1.4rem;
+  width: 0;
+  .private-message-notification-wrapper {
+    display: none;
+    background-color: $warning;
+    a {
+      padding: 0.2em 0.4em;
+      color: $white;
+    }
+    &.unread-threads {
+      display: inline-block;
+    }
+  }
+}
+
+// Create new message button.
+.block-joinup-private-message {
+  margin-bottom: $spacer;
+  > a {
+    @extend .btn;
+    @extend .btn-secondary;
+
+    text-decoration: none !important;
+    &::before {
+      @include get-bootstrap-icon("pencil-square", currentColor);
+
+      margin-right: $spacer * 0.5;
+    }
+  }
+}
+
+// Inbox block.
+.private-messages-inbox-wrapper {
+  .private-messages-toggle-inbox {
+    position: relative;
+    z-index: 1;
+    float: right;
+    margin-top: -3.6em;
+    &:has(
+        + .block-private-message-inbox-block
+          .private-message-thread--full-container:empty
+      ) {
+      display: none !important;
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: calc(100px + var(--drupal-displace-offset-top, 0));
+  }
+}
+
+.block-private-message-inbox-block {
+  margin-bottom: $spacer * 2;
+  .private-message-thread--full-container:not(:empty) {
+    border: 1px solid $gray-300;
+  }
+  .private-message-thread-inbox {
+    margin-bottom: 0;
+    padding: 0;
+    padding-bottom: $spacer;
+    border: none !important;
+    & > .contextual-region {
+      & > div {
+        padding: $spacer $spacer 0 $spacer !important;
+      }
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-300 !important;
+    }
+    &.active-thread,
+    &:hover {
+      background: $gray-200;
+    }
+    &.unread-thread {
+      background-color: $secondary-darker;
+    }
+    .private-message__message {
+      p {
+        margin-bottom: 0;
+      }
+    }
+    .private_message_created {
+      display: block;
+      text-align: right;
+      font-size: $font-size-sm;
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    &.collapse,
+    &.collapsing {
+      display: block !important;
+      overflow: none;
+      height: auto;
+      transition: none;
+    }
+  }
+}
+
+// Buttons.
+.private_message_thread_delete_link_wrapper,
+.private_message_thread_clear_history_link_wrapper {
+  position: relative;
+  z-index: 1;
+  a {
+    @extend .btn;
+    @extend .btn-sm;
+    @extend .btn-secondary;
+
+    text-decoration: none !important;
+    &::before {
+      @include get-bootstrap-icon("trash", currentColor);
+
+      margin-right: $spacer * 0.5;
+    }
+  }
+}
+
+.private_message_thread_delete_link_wrapper {
+  margin-right: $spacer * 0.5;
+  margin-bottom: $spacer * 0.5;
+}
+
+.private_message_thread_inbox_links {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.private-message-recipients {
+  margin: 0 !important;
+  padding: $spacer !important;
+  border: 1px solid $gray-300;
+  border-bottom: none;
+  background: $gray-200;
+  font-weight: $font-weight-bold;
+  .username a {
+    color: $brand-darker;
+  }
+  article {
+    padding: 0 !important;
+  }
+}
+
+#load-previous-threads-button-wrapper {
+  a {
+    padding: $spacer * 0.5;
+    border-top: 1px solid $gray-300;
+    font-size: $font-size-base !important;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+#load-previous-messages-button-wrapper {
+  margin-bottom: $spacer;
+  border-bottom: 1px solid $gray-300;
+  a {
+    display: block;
+    padding-bottom: $spacer;
+    text-align: center;
+    text-decoration: none;
+    &::after {
+      @include get-bootstrap-icon("arrow-down-circle", currentColor);
+
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+
+// Messages thread.
+.private-message-thread-full {
+  .username {
+    margin-bottom: 0;
+  }
+  .private-message-thread-messages {
+    padding: $spacer !important;
+    border: 1px solid $gray-300;
+  }
+  .private-message-wrapper {
+    display: flex !important;
+    flex-flow: wrap;
+    justify-content: end;
+    &:not(:last-child) {
+      margin-bottom: $spacer;
+      padding-bottom: $spacer;
+      border-bottom: 1px solid $gray-300 !important;
+    }
+    .private-message {
+      display: flex;
+      flex-flow: column;
+      flex-basis: 100%;
+      padding: 0 !important;
+      border: none !important;
+      p {
+        margin-bottom: 0;
+      }
+      &:has(+ .private_message_delete) {
+        a.private_message_report {
+          margin-right: $spacer * 1.8;
+          margin-bottom: $spacer * -1.4;
+        }
+      }
+    }
+    a.private_message_report {
+      display: block;
+      min-width: 24px;
+      min-height: 24px;
+      text-align: end;
+      color: $dark;
+      &::before {
+        @include get-bootstrap-icon("exclamation-triangle", $danger);
+      }
+    }
+    a.private_message_delete {
+      display: block;
+      min-width: 24px;
+      min-height: 24px;
+      text-align: end;
+      color: $dark;
+      &::before {
+        @include get-bootstrap-icon("trash", currentColor);
+      }
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+  .private-message-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .alert-wrapper {
+      flex: 0 1 100%;
+    }
+    .field--name-message {
+      flex: 1;
+      margin-right: $spacer;
+    }
+    .form-wrapper,
+    .form-item {
+      margin-bottom: 0 !important;
+    }
+    .form-actions {
+      display: flex;
+      .form-submit {
+        margin-top: 3.4em;
+        &::after {
+          @include get-bootstrap-icon("send-fill", currentColor);
+
+          margin-left: $spacer * 0.4;
+        }
+      }
+    }
+  }
+}
+
+// Add Send icon on ui-dialog modal send button.
+.ui-dialog-content:has(.private-message-form) {
+  & + .ui-widget-content button.form-submit {
+    &::after {
+      @include get-bootstrap-icon("send-fill", currentColor);
+
+      margin-left: $spacer * 0.4;
+    }
+  }
+}

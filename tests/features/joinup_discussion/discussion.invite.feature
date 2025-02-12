@@ -101,40 +101,38 @@ Feature: Invite members to subscribe to discussions
 
     # Try to filter by first name.
     When I type "sha" in the "Name" autocomplete field
-    Then I wait until the page contains the text "Shaquila Paternoster (paternoster)"
+    Then I should see the text "Shaquila Paternoster (paternoster)"
     And I should see the text "Shannon Hargrave (theacuteone)"
     But I should not see the text "Lynwood Crawford (Lynwood Crawford)"
     And I should not see the text "Glory Ruskin (Glory Ruskin)"
 
     ## Try to filter by last name.
     When I type "raw" in the "Name" autocomplete field
-    Then I wait until the page contains the text "Lynwood Crawford (Lynwood Crawford)"
+    Then I should see the text "Lynwood Crawford (Lynwood Crawford)"
     But I should not see the text "Shaquila Paternoster (paternoster)"
     And I should not see the text "Shannon Hargrave (theacuteone)"
     And I should not see the text "Glory Ruskin (Glory Ruskin)"
 
     ## Try fo filter by username.
     When I type "acute" in the "Name" autocomplete field
-    Then I wait until the page contains the text "Shannon Hargrave (theacuteone)"
+    Then I should see the text "Shannon Hargrave (theacuteone)"
     But I should not see the text "Glory Ruskin (Glory Ruskin)"
     And I should not see the text "Lynwood Crawford (Lynwood Crawford)"
     And I should not see the text "Shaquila Paternoster (paternoster)"
 
     ## Try to filter on a combination of first name and last name.
     When I type "or" in the "Name" autocomplete field
-    Then I wait until the page contains the text "Lynwood Crawford (Lynwood Crawford)"
+    Then I should see the text "Lynwood Crawford (Lynwood Crawford)"
     And I should see the text "Glory Ruskin (Glory Ruskin)"
     But I should not see the text "Shannon Hargrave (theacuteone)"
     And I should not see the text "Shaquila Paternoster (paternoster)"
 
     When I type "Glory Ruskin" in the "Name" autocomplete field
-    And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
     Then the page should show only the chips:
       | Glory Ruskin |
 
     When I type "Lynwood Crawford" in the "Name" autocomplete field
-    And I wait until the page contains the text "Lynwood Crawford (Lynwood Crawford)"
     And I pick "Lynwood Crawford (Lynwood Crawford)" from the autocomplete suggestions
     Then the page should show the chips:
       | Glory Ruskin     |
@@ -147,7 +145,6 @@ Feature: Invite members to subscribe to discussions
 
     # Add another one.
     When I type "paternoster" in the "Name" autocomplete field
-    And I wait until the page contains the text "Shaquila Paternoster (paternoster)"
     And I pick "Shaquila Paternoster (paternoster)" from the autocomplete suggestions
     Then the page should show the chips:
       | Glory Ruskin         |
@@ -204,7 +201,6 @@ Feature: Invite members to subscribe to discussions
     When I go to the "Concerned about dissolved gases?" discussion
     And I click "Invite"
     When I type "Glory Ruskin" in the "Name" autocomplete field
-    And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
     Then the page should show only the chips:
       | Glory Ruskin |
