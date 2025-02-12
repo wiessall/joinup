@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_user\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
-use Drupal\joinup_user\Controller\JoinupUserAutocompleteController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -16,15 +15,17 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection): void {
+  protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('entity.user.canonical')) {
       $route->addDefaults([
         '_title_callback' => 'joinup_user_canonical_title',
       ]);
     }
-    if ($route = $collection->get('system.entity_autocomplete')) {
-      $route->setDefault('_controller', JoinupUserAutocompleteController::class . '::handleAutocomplete');
-    }
+
+    $collection->get('entity.user.cancel_form')->addRequirements([
+      // Only active and blocked accounts can be cancelled.
+      '_user_status' => 'active,blocked',
+    ]);
   }
 
 }
