@@ -10,7 +10,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_assessment\AssessmentInterface;
-use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -116,6 +115,8 @@ class AssessmentContext extends RawDrupalContext {
       'og_audience' => $collection->title,
       'field_state' => 'published',
       'uuid' => AssessmentInterface::ASSESSMENT_REPORTS_UUID,
+      'field_paragraphs_body:target_id' => $paragraph->id(),
+      'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
     ]);
 
     $this->latestSubmissionId = $this->getLatestSubmissionId() ?? 0;

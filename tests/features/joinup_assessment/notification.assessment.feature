@@ -39,6 +39,7 @@ Feature: Notification test for the assessment.
       | Interoperability assessments space | assessment_report, discussion, document, event, news, solution, announcements |
 
     Given I am logged in as "AA Notify moderator"
+    Then I break
     And I click the link from email sent to "AA Notify moderator" with subject "Assessment submission (Complete)"
     When I select the radio button "Publish report"
     And I press "Submit"
