@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase;
+use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
 
@@ -46,10 +47,7 @@ class AssessmentSubscriber extends NotificationSubscriberBase {
         ],
       ],
       'og_roles' => [
-        'node-collection-administrator' => [
-          self::TEMPLATE_CREATE,
-        ],
-        'node-collection-facilitator' => [
+        'node-collection-member' => [
           self::TEMPLATE_CREATE,
         ],
       ],
@@ -101,11 +99,8 @@ class AssessmentSubscriber extends NotificationSubscriberBase {
 
     $arguments['@actor:full_name'] = $actor->getDisplayName();
 
-    $collection = $entity->get('og_audience')->entity;
-    $arguments = [
-      '@group:title' => $collection->label(),
-      '@group:bundle' => $collection->bundle(),
-    ];
+    $collection = $entity->getGroup();
+    $arguments += MessageArgumentGenerator::getGroupArguments($collection);
     // If the role is not yet set, get it from the parent collection|solution.
     if (empty($arguments['@actor:role'])) {
       $membership = $this->membershipManager->getMembership($collection, $actor->id());
