@@ -28,7 +28,7 @@ class HostingPlatformConfigForm extends EntityForm {
   use AjaxFormHelperTrait;
 
   public function __construct(
-    protected readonly EuOssCataloguePluginManagerInterface $platformManager,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
   ) {}
 
   /**
