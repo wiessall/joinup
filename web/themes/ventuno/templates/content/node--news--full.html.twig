@@ -85,15 +85,17 @@
     )
   }}
 </div>
-{% if content.group_references|stripped_length %}
+{% set _group_references = content.group_references|render %}
+{% if _group_references|striptags %}
   <div class="py-5 border-bottom">
-    {{ content.group_references }}
+    {{ _group_references }}
   </div>
 {% endif %}
-{% if content.field_attachment|stripped_length %}
+{% set _field_attachment = content.field_attachment|render %}
+{% if _field_attachment|striptags %}
   <div class="pt-5 pb-3 border-bottom mb-5">
     <h3>{{ 'Attachments'|t }}</h3>
-    {{ content.field_attachment }}
+    {{ _field_attachment }}
   </div>
 {% endif %}
 <div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">

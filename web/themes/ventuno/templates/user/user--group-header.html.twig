@@ -45,28 +45,32 @@
         <h1 class="mt-3 mt-md-0 fw-normal text-light text-center text-md-start">
           {{ full_name }}
         </h1>
-        {% if content.field_user_business_title|stripped_length %}
+        {% set _field_user_business_title = content.field_user_business_title|render %}
+        {% if _field_user_business_title %}
           <p class="mb-0 text-center text-md-start">
-            {{ content.field_user_business_title }}
+            {{ _field_user_business_title }}
           </p>
         {% endif %}
-        {% if content.field_user_nationality|stripped_length %}
+        {% set _field_user_nationality = content.field_user_nationality|render %}
+        {% if _field_user_nationality %}
           <div class="mt-3 text-center text-md-start">
             <p class="mb-0 fw-bold">{{ 'Country of origin'|t }}:</p>
-            {{ content.field_user_nationality }}
+            {{ _field_user_nationality }}
           </div>
         {% endif %}
         <div class="row">
-          {% if content.field_user_organisation|stripped_length %}
+          {% set _field_user_organisation = content.field_user_organisation|render %}
+          {% if _field_user_organisation %}
             <div class="col-12 col-md-5 col-lg-4 mt-3">
               <p class="mb-0 fw-bold">{{ 'Organisation'|t }}:</p>
-              {{ content.field_user_organisation }}
+              {{ _field_user_organisation }}
             </div>
           {% endif %}
-          {% if content.field_user_professional_domain|stripped_length %}
+          {% set _field_user_professional_domain = content.field_user_professional_domain|render %}
+          {% if _field_user_professional_domain %}
             <div class="col-12 col-md-7 col-lg-8 mt-3">
               <p class="mb-0 fw-bold">{{ 'Domains'|t }}:</p>
-              {{ content.field_user_professional_domain }}
+              {{ _field_user_professional_domain }}
             </div>
           {% endif %}
         </div>
