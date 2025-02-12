@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\joinup_user\JoinupUserFullNameInterface;
+use Drupal\joinup_user\JoinupUserDeletedUserInterface;
 use Drupal\user\UserInterface;
 
 /**
- * @coversDefaultClass \Drupal\joinup_user\JoinupUserFullName
+ * @coversDefaultClass \Drupal\joinup_user\JoinupUserDeletedUser
  * @group joinup_user
  */
 class FullNameTest extends JoinupExistingSiteTestBase {
@@ -54,7 +54,7 @@ class FullNameTest extends JoinupExistingSiteTestBase {
     $this->assertFullNameStoredForDeletedAccount($account, $expectedFullName);
 
     $deletedAccount = \Drupal::getContainer()
-      ->get('joinup_user.full_name')
+      ->get('joinup_user.deleted_user')
       ->getDeletedUser($account->id());
     $this->assertInstanceOf(UserInterface::class, $deletedAccount);
     $this->assertSame($expectedFullName, $deletedAccount->getDisplayName());
@@ -131,8 +131,8 @@ class FullNameTest extends JoinupExistingSiteTestBase {
    *   Whether the user has been deleted.
    */
   protected function storedFullnNameHelper(int $uid, string $fullName, bool $deleted): void {
-    $record = \Drupal::database()->select(JoinupUserFullNameInterface::TABLE)
-      ->fields(JoinupUserFullNameInterface::TABLE)
+    $record = \Drupal::database()->select(JoinupUserDeletedUserInterface::TABLE)
+      ->fields(JoinupUserDeletedUserInterface::TABLE)
       ->condition('uid', $uid)
       ->condition('full_name', $fullName)
       ->condition('deleted', $deleted)

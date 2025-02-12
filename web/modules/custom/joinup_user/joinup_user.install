@@ -8,14 +8,14 @@
 declare(strict_types=1);
 
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
-use Drupal\joinup_user\JoinupUserFullNameInterface;
+use Drupal\joinup_user\JoinupUserDeletedUserInterface;
 
 /**
  * Implements hook_schema().
  */
 function joinup_user_schema(): array {
   return [
-    JoinupUserFullNameInterface::TABLE => [
+    JoinupUserDeletedUserInterface::TABLE => [
       'fields' => [
         'uid' => [
           'description' => 'The {users}.uid.',

@@ -9,9 +9,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Interface of 'joinup_user.full_name' service.
+ * Interface of 'joinup_user.deleted_user' service.
  */
-interface JoinupUserFullNameInterface extends DestructableInterface {
+interface JoinupUserDeletedUserInterface extends DestructableInterface {
 
   /**
    * Table storing the relation between UID and user full name.

@@ -324,7 +324,7 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
 function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   if (!$author = $node->get('uid')->entity) {
-    $service = \Drupal::getContainer()->get('joinup_user.full_name');
+    $service = \Drupal::getContainer()->get('joinup_user.deleted_user');
     $uid = $node->get('uid')->target_id;
     $author = $node->get('uid')->target_id == 0 ? new AnonymousUserSession() : $service->getDeletedUser($uid);
   }
