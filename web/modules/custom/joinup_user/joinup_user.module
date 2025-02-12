@@ -24,7 +24,6 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
-use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -617,21 +616,4 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
   $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted_user')->isUserDeleted($account->id());
   return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
     ->addCacheableDependency($account);
-}
-
-/**
- * Implements hook_entity_storage_load().
- */
-function joinup_user_entity_storage_load(array $entities, string $entity_type_id): void {
-  if (!\Drupal::entityTypeManager()->getDefinition($entity_type_id)->entityClassImplements(EntityOwnerInterface::class)) {
-    return;
-  }
-
-  $fullNameService = \Drupal::getContainer()->get('joinup_user.deleted_user');
-  foreach ($entities as $entity) {
-    assert($entity instanceof EntityOwnerInterface);
-    if ($entity->getOwnerId() && !$entity->getOwner()) {
-      $entity->setOwner($fullNameService->getDeletedUser($entity->getOwnerId()));
-    }
-  }
 }
