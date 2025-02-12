@@ -39,10 +39,9 @@ Feature: Notification test for the assessment.
       | Interoperability assessments space | assessment_report, discussion, document, event, news, solution, announcements |
 
     Given I am logged in as "AA Notify moderator"
-    Then I break
     And I click the link from email sent to "AA Notify moderator" with subject "Assessment submission (Complete)"
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then the email sent to "AA member" with subject "Interoperable Europe Portal: Content has been published" contains the following lines of text:
-      | has published the new assessment_report - "Assessment report #                                                      |
-      | in the collection: "Interoperability assessments space". You can access the new content at the following link: http |
+    And the email sent to "AA member" with subject "Interoperable Europe Portal: Content has been published" contains the following lines of text:
+      | AA Notify Moderator has published the new assessment_report - "Assessment report                                  |
+      | in the collection: "Interoperability assessments space You can access the new content at the following link: http |
