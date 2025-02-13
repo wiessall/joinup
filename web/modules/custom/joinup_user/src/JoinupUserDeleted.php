@@ -44,7 +44,24 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())
       ->countQuery()
-      ->execute();
+      ->execute()
+      ->fetchField();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isAccountDeleted(UserInterface $account): bool {
+    if ($this->entityTypeManager->getStorage('user')->load($account->id())) {
+      throw new \InvalidArgumentException("User with ID {$account->id()} is not deleted");
+    }
+
+    return (bool) $this->database->select(JoinupUserDeletedInterface::TABLE_USER)
+      ->fields(JoinupUserDeletedInterface::TABLE_USER)
+      ->condition('uid', $account->id())
+      ->countQuery()
+      ->execute()
+      ->fetchField();
   }
 
   /**

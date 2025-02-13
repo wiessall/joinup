@@ -54,6 +54,17 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
   public function deletedUserHasAuthoredContent(int|string $uid, EntityOwnerInterface $entity): bool;
 
   /**
+   * Checks whether an account has been registered as deleted.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   *
+   * @return bool
+   *   Whether an account has been registered as deleted.
+   */
+  public function isAccountDeleted(UserInterface $account): bool;
+
+  /**
    * Acts when a user account is being cancelled.
    *
    * @param \Drupal\user\UserInterface $account
