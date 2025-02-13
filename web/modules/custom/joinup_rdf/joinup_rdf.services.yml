@@ -12,7 +12,6 @@ services:
 
   Drupal\joinup_rdf\Routing\RdfExportRouteSubscriber: { }
 
-  joinup_rdf.http_middleware.accept_based_negotiation:
-    class: Drupal\joinup_rdf\Middleware\JoinupAcceptHeaderMiddleware
+  Drupal\joinup_rdf\Middleware\JoinupAcceptHeaderMiddleware:
     tags:
       - { name: http_middleware, priority: 401 }

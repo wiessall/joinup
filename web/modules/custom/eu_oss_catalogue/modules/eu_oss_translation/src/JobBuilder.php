@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\tmgmt\SourceManager;
 use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Job builder service.
@@ -40,7 +41,9 @@ readonly class JobBuilder implements JobBuilderInterface {
   public function __construct(
     protected AccountInterface $currentUser,
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected LoggerChannelInterface $logger,
+    #[Autowire(service: 'plugin.manager.tmgmt.source')]
     protected SourceManager $sourcePluginManager,
     ConfigFactoryInterface $configFactory,
   ) {

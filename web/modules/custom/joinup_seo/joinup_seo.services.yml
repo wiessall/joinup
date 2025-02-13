@@ -5,3 +5,4 @@ services:
 
   joinup_seo.export_helper:
     class: Drupal\joinup_seo\JoinupSeoExportHelper
+  Drupal\joinup_seo\JoinupSeoExportHelperInterface: '@joinup_seo.export_helper'

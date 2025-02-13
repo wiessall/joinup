@@ -13,7 +13,6 @@ services:
 
   Drupal\joinup_workflow\EventSubscriber\StateMachineButtonsSubscriber: {}
 
-  joinup_workflow.content_creation_guard:
-    class: Drupal\joinup_workflow\Guard\ContentCreationTransitionGuard
+  Drupal\joinup_workflow\Guard\ContentCreationTransitionGuard:
     tags:
       - { name: state_machine.guard, group: community_content }

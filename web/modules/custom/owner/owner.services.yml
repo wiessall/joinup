@@ -1,8 +1,8 @@
 services:
+
   _defaults:
     autowire: true
 
-  owner.fulfillment_guard:
-    class: Drupal\owner\Guard\OwnerTransitionGuard
+  Drupal\owner\Guard\OwnerTransitionGuard:
     tags:
       - { name: state_machine.guard, group: owner }
