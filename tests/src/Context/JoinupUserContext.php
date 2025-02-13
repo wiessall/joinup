@@ -12,6 +12,7 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -27,9 +28,9 @@ class JoinupUserContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Stores the latest UID from joinup_user_full_name before running tests.
+   * Stores the latest deleted user UID.
    */
-  protected int $fullNameUid;
+  protected int $latestDeletedUserUid;
 
   /**
    * Navigates to the canonical page display of a collection.
@@ -257,25 +258,27 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
-   * Registers the higher full name table UID for cleaning up after scenario.
+   * Registers the latest deleted user UID for cleaning-up after scenario.
    *
    * @BeforeScenario @api
    */
-  public function registerHighestUid(): void {
-    // Register the highest UID from {joinup_user_fullname} table.
-    $this->fullNameUid = (int) \Drupal::database()
-      ->query("SELECT MAX(uid) FROM {joinup_user_full_name}")
+  public function registerLatestDeletedUser(): void {
+    $this->latestDeletedUserUid = (int) \Drupal::database()
+      ->query("SELECT MAX(uid) FROM {" . JoinupUserDeletedInterface::TABLE_USER . "}")
       ->fetchField();
   }
 
   /**
-   * Deletes {joinup_user_fullname} entries created during the test.
+   * Removes the deleted user entries created during the test.
    *
    * @AfterScenario @api
    */
-  public function deleteTestFullNameEntries(): void {
-    \Drupal::database()->delete('joinup_user_full_name')
-      ->condition('uid', $this->fullNameUid, '>')
+  public function remmoveDeletedUserEntries(): void {
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
+      ->execute();
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
       ->execute();
   }
 
