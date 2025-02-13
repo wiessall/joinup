@@ -323,10 +323,10 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
  */
 function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
-  if (!$author = $node->get('uid')->entity) {
+  if (!$node->getOriginalId()) {
     $service = \Drupal::getContainer()->get('joinup_user.deleted');
     $uid = $node->get('uid')->target_id;
-    $author = $node->get('uid')->target_id == 0 ? new AnonymousUserSession() : $service->getDeletedUser($uid);
+    $author = $service->deletedUserHasAuthoredContent($uid, $node) ? $service->getDeletedPseudoAccount($uid) : new AnonymousUserSession();
   }
   return $view_builder->view($author, 'inline');
 }
