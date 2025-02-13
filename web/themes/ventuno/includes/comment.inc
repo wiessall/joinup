@@ -21,7 +21,7 @@ function ventuno_preprocess_comment(array &$variables): void {
   $user = $variables['user_picture']['#user'];
 
   $uid = $comment->getOwnerId();
-  $service = \Drupal::getContainer()->get('joinup_user.deleted_user');
+  $service = \Drupal::getContainer()->get('joinup_user.deleted');
   if ($uid && !$comment->getOwner()->id() && $service->isUserDeleted($uid)) {
     // A deleted user.
     $user = $service->getDeletedUser($uid);

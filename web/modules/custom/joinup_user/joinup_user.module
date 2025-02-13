@@ -588,24 +588,10 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
 }
 
 /**
- * Implements hook_entity_insert().
- */
-function joinup_user_user_insert(UserInterface $account): void {
-  \Drupal::getContainer()->get('joinup_user.deleted_user')->onUserInsert($account);
-}
-
-/**
- * Implements hook_entity_insert().
- */
-function joinup_user_user_update(UserInterface $account): void {
-  \Drupal::getContainer()->get('joinup_user.deleted_user')->onUserUpdate($account);
-}
-
-/**
- * Implements hook_entity_insert().
+ * Implements hook_entity_delete().
  */
 function joinup_user_user_delete(UserInterface $account): void {
-  \Drupal::getContainer()->get('joinup_user.deleted_user')->onUserDelete($account);
+  \Drupal::getContainer()->get('joinup_user.deleted')->onUserDelete($account);
 }
 
 /**
@@ -613,7 +599,7 @@ function joinup_user_user_delete(UserInterface $account): void {
  */
 function joinup_user_user_access(UserInterface $account): AccessResultInterface {
   // Forbid access to a deleted user mocked entity instance.
-  $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted_user')->isUserDeleted($account->id());
+  $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted')->isUserDeleted($account->id());
   return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
     ->addCacheableDependency($account);
 }
