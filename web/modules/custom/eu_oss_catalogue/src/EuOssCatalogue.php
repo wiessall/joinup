@@ -16,6 +16,7 @@ use Drupal\eu_oss_catalogue\Event\EuOssSolutionPostSaveEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -26,11 +27,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   use StringTranslationTrait;
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
     protected readonly EuOssCataloguePluginManagerInterface $providerManager,
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.parser')]
     protected readonly EuOssCataloguePluginManagerInterface $parserManager,
     protected readonly QueueFactory $queueFactory,
     protected readonly EventDispatcherInterface $eventDispatcher,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly TimeInterface $time,
   ) {}

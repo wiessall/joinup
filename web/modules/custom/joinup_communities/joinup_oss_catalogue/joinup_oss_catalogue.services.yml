@@ -4,8 +4,7 @@ services:
     autowire: true
     autoconfigure: true
 
-  joinup_oss_catalogue.access_checker:
-    class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck
+  Drupal\joinup_oss_catalogue\Access\OssAccessCheck:
     tags:
       - { name: access_check, applies_to: _oss_access_check }
 
@@ -15,7 +14,6 @@ services:
     class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer
 
   # TODO: Remove this service in ISAICP-9053.
-  joinup_oss_catalogue.killswitch_check:
-    class: Drupal\joinup_oss_catalogue\Access\KillSwitchCheck
+  Drupal\joinup_oss_catalogue\Access\KillSwitchCheck:
     tags:
       - { name: access_check, applies_to: _eu_oss_catalogue_check_enabled }

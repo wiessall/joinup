@@ -8,10 +8,8 @@ services:
     class: Drupal\state_machine_permissions\StateMachinePermissionsHelper
   Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface: '@state_machine_permissions.helper'
 
-  Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber:
-    class: Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber
+  Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber: { }
 
-  state_machine_permissions.fulfillment_guard:
-    class: Drupal\state_machine_permissions\Guard\TransitionPermissionGuard
+  Drupal\state_machine_permissions\Guard\TransitionPermissionGuard:
     tags:
       - { name: state_machine.guard }

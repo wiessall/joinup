@@ -28,7 +28,7 @@ class AdmsValidatorForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('Drupal\adms_validator\AdmsValidator'),
+      $container->get('adms_validator.validator'),
       $container->get('session'),
       $container->get('rdf_sync.connection'),
     );

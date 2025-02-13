@@ -17,8 +17,7 @@ services:
 
   Drupal\joinup_discussion\EventSubscriber\WorkflowTransitionEventSubscriber: { }
 
-  joinup_discussion.discussion_overview.access_checker:
-    class: Drupal\joinup_discussion\Access\DiscussionOverviewAccessCheck
+  Drupal\joinup_discussion\Access\DiscussionOverviewAccessCheck:
     tags:
       - { name: access_check, applies_to: _joinup_discussion_overview }
 

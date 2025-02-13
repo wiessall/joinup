@@ -20,8 +20,7 @@ services:
 
   Drupal\joinup_user\Routing\RouteSubscriber: { }
 
-  joinup_user.user_cancelled.access_checker:
-    class: Drupal\joinup_user\Access\UserStatusAccessCheck
+  Drupal\joinup_user\Access\UserStatusAccessCheck:
     tags:
       - { name: access_check, applies_to: _user_status }
 
@@ -31,3 +30,4 @@ services:
 
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
+  Drupal\joinup_user\JoinupUserNotificationHelperInterface: '@joinup_user.notification_helper'
