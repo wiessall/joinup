@@ -26,7 +26,7 @@ services:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
   Drupal\joinup_user\JoinupUserNotificationHelperInterface: '@joinup_user.notification_helper'
 
-  joinup_user.deleted_user:
-    class: Drupal\joinup_user\JoinupUserDeletedUser
+  joinup_user.deleted:
+    class: Drupal\joinup_user\JoinupUserDeleted
     tags:
-      - { name: needs_destruction }
+      - { name: needs_destruction, priority: 100 }
