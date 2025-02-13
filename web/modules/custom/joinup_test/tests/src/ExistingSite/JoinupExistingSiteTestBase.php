@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
+use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -31,9 +32,9 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   protected bool $disableSpamProtection = TRUE;
 
   /**
-   * Stores the latest UID from joinup_user_fullname before running tests.
+   * Stores the latest deleted user UID.
    */
-  protected int $fullNameUid;
+  protected int $latestDeletedUserUid;
 
   use ConfigTestTrait;
 
@@ -49,9 +50,9 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       $this->overrideConfig('honeypot.settings', 'form_settings', []);
     }
 
-    // Register the highest UID from {joinup_user_fullname} table.
-    $this->fullNameUid = (int) \Drupal::database()
-      ->query("SELECT MAX(uid) FROM {joinup_user_full_name}")
+    // Register the latest deleted user UID.
+    $this->latestDeletedUserUid = (int) \Drupal::database()
+      ->query("SELECT MAX(uid) FROM {" . JoinupUserDeletedInterface::TABLE_USER . "}")
       ->fetchField();
   }
 
@@ -87,8 +88,11 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Cleanup the cas mock server.
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
 
-    \Drupal::database()->delete('joinup_user_full_name')
-      ->condition('uid', $this->fullNameUid, '>')
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
+      ->execute();
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
       ->execute();
 
     parent::tearDown();
