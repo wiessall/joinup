@@ -356,6 +356,7 @@ trait NameMappingsTrait {
    */
   protected function entityTypeAliases(): array {
     return [
+      'announcement' => 'message',
       'collection' => 'node',
       'contact information' => 'node',
       'content' => 'node',
@@ -367,16 +368,16 @@ trait NameMappingsTrait {
       'glossary' => 'node',
       'group' => 'node',
       'licence' => 'node',
+      'menu link' => 'menu_link_content',
       'news' => 'node',
-      'owner' => 'node',
       'oss_solution' => 'node',
+      'owner' => 'node',
       'release' => 'node',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
-      'webform' => 'webform',
-      'announcement' => 'message',
       'user' => 'user',
+      'webform' => 'webform',
     ];
   }
 
