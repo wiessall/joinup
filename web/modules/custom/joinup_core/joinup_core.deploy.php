@@ -14,15 +14,12 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_taxonomy\Entity\MappedTerm;
-use Drupal\node\Entity\Node;
-use Drupal\paragraphs\Entity\Paragraph;
 use EasyRdf\Graph;
 
 /**
  * Gather information about the current state of solution type terms.
  */
-function joinup_core_deploy_200200(): string {
+function joinup_core_deploy_200300(): string {
   // We only need to check the revision table as all data are there including
   // the data from the data table.
   $solution_type_values = \Drupal::database()
@@ -60,7 +57,7 @@ function joinup_core_deploy_200200(): string {
 /**
  * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
  */
-function joinup_core_deploy_200201(): void {
+function joinup_core_deploy_200301(): void {
   // Import the simplified EIRA 6.0.0.
   $graph = new Graph();
   $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
@@ -88,7 +85,7 @@ function joinup_core_deploy_200201(): void {
 /**
  * Update the solution type field and revision values.
  */
-function joinup_core_deploy_200202(): string {
+function joinup_core_deploy_200302(): string {
   $data = \Drupal::state()->get('joinup_core_deploy_200200');
   if (!$data) {
     return 'No data found.';
@@ -118,33 +115,4 @@ function joinup_core_deploy_200202(): string {
   }
 
   return 'Solution type field and revision values have been restored.';
-}
-
-/**
- * Create 'Upcoming events' page.
- */
-function joinup_core_deploy_200203(): void {
-  $node = Node::create([
-    'type' => 'custom_page',
-    'title' => 'Events calendar',
-    'status' => TRUE,
-    'path' => [
-      'alias' => '/upcoming-events',
-      'langcode' => 'en',
-      'pathauto' => 0,
-    ],
-    'field_paragraphs_body' => [
-      Paragraph::create([
-        'type' => 'block',
-        'paragraph_block' => [
-          'plugin_id' => 'views_block:events_calendar-upcoming_events_block',
-          'settings' => [],
-        ],
-      ]),
-    ],
-    'field_hide_title' => FALSE,
-    'field_state' => 'published',
-    'abstract' => 'Upcoming events',
-  ]);
-  $node->save();
 }
