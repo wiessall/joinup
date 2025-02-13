@@ -15,7 +15,7 @@ index 6973a4c81cfd6cdd030e2af57b80bb4ffe4387ce..5ab2897885cefec40a5d3693b7b2fa72
    ];
  }
 diff --git a/modules/flag_count/src/Plugin/ActionLink/CountLink.php b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
-index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abbafeff9d9b 100644
+index 1bb9ef083cdd9960139913fd10751defc70e476a..6d87870a62373f0373f4164dc16182d9d48b5d5b 100644
 --- a/modules/flag_count/src/Plugin/ActionLink/CountLink.php
 +++ b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
 @@ -3,8 +3,12 @@
@@ -31,7 +31,7 @@ index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abba
  
  /**
   * Provides the Count link type.
-@@ -20,20 +24,93 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
+@@ -21,20 +25,93 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
   */
  class CountLink extends AJAXactionLink {
  
@@ -70,14 +70,11 @@ index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abba
 +    $this->flagCountManager = $flag_count;
 +  }
 +
-   /**
-    * {@inheritdoc}
++  /**
++   * {@inheritdoc}
 +   *
 +   * @noinspection PhpParamsInspection
-    */
--  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
--    // Get the render array.
--    $build = parent::getAsFlagLink($flag, $entity);
++   */
 +  public static function create(
 +    ContainerInterface $container,
 +    array $configuration,
@@ -94,10 +91,12 @@ index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abba
 +    );
 +  }
 +
-+  /**
-+   * {@inheritdoc}
-+   */
-+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity): array {
+   /**
+    * {@inheritdoc}
+    */
+   public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
+-    // Get the render array.
+-    $build = parent::getAsFlagLink($flag, $entity, $view_mode);
 +    $action = $this->getAction($flag, $entity);
 +    $access = $flag->actionAccess($action, $this->currentUser, $entity);
 +    if ($access->isAllowed()) {
@@ -113,7 +112,7 @@ index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abba
 +    }
  
 -    // Normally, you'd just override flag.html.twig in your site's theme. For
--    // this example module, we do something more advanced: Provide a new
+-    // this example module, we do something more advanced: Provide a new.
 -    // @ActionLinkType that changes the default theme function.
 -    $build['#theme'] = 'flag_count';
 +    $access = $flag->actionAccess('view', $this->currentUser, $entity);
@@ -136,7 +135,7 @@ index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abba
  }
 diff --git a/modules/flag_count/templates/flag-count-text.html.twig b/modules/flag_count/templates/flag-count-text.html.twig
 new file mode 100644
-index 0000000000000000000000000000000000000000..fc6468215737a46c606245dad1e915c3d3fa81a4
+index 0000000000000000000000000000000000000000..0f11e187ae18fd7854b735fc827217488cd7edbe
 --- /dev/null
 +++ b/modules/flag_count/templates/flag-count-text.html.twig
 @@ -0,0 +1,21 @@
@@ -162,7 +161,7 @@ index 0000000000000000000000000000000000000000..fc6468215737a46c606245dad1e915c3
 +  <div class="{{ classes|join(' ') }}">{{ flag.label() }}: <span>{{ count }}</span></div>
 +{% endapply %}
 diff --git a/src/FlagType/FlagTypeBase.php b/src/FlagType/FlagTypeBase.php
-index 6a33b1e0d56804e61d026f63f325d0cd47b286af..611946baf4913094a0a22c232b2f01ecac628c6f 100644
+index 7c909020f2cc06c9810df870288505680ae35e7a..a9afe6625cd658b279a37f6550a2c956e610ad61 100644
 --- a/src/FlagType/FlagTypeBase.php
 +++ b/src/FlagType/FlagTypeBase.php
 @@ -164,6 +164,11 @@ abstract class FlagTypeBase extends PluginBase implements FlagTypePluginInterfac
