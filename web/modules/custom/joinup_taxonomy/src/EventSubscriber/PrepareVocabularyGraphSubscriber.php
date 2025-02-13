@@ -190,11 +190,11 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function alterEira(PrepareVocabularyGraphEvent $event): void {
-    if (!in_array($event->vid, ['egovera', 'eira', 'solution_type'])) {
+    if (!in_array($event->vid, ['eira', 'solution_type'])) {
       return;
     }
-    $graph = $event->getGraph();
 
+    $graph = $event->getGraph();
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
     RdfNamespace::delete('dc');
@@ -220,16 +220,21 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
 
     // Remove resources that are already in the `rdf_sync_uri` table.
     $graph = $event->getGraph();
-    $query = $this->database->select('rdf_sync_uri', 'r');
-    $query->fields('r', ['uri']);
-    $query->condition('r.bundle', 'eira');
-    $result = $query->execute();
-    $existingUris = $result->fetchCol();
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    RdfNamespace::set('egovera', 'http://data.europa.eu/dr8/egovera');
+    // Replace the `dc` namespace with `dct` - requested by the client.
+    RdfNamespace::delete('dc');
+    RdfNamespace::delete('dcterms');
+    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
+    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
 
     foreach ($graph->resources() as $resource) {
-      if (in_array($resource->getUri(), $existingUris, TRUE)) {
+      if (!str_starts_with($resource->getUri(), 'http://data.europa.eu/dr8/egovera')) {
         $graph->deleteEntireResource($resource);
+        continue;
       }
+
+      $this->performEiraAlterations($graph, $resource);
     }
   }
 
@@ -247,7 +252,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $usedTerms = $this->lookupUsedSolutionTypeLabels();
+    $usedTerms = $this->lookupUsedSolutionTypes();
     $graph = $event->getGraph();
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
@@ -257,18 +262,37 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
     RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
 
     foreach ($graph->resources() as $resource) {
-      if ($resource->isA('skos:Collection')) {
-        // Do not deal with term groups yet.
-        continue;
-      }
-
       $label = $resource->getLiteral('skos:prefLabel');
-      if ($label && !in_array($label->getValue(), $usedTerms, TRUE)) {
+      // Do not import unused terms in an effort to reduce the number of terms.
+      // Also, do not remove any groups. They will be removed later.
+      if ((!$label || !in_array($resource->getUri(), $usedTerms, TRUE)) && !$resource->isA('skos:Collection')) {
         $graph->deleteEntireResource($resource);
         continue;
       }
 
-      $this->performEiraAlterations($graph, $resource);
+      if (!$resource->isA('skos:Collection')) {
+        $this->performEiraAlterations($graph, $resource);
+      }
+
+      // Alter the resource URI to allow to exist 2 versions of the same term.
+      $uri = $resource->getUri();
+      $uri = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $uri);
+
+      $data = $resource->getGraph()->toRdfPhp()[$resource->getUri()];
+      if (isset($data['http://purl.org/dc/terms/identifier'])) {
+        $data['http://purl.org/dc/terms/identifier'][0]['value'] = $uri;
+      }
+
+      if (!empty($data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value'])) {
+        $data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value'] = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value']);
+      }
+
+      $graph->deleteEntireResource($resource);
+      foreach ($data as $predicate => $objects) {
+        foreach ($objects as $object) {
+          $graph->add($uri, $predicate, $object);
+        }
+      }
     }
 
     // Now that we have removed all unused terms, we can remove all empty
@@ -394,19 +418,17 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    * @return string[]
    *   The list of URIs.
    */
-  protected function lookupUsedSolutionTypeLabels(): array {
+  protected function lookupUsedSolutionTypes(): array {
     $query = $this->database->select('taxonomy_term_field_data', 't');
     $query->distinct();
     $query->fields('r', ['uri']);
     $query->condition('t.vid', 'eira');
     $query->condition('r.entity_type', 'taxonomy_term');
-    $query->innerJoin('node__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
+    $query->innerJoin('node_revision__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
     $query->leftJoin('rdf_sync_uri', 'r', 't.tid = r.entity_id');
     $result = $query->execute();
 
-    return array_map(function ($row) {
-      return $row->uri;
-    }, $result->fetchAllAssoc('uri'));
+    return array_map(fn($row) => $row->uri, $result->fetchAllAssoc('uri'));
   }
 
   /**
