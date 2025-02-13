@@ -121,13 +121,6 @@ use EasyRdf\Graph;
  * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
  */
 function joinup_core_deploy_200200(): void {
-  // Clean entities of bundle `eira` and `solution_type` from the
-  // `rdf_sync_uri` table.
-  \Drupal::database()
-    ->delete('rdf_sync_uri')
-    ->condition('bundle', ['eira', 'solution_type', 'egovera'], 'IN')
-    ->execute();
-
   // Import EIRA first.
   $graph = new Graph();
   $graph->parseFile('../resources/vocab/EIRA v6.1.0_SKOS.rdf');
