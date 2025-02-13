@@ -23,8 +23,10 @@ use Drupal\Core\Url;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
-use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\Solution;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgMembershipInterface;
+use Drupal\user\UserInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -115,7 +117,7 @@ class SubscribeToSolutionForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?SolutionInterface $node = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
     $form = [
       'intro' => [
         '#type' => 'html_tag',
@@ -213,7 +215,17 @@ class SubscribeToSolutionForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->messenger()->addStatus('solution subscription confirmed!');
+    $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
+    if ($operation === 'cancel') {
+      return;
+    }
+    $subscribe = (bool) $form_state->getValue('subscribe');
+    if ($subscribe) {
+      $solutionId = (int) $form_state->getValue('solution_id');
+      $solution = Solution::load($solutionId);
+      $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $solution);
+      $this->messenger->addStatus($solution->getNewMembershipSuccessMessage($membership));
+    }
   }
 
   /**
@@ -249,6 +261,16 @@ class SubscribeToSolutionForm extends FormBase {
       $response->addCommand(new PrependCommand('#drupal-modal form', $messages));
     }
     return $response;
+  }
+
+  /**
+   * Returns the full user entity object for the current user.
+   *
+   * @return \Drupal\user\UserInterface
+   *   The user entity.
+   */
+  protected function getUser(): UserInterface {
+    return $this->entityTypeManager->getStorage('user')->load($this->currentUser()->id());
   }
 
   /**
