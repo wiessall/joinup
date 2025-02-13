@@ -1,0 +1,392 @@
+diff --git a/flag.module b/flag.module
+index 8dd6181..4786be1 100644
+--- a/flag.module
++++ b/flag.module
+@@ -311,6 +311,7 @@ function flag_theme() {
+         'action' => 'flag',
+         'flag' => NULL,
+         'flaggable' => NULL,
++        'view_mode' => NULL,
+       ],
+     ],
+   ];
+@@ -378,6 +379,7 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
+         $entity->getEntityTypeId(),
+         $entity->id(),
+         $flag->id(),
++        $view_mode,
+       ]],
+       '#create_placeholder' => TRUE,
+     ];
+@@ -456,6 +458,7 @@ function flag_entity_view_alter(&$build, EntityInterface $entity, EntityViewDisp
+     }
+
+     if (!empty($flag_keys)) {
++      $build['#contextual_links'][$entity_type]['route_parameters']['view_mode'] = $build['#view_mode'];
+       $build['#contextual_links'][$entity_type]['metadata']['flag_keys'] = implode(',', $flag_keys);
+     }
+   }
+@@ -502,7 +505,7 @@ function flag_contextual_links_alter(array &$links, $group, array $route_paramet
+
+     $flag_link = $flag
+       ->getLinkTypePlugin()
+-      ->getAsLink($flag, $entity);
++      ->getAsLink($flag, $entity, $route_parameters['view_mode']);
+
+     $flag_url = $flag_link->getUrl();
+
+diff --git a/flag.routing.yml b/flag.routing.yml
+index 87d0281..84f4280 100644
+--- a/flag.routing.yml
++++ b/flag.routing.yml
+@@ -39,7 +39,7 @@ entity.flag.delete_form:
+     _entity_access: 'flag.update'
+
+ flag.action_link_flag:
+-  path: '/flag/flag/{flag}/{entity_id}'
++  path: '/flag/flag/{flag}/{entity_id}/{view_mode}'
+   defaults:
+     _controller: '\Drupal\flag\Controller\ActionLinkController::flag'
+   methods: [POST]
+@@ -49,7 +49,7 @@ flag.action_link_flag:
+     _csrf_token: 'TRUE'
+
+ flag.action_link_flag_nojs:
+-  path: '/flag/flag/{flag}/{entity_id}'
++  path: '/flag/flag/{flag}/{entity_id}/{view_mode}'
+   defaults:
+     _controller: '\Drupal\flag\Controller\ActionLinkNoJsController::flag'
+   methods: [GET]
+@@ -59,7 +59,7 @@ flag.action_link_flag_nojs:
+     _csrf_token: 'TRUE'
+
+ flag.action_link_unflag:
+-  path: '/flag/unflag/{flag}/{entity_id}'
++  path: '/flag/unflag/{flag}/{entity_id}/{view_mode}'
+   defaults:
+     _controller: '\Drupal\flag\Controller\ActionLinkController::unflag'
+   methods: [POST]
+@@ -69,7 +69,7 @@ flag.action_link_unflag:
+     _csrf_token: 'TRUE'
+
+ flag.action_link_unflag_nojs:
+-  path: '/flag/unflag/{flag}/{entity_id}'
++  path: '/flag/unflag/{flag}/{entity_id}/{view_mode}'
+   defaults:
+     _controller: '\Drupal\flag\Controller\ActionLinkNoJsController::unflag'
+   methods: [GET]
+diff --git a/modules/flag_count/flag_count.module b/modules/flag_count/flag_count.module
+index 5ab2897..b0b25ed 100644
+--- a/modules/flag_count/flag_count.module
++++ b/modules/flag_count/flag_count.module
+@@ -21,12 +21,14 @@ function flag_count_theme() {
+         'action' => 'flag',
+         'flag' => NULL,
+         'flaggable' => NULL,
++        'view_mode' => NULL,
+       ],
+     ],
+     'flag_count_text' => [
+       'variables' => [
+         'flag' => NULL,
+         'flaggable' => NULL,
++        'view_mode' => NULL,
+       ],
+     ],
+   ];
+diff --git a/modules/flag_count/src/Plugin/ActionLink/CountLink.php b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
+index 01e1c0a..52494d6 100644
+--- a/modules/flag_count/src/Plugin/ActionLink/CountLink.php
++++ b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
+@@ -83,12 +83,12 @@ class CountLink extends AJAXactionLink {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity): array {
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
+     $action = $this->getAction($flag, $entity);
+     $access = $flag->actionAccess($action, $this->currentUser, $entity);
+     if ($access->isAllowed()) {
+       // Get the render array.
+-      $build = parent::getAsFlagLink($flag, $entity);
++      $build = parent::getAsFlagLink($flag, $entity, $view_mode);
+
+       // Normally, you'd just override flag.html.twig in your site's theme. For
+       // this example module, we do something more advanced: Provide a new
+@@ -104,6 +104,7 @@ class CountLink extends AJAXactionLink {
+         '#theme' => 'flag_count_text',
+         '#flag' => $flag,
+         '#flaggable' => $entity,
++        '#view_mode' => $view_mode,
+         '#cache' => [
+           'tags' => ['flagging_list:' . $flag->id()],
+         ],
+diff --git a/src/ActionLink/ActionLinkTypeBase.php b/src/ActionLink/ActionLinkTypeBase.php
+index 1e5bb13..d677ce2 100644
+--- a/src/ActionLink/ActionLinkTypeBase.php
++++ b/src/ActionLink/ActionLinkTypeBase.php
+@@ -82,9 +82,10 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
+   /**
+    * {@inheritdoc}
+    */
+-  public function getAsLink(FlagInterface $flag, EntityInterface $entity) {
++  public function getAsLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
+     $action = $this->getAction($flag, $entity);
+     $url = $this->getUrl($action, $flag, $entity);
++    $url->setRouteParameter('view_mode', $view_mode);
+     $url->setOption('query', ['destination' => $this->getDestination()]);
+     $title = $flag->getShortText($action);
+
+@@ -94,17 +95,19 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
+   /**
+    * {@inheritdoc}
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
+     $action = $this->getAction($flag, $entity);
+     $access = $flag->actionAccess($action, $this->currentUser, $entity);
+
+     if ($access->isAllowed()) {
+       $url = $this->getUrl($action, $flag, $entity);
+       $url->setRouteParameter('destination', $this->getDestination());
++      $url->setRouteParameter('view_mode', $view_mode);
+       $render = [
+         '#theme' => 'flag',
+         '#flag' => $flag,
+         '#flaggable' => $entity,
++        '#view_mode' => $view_mode,
+         '#action' => $action,
+         '#access' => $access->isAllowed(),
+         // Use render array for title to allow limited markup in the link text.
+diff --git a/src/ActionLink/ActionLinkTypePluginInterface.php b/src/ActionLink/ActionLinkTypePluginInterface.php
+index 2c77aa8..46a1b86 100644
+--- a/src/ActionLink/ActionLinkTypePluginInterface.php
++++ b/src/ActionLink/ActionLinkTypePluginInterface.php
+@@ -19,11 +19,13 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
+    *   The flag entity.
+    * @param \Drupal\Core\Entity\EntityInterface $entity
+    *   The flaggable entity.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return array
+    *   The render array.
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity);
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode);
+
+   /**
+    * Get the action link as a Link object.
+@@ -32,10 +34,12 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
+    *   The flag entity.
+    * @param \Drupal\Core\Entity\EntityInterface $entity
+    *   The flaggable entity.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Drupal\Core\Link
+    *   The action Link.
+    */
+-  public function getAsLink(FlagInterface $flag, EntityInterface $entity);
++  public function getAsLink(FlagInterface $flag, EntityInterface $entity, $view_mode);
+
+ }
+diff --git a/src/Controller/ActionLinkController.php b/src/Controller/ActionLinkController.php
+index 651dd33..099d7ce 100644
+--- a/src/Controller/ActionLinkController.php
++++ b/src/Controller/ActionLinkController.php
+@@ -65,13 +65,15 @@ class ActionLinkController implements ContainerInjectionInterface {
+    *   The flag entity.
+    * @param int $entity_id
+    *   The flaggable entity ID.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Drupal\Core\Ajax\AjaxResponse|null
+    *   The response object, only if successful.
+    *
+    * @see \Drupal\flag\Plugin\Reload
+    */
+-  public function flag(FlagInterface $flag, $entity_id) {
++  public function flag(FlagInterface $flag, $entity_id, $view_mode) {
+     /* @var \Drupal\Core\Entity\EntityInterface $entity */
+     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
+
+@@ -87,7 +89,7 @@ class ActionLinkController implements ContainerInjectionInterface {
+       // link for the existing state of the flag.
+     }
+
+-    return $this->generateResponse($flag, $entity, $flag->getMessage('flag'));
++    return $this->generateResponse($flag, $entity, $flag->getMessage('flag'), $view_mode);
+   }
+
+   /**
+@@ -97,13 +99,15 @@ class ActionLinkController implements ContainerInjectionInterface {
+    *   The flag entity.
+    * @param int $entity_id
+    *   The flaggable entity ID.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Drupal\Core\Ajax\AjaxResponse|null
+    *   The response object, only if successful.
+    *
+    * @see \Drupal\flag\Plugin\Reload
+    */
+-  public function unflag(FlagInterface $flag, $entity_id) {
++  public function unflag(FlagInterface $flag, $entity_id, $view_mode) {
+     /* @var \Drupal\Core\Entity\EntityInterface $entity */
+     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
+
+@@ -119,7 +123,7 @@ class ActionLinkController implements ContainerInjectionInterface {
+       // link for the existing state of the flag.
+     }
+
+-    return $this->generateResponse($flag, $entity, $flag->getMessage('unflag'));
++    return $this->generateResponse($flag, $entity, $flag->getMessage('unflag'), $view_mode);
+   }
+
+   /**
+@@ -131,11 +135,13 @@ class ActionLinkController implements ContainerInjectionInterface {
+    *   The entity object.
+    * @param string $message
+    *   (optional) The message to flash.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Drupal\Core\Ajax\AjaxResponse
+    *   The response object.
+    */
+-  private function generateResponse(FlagInterface $flag, EntityInterface $entity, $message) {
++  private function generateResponse(FlagInterface $flag, EntityInterface $entity, $message, string $view_mode) {
+     // Create a new AJAX response.
+     $response = new AjaxResponse();
+
+@@ -143,7 +149,7 @@ class ActionLinkController implements ContainerInjectionInterface {
+     $link_type = $flag->getLinkTypePlugin();
+
+     // Generate the link render array.
+-    $link = $link_type->getAsFlagLink($flag, $entity);
++    $link = $link_type->getAsFlagLink($flag, $entity, $view_mode);
+
+     // Generate a CSS selector to use in a JQuery Replace command.
+     $selector = '.' . Html::getClass('js-flag-' . $flag->id() . '-' . $entity->id());
+diff --git a/src/Controller/ActionLinkNoJsController.php b/src/Controller/ActionLinkNoJsController.php
+index a1f8b94..7029b4b 100644
+--- a/src/Controller/ActionLinkNoJsController.php
++++ b/src/Controller/ActionLinkNoJsController.php
+@@ -66,13 +66,15 @@ class ActionLinkNoJsController implements ContainerInjectionInterface {
+    *   The flag entity.
+    * @param int $entity_id
+    *   The flaggable entity ID.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Symfony\Component\HttpFoundation\RedirectResponse|null
+    *   The response object, only if successful.
+    *
+    * @see \Drupal\flag\Plugin\Reload
+    */
+-  public function flag(FlagInterface $flag, $entity_id) {
++  public function flag(FlagInterface $flag, $entity_id, $view_mode) {
+     /* @var \Drupal\Core\Entity\EntityInterface $entity */
+     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
+
+@@ -98,13 +100,15 @@ class ActionLinkNoJsController implements ContainerInjectionInterface {
+    *   The flag entity.
+    * @param int $entity_id
+    *   The flaggable entity ID.
++   * @param string $view_mode
++   *   The flaggable entity view mode.
+    *
+    * @return \Symfony\Component\HttpFoundation\RedirectResponse|null
+    *   The response object, only if successful.
+    *
+    * @see \Drupal\flag\Plugin\Reload
+    */
+-  public function unflag(FlagInterface $flag, $entity_id) {
++  public function unflag(FlagInterface $flag, $entity_id, $view_mode) {
+     /* @var \Drupal\Core\Entity\EntityInterface $entity */
+     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
+
+diff --git a/src/FlagLinkBuilder.php b/src/FlagLinkBuilder.php
+index 88b1387..b9dedfc 100644
+--- a/src/FlagLinkBuilder.php
++++ b/src/FlagLinkBuilder.php
+@@ -47,12 +47,12 @@ class FlagLinkBuilder implements FlagLinkBuilderInterface, TrustedCallbackInterf
+   /**
+    * {@inheritdoc}
+    */
+-  public function build($entity_type_id, $entity_id, $flag_id) {
++  public function build($entity_type_id, $entity_id, $flag_id, $view_mode = 'default') {
+     $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($entity_id);
+     $flag = $this->flagService->getFlagById($flag_id);
+
+     $link_type_plugin = $flag->getLinkTypePlugin();
+-    return $link_type_plugin->getAsFlagLink($flag, $entity);
++    return $link_type_plugin->getAsFlagLink($flag, $entity, $view_mode);
+   }
+
+ }
+diff --git a/src/FlagLinkBuilderInterface.php b/src/FlagLinkBuilderInterface.php
+index 43ce76c..d619417 100644
+--- a/src/FlagLinkBuilderInterface.php
++++ b/src/FlagLinkBuilderInterface.php
+@@ -16,11 +16,13 @@ interface FlagLinkBuilderInterface {
+    *   The entity ID for which the link should be shown.
+    * @param string $flag_id
+    *   The flag ID for which the link should be shown.
++   * @param string $view_mode
++   *   The entity view mode.
+    *
+    * @return array
+    *   A render array for the action link, empty if the user does not have
+    *   access.
+    */
+-  public function build($entity_type_id, $entity_id, $flag_id);
++  public function build($entity_type_id, $entity_id, $flag_id, $view_mode = 'default');
+
+ }
+diff --git a/src/Plugin/ActionLink/AJAXactionLink.php b/src/Plugin/ActionLink/AJAXactionLink.php
+index 58c844d..add0e4b 100644
+--- a/src/Plugin/ActionLink/AJAXactionLink.php
++++ b/src/Plugin/ActionLink/AJAXactionLink.php
+@@ -76,8 +76,8 @@ class AJAXactionLink extends Reload {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
+-    $build = parent::getAsFlagLink($flag, $entity);
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
++    $build = parent::getAsFlagLink($flag, $entity, $view_mode);
+     $build['#attached']['library'][] = 'flag/flag.link_ajax';
+     $build['#attributes']['class'][] = 'use-ajax';
+     return $build;
+diff --git a/src/Plugin/ActionLink/FormEntryTypeBase.php b/src/Plugin/ActionLink/FormEntryTypeBase.php
+index 15c1480..da2e225 100644
+--- a/src/Plugin/ActionLink/FormEntryTypeBase.php
++++ b/src/Plugin/ActionLink/FormEntryTypeBase.php
+@@ -129,8 +129,8 @@ abstract class FormEntryTypeBase extends ActionLinkTypeBase implements FormEntry
+   /**
+    * {@inheritdoc}
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
+-    $render = parent::getAsFlagLink($flag, $entity);
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
++    $render = parent::getAsFlagLink($flag, $entity, $view_mode);
+     if ($this->configuration['form_behavior'] !== 'default') {
+       $render['#attached']['library'][] = 'core/drupal.ajax';
+       $render['#attributes']['class'][] = 'use-ajax';
+diff --git a/src/Plugin/views/field/FlagViewsLinkField.php b/src/Plugin/views/field/FlagViewsLinkField.php
+index ffa9afd..ba96de3 100644
+--- a/src/Plugin/views/field/FlagViewsLinkField.php
++++ b/src/Plugin/views/field/FlagViewsLinkField.php
+@@ -181,7 +181,7 @@ class FlagViewsLinkField extends FieldPluginBase implements ContainerFactoryPlug
+     }
+
+     return $this->flagLinkBuilder->build(
+-      $entity->getEntityTypeId(), $entity->id(), $this->getFlag()->id()
++      $entity->getEntityTypeId(), $entity->id(), $this->getFlag()->id(), 'default'
+     );
+   }
+
