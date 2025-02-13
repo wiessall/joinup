@@ -154,6 +154,12 @@ Feature: Subscribing to a solution
     Then I should see the button "Subscribe to this solution"
 
     When I press "Subscribe to this solution"
+    Then a modal should open
+    And I should see the text "You're now an active member of this space and ready to participate fully!" in the "Modal content"
+    And I should see the text "You can upgrade your notification preferences from your profile page at any time." in the "Modal content"
+    And I wait for 1 second
+    And I check "Notify me when content is published in Some solution to subscribe"
+    And I press "Confirm" in the "Modal buttons" region
     Then I should see the success message "You have subscribed to this solution and will receive notifications for it. To manage your subscriptions go to My subscriptions in your user menu."
 
     When I open the account menu
