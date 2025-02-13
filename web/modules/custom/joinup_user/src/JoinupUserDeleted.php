@@ -25,10 +25,27 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
   protected array $stack = [];
 
   public function __construct(
-    protected Connection $database,
+    protected readonly Connection $database,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
   ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deletedUserHasAuthoredContent(int|string $uid, EntityOwnerInterface $entity): bool {
+    if ($this->entityTypeManager->getStorage('user')->load($uid)) {
+      throw new \InvalidArgumentException("User with ID $uid is not deleted");
+    }
+
+    return (bool) $this->database->select(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->fields(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->condition('uid', $uid)
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('entity_id', $entity->id())
+      ->countQuery()
+      ->execute();
+  }
 
   /**
    * {@inheritdoc}
@@ -52,6 +69,7 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
       try {
         // Prevent geocoding.
         $this->requestStack->getCurrentRequest()->attributes->set('geocoder_presave_disabled', TRUE);
+
         $transaction = $this->database->transactionManager()->push();
 
         $this->database->insert(JoinupUserDeletedInterface::TABLE_USER)->fields([
@@ -84,6 +102,13 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
         $this->requestStack->getCurrentRequest()->attributes->remove('geocoder_presave_disabled');
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDeletedPseudoAccount(int|string $uid): UserInterface {
+    return $this->entityTypeManager->getStorage('user')->create(['uid' => $uid]);
   }
 
   /**
