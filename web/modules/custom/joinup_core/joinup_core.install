@@ -56,27 +56,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Updates old joinup.ec.europa.eu in access_url field.
- */
-function joinup_core_update_200200(): void {
-  $connection = \Drupal::database();
-
-  // Tables we need to update.
-  $tables = [
-    'node__access_url',
-    'node_revision__access_url',
-  ];
-
-  // Perform a REPLACE() on each table’s "access_url_target_id" column.
-  foreach ($tables as $table) {
-    $connection->update($table)
-      ->expression(
-        'access_url_target_id',
-        "REPLACE(access_url_target_id, 'joinup.ec.europa.eu', 'interoperable-europe.ec.europa.eu')"
-      )
-      ->condition('access_url_target_id', '%joinup.ec.europa.eu%', 'LIKE')
-      ->execute();
-  }
-}
