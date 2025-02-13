@@ -90,7 +90,6 @@ Feature:
     And I press "Update"
     Then I should see the error message "Title field is required."
 
-  @javascript
   Scenario Outline: Visibility of Report link and eTranslate button.
     Given <type> content:
       | title      | collection           |
@@ -99,7 +98,7 @@ Feature:
     When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should see the button "Translate"
+    And I should see the Webtools eTrans button
 
     Examples:
       | type        |
