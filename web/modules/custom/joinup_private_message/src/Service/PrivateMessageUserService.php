@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class PrivateMessageUserService implements PrivateMessageUserServiceInterface {
 
   public function __construct(
-    #[Autowire(service: 'private_message_flood.service')]
+    #[Autowire(service: 'private_message.service')]
     protected PrivateMessageServiceInterface $privateMessageService,
   ) {}
 
