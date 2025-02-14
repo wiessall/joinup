@@ -224,7 +224,7 @@ class SubscribeToSolutionForm extends FormBase {
     if ($subscribe) {
       $solutionId = (int) $form_state->getValue('solution_id');
       $solution = Solution::load($solutionId);
-      $membership = $this->createSolutionMembership(OgMembershipInterface::STATE_ACTIVE, [],$this->getUser(), $solution);
+      $membership = $this->createSolutionMembership(OgMembershipInterface::STATE_ACTIVE, [], $this->getUser(), $solution);
       $membership->save();
       $this->messenger->addStatus($solution->getNewMembershipSuccessMessage($membership));
     }
