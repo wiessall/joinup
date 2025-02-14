@@ -78,7 +78,6 @@ Feature:
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
-  @javascript
   Scenario: User should see error message if he does not fill out all required fields.
     Given custom_page content:
       | title               | collection           |
@@ -90,7 +89,6 @@ Feature:
     And I press "Update"
     Then I should see the error message "Title field is required."
 
-  @javascript
   Scenario Outline: Visibility of Report link and eTranslate button.
     Given <type> content:
       | title      | collection           |
@@ -99,7 +97,7 @@ Feature:
     When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should see the button "Translate"
+    And I should see the Webtools eTrans button
 
     Examples:
       | type        |

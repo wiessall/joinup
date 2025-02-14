@@ -1,8 +1,0 @@
-name: Semic
-type: module
-description: Specificities for the SEMIC community.
-core_version_requirement: ">= 9.4"
-package: Joinup communities
-
-dependencies:
-  - oe_webtools:oe_webtools
