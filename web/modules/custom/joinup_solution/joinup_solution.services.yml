@@ -25,14 +25,14 @@ services:
     class: Drupal\joinup_solution\SolutionTitleDuplicateHelper
   Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface: '@joinup_solution.title_duplicate_helper'
 
-  Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber:
+  Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber: {  }
 
   joinup_solution.lazy_builders:
     class: Drupal\joinup_solution\SolutionLazyBuilders
 
   Drupal\joinup_solution\EventSubscriber\SolutionGroupMenuLinksSubscriber: { }
 
-  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber:
+  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber: {  }
 
   Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }
 
