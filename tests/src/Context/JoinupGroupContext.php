@@ -145,7 +145,7 @@ class JoinupGroupContext extends RawDrupalContext {
     }
     if (!$link->hasClass('group-menu-link-external')) {
       throw new ExpectationFailedException("Link '{$link_label}' should point to a resource outside the current group but it doesn't.");
-    };
+    }
   }
 
   /**

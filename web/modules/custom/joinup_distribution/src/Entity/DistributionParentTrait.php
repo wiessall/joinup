@@ -34,7 +34,7 @@ trait DistributionParentTrait {
 
     foreach ($referenceField->referencedEntities() as $distribution) {
       $distributions[$distribution->id()] = $distribution;
-    };
+    }
     return $distributions;
   }
 
