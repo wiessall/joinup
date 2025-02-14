@@ -10,7 +10,6 @@ dependencies:
     - image.style.tile_item
     - paragraphs.paragraphs_type.tile
   module:
-    - joinup_html_stripper
     - link
     - svg_image
     - template_suggestion
@@ -20,10 +19,9 @@ bundle: tile
 mode: default
 content:
   paragraph_tile_description:
-    type: joinup_html_stripper_stripped
+    type: basic_string
     label: hidden
-    settings:
-      trim_length: 100
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
