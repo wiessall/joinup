@@ -8,8 +8,8 @@ services:
     class: Drupal\joinup_workflow\WorkflowHelper
   Drupal\joinup_workflow\WorkflowHelperInterface: '@joinup_workflow.workflow_helper'
 
+  # Provides access and permissions event handling related to the workflows.
   Drupal\joinup_workflow\EventSubscriber\WorkflowOgEventSubscriber: { }
-    # Provides access and permissions event handling related to the workflows.
 
   Drupal\joinup_workflow\EventSubscriber\StateMachineButtonsSubscriber: {}
 
