@@ -1,5 +1,4 @@
 services:
-
   joinup_sitewide_alert.commands:
     class: \Drupal\joinup_sitewide_alert\Commands\SitewideAlertCommands
     arguments: ['@entity_type.manager']
