@@ -7,6 +7,7 @@ namespace Drupal\joinup_replicate\EventSubscriber;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\replicate\Events\ReplicateAlterEvent;
@@ -29,8 +30,9 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setToDraft', 2];
-    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptySharedInField', 1];
+    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setToDraft', 3];
+    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptySharedInField', 2];
+    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptyPublicationDate', 1];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setOwner'];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setRevisionLog'];
 
@@ -104,6 +106,33 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
     $clone->setRevisionLogMessage($this->t('Replicated by account with ID @account-id', [
       '@account-id' => $this->currentUser->id(),
     ]));
+  }
+
+  /**
+   * Empties the publication date field if needed.
+   *
+   * @param \Drupal\replicate\Events\ReplicateAlterEvent $event
+   *   The event fired by Replicator.
+   */
+  public function emptyPublicationDate(ReplicateAlterEvent $event): void {
+    $original = $event->getOriginal();
+    if (
+      $original instanceof GroupContentInterface &&
+      $original->getPublicationTime()
+    ) {
+      $clone = $event->getEntity();
+      assert($clone instanceof GroupContentInterface);
+      $clone->set('published_at', NULL);
+    }
+
+    if (
+      $original instanceof DocumentInterface &&
+      $original->getPublicationTime()
+    ) {
+      $clone = $event->getEntity();
+      assert($clone instanceof GroupContentInterface);
+      $clone->set('field_document_publication_date', NULL);
+    }
   }
 
 }
