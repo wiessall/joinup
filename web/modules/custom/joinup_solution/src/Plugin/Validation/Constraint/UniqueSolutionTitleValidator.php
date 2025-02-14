@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Plugin\Validation\Constraint;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -23,18 +24,12 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueSolutionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'joinup_solution.title_duplicate_helper')]
     protected readonly SolutionTitleDuplicateHelperInterface $solutionTitleHelper,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('joinup_solution.title_duplicate_helper')
-    );
-  }
 
   /**
    * {@inheritdoc}
