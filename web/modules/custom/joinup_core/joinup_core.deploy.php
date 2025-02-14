@@ -30,6 +30,8 @@ function joinup_core_deploy_200300(array &$sandbox): string {
         'solution',
         'distribution',
         'release',
+        'contact_information',
+        'owner',
       ], 'IN');
     $query->join('key_value', 'k', "n.nid = k.name AND k.collection = :collection", [':collection' => 'pathauto_state.node']);
     $query->condition('k.value', 'i:0;');
