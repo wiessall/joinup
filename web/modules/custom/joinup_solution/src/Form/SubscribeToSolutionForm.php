@@ -20,6 +20,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -223,7 +224,8 @@ class SubscribeToSolutionForm extends FormBase {
     if ($subscribe) {
       $solutionId = (int) $form_state->getValue('solution_id');
       $solution = Solution::load($solutionId);
-      $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $solution);
+      $membership = $this->createSolutionMembership(OgMembershipInterface::STATE_ACTIVE, [],$this->getUser(), $solution);
+      $membership->save();
       $this->messenger->addStatus($solution->getNewMembershipSuccessMessage($membership));
     }
   }
@@ -261,6 +263,22 @@ class SubscribeToSolutionForm extends FormBase {
       $response->addCommand(new PrependCommand('#drupal-modal form', $messages));
     }
     return $response;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createSolutionMembership(string $state, array $roles, UserInterface $user, GroupInterface $group): OgMembershipInterface {
+    $membership = $this->createMembership($state, $roles, $user, $group);
+
+    $bundles = [];
+    foreach (CommunityContentHelper::BUNDLES as $bundle) {
+      $bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
+    }
+
+    $membership->set('subscription_bundles', $bundles);
+
+    return $membership;
   }
 
   /**
