@@ -147,6 +147,8 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "Goodbi world" discussion
     And I press "<join button>"
+    And I check "Notify me when content is published in Hellow world"
+    And I press "Confirm"
     And I visit the "Goodbi world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
 
@@ -195,6 +197,7 @@ Feature:
       | collection | no         | Join this collection       | Leave this collection |
       | solution   | yes        | Subscribe to this solution | Unsubscribe           |
       | solution   | no         | Subscribe to this solution | Unsubscribe           |
+
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
@@ -339,6 +342,8 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "<final title>" <content type>
     And I press "<join button>"
+    And I check "Notify me when content is published in Hellow world"
+    And I press "Confirm"
     When I visit the "<final title>" <content type>
     Then I should see the link "Revisions" in the "Entity actions" region
 
