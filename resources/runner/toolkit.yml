@@ -54,8 +54,6 @@ toolkit:
     clone:
       commands:
         before:
-          - task: run
-            command: joinup:environment
           - task: exec
             command: ${drush.bin} memcache:flush-all
           - task: run
@@ -105,8 +103,6 @@ commands:
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
-    - task: run
-      command: joinup:environment
     - task: exec
       command: ${drush.bin} memcache:flush-all
     - task: run
