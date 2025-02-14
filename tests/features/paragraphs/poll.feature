@@ -42,7 +42,7 @@ Feature: Pool paragraph tests.
   Scenario: Authenticated user can vote
     Given the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | result_vote_allow | choice                                                     | state     |
-      | What was the best series? | 1209600 | 0                 | 1                      | 1                 | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
+      | What was the best series? | 1209599 | 0                 | 1                      | 1                 | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
     And custom_page content:
       | title     | body                                                         | collection      | state     |
       | TV series | We've rounded up our picks for the best shows to binge-watch | Poll collection | published |
@@ -67,7 +67,7 @@ Feature: Pool paragraph tests.
   Scenario: Use who voted can cancel own vote
     Given the following polls:
       | question                      | runtime | cancel_vote_allow | show_number_of_results | choice                                    | state     |
-      | Whats the best pizza topping? | 432000  | 1                 | 0                      | Pepperoni,Pineapple,Just cheese,Mushrooms | published |
+      | Whats the best pizza topping? | 431999  | 1                 | 0                      | Pepperoni,Pineapple,Just cheese,Mushrooms | published |
     And custom_page content:
       | title       | body                                              | collection      | state     |
       | Pizza types | 10 Most Popular Types of Pizza Around the Country | Poll collection | published |
