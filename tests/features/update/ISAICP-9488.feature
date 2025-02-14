@@ -1,5 +1,5 @@
 @api @group-clone
-Feature: URL of a collection is not changed.
+Feature: Aliases are not updates.
 
   @update:joinup_core_deploy_200300
   Scenario Outline: Update collection alias.
