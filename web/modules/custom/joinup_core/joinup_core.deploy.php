@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Database\Database;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
  * Update pathauto state for "RDF" nodes with aliases.
@@ -38,6 +40,8 @@ function joinup_core_deploy_200300(array &$sandbox): string {
     $query->fields('n', ['uuid'])
       ->condition('n.uuid', [
         InteroperableEuropeCollectionInterface::COLLECTION_UUID,
+        OssCatalogueCollectionInterface::COLLECTION_UUID,
+        AssessmentInterface::GROUP_UUID,
       ], 'NOT IN');
     $query->join('key_value', 'k', 'nd.nid = k.name AND k.collection = :collection', [':collection' => 'pathauto_state.node']);
     $query->condition('k.value', 'i:0;');
