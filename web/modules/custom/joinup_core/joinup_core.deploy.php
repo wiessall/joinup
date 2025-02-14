@@ -39,7 +39,7 @@ function joinup_core_deploy_200300(array &$sandbox): string {
     $sandbox['progress'] = 0;
   }
 
-  $ids = array_splice($sandbox['ids'], 0, 100);
+  $ids = array_splice($sandbox['ids'], 0, 200);
   if (!empty($ids)) {
     $database->update('key_value')
       ->fields(['value' => 'i:1;'])
