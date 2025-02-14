@@ -15,6 +15,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Database\Database;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 
 /**
  * Update pathauto state for "RDF" nodes with aliases.
@@ -23,9 +24,9 @@ function joinup_core_deploy_200300(array &$sandbox): string {
   $database = Database::getConnection();
 
   if (!isset($sandbox['ids'])) {
-    $query = $database->select('node_field_data', 'n');
-    $query->fields('n', ['nid'])
-      ->condition('n.type', [
+    $query = $database->select('node_field_data', 'nd');
+    $query->fields('nd', ['nid'])
+      ->condition('nd.type', [
         'collection',
         'solution',
         'distribution',
@@ -33,7 +34,12 @@ function joinup_core_deploy_200300(array &$sandbox): string {
         'contact_information',
         'owner',
       ], 'IN');
-    $query->join('key_value', 'k', "n.nid = k.name AND k.collection = :collection", [':collection' => 'pathauto_state.node']);
+    $query->join('node', 'n', 'n.nid = nd.nid');
+    $query->fields('n', ['uuid'])
+      ->condition('n.uuid', [
+        InteroperableEuropeCollectionInterface::COLLECTION_UUID,
+      ], 'NOT IN');
+    $query->join('key_value', 'k', 'nd.nid = k.name AND k.collection = :collection', [':collection' => 'pathauto_state.node']);
     $query->condition('k.value', 'i:0;');
 
     $sandbox['ids'] = $query->execute()->fetchCol();
