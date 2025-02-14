@@ -41,6 +41,7 @@ Feature: Accessibility
 
   Scenario: Check accessibility standards webtools maps.
     Given I visit "/collection/open-source-observatory-osor/event/pass-salt-conference"
+    And I wait until ".leaflet-marker-icon" element exists
     Then I click on element ".leaflet-marker-icon"
     And I wait for CSS animations to finish
     And I should see a ".wt-map-info[role='dialog'][aria-label='Press ESC to close this panel.'][tabindex='0']" element
