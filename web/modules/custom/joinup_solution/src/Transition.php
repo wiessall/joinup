@@ -9,8 +9,8 @@ namespace Drupal\joinup_solution;
  */
 enum Transition {
 
-  case ARCHIVE;
-  case UNARCIVE;
+  case Archive;
+  case Unarchive;
 
   /**
    * Returns the machine name of the transition.
@@ -20,8 +20,8 @@ enum Transition {
    */
   public function getMachineName(): string {
     return match ($this) {
-      self::ARCHIVE => 'archive',
-      self::UNARCIVE => 'unarchive',
+      self::Archive => 'archive',
+      self::Unarchive => 'unarchive',
     };
   }
 
