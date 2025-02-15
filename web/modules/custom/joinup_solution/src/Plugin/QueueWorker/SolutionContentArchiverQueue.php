@@ -183,8 +183,8 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       $entity->skip_notification = TRUE;
       try {
         $newState = match ($transition) {
-          Transition::ARCHIVE => 'archived',
-          Transition::UNARCIVE =>'published',
+          Transition::Archive => 'archived',
+          Transition::Unarchive =>'published',
         };
         $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
           $entity,
@@ -195,8 +195,8 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         );
         match ($transition) {
           // '@plugin-id' queue
-          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
-          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
+          Transition::Archive => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
+          Transition::Unarchive => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
         };
       }
       catch (\Exception $exception) {
@@ -204,7 +204,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
     }
 
-    if ($transition === Transition::ARCHIVE) {
+    if ($transition === Transition::Archive) {
       joinup_notification_dispatch_notification('update', NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED, $solution);
     }
   }
