@@ -328,7 +328,7 @@ ddev grumphp run
 ```
 * Alternatively, run 1 or more tasks:
 ```shell
-ddev grumphp run --tasks=phpcs,phpstan,phplint,yamllint,eslint,stylelint
+ddev grumphp run --tasks=phpcs,phpstan,lint-css,lint-gherkin,lint-js,lint-php,lint-twig,lint-yaml
 ```
 
 GrumPHP gets triggered on git pre-push hook by default. To change this behavior,
