@@ -62,8 +62,16 @@ function joinup_core_deploy_200301(): void {
   $graph = new Graph();
   $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
   \Drupal::service('joinup_taxonomy.vocabulary_updater')
-    ->registerGraph('http://data.europa.eu/dr8', $graph)
-    ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->registerGraph('http://data.europa.eu/dr8/6.0.0', $graph)
+    ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8/6.0.0', 'http://data.europa.eu/dr8/6.0.0')
+    ->update();
+
+  // Re import eGovERA in order to clean the rest of the terms.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/eGovERA.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8/egovera', $graph)
+    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8/egovera', 'http://data.europa.eu/dr8/egovera')
     ->update();
 
   // Import EIRA which will clear previous values.
@@ -73,13 +81,6 @@ function joinup_core_deploy_200301(): void {
     ->registerGraph('http://data.europa.eu/dr8', $graph)
     ->registerVocabulary('eira', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
     ->update();
-
-  $graph = new Graph();
-  $graph->parseFile('../resources/vocab/eGovERA.rdf');
-  \Drupal::service('joinup_taxonomy.vocabulary_updater')
-    ->registerGraph('http://data.europa.eu/dr8', $graph)
-    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
-    ->update();
 }
 
 /**
@@ -88,7 +89,7 @@ function joinup_core_deploy_200301(): void {
 function joinup_core_deploy_200302(): string {
   $data = \Drupal::state()->get('joinup_core_deploy_200200');
   if (!$data) {
-    return 'No data found.';
+    throw new Exception('No relevant data found about solution type field.');
   }
 
   $rdf_sync_map = \Drupal::getContainer()->get('rdf_sync.mapper');
@@ -99,7 +100,9 @@ function joinup_core_deploy_200302(): string {
     $values = $values['values'];
     foreach ($values as $original_id => $uri) {
       $altered_uri = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $uri);
-      assert(in_array($altered_uri, $solution_types), 'URI not found in the solution type vocabulary.');
+      # The following line also ensures that every single entry will be
+      # replaced with an existing solution type term of the same URI.
+      assert(in_array($altered_uri, $solution_types), 'URI ' . $altered_uri . ' not found in the solution type vocabulary.');
       $term = $rdf_sync_map->getEntityByUri($altered_uri);
 
       foreach (['node__solution_type', 'node_revision__solution_type'] as $table) {
