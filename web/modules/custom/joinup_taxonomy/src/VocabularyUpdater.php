@@ -471,12 +471,13 @@ class VocabularyUpdater {
    *   Whether the resource is a term.
    */
   private function isTerm(Resource $resource, string $rdfType): bool {
-    if (!$vocabReference = $resource->getResource('skos:inScheme')) {
-      if (!$vocabReference = $resource->getResource('skos:topConceptOf')) {
+    if (!$vocabReference = $resource->allResources('skos:inScheme')) {
+      if (!$vocabReference = $resource->allResources('skos:topConceptOf')) {
         return FALSE;
       }
     }
-    return $vocabReference->getUri() === $rdfType;
+
+    return in_array($rdfType, array_map(fn (Resource $vocab) => $vocab->getUri(), $vocabReference));
   }
 
   /**
