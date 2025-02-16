@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Implements Vitality index queue service.
@@ -28,6 +29,7 @@ readonly class VitalityIndexQueue implements VitalityIndexQueueInterface {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected LoggerChannelInterface $logger,
     QueueFactory $queueFactory,
   ) {

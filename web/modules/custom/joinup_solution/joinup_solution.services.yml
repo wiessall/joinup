@@ -1,35 +1,41 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   Drupal\joinup_solution\EventSubscriber\SolutionOgSubscriber: { }
+
   cache_context.solution_owner:
     class: 'Drupal\joinup_solution\Cache\Context\SolutionOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
     tags:
       - { name: 'cache.context'}
-  joinup_solution.fulfillment_guard:
-    class: Drupal\joinup_solution\Guard\SolutionTransitionGuard
-    arguments: ['@current_user']
+
+  Drupal\joinup_solution\Guard\SolutionTransitionGuard:
     tags:
       # Priority 5 will set it to be executed before the generic guard of the
       # state_machine_permissions module.
       - { name: state_machine.guard, group: solution, priority: 5}
+
   joinup_solution.requirements_helper:
     class: Drupal\joinup_solution\RequirementsHelper
-    arguments: ['@rdf_sync.connection']
+
   joinup_solution.title_duplicate_helper:
-    class: 'Drupal\joinup_solution\SolutionTitleDuplicateHelper'
-    arguments: ['@entity_type.manager']
-  Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber:
-    arguments: ['@entity_type.manager']
+    class: Drupal\joinup_solution\SolutionTitleDuplicateHelper
+  Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface: '@joinup_solution.title_duplicate_helper'
+
+  Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber: {  }
+
   joinup_solution.lazy_builders:
     class: Drupal\joinup_solution\SolutionLazyBuilders
-    arguments: [ '@entity_type.manager', '@form_builder', '@current_user' ]
+
   Drupal\joinup_solution\EventSubscriber\SolutionGroupMenuLinksSubscriber: { }
-  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber:
-    arguments: ['@queue', '@current_user','@messenger']
-  Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber:
-    arguments: [ '@search_api.entity_datasource.tracking_manager', '@logger.channel.group_membership', '@current_user' ]
+
+  Drupal\joinup_solution\EventSubscriber\SolutionArchiveEventSubscriber: {  }
+
+  Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber: { }
+
   logger.channel.solution:
     parent: logger.channel_base
     arguments:

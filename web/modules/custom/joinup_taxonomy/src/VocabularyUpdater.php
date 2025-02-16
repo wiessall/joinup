@@ -11,12 +11,12 @@ use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
-use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 use EasyRdf\Graph;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Used to update vocabularies.
@@ -110,7 +110,7 @@ class VocabularyUpdater {
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityFieldManagerInterface $fieldManager,
     protected readonly FieldTypePluginManagerInterface $fieldTypeManager,
-    protected readonly RdfSyncMapper $mapper,
+    protected readonly RdfSyncMapperInterface $mapper,
     protected readonly Connection $database,
     protected readonly EventDispatcherInterface $eventDispatcher,
   ) {}

@@ -1,6 +1,8 @@
 services:
+
+  _defaults:
+    autowire: true
+
   joinup_seo.export_helper:
     class: Drupal\joinup_seo\JoinupSeoExportHelper
-    arguments:
-      - '@serializer'
-      - '@extension.path.resolver'
+  Drupal\joinup_seo\JoinupSeoExportHelperInterface: '@joinup_seo.export_helper'

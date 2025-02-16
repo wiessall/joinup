@@ -1,14 +1,18 @@
 services:
+
   _defaults:
     autoconfigure: true
-  Drupal\joinup_private_message\EventSubscriber\RequestSubscriber:
-    arguments: [ '@current_route_match', '@private_message_flood.service' ]
+    autowire: true
+
+  Drupal\joinup_private_message\EventSubscriber\RequestSubscriber: { }
+
   Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber: { }
-  joinup_private_message.paramconverter:
-    class: Drupal\joinup_private_message\ParamConverter\BanConverter
-    arguments: [ '@entity_type.manager', '@entity.repository', '@current_user' ]
+
+  Drupal\joinup_private_message\ParamConverter\BanConverter:
     tags:
       - { name: paramconverter, priority: 6 }
+
   joinup_private_message.user_service:
     class: Drupal\joinup_private_message\Service\PrivateMessageUserService
-    arguments: [ '@private_message.service' ]
+  Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface: '@joinup_private_message.user_service'
+

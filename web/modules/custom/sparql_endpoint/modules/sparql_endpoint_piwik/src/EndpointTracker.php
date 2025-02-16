@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\RequestOptions;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -27,6 +28,7 @@ readonly class EndpointTracker {
   public function __construct(
     protected ClientInterface $httpClient,
     protected AccountProxyInterface $currentUser,
+    #[Autowire(service: 'logger.channel.sparql_endpoint')]
     protected LoggerChannelInterface $logger,
     ConfigFactoryInterface $configFactory,
   ) {

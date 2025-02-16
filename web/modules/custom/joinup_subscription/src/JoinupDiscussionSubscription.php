@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Entity\Flag;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\joinup_subscription\Exception\UserAlreadySubscribedException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a service to handle subscriptions to discussions.
@@ -18,6 +19,7 @@ readonly class JoinupDiscussionSubscription implements JoinupDiscussionSubscript
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'flag')]
     protected FlagServiceInterface $flagService,
   ) {}
 

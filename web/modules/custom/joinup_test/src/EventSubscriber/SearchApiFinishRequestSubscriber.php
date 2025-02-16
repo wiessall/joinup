@@ -6,6 +6,7 @@ namespace Drupal\joinup_test\EventSubscriber;
 
 use Drupal\joinup_test\Utils\TestUtils;
 use Drupal\search_api\Utility\PostRequestIndexing;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -21,7 +22,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class SearchApiFinishRequestSubscriber implements EventSubscriberInterface {
 
-  public function __construct(protected PostRequestIndexing $postRequestIndexing) {
+  public function __construct(
+    #[Autowire(service: 'search_api.post_request_indexing')]
+    protected PostRequestIndexing $postRequestIndexing,
+  ) {
   }
 
   /**

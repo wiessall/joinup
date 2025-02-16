@@ -1,4 +1,6 @@
 services:
+
   _defaults:
     autoconfigure: true
+
   Drupal\joinup_group_content_management\EventSubscriber\AlterGroupContentManagementRoute: { }
