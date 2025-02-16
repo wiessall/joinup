@@ -100,8 +100,8 @@ function joinup_core_deploy_200302(): string {
     $values = $values['values'];
     foreach ($values as $original_id => $uri) {
       $altered_uri = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $uri);
-      # The following line also ensures that every single entry will be
-      # replaced with an existing solution type term of the same URI.
+      // The following line also ensures that every single entry will be
+      // replaced with an existing solution type term of the same URI.
       assert(in_array($altered_uri, $solution_types), 'URI ' . $altered_uri . ' not found in the solution type vocabulary.');
       $term = $rdf_sync_map->getEntityByUri($altered_uri);
 
