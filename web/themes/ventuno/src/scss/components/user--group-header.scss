@@ -5,6 +5,7 @@
       to bottom,
       rgba($primary, 0.6) 0%,
       rgba($primary, 0.4) 100%
-  ) url("#{$theme-images-path}/featured-bg.jpg") no-repeat center;
+  )
+  url("#{$theme-images-path}/featured-bg.jpg") no-repeat center;
   background-size: cover;
 }
