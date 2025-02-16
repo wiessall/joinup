@@ -190,7 +190,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function alterEira(PrepareVocabularyGraphEvent $event): void {
-    if (!in_array($event->vid, ['eira', 'solution_type'])) {
+    if ($event->vid !== 'eira') {
       return;
     }
 
@@ -203,7 +203,12 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
     RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
 
     foreach ($graph->resources() as $resource) {
-      $this->performEiraAlterations($graph, $resource);
+      if (!str_starts_with($resource->getUri(), 'http://data.europa.eu/dr8') || str_starts_with($resource->getUri(), 'http://data.europa.eu/dr8/egovera')) {
+        $graph->deleteEntireResource($resource);
+        continue;
+      }
+
+      $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8');
     }
   }
 
@@ -233,8 +238,8 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         $graph->deleteEntireResource($resource);
         continue;
       }
+      $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8/egovera');
 
-      $this->performEiraAlterations($graph, $resource);
     }
   }
 
@@ -254,7 +259,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
 
     $usedTerms = $this->lookupUsedSolutionTypes();
     $graph = $event->getGraph();
-    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/6.0.0');
     // Replace the `dc` namespace with `dct` - requested by the client.
     RdfNamespace::delete('dc');
     RdfNamespace::delete('dcterms');
@@ -265,33 +270,13 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       $label = $resource->getLiteral('skos:prefLabel');
       // Do not import unused terms in an effort to reduce the number of terms.
       // Also, do not remove any groups. They will be removed later.
-      if ((!$label || !in_array($resource->getUri(), $usedTerms, TRUE)) && !$resource->isA('skos:Collection')) {
+      if ((!$label || !in_array(str_replace('/6.0.0', '', $resource->getUri()), $usedTerms, TRUE)) && !$resource->isA('skos:Collection')) {
         $graph->deleteEntireResource($resource);
         continue;
       }
 
       if (!$resource->isA('skos:Collection')) {
-        $this->performEiraAlterations($graph, $resource);
-      }
-
-      // Alter the resource URI to allow to exist 2 versions of the same term.
-      $uri = $resource->getUri();
-      $uri = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $uri);
-
-      $data = $resource->getGraph()->toRdfPhp()[$resource->getUri()];
-      if (isset($data['http://purl.org/dc/terms/identifier'])) {
-        $data['http://purl.org/dc/terms/identifier'][0]['value'] = $uri;
-      }
-
-      if (!empty($data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value'])) {
-        $data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value'] = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $data['http://www.w3.org/2004/02/skos/core#broaderTransitive'][0]['value']);
-      }
-
-      $graph->deleteEntireResource($resource);
-      foreach ($data as $predicate => $objects) {
-        foreach ($objects as $object) {
-          $graph->add($uri, $predicate, $object);
-        }
+        $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8/6.0.0');
       }
     }
 
@@ -314,8 +299,10 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The graph.
    * @param \EasyRdf\Resource $resource
    *   The resource.
+   * @param string $graphUri
+   *   The graph URI.
    */
-  protected function performEiraAlterations(Graph $graph, Resource $resource): void {
+  protected function performEiraAlterations(Graph $graph, Resource $resource, string $graphUri): void {
     if (str_ends_with($resource->getUri(), '_Properties')) {
       // For EIRA_SKOS, after version 6, they have added all extra properties
       // of the EIRA terms as separate terms in the graph. To properly handle
@@ -343,7 +330,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       }
 
       // Inject properties in the main term.
-      $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
+      $graph->addLiteral($mainResource, $graphUri, Json::encode([
         'namespaces' => $namespaces,
         'rows' => $rows,
       ]));
@@ -373,24 +360,28 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
     // Add the link to all skos:Concept type elements so that they are all
     // considered as children of the vocabulary regardless of their depth.
     if ($resource->isA('skos:Concept')) {
-      $graph->addResource($resource, 'skos:topConceptOf', 'http://data.europa.eu/dr8');
+      $graph->addResource($resource, 'skos:topConceptOf', $graphUri);
     }
 
     switch ($resource->getUri()) {
       case 'http://data.europa.eu/dr8/ArchitecturePrinciple':
+      case 'http://data.europa.eu/dr8/6.0.0/ArchitecturePrinciple':
         $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Privacy', TRUE);
         $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Security', TRUE);
         break;
 
       case 'http://data.europa.eu/dr8/AdministrativeSimplification':
+      case 'http://data.europa.eu/dr8/6.0.0/AdministrativeSimplification':
         $this->deleteLiteralContainingText($resource, 'skos:definition', 'Harmonised rules on eligibility and durability');
         break;
 
       case 'http://data.europa.eu/dr8/ClientrequestforserviceApplicationEvent':
+      case 'http://data.europa.eu/dr8/6.0.0/ClientrequestforserviceApplicationEvent':
         $this->deleteLiteralContainingText($resource, 'skos:definition', 'https://www.techtarget.com/searchenterprisedesktop/definition/client');
         break;
 
       case 'http://data.europa.eu/dr8/HostingFacility':
+      case 'http://data.europa.eu/dr8/6.0.0/HostingFacility':
         $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: DIGIT C Infrastructure Services Provision');
     }
 
@@ -419,13 +410,11 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The list of URIs.
    */
   protected function lookupUsedSolutionTypes(): array {
-    $query = $this->database->select('taxonomy_term_field_data', 't');
+    $query = $this->database->select('node_revision__solution_type', 'ns');
     $query->distinct();
+    $query->fields('ns', ['solution_type_target_id']);
+    $query->innerJoin('rdf_sync_uri', 'r', 'ns.solution_type_target_id = r.entity_id');
     $query->fields('r', ['uri']);
-    $query->condition('t.vid', 'eira');
-    $query->condition('r.entity_type', 'taxonomy_term');
-    $query->innerJoin('node_revision__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
-    $query->leftJoin('rdf_sync_uri', 'r', 't.tid = r.entity_id');
     $result = $query->execute();
 
     return array_map(fn($row) => $row->uri, $result->fetchAllAssoc('uri'));
