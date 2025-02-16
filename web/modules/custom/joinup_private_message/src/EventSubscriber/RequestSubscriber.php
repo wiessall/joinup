@@ -6,9 +6,10 @@ namespace Drupal\joinup_private_message\EventSubscriber;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\MessageCommand;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\private_message_flood\Service\PrivateMessageFloodServiceInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,7 +22,8 @@ class RequestSubscriber implements EventSubscriberInterface {
   use StringTranslationTrait;
 
   public function __construct(
-    protected CurrentRouteMatch $routeMatch,
+    protected RouteMatchInterface $routeMatch,
+    #[Autowire(service: 'private_message_flood.service')]
     protected PrivateMessageFloodServiceInterface $floodService,
   ) {
   }

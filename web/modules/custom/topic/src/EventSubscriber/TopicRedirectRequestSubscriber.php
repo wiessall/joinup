@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\topic\EventSubscriber;
 
+use Drupal\Core\Routing\AccessAwareRouterInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\topic\Entity\TopicInterface;
@@ -12,7 +13,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Redirects topic term canonical to search page.
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\RouterInterface;
 readonly class TopicRedirectRequestSubscriber implements EventSubscriberInterface {
 
   public function __construct(
-    protected RouterInterface $router,
+    protected AccessAwareRouterInterface $router,
   ) {}
 
   /**

@@ -1,6 +1,9 @@
 services:
+
   _defaults:
     autoconfigure: true
+
   Drupal\joinup_collection\Routing\RouteSubscriber: { }
+
   Drupal\joinup_collection\EventSubscriber\MembershipNotificationSubscriber:
     parent: joinup_notification.notification_subscriber_base

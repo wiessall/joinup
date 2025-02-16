@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\Context\ContextProviderInterface;
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Subscribes to Joinup Group events.
@@ -17,6 +18,7 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'joinup_release.release_route_context')]
     protected readonly ContextProviderInterface $releaseContext,
   ) {
     parent::__construct($entityTypeManager);

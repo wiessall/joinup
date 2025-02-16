@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Drupal\eu_oss_catalogue\Model\GitUri;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Remote git API guesser.
@@ -25,8 +26,10 @@ final readonly class ApiGuesser implements ApiGuesserInterface {
   protected const STATE_STORAGE_KEY = 'eu_oss_catalogue.api_guesser.guessed';
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.hosting_platform')]
     protected EuOssCataloguePluginManagerInterface $hostingPlatformManager,
     protected StateInterface $state,
+    #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected LoggerChannelInterface $logger,
   ) {}
 

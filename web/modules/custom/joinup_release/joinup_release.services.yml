@@ -1,22 +1,24 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   joinup_release.release_route_context:
     class: Drupal\joinup_release\ContextProvider\ReleaseRouteContext
-    arguments: ['@current_route_match']
     tags:
       - { name: 'context_provider' }
+
   cache_context.release:
     class: Drupal\joinup_release\Cache\ReleaseCacheContext
-    arguments: ['@request_stack']
     tags:
       - { name: cache.context }
+
   cache_context.route.name.is_download_releases_route:
     class: Drupal\joinup_release\Cache\DownloadReleasesCacheContext
-    arguments: ['@current_route_match']
     tags:
       - { name: cache.context }
-  Drupal\joinup_release\EventSubscriber\ReleaseGroupSubscriber:
-    arguments: ['@entity_type.manager']
-  Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber:
-    arguments: ['@rdf_sync.mapper', '@rdf_sync.connection', '@config.factory']
+
+  Drupal\joinup_release\EventSubscriber\ReleaseGroupSubscriber: { }
+
+  Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber: { }

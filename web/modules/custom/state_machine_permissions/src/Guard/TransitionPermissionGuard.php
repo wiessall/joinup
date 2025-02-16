@@ -10,7 +10,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\TransitionGuardTrait;
-use Drupal\joinup_workflow\WorkflowHelper;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\owner\Entity\OwnerInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -26,7 +26,7 @@ class TransitionPermissionGuard implements GuardInterface {
 
   public function __construct(
     protected readonly AccountInterface $currentUser,
-    protected readonly WorkflowHelper $workflowHelper,
+    protected readonly WorkflowHelperInterface $workflowHelper,
   ) {}
 
   /**

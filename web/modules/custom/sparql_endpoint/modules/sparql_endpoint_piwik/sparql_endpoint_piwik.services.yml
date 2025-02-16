@@ -1,12 +1,9 @@
 services:
+
   _defaults:
     autoconfigure: true
-  sparql_endpoint.endpoint_tracker:
-    class: Drupal\sparql_endpoint_piwik\EndpointTracker
-    arguments:
-      - '@http_client'
-      - '@current_user'
-      - '@logger.channel.sparql_endpoint'
-      - '@config.factory'
-  Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber:
-    arguments: [ '@sparql_endpoint.endpoint_tracker' ]
+    autowire: true
+
+  Drupal\sparql_endpoint_piwik\EndpointTracker: { }
+
+  Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber: { }

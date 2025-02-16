@@ -1,18 +1,21 @@
 services:
+
   _defaults:
     autoconfigure: true
-  joinup_licence.spdx_id.param_converter:
-    class: Drupal\joinup_licence\ParamConverter\SpdxIdParamConverter
+    autowire: true
+
+  Drupal\joinup_licence\ParamConverter\SpdxIdParamConverter:
     tags:
       - { name: paramconverter }
-  joinup_licence.spdx_ids.param_converter:
-    class: Drupal\joinup_licence\ParamConverter\SpdxIdsParamConverter
-    arguments: ['@entity_type.manager']
+
+  Drupal\joinup_licence\ParamConverter\SpdxIdsParamConverter:
     tags:
       - { name: paramconverter }
-  Drupal\joinup_licence\EventSubscriber\LicenceGroupSubscriber:
-    arguments: ['@entity_type.manager']
+
+  Drupal\joinup_licence\EventSubscriber\LicenceGroupSubscriber: { }
+
   plugin.manager.joinup_licence_compatibility_rule:
     class: Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager
     parent: default_plugin_manager
+
   Drupal\joinup_licence\EventSubscriber\SpdxVocabularySubscriber: { }

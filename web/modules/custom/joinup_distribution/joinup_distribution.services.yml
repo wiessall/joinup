@@ -1,8 +1,11 @@
 services:
+
   _defaults:
     autoconfigure: true
-  Drupal\joinup_distribution\EventSubscriber\DistributionGroupSubscriber:
-    arguments: ['@entity_type.manager', '@joinup_release.release_route_context']
+    autowire: true
+
+  Drupal\joinup_distribution\EventSubscriber\DistributionGroupSubscriber: { }
+
   Drupal\joinup_distribution\EventSubscriber\AdjustSolutionContentSubscriber: { }
-  Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber:
-    arguments: ['@rdf_sync.mapper', '@file_url_generator']
+
+  Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber: { }

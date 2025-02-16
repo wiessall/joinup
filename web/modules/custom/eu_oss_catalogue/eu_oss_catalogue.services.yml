@@ -1,19 +1,14 @@
 services:
 
+  _defaults:
+    autowire: true
+
   logger.channel.eu_oss_catalogue:
     parent: logger.channel_base
     arguments: ['eu_oss_catalogue']
 
   eu_oss_catalogue:
     class: Drupal\eu_oss_catalogue\EuOssCatalogue
-    arguments:
-      - '@plugin.manager.eu_oss_catalogue.provider'
-      - '@plugin.manager.eu_oss_catalogue.parser'
-      - '@queue'
-      - '@event_dispatcher'
-      - '@entity_type.manager'
-      - '@logger.channel.eu_oss_catalogue'
-      - '@datetime.time'
   Drupal\eu_oss_catalogue\EuOssCatalogueInterface: '@eu_oss_catalogue'
 
   plugin.manager.eu_oss_catalogue.provider:
@@ -45,7 +40,4 @@ services:
 
   eu_oss_catalogue.git_remote.api_guesser:
     class: Drupal\eu_oss_catalogue\ApiGuesser
-    arguments:
-      - '@plugin.manager.eu_oss_catalogue.hosting_platform'
-      - '@state'
-      - '@logger.channel.eu_oss_catalogue'
+  Drupal\eu_oss_catalogue\ApiGuesserInterface: '@eu_oss_catalogue.git_remote.api_guesser'

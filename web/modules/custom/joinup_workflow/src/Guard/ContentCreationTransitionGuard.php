@@ -6,7 +6,7 @@ namespace Drupal\joinup_workflow\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_workflow\WorkflowHelper;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -18,7 +18,7 @@ readonly class ContentCreationTransitionGuard implements GuardInterface {
 
   public function __construct(
     protected AccountInterface $currentUser,
-    protected WorkflowHelper $workflowHelper,
+    protected WorkflowHelperInterface $workflowHelper,
   ) {}
 
   /**
