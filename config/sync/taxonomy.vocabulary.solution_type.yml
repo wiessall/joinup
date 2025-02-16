@@ -7,7 +7,7 @@ dependencies:
     - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: 'http://data.europa.eu/dr8'
+    type: 'http://data.europa.eu/dr8/6.0.0'
     uri_plugin: null
     fields:
       vid:
