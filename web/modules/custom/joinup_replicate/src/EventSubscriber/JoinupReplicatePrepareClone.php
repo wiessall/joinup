@@ -115,22 +115,13 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    *   The event fired by Replicator.
    */
   public function emptyPublicationDate(ReplicateAlterEvent $event): void {
-    $original = $event->getOriginal();
-    if (
-      $original instanceof GroupContentInterface &&
-      $original->getPublicationTime()
-    ) {
-      $clone = $event->getEntity();
-      assert($clone instanceof GroupContentInterface);
+    $clone = $event->getEntity();
+
+    if ($clone instanceof GroupContentInterface) {
       $clone->set('published_at', NULL);
     }
 
-    if (
-      $original instanceof DocumentInterface &&
-      $original->getPublicationTime()
-    ) {
-      $clone = $event->getEntity();
-      assert($clone instanceof GroupContentInterface);
+    if ($clone instanceof DocumentInterface) {
       $clone->set('field_document_publication_date', NULL);
     }
   }
