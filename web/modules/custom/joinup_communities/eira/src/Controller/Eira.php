@@ -11,23 +11,47 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Provides a controller for 'eira.vocabulary' route.
+ *
+ * The response is cached permanently as data comes from a static file which
+ * is part of the codebase. If the source file is changed, that means a new
+ * release will be created. Deploying a new release, *always* triggers an
+ * explicit cache clear.
  */
 class Eira extends ControllerBase {
 
   /**
    * Returns the EIRA vocabulary as RDF/XML.
    *
-   * The response is cached permanently as data comes from a static file which
-   * is part of the codebase. If the source file is changed, that means a new
-   * release will be created. Deploying a new release, *always* triggers an
-   * explicit cache clear.
+   * @return \Drupal\Core\Cache\CacheableResponse
+   *   The response as RDF/XML format.
+   */
+  public function eiraVocabulary(): CacheableResponse {
+    return $this->getFileAsResponse('EIRA v6.1.0_SKOS.rdf');
+  }
+
+  /**
+   * Returns the e-Government Core Vocabularies as RDF/XML.
    *
    * @return \Drupal\Core\Cache\CacheableResponse
    *   The response as RDF/XML format.
    */
-  public function vocabulary(): CacheableResponse {
+  public function egoveraVocabulary(): CacheableResponse {
+    return $this->getFileAsResponse('eGovERA.rdf');
+  }
+
+  /**
+   * Returns a file as a response.
+   *
+   * @param string $fileName
+   *   The file of the vocabulary from the /resources/vocab directory without
+   *   the path.
+   *
+   * @return \Drupal\Core\Cache\CacheableResponse
+   *   The response as RDF/XML format.
+   */
+  private function getFileAsResponse(string $fileName): CacheableResponse {
     $response = new CacheableResponse();
-    $response->setContent(file_get_contents(DRUPAL_ROOT . '/../resources/vocab/EIRA v6.1.0_SKOS.rdf'));
+    $response->setContent(file_get_contents(DRUPAL_ROOT . '/../resources/vocab/' . $fileName));
 
     /** @var \EasyRdf\Format $format */
     $format = Format::getFormats()['rdfxml'];
