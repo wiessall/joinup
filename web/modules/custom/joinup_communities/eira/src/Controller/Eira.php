@@ -27,7 +27,7 @@ class Eira extends ControllerBase {
    */
   public function vocabulary(): CacheableResponse {
     $response = new CacheableResponse();
-    $response->setContent(file_get_contents(DRUPAL_ROOT . '/../resources/vocab/EIRA_SKOS.rdf'));
+    $response->setContent(file_get_contents(DRUPAL_ROOT . '/../resources/vocab/EIRA v6.1.0_SKOS.rdf'));
 
     /** @var \EasyRdf\Format $format */
     $format = Format::getFormats()['rdfxml'];

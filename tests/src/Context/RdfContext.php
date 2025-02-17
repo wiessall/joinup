@@ -372,14 +372,12 @@ class RdfContext extends RawDrupalContext {
     // vocabularies, but we only re-imported terms already in use in solutions.
     $query = \Drupal::database()->select('taxonomy_term_field_data', 't');
     $query->distinct();
-    $query->fields('r', ['uri']);
+    $query->fields('t', ['tid']);
     $query->condition('t.vid', 'solution_type');
-    $query->condition('r.entity_type', 'taxonomy_term');
     $query->innerJoin('node_revision__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
-    $query->leftJoin('rdf_sync_uri', 'r', 't.tid = r.entity_id');
     $result = $query->execute();
 
-    $termIds = array_map(fn($row) => $row->uri, $result->fetchAllAssoc('uri'));
+    $termIds = array_map(fn($row) => $row->tid, $result->fetchAllAssoc('tid'));
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($termIds);
     $termUris = array_map(fn($term) => $term->getUri(), $terms);
 
