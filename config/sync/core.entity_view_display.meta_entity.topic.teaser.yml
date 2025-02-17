@@ -46,7 +46,7 @@ content:
         replace_tokens: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
+        template_suggestion: ''
     weight: 1
     region: content
   image:
