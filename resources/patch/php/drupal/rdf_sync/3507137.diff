@@ -1,0 +1,84 @@
+diff --git a/src/RdfSyncUriFieldItemList.php b/src/RdfSyncUriFieldItemList.php
+index 31544552775151e597073269309be7fbf2980675..dccd4d529715a1c36ae3aa56e8dda9f3b2040832 100644
+--- a/src/RdfSyncUriFieldItemList.php
++++ b/src/RdfSyncUriFieldItemList.php
+@@ -83,6 +83,33 @@ class RdfSyncUriFieldItemList extends FieldItemList {
+           'bundle' => $entity->bundle(),
+         ])->execute();
+     }
++    else {
++      // There are cases where the URI might change slightly by switching some
++      // case-sensitive characters. This is not a problem for the RDF data, but
++      // it is for the database. We need to update the URI in the database.
++      // However, do not allow other cases.
++      $uri = $this->first()->getValue()['value'];
++      // Load the original value from the database.
++      $originalUri = \Drupal::database()
++        ->select('rdf_sync_uri', 'u')
++        ->fields('u', ['uri'])
++        ->condition('u.entity_type', $this->getEntity()->getEntityTypeId())
++        ->condition('u.entity_id', $this->getEntity()->id())
++        ->execute()
++        ->fetchField();
++
++      if ($uri !== $originalUri && strtolower($uri) !== strtolower($originalUri)) {
++        throw new \LogicException('The RDF URI cannot be changed after creation.');
++      }
++      elseif ($uri !== $originalUri) {
++        \Drupal::database()
++          ->update('rdf_sync_uri')
++          ->fields(['uri' => $uri])
++          ->condition('entity_type', $this->getEntity()->getEntityTypeId())
++          ->condition('entity_id', $this->getEntity()->id())
++          ->execute();
++      }
++    }
+ 
+     return parent::postSave($update);
+   }
+diff --git a/tests/src/Kernel/RdfSyncTest.php b/tests/src/Kernel/RdfSyncTest.php
+index bac34f0bfacb8cefab14ef52eb056349701676eb..d20c8ea85a0201660a596ba0a1e01f56e1712803 100644
+--- a/tests/src/Kernel/RdfSyncTest.php
++++ b/tests/src/Kernel/RdfSyncTest.php
+@@ -6,6 +6,7 @@ namespace Drupal\Tests\rdf_sync\Kernel;
+ 
+ use Drupal\Component\Serialization\Yaml;
+ use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\Core\Entity\EntityStorageException;
+ use Drupal\KernelTests\KernelTestBase;
+ use Drupal\Tests\rdf_sync\Traits\RdfSyncTestingDataTrait;
+ use Drupal\taxonomy\Entity\Term;
+@@ -192,4 +193,33 @@ class RdfSyncTest extends KernelTestBase {
+     $this->assertSame($expectedUris, $actualUris);
+   }
+ 
++  /**
++   * Tests updating the URI.
++   *
++   * @covers \Drupal\rdf_sync\RdfSyncUriFieldItemList::postSave
++   */
++  public function testUpdateUri(): void {
++    $term = Term::create([
++      'vid' => 'category',
++      'name' => $this->randomString(),
++      'uri' => 'http://example.com/foo',
++    ]);
++    $term->save();
++
++    $term = Term::load($term->id());
++    $this->assertSame('http://example.com/foo', $term->get('uri')->value);
++
++    // We are throwing a logic exception because it is a logical error, but
++    // Drupal API handles it as an EntityStorageException as it is part of the
++    // postSave() method.
++    $this->expectException(EntityStorageException::class);
++    // Set to a completely different URI.
++    $term->set('uri', 'http://example.com/bar')->save();
++
++    // Change only some case-sensitive characters.
++    $term->set('uri', 'http://example.com/Foo')->save();
++    $term = Term::load($term->id());
++    $this->assertSame('http://example.com/Foo', $term->get('uri')->value);
++  }
++
+ }
