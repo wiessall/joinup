@@ -167,10 +167,10 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       // Current user cannot change the state to "archived" or "unarchived"
       // state.
       $allowedTransitions = $entity->getWorkflow()->getAllowedTransitions($entity->getWorkflowState(), $entity);
-      if (!array_key_exists($transition->getMachineName(), $allowedTransitions)) {
+      if (!array_key_exists($transition->value, $allowedTransitions)) {
         continue;
       }
-      $targetState = $allowedTransitions[$transition->getMachineName()]->getToState()->getId();
+      $targetState = $allowedTransitions[$transition->value]->getToState()->getId();
       // No need to archive unpublished or already archived entities.
       if (
         $entity->getWorkflowState() === $targetState ||
