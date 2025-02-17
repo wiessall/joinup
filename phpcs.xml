@@ -85,15 +85,6 @@
     </properties>
   </rule>
 
-  <!-- Exclude enum case naming rules for eu_oss_catalogue which would break GRAPHQL queries. -->
-  <!-- @see https://github.com/cfpinto/graphql/issues/24 -->
-  <rule ref="Drupal.NamingConventions.ValidEnumCase.NoUpperAcronyms">
-    <exclude-pattern>**/eu_oss_catalogue/src/Model/</exclude-pattern>
-  </rule>
-  <rule ref="Drupal.NamingConventions.ValidEnumCase.NoUnderscores">
-    <exclude-pattern>**/eu_oss_catalogue/src/Model/</exclude-pattern>
-  </rule>
-
   <!-- Arguments. -->
   <arg name="extensions" value="php,module,inc,theme,install,profile,engine"/>
   <arg name="report" value="full"/>
