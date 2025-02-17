@@ -15,6 +15,8 @@ namespace Drupal\eu_oss_catalogue\Model\GitHub;
  * @see https://docs.github.com/en/graphql/reference/enums#pullrequeststate
  * @see https://docs.github.com/en/graphql/reference/enums#pullrequestupdatestate
  * @see https://docs.github.com/en/graphql/reference/enums#trackedissuestates
+ *
+ * phpcs:disable Drupal.NamingConventions.ValidEnumCase.NoUpperAcronyms
  */
 enum State {
 
