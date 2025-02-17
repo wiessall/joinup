@@ -2,14 +2,10 @@
 
 /**
  * @file
+ * Deploy functions for Joinup search.
  */
 
 declare(strict_types=1);
-
-/**
- * @file
- * Deploy functions for Joinup search.
- */
 
 use Drupal\search_api\Entity\Index;
 
