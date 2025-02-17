@@ -117,5 +117,6 @@ function joinup_core_deploy_200302(): string {
     }
   }
 
+  \Drupal::state()->delete('joinup_core_deploy_200200');
   return 'Solution type field and revision values have been restored.';
 }
