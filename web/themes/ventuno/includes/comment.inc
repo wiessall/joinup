@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 
@@ -21,10 +20,11 @@ function ventuno_preprocess_comment(array &$variables): void {
   /** @var \Drupal\user\UserInterface $user */
   $user = $variables['user_picture']['#user'];
 
-  if (!$comment->getOriginalId()) {
+  if ($comment->getOwner()->isAnonymous()) {
     $service = \Drupal::getContainer()->get('joinup_user.deleted');
-    $uid = $comment->get('uid')->target_id;
-    $user = $service->deletedUserHasAuthoredContent($uid, $comment) ? $service->getDeletedPseudoAccount($uid) : new AnonymousUserSession();
+    if ($uid = $service->getContentDeletedAuthor($comment)) {
+      $user = $service->getDeletedUserPseudoAccount($uid);
+    }
   }
 
   $username = [
