@@ -28,6 +28,7 @@ Feature: Private message report.
     When I am logged in as "bob_rolls"
     And I am on "/user/messages"
     And a message containing the text "This is a mean message to Bob." should be present
+    And I should see a ".private_message_report[title='Report abusive content']" element
     When I click "Report message"
     Then a modal should open
     And I should see the text "Report and block sender" in the "Modal title"
