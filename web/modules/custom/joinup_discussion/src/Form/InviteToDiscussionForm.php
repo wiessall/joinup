@@ -6,7 +6,6 @@ namespace Drupal\joinup_discussion\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -28,8 +27,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class InviteToDiscussionForm extends InviteFormBase {
 
-  use AutowireTrait;
-
   /**
    * The message template to use for the notification mail.
    *
@@ -43,6 +40,7 @@ class InviteToDiscussionForm extends InviteFormBase {
     InvitationMessageHelperInterface $invitationMessageHelper,
     #[Autowire(service: 'logger.channel.group_membership')]
     LoggerChannelInterface $logger,
+    #[Autowire(service: 'event_dispatcher')]
     protected EventDispatcherInterface $eventDispatcher,
     #[Autowire(service: 'joinup_subscription.discussion_subscription')]
     protected JoinupDiscussionSubscriptionInterface $subscription,
