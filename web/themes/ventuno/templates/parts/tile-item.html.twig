@@ -29,7 +29,7 @@
     {{ image }}
     <div class="p-3">
       <h3{{ create_attribute().addClass(['h5', 'text-primary', 'fw-bold']) }}>{{ title }}</h3>
-      <p class="mb-0 text-dark fs-sm">{{ description|render|striptags }}</p>
+      <div class="mb-0 text-dark fs-sm">{{ description }}</div>
     </div>
     {{ title_suffix }}
   </article>
