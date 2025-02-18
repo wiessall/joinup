@@ -25,8 +25,7 @@ Feature: Subscribing to a collection after joining
     # A modal dialog opens proposing the user to subscribe to the collection.
     And a modal should open
     And I should see the text "Welcome to Sapient Pearwood" in the "Modal title"
-    And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal content"
-    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the text "You're now an active member of this space and ready to participate fully!" in the "Modal content"
     And I should see the text "You can update your notification preferences from your profile page at any time." in the "Modal content"
 
     # The user can decline the subscription.
@@ -56,7 +55,6 @@ Feature: Subscribing to a collection after joining
     Then a modal should open
     And I should see the text "Welcome to Troll ducks" in the "Modal title"
     And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal content"
-    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
     And I should see the text "You can update your notification preferences from your profile page at any time." in the "Modal content"
     When I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
