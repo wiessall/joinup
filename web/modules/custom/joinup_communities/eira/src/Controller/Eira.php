@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eira\Controller;
 
 use Drupal\Core\Cache\CacheableResponse;
+use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\Core\Controller\ControllerBase;
 use EasyRdf\Format;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -22,20 +23,20 @@ class Eira extends ControllerBase {
   /**
    * Returns the EIRA vocabulary as RDF/XML.
    *
-   * @return \Drupal\Core\Cache\CacheableResponse
+   * @return \Drupal\Core\Cache\CacheableResponseInterface
    *   The response as RDF/XML format.
    */
-  public function eiraVocabulary(): CacheableResponse {
+  public function eiraVocabulary(): CacheableResponseInterface {
     return $this->getFileAsResponse('EIRA v6.1.0_SKOS.rdf');
   }
 
   /**
    * Returns the e-Government Core Vocabularies as RDF/XML.
    *
-   * @return \Drupal\Core\Cache\CacheableResponse
+   * @return \Drupal\Core\Cache\CacheableResponseInterface
    *   The response as RDF/XML format.
    */
-  public function egoveraVocabulary(): CacheableResponse {
+  public function egoveraVocabulary(): CacheableResponseInterface {
     return $this->getFileAsResponse('eGovERA.rdf');
   }
 
@@ -46,10 +47,10 @@ class Eira extends ControllerBase {
    *   The file of the vocabulary from the /resources/vocab directory without
    *   the path.
    *
-   * @return \Drupal\Core\Cache\CacheableResponse
+   * @return \Drupal\Core\Cache\CacheableResponseInterface
    *   The response as RDF/XML format.
    */
-  private function getFileAsResponse(string $fileName): CacheableResponse {
+  private function getFileAsResponse(string $fileName): CacheableResponseInterface {
     $response = new CacheableResponse();
     $response->setContent(file_get_contents(DRUPAL_ROOT . '/../resources/vocab/' . $fileName));
 
