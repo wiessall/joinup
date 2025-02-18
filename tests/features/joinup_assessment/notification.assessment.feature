@@ -1,4 +1,4 @@
-@api @group-i @demoAssessment
+@api @group-e @demoAssessment
 Feature: Notification test for the assessment.
 
   Scenario: Notifications should be sent whenever a assessment is created.
