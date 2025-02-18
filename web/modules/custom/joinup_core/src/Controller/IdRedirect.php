@@ -7,7 +7,7 @@ namespace Drupal\joinup_core\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -16,17 +16,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class IdRedirect extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'rdf_sync.mapper')]
     protected readonly RdfSyncMapper $mapper,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('rdf_sync.mapper'),
-    );
-  }
 
   /**
    * Redirects to the RDF entity canonical page.

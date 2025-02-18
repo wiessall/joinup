@@ -14,6 +14,7 @@ use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\RemoveCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -32,7 +33,7 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A form suggesting the user to subscribe to a collection after joining.
@@ -47,11 +48,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SubscribeToCollectionForm extends FormBase {
 
   use MembershipCreateTrait;
+  use AutowireTrait;
 
   protected const string COC_CHECKBOX_KEY = 'code_of_conduct_agreed';
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected $messenger,
     protected readonly FormBuilderInterface $formBuilder,
@@ -59,21 +62,6 @@ class SubscribeToCollectionForm extends FormBase {
     protected readonly EventDispatcherInterface $eventDispatcher,
     protected readonly PathValidatorInterface $pathValidator,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('og.membership_manager'),
-      $container->get('messenger'),
-      $container->get('form_builder'),
-      $container->get('datetime.time'),
-      $container->get('event_dispatcher'),
-      $container->get('path.validator'),
-    );
-  }
 
   /**
    * {@inheritdoc}

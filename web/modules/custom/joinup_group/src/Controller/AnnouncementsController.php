@@ -12,7 +12,6 @@ use Drupal\joinup_group\AnnouncementsAccessTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\AnnouncementForm;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Returns responses for the group announcement form.
@@ -24,14 +23,6 @@ class AnnouncementsController extends ControllerBase {
   public function __construct(
     protected readonly ClassResolverInterface $classResolver,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return (new static($container->get('class_resolver')))
-      ->setJoinupGroupManager($container->get('joinup_group.group_manager'));
-  }
 
   /**
    * Access check for the group announcement form.

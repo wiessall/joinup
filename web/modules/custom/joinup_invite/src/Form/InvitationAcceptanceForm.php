@@ -7,6 +7,7 @@ namespace Drupal\joinup_invite\Form;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -18,7 +19,6 @@ use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -36,6 +36,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @see \Drupal\joinup_discussion\Form\InviteToDiscussionForm
  */
 class InvitationAcceptanceForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The identifier for accepting an invitation.
@@ -55,16 +57,6 @@ class InvitationAcceptanceForm extends FormBase {
     protected readonly EventDispatcherInterface $eventDispatcher,
     protected readonly CurrentRouteMatch $currentRouteMatch,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('event_dispatcher'),
-      $container->get('current_route_match'),
-    );
-  }
 
   /**
    * {@inheritdoc}

@@ -15,7 +15,7 @@ use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\Form\AnonymousDownloadForm;
 use Drupal\node\NodeStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,21 +26,11 @@ class DownloadTrackingController extends ControllerBase {
   public function __construct(
     protected readonly NodeStorageInterface $nodeStorage,
     protected readonly ContentEntityStorageInterface $eventStorage,
+    #[Autowire(service: 'file_url.handler')]
     protected readonly FileUrlHandler $fileUrlHandler,
+    #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('node'),
-      $container->get('entity_type.manager')->getStorage('download_event'),
-      $container->get('file_url.handler'),
-      $container->get('file.usage')
-    );
-  }
 
   /**
    * Tracks a distribution file download done by a user.

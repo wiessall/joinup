@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\Form;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -15,13 +16,15 @@ use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\node\NodeStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Retrieves the e-mail from anonymous users that are downloading distributions.
  */
 class AnonymousDownloadForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The file being downloaded.
@@ -33,19 +36,9 @@ class AnonymousDownloadForm extends FormBase {
   public function __construct(
     protected readonly NodeStorageInterface $nodeStorage,
     protected readonly ContentEntityStorageInterface $eventStorage,
+    #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('node'),
-      $container->get('entity_type.manager')->getStorage('download_event'),
-      $container->get('file.usage')
-    );
-  }
 
   /**
    * {@inheritdoc}
