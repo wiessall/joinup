@@ -27,17 +27,15 @@
             {{ content.field_user_photo }}
           </div>
         </div>
-        {% set social_media = content.field_social_media|render %}
-        {% if social_media %}
+        {% if content.field_social_media|field_value %}
           <div class="mt-3">
-           {{ social_media }}
+           {{ content.field_social_media }}
           </div>
         {% endif %}
-        {% set _member_for = member_for|render %}
-        {% if _member_for %}
+        {% if member_for %}
           <div class="mt-3 text-center text-sm">
             <span class="fw-bold">{{ 'Member for'|t }}:</span>
-            <span>{{ _member_for }}</span>
+            <span>{{ member_for }}</span>
           </div>
         {% endif %}
       </div>
@@ -45,32 +43,28 @@
         <h1 class="mt-3 mt-md-0 fw-normal text-light text-center text-md-start">
           {{ full_name }}
         </h1>
-        {% set _field_user_business_title = content.field_user_business_title|render %}
-        {% if _field_user_business_title %}
+        {% if content.field_user_business_title|field_value %}
           <p class="mb-0 text-center text-md-start">
-            {{ _field_user_business_title }}
+            {{ content.field_user_business_title }}
           </p>
         {% endif %}
-        {% set _field_user_nationality = content.field_user_nationality|render %}
-        {% if _field_user_nationality %}
+        {% if content.field_user_nationality|field_value %}
           <div class="mt-3 text-center text-md-start">
             <p class="mb-0 fw-bold">{{ 'Country of origin'|t }}:</p>
-            {{ _field_user_nationality }}
+            {{ content.field_user_nationality }}
           </div>
         {% endif %}
         <div class="row">
-          {% set _field_user_organisation = content.field_user_organisation|render %}
-          {% if _field_user_organisation %}
+          {% if content.field_user_organisation|field_value %}
             <div class="col-12 col-md-5 col-lg-4 mt-3">
               <p class="mb-0 fw-bold">{{ 'Organisation'|t }}:</p>
-              {{ _field_user_organisation }}
+              {{ content.field_user_organisation }}
             </div>
           {% endif %}
-          {% set _field_user_professional_domain = content.field_user_professional_domain|render %}
-          {% if _field_user_professional_domain %}
+          {% if content.field_user_professional_domain|field_value %}
             <div class="col-12 col-md-7 col-lg-8 mt-3">
               <p class="mb-0 fw-bold">{{ 'Domains'|t }}:</p>
-              {{ _field_user_professional_domain }}
+              {{ content.field_user_professional_domain }}
             </div>
           {% endif %}
         </div>
