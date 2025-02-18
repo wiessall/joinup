@@ -46,17 +46,15 @@
 ] %}
 
 <div{{ attributes.addClass(classes) }}>
-  {% set _paragraph_heading = content.paragraph_heading|render %}
-  {% if _paragraph_heading|striptags|trim is not empty %}
+  {% if content.paragraph_heading|field_value %}
     <h2 class="paragraph__heading mb-0">
-      {{ _paragraph_heading }}
+      {{ content.paragraph_heading }}
     </h2>
   {% endif %}
 
-  {% set _paragraph_carousel_action = content.paragraph_carousel_action|render %}
-  {% if _paragraph_carousel_action|striptags|trim is not empty %}
+  {% if content.paragraph_carousel_action|field_value %}
     <div class="paragraph--carousel__action">
-      {{ _paragraph_carousel_action }}
+      {{ content.paragraph_carousel_action }}
     </div>
   {% endif %}
   <div class="glide__outer">
