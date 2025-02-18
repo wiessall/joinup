@@ -8,6 +8,9 @@ namespace Drupal\eu_oss_catalogue\Model\GitLab;
  * GitLab release sort types.
  *
  * @see https://docs.gitlab.com/ee/api/graphql/reference/#releasesort
+ *
+ * phpcs:disable Drupal.NamingConventions.ValidEnumCase.NoUpperAcronyms
+ * phpcs:disable Drupal.NamingConventions.ValidEnumCase.NoUnderscores
  */
 enum ReleaseSort {
 

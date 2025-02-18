@@ -46,7 +46,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *   The workflow transition event dispatched after a solution was archived.
    */
   public function onSolutionPostArchiveTransition(WorkflowTransitionEvent $event): void {
-    if (!$this->queueSolutionSubContentTransition($event, Transition::ARCHIVE)) {
+    if (!$this->queueSolutionSubContentTransition($event, Transition::Archive)) {
       return;
     }
 
@@ -67,7 +67,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *   The workflow transition event dispatched after a solution was unarchived.
    */
   public function onSolutionPostUnarchiveTransition(WorkflowTransitionEvent $event): void {
-    if (!$this->queueSolutionSubContentTransition($event, Transition::UNARCIVE)) {
+    if (!$this->queueSolutionSubContentTransition($event, Transition::Unarchive)) {
       return;
     }
 
