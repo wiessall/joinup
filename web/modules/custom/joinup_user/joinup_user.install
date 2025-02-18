@@ -91,7 +91,7 @@ function joinup_user_install(): void {
 /**
  * Create deleted users tables.
  */
-function joinup_user_update_200200(): void {
+function joinup_user_update_200300(): void {
   $schema = \Drupal::database()->schema();
   foreach (joinup_user_schema() as $table => $specification) {
     $schema->createTable($table, $specification);
