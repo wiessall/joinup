@@ -57,13 +57,12 @@
           </svg>
           <span class="text-primary">{{ additional_content.field_event_date }}</span>
         </div>
-        {% set _field_event_location = additional_content.field_event_location|render %}
-        {% if _field_event_location|striptags %}
+        {% if additional_content.field_event_location|field_value %}
           <div class="page-title__headline d-flex align-items-center mt-2">
             <svg class="page-title__headline-icon bi icon--m text-brand me-2">
               <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>
             </svg>
-            <span class="text-primary">{{ _field_event_location }}</span>
+            <span class="text-primary">{{ additional_content.field_event_location }}</span>
           </div>
         {% endif %}
       </div>

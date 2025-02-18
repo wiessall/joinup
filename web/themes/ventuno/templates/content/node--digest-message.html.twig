@@ -6,19 +6,16 @@
  * @see template_preprocess_node()
  */
 #}
-{% set _field_short_title = content.field_short_title|render %}
-{% if _field_short_title %}
-  {% set digest_item_title = _field_short_title %}
+{% if content.field_short_title|field_value %}
+  {% set digest_item_title = content.field_short_title|render %}
 {% else %}
   {% set digest_item_title = label %}
 {% endif %}
 
-{% set _field_news_logo = content.field_news_logo|render %}
-{% set _field_event_logo = content.field_event_logo|render %}
-{% if _field_news_logo|striptags|trim %}
-  {% set digest_item_img = site_url ~ _field_news_logo|striptags|trim %}
-{% elseif _field_event_logo|striptags|trim %}
-  {% set digest_item_img = site_url ~ _field_event_logo|striptags|trim %}
+{% if content.field_news_logo|field_value %}
+  {% set digest_item_img = site_url ~ content.field_news_logo|render|striptags|trim %}
+{% elseif content.field_event_logo|field_value %}
+  {% set digest_item_img = site_url ~ content.field_event_logo|render|striptags|trim %}
 {% else %}
   {% set digest_item_img = site_url ~ '/' ~ directory ~ '/assets/images/digest-message/' ~ node.bundle ~ '_icon.png' %}
 {% endif %}
