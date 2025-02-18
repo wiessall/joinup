@@ -43,8 +43,7 @@
 ] %}
 
 <div {{ attributes.addClass(classes) }}>
-  {% set _paragraph_testimony_source = content.paragraph_testimony_source|render %}
-  <blockquote{% if _paragraph_testimony_source|striptags|trim is not empty %} cite="{{ _paragraph_testimony_source }}"{% endif %}>
+  <blockquote{% if content.paragraph_testimony_source|field_value %} cite="{{ content.paragraph_testimony_source }}"{% endif %}>
     <div class="testimony__quote">
       {{ content.paragraph_testimony_text }}
     </div>
@@ -54,13 +53,11 @@
       </div>
       <figcaption class="testimony__figcaption">
         <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
-        {% set _paragraph_testimony_bio = content.paragraph_testimony_bio|render %}
-        {% if _paragraph_testimony_bio|striptags|trim is not empty %}
-          <p class="testimony__bio">{{ _paragraph_testimony_bio }}</p>
+        {% if content.paragraph_testimony_bio|field_value %}
+          <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
         {% endif %}
-        {% set _paragraph_testimony_source = content.paragraph_testimony_source|render %}
-        {% if _paragraph_testimony_source|striptags|trim is not empty %}
-          <cite class="testimony__cite">{{ paragraph_testimony_source }}</cite>
+        {% if content.paragraph_testimony_source|field_value %}
+          <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
         {% endif %}
       </figcaption>
     </figure>
