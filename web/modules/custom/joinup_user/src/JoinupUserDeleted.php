@@ -213,7 +213,7 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
    * @param array<array-key, array<int|string, int|string>> $ids
    *   Associative array. The values are always entity IDs. The keys are
    *   revision IDs if the entity supports revision and entity IDs if not.
- */
+   */
   protected function setAnonymousAsOwner(UserInterface $account, string $entityTypeId, array $ids): void {
     $storage = $this->entityTypeManager->getStorage($entityTypeId);
 
