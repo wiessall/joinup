@@ -3,8 +3,6 @@ Feature: Library import check.
 
   @update:joinup_core_deploy_200301
   Scenario: Check that all 3 EIRA vocabularies are imported in full.
-    # @todo To be removed along with the step definition in the post release
-    #   cleanup.
     Given all EIRA vocabularies are successfully imported.
 
     # Ensure redirection to the eGovERA terms.
