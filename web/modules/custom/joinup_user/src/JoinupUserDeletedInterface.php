@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_user;
 
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 
@@ -41,17 +42,15 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
   ];
 
   /**
-   * Checks whether a deleted user authored in the past a content item.
+   * Returns the ID of user account which authored a given entity.
    *
-   * @param int|string $uid
-   *   The deleted user account ID.
    * @param \Drupal\user\EntityOwnerInterface $entity
    *   The entity authored by the deleted user.
    *
-   * @return bool
-   *   Whether a deleted user authored in the past a content item.
+   * @return int|null
+   *   The ID of user account which authored a given entity.
    */
-  public function deletedUserHasAuthoredContent(int|string $uid, EntityOwnerInterface $entity): bool;
+  public function getContentDeletedAuthor(EntityOwnerInterface $entity): ?int;
 
   /**
    * Checks whether an account has been registered as deleted.
@@ -62,7 +61,15 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
    * @return bool
    *   Whether an account has been registered as deleted.
    */
-  public function isAccountDeleted(UserInterface $account): bool;
+  public function isAccountDeleted(AccountInterface $account): bool;
+
+  /**
+   * Computes the user's full name.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   */
+  public function getFullName(AccountInterface $account): string;
 
   /**
    * Acts when a user account is being cancelled.
@@ -81,6 +88,6 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
    * @return \Drupal\user\UserInterface
    *   A mocked user entity instance.
    */
-  public function getDeletedPseudoAccount(int|string $uid): UserInterface;
+  public function getDeletedUserPseudoAccount(int|string $uid): UserInterface;
 
 }

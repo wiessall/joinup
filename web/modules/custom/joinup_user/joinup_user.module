@@ -481,7 +481,7 @@ function joinup_user_alter_account_cancel_form(array &$form): void {
 function joinup_user_user_format_name_alter(string &$name, AccountInterface $account): void {
   // Skip if the user is anonymous.
   if ($account->isAuthenticated()) {
-    $name = \Drupal::getContainer()->get('joinup_user.deleted_user')->getFullName($account);
+    $name = \Drupal::getContainer()->get('joinup_user.deleted')->getFullName($account);
   }
 }
 

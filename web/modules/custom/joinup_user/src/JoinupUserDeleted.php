@@ -7,15 +7,23 @@ namespace Drupal\joinup_user;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Default implementation of 'joinup_user.deleted' service.
  */
 class JoinupUserDeleted implements JoinupUserDeletedInterface {
+
+  /**
+   * Static cache for users full name.
+   */
+  protected array $fullName = [];
 
   /**
    * List of deleted user accounts.
@@ -28,21 +36,29 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
     protected readonly Connection $database,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
+    #[Autowire(service: 'logger.channel.user')]
+    protected readonly LoggerChannelInterface $logger,
   ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function deletedUserHasAuthoredContent(int|string $uid, EntityOwnerInterface $entity): bool {
-    if ($this->entityTypeManager->getStorage('user')->load($uid)) {
-      throw new \InvalidArgumentException("User with ID $uid is not deleted");
-    }
-
-    return (bool) $this->database->select(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+  public function getContentDeletedAuthor(EntityOwnerInterface $entity): ?int {
+    return (int) $this->database->select(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
       ->fields(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
-      ->condition('uid', $uid)
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())
+      ->execute()
+      ->fetchField() ?: NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isAccountDeleted(AccountInterface $account): bool {
+    return (bool) $this->database->select(JoinupUserDeletedInterface::TABLE_USER)
+      ->fields(JoinupUserDeletedInterface::TABLE_USER)
+      ->condition('uid', $account->id())
       ->countQuery()
       ->execute()
       ->fetchField();
@@ -51,17 +67,31 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
   /**
    * {@inheritdoc}
    */
-  public function isAccountDeleted(UserInterface $account): bool {
-    if ($this->entityTypeManager->getStorage('user')->load($account->id())) {
-      throw new \InvalidArgumentException("User with ID {$account->id()} is not deleted");
+  public function getFullName(AccountInterface $account): string {
+    if (!isset($this->fullName[$account->id()])) {
+      if ($this->isAccountDeleted($account)) {
+        $this->fullName[$account->id()] = $this->database->select(self::TABLE_USER)
+          ->fields(self::TABLE_USER, ['full_name'])
+          ->condition('uid', $account->id())
+          ->execute()
+          ->fetchField();
+
+        if (!$this->fullName[$account->id()]) {
+          $this->logger->error('User with ID @uid is missing a @table table entry', [
+            '@table' => self::TABLE_USER,
+            '@uid' => $account->id(),
+          ]);
+          return $this->fullName[$account->id()];
+        }
+      }
+      else {
+        $account = $account instanceof UserInterface ? $account : $this->entityTypeManager->getStorage('user')->load($account->id());
+        $this->fullName[$account->id()] = trim($account->get('field_user_first_name')->value . ' ' . $account->get('field_user_family_name')->value);
+        $this->fullName[$account->id()] = $this->fullName[$account->id()] ?: $account->getAccountName();
+      }
     }
 
-    return (bool) $this->database->select(JoinupUserDeletedInterface::TABLE_USER)
-      ->fields(JoinupUserDeletedInterface::TABLE_USER)
-      ->condition('uid', $account->id())
-      ->countQuery()
-      ->execute()
-      ->fetchField();
+    return $this->fullName[$account->id()];
   }
 
   /**
@@ -83,48 +113,37 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
         continue;
       }
 
-      try {
-        // Prevent geocoding.
-        $this->requestStack->getCurrentRequest()->attributes->set('geocoder_presave_disabled', TRUE);
+      // Prevent geocoding.
+      $this->requestStack->getCurrentRequest()->attributes->set('geocoder_presave_disabled', TRUE);
 
-        $transaction = $this->database->transactionManager()->push();
+      $this->database->insert(JoinupUserDeletedInterface::TABLE_USER)->fields([
+        'uid' => $account->id(),
+        'full_name' => $account->getDisplayName(),
+      ])->execute();
 
-        $this->database->insert(JoinupUserDeletedInterface::TABLE_USER)->fields([
-          'uid' => $account->id(),
-          'full_name' => $account->getDisplayName(),
-        ])->execute();
+      foreach ($content as $entityTypeId => $ids) {
+        // Replaces comment_user_predelete() and node_user_predelete().
+        // @see joinup_user_module_implements_alter()
+        $this->setAnonymousAsOwner($account, $entityTypeId, $ids);
 
-        foreach ($content as $entityTypeId => $ids) {
-          // Replaces comment_user_predelete() and node_user_predelete().
-          // @see joinup_user_module_implements_alter()
-          $this->setAnonymousAsOwner($account, $entityTypeId, $ids);
-
-          foreach (array_unique($ids) as $id) {
-            $this->database->insert(JoinupUserDeletedInterface::TABLE_USER_CONTENT)->fields([
-              'uid' => $account->id(),
-              'entity_type' => $entityTypeId,
-              'entity_id' => $id,
-            ])->execute();
-          }
+        foreach (array_unique($ids) as $id) {
+          $this->database->insert(JoinupUserDeletedInterface::TABLE_USER_CONTENT)->fields([
+            'uid' => $account->id(),
+            'entity_type' => $entityTypeId,
+            'entity_id' => $id,
+          ])->execute();
         }
       }
-      catch (\Exception $exception) {
-        if (isset($transaction)) {
-          $transaction->rollBack();
-        }
-        throw $exception;
-      }
-      finally {
-        // Restore geocoding.
-        $this->requestStack->getCurrentRequest()->attributes->remove('geocoder_presave_disabled');
-      }
+
+      // Restore geocoding.
+      $this->requestStack->getCurrentRequest()->attributes->remove('geocoder_presave_disabled');
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDeletedPseudoAccount(int|string $uid): UserInterface {
+  public function getDeletedUserPseudoAccount(int|string $uid): UserInterface {
     return $this->entityTypeManager->getStorage('user')->create(['uid' => $uid]);
   }
 
@@ -182,7 +201,7 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
     }
 
     foreach ($entities as $entity) {
-      // Loaded revisions are mossing.
+      // Loaded revisions are missing the original.
       $entity->original = clone $entity;
 
       if ($entity instanceof TranslatableInterface) {
