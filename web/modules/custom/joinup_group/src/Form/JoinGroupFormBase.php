@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessManagerInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -19,7 +20,7 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A simple form with a button to join or leave a collection.
@@ -27,6 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterface {
 
   use MembershipCreateTrait;
+  use AutowireTrait;
 
   /**
    * The group to join.
@@ -51,24 +53,12 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
     protected AccessManagerInterface $accessManager,
     protected $messenger,
     protected FormBuilderInterface $formBuilder,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('og.membership_manager'),
-      $container->get('access_manager'),
-      $container->get('messenger'),
-      $container->get('form_builder')
-    );
-  }
 
   /**
    * {@inheritdoc}

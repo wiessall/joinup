@@ -6,6 +6,7 @@ namespace Drupal\joinup_discussion\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -19,13 +20,15 @@ use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Form to invite users to participate in a discussion.
  */
 class InviteToDiscussionForm extends InviteFormBase {
+
+  use AutowireTrait;
 
   /**
    * The message template to use for the notification mail.
@@ -36,27 +39,17 @@ class InviteToDiscussionForm extends InviteFormBase {
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'joinup_invite.invitation_message_helper')]
     InvitationMessageHelperInterface $invitationMessageHelper,
+    #[Autowire(service: 'logger.channel.group_membership')]
     LoggerChannelInterface $logger,
     protected EventDispatcherInterface $eventDispatcher,
+    #[Autowire(service: 'joinup_subscription.discussion_subscription')]
     protected JoinupDiscussionSubscriptionInterface $subscription,
+    #[Autowire(service: 'og.access')]
     protected OgAccessInterface $ogAccess,
   ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('logger.channel.group_membership'),
-      $container->get('event_dispatcher'),
-      $container->get('joinup_subscription.discussion_subscription'),
-      $container->get('og.access')
-    );
   }
 
   /**

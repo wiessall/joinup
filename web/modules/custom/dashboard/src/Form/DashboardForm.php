@@ -7,6 +7,7 @@ namespace Drupal\dashboard\Form;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -16,33 +17,23 @@ use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Dashboard form.
  */
 class DashboardForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly StateInterface $state,
     protected readonly CacheBackendInterface $pageCache,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'rdf_sync.connection')]
     protected readonly RdfSyncConnectionInterface $rdfSyncConnection,
     protected readonly Connection $db,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('state'),
-      $container->get('cache.page'),
-      $container->get('entity_type.manager'),
-      $container->get('rdf_sync.connection'),
-      $container->get('database'),
-    );
-  }
 
   /**
    * {@inheritdoc}

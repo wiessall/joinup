@@ -9,6 +9,7 @@ use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -24,15 +25,18 @@ use Drupal\joinup_group\Form\JoinGroupFormBase;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A simple form with a button to join or leave a collection.
  */
 class JoinCollectionForm extends JoinGroupFormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     MembershipManagerInterface $membershipManager,
     AccessManagerInterface $accessManager,
     MessengerInterface $messenger,
@@ -40,20 +44,6 @@ class JoinCollectionForm extends JoinGroupFormBase {
     protected EventDispatcherInterface $eventDispatcher,
   ) {
     parent::__construct($entityTypeManager, $membershipManager, $accessManager, $messenger, $formBuilder);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('og.membership_manager'),
-      $container->get('access_manager'),
-      $container->get('messenger'),
-      $container->get('form_builder'),
-      $container->get('event_dispatcher'),
-    );
   }
 
   /**

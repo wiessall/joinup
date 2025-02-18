@@ -12,7 +12,7 @@ use Drupal\contact_information\Form\ContactInformationContactForm;
 use Drupal\email_contact\Controller\ContactController;
 use Drupal\honeypot\HoneypotServiceInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -28,24 +28,11 @@ class ContactInformationContactFormController extends ContactController {
     FormBuilderInterface $formBuilder,
     EventDispatcherInterface $eventDispatcher,
     protected readonly MailManagerInterface $mailManager,
+    #[Autowire(service: 'honeypot')]
     protected readonly ?HoneypotServiceInterface $honeypot,
   ) {
     parent::__construct(
       $logger, $entityTypeManager, $formBuilder, $eventDispatcher
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('logger.factory')->get('action'),
-      $container->get('entity_type.manager'),
-      $container->get('form_builder'),
-      $container->get('event_dispatcher'),
-      $container->get('plugin.manager.mail'),
-      $container->has('honeypot') ? $container->get('honeypot') : NULL
     );
   }
 

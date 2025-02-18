@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Route controller for the unpublished content page.
@@ -20,19 +20,9 @@ class UnpublishedContentPageController extends ControllerBase {
   public function __construct(
     protected readonly BlockManagerInterface $block_plugin_manager,
     protected readonly RendererInterface $renderer,
+    #[Autowire(service: 'joinup_group.group_manager')]
     protected readonly JoinupGroupManagerInterface $group_manager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('plugin.manager.block'),
-      $container->get('renderer'),
-      $container->get('joinup_group.group_manager')
-    );
-  }
 
   /**
    * Renders a placeholder page for group unpublished content.

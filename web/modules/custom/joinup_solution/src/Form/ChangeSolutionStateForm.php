@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
@@ -16,7 +17,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\Plugin\Action\ChangeSolutionStateAction;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -27,6 +28,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class ChangeSolutionStateForm extends ConfirmFormBase {
 
+  use AutowireTrait;
+
   /**
    * The private temporary data store.
    */
@@ -35,21 +38,11 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
   public function __construct(
     protected readonly PrivateTempStoreFactory $tempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'plugin.manager.workflow')]
     protected readonly WorkflowManagerInterface $workflowManager,
+    #[Autowire(service: 'search_api.post_request_indexing')]
     protected readonly ?DestructableInterface $postRequestIndexer,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('tempstore.private'),
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.workflow'),
-      $container->get('search_api.post_request_indexing', ContainerInterface::NULL_ON_INVALID_REFERENCE)
-    );
-  }
 
   /**
    * {@inheritdoc}

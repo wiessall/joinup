@@ -18,9 +18,7 @@ class GlossaryTermNameValidator extends ConstraintValidator implements Container
 
   use AutowireTrait;
 
-  public function __construct(
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-  ) {}
+  public function __construct(protected readonly EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
