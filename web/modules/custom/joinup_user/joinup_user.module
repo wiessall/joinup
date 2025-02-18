@@ -595,6 +595,13 @@ function joinup_user_user_delete(UserInterface $account): void {
 }
 
 /**
+ * Implements hook_entity_delete().
+ */
+function joinup_user_entity_delete(EntityInterface $entity): void {
+  \Drupal::getContainer()->get('joinup_user.deleted')->onEntityDelete($entity);
+}
+
+/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function joinup_user_user_access(UserInterface $account): AccessResultInterface {
