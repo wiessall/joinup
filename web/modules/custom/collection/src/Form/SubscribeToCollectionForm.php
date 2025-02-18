@@ -128,21 +128,13 @@ class SubscribeToCollectionForm extends FormBase {
     $membership = $this->getUserNonBlockedMembership($node);
     $intro_message = $membership && $membership->isPending() ?
       $this->t('When your membership is approved you will be able to publish content in it.') :
-      $this->t('You have joined the collection and you are now able to publish content in it.');
+      $this->t("You're now an active member of this space and ready to participate fully!");
     $form = $coc_components ?? [
       'intro' => [
         '#type' => 'html_tag',
         '#tag' => 'p',
         '#value' => $intro_message,
         '#weight' => -3,
-      ],
-      'proposal' => [
-        '#type' => 'html_tag',
-        '#tag' => 'h2',
-        '#attributes' => [
-          'class' => ['fs-6'],
-        ],
-        '#value' => $this->t('Want to subscribe for new content notifications, too?'),
       ],
       'description' => [
         '#type' => 'html_tag',

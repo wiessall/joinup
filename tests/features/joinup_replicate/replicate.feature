@@ -3,27 +3,27 @@ Feature: Cloning of entities
 
   Background:
     Given collection content:
-      | title      |
-      | Collection |
+      | title      | published at     |
+      | Collection | 2014-07-13T13:00 |
     Given solution content:
-      | title    | collection |
-      | Solution | Collection |
+      | title    | collection | published at     |
+      | Solution | Collection | 2015-07-13T13:00 |
     And "custom_page" content:
-      | title                  | collection | field_paragraphs_body          |
-      | Collection custom page | Collection | Collection custom page content |
-      | Solution custom page   | Solution   | Solution custom page content   |
+      | title                  | collection | field_paragraphs_body          | published at     |
+      | Collection custom page | Collection | Collection custom page content | 2016-07-13T13:00 |
+      | Solution custom page   | Solution   | Solution custom page content   | 2016-05-13T13:00 |
     And "event" content:
-      | title            | collection |
-      | Collection event | Collection |
-      | Solution event   | Solution   |
+      | title            | collection | published at     |
+      | Collection event | Collection | 2017-07-13T13:00 |
+      | Solution event   | Solution   | 2018-07-13T13:00 |
     And "news" content:
-      | title           | collection |
-      | Collection news | Collection |
-      | Solution news   | Solution   |
+      | title           | collection | published at     |
+      | Collection news | Collection | 2016-01-13T13:00 |
+      | Solution news   | Solution   | 2016-02-13T13:00 |
     And "document" content:
-      | title               | collection |
-      | Collection document | Collection |
-      | Solution document   | Solution   |
+      | title               | collection | published at     |
+      | Collection document | Collection | 2017-10-13T13:00 |
+      | Solution document   | Solution   | 2017-09-13T13:00 |
     Given users:
       | Username               | Roles     |
       | Authenticated          |           |
@@ -105,6 +105,8 @@ Feature: Cloning of entities
     And I should see the success message "content item has been cloned as Cloned <node title>."
     And the workflow state of the "Cloned <node title>" content should be "draft"
     And the "Cloned <node title>" "<content type>" should not be published
+    # Check publication date.
+    And the "Cloned <node title>" <content type> should not have a publication date
 
     Examples:
       | user                   | node title             | content type |
