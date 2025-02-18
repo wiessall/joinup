@@ -19,12 +19,10 @@
     <div{{ content_attributes.addClass('clearfix') }}>
       {{ content|without('report', 'share_link') }}
     </div>
-    {% set _report = content.report|render %}
-    {% set _share_link = content.share_link|render %}
-    {% if _report|striptags|trim or _share_link|striptags|trim %}
+    {% if content.report|field_value or content.share_link %}
       <div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
-        {{ _report }}
-        {{ _share_link }}
+        {{ content.report|field_value }}
+        {{ content.share_link }}
       </div>
     {% endif %}
   {% endblock %}

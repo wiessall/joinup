@@ -6,9 +6,8 @@
 #}
 
 {{ attach_library('ventuno/badge') }}
-{% set _release_number = content.release_number|render %}
 <li class="mb-3 releases__item{% if is_latest_release %} is-latest{% endif %}">
-  {% if _release_number %}<span class="badge bg-brand fs-sm">{{ _release_number }}</span>{% endif %}
+  {% if content.release_number|field_value %}<span class="badge bg-brand fs-sm">{{ content.release_number }}</span>{% endif %}
   {% if is_latest_release %}<span class="badge bg-success fs-sm">{{ 'Latest release'|t }}</span>{% endif %}
   <h2 class="h3 mt-3 releases__item-title"><a href="{{ url }}" rel="bookmark">{{ full_label }}</a></h2>
   <div class="page-title__details fs-sm mb-3 d-flex">
@@ -26,10 +25,9 @@
     </svg>
   </a>
   <div class="mt-3">
-    {% set _distributions = content.distributions|render %}
-    <h3 class="h5{% if _distributions %} d-inline{% endif %}">{{ 'Distributions:'|t }}</h3>
-    {% if _distributions %}
-      {{ _distributions }}
+    <h3 class="h5{% if content.distributions %} d-inline{% endif %}">{{ 'Distributions:'|t }}</h3>
+    {% if content.distributions %}
+      {{ content.distributions }}
     {% else %}
       {{ 'No distributions yet.'|t }}
     {% endif %}

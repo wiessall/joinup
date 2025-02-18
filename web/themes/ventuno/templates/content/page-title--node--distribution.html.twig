@@ -5,19 +5,16 @@
  */
 #}
 {% extends '@ventuno/content/page-title.html.twig' %}
-
 {% block metadata %}
   <div class="fs-sm mb-3 d-flex">
-    {% set _file_size = additional_content.file_size|render %}
-    {% if _file_size|striptags|trim %}
-      {{ _file_size }}
+    {% if additional_content.file_size|field_value %}
+      {{ additional_content.file_size }}
     {% endif %}
-    {% set _licence = additional_content.licence|render %}
-    {% if _file_size|striptags|trim and _licence|striptags|trim %}
+    {% if additional_content.file_size|field_value and additional_content.licence|field_value %}
       <span class="mx-1">|</span>
     {% endif %}
-    {% if _licence|striptags|trim %}
-      <span class="me-1">Licence:</span> {{ _licence }}
+    {% if additional_content.licence|field_value %}
+      <span class="me-1">Licence:</span> {{ additional_content.licence }}
     {% endif %}
   </div>
   <div class="page-title__details fs-sm mb-3 d-flex">
