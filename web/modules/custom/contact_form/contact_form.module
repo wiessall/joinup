@@ -36,7 +36,7 @@ function contact_form_preprocess_html(&$variables): void {
       ],
     ];
     $variables['page']['#attached']['html_head'][] = [$metadesc, 'description'];
-  };
+  }
 }
 
 /**

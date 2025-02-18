@@ -82,7 +82,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       $resolvers =& $settings['resolvers'];
       $override = FieldOverridingPolicy::from($settings['override']);
 
-      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+      if ($override === FieldOverridingPolicy::PreserveNotEmpty && !$fieldItemList->isEmpty()) {
         // Don't override a field not-empty field.
         continue;
       }
@@ -107,7 +107,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
 
-      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+      if ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
         // Populate the node field.
         foreach ($resolved as $langcode => $values) {
           // Create a new translation on demand.

@@ -281,7 +281,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         && $field_definition->getTargetEntityTypeId() === 'node'
         && $field_definition->getTargetBundle() === 'custom_page');
 
-    case 'path';
+    case 'path':
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
         'manage custom landing pages',
         'administer url aliases',
