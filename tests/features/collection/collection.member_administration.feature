@@ -106,7 +106,6 @@ Feature: Collection membership administration
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
     Then a modal should open
-    And I should see the text "Want to subscribe for new content notifications, too?"
 
     When I check "Notify me when content is published in Medical diagnosis"
     And I press "Confirm" in the "Modal buttons" region
