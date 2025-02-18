@@ -7,6 +7,9 @@ This module provides configuration for the EIRA Community.
 The EIRA community hosts 2 vocabularies with us. The vocabularies are:
 * eGovERA
 * EIRA
+
+The EIRA vocabulary, we further split into 2 vocabularies:
+* EIRA
 * Solution type
 
 Mappings are already set in third party settings of the vocabulary and related
