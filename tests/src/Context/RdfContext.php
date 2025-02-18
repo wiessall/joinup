@@ -359,9 +359,6 @@ class RdfContext extends RawDrupalContext {
   /**
    * Asserts that all EIRA related vocabularies are successfully imported.
    *
-   * @todo To be removed along with the step definition in the post update
-   *   cleanup.
-   *
    * @Given /^all EIRA vocabularies are successfully imported\.$/
    */
   public function assertImportedEiraVocabularies(): void {
