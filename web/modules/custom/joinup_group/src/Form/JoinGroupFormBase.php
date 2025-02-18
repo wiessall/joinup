@@ -56,6 +56,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
     protected AccessManagerInterface $accessManager,
+    #[Autowire(service: 'messenger')]
     protected $messenger,
     protected FormBuilderInterface $formBuilder,
   ) {}
