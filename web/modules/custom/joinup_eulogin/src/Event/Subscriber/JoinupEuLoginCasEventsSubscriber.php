@@ -121,7 +121,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     $xml = new \SimpleXMLElement($event->getResponseData());
     foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
       $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
-    };
+    }
   }
 
   /**
