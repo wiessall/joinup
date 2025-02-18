@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Remove cancelled users.
  */
-function joinup_user_deploy_200200(?array &$sandbox = NULL): string {
+function joinup_user_deploy_200300(?array &$sandbox = NULL): string {
   $storage = \Drupal::entityTypeManager()->getStorage('user');
   $service = \Drupal::getContainer()->get('joinup_user.deleted');
 
@@ -34,7 +34,7 @@ function joinup_user_deploy_200200(?array &$sandbox = NULL): string {
 /**
  * Restore the user status field storage definition.
  */
-function joinup_user_deploy_200201(): string {
+function joinup_user_deploy_200301(): string {
   $fieldName = 'status';
   $entityTypeId = 'user';
 
