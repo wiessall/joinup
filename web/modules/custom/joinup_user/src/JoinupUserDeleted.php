@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_user;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -145,6 +146,30 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
    */
   public function getDeletedUserPseudoAccount(int|string $uid): UserInterface {
     return $this->entityTypeManager->getStorage('user')->create(['uid' => $uid]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function onEntityDelete(EntityInterface $entity): void {
+    if (!isset(self::ENTITY_TYPES[$entity->getEntityTypeId()])) {
+      return;
+    }
+
+    $deleted = $this->database->delete(self::TABLE_USER_CONTENT)
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('entity_id', $entity->id())
+      ->execute();
+
+    if ($deleted) {
+      // Cleanup entries from {joinup_user_deleted_user} that are left without
+      // a corresponding entry in {joinup_user_deleted_user_content}.
+      $sql = $this->database->select(self::TABLE_USER, 'u')->fields('u', ['uid']);
+      $sql->leftJoin(self::TABLE_USER_CONTENT, 'c', 'u.uid = c.uid');
+      if ($uids = $sql->isNull('c.uid')->execute()->fetchCol()) {
+        $this->database->delete(self::TABLE_USER)->condition('uid', $uids, 'IN')->execute();
+      }
+    }
   }
 
   /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_user;
 
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
@@ -89,5 +90,13 @@ interface JoinupUserDeletedInterface extends DestructableInterface {
    *   A mocked user entity instance.
    */
   public function getDeletedUserPseudoAccount(int|string $uid): UserInterface;
+
+  /**
+   * Cleans-up the tables when an entity is being deleted.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity being deleted.
+   */
+  public function onEntityDelete(EntityInterface $entity): void;
 
 }
