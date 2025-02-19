@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_assessment\Form;
+namespace Drupal\collection\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;

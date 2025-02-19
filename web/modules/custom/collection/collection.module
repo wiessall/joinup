@@ -23,11 +23,16 @@ use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
+use Drupal\og\Entity\OgRole;
+use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -165,6 +170,58 @@ function collection_entity_extra_field_info(): array {
   ];
 
   return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function collection_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'collection') {
+    return;
+  }
+
+  // When a new collection is proposed, give the user the 'group owner' role.
+  // This will not occur if the user is the anonymous, i.e. the entity was
+  // created by some batch process or some importing.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    // The group owner inherits all roles of a collection member, facilitator
+    // and administrator.
+    $roles = [
+      'node-collection-' . OgRoleInterface::AUTHENTICATED,
+      'node-collection-' . OgRoleInterface::ADMINISTRATOR,
+      'node-collection-facilitator',
+    ];
+
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+    // Remove the 'assessment_report' subscription for all collections,
+    // except the assessment collection.
+    if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+        return $bundle['bundle'] !== 'assessment_report';
+      }));
+    }
+    Og::createMembership($entity, $entity->getOwner())
+      ->setRoles(array_values(OgRole::loadMultiple($roles)))
+      ->set('subscription_bundles', $subscription_bundles)
+      ->set('announcements', TRUE)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function collection_module_implements_alter(&$implementations, $hook): void {
+  if ($hook === 'node_insert') {
+    // Make sure collection_entity_insert() runs after
+    // og_entity_insert(). The latter creates an OgMembership
+    // entry for the collection owner when a new collection is
+    // proposed, and collection_entity_insert() needs to
+    // modify this membership to add the required OG roles to it.
+    $group = $implementations['collection'];
+    unset($implementations['collection']);
+    $implementations['collection'] = $group;
+  }
 }
 
 /**

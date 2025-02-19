@@ -80,11 +80,7 @@ class AssessmentSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnAssessments(): bool {
-    if (!$this->entity instanceof AssessmentReportInterface) {
-      return FALSE;
-    }
-
-    return TRUE;
+    return $this->entity instanceof AssessmentReportInterface;
   }
 
   /**
@@ -122,7 +118,7 @@ class AssessmentSubscriber extends NotificationSubscriberBase {
   }
 
   /**
-   * Calculates the user data to send the messages with.
+   * Calculates the user data and sends the messages to.
    *
    * @param array $user_data
    *   The user data array.
