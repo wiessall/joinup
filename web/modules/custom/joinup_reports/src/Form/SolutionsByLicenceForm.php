@@ -13,6 +13,7 @@ use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A reporting page that presents solutions indexed by related licences.
@@ -30,6 +31,7 @@ class SolutionsByLicenceForm extends FormBase {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'database')]
     protected Connection $database,
     protected LinkGeneratorInterface $linkGenerator,
   ) {}
