@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_user
     - private_message
     - user
 id: private_message_ban_settings
@@ -355,7 +354,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
