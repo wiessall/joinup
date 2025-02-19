@@ -61,7 +61,7 @@ class AddAggregatedTopicHierarchy extends ProcessorPluginBase {
       foreach ($values = $field->getValues() as $tid) {
         $parents = $storage->loadParents($tid);
         $parent_tids = array_merge($parent_tids, array_keys($parents));
-      };
+      }
 
       $field->setValues(array_merge($values, $parent_tids));
     }

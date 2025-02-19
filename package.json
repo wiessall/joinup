@@ -42,12 +42,13 @@
     "clean:assets": "del-cli web/themes/ventuno/assets/* web/themes/iop/assets/*",
     "clean:scripts": "del-cli web/themes/ventuno/assets/js web/themes/iop/assets/js",
     "clean:styles": "del-cli web/themes/ventuno/assets/css web/themes/iop/assets/css",
-    "build": "npm-run-all clean:scripts clean:styles build:scripts build:styles build:copy build:sprite",
-    "build:scripts": "cross-env bcl-builder scripts",
+    "build": "npm-run-all clean:scripts clean:styles build:scripts build:styles build:copy build:sprite clean:js",
+    "build:scripts": "cross-env bcl-builder scripts && npm run clean:js",
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
     "build:sprite": "cross-env bcl-builder sprite",
-    "postinstall": "patch-package --patch-dir=resources/patch/node"
+    "postinstall": "patch-package --patch-dir=resources/patch/node",
+    "clean:js": "find web/themes/ventuno/assets/js -type f -name '*.js' ! -name '*.min.js' -delete && find web/themes/iop/assets/js -type f -name '*.js' ! -name '*.min.js' -delete"
   },
   "watch": {
     "build:styles": {

@@ -61,6 +61,7 @@ dependencies:
     - node
     - og
     - paragraphs_type_permissions
+    - private_message
     - replicate_ui
     - role_delegation
     - sitewide_alert
@@ -104,6 +105,7 @@ permissions:
   - 'administer nodes'
   - 'administer organic groups'
   - 'administer outdated content threshold'
+  - 'administer private messages'
   - 'administer search fields'
   - 'administer shared entities'
   - 'administer sitewide alert entities'
@@ -132,6 +134,7 @@ permissions:
   - 'create paragraph content carousel'
   - 'create paragraph content content_listing'
   - 'create paragraph content entity_reference'
+  - 'create paragraph content events_calendar'
   - 'create paragraph content github_feed'
   - 'create paragraph content heading'
   - 'create paragraph content iframe'
@@ -159,12 +162,14 @@ permissions:
   - 'delete any licence content'
   - 'delete any news_logo media'
   - 'delete any owner content'
+  - 'delete any private message'
   - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
   - 'delete paragraph content entity_reference'
+  - 'delete paragraph content events_calendar'
   - 'delete paragraph content github_feed'
   - 'delete paragraph content heading'
   - 'delete paragraph content iframe'
@@ -177,6 +182,7 @@ permissions:
   - 'delete paragraph content testimony'
   - 'delete paragraph content video'
   - 'delete paragraph content webform'
+  - 'delete private message thread for all'
   - 'delete sitewide alert entities'
   - 'download subscribers report'
   - 'edit any collection content'
@@ -290,6 +296,7 @@ permissions:
   - 'update paragraph content call_to_action'
   - 'update paragraph content carousel'
   - 'update paragraph content entity_reference'
+  - 'update paragraph content events_calendar'
   - 'update paragraph content github_feed'
   - 'update paragraph content heading'
   - 'update paragraph content iframe'

@@ -184,7 +184,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function alterEira(PrepareVocabularyGraphEvent $event): void {
-    if ($event->vid !== 'eira') {
+    if (!in_array($event->vid, ['egovera', 'eira'])) {
       return;
     }
     $graph = $event->getGraph();

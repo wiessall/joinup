@@ -54,7 +54,7 @@ class SpdxContext extends RawDrupalContext {
           ];
         }
         $values->{$aliases[$key]} = $value;
-      };
+      }
 
       $this->termCreate($values);
     }

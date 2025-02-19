@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\custom_page\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableRedirectResponse;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 readonly class LandingPageRedirectionSubscriber implements EventSubscriberInterface {
 
   public function __construct(
-    protected CurrentRouteMatch $routeMatch,
+    protected RouteMatchInterface $routeMatch,
   ) {}
 
   /**

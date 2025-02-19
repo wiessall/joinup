@@ -153,6 +153,7 @@ hidden:
   langcode: true
   latest_update_time: true
   pinned_in: true
+  private_message_link: true
   published_at: true
   read_more: true
   search_api_excerpt: true

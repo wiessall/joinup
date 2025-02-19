@@ -8,6 +8,7 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -16,6 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class DiscussionSearchApiStatusSubscriber implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'facets.manager')]
     protected DefaultFacetManager $facetManager,
   ) {}
 

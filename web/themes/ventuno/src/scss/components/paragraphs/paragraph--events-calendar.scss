@@ -1,0 +1,102 @@
+@import "../../partials/core";
+@import "../badge";
+
+.calendar-view-pager {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding: $spacer * 0.5;
+  padding-left: 0;
+  list-style-type: none;
+  border-width: 1px 1px 0;
+  border-style: solid;
+  border-color: $gray-300;
+  font-weight: $font-weight-bold;
+  .pager__previous a {
+    &::before {
+      @include get-bootstrap-icon("chevron-left", currentColor);
+
+      margin-right: $spacer * 0.5;
+    }
+  }
+  .pager__current .form-item {
+    margin: $spacer * 0.2 0 !important;
+  }
+  .pager__next a {
+    &::after {
+      @include get-bootstrap-icon("chevron-right", currentColor);
+
+      margin-left: $spacer * 0.5;
+    }
+  }
+}
+.calendar-view-table {
+  thead {
+    color: $white;
+    background-color: $primary;
+  }
+  .calendar-view-day__number {
+    @extend .badge;
+
+    float: right;
+    margin-left: $spacer * 0.2;
+    color: $white;
+    border-radius: $border-radius-lg;
+    background-color: $primary;
+    font-size: $font-size-sm;
+  }
+  .calendar-view-day__rows {
+    min-height: 8rem;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    .calendar-view-day__row:not(:last-child) {
+      margin-bottom: $spacer * 0.5;
+      padding-bottom: $spacer * 0.5;
+      border-bottom: 1px solid $gray-300;
+    }
+    .views-field-title {
+      margin-bottom: $spacer * 0.5;
+    }
+    .views-field-field-event-date .field-content:not(:empty) {
+      font-size: $font-size-sm;
+      &::before {
+        @include get-bootstrap-icon("calendar-event", currentColor);
+
+        margin-right: $spacer * 0.5;
+      }
+    }
+    .views-field-field-location .field-content:not(:empty) {
+      font-size: $font-size-sm;
+      &::before {
+        @include get-bootstrap-icon("geo-alt", currentColor);
+
+        margin-right: $spacer * 0.5;
+      }
+    }
+    .views-field-field-event-online-location .field-content:not(:empty) {
+      font-size: $font-size-sm;
+      &::before {
+        @include get-bootstrap-icon("globe", currentColor);
+
+        margin-right: $spacer * 0.5;
+      }
+    }
+  }
+  td {
+    background-color: $white;
+    box-shadow: none !important;
+    &.is-today {
+      border: 2px solid $primary;
+    }
+    &.is-past {
+      opacity: 0.75;
+    }
+    &.saturday,
+    &.sunday {
+      background-color: $gray-200;
+    }
+  }
+}

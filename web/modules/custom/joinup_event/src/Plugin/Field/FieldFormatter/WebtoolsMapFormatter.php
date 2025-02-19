@@ -32,8 +32,9 @@ class WebtoolsMapFormatter extends OriginalWebtoolsMapFormatter {
       if (!$entity->hasField('field_location')) {
         throw new \InvalidArgumentException('Can only display map for fields that are linked to a location.');
       }
-      $json_data['layers'][0]['markers']['features'][0]['properties']['name'] = $entity->label();
-      $json_data['layers'][0]['markers']['features'][0]['properties']['description'] = $entity->field_location->value ?? '';
+      $json_data['layers']['markers'][0]['data']['features'][0]['properties']['name'] = $entity->label();
+      $json_data['layers']['markers'][0]['data']['features'][0]['properties']['description'] = $entity->field_location->value ?? '';
+
       $json->setJson($json_data);
     }
 

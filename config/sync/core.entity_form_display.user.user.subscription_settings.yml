@@ -47,4 +47,5 @@ hidden:
   language: true
   matomo: true
   path: true
+  private_messages: true
   timezone: true

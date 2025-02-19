@@ -1,4 +1,7 @@
 services:
+
+  _defaults:
+    autowire: true
+
   oe_newsroom_newsletter.subscriber_factory:
     class: Drupal\oe_newsroom_newsletter\SubscriberFactory
-    arguments: ['@service_container', '@config.factory']

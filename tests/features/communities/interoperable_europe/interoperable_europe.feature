@@ -4,10 +4,22 @@ Feature:
   As a content editor
   I want to manage a dedicated collection and landing page
 
+  Scenario: Moderator and facilitator check the three dots permissions.
+    Given I am logged in as a moderator
+    Then I go to the "Interoperable Europe" collection
+    And I should see the link "Settings" in the "Entity actions" region
+
+    When I am logged in as a facilitator of the "Interoperable Europe" collection
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
+    When I go to the "Interoperable Europe" collection
+    And I should see the link "Settings" in the "Entity actions" region
+
   Scenario: Anonymous visiting the landing page.
     Given I am on the homepage
     When I click "Discover more"
     Then I should see the heading "Joinup is becoming Interoperable Europe Portal"
+    And I should not see the "Entity actions" region
     And the page should be rendered using the "Interoperable Europe" theme
     And I should not see the link "Report abusive content"
 
@@ -47,6 +59,7 @@ Feature:
     Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
+    And I should not see the "Entity actions" region
     And the page should be rendered using the "Interoperable Europe" theme
 
     # Check IOPE footer
@@ -65,7 +78,6 @@ Feature:
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
-  @javascript
   Scenario: User should see error message if he does not fill out all required fields.
     Given custom_page content:
       | title               | collection           |
@@ -77,7 +89,6 @@ Feature:
     And I press "Update"
     Then I should see the error message "Title field is required."
 
-  @javascript
   Scenario Outline: Visibility of Report link and eTranslate button.
     Given <type> content:
       | title      | collection           |
@@ -86,7 +97,7 @@ Feature:
     When I am an anonymous user
     And I go to the "IOP <type>" <type>
     Then I should not see the link "Report abusive content"
-    And I should see the button "Translate"
+    And I should see the Webtools eTrans button
 
     Examples:
       | type        |

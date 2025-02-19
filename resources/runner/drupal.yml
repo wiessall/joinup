@@ -256,6 +256,9 @@ drupal:
         // Enable test_mode.
         $config['joinup_test.settings']['test_mode'] = TRUE;
 
+        // Disable ajax refresh which causes a lot of traffic during tests.
+        $config['block.block.ventuno_privatemessagenotification']['settings']['ajax_refresh_rate'] = 0;
+
         // In order to ensure that tests assert dates correctly even in edge cases, we
         // set the website default timezone to UTC and the same in tests too so that
         // even edge cases produce expected results.

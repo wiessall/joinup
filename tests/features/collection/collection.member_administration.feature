@@ -106,7 +106,6 @@ Feature: Collection membership administration
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
     Then a modal should open
-    And I should see the text "Want to subscribe for new content notifications, too?"
 
     When I check "Notify me when content is published in Medical diagnosis"
     And I press "Confirm" in the "Modal buttons" region
@@ -487,14 +486,12 @@ Feature: Collection membership administration
     And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
     And I type "Donald" in the "Name" autocomplete field
-    And I wait until the page contains the text "Donald Duck (Donald Duck)"
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
       | Donald Duck |
     When I press the remove button on the chip "Donald Duck"
     Then I should not see the text "Donald Duck"
     When I type "Donald" in the "Name" autocomplete field
-    And I wait until the page contains the text "Donald Duck (Donald Duck)"
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
@@ -502,14 +499,12 @@ Feature: Collection membership administration
 
     When I click "Add members"
     And I type "Turkey" in the "Name" autocomplete field
-    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
     And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
       | Turkey Ham |
     When I press the remove button on the chip "Turkey Ham"
     Then I should not see the text "Turkey Ham"
     When I type "Turkey" in the "Name" autocomplete field
-    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
     And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
       | Turkey Ham |

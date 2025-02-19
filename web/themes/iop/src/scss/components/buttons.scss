@@ -1,4 +1,6 @@
 @use "sass:color";
+@import "@openeuropa/bcl-bootstrap/scss/buttons";
+@import "@openeuropa/bcl-theme-joinup/src/scss/buttons";
 
 .btn {
   font-weight: 500;

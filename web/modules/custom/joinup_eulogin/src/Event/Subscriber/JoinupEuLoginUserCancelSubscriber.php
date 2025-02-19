@@ -6,6 +6,7 @@ namespace Drupal\joinup_eulogin\Event\Subscriber;
 
 use Drupal\externalauth\AuthmapInterface;
 use Drupal\joinup_user\Event\JoinupUserCancelEvent;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class JoinupEuLoginUserCancelSubscriber implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'externalauth.authmap')]
     protected AuthmapInterface $authmap,
   ) {}
 

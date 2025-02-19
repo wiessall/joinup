@@ -10,6 +10,7 @@ use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Default implementation for 'contact_information.email_confirm' service.
@@ -19,6 +20,7 @@ readonly class ContactInformationEmailConfirm implements ContactInformationEmail
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RendererInterface $renderer,
+    #[Autowire(service: 'email_confirmer')]
     protected EmailConfirmerManagerInterface $emailConfirmer,
   ) {}
 

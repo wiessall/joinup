@@ -2,6 +2,10 @@ parameters:
   sparql_endpoint.ttl: 86400
 
 services:
+
+  _defaults:
+    autowire: true
+
   logger.channel.sparql_endpoint:
     parent: logger.channel_base
     arguments: [ 'sparql_endpoint' ]
@@ -15,7 +19,6 @@ services:
 
   sparql_endpoint.readonly_endpoint:
     class: Drupal\sparql_endpoint\SparqlReadOnlyEndpoint
-    autowire: true
 
   sparql_endpoint.cached_sparql_endpoint:
     class: Drupal\sparql_endpoint\CachedSparqlReadOnlyEndpoint

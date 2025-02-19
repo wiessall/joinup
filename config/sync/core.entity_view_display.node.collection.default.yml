@@ -678,6 +678,7 @@ hidden:
   node_collection_listing_content_inline_facets: true
   node_collection_listing_content_top: true
   owner: true
+  private_message_link: true
   published_at: true
   read_more: true
   search_api_excerpt: true

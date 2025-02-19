@@ -7,7 +7,7 @@ namespace Drupal\joinup_rdf\EventSubscriber;
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
 
-  public function __construct(protected RdfSyncMapper $mapper) {}
+  public function __construct(protected RdfSyncMapperInterface $mapper) {}
 
   /**
    * {@inheritdoc}
