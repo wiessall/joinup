@@ -194,7 +194,7 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getLabel(): TranslatableMarkup {
+  public function getLabel(): TranslatableMarkup|string {
     return $this->pluginDefinition['label'];
   }
 

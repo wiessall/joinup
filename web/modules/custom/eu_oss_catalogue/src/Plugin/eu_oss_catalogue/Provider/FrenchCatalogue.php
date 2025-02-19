@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * French catalogue provider.
  */
-#[EuOssCatalogueProvider(id: "awesome_code_gouv_fr", label: "Awesome CodeGouvFr", parser: "publiccode_yml", description:"French National OSS Catalogue, by https://code.gouv.fr/fr/awesome/ website.")]
+#[EuOssCatalogueProvider(id: "awesome_code_gouv_fr", label: "Awesome CodeGouvFr", description:"French National OSS Catalogue, by https://code.gouv.fr/fr/awesome/ website.", parser: "publiccode_yml")]
 class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**

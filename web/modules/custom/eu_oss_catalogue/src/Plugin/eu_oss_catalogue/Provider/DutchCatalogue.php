@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Dutch catalogue provider.
  */
-#[EuOssCatalogueProvider(id: "dutch_catalogue", label: "Developer Overheid", parser: "publiccode_yml", description: "Dutch National OSS Catalogue, by https://developer.overheid.nl website.")]
+#[EuOssCatalogueProvider(id: "dutch_catalogue", label: "Developer Overheid", description: "Dutch National OSS Catalogue, by https://developer.overheid.nl website.", parser: "publiccode_yml")]
 class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**
