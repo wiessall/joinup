@@ -25,8 +25,8 @@
     </svg>
   </a>
   <div class="mt-3">
-    <h3 class="h5{% if content.distributions %} d-inline{% endif %}">{{ 'Distributions:'|t }}</h3>
-    {% if content.distributions %}
+    <h3 class="h5{% if content.distributions|field_value %} d-inline{% endif %}">{{ 'Distributions:'|t }}</h3>
+    {% if content.distributions|field_value %}
       {{ content.distributions }}
     {% else %}
       {{ 'No distributions yet.'|t }}
