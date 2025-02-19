@@ -33,7 +33,7 @@ class SubscriptionsForm extends FormBase {
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
-    #[Autowire(service: 'file.usage')]
+    #[Autowire(service: 'joinup_group.group_manager')]
     protected readonly JoinupGroupManagerInterface $groupManager,
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,

@@ -23,6 +23,7 @@ class AdmsValidatorForm extends FormBase {
   public function __construct(
     #[Autowire(service: 'adms_validator.validator')]
     protected AdmsValidatorInterface $admsValidator,
+    #[Autowire(service: 'session')]
     protected Session $session,
     #[Autowire(service: 'rdf_sync.connection')]
     protected RdfSyncConnectionInterface $connection,
