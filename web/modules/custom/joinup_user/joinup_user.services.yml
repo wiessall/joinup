@@ -26,6 +26,13 @@ services:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
   Drupal\joinup_user\JoinupUserNotificationHelperInterface: '@joinup_user.notification_helper'
 
+  joinup_user.memory_cache:
+    class: Drupal\Core\Cache\MemoryCache\MemoryCacheInterface
+    tags:
+      - { name: cache.bin.memory, default_backend: cache.backend.memory.memory }
+    factory: [ '@cache_factory', 'get' ]
+    arguments: [ memory_cache ]
+
   joinup_user.deleted:
     class: Drupal\joinup_user\JoinupUserDeleted
     tags:

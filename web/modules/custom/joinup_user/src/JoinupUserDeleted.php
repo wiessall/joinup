@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -22,11 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class JoinupUserDeleted implements JoinupUserDeletedInterface {
 
   /**
-   * Static cache for users full name.
-   */
-  protected array $fullName = [];
-
-  /**
    * List of deleted user accounts.
    *
    * @var \Drupal\user\UserInterface[]
@@ -39,6 +36,10 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
     protected RequestStack $requestStack,
     #[Autowire(service: 'logger.channel.user')]
     protected readonly LoggerChannelInterface $logger,
+    // Use a memory cache bin instead of an internal class property to be able
+    // to invalidate the memory cache based on cache tags.
+    #[Autowire(service: 'joinup_user.memory_cache')]
+    protected CacheBackendInterface $cache,
   ) {}
 
   /**
@@ -69,30 +70,35 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
    * {@inheritdoc}
    */
   public function getFullName(AccountInterface $account): string {
-    if (!isset($this->fullName[$account->id()])) {
-      if ($this->isAccountDeleted($account)) {
-        $this->fullName[$account->id()] = $this->database->select(self::TABLE_USER)
-          ->fields(self::TABLE_USER, ['full_name'])
-          ->condition('uid', $account->id())
-          ->execute()
-          ->fetchField();
-
-        if (!$this->fullName[$account->id()]) {
-          $this->logger->error('User with ID @uid is missing a @table table entry', [
-            '@table' => self::TABLE_USER,
-            '@uid' => $account->id(),
-          ]);
-          return $this->fullName[$account->id()];
-        }
-      }
-      else {
-        $account = $account instanceof UserInterface ? $account : $this->entityTypeManager->getStorage('user')->load($account->id());
-        $this->fullName[$account->id()] = trim($account->get('field_user_first_name')->value . ' ' . $account->get('field_user_family_name')->value);
-        $this->fullName[$account->id()] = $this->fullName[$account->id()] ?: $account->getAccountName();
-      }
+    $cid = "full_name:{$account->id()}";
+    if ($cached = $this->cache->get($cid)) {
+      return $cached->data;
     }
 
-    return $this->fullName[$account->id()];
+    if ($this->isAccountDeleted($account)) {
+      $fullName = $this->database->select(self::TABLE_USER)
+        ->fields(self::TABLE_USER, ['full_name'])
+        ->condition('uid', $account->id())
+        ->execute()
+        ->fetchField();
+
+      if ($fullName === FALSE) {
+        $this->logger->error('User with ID @uid is missing a @table table entry', [
+          '@table' => self::TABLE_USER,
+          '@uid' => $account->id(),
+        ]);
+        // Don't cache an erroneous value.
+        return '';
+      }
+    }
+    else {
+      $account = $account instanceof UserInterface ? $account : $this->entityTypeManager->getStorage('user')->load($account->id());
+      $fullName = trim($account->get('field_user_first_name')->value . ' ' . $account->get('field_user_family_name')->value);
+      $fullName = $fullName ?: $account->getAccountName();
+    }
+    $this->cache->set($cid, $fullName, Cache::PERMANENT, $account->getCacheTagsToInvalidate());
+
+    return $fullName;
   }
 
   /**
