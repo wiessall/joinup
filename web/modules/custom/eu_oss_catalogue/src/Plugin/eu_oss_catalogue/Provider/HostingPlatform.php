@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Code hosting platform provider plugin.
  */
-#[EuOssCatalogueProvider(id: "hosting_platform", label: "Hosting platform", parser: "publiccode_yml",  description: "Code hosting platform", deriver: '\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver', configuredBy: "hosting_platform")]
+#[EuOssCatalogueProvider(id: "hosting_platform", label: "Hosting platform", parser: "publiccode_yml", description: "Code hosting platform", deriver: '\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver', configuredBy: "hosting_platform")]
 class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   /**
