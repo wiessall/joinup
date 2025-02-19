@@ -9,10 +9,9 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -223,53 +222,34 @@ class JoinupUserDeleted implements JoinupUserDeletedInterface {
   protected function setAnonymousAsOwner(UserInterface $account, string $entityTypeId, array $ids): void {
     $storage = $this->entityTypeManager->getStorage($entityTypeId);
 
+    // The Interoperable Europe Portal entity types are only supporting SQL
+    // storage. This check is heads-up in the very unlikely case when the entity
+    // type is switched to a non-SQL storage. Making sure we only run on SQL
+    // storage allows us to use direct SQL queries to improve the performance of
+    // this task that might be very intensive with entity API.
+    \assert($storage instanceof SqlEntityStorageInterface);
+
+    $mapping = $storage->getTableMapping();
+    [$ownerKey, $revisionUserKey] = self::ENTITY_TYPES[$entityTypeId];
+
+    foreach ($mapping->getAllFieldTableNames($ownerKey) as $table) {
+      $this->database->update($table)
+        ->fields([$ownerKey => 0])
+        ->condition($ownerKey, $account->id())
+        ->execute();
+    }
+
     // Revision support.
-    if ($isRevisionable = isset(self::ENTITY_TYPES[$entityTypeId][1])) {
-      $entities = $storage->loadMultipleRevisions(array_keys($ids));
-    }
-    else {
-      $entities = $storage->loadMultiple(array_unique($ids));
-    }
-
-    foreach ($entities as $entity) {
-      // Loaded revisions are missing the original.
-      $entity->original = clone $entity;
-
-      if ($entity instanceof TranslatableInterface) {
-        // Do for each translation.
-        foreach ($entity->getTranslationLanguages() as $language) {
-          $this->doSetAnonymousAsOwner($entity->getTranslation($language->getId()), $account, $isRevisionable);
-        }
-      }
-      else {
-        $this->doSetAnonymousAsOwner($entity, $account, $isRevisionable);
-      }
-      $entity->save();
-    }
-  }
-
-  /**
-   * Sets anonymous as author.
-   *
-   * @param \Drupal\user\EntityOwnerInterface $entity
-   *   The entity.
-   * @param \Drupal\user\UserInterface $account
-   *   The user account.
-   * @param bool $isRevisionable
-   *   Whether this entity is revisionable.
-   */
-  protected function doSetAnonymousAsOwner(EntityOwnerInterface $entity, UserInterface $account, bool $isRevisionable): void {
-    if ($entity->getOwnerId() == $account->id()) {
-      $entity->setOwnerId(0);
-    }
-    if ($isRevisionable) {
-      assert($entity instanceof RevisionLogInterface);
-      if ($entity->getRevisionUserId() == $account->id()) {
-        $entity->setRevisionUserId(0);
+    if ($revisionUserKey) {
+      foreach ($mapping->getAllFieldTableNames($revisionUserKey) as $table) {
+        $this->database->update($table)
+          ->fields([$revisionUserKey => 0])
+          ->condition($revisionUserKey, $account->id())
+          ->execute();
       }
     }
-    // Prevent notifications.
-    $entity->skip_notification = TRUE;
+
+    $storage->resetCache(array_unique($ids));
   }
 
 }
