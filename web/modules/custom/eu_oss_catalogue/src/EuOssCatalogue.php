@@ -116,7 +116,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       ]);
     }
     else {
-      // We have unstable API behind the current @EuOssCatalogueProvider
+      // We have unstable API behind the current EuOssCatalogueProvider
       // plugin instance.
       $this->logger->error(
         "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
