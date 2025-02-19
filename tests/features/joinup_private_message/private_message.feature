@@ -114,6 +114,7 @@ Feature: Private messages
     # Delete a single private message.
     When I click "Alice Miller" in thread message card
     Then a message containing the text "A private message from Alice to Bob." should be present
+    And I should see a ".private_message_delete[title='Delete']" element
     When I click "Delete message"
     Then a modal should open
     And I should see the text "Are you sure you want to delete the private message" in the "Modal title"
