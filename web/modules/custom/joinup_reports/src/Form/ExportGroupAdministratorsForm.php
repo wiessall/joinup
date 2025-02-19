@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
@@ -20,6 +21,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   use AutowireTrait;
 
   public function __construct(
+    #[Autowire(service: 'cache.default')]
     protected CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
