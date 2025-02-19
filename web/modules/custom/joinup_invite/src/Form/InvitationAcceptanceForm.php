@@ -19,6 +19,7 @@ use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -54,7 +55,9 @@ class InvitationAcceptanceForm extends FormBase {
   const string ACTION_REJECT = 'reject';
 
   public function __construct(
+    #[Autowire(service: 'event_dispatcher')]
     protected readonly EventDispatcherInterface $eventDispatcher,
+    #[Autowire(service: 'current_route_match')]
     protected readonly CurrentRouteMatch $currentRouteMatch,
   ) {}
 

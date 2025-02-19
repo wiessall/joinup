@@ -42,6 +42,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
   public function __construct(
     protected readonly AccountInterface $currentUser,
     protected readonly RendererInterface $renderer,
+    #[Autowire(service: 'plugin.manager.action')]
     protected readonly ActionManager $actionPluginManager,
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,

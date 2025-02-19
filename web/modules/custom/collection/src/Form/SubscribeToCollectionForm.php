@@ -56,6 +56,7 @@ class SubscribeToCollectionForm extends FormBase {
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
+    #[Autowire(service: 'messenger')]
     protected $messenger,
     protected readonly FormBuilderInterface $formBuilder,
     protected readonly TimeInterface $time,

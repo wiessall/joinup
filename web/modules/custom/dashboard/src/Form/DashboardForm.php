@@ -28,6 +28,7 @@ class DashboardForm extends FormBase {
 
   public function __construct(
     protected readonly StateInterface $state,
+    #[Autowire(service: 'cache.page')]
     protected readonly CacheBackendInterface $pageCache,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'rdf_sync.connection')]
