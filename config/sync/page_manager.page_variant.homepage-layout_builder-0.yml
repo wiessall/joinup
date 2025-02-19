@@ -200,7 +200,7 @@ variant_settings:
             provider: custom_markup_block
             context_mapping: {  }
             markup:
-              value: "<p>\r\n<a class=\"btn btn-secondary\" href=\"/collection/portal/how-articles\">How to video</a>&nbsp;\r\n<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;\r\n<div class=\"btn-group\">\r\n<a class=\"btn btn-secondary dropdown-toggle\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">\r\nFAQ\r\n</a>\r\n<div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuLink\">\r\n<a class=\"dropdown-item\" href=\"/collection/portal/faq\">FAQ</a>\r\n<a class=\"dropdown-item\" href=\"/collection/portal/portals-user-reference-guide\"> Reference guide</a>\r\n</div>\r\n</div>\r\n</p>"
+              value: "<p>\r\n<a class=\"btn btn-secondary\" href=\"/collection/portal/how-articles\">How to video</a>&nbsp;\r\n<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;\r\n<a class=\"btn btn-secondary\" href=\"/collection/portal/faq\">FAQ</a>&nbsp;\r\n<a class=\"btn btn-secondary\" href=\"/collection/portal/portals-user-reference-guide\">Reference guide</a>&nbsp;\r\n</p>"
               format: full_html
           weight: 0
           additional:
