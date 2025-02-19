@@ -113,6 +113,7 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
           autosubmit_hide: true
+          timeout: 500
       access:
         type: none
         options: {  }
