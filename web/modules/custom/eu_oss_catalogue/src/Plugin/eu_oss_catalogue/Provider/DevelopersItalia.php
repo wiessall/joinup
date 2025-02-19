@@ -20,13 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Developers Italia provider.
- *
- * @EuOssCatalogueProvider(
- *   id = "developers_italia",
- *   label = @Translation("Developers Italia"),
- *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."),
- *   parser = "publiccode_yml",
- * )
  */
 #[EuOssCatalogueProvider(id: "developers_italia", label: "Developers Italia", parser: "publiccode_yml", description: "Italian National OSS Catalogue, by https://developers.italia.it website.")]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
