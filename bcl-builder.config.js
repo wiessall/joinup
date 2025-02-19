@@ -55,99 +55,41 @@ module.exports = {
     ...buildAssetEntries({
       sourceFolder: path.resolve(paths.themes.ventuno, "src/js/"),
       destFolder: path.resolve(paths.themes.ventuno, "assets/js/"),
-      defaultOptions: {
-        minify: true,
-        sourceMap: !isProd,
-      },
+      defaultOptions: { minify: true, sourceMap: !isProd },
       objects: [
-        {
-          entry: "ajax-throbber.js",
-          dest: "ajax-throbber.js",
-        },
-        {
-          entry: "alert.js",
-          dest: "alert.js",
-        },
-        {
-          entry: "checkbox.js",
-          dest: "checkbox.js",
-        },
-        {
-          entry: "navbar-hover-dropdown.js",
-          dest: "navbar-hover-dropdown.js",
-        },
-        {
-          entry: "mmenu-nav.js",
-          dest: "mmenu-nav.js",
-        },
-        {
-          entry: "explore-block.js",
-          dest: "explore-block.js",
-        },
-        {
-          entry: "fieldset-show-more.js",
-          dest: "fieldset-show-more.js",
-        },
-        {
-          entry: "highlight-invalid-fields.js",
-          dest: "highlight-invalid-fields.js",
-        },
-        {
-          entry: "carousel.js",
-          dest: "carousel.js",
-        },
-        {
-          entry: "paragraph-inline-img.js",
-          dest: "paragraph-inline-img.js",
-        },
-        {
-          entry: "responsive-tables.js",
-          dest: "responsive-tables.js",
-        },
-        {
-          entry: "searchbox-focus.js",
-          dest: "searchbox-focus.js",
-        },
-        {
-          entry: "shared-entity.js",
-          dest: "shared-entity.js",
-        },
-        {
-          entry: "show-accordion-invalid-fields.js",
-          dest: "show-accordion-invalid-fields.js",
-        },
-        {
-          entry: "toggle-text-seemore-btn.js",
-          dest: "toggle-text-seemore-btn.js",
-        },
-        {
-          entry: "tour-first-balloon.js",
-          dest: "tour-first-balloon.js",
-        },
-        {
-          entry: "og-navigation.js",
-          dest: "og-navigation.js",
-        },
-        {
-          entry: "sticky-groupheader.js",
-          dest: "sticky-groupheader.js",
-        },
-      ],
+        "ajax-throbber.js",
+        "alert.js",
+        "checkbox.js",
+        "navbar-hover-dropdown.js",
+        "mmenu-nav.js",
+        "explore-block.js",
+        "fieldset-show-more.js",
+        "highlight-invalid-fields.js",
+        "carousel.js",
+        "paragraph-inline-img.js",
+        "private-message.js",
+        "responsive-tables.js",
+        "searchbox-focus.js",
+        "shared-entity.js",
+        "show-accordion-invalid-fields.js",
+        "toggle-text-seemore-btn.js",
+        "tour-first-balloon.js",
+        "og-navigation.js",
+        "sticky-groupheader.js",
+      ].map((file) => ({
+        entry: file,
+        dest: file,
+      })),
     }),
     // IOP.
     ...buildAssetEntries({
       sourceFolder: path.resolve(paths.themes.iop, "src/js/"),
       destFolder: path.resolve(paths.themes.iop, "assets/js/"),
-      defaultOptions: {
-        minify: true,
-        sourceMap: !isProd,
-      },
-      objects: [
-        {
-          entry: "glide.js",
-          dest: "glide.js",
-        },
-      ],
+      defaultOptions: { minify: true, sourceMap: !isProd },
+      objects: ["glide.js"].map((file) => ({
+        entry: file,
+        dest: file,
+      })),
     }),
   ],
   styles: [
@@ -353,6 +295,10 @@ module.exports = {
           dest: "paragraph.min.css",
         },
         {
+          entry: "components/private-message.scss",
+          dest: "private-message.min.css",
+        },
+        {
           entry: "components/carousel.scss",
           dest: "carousel.min.css",
         },
@@ -399,6 +345,10 @@ module.exports = {
         {
           entry: "components/paragraphs/paragraph--video.scss",
           dest: "paragraph--video.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--events-calendar.scss",
+          dest: "paragraph--events-calendar.min.css",
         },
         {
           entry: "components/releases.scss",
@@ -685,6 +635,7 @@ module.exports = {
           "card-list.svg",
           "caret-down-fill.svg",
           "chat.svg",
+          "chat-dots.svg",
           "chat-left-text.svg",
           "chat-square.svg",
           "check-circle.svg",

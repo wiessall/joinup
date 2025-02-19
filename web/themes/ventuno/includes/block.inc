@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -166,6 +167,24 @@ function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$vari
           'class' => ['more-link'],
         ],
       ];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block__private_message_inbox_block(array &$variables): void {
+  // Close Inbox when clicking in one of its items.
+  foreach (Element::children($variables['content']) as $key) {
+    if (isset($variables['content'][$key]['inbox_link'])) {
+      $attributes = $variables['content'][$key]['inbox_link']['#attributes'] ?? [];
+      $variables['content'][$key]['inbox_link']['#attributes'] = array_merge($attributes, [
+        'data-bs-toggle' => 'collapse',
+        'data-bs-target' => '#block-ventuno-privatemessage-inbox',
+        'aria-controls' => '#block-ventuno-privatemessage-inbox',
+        'aria-expanded' => 'false',
+      ]);
     }
   }
 }

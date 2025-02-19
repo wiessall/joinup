@@ -1,0 +1,18 @@
+services:
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  Drupal\joinup_private_message\EventSubscriber\RequestSubscriber: { }
+
+  Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber: { }
+
+  Drupal\joinup_private_message\ParamConverter\BanConverter:
+    tags:
+      - { name: paramconverter, priority: 6 }
+
+  joinup_private_message.user_service:
+    class: Drupal\joinup_private_message\Service\PrivateMessageUserService
+  Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface: '@joinup_private_message.user_service'
+

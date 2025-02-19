@@ -1,0 +1,474 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for joinup_private_message module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
+use Drupal\joinup_private_message\Form\PrivateMessageDeleteForm;
+use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\private_message\Entity\PrivateMessageInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function joinup_private_message_entity_type_alter(array &$entity_types): void {
+  $entity_types['private_message']->setFormClass('delete', PrivateMessageDeleteForm::class);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_private_message_preprocess_private_message(&$variables): void {
+  /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
+  $private_message = $variables['private_message'];
+  if ($variables['view_mode'] === 'inbox') {
+    // Get the created datetime in the right format.
+    $created = (int) $private_message->getCreatedTime();
+    $format = date('Y-m-d') === date('Y-m-d', $created) ? 'H:i' : 'Y-m-d';
+    $variables['created']['#markup'] = date($format, $created);
+  }
+  elseif ($variables['view_mode'] === 'default') {
+    $user = \Drupal::currentUser();
+    $is_owner = $private_message->getOwnerId() === $user->id();
+    $owner = $is_owner ? t('You') : $private_message->getOwner()
+      ->getDisplayName();
+    $variables['owner']['#markup'] = $owner;
+
+    $cache_metadata = (new CacheableMetadata())->addCacheableDependency($user);
+    $cache_metadata->applyTo($variables['owner']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_private_message_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if ($form_id === 'private_message_add_form') {
+
+    // @todo remove once https://www.drupal.org/i/3490346 is in.
+    $form['#attached']['library'][] = 'joinup_private_message/new_message_member_cardinality_one';
+
+    $current_route_name = \Drupal::routeMatch()->getRouteName();
+    if (isset($form['message'])) {
+      if ($current_route_name !== 'private_message.private_message_create') {
+        /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
+        $thread = $form_state->getBuildInfo()['args'][0];
+        $members = $thread->getMemberIds();
+        if (count($members) !== 2) {
+          // Failsafe in case something went wrong and the database is in an
+          // inconsistent state.
+          $form['warning'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('Something went wrong. Please, refresh the page.'),
+              ],
+            ],
+            '#weight' => -100,
+          ];
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['widget'][0]['#attributes']['disabled'] = 'disabled';
+        }
+        // Threads in Joinup always have only 2 members.
+        elseif (joinup_private_message_block_exists_between_users(...$members)) {
+          $form['warning'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('You cannot send messages to a user that has blocked you, or was blocked by you.'),
+              ],
+            ],
+            '#weight' => -100,
+          ];
+
+          // In order to avoid removing the button from the DOM, we disable it
+          // because otherwise, since this is a strictly AJAX form, an error
+          // will be raised about the missing AJAX callback.
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['#attributes']['disabled'] = 'disabled';
+        }
+
+        // Change the label from "Message" to "Reply".
+        $form['message']['widget'][0]['#title'] = t('Reply');
+        $form['actions']['submit']['#value'] = t('Send');
+
+        // Use the tag <button> and set its value.
+        $form['actions']['submit']['#extra_suggestion'] = 'tag_button';
+      }
+      // Set as default and limit the allowed formats format to 'Plain text'.
+      $form['message']['widget'][0]['#format'] = 'plain_text';
+      $form['message']['widget'][0]['#allowed_formats'] = ['plain_text'];
+    }
+    $form['#validate'][] = 'joinup_private_message_add_form_validate';
+    $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
+  }
+
+  if ($form_id === 'private_message_thread_clear_personal_history_form') {
+    $form['#title'] = t('Delete conversation for me');
+    $form['description']['#markup'] = t('This action cannot be undone. The conversation will be removed from your view, but it will remain accessible to the other participant.');
+    // Change the submit button label from "Clear history" to "Delete for me".
+    if (isset($form['actions']['submit']['#value'])) {
+      $form['actions']['submit']['#value'] = t('Delete for me');
+    }
+  }
+}
+
+/**
+ * Ensure that open windows are still unable to send messages to blocked users.
+ */
+function joinup_private_message_add_form_validate(array &$form, FormStateInterface $form_state): void {
+  $thread = $form_state->getBuildInfo()['args'][0];
+  if (empty($thread)) {
+    // A new message is being created.
+    return;
+  }
+
+  $members = array_slice($thread->getMemberIds(), 0, 2);
+  if (count($members) !== 2) {
+    $form_state->setError($form, t('Something went wrong. Please, refresh the page.'));
+  }
+
+  $is_banned = joinup_private_message_block_exists_between_users(...$thread->getMemberIds());
+  if ($is_banned) {
+    $form_state->setError($form, \Drupal::config('private_message.settings')->get('ban_message'));
+  }
+}
+
+/**
+ * Custom form submit handler for redirect.
+ */
+function joinup_private_message_form_submit(array &$form, FormStateInterface $form_state): void {
+  // The entity.private_message_thread.canonical route has been removed,
+  // so we will redirect to the Private Messages page.
+  $form_state->setRedirect('private_message.private_message_page');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function joinup_private_message_form_private_message_add_form_alter(array &$form): void {
+  $current_route_name = \Drupal::routeMatch()->getRouteName();
+  if ($current_route_name === 'private_message.private_message_create') {
+    $form['#title'] = t('New message');
+    $form['#prefix'] = '<div id="private-message-create-form-wrapper">';
+    $form['#suffix'] = '</div>';
+
+    $form['actions']['submit']['#ajax'] = [
+      'callback' => 'joinup_private_message_create_ajax_callback',
+      'wrapper' => 'private-message-create-form-wrapper',
+      'effect' => 'fade',
+    ];
+  }
+}
+
+/**
+ * Ajax callback for add a new thread form.
+ *
+ * @param array $form
+ *   Form fields.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ */
+function joinup_private_message_create_ajax_callback(array &$form, FormStateInterface $form_state): array|AjaxResponse {
+  $response = new AjaxResponse();
+
+  if ($form_state->hasAnyErrors()) {
+    return $form;
+  }
+
+  $url = Url::fromRoute('private_message.private_message_page');
+
+  $response->addCommand(new CloseModalDialogCommand());
+  $response->addCommand(new RedirectCommand($url->toString()));
+
+  return $response;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ *
+ * @see private_message_private_message_thread_view_alter()
+ */
+function joinup_private_message_private_message_thread_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display): void {
+  if (isset($build['delete_link'])) {
+    // Open form in a modal.
+    $build['delete_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
+  }
+  if (isset($build['clear_history_link'])) {
+    // Open form in a modal.
+    $build['clear_history_link']['#title'] = t('Delete for me');
+    $build['clear_history_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
+  \assert($entity instanceof PrivateMessage);
+
+  // We're only adding links here, but only in default view mode.
+  if (@$build['wrapper']['message']['#view_mode'] !== 'default') {
+    return;
+  }
+
+  // Display the report link.
+  if ($entity->getOwnerId() !== \Drupal::currentUser()->id()) {
+    $report_url = Url::fromRoute('joinup_private_message.report', [
+      'private_message' => $entity->id(),
+    ]);
+    $build['wrapper']['links']['report'] = [
+      '#type' => 'link',
+      '#title' => Markup::create('<span class="visually-hidden">' . t('Report message') . '</span>'),
+      '#url' => $report_url,
+      '#attributes' => array_merge_recursive(
+        _joinup_private_message_get_ajax_modal_attributes(),
+        [
+          'title' => t('Report abusive content'),
+        ],
+      ),
+    ];
+    $build['wrapper']['links']['report']['#attributes']['class'][] = 'private_message_report';
+  }
+
+  // Display the delete link.
+  if ($entity->access('delete', \Drupal::currentUser())) {
+    $delete_url = Url::fromRoute('entity.private_message.delete', [
+      'private_message' => $entity->id(),
+    ]);
+    $build['links']['delete'] = [
+      '#type' => 'link',
+      '#title' => Markup::create('<span class="visually-hidden">' . t('Delete message') . '</span>'),
+      '#url' => $delete_url,
+      '#attributes' => array_merge_recursive(
+        _joinup_private_message_get_ajax_modal_attributes(),
+        [
+          'class' => ['private_message_delete'],
+          'title' => t('Delete'),
+        ],
+      ),
+    ];
+  }
+  unset($build['#contextual_links']);
+}
+
+/**
+ * Gets the attributes for use with an AJAX modal.
+ *
+ * @return array
+ *   The attributes for use with an AJAX modal.
+ */
+function _joinup_private_message_get_ajax_modal_attributes(): array {
+  return [
+    'class' => ['use-ajax'],
+    'data-dialog-type' => 'modal',
+    'data-dialog-options' => Json::encode([
+      'width' => 'auto',
+    ]),
+  ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_private_message_mail(string $key, array &$message, array $params): void {
+  // @see \Drupal\joinup_private_message\Form\PrivateMessageReportForm::submitForm()
+  if ($key === 'report_message') {
+    $storage = \Drupal::entityTypeManager()->getStorage('user');
+    $recipient = $storage->load($params['recipient']->id());
+    assert($recipient instanceof UserInterface);
+    $sender = $storage->load($params['sender']->id());
+    assert($sender instanceof UserInterface);
+
+    $reported = $params['message'];
+    assert($reported instanceof PrivateMessageInterface);
+
+    $message['subject'] = t('User @reporter reported a message', [
+      '@reporter' => $recipient->getDisplayName(),
+    ]);
+    $message['body'] = [
+      t('The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):', [
+        '@reporter_name' => $recipient->getDisplayName(),
+        '@reporter_url' => $recipient->toUrl()->setAbsolute()->toString(),
+        '@sender_name' => $sender->getDisplayName(),
+        '@sender_url' => $sender->toUrl()->setAbsolute()->toString(),
+        '@message_url' => Url::fromRoute('view.private_message_report.single', [
+          'private_message' => $reported->id(),
+        ])->setAbsolute()->toString(),
+      ]) .
+      '<h5>' . t('Message content:') . '</h5><p>' . $reported->get('message')->processed . '</p>' .
+      '<h5>' . t('Report reason:') . '</h5><p>' . $reported->get('report')->processed . '</p>',
+    ];
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function joinup_private_message_entity_base_field_info(EntityTypeInterface $entity_type): array {
+  $fields = [];
+  if ($entity_type->id() == 'private_message') {
+    $fields['report'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Report'))
+      ->setDescription(t('The report related to the private message.'))
+      ->setRequired(FALSE)
+      ->setDefaultValue(NULL)
+      ->setSettings([
+        'allowed_formats' => ['plain_text'],
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'string',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['report_timestamp'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Report timestamp'))
+      ->setDescription(t('The timestamp of the report.'))
+      ->setRequired(FALSE)
+      ->setDefaultValue(NULL)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'timestamp',
+        'weight' => 1,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function joinup_private_message_views_data_alter(array &$data): void {
+  $data['reporting']['table']['group'] = t('Private Message');
+  $data['reporting']['table']['join'] = [
+    '#global' => [],
+  ];
+  $data['reporting']['private_message_actions'] = [
+    'title' => t('Actions'),
+    'field' => [
+      'title' => t('Actions'),
+      'help' => t('Actions for reported private messages.'),
+      'id' => 'private_message_actions',
+    ],
+  ];
+  $data['reporting']['private_message_target'] = [
+    'title' => t('To:'),
+    'field' => [
+      'title' => t('To:'),
+      'help' => t('Target of private message.'),
+      'id' => 'private_message_target',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function joinup_private_message_query_skip_banned_users_alter(AlterableInterface $query): void {
+  $current_uid = $query->getMetaData('current_user');
+
+  // The user from the query should be excluded if the current user is banned
+  // by them, or that user is banned by the current user. The data are in the
+  // `private_message_ban` table.
+  $query->leftJoin('private_message_ban', 'ban', '(ban.owner = {base_table}.uid AND ban.target = :current_uid) OR (ban.owner = :current_uid AND ban.target = {base_table}.uid)', [
+    ':current_uid' => $current_uid,
+  ]);
+  $query->condition('ban.id', NULL, 'IS NULL');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function joinup_private_message_user_predelete(UserInterface $entity): void {
+  // In Joinup, threads strictly involve 2 users. If one of them is deleted,
+  // the thread should be deleted as well.
+  $query = \Drupal::entityQuery('private_message_thread')
+    ->accessCheck(FALSE)
+    ->condition('members', $entity->id());
+  $thread_ids = $query->execute();
+  if (!empty($thread_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_thread');
+    foreach ($storage->loadMultiple($thread_ids) as $thread) {
+      $thread->delete();
+    }
+  }
+
+  // Delete relevant bans.
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $or = $query->orConditionGroup()
+    ->condition('owner', $entity->id())
+    ->condition('target', $entity->id());
+  $ban_ids = $query->condition($or)
+    ->execute();
+
+  if (!empty($ban_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_ban');
+    $storage->delete($storage->loadMultiple($ban_ids));
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * @todo Remove once https://www.drupal.org/i/3501786 is in.
+ */
+function joinup_private_message_preprocess_block(&$variables): void {
+  if ($variables['plugin_id'] == 'private_message_inbox_block') {
+    if (isset($variables['content']['no_threads'])) {
+      unset($variables['content']['no_threads']);
+    }
+  }
+}
+
+/**
+ * Returns whether a private message block exists between two users.
+ *
+ * @param int $user1
+ *   The first user ID.
+ * @param int $user2
+ *   The second user ID.
+ *
+ * @return bool
+ *   TRUE if a block exists, FALSE otherwise.
+ */
+function joinup_private_message_block_exists_between_users(int $user1, int $user2): bool {
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $andGroup12 = $query->andConditionGroup()
+    ->condition('owner', $user1)
+    ->condition('target', $user2);
+  $andGroup21 = $query->andConditionGroup()
+    ->condition('owner', $user2)
+    ->condition('target', $user1);
+  $orGroup = $query->orConditionGroup()
+    ->condition($andGroup12)
+    ->condition($andGroup21);
+  $ban_ids = $query->condition($orGroup)
+    ->execute();
+
+  return !empty($ban_ids);
+}

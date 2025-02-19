@@ -1,6 +1,8 @@
 services:
-  joinup_test_time.datetime.time:
-    class: Drupal\joinup_test_time\Datetime\TestTime
-    arguments: ['@request_stack']
+
+  _defaults:
+    autowire: true
+
+  Drupal\joinup_test_time\Datetime\TestTime:
     decorates: datetime.time
     public: false

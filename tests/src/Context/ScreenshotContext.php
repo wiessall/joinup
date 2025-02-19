@@ -86,15 +86,22 @@ class ScreenshotContext extends RawMinkContext {
   /**
    * Creates a screenshot in HTML or PNG format.
    *
+   * Does nothing if there was no initial page visit (so, without browser
+   * session) because in that case, there is nothing to create screenshot about.
+   *
    * @param string $fileName
    *   The filename of the screenshot (complete).
    * @param string $message
    *   The message to be printed.
    *
    * @throws \Exception
-   *   When the screenshot cannot be saved.
+   *   When the screenshot cannot be saved although the session was started.
    */
   protected function createScreenshots(string $fileName, string $message): void {
+    $driver = $this->getSession()->getDriver();
+    if (!$driver->isStarted()) {
+      return;
+    }
     $screenshot = $this->getSession()->getPage()->getContent();
     $output = [
       $message,
@@ -102,9 +109,9 @@ class ScreenshotContext extends RawMinkContext {
     ];
 
     // For Selenium tests, create an additional .png screenshot.
-    if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
+    if ($driver instanceof Selenium2Driver) {
       try {
-        $screenshot = $this->getSession()->getDriver()->getScreenshot();
+        $screenshot = $driver->getScreenshot();
         $output[] = '- ' . $this->storeScreenshot($screenshot, "$fileName.png");
       }
       catch (DriverException) {

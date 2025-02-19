@@ -23,6 +23,7 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Stringable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Contains helper methods to retrieve workflow related data from entities.
@@ -35,6 +36,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
     protected readonly AccountProxyInterface $currentUser,
     protected readonly AccountSwitcherInterface $accountSwitcher,
     protected readonly EntityFieldManagerInterface $entityFieldManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,

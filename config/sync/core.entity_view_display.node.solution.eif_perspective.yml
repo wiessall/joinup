@@ -175,6 +175,7 @@ hidden:
   og_audience: true
   og_group: true
   pinned_in: true
+  private_message_link: true
   process_status: true
   published_at: true
   related_solution: true

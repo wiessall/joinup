@@ -31,4 +31,5 @@ visibility:
     context_mapping:
       taxonomy_term: '@taxonomy_term.taxonomy_term_route_context:taxonomy_term'
     bundles:
+      egovera: egovera
       eira: eira

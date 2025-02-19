@@ -7,13 +7,10 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\changed_fields\EntitySubject;
 use Drupal\joinup_discussion\DiscussionObserver;
@@ -148,27 +145,6 @@ function joinup_discussion_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['discussion'])) {
     $bundles['node']['discussion']['class'] = Discussion::class;
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access() for comment entity type.
- *
- * Prevents comments from being posted to archived discussions.
- */
-function joinup_discussion_comment_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  if (isset($context['commented_entity'])) {
-    $discussion = $context['commented_entity'];
-    if ($discussion instanceof DiscussionInterface) {
-      $collection = $discussion->getCollection();
-      return AccessResult::forbiddenIf(
-        // Either the top collection or the discussion are archived.
-        $collection->isArchived() || $discussion->isArchived()
-      )
-        ->addCacheableDependency($collection)
-        ->addCacheableDependency($discussion);
-    }
-  }
-  return AccessResult::neutral();
 }
 
 /**

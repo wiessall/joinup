@@ -10,12 +10,12 @@ namespace Drupal\eu_oss_catalogue\Model;
 enum FieldOverridingPolicy: string {
 
   // Override any existing value in the field (default).
-  case ALWAYS = 'always';
+  case Always = 'always';
 
   // Preserve any non-empty value.
-  case PRESERVE_NOT_EMPTY = 'preserve_not_empty';
+  case PreserveNotEmpty = 'preserve_not_empty';
 
   // Override only if resolved value is not empty.
-  case RESOLVED_NOT_EMPTY = 'resolved_not_empty';
+  case ResolvedNotEmpty = 'resolved_not_empty';
 
 }
