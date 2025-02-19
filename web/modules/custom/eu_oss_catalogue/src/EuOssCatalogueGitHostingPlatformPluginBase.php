@@ -151,7 +151,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
-  public function getLabel(): TranslatableMarkup {
+  public function getLabel(): TranslatableMarkup|string {
     return $this->pluginDefinition['label'];
   }
 
