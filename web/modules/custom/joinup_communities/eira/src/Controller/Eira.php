@@ -58,7 +58,7 @@ class Eira extends ControllerBase {
     $response->headers->set('Content-Type', $format->getDefaultMimeType());
 
     // Attempt to render the result in browser, if the browser accepts.
-    $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, 'eira.' . $format->getDefaultExtension());
+    $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $fileName);
     $response->headers->set('Content-Disposition', $disposition);
 
     return $response;
