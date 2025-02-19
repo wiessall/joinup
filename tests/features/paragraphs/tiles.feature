@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-h @javascript
 Feature:
   As a site builder of the site
   I need to be able to use "Tiles" paragraph for content.
@@ -8,7 +8,7 @@ Feature:
       | title                 | state     |
       | Paragraphs collection | published |
 
-  @javascript @uploadFiles:topic.png
+  @uploadFiles:topic.png
   Scenario: Add tiles paragraph to one column layout.
     Given custom_page content:
       | title                   | collection            | state     | abstract            |
@@ -31,7 +31,6 @@ Feature:
     When I should see the heading "Card title"
     And I see the text "This is some text within a card body."
 
-  @javascript
   Scenario: Tiles paragraph is restricted.
     Given custom_page content:
       | title                   | collection            | state     |
@@ -45,3 +44,27 @@ Feature:
     And a modal should open
 
     When I should not see the link "Tiles" in the "Modal content" region
+
+  @uploadFiles:topic.png
+  Scenario: Regression test - System not able to recognise the apostrophe on a text.
+    Given custom_page content:
+      | title                    | collection            | state     | abstract                       |
+      | Tiles regression example | Paragraphs collection | published | Tiles regression page abstract |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Tiles regression example" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "Tiles regression example" "custom page"
+    And I click "Choose component"
+    And a modal should open
+    And I click "Tiles"
+    And I fill in "Title" with "Board" in the "Modal content" region
+    And I fill in "Description" with "Explore the roles and decisions of the Governance Board's." in the "Modal content" region
+    And I fill in "Link" with "https://european-union.europa.eu" in the "Modal content" region
+    And I attach the file "topic.png" to "Image"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+
+    When I should see the heading "Board"
+    And I see the text "Explore the roles and decisions of the Governance Board's."
+    And I should not see the text "Explore the roles and decisions of the Governance Board&#039;s."
