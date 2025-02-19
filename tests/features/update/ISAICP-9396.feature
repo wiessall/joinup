@@ -20,3 +20,12 @@ Feature: Library import check.
     And I should see the text "EIRA properties"
     # Text from the EIRA properties.
     And I should see the text "eira:InformationBusinessObject"
+
+  @update:joinup_core_deploy_200301
+  Scenario: Sample check that options are available in the solution type field.
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Joinup source code" solution
+    And the option "-Interoperable European Solution" should be selected
+    # Assert that some options exist.
+    And I select "-Logging Service" from "Solution type"
+    And I select "-Key Interoperability Enabler" from "Solution type"
