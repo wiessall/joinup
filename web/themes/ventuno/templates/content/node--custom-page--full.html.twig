@@ -19,11 +19,9 @@
     <div{{ content_attributes.addClass('clearfix') }}>
       {{ content|without('report', 'share_link') }}
     </div>
-    {% if content.report|field_value or content.share_link %}
-      <div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
-        {{ content.report|field_value }}
-        {{ content.share_link }}
-      </div>
-    {% endif %}
+    <div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
+      {{ content.report }}
+      {{ content.share_link }}
+    </div>
   {% endblock %}
 </article>
