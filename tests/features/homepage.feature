@@ -187,14 +187,6 @@ Feature: Homepage
     When I click "Read more" in the "Highlighted event"
     Then the url should match "/collection/portal/event/florentine-steak-festival"
 
-    # The "More events" link should temporarily link to the search page with the
-    # events pre-filtered. This will be replaced with the events page later.
-    Given I am on the homepage
-    When I click "More events"
-    Then I should be on the advanced search page
-    And I should see the following facet summary "Event"
-    And I should see the "Florentine steak festival" tile
-
   @joinupVersion
   Scenario Outline: The current version of the Interoperable Europe Portal platform is shown in the footer.
     Given the Interoperable Europe Portal version is set to "<version>"
@@ -376,3 +368,9 @@ Feature: Homepage
     Given I am on the homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
+
+  @group-clone
+  Scenario: The /events path redirects to upcoming events page.
+    Given I am on the homepage
+    When I click "More events"
+    Then I should be on "/portal-upcoming-events"
