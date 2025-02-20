@@ -282,4 +282,16 @@ class JoinupUserContext extends RawDrupalContext {
       ->execute();
   }
 
+  /**
+   * Runs the destructor of joinup_user.deleted service.
+   *
+   * Such operation might slow the whole Behat suite runs after each step. Limit
+   * to tests where this operation is meaningful.
+   *
+   * @AfterStep @deletedUser&&@api
+   */
+  public function runUserDeletedDestruct(): void {
+    \Drupal::service('joinup_user.deleted')->destruct();
+  }
+
 }
