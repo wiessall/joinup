@@ -13,3 +13,15 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Add an /events redirect.
+ */
+function joinup_core_deploy_200300(): void {
+  \Drupal::entityTypeManager()->getStorage('redirect')->create([
+    'redirect_source' => ['path' => 'events'],
+    'redirect_redirect' => ['uri' => 'internal:/node/726616'],
+    'language' => 'und',
+    'status_code' => 301,
+  ])->save();
+}
