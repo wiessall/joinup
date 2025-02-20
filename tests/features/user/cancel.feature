@@ -26,6 +26,7 @@ Feature:
       | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Interoperable Europe Portal platform. If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     And 1 e-mail should have been sent
 
+  @deletedUser
   Scenario: A moderator deletes a user using the administrative UI.
     Given collection content:
       | title           |
@@ -124,6 +125,7 @@ Feature:
     Then I should see "Alicia Potter"
     Then I should not see the link "Alicia Potter"
 
+  @deletedUser
   Scenario Outline:
     Given collection content:
       | title          |
