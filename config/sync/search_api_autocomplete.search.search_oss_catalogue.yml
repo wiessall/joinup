@@ -7,7 +7,6 @@ dependencies:
     - views.view.search_oss_catalogue
   module:
     - views
-    - search_api_autocomplete
 id: search_oss_catalogue
 label: 'Search oss catalogue'
 index_id: oss_catalogue

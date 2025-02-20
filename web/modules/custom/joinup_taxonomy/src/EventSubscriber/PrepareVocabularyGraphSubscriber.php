@@ -207,7 +207,6 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         $graph->deleteEntireResource($resource);
         continue;
       }
-
       $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8');
     }
   }
@@ -274,10 +273,7 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         $graph->deleteEntireResource($resource);
         continue;
       }
-
-      if (!$resource->isA('skos:Collection')) {
-        $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8/6.0.0');
-      }
+      $this->performEiraAlterations($graph, $resource, 'http://data.europa.eu/dr8/6.0.0');
     }
 
     // Now that we have removed all unused terms, we can remove all empty
@@ -346,8 +342,21 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3216
       $graph->addType($resource, 'skos:Concept');
 
+      // Add a relation to the topConceptOf for all collections if it does
+      // not exist. This helps the importer recognize the concept as a term.
+      if (!$graph->hasProperty($resource, 'skos:topConceptOf')) {
+        $graph->addResource($resource, 'skos:topConceptOf', $graphUri);
+      }
+
       foreach ($graph->allResources($resource, 'skos:member') as $member) {
         // Create a backwards connection from the children to the parent.
+        // Important: while in the EIRA files, the skos:broader is used to
+        // connect the parent to the children, the file has multiple cases
+        // where the connection goes both ways, i.e. the parent is connected to
+        // the child and the child is connected to the parent with the same
+        // predicate. This is not a valid SKOS structure and it is causing
+        // infinite loops in the website. To avoid this, we are using the
+        // skos:broaderTransitive predicate to connect the parent to the child.
         $graph->addResource($member, 'skos:broaderTransitive', $resource);
       }
 

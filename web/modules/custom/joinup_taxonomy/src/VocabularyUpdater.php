@@ -414,13 +414,6 @@ class VocabularyUpdater {
     }
 
     $values =& $this->termValues[$uri];
-    // Ensure that if the parent is not set, then set the parent to 0 since it
-    // means that the term is a top-level term now. That will override
-    // the case that the updated term was previously set under another parent.
-    // @see \Drupal\taxonomy\Entity\Term::postDelete
-    if (!isset($values['parent'])) {
-      $values['parent'] = 0;
-    }
 
     // Normalize references.
     foreach ($values['_references'] as &$targetUris) {
@@ -449,6 +442,13 @@ class VocabularyUpdater {
       }
     }
     unset($values['_references'], $values['_children']);
+    // Ensure that if the parent is not set, then set the parent to 0 since it
+    // means that the term is a top-level term now. That will override
+    // the case that the updated term was previously set under another parent.
+    // @see \Drupal\taxonomy\Entity\Term::postDelete
+    if (!isset($values['parent'])) {
+      $values['parent'] = 0;
+    }
 
     if ($term = MappedTerm::loadByUri($uri)) {
       foreach ($values as $fieldName => $value) {
