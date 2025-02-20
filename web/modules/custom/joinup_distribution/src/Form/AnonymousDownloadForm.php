@@ -113,11 +113,11 @@ class AnonymousDownloadForm extends FormBase {
     if (count($usages['file']['node']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
-    $distribution = $this->nodeStorage->load(key($usages['file']['node']));
+    $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
 
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();
-    $event = $this->entityTypeManager->getStorage('node')->create([
+    $event = $this->entityTypeManager->getStorage('download_event')->create([
       'uid' => 0,
       'mail' => $form_state->getValue('email'),
       'file' => $this->file->id(),

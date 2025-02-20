@@ -8,7 +8,6 @@ use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\Environment;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
@@ -19,19 +18,16 @@ use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\email_contact\Form\ContactForm;
 use Drupal\file\FileInterface;
 use Drupal\honeypot\HoneypotServiceInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base class for the contact information form.
  */
 abstract class ContactInformationFormBase extends ContactForm {
 
-  use AutowireTrait;
-
   public function __construct(
     protected MailManagerInterface $mailManager,
     protected EntityTypeManagerInterface $entityTypeManager,
-    #[Autowire(service: 'honeypot')]
     protected ?HoneypotServiceInterface $honeypot,
     ?string $entityType = NULL,
     ?string $entityId = NULL,
@@ -347,6 +343,17 @@ abstract class ContactInformationFormBase extends ContactForm {
 
     $fid = reset($form_state->getValue('attachment'));
     return $this->entityTypeManager->getStorage('file')->load($fid);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.mail'),
+      $container->get('entity_type.manager'),
+      $container->has('honeypot') ? $container->get('honeypot') : NULL
+    );
   }
 
   /**
