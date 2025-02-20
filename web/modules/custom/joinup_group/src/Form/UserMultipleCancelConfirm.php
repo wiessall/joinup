@@ -13,7 +13,6 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\user\Form\UserMultipleCancelConfirm as CoreUserMultipleCancelConfirm;
-use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
