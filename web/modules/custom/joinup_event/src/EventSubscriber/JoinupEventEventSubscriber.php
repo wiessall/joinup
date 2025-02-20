@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_event\EventSubscriber;
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
-use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -19,7 +19,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 readonly class JoinupEventEventSubscriber implements EventSubscriberInterface {
 
-  public function __construct(protected InboundPathProcessorInterface $pathProcessor) {}
+  protected const string UPCOMING_EVENTS_UUID = '9270e98e-cfe2-4eeb-aeae-688a7240a4ff';
+
+  public function __construct(
+    protected InboundPathProcessorInterface $pathProcessor,
+    protected EntityRepositoryInterface $entityRepository,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -34,10 +39,7 @@ readonly class JoinupEventEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Redirects /events to the search page, filtered on events.
-   *
-   * Until the Events page is ready we temporarily redirect to the search page.
-   * This way our users can already find the events they are looking for.
+   * Redirects /events to the upcoming events page.
    *
    * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   Response event.
@@ -46,7 +48,7 @@ readonly class JoinupEventEventSubscriber implements EventSubscriberInterface {
     // Retrieve the request path, and do inbound processing so that language
     // prefixes are removed.
     $request = $event->getRequest();
-    if (strpos($request->getPathInfo(), '/system/files/') === 0 && !$request->query->has('file')) {
+    if (str_starts_with($request->getPathInfo(), '/system/files/') && !$request->query->has('file')) {
       // Private files paths are split by the inbound path processor and the
       // relative file path is moved to the 'file' query string parameter. This
       // is because the route system does not allow an arbitrary amount of
@@ -60,9 +62,8 @@ readonly class JoinupEventEventSubscriber implements EventSubscriberInterface {
     }
 
     if ($path === '/events') {
-      $url = Url::fromRoute('view.search.page_1');
-      $url->setOption('query', ['f' => ['type:event']]);
-      $response = new LocalRedirectResponse($url->toString(), Response::HTTP_FOUND);
+      $events = $this->entityRepository->loadEntityByUuid('node', self::UPCOMING_EVENTS_UUID);
+      $response = new LocalRedirectResponse($events->toUrl()->toString(), Response::HTTP_FOUND);
       $event->setResponse($response);
     }
   }
