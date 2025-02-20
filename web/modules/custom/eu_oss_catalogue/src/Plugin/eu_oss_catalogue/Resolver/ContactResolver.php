@@ -9,17 +9,18 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolves a contact information.
- *
- * @EuOssCatalogueResolver(
- *   id = "contact",
- *   label = "Contact",
- * )
  */
+#[EuOssCatalogueResolver(
+  id: "contact",
+  label: new TranslatableMarkup("Contact")
+)]
 class ContactResolver extends DefaultResolver implements ContainerFactoryPluginInterface {
 
   public function __construct(

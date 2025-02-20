@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueHostingPlatform;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\GitUri;
@@ -20,14 +21,13 @@ use Psr\Http\Client\ClientInterface;
 
 /**
  * Git code hosting platform for repositories hosted on bitbucket.org.
- *
- * @EuOssCatalogueHostingPlatform(
- *   id = "bitbucket_org",
- *   label = @Translation("Bitbucket (bitbucket.org)"),
- *   baseUrl = "https://bitbucket.org",
- *   weight = -5,
- * )
  */
+#[EuOssCatalogueHostingPlatform(
+  id: "bitbucket_org",
+  label: new TranslatableMarkup("Bitbucket (bitbucket.org)"),
+  baseUrl: "https://bitbucket.org",
+  weight: -5,
+)]
 class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
