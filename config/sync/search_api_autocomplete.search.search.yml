@@ -7,7 +7,6 @@ dependencies:
     - views.view.search
   module:
     - views
-    - search_api_autocomplete
 id: search
 label: Search
 index_id: published
@@ -20,6 +19,7 @@ suggester_settings:
     suggest_keys: true
     view_modes:
       'entity:node':
+        assessment_report: ''
         collection: ''
         custom_page: ''
         discussion: ''
@@ -30,13 +30,12 @@ suggester_settings:
         news: ''
         release: ''
         solution: ''
-        video: ''
       'entity:taxonomy_term':
         eif_conceptual_model: ''
         eif_interoperability_layer: ''
         eif_principle: ''
         eif_recommendation: ''
-        spdx_licence: ''
+        oss_category: ''
         topic: ''
       'entity:user':
         user: ''
