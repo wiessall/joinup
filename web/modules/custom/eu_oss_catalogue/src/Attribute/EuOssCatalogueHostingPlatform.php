@@ -15,7 +15,7 @@ class EuOssCatalogueHostingPlatform extends Plugin {
 
   public function __construct(
     public readonly string $id,
-    public readonly TranslatableMarkup|string $label,
+    public readonly TranslatableMarkup $label,
     public readonly ?string $baseUrl = NULL,
     public readonly int $weight = 0,
     public readonly ?string $deriver = NULL,

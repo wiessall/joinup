@@ -11,7 +11,11 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
  *
  * Same as developers_italia but we need a different name.
  */
-#[EuOssCatalogueProvider(id: "yaml_become_valid_provider", label: "YAML become valid", parser: "publiccode_yml")]
+#[EuOssCatalogueProvider(
+  id: "yaml_become_valid_provider",
+  label: new TranslatableMarkup("YAML become valid"),
+  parser: "publiccode_yml"
+)]
 class YamlBecomeValidProvider extends SelectedProjectProvider {
 
   /**

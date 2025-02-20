@@ -15,9 +15,9 @@ class EuOssCatalogueProvider extends Plugin {
 
   public function __construct(
     public readonly string $id,
-    public readonly TranslatableMarkup|string $label,
+    public readonly TranslatableMarkup $label,
     public readonly string $parser,
-    public readonly ?string $description = NULL,
+    public readonly ?TranslatableMarkup $description = NULL,
     public readonly ?string $deriver = NULL,
     public readonly ?string $configuredBy = NULL,
   ) {}

@@ -15,7 +15,7 @@ class EuOssCatalogueResolver extends Plugin {
 
   public function __construct(
     public readonly string $id,
-    public readonly TranslatableMarkup|string $label,
+    public readonly TranslatableMarkup $label,
     public readonly ?string $deriver = NULL,
   ) {}
 
