@@ -11,7 +11,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueParser;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -23,14 +25,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Parser for publiccode.yml data.
- *
- * @see https://yml.publiccode.tools
- *
- * @EuOssCatalogueParser(
- *   id = "publiccode_yml",
- *   label = @Translation("publiccode.yml data"),
- * )
  */
+#[EuOssCatalogueParser(
+  id: "publiccode_yml",
+  label: new TranslatableMarkup("publiccode.yml data")
+)]
 class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
