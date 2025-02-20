@@ -28,12 +28,12 @@ class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
 
   public function __construct(
     PrivateTempStoreFactory $temp_store_factory,
-    UserStorageInterface $user_storage,
     EntityTypeManagerInterface $entity_type_manager,
     #[Autowire(service: 'joinup_group.group_manager')]
     protected JoinupGroupManagerInterface $groupManager,
     protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {
+    $user_storage = $entity_type_manager->getStorage('user');
     parent::__construct($temp_store_factory, $user_storage, $entity_type_manager);
   }
 
