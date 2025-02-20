@@ -1,14 +1,5 @@
-From 9ce6a758c4ed8bb5c29de3fc9cd736fc94c26996 Mon Sep 17 00:00:00 2001
-From: Alexandre Dias <alex.jm.dias@gmail.com>
-Date: Thu, 29 Jun 2023 09:55:22 +0100
-Subject: [PATCH] Allow to alter timeout textfields.
-
----
- js/views_autosubmit.js | 7 +++++++
- 1 file changed, 7 insertions(+)
-
 diff --git a/js/views_autosubmit.js b/js/views_autosubmit.js
-index 9203baf..458f9e8 100644
+index 266e3861b4c9229184a5ffd27bd7d9ba99952f12..dfe1674c07e79b78e06ff8023e876d5d2fffb24a 100644
 --- a/js/views_autosubmit.js
 +++ b/js/views_autosubmit.js
 @@ -5,6 +5,12 @@
@@ -27,11 +18,8 @@ index 9203baf..458f9e8 100644
 @@ -58,6 +64,7 @@ Drupal.behaviors.ViewsAutoSubmit = {
            .keyup(function(e) {
              if ($.inArray(e.keyCode, discardKeyCode) === -1) {
-               timeoutID = setTimeout($.proxy(triggerSubmit, this.form), 500);
+               timeoutID = setTimeout($.proxy(triggerSubmit, this.form), drupalSettings.views_autosubmit.timeout);
 +              Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout(timeoutID);
              }
            });
        });
--- 
-GitLab
-
