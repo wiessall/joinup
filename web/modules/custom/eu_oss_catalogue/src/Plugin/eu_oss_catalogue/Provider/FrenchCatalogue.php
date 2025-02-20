@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -19,7 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * French catalogue provider.
  */
-#[EuOssCatalogueProvider(id: "awesome_code_gouv_fr", label: "Awesome CodeGouvFr", parser: "publiccode_yml", description:"French National OSS Catalogue, by https://code.gouv.fr/fr/awesome/ website.")]
+#[EuOssCatalogueProvider(
+  id: "awesome_code_gouv_fr",
+  label: new TranslatableMarkup("Awesome CodeGouvFr"),
+  parser: "publiccode_yml",
+  description: new TranslatableMarkup("French National OSS Catalogue, by https://code.gouv.fr/fr/awesome/ website.")
+)]
 class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**

@@ -22,7 +22,12 @@ use Psr\Http\Client\ClientInterface;
 /**
  * Git code hosting platform for repositories hosted on bitbucket.org.
  */
-#[EuOssCatalogueHostingPlatform(id: "bitbucket_org", label: "Bitbucket (bitbucket.org)", baseUrl: "https://bitbucket.org", weight: -5)]
+#[EuOssCatalogueHostingPlatform(
+  id: "bitbucket_org",
+  label: new TranslatableMarkup("Bitbucket (bitbucket.org)"),
+  baseUrl: "https://bitbucket.org",
+  weight: -5,
+)]
 class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
@@ -194,7 +199,7 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getLabel(): TranslatableMarkup|string {
+  public function getLabel(): TranslatableMarkup {
     return $this->pluginDefinition['label'];
   }
 

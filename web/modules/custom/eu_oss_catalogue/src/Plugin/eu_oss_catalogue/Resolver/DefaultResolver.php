@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -18,7 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Default and fallback publiccode.yml value resolver.
  */
-#[EuOssCatalogueResolver(id: "default", label: "Default")]
+#[EuOssCatalogueResolver(
+  id: "default",
+  label: new TranslatableMarkup("Default")
+)]
 class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterface {
 
   public function __construct(
