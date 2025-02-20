@@ -35,6 +35,7 @@ class PrivateMessageReportForm extends FormBase {
   public function __construct(
     #[Autowire(service: 'private_message.ban_manager')]
     protected readonly PrivateMessageBanManager $privateMessageBanManager,
+    #[Autowire(service: 'plugin.manager.mail')]
     protected readonly MailManager $mailManager,
     #[Autowire(service: 'private_message.service')]
     protected readonly PrivateMessageService $privateMessageService,
