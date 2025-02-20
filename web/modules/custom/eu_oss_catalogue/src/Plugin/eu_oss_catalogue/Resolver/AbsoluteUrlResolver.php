@@ -7,7 +7,9 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -18,12 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Converts a path relative to solution code repository to an absolute URL.
- *
- * @EuOssCatalogueResolver(
- *   id = "absolute_url",
- *   label = "Absolute URL",
- * )
  */
+#[EuOssCatalogueResolver(
+  id: "absolute_url",
+  label: new TranslatableMarkup("Absolute URL")
+)]
 class AbsoluteUrlResolver extends DefaultResolver {
 
   public function __construct(
