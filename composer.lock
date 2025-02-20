@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e85898afc26a41cccf74b629c1aeb23",
+    "content-hash": "b0a318237184431ef95a0b6444658f71",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8343,20 +8343,20 @@
         },
         {
             "name": "drupal/search_api_autocomplete",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_autocomplete.git",
-                "reference": "8.x-1.9"
+                "reference": "8.x-1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.9.zip",
-                "reference": "8.x-1.9",
-                "shasum": "5cb2d1a09dbd54facba82d6d88907e3a184c1539"
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.10.zip",
+                "reference": "8.x-1.10",
+                "shasum": "bd7d4a35a595efb866f6f5e2230d62d93b074927"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10 || ^11",
+                "drupal/core": "^10.2 || ^11",
                 "drupal/search_api": "^1.0"
             },
             "require-dev": {
@@ -8365,8 +8365,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.9",
-                    "datestamp": "1718551474",
+                    "version": "8.x-1.10",
+                    "datestamp": "1736941746",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9673,26 +9673,26 @@
         },
         {
             "name": "drupal/views_autosubmit",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_autosubmit.git",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_autosubmit-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "f7b520e59721ab32f3e40ff8defe99d804e939e2"
+                "url": "https://ftp.drupal.org/files/projects/views_autosubmit-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "a6ad12ee561b167d4ea87e3a4f0f2d69992292bd"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10"
+                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1695586179",
+                    "version": "8.x-1.7",
+                    "datestamp": "1737453419",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
