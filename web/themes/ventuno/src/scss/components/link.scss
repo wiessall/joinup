@@ -22,11 +22,13 @@ a {
     }
   }
 }
-.bg-light {
-  a:not(.btn) {
-    color: color.adjust(
-      $brand,
-      $lightness: -15%
-    ); // Ensure having enough contrast.
+.bg-light,
+.joinup-group--description,
+.table {
+  // Links need darker color when on gray backgrounds for A11Y contrast ratio.
+  a:link,
+  a:visited,
+  .btn-link {
+    color: $brand-darker; // Ensure having enough contrast.
   }
 }
