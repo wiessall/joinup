@@ -36,7 +36,7 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The label.
    */
-  public function getLabel(): TranslatableMarkup|string;
+  public function getLabel(): TranslatableMarkup;
 
   /**
    * Determines whether the plugin can parse the provided git URL.

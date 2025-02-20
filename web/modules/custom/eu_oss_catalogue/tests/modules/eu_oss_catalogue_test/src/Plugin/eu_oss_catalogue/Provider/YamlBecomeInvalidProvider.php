@@ -11,7 +11,11 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
  *
  * Same as developers_italia but we need a different name.
  */
-#[EuOssCatalogueProvider(id: "yaml_become_invalid_provider", label: "YAML become invalid", parser: "publiccode_yml")]
+#[EuOssCatalogueProvider(
+  id: "yaml_become_invalid_provider",
+  label: new TranslatableMarkup("YAML become invalid"),
+  parser: "publiccode_yml"
+)]
 class YamlBecomeInvalidProvider extends SelectedProjectProvider {
 
   /**
