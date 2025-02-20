@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
@@ -15,12 +16,20 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Code hosting platform provider plugin.
  */
-#[EuOssCatalogueProvider(id: "hosting_platform", label: "Hosting platform", parser: "publiccode_yml", description: "Code hosting platform", deriver: '\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver', configuredBy: "hosting_platform")]
+#[EuOssCatalogueProvider(
+  id: "hosting_platform",
+  label: new TranslatableMarkup("Hosting platform"),
+  description: new TranslatableMarkup("Code hosting platform"),
+  parser: "publiccode_yml",
+  deriver: HostingPlatformDeriver::class,
+  configuredBy: "hosting_platform",
+)]
 class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   /**

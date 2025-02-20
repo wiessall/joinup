@@ -13,7 +13,11 @@ use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
  *
  * Same as developers_italia but we need a different name.
  */
-#[EuOssCatalogueProvider(id: "testing_provider", label: "Testing provider", parser: "publiccode_yml")]
+#[EuOssCatalogueProvider(
+  id: "testing_provider",
+  label: new TranslatableMarkup("Testing provider"),
+  parser: "publiccode_yml"
+)]
 class TestingProvider extends DevelopersItalia {
 
   /**

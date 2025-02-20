@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -21,7 +22,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Developers Italia provider.
  */
-#[EuOssCatalogueProvider(id: "developers_italia", label: "Developers Italia", parser: "publiccode_yml", description: "Italian National OSS Catalogue, by https://developers.italia.it website.")]
+#[EuOssCatalogueProvider(
+  id: "developers_italia",
+  label: new TranslatableMarkup("Developers Italia"),
+  parser: "publiccode_yml",
+  description: new TranslatableMarkup("Italian National OSS Catalogue, by https://developers.italia.it website.")
+)]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
   /**
