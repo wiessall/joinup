@@ -34,8 +34,8 @@ class AnonymousDownloadForm extends FormBase {
   protected FileInterface $file;
 
   public function __construct(
-    protected readonly NodeStorageInterface $nodeStorage,
-    protected readonly ContentEntityStorageInterface $eventStorage,
+    #[Autowire(service: 'entity_type.manager')]
+    protected $entityTypeManager,
     #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
@@ -119,7 +119,7 @@ class AnonymousDownloadForm extends FormBase {
 
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();
-    $event = $this->eventStorage->create([
+    $event = $this->entityTypeManager->getStorage('node')->create([
       'uid' => 0,
       'mail' => $form_state->getValue('email'),
       'file' => $this->file->id(),
