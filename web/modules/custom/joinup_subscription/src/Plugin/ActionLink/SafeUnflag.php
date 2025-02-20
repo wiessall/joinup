@@ -42,7 +42,7 @@ class SafeUnflag extends FormEntryTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
     $action = $this->getAction($flag, $entity);
 
     // Store the original form behaviour configuration. Since we need to render
