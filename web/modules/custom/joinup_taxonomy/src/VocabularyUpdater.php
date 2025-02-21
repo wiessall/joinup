@@ -246,7 +246,19 @@ class VocabularyUpdater {
         );
         $processed = array_intersect_key($this->uriToTid, array_flip($processedUris));
         $existing = $this->mapper->getUrisByEntityType('taxonomy_term', $vid);
-        $tidsToRemove = array_diff_key(array_flip($existing), $processed);
+        // Set all URIs to lowercase in order to perform a case-insensitive
+        // comparison. The reason is that SQL handles URIs in an insensitive
+        // case manner. For example, looking for
+        // 'http://data.europa.eu/dr8/viewpoint/HighLevelViewpoint' can return
+        // also 'http://data.europa.eu/dr8/viewpoint/HighlevelViewpoint' (lower
+        // case 'l' in 'level'). That means that in
+        // \Drupal\joinup_taxonomy\VocabularyUpdater::createOrUpdateTerm, when
+        // we do a MappedTerm::loadByUri, we can get a term with a different
+        // case, but because PHP is handling the array functions by bytes, we
+        // might get unwanted results.
+        $processed = array_change_key_case($processed);
+        $existing = array_change_key_case(array_flip($existing));
+        $tidsToRemove = array_diff_key($existing, $processed);
         if ($tidsToRemove) {
           $termStorage->delete($termStorage->loadMultiple($tidsToRemove));
           $this->stats[$vid]['deleted'] += count($tidsToRemove);
@@ -430,6 +442,13 @@ class VocabularyUpdater {
       }
     }
     unset($values['_references'], $values['_children']);
+    // Ensure that if the parent is not set, then set the parent to 0 since it
+    // means that the term is a top-level term now. That will override
+    // the case that the updated term was previously set under another parent.
+    // @see \Drupal\taxonomy\Entity\Term::postDelete
+    if (!isset($values['parent'])) {
+      $values['parent'] = 0;
+    }
 
     if ($term = MappedTerm::loadByUri($uri)) {
       foreach ($values as $fieldName => $value) {
@@ -459,12 +478,13 @@ class VocabularyUpdater {
    *   Whether the resource is a term.
    */
   private function isTerm(Resource $resource, string $rdfType): bool {
-    if (!$vocabReference = $resource->getResource('skos:inScheme')) {
-      if (!$vocabReference = $resource->getResource('skos:topConceptOf')) {
+    if (!$vocabReference = $resource->allResources('skos:inScheme')) {
+      if (!$vocabReference = $resource->allResources('skos:topConceptOf')) {
         return FALSE;
       }
     }
-    return $vocabReference->getUri() === $rdfType;
+
+    return in_array($rdfType, array_map(fn (Resource $vocab) => $vocab->getUri(), $vocabReference));
   }
 
   /**
