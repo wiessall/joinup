@@ -10,11 +10,16 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReport;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\og\Entity\OgRole;
+use Drupal\og\Og;
+use Drupal\og\OgRoleInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -141,5 +146,23 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
         $group['options']['submit']['#attributes']['data-joinup-subscriptions'] = $subscriptions;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_assessment_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'collection' && $entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+    return;
+  }
+
+  // When a new collection is proposed, give the user the 'group owner' role.
+  // This will not occur if the user is the anonymous, i.e. the entity was
+  // created by some batch process or some importing.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    Og::getMembership($entity, $entity->getOwner())
+      ->set('subscription_bundles', JoinupSubscriptionsHelper::provideDataForField('collection'))
+      ->save();
   }
 }
