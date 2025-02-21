@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 
 /**
  * Interface for 'hosting_platform' entities.
@@ -35,5 +36,13 @@ interface HostingPlatformConfigInterface extends ConfigEntityInterface, EntityWi
    *   The description of this code hosting platform config.
    */
   public function getDescription(): ?string;
+
+  /**
+   * Gets the catalogue type.
+   *
+   * @return \Drupal\eu_oss_catalogue\Attribute\CatalogueType
+   *   The catalogue type.
+   */
+  public function getCatalogueType(): CatalogueType;
 
 }

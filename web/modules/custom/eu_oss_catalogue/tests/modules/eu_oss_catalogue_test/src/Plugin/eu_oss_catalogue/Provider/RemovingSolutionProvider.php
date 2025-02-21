@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 
 /**
@@ -15,7 +16,8 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 #[EuOssCatalogueProvider(
   id: "removing_solution_provider",
   label: new TranslatableMarkup("Removing solution provider"),
-  parser: "publiccode_yml"
+  parser: "publiccode_yml",
+  type: CatalogueType::Local
 )]
 class RemovingSolutionProvider extends SelectedProjectProvider {
 

@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
@@ -65,6 +66,11 @@ class HostingPlatformConfigForm extends EntityForm {
         'source' => ['label'],
       ],
       '#description' => $this->t('A unique string identifier. It must only contain lowercase letters, numbers, and underscores.'),
+    ];
+
+    $form['type'] = [
+      '#type' => 'hidden',
+      '#value' => CatalogueType::Local->value,
     ];
 
     $form['description'] = [

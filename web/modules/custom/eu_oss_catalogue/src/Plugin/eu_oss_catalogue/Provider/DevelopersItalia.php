@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
@@ -26,7 +27,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "developers_italia",
   label: new TranslatableMarkup("Developers Italia"),
   parser: "publiccode_yml",
-  description: new TranslatableMarkup("Italian National OSS Catalogue, by https://developers.italia.it website.")
+  type: CatalogueType::National,
+  description: new TranslatableMarkup("Italian National OSS Catalogue, by https://developers.italia.it website."),
 )]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 

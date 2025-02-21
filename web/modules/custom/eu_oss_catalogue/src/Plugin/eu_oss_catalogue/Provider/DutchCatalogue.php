@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
@@ -24,7 +25,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "dutch_catalogue",
   label: new TranslatableMarkup("Developer Overheid"),
   parser: "publiccode_yml",
-  description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website.")
+  type: CatalogueType::National,
+  description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website."),
 )]
 class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
 
