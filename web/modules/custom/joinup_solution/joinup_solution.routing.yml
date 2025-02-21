@@ -53,18 +53,3 @@ joinup_solution.change_state.multiple:
         type: entity:node
         bundle:
           - collection
-
-joinup_solution.subscribe:
-  path: /node/{node}/solution/subscribe
-  defaults:
-    _form: \Drupal\joinup_solution\Form\SubscribeToSolutionForm
-    _title: 'Subscribe to Solution'
-  requirements:
-    _permission: 'access content'
-    _role: 'authenticated'
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - solution
