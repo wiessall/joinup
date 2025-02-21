@@ -14,6 +14,10 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Database\Database;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use EasyRdf\Graph;
 
 /**
@@ -28,11 +32,57 @@ function joinup_core_deploy_200300(): void {
   ])->save();
 }
 
+/**
+ * Update pathauto state for "RDF" nodes with aliases.
+ */
+function joinup_core_deploy_200301(array &$sandbox): string {
+  $database = Database::getConnection();
+
+  if (!isset($sandbox['ids'])) {
+    $query = $database->select('node_field_data', 'nd');
+    $query->fields('nd', ['nid'])
+      ->condition('nd.type', [
+        'collection',
+        'solution',
+        'distribution',
+        'release',
+        'contact_information',
+        'owner',
+      ], 'IN');
+    $query->join('node', 'n', 'n.nid = nd.nid');
+    $query->fields('n', ['uuid'])
+      ->condition('n.uuid', [
+        InteroperableEuropeCollectionInterface::COLLECTION_UUID,
+        OssCatalogueCollectionInterface::COLLECTION_UUID,
+        AssessmentInterface::GROUP_UUID,
+      ], 'NOT IN');
+    $query->join('key_value', 'k', 'nd.nid = k.name AND k.collection = :collection', [':collection' => 'pathauto_state.node']);
+    $query->condition('k.value', 'i:0;');
+
+    $sandbox['ids'] = $query->execute()->fetchCol();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 200);
+  if (!empty($ids)) {
+    $database->update('key_value')
+      ->fields(['value' => 'i:1;'])
+      ->condition('name', $ids, 'IN')
+      ->condition('collection', 'pathauto_state.node')
+      ->execute();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']}";
+}
 
 /**
  * Gather information about the current state of solution type terms.
  */
-function joinup_core_deploy_200301(): string {
+function joinup_core_deploy_200302(): string {
   // We only need to check the revision table as all data are there including
   // the data from the data table.
   $solution_type_values = \Drupal::database()
@@ -70,7 +120,7 @@ function joinup_core_deploy_200301(): string {
 /**
  * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
  */
-function joinup_core_deploy_200302(): void {
+function joinup_core_deploy_200303(): void {
   // Import the simplified EIRA 6.0.0.
   $graph = new Graph();
   $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
@@ -99,7 +149,7 @@ function joinup_core_deploy_200302(): void {
 /**
  * Update the solution type field and revision values.
  */
-function joinup_core_deploy_200303(): string {
+function joinup_core_deploy_200304(): string {
   $data = \Drupal::state()->get('joinup_core_deploy_200200');
   if (!$data) {
     throw new Exception('No relevant data found about solution type field.');
