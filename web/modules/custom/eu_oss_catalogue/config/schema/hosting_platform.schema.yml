@@ -9,8 +9,11 @@ eu_oss_catalogue.hosting_platform.*:
       type: label
       label: Label
     type:
-      type: text
+      type: string
       label: Catalogue type
+      constraints:
+        Choice:
+          callback: \Drupal\eu_oss_catalogue\Attribute\CatalogueType::validChoices()
     description:
       type: text
       label: Description
