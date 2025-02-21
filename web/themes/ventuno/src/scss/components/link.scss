@@ -26,9 +26,9 @@ a {
 .joinup-group--description,
 .table {
   // Links need darker color when on gray backgrounds for A11Y contrast ratio.
-  a:link,
-  a:visited,
-  .btn-link {
-    color: $brand-darker; // Ensure having enough contrast.
+  a:not(.btn),
+  .btn-link,
+  .button--link  {
+    color: $brand-darker;
   }
 }
