@@ -8,6 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\meta_entity\MetaEntityRepositoryInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Helper class for managing the topic vocabulary.
@@ -19,7 +20,9 @@ readonly class VocabularyManager {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
+    #[Autowire(service: 'rdf_sync.connection')]
     protected RdfSyncConnectionInterface $sparqlEndpoint,
+    #[Autowire(service: 'meta_entity.repository')]
     protected MetaEntityRepositoryInterface $metaEntityRepository,
   ) {
   }

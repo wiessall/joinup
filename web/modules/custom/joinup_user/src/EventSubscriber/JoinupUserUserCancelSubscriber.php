@@ -11,6 +11,7 @@ use Drupal\joinup_user\Event\JoinupUserCancelEvent;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserDataInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -20,6 +21,7 @@ readonly class JoinupUserUserCancelSubscriber implements EventSubscriberInterfac
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
     protected UserDataInterface $userData,
     protected PasswordGeneratorInterface $passwordGenerator,

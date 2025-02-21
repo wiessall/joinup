@@ -239,7 +239,12 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
       '#type' => 'link',
       '#title' => Markup::create('<span class="visually-hidden">' . t('Report message') . '</span>'),
       '#url' => $report_url,
-      '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+      '#attributes' => array_merge_recursive(
+        _joinup_private_message_get_ajax_modal_attributes(),
+        [
+          'title' => t('Report abusive content'),
+        ],
+      ),
     ];
     $build['wrapper']['links']['report']['#attributes']['class'][] = 'private_message_report';
   }
@@ -255,7 +260,10 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
       '#url' => $delete_url,
       '#attributes' => array_merge_recursive(
         _joinup_private_message_get_ajax_modal_attributes(),
-        ['class' => ['private_message_delete']]
+        [
+          'class' => ['private_message_delete'],
+          'title' => t('Delete'),
+        ],
       ),
     ];
   }

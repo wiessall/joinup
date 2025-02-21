@@ -11,7 +11,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Exception\MissingSolutionException;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final readonly class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
 
   public function __construct(
-    protected RdfSyncMapper $mapper,
+    protected RdfSyncMapperInterface $mapper,
     protected RdfSyncConnectionInterface $sparqlConnection,
     protected ConfigFactoryInterface $configFactory,
   ) {}

@@ -14,6 +14,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Gitonomy\Git\Admin;
 use Gitonomy\Git\Repository;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Vitality Index service.
@@ -34,6 +35,7 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly FileSystemInterface $fileSystem,
     readonly ConfigFactoryInterface $configFactory,

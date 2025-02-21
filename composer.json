@@ -54,7 +54,7 @@
         "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
-        "drupal/flag": "^4.0",
+        "drupal/flag": "4.0.0-beta5",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
@@ -79,7 +79,7 @@
         "drupal/mimemail": "^1.0@alpha",
         "drupal/monolog": "^3.0",
         "drupal/multivalue_form_element": "^1.0",
-        "drupal/node_revision_delete": "^2.0@RC",
+        "drupal/node_revision_delete": "^2.0",
         "drupal/og": "^1.0-alpha8",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
@@ -101,7 +101,7 @@
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
         "drupal/search_api": "^1.27",
-        "drupal/search_api_autocomplete": "1.9.0",
+        "drupal/search_api_autocomplete": "^1.10",
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
         "drupal/simple_block": "^1.3",
@@ -117,9 +117,8 @@
         "drupal/theme_rule": "^1.0",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
-        "drupal/video_embed_field": "^2",
         "drupal/view_unpublished": "^1.0",
-        "drupal/views_autosubmit": "^1.5",
+        "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^1.0@beta",
         "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
@@ -154,7 +153,7 @@
         "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
         "drupal/cas_mock_server": "^2.0",
-        "drupal/coder": "8.3.26",
+        "drupal/coder": "^8.3",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
@@ -344,7 +343,6 @@
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
-                "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/3098560.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
@@ -405,8 +403,7 @@
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
-                "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch",
-                "Remove caching in HoneypotService::getProtectedForms preventing proper invalidation @see https://www.drupal.org/i/3481399": "resources/patch/php/drupal/honeypot/3481399.patch"
+                "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
             },
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
@@ -427,9 +424,6 @@
             },
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal//mimemail/mimemail_attachment_errors-2904611-55.patch"
-            },
-            "drupal/node_revision_delete": {
-                "It is possible that queue table does not exist @see https://www.drupal.org/project/node_revision_delete/issues/3436432": "resources/patch/php/drupal/node_revision_delete/3436432.patch"
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
@@ -475,6 +469,9 @@
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
             },
+            "drupal/tmgmt_ec_etranslation": {
+                "Remove requesterCallback parameter see https://www.drupal.org/i/3504767": "resources/patch/php/drupal/tmgmt_ec_etranslation/21.diff"
+            },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
@@ -483,7 +480,7 @@
                 "AssertionError: \"media\" must be defined in MODULE_NAME.field_type_categories.yml @see https://www.drupal.org/project/video_embed_field/issues/3469668": "resources/patch/php/drupal/video_embed_field/3469668.patch"
             },
             "drupal/views_autosubmit": {
-                "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600": "resources/patch/php/drupal/views_autosubmit/3160600.patch"
+                "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600": "resources/patch/php/drupal/views_autosubmit/10.diff"
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",

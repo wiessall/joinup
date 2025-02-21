@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\joinup_rdf\Controller\RdfExportController;
-use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -21,7 +21,7 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityTypeBundleInfoInterface $entityTypeBundleInfo,
-    protected RdfSyncMapper $rdfSyncMapper,
+    protected RdfSyncMapperInterface $rdfSyncMapper,
   ) {
   }
 

@@ -14,6 +14,7 @@ use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api_solr\Event\PreQueryEvent;
 use Solarium\Core\Query\QueryInterface as SolariumApiQueryInterface;
 use Solarium\QueryType\Select\Query\Query;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,6 +23,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'facets.utility.date_handler')]
     protected FacetsDateHandler $facetDateHandler,
   ) {}
 
