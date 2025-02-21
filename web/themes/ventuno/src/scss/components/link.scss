@@ -28,7 +28,7 @@ a {
   // Links need darker color when on gray backgrounds for A11Y contrast ratio.
   a:not(.btn),
   .btn-link,
-  .button--link  {
+  .button--link {
     color: $brand-darker;
   }
 }
