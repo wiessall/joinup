@@ -17,9 +17,7 @@ use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReport;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
-use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
-use Drupal\og\OgRoleInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -164,5 +162,21 @@ function joinup_assessment_node_insert(EntityInterface $entity): void {
     Og::getMembership($entity, $entity->getOwner())
       ->set('subscription_bundles', JoinupSubscriptionsHelper::provideDataForField('collection'))
       ->save();
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_assessment_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'node_insert') {
+    // Make sure joinup_assessment_entity_insert() runs after
+    // og_entity_insert(). The latter creates an OgMembership
+    // entry for the collection owner when a new collection is
+    // proposed, and joinup_assessment_entity_insert() needs to
+    // modify this membership to add the required OG roles to it.
+    $assessment = $implementations['joinup_assessment'];
+    unset($implementations['joinup_assessment']);
+    $implementations['joinup_assessment'] = $assessment;
   }
 }
