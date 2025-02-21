@@ -38,6 +38,7 @@ use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
  *     "id",
  *     "label",
  *     "type",
+ *     "country",
  *     "description",
  *     "platformId",
  *     "platformSettings",
@@ -60,6 +61,11 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    * The catalogue type.
    */
   protected string $type;
+
+  /**
+   * The country code.
+   */
+  protected ?string $country = NULL;
 
   /**
    * The description.
@@ -93,6 +99,13 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    */
   public function getCatalogueType(): CatalogueType {
     return CatalogueType::from($this->type);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCountryCode(): ?string {
+    return $this->country;
   }
 
   /**
