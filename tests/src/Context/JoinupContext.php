@@ -829,7 +829,7 @@ class JoinupContext extends RawDrupalContext {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('eira')->label();
+      $node->solution_type = $this->getRandomTerm('solution_type')->label();
     }
 
     // Handle file URL fields.

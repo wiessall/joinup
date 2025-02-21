@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
+use Drupal\joinup\JoinupCssAssetController;
+use Drupal\joinup\JoinupJsAssetController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -31,6 +33,13 @@ class RouteSubscriber extends RouteSubscriberBase {
         $route->addRequirements(['_node_creation_route' => 'TRUE']);
       }
     }
+
+    // Modifies asset controller routes to make them return empty files on
+    // invalid requests.
+    $collection->get('system.js_asset')
+      ->setDefault('_controller', JoinupJsAssetController::class . '::deliver');
+    $collection->get('system.css_asset')
+      ->setDefault('_controller', JoinupCssAssetController::class . '::deliver');
   }
 
 }
