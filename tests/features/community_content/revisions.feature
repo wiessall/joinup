@@ -198,7 +198,6 @@ Feature:
       | solution   | yes        | Subscribe to this solution | Unsubscribe           |
       | solution   | no         | Subscribe to this solution | Unsubscribe           |
 
-
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
       | title        | description                               | moderation   |
