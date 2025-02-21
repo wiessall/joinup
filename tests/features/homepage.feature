@@ -373,4 +373,4 @@ Feature: Homepage
   Scenario: The /events path redirects to upcoming events page.
     Given I am on the homepage
     When I click "More events"
-    Then I should be on "/portal-upcoming-events"
+    Then I should be on "/upcoming-events"
