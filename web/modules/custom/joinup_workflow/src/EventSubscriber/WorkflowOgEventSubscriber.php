@@ -13,6 +13,7 @@ use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\MembershipManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,6 +26,7 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly AccountProxyInterface $currentUser,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $ogMembershipManager,
   ) {}
 

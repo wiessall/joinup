@@ -1,60 +1,70 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
+
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
     tags:
       - { name: 'cache.context'}
-  joinup_group.achived_collection.access_check:
-    class: Drupal\joinup_group\Access\ArchivedGroupAccessCheck
+
+  Drupal\joinup_group\Access\ArchivedGroupAccessCheck:
     tags:
       - { name: access_check, applies_to: _archived_group }
+
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context', '@current_user', '@og.access']
-  Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber:
-    arguments: ['@entity_type.manager']
+  Drupal\joinup_group\JoinupGroupManagerInterface: '@joinup_group.group_manager'
+
+  Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber: { }
+
   joinup_group.group_menu_manager:
     class: Drupal\joinup_group\GroupMenuManager
-    arguments: ['@entity_type.manager']
+  Drupal\joinup_group\GroupMenuManagerInterface: '@joinup_group.group_menu_manager'
+
   joinup_group.group_settings_form_alter:
     class: Drupal\joinup_group\GroupSettingsFormAlter
-    arguments: ['@entity_type.manager', '@joinup_group.group_menu_manager']
-  Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber:
-    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager', '@messenger']
-  Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber:
-    arguments: ['@current_user']
+
+  Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber: { }
+
+  Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber: { }
+
   Drupal\joinup_group\Routing\RouteSubscriber: { }
+
   Drupal\joinup_group\EventSubscriber\JoinupGroupExceptionRedirectSubscriber: { }
-  Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber:
-    arguments: ['@current_user', '@messenger', '@tempstore.private']
+
+  Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber: { }
+
   joinup_group.group_aware_queue:
     class: Drupal\joinup_group\Queue\JoinupGroupQueueFactory
     parent: queue.database
+  Drupal\joinup_group\Queue\JoinupGroupQueueFactory: '@joinup_group.group_aware_queue'
+
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
-    arguments: ['@joinup_group.group_aware_queue']
+
   Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber: { }
-  joinup_group.state_machine.transition_guard:
-    class: Drupal\joinup_group\Guard\AnnouncementTransitionsGuard
-    arguments: ['@joinup_group.group_manager']
+
+  Drupal\joinup_group\Guard\AnnouncementTransitionsGuard:
     tags:
       - { name: state_machine.guard, group: announcement }
-  Drupal\joinup_group\EventSubscriber\AnnouncementTransitionSubscriber:
-    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager', '@joinup_notification.message_delivery', '@queue']
-  joinup_group.announcements_enabled.access_checker:
-    class: Drupal\joinup_group\Access\AnnouncementsAccessCheck
+
+  Drupal\joinup_group\EventSubscriber\AnnouncementTransitionSubscriber: { }
+
+  Drupal\joinup_group\Access\AnnouncementsAccessCheck:
     calls:
       - [setJoinupGroupManager, ['@joinup_group.group_manager']]
     tags:
       - { name: access_check, applies_to: _joinup_group_announcements }
-  joinup_group.og_permission:
-    class: Drupal\joinup_group\Access\OgPermissionAccessCheck
-    arguments: ['@joinup_group.group_manager']
+
+  Drupal\joinup_group\Access\OgPermissionAccessCheck:
     tags:
       - { name: access_check, applies_to: _og_permission }
+
   Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber: { }

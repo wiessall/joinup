@@ -38,9 +38,9 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
 
     $typeCamelized = Container::camelize($type);
     $interfaceClass = 'Drupal\eu_oss_catalogue\EuOssCatalogue' . $typeCamelized . 'Interface';
-    $annotationClass = 'Drupal\eu_oss_catalogue\Annotation\EuOssCatalogue' . $typeCamelized;
+    $attributeClass = 'Drupal\eu_oss_catalogue\Attribute\EuOssCatalogue' . $typeCamelized;
 
-    parent::__construct('Plugin/eu_oss_catalogue/' . $typeCamelized, $namespaces, $moduleHandler, $interfaceClass, $annotationClass);
+    parent::__construct('Plugin/eu_oss_catalogue/' . $typeCamelized, $namespaces, $moduleHandler, $interfaceClass, $attributeClass);
 
     $this->alterInfo("eu_oss_catalogue_{$type}_info");
     $tags = $type === 'provider' ? ['config:hosting_platform_list'] : [];

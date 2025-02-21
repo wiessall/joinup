@@ -21,6 +21,7 @@ use Drupal\cas\Service\CasHelper;
 use Drupal\externalauth\Authmap;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -54,6 +55,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     readonly RequestStack $requestStack,
     protected readonly MessengerInterface $messenger,
     protected readonly StateInterface $state,
+    #[Autowire(service: 'externalauth.authmap')]
     protected readonly Authmap $authmap,
   ) {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
@@ -119,7 +121,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     $xml = new \SimpleXMLElement($event->getResponseData());
     foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
       $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
-    };
+    }
   }
 
   /**

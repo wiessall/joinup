@@ -11,6 +11,7 @@ use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -19,6 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
 
   public function __construct(
+    #[Autowire(service: 'facets.manager')]
     protected DefaultFacetManager $facetManager,
   ) {}
 

@@ -26,7 +26,9 @@ use Drupal\Core\Cache\Context\CacheContextInterface;
  */
 readonly class FeaturedContentCsrfCacheContext implements CacheContextInterface {
 
-  public function __construct(protected CsrfTokenGenerator $csrfTokenGenerator) {}
+  public function __construct(
+    protected CsrfTokenGenerator $csrfTokenGenerator,
+  ) {}
 
   /**
    * {@inheritdoc}

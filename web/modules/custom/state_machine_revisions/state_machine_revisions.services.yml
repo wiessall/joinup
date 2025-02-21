@@ -1,10 +1,13 @@
 services:
+
   _defaults:
     autoconfigure: true
-  Drupal\state_machine_revisions\Routing\StateMachineRevisionsRouteSubscriber:
-    arguments: ['@entity_type.manager', '@entity_field.manager']
-  Drupal\state_machine_revisions\EventSubscriber\WorkflowTransitionEventSubscriber:
-    arguments: ['@state_machine_revisions.revision_manager', '@joinup_workflow.workflow_helper']
+    autowire: true
+
+  Drupal\state_machine_revisions\Routing\StateMachineRevisionsRouteSubscriber: { }
+
   state_machine_revisions.revision_manager:
     class: Drupal\state_machine_revisions\RevisionManager
-    arguments: ['@entity_type.manager']
+  Drupal\state_machine_revisions\RevisionManagerInterface: '@state_machine_revisions.revision_manager'
+
+  Drupal\state_machine_revisions\EventSubscriber\WorkflowTransitionEventSubscriber: {}

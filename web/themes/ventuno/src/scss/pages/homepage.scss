@@ -30,7 +30,8 @@
 
 // Hero
 .region-featured {
-  background-image: url(../images/wave.svg), url(../images/background.svg),
+  background-image:
+    url(../images/wave.svg), url(../images/background.svg),
     linear-gradient($ec-blue 0%, $ec-blue 50%, #001e2f 50%, #001e2f 100%);
   background-repeat: no-repeat;
   background-position:
@@ -86,7 +87,8 @@
     }
   }
   @include media-breakpoint-up(md) {
-    background-image: url(../images/banner-md.svg),
+    background-image:
+      url(../images/banner-md.svg),
       linear-gradient(
         to right,
         $ec-blue 0%,

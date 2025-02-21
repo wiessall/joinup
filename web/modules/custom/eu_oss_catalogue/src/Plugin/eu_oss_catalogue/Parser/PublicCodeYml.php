@@ -11,7 +11,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueParser;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -23,14 +25,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Parser for publiccode.yml data.
- *
- * @see https://yml.publiccode.tools
- *
- * @EuOssCatalogueParser(
- *   id = "publiccode_yml",
- *   label = @Translation("publiccode.yml data"),
- * )
  */
+#[EuOssCatalogueParser(
+  id: "publiccode_yml",
+  label: new TranslatableMarkup("publiccode.yml data")
+)]
 class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
@@ -82,7 +81,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       $resolvers =& $settings['resolvers'];
       $override = FieldOverridingPolicy::from($settings['override']);
 
-      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+      if ($override === FieldOverridingPolicy::PreserveNotEmpty && !$fieldItemList->isEmpty()) {
         // Don't override a field not-empty field.
         continue;
       }
@@ -107,7 +106,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
 
-      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+      if ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
         // Populate the node field.
         foreach ($resolved as $langcode => $values) {
           // Create a new translation on demand.

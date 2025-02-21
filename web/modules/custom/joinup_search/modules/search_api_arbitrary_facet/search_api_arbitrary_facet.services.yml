@@ -1,8 +1,13 @@
 services:
+
   _defaults:
     autoconfigure: true
+    autowire: true
+
   plugin.manager.arbitrary_facet:
     class: Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager
     parent: default_plugin_manager
-  Drupal\search_api_arbitrary_facet\EventSubscriber\FacetsConvertsSearchApiAlter:
-    arguments: ['@plugin.manager.arbitrary_facet']
+  Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager: '@plugin.manager.arbitrary_facet'
+
+  Drupal\search_api_arbitrary_facet\EventSubscriber\FacetsConvertsSearchApiAlter: { }
+
