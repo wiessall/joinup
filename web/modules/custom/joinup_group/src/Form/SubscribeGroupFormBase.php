@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\collection\Form;
+namespace Drupal\joinup_group\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;
@@ -22,7 +22,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -44,7 +46,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6330
  * @see \Drupal\collection\Form\JoinCollectionForm::showSubscribeDialog()
  */
-class SubscribeToCollectionForm extends FormBase {
+class SubscribeGroupFormBase extends FormBase {
 
   use MembershipCreateTrait;
 
@@ -79,7 +81,7 @@ class SubscribeToCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'subscribe_to_collection_form';
+    return 'subscribe_group_form_base';
   }
 
   /**
@@ -164,7 +166,7 @@ class SubscribeToCollectionForm extends FormBase {
     // the collection.
     $form['#access'] = $this->access($node)->isAllowed();
     // Keep track of the collection we are subscribing to.
-    $form['collection_id'] = [
+    $form['entity_id'] = [
       '#type' => 'value',
       '#value' => $node->id(),
     ];
@@ -270,12 +272,12 @@ class SubscribeToCollectionForm extends FormBase {
     }
     parent::validateForm($form, $form_state);
 
-    $collection = $this->loadCollection($form_state->getValue('collection_id'));
-
-    // The user should be a non-blocked member of the collection.
-    $membership = $this->getUserNonBlockedMembership($collection);
-    if (!$membership && !isset($form[static::COC_CHECKBOX_KEY])) {
-      $form_state->setErrorByName('collection', $this->t('Please join the collection before subscribing to it.'));
+    $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
+    if ($node instanceof Collection) {
+      $membership = $this->getUserNonBlockedMembership($node);
+      if (!$membership && !isset($form[static::COC_CHECKBOX_KEY])) {
+        $form_state->setErrorByName('collection', $this->t('Please join the collection before subscribing to it.'));
+      }
     }
   }
 
@@ -283,52 +285,83 @@ class SubscribeToCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $collection = $this->loadCollection($form_state->getValue('collection_id'));
-    if (!$this->isAjax()) {
-      $redirectValue = $form_state->getValue('redirect');
-      $redirect = $redirectValue
-        ? $this->pathValidator->getUrlIfValid($redirectValue)
-        : NULL;
-      $form_state->setRedirectUrl($redirect ?: $collection->toUrl());
-    }
-    $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
-    if ($operation === 'cancel') {
-      return;
-    }
-    $parameters = ['%collection' => $collection->label()];
-    $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
-
-    $membership = $this->getUserNonBlockedMembership($collection);
-    $noInitialMembership = empty($membership);
-    if ($noInitialMembership && $codeOfConductHasBeenApproved) {
-      $state = $collection->isClosed() ? OgMembershipInterface::STATE_PENDING
-        : OgMembershipInterface::STATE_ACTIVE;
-      $membership = $this->createSaveNewMembership($state, $this->getUser(), $collection);
-    }
-
-    if ($noInitialMembership && $membership) {
-      $message = isset($state) && $state === OgMembershipInterface::STATE_PENDING
-        ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
-        : $this->t('You have been joined to %collection.', $parameters);
-      $this->messenger()->addStatus($message);
-    }
-
+    $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
     $subscribe = (bool) $form_state->getValue('subscribe');
-    if ($subscribe) {
-      $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
-      $membership
-        ->set('announcements', TRUE)
-        ->set('subscription_bundles', $subscription_bundles)
-        ->save();
+    if ($node instanceof Collection) {
+      if (!$this->isAjax()) {
+        $redirectValue = $form_state->getValue('redirect');
+        $redirect = $redirectValue
+          ? $this->pathValidator->getUrlIfValid($redirectValue)
+          : NULL;
+        $form_state->setRedirectUrl($redirect ?: $node->toUrl());
+      }
+      $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
+      if ($operation === 'cancel') {
+        return;
+      }
+      $parameters = ['%collection' => $node->label()];
+      $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
 
-      // Check if the user is pending, so we can adapt the message for the user.
-      $is_pending = !empty($membership) && $membership->isPending();
+      $membership = $this->getUserNonBlockedMembership($node);
+      $noInitialMembership = empty($membership);
+      if ($noInitialMembership && $codeOfConductHasBeenApproved) {
+        $state = $node->isClosed() ? OgMembershipInterface::STATE_PENDING
+          : OgMembershipInterface::STATE_ACTIVE;
+        $membership = $this->createSaveNewMembership($state, $this->getUser(), $node);
+      }
 
-      $message = $is_pending ?
-        $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
-        $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
-      $this->messenger()->addStatus($message);
+      if ($noInitialMembership && $membership) {
+        $message = isset($state) && $state === OgMembershipInterface::STATE_PENDING
+          ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
+          : $this->t('You have been joined to %collection.', $parameters);
+        $this->messenger()->addStatus($message);
+      }
+
+      if ($subscribe) {
+        $membership = $this->subscribe($node);
+        $is_pending = !empty($membership) && $membership->isPending();
+        $message = $is_pending ?
+          $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
+          $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
+        $this->messenger()->addStatus($message);
+      }
     }
+    else {
+      $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
+      if ($operation === 'cancel') {
+        return;
+      }
+
+      if ($subscribe) {
+        $membership = $this->subscribe($node);
+        $this->messenger->addStatus($node->getNewMembershipSuccessMessage($membership));
+      }
+    }
+  }
+
+  /**
+   * Creates and stores subscriptions.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
+   *   Passed node.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function subscribe(GroupInterface $node): OgMembershipInterface {
+    $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $node);
+    if ($node instanceof Collection) {
+      $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+      $membership->set('announcements', TRUE);
+    }
+    else {
+      $subscription_bundles = [];
+      foreach (CommunityContentHelper::BUNDLES as $bundle) {
+        $subscription_bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
+      }
+    }
+    $membership->set('subscription_bundles', $subscription_bundles);
+    $membership->save();
+    return $membership;
   }
 
   /**
@@ -351,13 +384,13 @@ class SubscribeToCollectionForm extends FormBase {
     if (!$form_state->getErrors()) {
       // Allow modules to alter or replace the Ajax command.
       $event = new AjaxCommandEvent(new CloseModalDialogCommand(), [
-        'instance' => 'join_collection.subscribe_dialog.close',
+        'instance' => 'join_group.subscribe_dialog.close',
       ]);
       $this->eventDispatcher->dispatch($event);
 
       $response->addCommand($event->getCommand());
       $response->addCommand(new AfterCommand('*[data-drupal-messages-fallback]', $messages));
-      $response->addCommand(new InvokeCommand('[name="join_collection_rebuild"]', 'trigger', ['mousedown']));
+      $response->addCommand(new InvokeCommand('[name="join_group_form_base_rebuild"]', 'trigger', ['mousedown']));
     }
     else {
       $response->addCommand(new RemoveCommand('#drupal-modal form > [data-drupal-messages], #drupal-modal form > [data-drupal-messages-fallback]'));
@@ -407,11 +440,14 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function access(NodeInterface $node): AccessResultInterface {
     $user = $this->getUser();
-    $hasCodeOfConductToAccept = $node instanceof CollectionInterface && $node->hasCodeOfConductToAccept();
-    return AccessResult::allowedIf(
-      $user->isAuthenticated() &&
-      ($this->getUserNonBlockedMembership($node) || $hasCodeOfConductToAccept)
-    );
+    if ($node instanceof Collection) {
+      $hasCodeOfConductToAccept = $node instanceof CollectionInterface && $node->hasCodeOfConductToAccept();
+      return AccessResult::allowedIf(
+        $user->isAuthenticated() &&
+        ($this->getUserNonBlockedMembership($node) || $hasCodeOfConductToAccept)
+      );
+    }
+    return AccessResult::allowedIf($user->isAuthenticated());
   }
 
   /**
@@ -428,21 +464,6 @@ class SubscribeToCollectionForm extends FormBase {
       OgMembershipInterface::STATE_ACTIVE,
       OgMembershipInterface::STATE_PENDING,
     ]);
-  }
-
-  /**
-   * Loads the collection with the given ID.
-   *
-   * @param string $collection_id
-   *   The collection ID.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The collection.
-   */
-  protected function loadCollection(string $collection_id): CollectionInterface {
-    $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
-    assert($collection instanceof CollectionInterface);
-    return $collection;
   }
 
   /**
