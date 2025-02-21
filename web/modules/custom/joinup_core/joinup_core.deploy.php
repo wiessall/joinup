@@ -20,7 +20,7 @@ declare(strict_types=1);
 function joinup_core_deploy_200300(): void {
   \Drupal::entityTypeManager()->getStorage('redirect')->create([
     'redirect_source' => ['path' => 'events'],
-    'redirect_redirect' => ['uri' => 'internal:/node/726616'],
+    'redirect_redirect' => ['uri' => 'internal:/node/726609'],
     'language' => 'und',
     'status_code' => 301,
   ])->save();
