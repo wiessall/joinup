@@ -45,4 +45,12 @@ interface HostingPlatformConfigInterface extends ConfigEntityInterface, EntityWi
    */
   public function getCatalogueType(): CatalogueType;
 
+  /**
+   * Gets the country code.
+   *
+   * @return string|null
+   *   The country code.
+   */
+  public function getCountryCode(): ?string;
+
 }
