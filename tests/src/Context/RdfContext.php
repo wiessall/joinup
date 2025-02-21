@@ -7,6 +7,8 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\rdf_sync\Model\SyncMethod;
+use EasyRdf\Graph;
+use EasyRdf\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use function PHPUnit\Framework\assertCount;
@@ -253,7 +255,7 @@ class RdfContext extends RawDrupalContext {
       ->execute();
     /** @var \Drupal\taxonomy\TermInterface[] $terms */
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids);
-    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::UPDATE, $terms);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::Update, $terms);
   }
 
   /**
@@ -352,6 +354,65 @@ class RdfContext extends RawDrupalContext {
     }
 
     Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
+  }
+
+  /**
+   * Asserts that all EIRA related vocabularies are successfully imported.
+   *
+   * @Given /^all EIRA vocabularies are successfully imported\.$/
+   */
+  public function assertImportedEiraVocabularies(): void {
+    $this->assertVocabularyImported('EIRA v6.1.0_SKOS.rdf', 'http://data.europa.eu/dr8/');
+    $this->assertVocabularyImported('eGovERA.rdf', 'http://data.europa.eu/dr8/egovera/');
+
+    // The EIRA 6.0.0 is not imported in the same way as the other
+    // vocabularies, but we only re-imported terms already in use in solutions.
+    $query = \Drupal::database()->select('taxonomy_term_field_data', 't');
+    $query->distinct();
+    $query->fields('t', ['tid']);
+    $query->condition('t.vid', 'solution_type');
+    $query->innerJoin('node_revision__solution_type', 'ns', 't.tid = ns.solution_type_target_id');
+    $result = $query->execute();
+
+    $termIds = array_map(fn($row) => $row->tid, $result->fetchAllAssoc('tid'));
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($termIds);
+    $termUris = array_map(fn($term) => $term->getUri(), $terms);
+
+    // Check that all resources exist in the `rdf_sync_uri` table.
+    $query = \Drupal::database()->select('rdf_sync_uri', 'r');
+    $query->fields('r', ['uri']);
+    $query->condition('uri', $termUris, 'IN');
+    $result = $query->execute()->fetchAll();
+    $result = array_map(fn(\stdClass $row): string => $row->uri, $result);
+
+    Assert::assertEmpty(array_diff($termUris, $result), 'Not all terms resources are imported.');
+  }
+
+  /**
+   * Asserts that an EIRA vocabulary is imported.
+   *
+   * @param string $file
+   *   The file to check.
+   * @param string $prefix
+   *   The prefix to check.
+   */
+  private function assertVocabularyImported(string $file, string $prefix): void {
+    $graph = new Graph();
+    $graph->parseFile('../resources/vocab/' . $file);
+    $resources = $graph->resources();
+
+    $resources = array_filter($resources, fn(Resource $resource): bool => str_starts_with($resource->getUri(), $prefix) && !str_ends_with($resource->getUri(), '_Properties'));
+    $resources = array_map(fn(Resource $resource): string => $resource->getUri(), $resources);
+
+    // Check that all resources exist in the `rdf_sync_uri` table.
+    $query = \Drupal::database()->select('rdf_sync_uri', 'r');
+    $query->fields('r', ['uri']);
+    $query->condition('uri', $resources, 'IN');
+    $result = $query->execute()->fetchAll();
+    $result = array_map(fn(\stdClass $row): string => $row->uri, $result);
+    $array_diff = array_diff($resources, $result);
+
+    Assert::assertEmpty($array_diff, 'Not all EIRA 6.1.0 resources are imported. Diff: ' . implode(', ', $array_diff));
   }
 
 }

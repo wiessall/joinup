@@ -6,7 +6,9 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -17,14 +19,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Dutch catalogue provider.
- *
- * @EuOssCatalogueProvider(
- *   id = "dutch_catalogue",
- *   label = @Translation("Developer Overheid"),
- *   description = @Translation("Dutch National OSS Catalogue, by https://developer.overheid.nl website."),
- *   parser = "publiccode_yml",
- * )
  */
+#[EuOssCatalogueProvider(
+  id: "dutch_catalogue",
+  label: new TranslatableMarkup("Developer Overheid"),
+  parser: "publiccode_yml",
+  description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website.")
+)]
 class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**
