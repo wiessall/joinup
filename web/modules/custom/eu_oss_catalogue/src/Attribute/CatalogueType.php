@@ -33,4 +33,14 @@ enum CatalogueType: string {
     };
   }
 
+  /**
+   * Get all valid choices.
+   *
+   * @return string[]
+   *   All valid choices.
+   */
+  public static function validChoices(): array {
+    return array_map(fn($case) => $case->value, CatalogueType::cases());
+  }
+
 }
