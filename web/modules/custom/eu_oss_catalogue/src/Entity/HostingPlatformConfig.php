@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 
 /**
  * Stores the configuration of a 'hosting_platform' plugin instance.
@@ -36,6 +37,7 @@ use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
  *   config_export = {
  *     "id",
  *     "label",
+ *     "type",
  *     "description",
  *     "platformId",
  *     "platformSettings",
@@ -53,6 +55,11 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    * A meaningful label.
    */
   protected string $label;
+
+  /**
+   * The catalogue type.
+   */
+  protected string $type;
 
   /**
    * The description.
@@ -79,6 +86,13 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    */
   public function getDescription(): ?string {
     return $this->description;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCatalogueType(): CatalogueType {
+    return CatalogueType::from($this->type);
   }
 
   /**

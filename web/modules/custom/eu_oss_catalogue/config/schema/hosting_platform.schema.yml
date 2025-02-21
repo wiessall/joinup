@@ -8,6 +8,9 @@ eu_oss_catalogue.hosting_platform.*:
     label:
       type: label
       label: Label
+    type:
+      type: text
+      label: Catalogue type
     description:
       type: text
       label: Description

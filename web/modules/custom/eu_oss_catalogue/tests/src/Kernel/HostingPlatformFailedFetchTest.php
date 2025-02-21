@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
@@ -87,6 +88,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
     $hostingPlatformConfig = $hostingPlatformConfigStorage->create([
       'id' => $pluginId,
       'label' => $pluginId,
+      'type' => CatalogueType::Local->value,
       'platformId' => $pluginId,
       'platformSettings' => $config,
     ]);

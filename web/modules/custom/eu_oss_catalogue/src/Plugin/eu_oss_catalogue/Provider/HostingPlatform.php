@@ -8,6 +8,7 @@ use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
@@ -25,8 +26,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 #[EuOssCatalogueProvider(
   id: "hosting_platform",
   label: new TranslatableMarkup("Hosting platform"),
-  description: new TranslatableMarkup("Code hosting platform"),
   parser: "publiccode_yml",
+  type: CatalogueType::Local,
+  description: new TranslatableMarkup("Code hosting platform"),
   deriver: HostingPlatformDeriver::class,
   configuredBy: "hosting_platform",
 )]

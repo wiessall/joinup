@@ -4,6 +4,7 @@ status: true
 dependencies: {  }
 id: code_europa_eu
 label: 'Code Europa EU'
+type: european
 description: 'Code Europa EU / European Commission OSS Catalogue, by https://code.europa.eu.'
 platformId: gitlab_self_hosted
 platformSettings:

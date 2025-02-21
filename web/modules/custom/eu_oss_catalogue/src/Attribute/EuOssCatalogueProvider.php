@@ -17,6 +17,7 @@ class EuOssCatalogueProvider extends Plugin {
     public readonly string $id,
     public readonly TranslatableMarkup $label,
     public readonly string $parser,
+    public readonly CatalogueType $type,
     public readonly ?TranslatableMarkup $description = NULL,
     public readonly ?string $deriver = NULL,
     public readonly ?string $configuredBy = NULL,

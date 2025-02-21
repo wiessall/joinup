@@ -3,6 +3,7 @@ status: true
 dependencies: {  }
 id: github_example
 label: 'Github example'
+type: local
 description: ''
 platformId: github
 platformSettings:
