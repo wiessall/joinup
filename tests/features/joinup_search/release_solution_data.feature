@@ -19,10 +19,9 @@ Feature: Releases should inherit data from their parent.
       | topic | E-health Dpt., E-health, Social and Political, Demography |
 
     # The parent is "Info" for both of the following topics.
-    Given I change the topics of "Solution 1" to "Data gathering and processing, Statistics and Analysis"
+    Given the "topic" of "Solution 1" solution is changed to "Data gathering and processing, Statistics and Analysis"
     # The parent is "HR Dpt." for both of the following topics.
-    And I change the topics of "Solution 2" to "Employment and Support Allowance, HR"
-
+    And the "topic" of "Solution 2" solution is changed to "Employment and Support Allowance, HR"
 
     # Only the new values should be available.
     Then the "Release 1" "release" should have the following fields in the "published" index:

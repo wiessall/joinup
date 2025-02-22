@@ -479,28 +479,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Changes the topics of an entity.
-   *
-   * @param string $entity
-   *   The label of the entity.
-   * @param string $aggregated_topics
-   *   A comma-separated list of topics.
-   *
-   * @Given I change the topics of :entity to :aggregated_topics
-   */
-  public function changeTopicsOfEntity(string $entity, string $aggregated_topics): void {
-    $entity = $this->getEntityByLabel('node', $entity);
-    $aggregated_topics = $this->explodeCommaSeparatedStepArgument($aggregated_topics);
-    $topics = [];
-    foreach ($aggregated_topics as $topic) {
-      $topics[] = $this->getEntityByLabel('taxonomy_term', $topic);
-    }
-    $entity->set('field_topic', $topics);
-    $entity->skip_notification = TRUE;
-    $entity->save();
-  }
-
-  /**
    * Re-indexes immediately the given content.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
