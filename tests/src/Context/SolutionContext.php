@@ -123,9 +123,13 @@ class SolutionContext extends RawDrupalContext {
 
     // For reference fields, we need to convert the value to the entity ID.
     if ($fieldDefinitions[$fieldName]->getType() === 'entity_reference') {
-      $targetType = $fieldDefinitions[$fieldName]->getSetting('target_type');
-      $entity = $this->getEntityByLabel($targetType, $fieldValue);
-      $fieldValue = $entity->id();
+      $values = $this->explodeCommaSeparatedStepArgument($fieldValue);
+      $fieldValue = [];
+      foreach ($values as $value) {
+        $targetType = $fieldDefinitions[$fieldName]->getSetting('target_type');
+        $entity = $this->getEntityByLabel($targetType, $value);
+        $fieldValue[] = $entity->id();
+      }
     }
 
     $solution->set($fieldName, $fieldValue);
