@@ -15,6 +15,9 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\search_api\Entity\Index;
+use Drupal\search_api\Entity\Server;
+use Drupal\search_api\Utility\Utility;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -34,6 +37,11 @@ class JoinupSearchContext extends RawDrupalContext {
    * Path to the search box dropdown element.
    */
   protected const SEARCH_BOX_DROPDOWN = '.joinup-navbar button#search-box-dropdown.dropdown-toggle';
+
+  /**
+   * Configuration of the search API server.
+   */
+  protected array $configuration = [];
 
   /**
    * Forces the indexing of new or changed content after each step.
@@ -388,6 +396,133 @@ class JoinupSearchContext extends RawDrupalContext {
     $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
     // The facet might be present but with no options.
     Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
+  }
+
+  /**
+   * Sets the `retrieve_data` configuration to the search API server.
+   *
+   * By default, the search API server does not return the property data for
+   * the entity, just some basic information like the identifier, the boost
+   * etc. To get the property data, we need to set the `retrieve_data` option
+   * to TRUE in the server configuration.
+   *
+   * @beforeScenario @solrRetrieveData
+   */
+  public function setRetrieveDataForServer(): void {
+    $server = Server::load('joinup');
+    $this->configuration = $server->getBackendConfig();
+    $new_config = $this->configuration;
+    $new_config['retrieve_data'] = TRUE;
+    $server->setBackendConfig($new_config);
+    $server->save();
+  }
+
+  /**
+   * Resets the `retrieve_data` configuration to the search API server.
+   *
+   * @afterScenario @solrRetrieveData
+   */
+  public function resetRetrieveDataForServer(): void {
+    $server = Server::load('joinup');
+    $server->setBackendConfig($this->configuration);
+    $server->save();
+  }
+
+  /**
+   * Asserts the values of an entity in the index.
+   *
+   * The table format is as follows:
+   * @codingStandardsIgnoreStart
+   * | some_field_in_the_index  | Some value 1, Some value 2 |
+   * | other_field_in_the_index | Some value                 |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $bundle
+   *   The bundle of the entity.
+   * @param string $index
+   *   The index that holds the data.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   The fields to assert.
+   *
+   * @Then the :label :bundle should have the following fields in the :index index:
+   */
+  public function assertFieldsInIndex(string $label, string $bundle, string $index, TableNode $fields): void {
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = $this->getEntityByLabel('node', $label, $bundle);
+    $index = Index::load($index);
+    Assert::assertNotNull($index, "The index '{$index->label()}' was not found.");
+
+    $query = $index->query();
+    $query->addCondition($index->getField('nid')->getFieldIdentifier(), $entity->id());
+    $results = $query->execute();
+
+    $results = $results->getResultItems();
+    $document = reset($results);
+    /** @var \Drupal\search_api\Item\ItemInterface $document */
+    Assert::assertNotEmpty($document, "The entity '$label' was not found in the index.");
+
+    foreach ($fields->getRows() as $row) {
+      $field_name = $row[0];
+      $expected_values = array_map('trim', explode(',', $row[1]));
+      if ($field_name === 'topic') {
+        foreach ($expected_values as $index => $value) {
+          $expected_values[$index] = $this->getEntityByLabel('taxonomy_term', $value)->id();
+        }
+      }
+      $actual_values = $document->getField($field_name)->getValues();
+      sort($actual_values);
+      sort($expected_values);
+      Assert::assertEquals($expected_values, $actual_values, "The field '$field_name' does not match the expected values.");
+    }
+  }
+
+  /**
+   * Changes the topics of an entity.
+   *
+   * @param string $entity
+   *   The label of the entity.
+   * @param string $aggregated_topics
+   *   A comma-separated list of topics.
+   *
+   * @Given I change the topics of :entity to :aggregated_topics
+   */
+  public function changeTopicsOfEntity(string $entity, string $aggregated_topics): void {
+    $entity = $this->getEntityByLabel('node', $entity);
+    $aggregated_topics = $this->explodeCommaSeparatedStepArgument($aggregated_topics);
+    $topics = [];
+    foreach ($aggregated_topics as $topic) {
+      $topics[] = $this->getEntityByLabel('taxonomy_term', $topic);
+    }
+    $entity->set('field_topic', $topics);
+    $entity->skip_notification = TRUE;
+    $entity->save();
+  }
+
+  /**
+   * Re-indexes immediately the given content.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A lis of entity labels to reindex.
+   *
+   * @Given I reindex the following content:
+   */
+  public function reindexContent(TableNode $table): void {
+    $entities = [];
+    foreach ($table->getRows() as $row) {
+      $entities[] = $this->getEntityByLabel('node', $row[0]);
+    }
+
+    $index_id = 'published';
+    $index = Index::load($index_id);
+    $document_ids = [];
+    foreach ($entities as $entity) {
+      $document_ids[] = Utility::createCombinedId('entity:' . $entity->getEntityTypeId(), $entity->id() . ':' . $entity->language()->getId());
+    }
+
+    $documents = $index->loadItemsMultiple($document_ids);
+    $index->indexSpecificItems($documents);
   }
 
   /**
