@@ -22,6 +22,7 @@ use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_release\SolutionFieldsFieldItemList;
 use Drupal\joinup_release\SolutionReleasesFieldItemList;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -389,4 +390,27 @@ function _joinup_release_edit_date_validate(array &$form, FormStateInterface $fo
   if ($date_value && ($date_value->format('c') > $dt_now->format('c'))) {
     $form_state->setErrorByName('created', t('Your "Authored on" field date is greater than @date', ['@date' => $dt_now->format('c')]));
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function joinup_release_node_update(EntityInterface $entity): void {
+  if (!$entity instanceof SolutionInterface) {
+    return;
+  }
+
+  // Mark all releases to be re-indexed in the 'published' search API index.
+  $release_ids = $entity->getReleaseIds();
+  if (empty($release_ids)) {
+    return;
+  }
+
+  $language = $entity->language()->getId();
+  $release_ids = array_map(function ($id) use ($language): string {
+    return $id . ':' . $language;
+  }, $release_ids);
+
+  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('published');
+  $index->trackItemsUpdated('entity:node', $release_ids);
 }
