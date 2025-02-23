@@ -1,4 +1,4 @@
-@api @group_other @solrRetrieveData
+@api @solrRetrieveData
 Feature: Releases should inherit data from their parent.
 
   Scenario: Releases should inherit the topics of their parent.
