@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
-use Drupal\search_api\Utility\Utility;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -476,31 +475,6 @@ class JoinupSearchContext extends RawDrupalContext {
       sort($expected_values);
       Assert::assertEquals($expected_values, $actual_values, "The field '$field_name' does not match the expected values.");
     }
-  }
-
-  /**
-   * Re-indexes immediately the given content.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   A lis of entity labels to reindex.
-   *
-   * @Given I reindex the following content:
-   */
-  public function reindexContent(TableNode $table): void {
-    $entities = [];
-    foreach ($table->getRows() as $row) {
-      $entities[] = $this->getEntityByLabel('node', $row[0]);
-    }
-
-    $index_id = 'published';
-    $index = Index::load($index_id);
-    $document_ids = [];
-    foreach ($entities as $entity) {
-      $document_ids[] = Utility::createCombinedId('entity:' . $entity->getEntityTypeId(), $entity->id() . ':' . $entity->language()->getId());
-    }
-
-    $documents = $index->loadItemsMultiple($document_ids);
-    $index->indexSpecificItems($documents);
   }
 
   /**
