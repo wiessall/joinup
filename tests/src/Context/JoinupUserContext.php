@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
+use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -24,6 +26,7 @@ class JoinupUserContext extends RawDrupalContext {
 
   use MailCollectorTrait;
   use StringTranslationTrait;
+  use TagTrait;
   use UserTrait;
   use UtilityTrait;
 
@@ -288,10 +291,18 @@ class JoinupUserContext extends RawDrupalContext {
    * Such operation might slow the whole Behat suite runs after each step. Limit
    * to tests where this operation is meaningful.
    *
-   * @AfterStep @deletedUser&&@api
+   * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
+   *   The step.after event.
+   *
+   * @AfterStep
    */
-  public function runUserDeletedDestruct(): void {
-    \Drupal::service('joinup_user.deleted')->destruct();
+  public function runUserDeletedDestruct(AfterStepScope $event): void {
+    if (!$this->getScenario()->hasTag('api') && !$event->getFeature()->hasTag('api')) {
+      return;
+    }
+    if ($this->getScenario()->hasTag('deletedUser') || $event->getFeature()->hasTag('deletedUser')) {
+      \Drupal::service('joinup_user.deleted')->destruct();
+    }
   }
 
 }
