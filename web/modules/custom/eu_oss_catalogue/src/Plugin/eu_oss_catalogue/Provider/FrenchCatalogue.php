@@ -26,8 +26,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup("Awesome CodeGouvFr"),
   parser: "publiccode_yml",
   type: CatalogueType::National,
+  weblinks: [
+    [
+      'url' => 'https://code.gouv.fr/sources/#/awesome',
+      'title' => NULL,
+    ],
+  ],
   country: "FR",
-  description: new TranslatableMarkup("French National OSS Catalogue, by https://code.gouv.fr/fr/awesome/ website."),
+  description: new TranslatableMarkup("CodeGouvFr, the French National Catalogue with mission to use and contribute to free software and digital commons provides. Awesome Open Source projects actively maintained and funded by Public Administrations and Public Sector organizations."),
 )]
 class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
 

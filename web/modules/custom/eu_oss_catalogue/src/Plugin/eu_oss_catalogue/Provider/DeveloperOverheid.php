@@ -26,8 +26,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup("Developer Overheid"),
   parser: "publiccode_yml",
   type: CatalogueType::National,
+  weblinks: [
+    [
+      'url' => 'https://developer.overheid.nl',
+      'title' => NULL,
+    ],
+  ],
   country: "NL",
-  description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website."),
+  description: new TranslatableMarkup("Developer Overheid is the Dutch National Catalogue, one central location for OSS Solutions developed by and for Dutch government organizations."),
 )]
 class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
