@@ -39,10 +39,8 @@ Feature: Joining a collection as an anonymous user
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
     And I press "Log in"
-    And I check "I have read and accept the Legal notice"
-    And I press "Submit"
     Then I should see the text "Reannual plants" in the Header region
-    And I should see the heading "Welcome to Reannual plants"
+    And I should see the success message "You are now a member of Reannual plants"
     And I should see the success message "You have been logged in."
     And the "Reannual plants" collection should have 1 active member
     And the "Reannual plants" collection should have 0 pending member
@@ -62,8 +60,6 @@ Feature: Joining a collection as an anonymous user
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
     And I press "Log in"
-    And I check "I have read and accept the Legal notice"
-    And I press "Submit"
     Then I should see the heading "CoC collection"
     And I should see the success message "You have been logged in."
     And the "CoC collection" collection should have 0 active member
