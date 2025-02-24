@@ -24,6 +24,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -349,7 +350,15 @@ class SubscribeGroupFormBase extends FormBase {
    */
   public function subscribe(OgMembershipInterface $membership): OgMembershipInterface {
     $groupBundle = $membership->getGroupBundle();
-    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField($groupBundle);
+    if ($groupBundle == 'collection') {
+      $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField($groupBundle);
+    }
+    else {
+      $subscription_bundles = [];
+      foreach (CommunityContentHelper::BUNDLES as $bundle) {
+        $subscription_bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
+      }
+    }
     $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();
     return $membership;
