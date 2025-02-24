@@ -19,17 +19,17 @@ use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Dutch catalogue provider.
+ * Developer Overheid provider.
  */
 #[EuOssCatalogueProvider(
-  id: "dutch_catalogue",
+  id: "developer_overheid",
   label: new TranslatableMarkup("Developer Overheid"),
   parser: "publiccode_yml",
   type: CatalogueType::National,
   country: "NL",
   description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website."),
 )]
-class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
+class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
   /**
    * Dutch catalogue endpoint.
