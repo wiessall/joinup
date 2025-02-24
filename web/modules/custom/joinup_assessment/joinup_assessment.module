@@ -149,9 +149,11 @@ function joinup_assessment_form_alter(array &$form, FormStateInterface $form_sta
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
+ *
+ * Override collection_node_insert.
  */
 function joinup_assessment_node_insert(EntityInterface $entity): void {
-  if ($entity->bundle() !== 'collection' && $entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+  if ($entity->bundle() !== 'collection') {
     return;
   }
 
@@ -159,8 +161,16 @@ function joinup_assessment_node_insert(EntityInterface $entity): void {
   // This will not occur if the user is the anonymous, i.e. the entity was
   // created by some batch process or some importing.
   if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+    // Remove the 'assessment_report' subscription for all collections,
+    // except the assessment collection.
+    if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+        return $bundle['bundle'] !== 'assessment_report';
+      }));
+    }
     Og::getMembership($entity, $entity->getOwner())
-      ->set('subscription_bundles', JoinupSubscriptionsHelper::provideDataForField('collection'))
+      ->set('subscription_bundles', $subscription_bundles)
       ->save();
   }
 }
