@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
 use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Stores the configuration of a 'hosting_platform' plugin instance.
@@ -17,7 +18,8 @@ use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
  *   handlers = {
  *     "form" = {
  *       "edit" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm",
- *       "delete" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
+ *       "delete" =
+ *   "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
@@ -31,8 +33,10 @@ use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
  *     "label" = "label",
  *   },
  *   links = {
- *     "edit-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
- *     "delete-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
+ *     "edit-form" =
+ *   "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
+ *     "delete-form" =
+ *   "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
  *   },
  *   config_export = {
  *     "id",
@@ -156,6 +160,35 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
       $this->platform = new DefaultSingleLazyPluginCollection($platformManager, $this->platformId, $this->platformSettings);
     }
     return $this->platform;
+  }
+
+  /**
+   * Config validation callback for weblinks.
+   *
+   * @param array $values
+   *    The configuration.
+   * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
+   *    The validation execution context.
+   *
+   * @return void
+   */
+  public static function validateWeblinks(array $values, ExecutionContextInterface $context): void {
+    if (empty($values)) {
+      $context->buildViolation('It is required')
+        ->atPath('weblinks')
+        ->addViolation();
+    }
+
+    foreach ($values as $weblink) {
+      $url = $weblink['url'] ?? '';
+
+      if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        $context->buildViolation('Invalid URL: @url')
+          ->setParameter('@url', $url)
+          ->atPath('weblinks')
+          ->addViolation();
+      }
+    }
   }
 
 }
