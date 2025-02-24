@@ -5,10 +5,10 @@ dependencies: {  }
 id: code_europa_eu
 label: 'Code Europa EU'
 type: european
-country: null
 weblinks:
   - url: 'https://code.europa.eu'
     title: null
+country: null
 description: 'Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights.'
 platformId: gitlab_self_hosted
 platformSettings:
