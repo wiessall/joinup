@@ -28,8 +28,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup("Developers Italia"),
   parser: "publiccode_yml",
   type: CatalogueType::National,
+  weblinks: [
+    [
+      'url' => 'https://developers.italia.it/en/software',
+      'title' => NULL,
+    ],
+  ],
   country: "IT",
-  description: new TranslatableMarkup("Italian National OSS Catalogue, by https://developers.italia.it website."),
+  description: new TranslatableMarkup("Developers Italia is a community of developers who design and code Italian digital public services, and provide the Italian National Catalogue for the acquisition and reuse of software by and for the Public Administration, as envisaged and required by national legislation."),
 )]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
