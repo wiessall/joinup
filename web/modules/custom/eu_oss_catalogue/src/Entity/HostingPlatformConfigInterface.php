@@ -46,6 +46,14 @@ interface HostingPlatformConfigInterface extends ConfigEntityInterface, EntityWi
   public function getCatalogueType(): CatalogueType;
 
   /**
+   * Gets weblinks.
+   *
+   * @return array
+   *   Weblinks.
+   */
+  public function getWeblinks(): array;
+
+  /**
    * Gets the country code.
    *
    * @return string|null
