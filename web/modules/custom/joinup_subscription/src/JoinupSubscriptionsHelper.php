@@ -29,9 +29,11 @@ class JoinupSubscriptionsHelper {
     'solution' => [
       'node' => [
         'discussion',
+        'distribution',
         'document',
         'event',
         'news',
+        'release',
       ],
     ],
   ];
