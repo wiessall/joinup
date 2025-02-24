@@ -125,7 +125,7 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drupal/webform_views": "^5.4",
-        "drush/drush": "^12.1",
+        "drush/drush": "^13.3",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
