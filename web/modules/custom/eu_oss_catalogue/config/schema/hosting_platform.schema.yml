@@ -13,11 +13,13 @@ eu_oss_catalogue.hosting_platform.*:
       label: Catalogue type
       constraints:
         Choice:
-          callback: \Drupal\eu_oss_catalogue\Attribute\CatalogueType::validChoices()
+          callback: [ '\Drupal\eu_oss_catalogue\Attribute\CatalogueType', 'validChoices' ]
     country:
       type: string
       label: Country code
       nullable: true
+      constraints:
+        CountryCode: [ ]
     description:
       type: text
       label: Description
