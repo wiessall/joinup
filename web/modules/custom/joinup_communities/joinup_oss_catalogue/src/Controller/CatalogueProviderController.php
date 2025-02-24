@@ -13,16 +13,32 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 class CatalogueProviderController extends ControllerBase {
 
   /**
-   * Returns a renderable array for a test page.
+   * Returns a renderable array.
    *
-   * Return []
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $plugin
+   *   Provider plugin.
+   *
+   * @return array
    */
-  public function content(EuOssCatalogueProviderInterface $plugin): array {
+  public function getContent(EuOssCatalogueProviderInterface $plugin): array {
     $build = [
       '#markup' => $plugin->getPluginId(),
     ];
 
     return $build;
+  }
+
+  /**
+   * Gets the title of the page.
+   *
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $plugin
+   *   Provide plugin.
+   *
+   * @return string
+   *   Title.
+   */
+  public function getTitle(EuOssCatalogueProviderInterface $plugin): string {
+    return $plugin->getPluginDefinition()['label']->__toString();
   }
 
 }
