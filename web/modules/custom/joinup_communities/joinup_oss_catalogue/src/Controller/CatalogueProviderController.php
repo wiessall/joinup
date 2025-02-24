@@ -15,13 +15,13 @@ class CatalogueProviderController extends ControllerBase {
   /**
    * Returns a renderable array for a test page.
    *
-   * return []
+   * Return []
    */
   public function content(EuOssCatalogueProviderInterface $plugin): array {
     $build = [
       '#markup' => $plugin->getPluginId(),
     ];
-    
+
     return $build;
   }
 
