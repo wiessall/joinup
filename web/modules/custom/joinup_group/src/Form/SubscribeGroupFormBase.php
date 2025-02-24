@@ -24,7 +24,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -318,7 +317,7 @@ class SubscribeGroupFormBase extends FormBase {
       }
 
       if ($subscribe) {
-        $membership = $this->subscribe($node);
+        $membership = $this->subscribe($membership);
         $is_pending = !empty($membership) && $membership->isPending();
         $message = $is_pending ?
           $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
@@ -333,32 +332,24 @@ class SubscribeGroupFormBase extends FormBase {
       }
 
       if ($subscribe) {
-        $membership = $this->subscribe($node);
+        $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $node);
+        $membership = $this->subscribe($membership);
         $this->messenger->addStatus($node->getNewMembershipSuccessMessage($membership));
       }
     }
   }
 
   /**
-   * Creates and stores subscriptions.
+   * Subscribes collection or solution membership.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $node
-   *   Passed node.
+   * @param \Drupal\og\OgMembershipInterface $membership
+   *   Membership param.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function subscribe(GroupInterface $node): OgMembershipInterface {
-    $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $node);
-    if ($node instanceof Collection) {
-      $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
-      $membership->set('announcements', TRUE);
-    }
-    else {
-      $subscription_bundles = [];
-      foreach (CommunityContentHelper::BUNDLES as $bundle) {
-        $subscription_bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
-      }
-    }
+  public function subscribe(OgMembershipInterface $membership): OgMembershipInterface {
+    $groupBundle = $membership->getGroupBundle();
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField($groupBundle);
     $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();
     return $membership;

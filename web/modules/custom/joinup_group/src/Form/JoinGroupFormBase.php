@@ -64,7 +64,9 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     MessengerInterface $messenger,
     protected FormBuilderInterface $formBuilder,
     protected EventDispatcherInterface $eventDispatcher,
-  ) {}
+  ) {
+    $this->messenger = $messenger;
+  }
 
   /**
    * {@inheritdoc}
