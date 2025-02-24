@@ -166,11 +166,9 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    * Config validation callback for weblinks.
    *
    * @param array $values
-   *    The configuration.
+   *   The configuration.
    * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
-   *    The validation execution context.
-   *
-   * @return void
+   *   The validation execution context.
    */
   public static function validateWeblinks(array $values, ExecutionContextInterface $context): void {
     if (empty($values)) {
