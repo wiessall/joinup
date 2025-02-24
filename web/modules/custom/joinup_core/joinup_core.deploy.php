@@ -183,3 +183,33 @@ function joinup_core_deploy_200304(): string {
   \Drupal::state()->delete('joinup_core_deploy_200200');
   return 'Solution type field and revision values have been restored.';
 }
+
+/**
+ * Remove users inactive for 3 years.
+ */
+function joinup_core_deploy_200305(array &$sandbox): string {
+
+  if (empty($sandbox['usernames'])) {
+    $sandbox['usernames'] = str_getcsv(file_get_contents(__DIR__ . "/fixtures/inactive_users.csv"));
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['usernames']);
+  }
+
+  $usernames = array_splice($sandbox['usernames'], 0, 500);
+
+  foreach ($usernames as $username) {
+    $user = user_load_by_name($username);
+    if ($user) {
+      $edit = ['user_cancel_notify' => TRUE];
+      // Call the user_cancel to cancel and log.
+      user_cancel($edit, $user->id(), 'joinup_user_cancel');
+    }
+    else {
+      \Drupal::logger('joinup_core')->warning('No user found for username: @username', ['@username' => $username]);
+    }
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
+}
