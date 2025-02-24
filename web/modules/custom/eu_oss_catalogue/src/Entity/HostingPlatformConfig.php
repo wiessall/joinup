@@ -6,7 +6,6 @@ namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
-use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
@@ -18,8 +17,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *   handlers = {
  *     "form" = {
  *       "edit" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm",
- *       "delete" =
- *   "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
+ *       "delete" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
@@ -33,10 +31,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     "label" = "label",
  *   },
  *   links = {
- *     "edit-form" =
- *   "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
- *     "delete-form" =
- *   "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
+ *     "edit-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
+ *     "delete-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
  *   },
  *   config_export = {
  *     "id",

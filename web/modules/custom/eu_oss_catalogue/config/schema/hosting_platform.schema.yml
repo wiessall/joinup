@@ -13,7 +13,7 @@ eu_oss_catalogue.hosting_platform.*:
       label: Catalogue type
       constraints:
         Choice:
-          callback: [ '\Drupal\eu_oss_catalogue\Attribute\CatalogueType', 'validChoices' ]
+          callback: [ '\Drupal\eu_oss_catalogue\Entity\CatalogueType', 'validChoices' ]
     country:
       type: string
       label: Country code
@@ -22,19 +22,19 @@ eu_oss_catalogue.hosting_platform.*:
         CountryCode: [ ]
     weblinks:
       type: sequence
-      label: 'Weblinks'
+      label: Weblinks
       constraints:
         Callback: [ '\Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig', 'validateWeblinks' ]
       sequence:
         type: mapping
-        label: 'Weblink'
+        label: Weblink
         mapping:
           url:
             type: string
-            label: 'URL'
+            label: URL
           title:
             type: string
-            label: 'Title'
+            label: Title
             nullable: true
     description:
       type: text

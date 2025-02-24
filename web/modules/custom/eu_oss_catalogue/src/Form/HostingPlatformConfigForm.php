@@ -13,7 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\PluginFormInterface;
-use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
