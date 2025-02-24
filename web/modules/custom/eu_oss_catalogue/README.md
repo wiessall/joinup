@@ -246,9 +246,9 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-Fetch solutions from Dutch catalogue
+Fetch solutions from Developer overheid
 ```bash
-./vendor/bin/drush eu-oss:fetch dutch_catalogue
+./vendor/bin/drush eu-oss:fetch developer_overheid
 ```
 
 Run the following, to fetch from

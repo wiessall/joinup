@@ -17,12 +17,12 @@ use Psr\Http\Message\ResponseInterface;
  * Intercepts any HTTP requests made to Dutch catalogue API.
  *
  * @ServiceMock(
- *   id = "dutch_catalogue",
- *   label = @Translation("Dutch catalogue API"),
+ *   id = "developer_overheid",
+ *   label = @Translation("Developer overheid API"),
  *   weight = 0,
  * )
  */
-class DutchCatalogue extends PluginBase implements ServiceMockPluginInterface {
+class DeveloperOverheid extends PluginBase implements ServiceMockPluginInterface {
 
   use IntegrationTestTrait;
 
@@ -38,7 +38,7 @@ class DutchCatalogue extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/dutch_catalogue.yml')));
+    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/developer_overheid.yml')));
     return new Response(200, [
       'Content-Type' => 'application/json',
       'Content-Length' => strlen($response),
