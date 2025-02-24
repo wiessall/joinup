@@ -18,7 +18,7 @@ readonly class CatalogueProviderConverter implements ParamConverterInterface {
 
   public function __construct(
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager
+    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {}
 
   /**
