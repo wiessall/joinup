@@ -17,7 +17,6 @@ use Drupal\cas\Event\CasPostValidateEvent;
 use Drupal\cas\Event\CasPreLoginEvent;
 use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
-use Drupal\cas\Service\CasHelper;
 use Drupal\externalauth\Authmap;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
@@ -68,20 +67,20 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      CasHelper::EVENT_PRE_VALIDATE => 'alterValidationUrl',
-      CasHelper::EVENT_POST_VALIDATE => [
+      CasPreValidateEvent::class => 'alterValidationUrl',
+      CasPostValidateEvent::class => [
         ['prepareAttributes'],
         ['blockedUserMessage'],
       ],
-      CasHelper::EVENT_PRE_REGISTER => [
+      CasPreRegisterEvent::class => [
         ['markAsNewAccountRegistration'],
         ['handleDrupalUsernameCollision'],
         ['preventRegisterEmailCollision'],
       ],
       // This runs just before CasAttributesSubscriber::onPreLogin().
       // @see \Drupal\cas_attributes\Subscriber\CasAttributesSubscriber::onPreLogin()
-      CasHelper::EVENT_PRE_LOGIN => ['handlePotentialMailCollision', 21],
-      CasHelper::EVENT_POST_LOGIN => [
+      CasPreLoginEvent::class => ['handlePotentialMailCollision', 21],
+      CasPostLoginEvent::class => [
         ['storeAttributes'],
         ['setRedirectAndStatusOnNewAccount', -20],
       ],
