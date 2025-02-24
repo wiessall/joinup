@@ -1,0 +1,34 @@
+uuid: e25edb20-9e60-4ed9-a3fa-2ea010b39a71
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_taxonomy_related_term
+    - taxonomy.vocabulary.egovera
+    - taxonomy.vocabulary.eira
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.egovera.field_taxonomy_related_term
+field_name: field_taxonomy_related_term
+entity_type: taxonomy_term
+bundle: egovera
+label: 'Related terms'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      eira: eira
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
