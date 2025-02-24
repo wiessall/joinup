@@ -25,7 +25,7 @@ settings:
   handler: grouped_taxonomy_term_selection
   handler_settings:
     target_bundles:
-      eira: eira
+      solution_type: solution_type
     sort:
       field: _none
     auto_create: false

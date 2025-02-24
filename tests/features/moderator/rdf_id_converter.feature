@@ -11,7 +11,7 @@ Feature:
     Then I should see the heading "Entity URI to URL and the other way around"
 
     # Deliberately add a blank space in the beginning and the end of the URI to ensure trimming.
-    When I fill in "RDF URI or entity URL" with " http://data.europa.eu/dr8/PublicServiceProvider "
+    When I fill in "RDF URI or entity URL" with " http://data.europa.eu/dr8/testing/PublicServiceProvider "
     And I press "Go!"
     Then I should see the heading "Public Service Provider"
 

@@ -77,6 +77,7 @@ class IdRedirect extends ControllerBase {
     $namespaces = [
       'w21' => 'node',
       'dr8' => 'taxonomy_term',
+      'dr8/egovera' => 'taxonomy_term',
     ];
 
     if (!$namespace) {
