@@ -29,7 +29,7 @@ class JoinupEuLoginAuthnameItemList extends FieldItemList {
     if ($account->isAuthenticated()) {
       /** @var \Drupal\cas\Service\CasUserManager $cas_user_manager */
       $cas_user_manager = \Drupal::service('cas.user_manager');
-      if ($authname = $cas_user_manager->getCasUsernameForAccount($account->id())) {
+      if ($authname = $cas_user_manager->getCasUsernameForAccount((int) $account->id())) {
         $this->list[0] = $this->createItem(0, $authname);
       }
     }
