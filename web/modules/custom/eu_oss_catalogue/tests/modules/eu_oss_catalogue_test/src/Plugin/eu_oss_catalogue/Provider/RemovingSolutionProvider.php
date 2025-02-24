@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 
 /**

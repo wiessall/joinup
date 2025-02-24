@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Attribute;
+namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 

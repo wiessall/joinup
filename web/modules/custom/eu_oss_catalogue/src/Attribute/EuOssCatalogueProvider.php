@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Attribute;
 
 use Drupal\Component\Plugin\Attribute\Plugin;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 
 /**
  * Defines a EU OSS Catalogue provider.
