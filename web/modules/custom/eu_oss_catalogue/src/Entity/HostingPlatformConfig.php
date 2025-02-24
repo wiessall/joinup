@@ -38,6 +38,7 @@ use Drupal\eu_oss_catalogue\Attribute\CatalogueType;
  *     "id",
  *     "label",
  *     "type",
+ *     "weblinks",
  *     "country",
  *     "description",
  *     "platformId",
@@ -61,6 +62,11 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    * The catalogue type.
    */
   protected string $type;
+
+  /**
+   * List of weblinks.
+   */
+  protected array $weblinks = [];
 
   /**
    * The country code.
@@ -99,6 +105,13 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    */
   public function getCatalogueType(): CatalogueType {
     return CatalogueType::from($this->type);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWeblinks(): array {
+    return $this->weblinks;
   }
 
   /**
