@@ -1,8 +1,8 @@
 joinup_oss_catalogue.catalogue_provider:
   path: '/eu-oss-catalogue/source/{plugin}'
   defaults:
-    _controller: '\Drupal\joinup_oss_catalogue\Controller\CatalogueProviderController:content'
-    _title: 'OSS catalogue provider'
+    _controller: '\Drupal\joinup_oss_catalogue\Controller\CatalogueProviderController::getContent'
+    _title_callback: '\Drupal\joinup_oss_catalogue\Controller\CatalogueProviderController::getTitle'
   requirements:
     _access: 'TRUE'
   options:
