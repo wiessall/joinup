@@ -13,7 +13,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 class CatalogueProviderController extends ControllerBase {
 
   /**
-   * Returns a renderable array.
+   * Returns the catalogue content.
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $plugin
    *   Provider plugin.
@@ -22,11 +22,10 @@ class CatalogueProviderController extends ControllerBase {
    *   Render array.
    */
   public function getContent(EuOssCatalogueProviderInterface $plugin): array {
-    $build = [
-      '#markup' => $plugin->getPluginId(),
+    return [
+      '#theme' => 'catalogue_provider',
+      '#provider' => $plugin,
     ];
-
-    return $build;
   }
 
   /**
@@ -39,7 +38,7 @@ class CatalogueProviderController extends ControllerBase {
    *   Title.
    */
   public function getTitle(EuOssCatalogueProviderInterface $plugin): string {
-    return $plugin->getPluginDefinition()['label']->__toString();
+    return (string) $plugin->getPluginDefinition()['label'];
   }
 
 }
