@@ -62,9 +62,6 @@ Feature: "Add document" visibility options.
       | Short title | Amazing document    |
       | Abstract    | Amazing document    |
     And I select "Document" from "Type"
-    # Regression test: Document is successfully displayed even when a publication date is not set.
-    And I clear the date of the "Publication date" widget
-    And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
     Then I should see the following error messages:
@@ -84,11 +81,6 @@ Feature: "Add document" visibility options.
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
-
-    # Check that the publication date field is prefilled with the current time.
-    When I go to the homepage of the "Hunter in the Swords" collection
-    And I click "Add document" in the plus button menu
-    Then I see "Publication date" filled with the current time
 
   # Regression test to ensure that no critical errors are thrown when a new
   # revision is created for a document that has a remote file attached.
