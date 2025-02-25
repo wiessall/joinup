@@ -53,12 +53,10 @@ Feature: Notification test for the news transitions on a pre moderated parent.
 
     # Regression test for proposing an item with a published version.
     When I am logged in as "CC facilitator"
-    And I go to the "CCN create propose" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN create propose"
     And I press "Publish"
     And I am logged in as "CC member"
-    And I go to the "CCN create propose" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN create propose"
     And I press "Save new draft"
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
@@ -88,22 +86,19 @@ Feature: Notification test for the news transitions on a pre moderated parent.
 
     # Test 'update' operation.
     When I am logged in as "CC member"
-    And I go to the "CCN pre propose" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre propose"
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been proposed" contains the following lines of text:
       | CC Member has submitted a new news - "CCN pre propose" for publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Portal Support at                             |
 
-    When I go to the "CCN pre propose from reported" news
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "news" with the title "CCN pre propose from reported"
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
       | CC Member has updated the content of the news - "CCN pre propose from reported" as advised and requests again its publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                    |
 
-    When I go to the "CCN pre request deletion" news
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "news" with the title "CCN pre request deletion"
     And I press "Request deletion"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I just want to delete it."
@@ -112,8 +107,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC Member has requested to delete the news - "CCN pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                          |
 
-    When I go to the "CCN published to revise" news
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "news" with the title "CCN published to revise"
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                          |
@@ -121,8 +115,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | body      | CC Member has submitted an update of the news - "CCN published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre publish" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre publish"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                              |
@@ -130,8 +123,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | body      | CC Facilitator has published the new news - "CCN pre publish" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre request changes" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre request changes"
     And I press "Request changes"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
@@ -145,8 +137,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | body      | CC Facilitator has submitted an update of the news - "CCN pre request changes" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre report" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre report"
     And I press "Report"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
@@ -156,8 +147,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                                         |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre approve proposed" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre approve proposed"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                 |
@@ -165,8 +155,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the news - "CCN pre approve proposed" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre reject deletion" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre reject deletion"
     And I press "Reject deletion"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I still like it"
@@ -178,8 +167,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
 
     # Test 'delete' operation.
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre delete" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre delete"
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -188,8 +176,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | body      | Facilitator CC Facilitator has approved your request of deletion for the news - "CCN pre delete" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN pre request deletion" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN pre request deletion"
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -199,8 +186,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
 
     # Test 'delete' operation for a published entity.
     When I am logged in as "CC facilitator"
-    And I go to the "CCN published to delete" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN published to delete"
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:

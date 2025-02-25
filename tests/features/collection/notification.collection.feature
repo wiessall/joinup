@@ -83,8 +83,7 @@ Feature: Notification test for the collection transitions.
 
     # Test 'propose' operation (on an existing collection)
     And I am logged in as "NC owner"
-    And I go to the homepage of the "NC to propose" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to propose"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC to propose" contains the following lines of text:
       | NC Owner has proposed collection "NC to propose".                                  |
@@ -92,8 +91,7 @@ Feature: Notification test for the collection transitions.
       | If you think this action is not clear or not due, please contact Portal Support at |
 
     # Test 'request archival' operation.
-    And I go to the homepage of the "NC to request archival" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to request archival"
     And I press "Request archival"
     Then the email sent to "NC moderator" with subject "User NC requested to archive collection NC to request archival" contains the following lines of text:
       | NC Owner has requested to archive the collection "NC to request archival".         |
@@ -102,8 +100,7 @@ Feature: Notification test for the collection transitions.
 
     # Test deletion of a collection by the owner.
     When I mark all emails as read
-    And I go to the homepage of the "NC to delete" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to delete"
     And I click "Delete"
     And I press "Delete"
     Then 2 e-mails should have been sent
@@ -118,8 +115,7 @@ Feature: Notification test for the collection transitions.
 
     # Test 'propose edit' operation.
     And I am logged in as "NC facilitator"
-    And I go to the homepage of the "NC to propose edit" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to propose edit"
     And I fill in "Title" with "NC to propose edit proposed"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed to edit collection NC to propose edit proposed" contains the following lines of text:
@@ -131,8 +127,7 @@ Feature: Notification test for the collection transitions.
 
     # Test the 'approve new' operation.
     And I am logged in as "NC moderator"
-    And I go to the homepage of the "NC to publish" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to publish"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | NC owner                                                                         |
@@ -140,16 +135,14 @@ Feature: Notification test for the collection transitions.
       | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
-    And I go to the homepage of the "NC to propose edit" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to propose edit"
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
       | Your proposal to edit the collection "NC to propose edit proposed" has been accepted. |
       | You can verify the edited version of the collection at                                |
 
     # Test the 'reject archival' operation.
-    And I go to the homepage of the "NC to reject archival" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to reject archival"
     # @todo This should change into a separate transition.
     And I press "Publish"
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -160,8 +153,7 @@ Feature: Notification test for the collection transitions.
       | The reason for rejection is: It will not be archived.                                     |
 
     # Test the 'archive' operation.
-    And I go to the homepage of the "NC to archive" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to archive"
     And I press "Archive"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "As you wish."
@@ -190,8 +182,7 @@ Feature: Notification test for the collection transitions.
     # Test the deletion of a collection by a moderator. This should also inform
     # the collection owner.
     When I mark all emails as read
-    And I go to the homepage of the "NC to delete by mod" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "NC to delete by mod"
     And I click "Delete"
     And I press "Delete"
     Then 3 e-mails should have been sent

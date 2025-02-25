@@ -290,8 +290,7 @@ Feature: Moderate community content
 
     # Verify that when an entity receives a version to moderate while having a published version,
     # the latest version is shown in the moderation page.
-    When I go to the "Cataclysmic variables" discussion
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "discussion" with the title "Cataclysmic variables"
     And I fill in "Title" with "Cataclysmic conditions"
     And I fill in "Motivation" with "This is a regression issue."
     And I press "Request changes"
