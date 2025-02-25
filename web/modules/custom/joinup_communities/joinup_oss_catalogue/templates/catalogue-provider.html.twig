@@ -17,22 +17,22 @@
 <div class="catalogue-provider">
 
   <p>
-    <strong>{{ 'Type:'| t }}</strong> {{ type }}
+    <strong>{{ 'Type:'|t }}</strong> {{ type }}
   </p>
 
   {% if country %}
     <p>
-      <strong>{{ 'Country:'| t }}</strong> {{ country }}
+      <strong>{{ 'Country:'|t }}</strong> {{ country }}
     </p>
   {% endif %}
 
   <div>
-    <strong>{{ 'Description:'| t }}</strong>
+    <strong>{{ 'Description:'|t }}</strong>
     {{ description }}
   </div>
 
   <div>
-    <strong>{{ 'Weblinks:'| t }}</strong>
+    <strong>{{ 'Weblinks:'|t }}</strong>
     <ul>
       {% for weblink in weblinks %}
         <li>{{ weblink }}</li>
