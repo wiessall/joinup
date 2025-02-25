@@ -159,7 +159,7 @@ default:
                 - website-builder
               roadmap: http://roadmap.example.com/vendor/solution2
               developmentStatus: development
-              softwareType: library
+              softwareType: ""
               description:
                 it:
                   genericName: '[IT] ACME Solution 2'

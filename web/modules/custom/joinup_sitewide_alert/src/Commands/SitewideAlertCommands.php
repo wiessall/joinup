@@ -10,7 +10,7 @@ use Drush\Commands\DrushCommands;
 /**
  * Sitewide alert drush commands.
  *
- * @see \Drush\Drupal\Commands\sql\SanitizeCommands::sanitize()
+ * @see \Drush\Commands\sql\sanitize\SanitizeCommands::sanitize()
  */
 class SitewideAlertCommands extends DrushCommands {
 

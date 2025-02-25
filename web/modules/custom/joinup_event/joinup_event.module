@@ -190,6 +190,9 @@ function joinup_event_library_info_alter(array &$libraries, string $extension): 
   // Temporary support for Internet Explorer.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5564
   // @see https://github.com/openeuropa/oe_webtools/pull/104
+  // This override also used in the test css_js_asset.feature. Please add a
+  // replacement library with an external JS asset for the test HTML head when
+  // this alteration is removed.
   if ($extension === 'oe_webtools') {
     $libraries['drupal.webtools-smartloader']['header'] = TRUE;
   }
