@@ -19,7 +19,7 @@ use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
   id: "testing_provider",
   label: new TranslatableMarkup("Testing provider"),
   parser: "publiccode_yml",
-  type: CatalogueType::Local
+  type: CatalogueType::Local,
 )]
 class TestingProvider extends DevelopersItalia {
 

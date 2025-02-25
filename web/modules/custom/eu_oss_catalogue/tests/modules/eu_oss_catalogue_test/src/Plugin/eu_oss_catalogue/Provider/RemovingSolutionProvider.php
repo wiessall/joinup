@@ -17,7 +17,7 @@ use Drupal\eu_oss_catalogue\Entity\CatalogueType;
   id: "removing_solution_provider",
   label: new TranslatableMarkup("Removing solution provider"),
   parser: "publiccode_yml",
-  type: CatalogueType::Local
+  type: CatalogueType::Local,
 )]
 class RemovingSolutionProvider extends SelectedProjectProvider {
 
