@@ -58,7 +58,7 @@ Feature:
     Examples:
       # Events are excluded since they do not show the updated timestamp to the end user.
       | type     | publication field name    |
-      | document | document publication date |
+      | document | published at              |
       | news     | published at              |
 
   Scenario: Documents without a publication date should show the published_at property.
