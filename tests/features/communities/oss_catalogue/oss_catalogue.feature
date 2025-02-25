@@ -371,3 +371,21 @@ Feature:
       | /modal/foo/modal/bar/like |
       | /feature/foo/bar/add      |
       | /feature/foo/bar/remove   |
+
+  Scenario: OSS catalogue source page
+    When I go to "eu-oss-catalogue/source/developers_italia"
+    Then I should see the following lines of text:
+      | Type: National                                                                                                                                                                                                                                                                    |
+      | Country: Italy                                                                                                                                                                                                                                                                    |
+      | Description:                                                                                                                                                                                                                                                                      |
+      | Developers Italia is a community of developers who design and code Italian digital public services, and provide the Italian National Catalogue for the acquisition and reuse of software by and for the Public Administration, as envisaged and required by national legislation. |
+      | Weblinks:                                                                                                                                                                                                                                                                         |
+    And I should see the link "https://developers.italia.it/en/software"
+
+    When I go to "eu-oss-catalogue/source/hosting_platform:code_europa_eu"
+    Then I should see the following lines of text:
+      | Type: European                                                                                                                                                                                      |
+      | Description:                                                                                                                                                                                        |
+      | Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights. |
+      | Weblinks:                                                                                                                                                                                           |
+    And I should see the link "https://code.europa.eu"
