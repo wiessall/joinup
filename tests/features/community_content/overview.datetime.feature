@@ -74,9 +74,6 @@ Feature:
       | Abstract    | POLI |
     And I select "Document" from "Type"
     And I select "Supplier exchange" from "Topic"
-    # Regression test: Document is successfully displayed even when a publication date is not set.
-    And I clear the date of the "Publication date" widget
-    And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah blah nobody cares. |
@@ -101,9 +98,6 @@ Feature:
       | Abstract    | POLI |
     And I select "Document" from "Type"
     And I select "Supplier exchange" from "Topic"
-    # Regression test: Document is successfully displayed even when a publication date is not set.
-    And I clear the date of the "Publication date" widget
-    And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah blah nobody cares. |
