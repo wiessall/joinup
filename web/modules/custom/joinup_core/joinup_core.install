@@ -6,6 +6,7 @@
  */
 
 declare(strict_types=1);
+
 use Drupal\Core\Database\Database;
 
 /**
@@ -116,7 +117,8 @@ function joinup_core_update_200300(array &$sandbox): void {
 
   if ($sandbox['progress'] >= $sandbox['total']) {
     $sandbox['#finished'] = 1;
-  } else {
+  }
+  else {
     $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
   }
 }
