@@ -38,6 +38,12 @@ Feature: Notification test for the assessment.
     And I should have the following content subscriptions:
       | Interoperability assessments space | assessment_report, discussion, document, event, news, solution, announcements |
 
+    # Ensure the assessment_report option is only available for the
+    # assessment collection.
+    And I click "My subscriptions"
+    Then I should see the text "Assessment report" in the "Interoperability assessments space" card
+    But I should not see the text "Assessment report" in the "The Portal" card
+
     Given I am logged in as "AA Notify moderator"
     And I click the link from email sent to "AA Notify moderator" with subject "Assessment submission (Complete)"
     When I select the radio button "Publish report"
