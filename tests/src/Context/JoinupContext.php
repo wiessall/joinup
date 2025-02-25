@@ -2041,6 +2041,36 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Cleans up orphaned group content in non clone group.
+   *
+   * @AfterScenario ~@group-clone
+   *
+   * @todo Remove this in ISAICP-9358
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
+   */
+  public function cleanGroupContentClean(AfterScenarioScope $event): void {
+    // Because we are deleting the users but keep the UID in the content's
+    // uid field, OG is cleaning up the records from the og_membership table
+    // because the the UID is now still there on user deletion. We also need
+    // to clean up entities from the og_membership table that the users no
+    // longer exist.
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
+    $query->fields('n', ['nid']);
+    $query->isNull('u.uid');
+    // Avoid deleting default content that belong to the anonymous user or user
+    // 1 in tests.
+    $query->condition('n.uid', 1, '>');
+    $nids = $query->execute()->fetchCol();
+
+    if (!empty($nids)) {
+      $storage = \Drupal::entityTypeManager()->getStorage('node');
+      $nodes = $storage->loadMultiple($nids);
+      $storage->delete($nodes);
+    }
+  }
+
+  /**
    * Assert that a given attribute is not set for a given element in a region.
    *
    * @Then I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)
