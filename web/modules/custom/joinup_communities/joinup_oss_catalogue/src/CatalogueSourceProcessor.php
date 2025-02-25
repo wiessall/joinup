@@ -8,7 +8,10 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\joinup_oss_catalogue\ParamConverter\CatalogueSourceConverter;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,6 +23,10 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
 
   public function __construct(
     readonly protected CountryManagerInterface $countryManager,
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
+    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    #[Autowire(service: 'Drupal\joinup_oss_catalogue\ParamConverter\CatalogueSourceConverter')]
+    protected CatalogueSourceConverter $converter,
   ) {}
 
   /**
@@ -28,6 +35,8 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('country_manager'),
+      $container->get('plugin.manager.eu_oss_catalogue.provider'),
+      $container->get('Drupal\joinup_oss_catalogue\ParamConverter\CatalogueSourceConverter'),
     );
   }
 
@@ -63,6 +72,21 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
         ],
       ], $definition['weblinks'] ?? []),
     ];
+  }
+
+  /**
+   * Returns all EU OSS Catalogue providers.
+   */
+  public function getAllProviders(): array {
+    $rows = [];
+    foreach ($this->providerPluginManager->getDefinitions() as $pluginId => $definition) {
+      $provider = $this->converter->convert($pluginId, $definition, 'plugin', []);
+      $rows[$pluginId] = $this->processProvider($provider);
+    }
+    uasort($rows, function ($a, $b) {
+      return strcmp($a['label'], $b['label']);
+    });
+    return $rows;
   }
 
 }

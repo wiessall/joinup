@@ -53,6 +53,11 @@ function joinup_oss_catalogue_theme(): array {
         'provider' => NULL,
       ],
     ],
+    'catalogue_sources_table' => [
+      'variables' => [
+        'providers' => NULL,
+      ],
+    ],
   ];
 }
 
