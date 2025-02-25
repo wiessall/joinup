@@ -19,7 +19,7 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
   public function __construct(
-    readonly protected CountryManagerInterface $countryManager
+    readonly protected CountryManagerInterface $countryManager,
   ) {}
 
   /**
@@ -35,7 +35,7 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
    * Processes provided.
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
-   *  The provider.
+   *   The provider.
    *
    * @return array
    *   Render array for source provider.
