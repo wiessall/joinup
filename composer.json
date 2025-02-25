@@ -24,13 +24,13 @@
         "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
         "drupal/calendar_view": "^2.1",
-        "drupal/cas": "^2.0",
-        "drupal/cas_attributes": "^2.0",
+        "drupal/cas": "^3.0",
+        "drupal/cas_attributes": "^3.0",
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "~10.4.1",
-        "drupal/core-recommended": "~10.4.1",
+        "drupal/core-composer-scaffold": "~10.4.3",
+        "drupal/core-recommended": "~10.4.3",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -125,7 +125,7 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drupal/webform_views": "^5.4",
-        "drush/drush": "^12.1",
+        "drush/drush": "^13.3",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
@@ -444,6 +444,9 @@
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
+            },
+            "drupal/rdf_sync": {
+                "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",

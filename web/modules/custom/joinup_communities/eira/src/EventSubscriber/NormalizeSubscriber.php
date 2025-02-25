@@ -34,7 +34,7 @@ class NormalizeSubscriber implements EventSubscriberInterface {
    */
   public function normalizeEiraExtraProperties(RdfSyncNormalizeEvent $event): void {
     $term = $event->getEntity();
-    if (!$term instanceof TermInterface || !in_array($term->bundle(), ['egovera', 'eira'])) {
+    if (!$term instanceof TermInterface || !in_array($term->bundle(), ['egovera', 'eira', 'solution_type'])) {
       return;
     }
 
