@@ -71,7 +71,6 @@ trait NameMappingsTrait {
         'state' => 'field_state',
       ],
       'document' => [
-        'document publication date' => 'field_document_publication_date',
         'document type' => 'field_type',
         'file' => 'field_file',
         'keywords' => 'field_keywords',
