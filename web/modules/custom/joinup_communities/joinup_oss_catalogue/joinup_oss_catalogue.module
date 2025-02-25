@@ -7,18 +7,18 @@
 
 declare(strict_types=1);
 
+use Drupal\block\BlockInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\block\BlockInterface;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_oss_catalogue\CatalogueSourceProcessor;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
@@ -69,28 +69,8 @@ function template_preprocess_catalogue_source(array &$variables): void {
     return;
   }
 
-  $variables['type'] = $provider->getPluginDefinition()['type']?->getLabel();
-  $list = Drupal::service(CountryManagerInterface::class)->getList();
-  $variables['country'] = $list[$provider->getPluginDefinition()['country']] ?? NULL;
-  $variables['description'] = [
-    '#type' => 'processed_text',
-    '#text' => (string) $provider->getPluginDefinition()['description'],
-    '#format' => 'plain_text',
-  ];
-  $variables['weblinks'] = [];
-  foreach ($provider->getPluginDefinition()['weblinks'] as $weblink) {
-    $title = $weblink['title'] ?? $weblink['url'];
-
-    $variables['weblinks'][] = [
-      '#type' => 'link',
-      '#title' => $title,
-      '#url' => Url::fromUri($weblink['url']),
-      '#attributes' => [
-        'target' => '_blank',
-        'rel' => 'noopener noreferrer',
-      ],
-    ];
-  }
+  $processor = \Drupal::service(CatalogueSourceProcessor::class);
+  $variables = array_merge($variables, $processor->processProvider($provider));
 }
 
 /**
