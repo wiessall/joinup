@@ -2041,19 +2041,15 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Cleans up orphaned group content in non clone group.
+   * Cleans up orphaned content in non clone group.
    *
    * @AfterScenario ~@group-clone
    *
    * @todo Remove this in ISAICP-9358
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
    */
-  public function cleanGroupContentClean(AfterScenarioScope $event): void {
-    // Because we are deleting the users but keep the UID in the content's
-    // uid field, OG is cleaning up the records from the og_membership table
-    // because the the UID is now still there on user deletion. We also need
-    // to clean up entities from the og_membership table that the users no
-    // longer exist.
+  public function cleanLeftoverContent(AfterScenarioScope $event): void {
+    // Delete data that are not created through the behat API.
     $query = \Drupal::database()->select('node_field_data', 'n');
     $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
     $query->fields('n', ['nid']);
