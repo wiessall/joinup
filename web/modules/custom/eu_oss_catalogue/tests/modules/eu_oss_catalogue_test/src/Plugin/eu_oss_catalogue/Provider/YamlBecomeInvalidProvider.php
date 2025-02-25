@@ -17,7 +17,7 @@ use Drupal\eu_oss_catalogue\Entity\CatalogueType;
   id: "yaml_become_invalid_provider",
   label: new TranslatableMarkup("YAML become invalid"),
   parser: "publiccode_yml",
-  type: CatalogueType::Local
+  type: CatalogueType::Local,
 )]
 class YamlBecomeInvalidProvider extends SelectedProjectProvider {
 

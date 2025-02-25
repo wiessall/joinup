@@ -17,7 +17,7 @@ use Drupal\eu_oss_catalogue\Entity\CatalogueType;
   id: "yaml_become_valid_provider",
   label: new TranslatableMarkup("YAML become valid"),
   parser: "publiccode_yml",
-  type: CatalogueType::Local
+  type: CatalogueType::Local,
 )]
 class YamlBecomeValidProvider extends SelectedProjectProvider {
 
