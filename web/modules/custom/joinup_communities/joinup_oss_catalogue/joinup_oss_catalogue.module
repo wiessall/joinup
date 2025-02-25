@@ -48,7 +48,7 @@ function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
  */
 function joinup_oss_catalogue_theme(): array {
   return [
-    'catalogue_provider' => [
+    'catalogue_source' => [
       'variables' => [
         'provider' => NULL,
         'type' => NULL,
@@ -63,7 +63,7 @@ function joinup_oss_catalogue_theme(): array {
 /**
  * Implements template_preprocess_HOOK().
  */
-function template_preprocess_catalogue_provider(array &$variables): void {
+function template_preprocess_catalogue_source(array &$variables): void {
   $provider = $variables['provider'] ?? NULL;
   if (!$provider instanceof EuOssCatalogueProviderInterface) {
     return;
