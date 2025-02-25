@@ -19,6 +19,7 @@ class CatalogueProviderController extends ControllerBase {
    *   Provider plugin.
    *
    * @return array
+   *   Render array.
    */
   public function getContent(EuOssCatalogueProviderInterface $plugin): array {
     $build = [
