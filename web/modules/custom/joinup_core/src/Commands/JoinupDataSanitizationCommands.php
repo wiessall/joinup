@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputInterface;
 /**
  * Additional Drush sanitization plugins.
  *
- * @see \Drush\Drupal\Commands\sql\SanitizeCommands::sanitize()
+ * @see \Drush\Commands\sql\sanitize\SanitizeCommands::sanitize()
  */
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
 
