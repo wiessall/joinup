@@ -61,11 +61,16 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    */
   public function getTargetEntity(string $path): array {
     // Extracts the encoded URI and everything that comes after.
-    $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^/]*)(?<suffix>/(?:.*))?$@';
+    $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^?]*)(?<suffix>/(?:.*))?$@';
     if (!preg_match($pattern, $path, $found)) {
       return [NULL, NULL];
     }
 
+    // Cases like eGovEra are redirected with a / in their URI. We need to fix
+    // this by replacing the prefix.
+    if ($found['uri'] && str_contains($found['uri'], '_fegovera/')) {
+      $found['uri'] = str_replace('/', '_f', $found['uri']);
+    }
     if (!$entity = $this->getEntity($found['uri'])) {
       return [NULL, NULL];
     }
