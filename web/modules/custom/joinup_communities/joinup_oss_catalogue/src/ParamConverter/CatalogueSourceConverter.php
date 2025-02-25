@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Route;
 /**
  * Converts route params of type 'hosting_platform'.
  */
-readonly class CatalogueProviderConverter implements ParamConverterInterface {
+readonly class CatalogueSourceConverter implements ParamConverterInterface {
 
   public function __construct(
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]

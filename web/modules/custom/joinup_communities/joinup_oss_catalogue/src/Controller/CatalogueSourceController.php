@@ -8,9 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 
 /**
- * Provides a controller for 'joinup_oss_catalogue.catalogue_provider' route.
+ * Provides a controller for 'joinup_oss_catalogue.catalogue_source' route.
  */
-class CatalogueProviderController extends ControllerBase {
+class CatalogueSourceController extends ControllerBase {
 
   /**
    * Returns the catalogue content.
@@ -23,7 +23,7 @@ class CatalogueProviderController extends ControllerBase {
    */
   public function getContent(EuOssCatalogueProviderInterface $plugin): array {
     return [
-      '#theme' => 'catalogue_provider',
+      '#theme' => 'catalogue_source',
       '#provider' => $plugin,
     ];
   }

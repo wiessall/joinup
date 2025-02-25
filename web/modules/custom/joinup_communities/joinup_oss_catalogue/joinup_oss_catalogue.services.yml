@@ -13,7 +13,7 @@ services:
   joinup_oss_catalogue.oss_solution.imagecache_warmer:
     class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer
 
-  Drupal\joinup_oss_catalogue\ParamConverter\CatalogueProviderConverter:
+  Drupal\joinup_oss_catalogue\ParamConverter\CatalogueSourceConverter:
     tags:
       - { name: paramconverter }
 
