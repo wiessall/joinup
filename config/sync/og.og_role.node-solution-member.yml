@@ -13,6 +13,10 @@ group_bundle: solution
 is_admin: null
 permissions:
   - 'access comments'
+  - 'create discussion content'
+  - 'create document content'
+  - 'create event content'
+  - 'create news content'
   - 'delete own comments'
   - 'delete own discussion content'
   - 'delete own document content'
