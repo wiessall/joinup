@@ -33,3 +33,4 @@ visibility:
     bundles:
       egovera: egovera
       eira: eira
+      solution_type: solution_type
