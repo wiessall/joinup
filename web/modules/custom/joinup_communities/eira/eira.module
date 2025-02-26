@@ -10,12 +10,13 @@ declare(strict_types=1);
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\eira\Entity\Term\Egovera;
+use Drupal\eira\Entity\Term\SolutionType;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
 function eira_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
-  if (!in_array($entity->bundle(), ['egovera', 'eira'])) {
+  if (!in_array($entity->bundle(), ['egovera', 'eira', 'solution_type'])) {
     return;
   }
 
@@ -33,5 +34,8 @@ function eira_entity_bundle_info_alter(array &$bundles): void {
   if (isset($bundles['taxonomy_term']['egovera'])) {
     // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
     $bundles['taxonomy_term']['egovera']['class'] = Egovera::class;
+  }
+  if (isset($bundles['taxonomy_term']['solution_type'])) {
+    $bundles['taxonomy_term']['solution_type']['class'] = SolutionType::class;
   }
 }

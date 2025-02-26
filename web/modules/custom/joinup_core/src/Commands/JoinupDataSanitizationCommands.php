@@ -15,14 +15,14 @@ use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
-use Drush\Drupal\Commands\sql\SanitizeCommands;
-use Drush\Drupal\Commands\sql\SanitizePluginInterface;
+use Drush\Commands\sql\sanitize\SanitizeCommands;
+use Drush\Commands\sql\sanitize\SanitizePluginInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Additional Drush sanitization plugins.
  *
- * @see \Drush\Drupal\Commands\sql\SanitizeCommands::sanitize()
+ * @see \Drush\Commands\sql\sanitize\SanitizeCommands::sanitize()
  */
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
 

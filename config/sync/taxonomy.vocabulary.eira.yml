@@ -32,6 +32,6 @@ _core:
   default_config_hash: mEUCMUaY5OkSGEFzI41HGbP3_Thnomwf6kQ8gtaCu8k
 name: EIRA
 vid: eira
-description: null
+description: 'The official EIRA vocabulary that follows the versions released by the EIRA team.'
 weight: 0
 new_revision: false
