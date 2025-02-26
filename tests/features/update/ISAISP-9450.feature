@@ -1,7 +1,7 @@
 @api @group-clone
 Feature: Test removed inactive users
 
-  @update:joinup_core_deploy_300000
+  @update:joinup_core_deploy_200305
   Scenario: Check users.
     Given the following users should be canceled:
       | name            |
