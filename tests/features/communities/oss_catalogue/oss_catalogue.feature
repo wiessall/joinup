@@ -393,12 +393,12 @@ Feature:
   @javascript
   Scenario: User can click on info icon for source catalogue.
     Given oss_solution content:
-      | title | oss_development_status | oss_source        | status    |
-      | macOS | development            | developers_italia | published |
+      | title | oss_source                      | status    |
+      | macOS | hosting_platform:code_europa_eu | published |
 
     When I go to the content page of the type "oss_solution" with the title "macOS"
-    And I click "Get more details on Developers Italia"
+    And I click "Get more details on Code Europa EU"
 
     Then a modal should open
-    And I should see the text "Developers Italia" in the "Modal title"
-    And I should see the text "Developers Italia is a community of developers" in the "Modal content"
+    And I should see the text "Code Europa EU" in the "Modal title"
+    And I should see the text "Code development platform for Open Source projects shared by the institutions of the European Union" in the "Modal content"
