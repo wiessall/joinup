@@ -15,7 +15,7 @@ use Drupal\user\UserInterface;
 /**
  * User Unblock confirmation form.
  */
-class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerInjectionInterface {
+class ConfirmUnblockUserForm extends ConfirmUnbanUserForm {
 
   /**
    * Banned user.
