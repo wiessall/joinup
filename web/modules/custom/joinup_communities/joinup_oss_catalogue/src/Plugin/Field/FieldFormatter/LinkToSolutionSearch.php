@@ -9,6 +9,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
@@ -27,6 +28,8 @@ use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceFieldItemListIn
  * )
  */
 class LinkToSolutionSearch extends FormatterBase {
+
+  use StringTranslationTrait;
 
   const SEARCH_PAGE_ROUTE = 'view.search_oss_catalogue.search';
 
@@ -179,7 +182,7 @@ class LinkToSolutionSearch extends FormatterBase {
         $renderable[$delta]['link'] = [
           '#theme' => 'catalogue_link',
           '#url' => Url::fromRoute('joinup_oss_catalogue.catalogue_source', ['plugin' => $plugin->getPluginId()]),
-          '#title' => t('Get more details on @provider', ['@provider' => $plugin->getPluginDefinition()['label']]),
+          '#title' => $this->t('Get more details on @provider', ['@provider' => $plugin->getPluginDefinition()['label']]),
         ];
       }
     }
