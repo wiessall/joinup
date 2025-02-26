@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_oss_catalogue\CatalogueSourceProcessor;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an OSS catalogue sources block.
- *
- * @Block(
- *   id = "joinup_oss_catalogue_sources",
- *   admin_label = @Translation("OSS catalogue sources"),
- *   category = @Translation("OSS Catalogue")
- * )
  */
+#[Block(
+  id: "joinup_oss_catalogue_sources",
+  admin_label: new TranslatableMarkup("OSS catalogue sources"),
+  category: new TranslatableMarkup("OSS Catalogue"),
+)]
 class OssCatalogueSourcesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
@@ -32,7 +33,7 @@ class OssCatalogueSourcesBlock extends BlockBase implements ContainerFactoryPlug
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -55,6 +56,7 @@ class OssCatalogueSourcesBlock extends BlockBase implements ContainerFactoryPlug
         $this->t('Weblinks'),
       ],
       '#rows' => $this->processor->getAllProviders(),
+      '#attributes' => ['class' => ['oss-catalogue-list']],
     ];
   }
 
