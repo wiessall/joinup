@@ -388,7 +388,7 @@
         <!--
         The DelimitedPayloadTokenFilter can put payloads on tokens... for example,
         a token of "foo|1.4"  would be indexed as "foo" with a payload of 1.4f
-        Attribute of the DelimitedPayloadTokenFilterFactory :
+        Attributes of the DelimitedPayloadTokenFilterFactory :
          "delimiter" - a one character delimiter. Default is | (pipe)
          "encoder" - how to encode the following value into a playload
            float -> org.apache.lucene.analysis.payloads.FloatEncoder,
