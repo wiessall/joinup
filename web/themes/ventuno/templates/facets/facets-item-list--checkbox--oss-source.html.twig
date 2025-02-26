@@ -51,7 +51,10 @@
     {%- if items -%}
       <{{ list_type }}{{ attributes }}>
       {%- for item in items -%}
-      <li{{ item.attributes }}>{{ item.value }}</li>
+        <li{{ item.attributes }}>
+          {{ item.value }}
+          {{ item.catalogue_link }}
+        </li>
       {%- endfor -%}
       </{{ list_type }}>
     {%- else -%}
