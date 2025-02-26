@@ -66,12 +66,16 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
       return [NULL, NULL];
     }
 
-    if (!$entity = $this->getEntity($found['uri'], $found['suffix'])) {
+    if (!$entity = $this->getEntity($found['uri'], $found['suffix'] ?? '')) {
       return [NULL, NULL];
     }
 
     // In case we found that the suffix is part of the IRI, then, return an
     // empty string as suffix.
+    if (!isset($found['suffix'])) {
+      return [$entity, ''];
+    }
+
     return str_ends_with($entity->getUri(), $found['suffix'])
       ? [$entity, '']
       : [$entity, $found['suffix']];
@@ -88,7 +92,7 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    * @return \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface|null
    *   The entity or NULL if the request URL doesn't designate a mapped entity.
    */
-  protected function getEntity(string $encodedUri, string $suffix): ?RdfSyncEntityInterface {
+  protected function getEntity(string $encodedUri, string $suffix = ''): ?RdfSyncEntityInterface {
     // With the legacy storage, RDF entity IDs were encoded URIs.
     $uri = strtr($encodedUri, self::MAP);
 
