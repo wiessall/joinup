@@ -1,0 +1,35 @@
+uuid: 6f7208e8-e5df-4009-800e-cbfc2d30f23c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.solution_type.extra_properties
+    - field.field.taxonomy_term.solution_type.field_taxonomy_related_term
+    - taxonomy.vocabulary.solution_type
+  module:
+    - text
+id: taxonomy_term.solution_type.default
+targetEntityType: taxonomy_term
+bundle: solution_type
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_taxonomy_related_term:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  extra_properties: true
+  langcode: true
+  search_api_excerpt: true
+  uri: true
