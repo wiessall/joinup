@@ -61,16 +61,20 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    */
   public function getTargetEntity(string $path): array {
     // Extracts the encoded URI and everything that comes after.
-    $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^?]*)(?<suffix>/(?:.*))?$@';
+    $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^/]*)(?<suffix>/(?:.*))?$@';
     if (!preg_match($pattern, $path, $found)) {
       return [NULL, NULL];
     }
 
-    if (!$entity = $this->getEntity($found['uri'])) {
+    if (!$entity = $this->getEntity($found['uri'], $found['suffix'])) {
       return [NULL, NULL];
     }
 
-    return [$entity, $found['suffix'] ?? ''];
+    // In case we found that the suffix is part of the IRI, then, return an
+    // empty string as suffix.
+    return str_ends_with($entity->getUri(), $found['suffix'])
+      ? [$entity, '']
+      : [$entity, $found['suffix']];
   }
 
   /**
@@ -78,20 +82,36 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    *
    * @param string $encodedUri
    *   The entity encoded URI path.
+   * @param string $suffix
+   *   The URL suffix that might be part of the URL.
    *
    * @return \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface|null
    *   The entity or NULL if the request URL doesn't designate a mapped entity.
    */
-  protected function getEntity(string $encodedUri): ?RdfSyncEntityInterface {
+  protected function getEntity(string $encodedUri, string $suffix): ?RdfSyncEntityInterface {
     // With the legacy storage, RDF entity IDs were encoded URIs.
     $uri = strtr($encodedUri, self::MAP);
 
-    if (!$entity = $this->mapper->getEntityByUri($uri)) {
-      return NULL;
+    // Sometimes, the URI is served to us including '/' characters, like the
+    // eGovERA. Other times, the UUID is already properly set, like internal
+    // URLs. Try to construct the URL by adding parts of the suffix if the
+    // entity is not found with the solid URI.
+    $uriParts = array_filter(explode('/', $suffix));
+    $candidate = $uri;
+    $entity = $this->mapper->getEntityByUri($candidate);
+    if ($entity instanceof RdfSyncEntityInterface) {
+      return $entity;
     }
 
-    // Make sure is a mapped entity.
-    return $entity instanceof RdfSyncEntityInterface ? $entity : NULL;
+    while ($uriParts) {
+      $part = array_shift($uriParts);
+      $candidate .= '/' . $part;
+      $entity = $this->mapper->getEntityByUri($candidate);
+      if ($entity instanceof RdfSyncEntityInterface) {
+        return $entity;
+      }
+    }
+    return NULL;
   }
 
   /**
