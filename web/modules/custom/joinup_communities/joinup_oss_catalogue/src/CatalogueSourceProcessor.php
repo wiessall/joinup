@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_oss_catalogue;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -58,19 +59,18 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
       'type' => $definition['type']?->getLabel(),
       'country' => $list[$definition['country']] ?? NULL,
       'description' => [
-        '#type' => 'processed_text',
-        '#text' => (string) $definition['description'],
-        '#format' => 'plain_text',
-      ],
-      'weblinks' => array_map(fn($weblink) => [
-        '#type' => 'link',
-        '#title' => $weblink['title'] ?? $weblink['url'],
-        '#url' => Url::fromUri($weblink['url']),
-        '#attributes' => [
-          'target' => '_blank',
-          'rel' => 'noopener noreferrer',
+        'data' => [
+          '#type' => 'processed_text',
+          '#text' => (string) $definition['description'],
+          '#format' => 'plain_text',
         ],
-      ], $definition['weblinks'] ?? []),
+      ],
+      'weblinks' => [
+        'data' => array_map(fn($weblink) => Link::fromTextAndUrl(
+          $weblink['title'] ?? $weblink['url'],
+          Url::fromUri($weblink['url'])
+        )->toRenderable(), $definition['weblinks'] ?? []),
+      ],
     ];
   }
 
