@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
@@ -165,23 +164,6 @@ function joinup_paragraphs_preprocess_paragraph__image_gallery(array &$variables
   }
   // Prevent paragraph heading to be rendered twice.
   unset($variables['content']['paragraph_heading']);
-}
-
-/**
- * Implements hook_form_alter().
- *
- * Limits block joinup_oss_catalogue_sources in paragraph only for moderators.
- */
-function joinup_paragraphs_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-
-  if ($form_id === 'layout_paragraphs_component_form') {
-    $current_user = \Drupal::currentUser();
-    if (!in_array('moderator', $current_user->getRoles())) {
-      if (isset($form['paragraph_block']['widget'][0]['plugin_id']['#options']['OSS Catalogue']['joinup_oss_catalogue_sources'])) {
-        unset($form['paragraph_block']['widget'][0]['plugin_id']['#options']['OSS Catalogue']['joinup_oss_catalogue_sources']);
-      }
-    }
-  }
 }
 
 /**
