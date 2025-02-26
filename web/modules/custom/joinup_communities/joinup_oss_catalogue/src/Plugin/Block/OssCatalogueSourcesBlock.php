@@ -46,8 +46,15 @@ class OssCatalogueSourcesBlock extends BlockBase implements ContainerFactoryPlug
    */
   public function build(): array {
     return [
-      '#theme' => 'catalogue_sources_table',
-      '#providers' => $this->processor->getAllProviders(),
+      '#theme' => 'table',
+      '#header' => [
+        $this->t('Catalogue'),
+        $this->t('Type'),
+        $this->t('Country'),
+        $this->t('Description'),
+        $this->t('Weblinks'),
+      ],
+      '#rows' => $this->processor->getAllProviders(),
     ];
   }
 
