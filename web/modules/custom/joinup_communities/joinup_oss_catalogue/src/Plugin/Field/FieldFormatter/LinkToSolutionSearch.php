@@ -182,7 +182,7 @@ class LinkToSolutionSearch extends FormatterBase {
         $renderable[$delta]['link'] = [
           '#theme' => 'catalogue_link',
           '#url' => Url::fromRoute('joinup_oss_catalogue.catalogue_source', ['plugin' => $plugin->getPluginId()]),
-          '#title' => $this->t('Get more details on @provider', ['@provider' => $plugin->getPluginDefinition()['label']]),
+          '#title' => $plugin->getPluginDefinition()['label'],
         ];
       }
     }
