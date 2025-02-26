@@ -53,6 +53,11 @@ function joinup_oss_catalogue_theme(): array {
         'provider' => NULL,
       ],
     ],
+    'catalogue_link' => [
+      'variables' => [
+        'url' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -103,6 +108,10 @@ function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(
     $provider = $item['value']['#attributes']['data-drupal-facet-item-value'];
     if ($provider && isset($descriptions[$provider])) {
       $item['attributes']['title'] = $descriptions[$provider];
+      $item['catalogue_link'] = [
+        '#theme' => 'catalogue_link',
+        '#url' => Url::fromRoute('joinup_oss_catalogue.catalogue_source', ['plugin' => $provider]),
+      ];
     }
   }
 }
