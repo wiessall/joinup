@@ -202,7 +202,8 @@ function joinup_core_deploy_200305(array &$sandbox): string {
     if ($user) {
       $edit = ['user_cancel_notify' => TRUE];
       // Call the user_cancel to cancel and log.
-      user_cancel($edit, $user->id(), 'joinup_user_cancel');
+      _user_cancel($edit, $user, 'joinup_user_cancel');
+      _user_cancel_session_regenerate();
     }
     else {
       \Drupal::logger('joinup_core')->warning('No user found for username: @username', ['@username' => $username]);
