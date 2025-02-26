@@ -61,7 +61,7 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    */
   public function getTargetEntity(string $path): array {
     // Extracts the encoded URI and everything that comes after.
-    $pattern = '@^(?<prefix>/taxonomy/term/)(?<uri>http_e_f_f[^?]*)(?<suffix>/(?:.*))?$@';
+    $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^?]*)(?<suffix>/(?:.*))?$@';
     if (!preg_match($pattern, $path, $found)) {
       return [NULL, NULL];
     }
