@@ -56,6 +56,7 @@ function joinup_oss_catalogue_theme(): array {
     'catalogue_link' => [
       'variables' => [
         'url' => NULL,
+        'title' => NULL,
       ],
     ],
   ];
@@ -113,6 +114,7 @@ function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(
         'link' => [
           '#theme' => 'catalogue_link',
           '#url' => Url::fromRoute('joinup_oss_catalogue.catalogue_source', ['plugin' => $provider]),
+          '#title' => t('Get more details on @provider', ['@provider' => $item['value']['#title']['#value']]),
         ],
       ];
     }
