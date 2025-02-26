@@ -389,3 +389,16 @@ Feature:
       | Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights. |
       | Weblinks:                                                                                                                                                                                           |
     And I should see the link "https://code.europa.eu"
+
+  @javascript
+  Scenario: User can click on info icon for source catalogue.
+    Given oss_solution content:
+      | title | oss_development_status | oss_source        | status    |
+      | macOS | development            | developers_italia | published |
+
+    When I go to the content page of the type "oss_solution" with the title "macOS"
+    And I click "Get more details on Developers Italia"
+
+    Then a modal should open
+    And I should see the text "Developers Italia" in the "Modal title"
+    And I should see the text "Developers Italia is a community of developers" in the "Modal content"
