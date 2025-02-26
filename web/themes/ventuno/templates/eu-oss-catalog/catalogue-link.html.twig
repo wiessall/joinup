@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Default theme implementation of catalogue_link.
+ *
+ * Available variables:
+ * - url: Source link.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{{ attach_library('core/drupal.dialog.ajax') }}
+
+{% set attributes = create_attribute(
+  {
+    class: 'use-ajax',
+    'data-dialog-type': 'modal',
+    'data-dialog-options': {width: 600}|json_encode,
+  }
+) %}
+
+<span class="catalogue-link">
+  <a href="{{ url }}" {{ attributes }}>
+     {{ pattern('icon', {
+       name: 'info-circle-fill',
+       path: bcl_icon_path,
+       size: 's',
+     }) }}
+  </a>
+</span>
