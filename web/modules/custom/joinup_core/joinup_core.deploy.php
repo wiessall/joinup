@@ -198,12 +198,15 @@ function joinup_core_deploy_200305(array &$sandbox): string {
   $usernames = array_splice($sandbox['usernames'], 0, 500);
 
   foreach ($usernames as $username) {
-    $user = user_load_by_name($username);
-    if ($user) {
+    $uid = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->condition('name', $username)
+      ->execute();
+
+    if (!empty($uid)) {
       $edit = ['user_cancel_notify' => TRUE];
       // Call the user_cancel to cancel and log.
-      _user_cancel($edit, $user, 'joinup_user_cancel');
-      _user_cancel_session_regenerate();
+      user_cancel($edit, (int) reset($uid), 'user_cancel_delete');
     }
     else {
       \Drupal::logger('joinup_core')->warning('No user found for username: @username', ['@username' => $username]);
