@@ -10,6 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceFieldItemListInterface;
 
@@ -161,7 +162,8 @@ class LinkToSolutionSearch extends FormatterBase {
       $linkTitle = $this->getSetting('use_label') && $labelFromDefinition
         ? $labelFromDefinition
         : $plugin->getPluginId();
-      $renderable[$delta] = [
+
+      $renderable[$delta]['name'] = [
         '#title' => $labelFromDefinition ?: $plugin->getPluginId(),
         '#url' => Url::fromRoute(
           route_name: static::SEARCH_PAGE_ROUTE,
@@ -172,6 +174,14 @@ class LinkToSolutionSearch extends FormatterBase {
           ],
         ),
       ] + static::DEFAULT_LINK;
+
+      if ($plugin instanceof EuOssCatalogueProviderInterface) {
+        $renderable[$delta]['link'] = [
+          '#theme' => 'catalogue_link',
+          '#url' => Url::fromRoute('joinup_oss_catalogue.catalogue_source', ['plugin' => $plugin->getPluginId()]),
+          '#title' => t('Get more details on @provider', ['@provider' => $plugin->getPluginDefinition()['label']]),
+        ];
+      }
     }
 
     return $renderable;
