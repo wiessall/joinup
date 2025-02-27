@@ -152,8 +152,7 @@ class HostingPlatformUITest extends BrowserTestBase {
   }
 
   /**
-   * Clicks a specific action link (Edit/Delete) inside a table row containing
-   * specific text.
+   * Clicks a specific action link inside a table row.
    *
    * @param string $rowText
    *   The unique text to locate the correct row.
