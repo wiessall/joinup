@@ -3,7 +3,8 @@ Feature: Test removed inactive users
 
   @update:joinup_core_deploy_200305
   Scenario: Check users.
-    Given the following users should be deleted:
+    Given I run the "joinup_removed_users" queue worker
+    Then the following users should be deleted:
       | name            |
       | gerelia         |
       | n00ib7n0        |
