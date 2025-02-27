@@ -6,6 +6,9 @@
     td {
       min-width: 100px;
       vertical-align: top;
+      a {
+        word-wrap: break-word;
+      }
     }
     @include media-breakpoint-up(md) {
       table-layout: fixed;
