@@ -76,6 +76,9 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
 
   /**
    * Returns all EU OSS Catalogue providers.
+   *
+   * @return array
+   *   Returns array of EuOssCatalogueProviderInterface providers.
    */
   public function getAllProviders(): array {
     $rows = [];
