@@ -34,8 +34,8 @@ class HostingPlatformConfigForm extends EntityForm {
 
   public function __construct(
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.hosting_platform')]
-    protected readonly EuOssCataloguePluginManagerInterface $platformManager,
-    protected readonly CountryManagerInterface $countryManager,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected CountryManagerInterface $countryManager,
   ) {}
 
   /**
