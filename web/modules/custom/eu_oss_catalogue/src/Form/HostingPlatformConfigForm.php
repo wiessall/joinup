@@ -204,8 +204,8 @@ class HostingPlatformConfigForm extends EntityForm {
     $plugin = $this->platformManager->createInstance($platformId, [
         // Pass also the entity as plugin configuration for plugins that might
         // need it. It's removed from configuration on form submit.
-        'hosting_platform' => $this->getEntity(),
-      ] +
+      'hosting_platform' => $this->getEntity(),
+    ] +
       // Pass the settings if the platform already exists.
       ($this->getEntity()->isNew() ? [] : $this->getEntity()
         ->getPlatformSettings()));
