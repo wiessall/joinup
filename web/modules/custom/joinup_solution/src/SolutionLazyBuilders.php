@@ -6,14 +6,14 @@ namespace Drupal\joinup_solution;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\Security\Attribute\TrustedCallback;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_solution\Form\JoinSolutionForm;
 
 /**
  * Defines a service for #lazy_builder callbacks for the Collection module.
  */
-readonly class SolutionLazyBuilders implements TrustedCallbackInterface {
+readonly class SolutionLazyBuilders {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -30,16 +30,10 @@ readonly class SolutionLazyBuilders implements TrustedCallbackInterface {
    * @return array
    *   A renderable array containing the comment form.
    */
+  #[TrustedCallback]
   public function renderJoinSolutionForm(string $solution_id): array {
     $solution = $this->entityTypeManager->getStorage('node')->load($solution_id);
     return $this->formBuilder->getForm(JoinSolutionForm::class, $this->currentUser, $solution);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function trustedCallbacks(): array {
-    return ['renderJoinSolutionForm'];
   }
 
 }
