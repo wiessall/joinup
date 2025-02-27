@@ -7,7 +7,7 @@
 <div class="pt-3 pb-5 border-bottom">
   {{ content.body }}
 </div>
-{% if content.field_attachment|render|striptags %}
+{% if content.field_attachment|field_value %}
   <div class="pt-5 pb-3 border-bottom mb-5">
     <h3>{{ 'Attachments'|t }}</h3>
     {{ content.field_attachment }}
