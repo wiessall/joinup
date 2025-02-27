@@ -188,6 +188,7 @@ function joinup_core_deploy_200304(): string {
  * Remove users inactive for 3 years.
  */
 function joinup_core_deploy_200305(array &$sandbox): string {
+  $queue = \Drupal::queue('joinup_removed_users');
 
   if (empty($sandbox['usernames'])) {
     $sandbox['usernames'] = str_getcsv(file_get_contents(__DIR__ . "/fixtures/inactive_users.csv"));
@@ -197,20 +198,9 @@ function joinup_core_deploy_200305(array &$sandbox): string {
 
   $usernames = array_splice($sandbox['usernames'], 0, 500);
 
+  $queue->createQueue();
   foreach ($usernames as $username) {
-    $uid = \Drupal::entityQuery('user')
-      ->accessCheck(FALSE)
-      ->condition('name', $username)
-      ->execute();
-
-    if (!empty($uid)) {
-      $edit = ['user_cancel_notify' => TRUE];
-      // Call the user_cancel to cancel and log.
-      user_cancel($edit, (int) reset($uid), 'user_cancel_delete');
-    }
-    else {
-      \Drupal::logger('joinup_core')->warning('No user found for username: @username', ['@username' => $username]);
-    }
+    $queue->createItem(['name' => $username]);
     $sandbox['progress']++;
   }
 
