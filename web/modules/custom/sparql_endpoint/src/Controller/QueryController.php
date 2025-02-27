@@ -9,7 +9,7 @@ use Drupal\sparql_endpoint\CachedSparqlReadOnlyEndpoint;
 use Drupal\sparql_endpoint\Form\QueryForm;
 use Drupal\sparql_endpoint\SparqlFormatManager;
 use Drupal\sparql_endpoint\SparqlResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\AcceptHeader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,19 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 class QueryController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'sparql_endpoint.cached_sparql_endpoint')]
     protected readonly CachedSparqlReadOnlyEndpoint $endpoint,
+    #[Autowire(service: 'plugin.manager.sparql_endpoint.sparql_format')]
     protected readonly SparqlFormatManager $sparqlFormatManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('sparql_endpoint.cached_sparql_endpoint'),
-      $container->get('plugin.manager.sparql_endpoint.sparql_format')
-    );
-  }
 
   /**
    * Handles the content request.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -15,7 +14,7 @@ use Drupal\user\UserInterface;
 /**
  * User Unblock confirmation form.
  */
-class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerInjectionInterface {
+class ConfirmUnblockUserForm extends ConfirmUnbanUserForm {
 
   /**
    * Banned user.

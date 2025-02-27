@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Helper class to create or update the user's avatar default image file.
@@ -27,24 +27,14 @@ readonly class JoinupUserDefaultAvatarImageHelper implements ContainerInjectionI
    */
   private const UUID = '2e24bbc5-dedf-42b0-85cf-35940274c2f8';
 
+  use AutowireTrait;
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityRepositoryInterface $entityRepository,
     protected FileSystemInterface $fileSystem,
     protected ModuleExtensionList $moduleExtensionList,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('entity.repository'),
-      $container->get('file_system'),
-      $container->get('extension.list.module'),
-    );
-  }
 
   /**
    * Creates or updates the default user avatar image file.

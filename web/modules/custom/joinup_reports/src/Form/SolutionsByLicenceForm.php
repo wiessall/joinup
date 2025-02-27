@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_reports\Form;
 
 use Drupal\Core\Database\Query\PagerSelectExtender;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,12 +13,14 @@ use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A reporting page that presents solutions indexed by related licences.
  */
 class SolutionsByLicenceForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * {@inheritdoc}
@@ -28,20 +31,10 @@ class SolutionsByLicenceForm extends FormBase {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'database')]
     protected Connection $database,
     protected LinkGeneratorInterface $linkGenerator,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('database'),
-      $container->get('link_generator')
-    );
-  }
 
   /**
    * {@inheritdoc}
