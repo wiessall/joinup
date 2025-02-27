@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
@@ -11,7 +12,9 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Psr\Log\LogLevel;
@@ -19,12 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Taxonomy term resolver.
- *
- * @EuOssCatalogueResolver(
- *   id = "taxonomy_term",
- *   label = "Taxonomy term",
- * )
  */
+#[EuOssCatalogueResolver(
+  id: "taxonomy_term",
+  label: new TranslatableMarkup("Taxonomy term")
+)]
 class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPluginInterface {
 
   public function __construct(
@@ -72,6 +74,9 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     if (!$value) {
       return;
     }
+
+    // Remove empty term names.
+    $value = NestedArray::filter($value);
 
     // Get a flat list of all term names regardless of the language.
     $allTermNames = array_values(array_merge(...array_values($value)));

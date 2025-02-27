@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Dynamic permissions provider.
@@ -18,23 +19,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class JoinupGroupPermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
+  use AutowireTrait;
 
   public function __construct(
+    #[Autowire(service: 'og.group_type_manager')]
     protected readonly GroupTypeManagerInterface $groupTypeManager,
+    #[Autowire(service: 'plugin.manager.workflow')]
     protected readonly WorkflowManagerInterface $workflowManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.group_type_manager'),
-      $container->get('plugin.manager.workflow'),
-      $container->get('entity_type.manager'),
-    );
-  }
 
   /**
    * Returns an array of group ownership permissions.

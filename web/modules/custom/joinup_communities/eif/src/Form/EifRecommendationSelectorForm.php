@@ -4,26 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\eif\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form class for EIF recommendation selector.
  */
 class EifRecommendationSelectorForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('entity_type.manager'));
-  }
 
   /**
    * {@inheritdoc}

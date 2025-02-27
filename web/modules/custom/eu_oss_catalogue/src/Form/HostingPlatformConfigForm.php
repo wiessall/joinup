@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxFormHelperTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,7 +18,7 @@ use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,19 +27,12 @@ use Symfony\Component\HttpFoundation\Response;
 class HostingPlatformConfigForm extends EntityForm {
 
   use AjaxFormHelperTrait;
+  use AutowireTrait;
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.hosting_platform')]
     protected readonly EuOssCataloguePluginManagerInterface $platformManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
-    );
-  }
 
   /**
    * {@inheritdoc}

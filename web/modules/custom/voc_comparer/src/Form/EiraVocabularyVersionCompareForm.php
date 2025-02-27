@@ -6,36 +6,29 @@ namespace Drupal\voc_comparer\Form;
 
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_rdf\VocabularyFixturesHelperInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Voc comparer form.
  */
 class EiraVocabularyVersionCompareForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly CacheBackendInterface $databaseCache,
+    #[Autowire(service: 'joinup_rdf.vocabulary_fixtures.helper')]
     protected readonly VocabularyFixturesHelperInterface $fixtureImporter,
+    #[Autowire(service: 'rdf_sync.connection')]
     protected readonly RdfSyncConnectionInterface $sparql,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('cache.default'),
-      $container->get('joinup_rdf.vocabulary_fixtures.helper'),
-      $container->get('rdf_sync.connection')
-    );
-  }
 
   /**
    * {@inheritdoc}
