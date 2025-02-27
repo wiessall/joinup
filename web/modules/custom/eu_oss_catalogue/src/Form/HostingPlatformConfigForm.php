@@ -62,9 +62,13 @@ class HostingPlatformConfigForm extends EntityForm {
       '#description' => $this->t('A unique string identifier. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
+    $type = $this->getEntity()
+      ->isNew() ? CatalogueType::Local->value : $this->getEntity()
+      ->getCatalogueType()->value;
     $form['type'] = [
-      '#type' => 'hidden',
-      '#value' => CatalogueType::Local->value,
+      '#type' => 'select',
+      '#options' => $this->getOptionTypes(),
+      '#default_value' => $type,
     ];
 
     $form['description'] = [
@@ -102,6 +106,22 @@ class HostingPlatformConfigForm extends EntityForm {
   }
 
   /**
+   * Get option types.
+   *
+   * @return array
+   *   Options.
+   */
+  protected function getOptionTypes(): array {
+    $options = [];
+
+    foreach (CatalogueType::cases() as $type) {
+      $options[$type->value] = $type->getLabel();
+    }
+
+    return $options;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $formState): void {
@@ -110,6 +130,7 @@ class HostingPlatformConfigForm extends EntityForm {
     // Remove leading or trailing whitespaces.
     $formState->setValue('id', trim($formState->getValue('id')));
     $formState->setValue('label', trim($formState->getValue('label')));
+    $formState->setValue('type', trim($formState->getValue('type')));
     $formState->setValue('description', trim($formState->getValue('description')));
 
     // Ask plugin to add its validations.
