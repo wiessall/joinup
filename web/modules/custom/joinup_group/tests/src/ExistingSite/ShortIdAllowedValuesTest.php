@@ -52,7 +52,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
    *   the string triggers a validation error, or FALSE if the string does not
    *   cause a validation error.
    */
-  public function shortIdAllowedValuesProvider(): array {
+  public static function shortIdAllowedValuesProvider(): array {
     return [
       'starts with dash' => ['-startwithdash', FALSE],
       'starts with dash contains uppercase' => ['-StartWithDash', TRUE],

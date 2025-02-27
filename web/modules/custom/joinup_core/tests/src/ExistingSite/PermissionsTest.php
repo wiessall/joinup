@@ -51,7 +51,7 @@ class PermissionsTest extends JoinupExistingSiteTestBase {
    *
    * @see testPermissionsAreDefined
    */
-  public function providerPermissionTypes(): array {
+  public static function providerPermissionTypes(): array {
     return [
       [
         'user_role',

@@ -43,7 +43,7 @@ class OssSolutionPageTest extends FetchTestBase {
   /**
    * Data provider for testViewAccess.
    */
-  public function viewDataProvider(): array {
+  public static function viewDataProvider(): array {
     return [
       [0, 200],
       [1, 403],
