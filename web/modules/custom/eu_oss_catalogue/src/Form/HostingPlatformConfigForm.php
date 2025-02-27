@@ -91,8 +91,7 @@ class HostingPlatformConfigForm extends EntityForm {
     $form['weblinks'] = [
       '#type' => 'multivalue',
       '#title' => $this->t('Weblinks'),
-      '#default_value' => $this->getEntity()
-        ->isNew() ? [] : $this->entity->getWeblinks(),
+      '#default_value' => $this->entity->getWeblinks(),
       '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
       '#required' => TRUE,
       'url' => [
