@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\user\Form\UserCancelForm as CoreUserCancelForm;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Overrides the default implementation of the form to delete a user account.
@@ -21,25 +22,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UserCancelForm extends CoreUserCancelForm {
 
+  use AutowireTrait;
+
   public function __construct(
     EntityRepositoryInterface $entity_repository,
     EntityTypeBundleInfoInterface $entity_type_bundle_info,
     TimeInterface $time,
+    #[Autowire(service: 'joinup_group.group_manager')]
     protected JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity.repository'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time'),
-      $container->get('joinup_group.group_manager')
-    );
   }
 
   /**

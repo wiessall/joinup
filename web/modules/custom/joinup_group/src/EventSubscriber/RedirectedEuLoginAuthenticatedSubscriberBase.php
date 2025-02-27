@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\EventSubscriber;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\cas\Event\CasPostLoginEvent;
-use Drupal\cas\Service\CasHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -50,7 +49,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
     return [
       // Act before other subscribers that intend to set a redirect destination.
       // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -10],
+      CasPostLoginEvent::class => ['onPostLogin', -10],
     ];
   }
 

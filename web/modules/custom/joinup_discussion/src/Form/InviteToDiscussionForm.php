@@ -19,7 +19,7 @@ use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -36,27 +36,18 @@ class InviteToDiscussionForm extends InviteFormBase {
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'joinup_invite.invitation_message_helper')]
     InvitationMessageHelperInterface $invitationMessageHelper,
+    #[Autowire(service: 'logger.channel.group_membership')]
     LoggerChannelInterface $logger,
+    #[Autowire(service: 'event_dispatcher')]
     protected EventDispatcherInterface $eventDispatcher,
+    #[Autowire(service: 'joinup_subscription.discussion_subscription')]
     protected JoinupDiscussionSubscriptionInterface $subscription,
+    #[Autowire(service: 'og.access')]
     protected OgAccessInterface $ogAccess,
   ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('logger.channel.group_membership'),
-      $container->get('event_dispatcher'),
-      $container->get('joinup_subscription.discussion_subscription'),
-      $container->get('og.access')
-    );
   }
 
   /**

@@ -4,35 +4,28 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_debug\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Task\IndexTaskManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Joinup debug form.
  */
 final class VocabularyIndexForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'search_api.index_task_manager')]
     protected readonly IndexTaskManagerInterface $indexTaskManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.bundle.info'),
-      $container->get('entity_type.manager'),
-      $container->get('search_api.index_task_manager')
-    );
-  }
 
   /**
    * {@inheritdoc}
