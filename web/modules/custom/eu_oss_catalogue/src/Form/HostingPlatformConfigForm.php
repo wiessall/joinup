@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
+use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
@@ -33,6 +34,7 @@ class HostingPlatformConfigForm extends EntityForm {
   public function __construct(
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.hosting_platform')]
     protected readonly EuOssCataloguePluginManagerInterface $platformManager,
+    protected readonly CountryManagerInterface $countryManager,
   ) {}
 
   /**
@@ -67,8 +69,16 @@ class HostingPlatformConfigForm extends EntityForm {
       ->getCatalogueType()->value;
     $form['type'] = [
       '#type' => 'select',
+      '#title' => $this->t('Type'),
       '#options' => $this->getOptionTypes(),
       '#default_value' => $type,
+    ];
+
+    $form['country'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Country'),
+      '#options' => ['' => $this->t('- Select -')] + $this->countryManager->getList(),
+      '#default_value' => $this->getEntity()->getCountryCode(),
     ];
 
     $form['description'] = [
@@ -131,6 +141,8 @@ class HostingPlatformConfigForm extends EntityForm {
     $formState->setValue('id', trim($formState->getValue('id')));
     $formState->setValue('label', trim($formState->getValue('label')));
     $formState->setValue('type', trim($formState->getValue('type')));
+    $country = trim($formState->getValue('country'));
+    $formState->setValue('country', empty($country) ? NULL : $country);
     $formState->setValue('description', trim($formState->getValue('description')));
 
     // Ask plugin to add its validations.
