@@ -91,14 +91,14 @@ function joinup_core_update_200300(array &$sandbox): void {
       ->fields('fdpd', ['entity_id', 'field_document_publication_date_value'])
       ->condition('entity_id', $batch_nodes, 'IN')
       ->execute()
-      ->fetchAllAssoc('entity_id');
+      ->fetchAll();
 
-    foreach ($query as $nid => $record) {
+    foreach ($query as $record) {
       if (!empty($record->field_document_publication_date_value)) {
         $timestamp = strtotime($record->field_document_publication_date_value);
         $database->update('node_field_data')
           ->fields(['published_at' => $timestamp])
-          ->condition('nid', $nid)
+          ->condition('nid', $record->entity_id)
           ->execute();
       }
     }
