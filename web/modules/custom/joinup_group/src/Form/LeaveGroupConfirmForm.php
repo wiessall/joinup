@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,12 +16,14 @@ use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\Og;
 use Drupal\user\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Confirmation form for users that want to revoke their group membership.
  */
 class LeaveGroupConfirmForm extends ConfirmFormBase {
+
+  use AutowireTrait;
 
   /**
    * The group that is about to be abandoned by the user.
@@ -30,17 +33,9 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
   protected $group;
 
   public function __construct(
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.membership_manager')
-    );
-  }
 
   /**
    * {@inheritdoc}

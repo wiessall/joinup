@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,7 +15,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form which directs anonymous users to EU Login so they can join a group.
@@ -26,6 +26,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinGroupAnonymousRedirectForm extends FormBase {
 
+  use AutowireTrait;
+
   /**
    * The group that is about to be joined by the user.
    *
@@ -36,15 +38,6 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
   public function __construct(
     protected readonly TimeInterface $time,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('datetime.time')
-    );
-  }
 
   /**
    * {@inheritdoc}

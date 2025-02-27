@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
@@ -17,12 +18,14 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Base form class for share/unshare entity forms.
  */
 abstract class ShareFormBase extends FormBase {
+
+  use AutowireTrait;
 
   const array SHAREABLE_BUNDLES = [
     'discussion',
@@ -43,26 +46,14 @@ abstract class ShareFormBase extends FormBase {
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
+    #[Autowire(service: 'og.role_manager')]
     protected readonly OgRoleManagerInterface $roleManager,
     protected readonly AccountInterface $currentUser,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
     protected readonly CacheTagsInvalidatorInterface $invalidator,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('og.membership_manager'),
-      $container->get('og.role_manager'),
-      $container->get('current_user'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('cache_tags.invalidator')
-    );
-  }
 
   /**
    * Gets a list of group ids where the current entity is already shared.

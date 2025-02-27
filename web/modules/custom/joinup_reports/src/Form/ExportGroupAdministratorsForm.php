@@ -7,35 +7,27 @@ namespace Drupal\joinup_reports\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
  */
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'cache.default')]
     protected CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('cache.default'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time'),
-      $container->get('entity_type.manager'),
-    );
   }
 
   /**

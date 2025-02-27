@@ -15,7 +15,7 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,20 +26,10 @@ class SubscribersReportController extends ControllerBase {
 
   public function __construct(
     protected readonly Connection $sqlConnection,
+    #[Autowire(service: 'rdf_sync.connection')]
     protected readonly RdfSyncConnectionInterface $sparqlConnection,
     protected readonly RequestStack $requestStack,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('database'),
-      $container->get('rdf_sync.connection'),
-      $container->get('request_stack')
-    );
-  }
 
   /**
    * Returns a table with subscriber data across all groups.

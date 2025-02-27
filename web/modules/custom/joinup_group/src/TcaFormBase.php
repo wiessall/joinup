@@ -6,28 +6,21 @@ namespace Drupal\joinup_group;
 
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Block\Plugin\Block\Broken;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A base form for a TCA submission.
  */
 abstract class TcaFormBase extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly BlockManagerInterface $blockManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('plugin.manager.block')
-    );
-  }
 
   /**
    * Returns the bundle of the type the user is trying to create.
