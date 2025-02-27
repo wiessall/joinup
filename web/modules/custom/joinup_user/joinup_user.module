@@ -12,7 +12,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -517,21 +516,6 @@ function joinup_user_menu_links_discovered_alter(array &$links): void {
 function joinup_user_local_tasks_alter(&$local_tasks): void {
   if (isset($local_tasks['user.login'])) {
     $local_tasks['user.login']['title'] = t('Sign in');
-  }
-}
-
-/**
- * Implements hook_entity_presave().
- */
-function joinup_user_entity_presave(EntityInterface $entity): void {
-  if ($entity->isNew() || !$entity instanceof ContentEntityInterface ||
-    empty($entity->original) || !$entity->original instanceof ContentEntityInterface) {
-    return;
-  }
-
-  // Prevent changes to update date in case content is reassigned to anonymous.
-  if (isset($entity->joinupUserCancelReassign)) {
-    $entity->setChangedTime($entity->original->getChangedTime());
   }
 }
 
