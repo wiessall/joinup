@@ -102,7 +102,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
    * @return array[]
    *   The test cases.
    */
-  public function providerTestHostingPlatformFetch(): array {
+  public static function providerTestHostingPlatformFetch(): array {
     return [
       'Bitbucket.org' => [
         'Mocked errors' => [500],
