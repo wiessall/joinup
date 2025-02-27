@@ -5,28 +5,23 @@ declare(strict_types=1);
 namespace Drupal\joinup_debug\Form;
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Joinup RDF form.
  */
 final class SparqlConsoleForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'rdf_sync.connection')]
     protected readonly RdfSyncConnectionInterface $endpoint,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('rdf_sync.connection'),
-    );
-  }
 
   /**
    * {@inheritdoc}

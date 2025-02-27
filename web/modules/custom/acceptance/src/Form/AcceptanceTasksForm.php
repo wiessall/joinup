@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_acceptance\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -12,7 +13,6 @@ use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\SuspendQueueException;
 use Drupal\Core\Utility\Error;
 use Drupal\message_digest\Traits\MessageDigestTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form allowing to perform acceptance tasks.
@@ -20,21 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AcceptanceTasksForm extends FormBase {
 
   use MessageDigestTrait;
+  use AutowireTrait;
 
   public function __construct(
     protected readonly QueueFactory $queueFactory,
     protected readonly QueueWorkerManagerInterface $queueManager,
   ) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('queue'),
-      $container->get('plugin.manager.queue_worker'),
-    );
   }
 
   /**

@@ -7,11 +7,11 @@ namespace Drupal\joinup_reports;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,22 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class ExportBatchedDataFormBase extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected CacheBackendInterface $cacheStorage,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('cache.default'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time')
-    );
-  }
 
   /**
    * {@inheritdoc}

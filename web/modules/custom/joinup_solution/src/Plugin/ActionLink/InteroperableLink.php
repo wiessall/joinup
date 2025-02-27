@@ -32,7 +32,7 @@ class InteroperableLink extends ConfirmForm {
   /**
    * {@inheritdoc}
    */
-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode): array {
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
     $build = parent::getAsFlagLink($flag, $entity, $view_mode);
     if (isset($build['#theme']) && in_array($view_mode, $this->actionViewModes, TRUE)) {
       return $build;

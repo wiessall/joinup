@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\state_machine\WorkflowManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Dynamic permissions provider.
@@ -15,17 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class StateMachinePermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
+  use AutowireTrait;
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.workflow')]
     protected readonly WorkflowManagerInterface $workflowManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('plugin.manager.workflow'));
-  }
 
   /**
    * Returns an array of permissions related to state machine.

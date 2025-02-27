@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_media\Update;
 
 use Drupal\Core\Config\StorageInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
@@ -15,29 +16,21 @@ use Drupal\media\OEmbed\ResourceException;
 use Drupal\media\OEmbed\UrlResolverInterface;
 use Drupal\media\Plugin\media\Source\OEmbedInterface;
 use Drupal\paragraphs\ParagraphInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Migrates media videos to oEmbed.
  */
 final readonly class MediaOembedMigrate implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected StorageInterface $syncStorage,
+    #[Autowire(service: 'media.oembed.url_resolver')]
     protected UrlResolverInterface $urlResolver,
   ) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('config.storage.sync'),
-      $container->get('media.oembed.url_resolver'),
-    );
   }
 
   /**

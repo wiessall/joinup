@@ -7,6 +7,7 @@ namespace Drupal\joinup_subscription\Form;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
@@ -20,13 +21,15 @@ use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Form that allows the user to unsubscribe from all groups.
  */
 class UnsubscribeForm extends ConfirmFormBase {
+
+  use AutowireTrait;
 
   /**
    * The group, if any.
@@ -42,20 +45,9 @@ class UnsubscribeForm extends ConfirmFormBase {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RendererInterface $renderer,
     protected EntityTypeBundleInfoInterface $bundleInfo,
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $membershipManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('renderer'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('og.membership_manager'),
-    );
-  }
 
   /**
    * {@inheritdoc}

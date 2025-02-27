@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -16,18 +16,11 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueFieldValueInBundleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
-  }
 
   /**
    * {@inheritdoc}

@@ -23,19 +23,9 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
 class NodeBookmarkLink extends AJAXactionLink {
 
   /**
-   * Get the action link formatted for use in entity links.
-   *
-   * @param \Drupal\flag\FlagInterface $flag
-   *   The flag entity.
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The flaggable entity.
-   * @param string $view_mode
-   *   The flaggable entity view mode.
-   *
-   * @return array
-   *   The render array.
+   * {@inheritdoc}
    */
-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode): array {
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, ?string $view_mode = NULL): array {
     assert(is_subclass_of($this, AJAXactionLink::class), __TRAIT__ . ' is intended to be used in action link plugin.');
 
     $build = parent::getAsFlagLink($flag, $entity, $view_mode);
