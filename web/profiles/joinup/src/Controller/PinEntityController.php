@@ -16,7 +16,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgAccessInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -25,17 +25,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class PinEntityController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('og.access')
-    );
-  }
 
   /**
    * Pins a group content entity inside a group.

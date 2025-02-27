@@ -7,21 +7,22 @@ namespace Drupal\joinup_distribution\Form;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
-use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
-use Drupal\node\NodeStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Retrieves the e-mail from anonymous users that are downloading distributions.
  */
 class AnonymousDownloadForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The file being downloaded.
@@ -31,21 +32,11 @@ class AnonymousDownloadForm extends FormBase {
   protected FileInterface $file;
 
   public function __construct(
-    protected readonly NodeStorageInterface $nodeStorage,
-    protected readonly ContentEntityStorageInterface $eventStorage,
+    #[Autowire(service: 'entity_type.manager')]
+    protected $entityTypeManager,
+    #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('node'),
-      $container->get('entity_type.manager')->getStorage('download_event'),
-      $container->get('file.usage')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -122,11 +113,11 @@ class AnonymousDownloadForm extends FormBase {
     if (count($usages['file']['node']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
-    $distribution = $this->nodeStorage->load(key($usages['file']['node']));
+    $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
 
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();
-    $event = $this->eventStorage->create([
+    $event = $this->entityTypeManager->getStorage('download_event')->create([
       'uid' => 0,
       'mail' => $form_state->getValue('email'),
       'file' => $this->file->id(),

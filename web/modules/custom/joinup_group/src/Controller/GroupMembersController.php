@@ -11,7 +11,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\views\Views;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Controller for routes that are showing lists of group memberships.
@@ -28,17 +28,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GroupMembersController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.access')
-    );
-  }
 
   /**
    * Display a list of members that belong to the group.
