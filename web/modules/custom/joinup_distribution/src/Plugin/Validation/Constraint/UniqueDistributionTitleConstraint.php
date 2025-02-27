@@ -33,7 +33,7 @@ class UniqueDistributionTitleConstraint extends Constraint {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOption(): ?string {
+  public function getDefaultOption(): array {
     return [];
   }
 
