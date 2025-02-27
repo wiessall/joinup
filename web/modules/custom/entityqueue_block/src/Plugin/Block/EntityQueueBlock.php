@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\entityqueue_block\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A block that shows the contents of an entityqueue.
- *
- * @Block(
- *   id = "entityqueue_block",
- *   admin_label = @Translation("Entityqueue block"),
- *   category = @Translation("Entityqueue"),
- *   deriver = "Drupal\entityqueue_block\Plugin\Derivative\EntityQueueBlock"
- * )
  */
+#[Block(
+  id: "entityqueue_block",
+  admin_label: new TranslatableMarkup("Entityqueue block"),
+  category: new TranslatableMarkup("Entityqueue"),
+  deriver: 'Drupal\entityqueue_block\Plugin\Derivative\EntityQueueBlock'
+)]
 class EntityQueueBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
