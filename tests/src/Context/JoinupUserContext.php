@@ -261,26 +261,6 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts list of users with the given name doesn't exist.
-   *
-   * Table format:
-   * | name  |
-   * | user1 |
-   * | user2 |
-   * | user3 |
-   *
-   * @param \Behat\Gherkin\Node\TableNode $usersTable
-   *   A table containing the usernames to check.
-   *
-   * @Then the following users should be deleted:
-   */
-  public function assertUsersAreDeleted(TableNode $usersTable): void {
-    foreach ($usersTable->getHash() as $userData) {
-      $this->userNotExists($userData['name']);
-    }
-  }
-
-  /**
    * Registers the latest deleted user UID for cleaning-up after scenario.
    *
    * @BeforeScenario @api
