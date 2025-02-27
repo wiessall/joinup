@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Validation\Constraint;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\collection\Entity\GlossaryTermInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -16,14 +16,9 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class GlossaryTermNameValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
-  public function __construct(protected readonly EntityTypeManagerInterface $entityTypeManager) {}
+  use AutowireTrait;
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static($container->get('entity_type.manager'));
-  }
+  public function __construct(protected readonly EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}

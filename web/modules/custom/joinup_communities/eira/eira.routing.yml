@@ -1,7 +1,14 @@
-eira.vocabulary:
+eira.eira.vocabulary:
   path: '/data/dr8'
   defaults:
-    _controller: '\Drupal\eira\Controller\Eira::vocabulary'
+    _controller: '\Drupal\eira\Controller\Eira::eiraVocabulary'
+    _title: 'Controlled vocabulary for the European Interoperability Reference Architecture (EIRA)'
+  requirements:
+    _access: 'TRUE'
+eira.egovera.vocabulary:
+  path: '/data/dr8/egovera'
+  defaults:
+    _controller: '\Drupal\eira\Controller\Eira::egoveraVocabulary'
     _title: 'Controlled vocabulary for the European Interoperability Reference Architecture (EIRA)'
   requirements:
     _access: 'TRUE'

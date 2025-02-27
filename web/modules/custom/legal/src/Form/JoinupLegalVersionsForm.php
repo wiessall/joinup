@@ -4,31 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_legal\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\entity_legal\Entity\EntityLegalDocument;
 use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Shows a list of versions of 'legal_notice' legal document.
  */
 class JoinupLegalVersionsForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly RendererInterface $renderer,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('renderer')
-    );
-  }
 
   /**
    * {@inheritdoc}
