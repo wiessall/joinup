@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a UI to edit the 'joinup_core.outdated_content_threshold' config.
  */
 class OutdatedContentThresholdForm extends ConfigFormBase {
+
+  use AutowireTrait;
 
   public function __construct(
     readonly ConfigFactoryInterface $config_factory,
@@ -23,17 +25,6 @@ class OutdatedContentThresholdForm extends ConfigFormBase {
     readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($config_factory);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('entity_type.manager')
-    );
   }
 
   /**

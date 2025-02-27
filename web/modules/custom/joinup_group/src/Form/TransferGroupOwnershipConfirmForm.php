@@ -8,6 +8,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\ActionManager;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -19,12 +20,14 @@ use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Confirmation form for transferring the group ownership.
  */
 class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
+
+  use AutowireTrait;
 
   /**
    * The user private tempstore.
@@ -39,7 +42,9 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
   public function __construct(
     protected readonly AccountInterface $currentUser,
     protected readonly RendererInterface $renderer,
+    #[Autowire(service: 'plugin.manager.action')]
     protected readonly ActionManager $actionPluginManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
     protected readonly PrivateTempStoreFactory $tempStoreFactory,
   ) {
@@ -50,19 +55,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
         throw new \RuntimeException("Invalid membership with ID '{$data['membership']}'");
       }
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('current_user'),
-      $container->get('renderer'),
-      $container->get('plugin.manager.action'),
-      $container->get('og.membership_manager'),
-      $container->get('tempstore.private')
-    );
   }
 
   /**

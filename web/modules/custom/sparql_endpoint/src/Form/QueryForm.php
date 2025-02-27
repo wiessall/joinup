@@ -4,29 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\sparql_endpoint\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\sparql_endpoint\SparqlFormatManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Sparql query form.
  */
 class QueryForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'plugin.manager.sparql_endpoint.sparql_format')]
     protected readonly SparqlFormatManager $sparqlFormatManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('plugin.manager.sparql_endpoint.sparql_format')
-    );
-  }
 
   /**
    * {@inheritdoc}
