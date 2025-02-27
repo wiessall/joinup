@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_flag\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
 use Drupal\joinup_flag\FlagType;
@@ -17,12 +19,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a flag block.
- *
- * @Block(
- *   id = "joinup_flag_block",
- *   admin_label = @Translation("Flag block"),
- * )
  */
+#[Block(
+  id: "joinup_flag_block",
+  admin_label: new TranslatableMarkup("Flag block"),
+)]
 class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

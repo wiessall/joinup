@@ -4,21 +4,26 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Plugin\Block\GroupMenuBlock;
 
 /**
  * Table-Of-Contents for top-level custom pages.
- *
- * @Block(
- *   id = "custom_page_toc:navigation",
- *   admin_label = @Translation("Custom page TOC"),
- *   category = @Translation("Custom page"),
- *   context_definitions = {
- *     "og" = @ContextDefinition("entity", label = @Translation("Group")),
- *   },
- * ),
  */
+#[Block(
+  id: "custom_page_toc:navigation",
+  admin_label: new TranslatableMarkup("Custom page TOC"),
+  category: new TranslatableMarkup("Custom page"),
+  context_definitions: [
+    'og' => new EntityContextDefinition(
+      data_type: 'entity',
+      label: new TranslatableMarkup("Group"),
+    ),
+  ],
+)]
 class TableOfContents extends GroupMenuBlock {
 
   /**
