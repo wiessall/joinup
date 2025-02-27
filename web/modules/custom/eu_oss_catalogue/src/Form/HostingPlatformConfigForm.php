@@ -65,6 +65,12 @@ class HostingPlatformConfigForm extends EntityForm {
       '#description' => $this->t('A unique string identifier. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
+    $form['description'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Description'),
+      '#default_value' => $this->getEntity()->getDescription(),
+    ];
+
     $type = $this->getEntity()
       ->isNew() ? CatalogueType::Local->value : $this->getEntity()
       ->getCatalogueType()->value;
@@ -80,12 +86,6 @@ class HostingPlatformConfigForm extends EntityForm {
       '#title' => $this->t('Country'),
       '#options' => ['' => $this->t('- Select -')] + $this->countryManager->getList(),
       '#default_value' => $this->getEntity()->getCountryCode(),
-    ];
-
-    $form['description'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description'),
-      '#default_value' => $this->getEntity()->getDescription(),
     ];
 
     $form['weblinks'] = [
