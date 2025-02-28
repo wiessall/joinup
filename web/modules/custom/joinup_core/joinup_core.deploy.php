@@ -14,13 +14,182 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Database\Database;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
+use EasyRdf\Graph;
+
+/**
+ * Add an /events redirect.
+ */
+function joinup_core_deploy_200300(): void {
+  \Drupal::entityTypeManager()->getStorage('redirect')->create([
+    'redirect_source' => ['path' => 'events'],
+    'redirect_redirect' => ['uri' => 'internal:/node/726609'],
+    'language' => 'und',
+    'status_code' => 301,
+  ])->save();
+}
+
+/**
+ * Update pathauto state for "RDF" nodes with aliases.
+ */
+function joinup_core_deploy_200301(array &$sandbox): string {
+  $database = Database::getConnection();
+
+  if (!isset($sandbox['ids'])) {
+    $query = $database->select('node_field_data', 'nd');
+    $query->fields('nd', ['nid'])
+      ->condition('nd.type', [
+        'collection',
+        'solution',
+        'distribution',
+        'release',
+        'contact_information',
+        'owner',
+      ], 'IN');
+    $query->join('node', 'n', 'n.nid = nd.nid');
+    $query->fields('n', ['uuid'])
+      ->condition('n.uuid', [
+        InteroperableEuropeCollectionInterface::COLLECTION_UUID,
+        OssCatalogueCollectionInterface::COLLECTION_UUID,
+        AssessmentInterface::GROUP_UUID,
+      ], 'NOT IN');
+    $query->join('key_value', 'k', 'nd.nid = k.name AND k.collection = :collection', [':collection' => 'pathauto_state.node']);
+    $query->condition('k.value', 'i:0;');
+
+    $sandbox['ids'] = $query->execute()->fetchCol();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 200);
+  if (!empty($ids)) {
+    $database->update('key_value')
+      ->fields(['value' => 'i:1;'])
+      ->condition('name', $ids, 'IN')
+      ->condition('collection', 'pathauto_state.node')
+      ->execute();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']}";
+}
+
+/**
+ * Gather information about the current state of solution type terms.
+ */
+function joinup_core_deploy_200302(): string {
+  // We only need to check the revision table as all data are there including
+  // the data from the data table.
+  $solution_type_values = \Drupal::database()
+    ->select('node_revision__solution_type', 'nrst')
+    ->fields('nrst', ['entity_id', 'revision_id', 'solution_type_target_id'])
+    ->execute()
+    ->fetchAll();
+
+  $target_ids = array_column($solution_type_values, 'solution_type_target_id');
+  $eira_terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadMultiple($target_ids);
+
+  $target_ids_to_uri = [];
+  foreach ($eira_terms as $eira_term) {
+    $target_ids_to_uri[$eira_term->id()] = $eira_term->getUri();
+  }
+
+  $data = [];
+  foreach ($solution_type_values as $solution_type_value) {
+    if (!isset($data[$solution_type_value->revision_id])) {
+      $data[$solution_type_value->revision_id] = [
+        'entity_id' => $solution_type_value->entity_id,
+        'revision_id' => $solution_type_value->revision_id,
+      ];
+    }
+
+    $data[$solution_type_value->revision_id]['values'][$solution_type_value->solution_type_target_id] = $target_ids_to_uri[$solution_type_value->solution_type_target_id];
+  }
+
+  \Drupal::state()->set('joinup_core_deploy_200200', $data);
+  return 'Data has been gathered.';
+}
+
+/**
+ * Deploy EIRA 6.1.0, simplified solution type (EIRA 6.0.0) and eGovERA.
+ */
+function joinup_core_deploy_200303(): void {
+  // Import the simplified EIRA 6.0.0.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA_SKOS_v6_0_0.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8/6.0.0', $graph)
+    ->registerVocabulary('solution_type', 'http://data.europa.eu/dr8/6.0.0', 'http://data.europa.eu/dr8/6.0.0')
+    ->update();
+
+  // Re import eGovERA in order to clean the rest of the terms.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/eGovERA.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8/egovera', $graph)
+    ->registerVocabulary('egovera', 'http://data.europa.eu/dr8/egovera', 'http://data.europa.eu/dr8/egovera')
+    ->update();
+
+  // Import EIRA which will clear previous values.
+  $graph = new Graph();
+  $graph->parseFile('../resources/vocab/EIRA v6.1.0_SKOS.rdf');
+  \Drupal::service('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://data.europa.eu/dr8', $graph)
+    ->registerVocabulary('eira', 'http://data.europa.eu/dr8', 'http://data.europa.eu/dr8')
+    ->update();
+}
+
+/**
+ * Update the solution type field and revision values.
+ */
+function joinup_core_deploy_200304(): string {
+  $data = \Drupal::state()->get('joinup_core_deploy_200200');
+  if (!$data) {
+    throw new Exception('No relevant data found about solution type field.');
+  }
+
+  $rdf_sync_map = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $solution_types = $rdf_sync_map->getUrisByEntityType('taxonomy_term', 'solution_type');
+
+  foreach ($data as $revision_id => $values) {
+    $entity_id = $values['entity_id'];
+    $values = $values['values'];
+    foreach ($values as $original_id => $uri) {
+      $altered_uri = str_replace('http://data.europa.eu/dr8/', 'http://data.europa.eu/dr8/6.0.0/', $uri);
+      // The following line also ensures that every single entry will be
+      // replaced with an existing solution type term of the same URI.
+      assert(in_array($altered_uri, $solution_types), 'URI ' . $altered_uri . ' not found in the solution type vocabulary.');
+      $term = $rdf_sync_map->getEntityByUri($altered_uri);
+
+      foreach (['node__solution_type', 'node_revision__solution_type'] as $table) {
+        \Drupal::database()
+          ->update($table)
+          ->condition('entity_id', $entity_id)
+          ->condition('revision_id', $revision_id)
+          ->condition('solution_type_target_id', $original_id)
+          ->fields(['solution_type_target_id' => $term->id()])
+          ->execute();
+      }
+    }
+  }
+
+  \Drupal::state()->delete('joinup_core_deploy_200200');
+  return 'Solution type field and revision values have been restored.';
+}
 
 /**
  * Mark all releases as needing reindexing.
  */
-function joinup_core_deploy_200300(array &$sandbox): string {
+function joinup_core_deploy_200305(array &$sandbox): string {
   if (empty($sandbox['current'])) {
     $sandbox['current'] = 0;
     $query = \Drupal::entityQuery('node')

@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\GroupReportsEvent;
 use Drupal\joinup_group\Event\GroupReportsEventInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -25,15 +25,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class GroupReportsController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'event_dispatcher')]
     protected readonly EventDispatcherInterface $dispatcher,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static($container->get('event_dispatcher'));
-  }
 
   /**
    * Renders the group reports page.

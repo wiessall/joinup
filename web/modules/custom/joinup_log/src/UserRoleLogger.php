@@ -4,34 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * User role logger.
  */
 readonly class UserRoleLogger implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'logger.channel.group_membership')]
     protected LoggerChannelInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected AccountInterface $currentUser,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('logger.channel.group_membership'),
-      $container->get('entity_type.manager'),
-      $container->get('current_user'),
-    );
-  }
 
   /**
    * Detects role changes.

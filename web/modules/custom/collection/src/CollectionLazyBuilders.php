@@ -6,14 +6,14 @@ namespace Drupal\collection;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\Security\Attribute\TrustedCallback;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Form\JoinCollectionForm;
 
 /**
  * Defines a service for #lazy_builder callbacks for the Collection module.
  */
-class CollectionLazyBuilders implements TrustedCallbackInterface {
+class CollectionLazyBuilders {
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
@@ -30,16 +30,10 @@ class CollectionLazyBuilders implements TrustedCallbackInterface {
    * @return array
    *   A renderable array containing the comment form.
    */
+  #[TrustedCallback]
   public function renderJoinCollectionForm(string $collection_id): array {
     $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
     return $this->formBuilder->getForm(JoinCollectionForm::class, $this->account, $collection);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function trustedCallbacks(): array {
-    return ['renderJoinCollectionForm'];
   }
 
 }

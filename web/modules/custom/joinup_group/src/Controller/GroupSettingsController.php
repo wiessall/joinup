@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgAccessInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Controller class for collection/solution settings.
@@ -18,17 +18,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GroupSettingsController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.access')
-    );
-  }
 
   /**
    * Provides a controller for the 'joinup_group.settings_form' route title.
