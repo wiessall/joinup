@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\adms_validator\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\adms_validator\AdmsValidatorInterface;
 use Drupal\file\FileInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -17,22 +18,16 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class AdmsValidatorForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'adms_validator.validator')]
     protected AdmsValidatorInterface $admsValidator,
+    #[Autowire(service: 'session')]
     protected Session $session,
+    #[Autowire(service: 'rdf_sync.connection')]
     protected RdfSyncConnectionInterface $connection,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('adms_validator.validator'),
-      $container->get('session'),
-      $container->get('rdf_sync.connection'),
-    );
-  }
 
   /**
    * {@inheritdoc}

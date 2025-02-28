@@ -13,7 +13,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides controllers for community content.
@@ -21,20 +21,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CommunityContentController extends GroupNodeController {
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     readonly OgAccessInterface $og_access,
+    #[Autowire(service: 'joinup_community_content.community_content_workflow_access')]
     readonly CommunityContentWorkflowAccessControlHandler $workflowAccessControlHandler,
   ) {
     parent::__construct($og_access);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('og.access'),
-      $container->get('joinup_community_content.community_content_workflow_access')
-    );
   }
 
   /**

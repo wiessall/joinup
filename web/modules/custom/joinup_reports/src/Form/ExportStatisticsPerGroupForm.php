@@ -8,39 +8,34 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\node\NodeInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
  */
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
+  // Use the serialization trait to ensure the read only params get instantiated
+  // given the fact that their read only status prevents the parent class from
+  // doing so.
+  use DependencySerializationTrait;
+
   public function __construct(
+    #[Autowire(service: 'cache.default')]
     protected readonly CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'database')]
     protected readonly Connection $mysql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('cache.default'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time'),
-      $container->get('entity_type.manager'),
-      $container->get('database')
-    );
   }
 
   /**
