@@ -64,7 +64,7 @@ class VitalityIndexProcessorTest extends UnitTestCase {
    * The summary of expected points follows a specific order: User community
    * range + Code activity range + Release history range + Longevity range.
    */
-  public function providerLongevityRange(): array {
+  public static function providerLongevityRange(): array {
     return [
       'range 100' => [100, 4 + 2 + 20 + 20],
       'range 400' => [400, 4 + 2 + 20 + 30],
@@ -99,7 +99,7 @@ class VitalityIndexProcessorTest extends UnitTestCase {
    * The summary of expected points follows a specific order: User community
    * range + Code activity range + Release history range + Longevity range.
    */
-  public function providerCodeActivityRange(): array {
+  public static function providerCodeActivityRange(): array {
     return [
       'code activity 35' => [35, min(4 + 60 + 20 + 20, 100)],
       'code activity 18' => [18, 4 + 38 + 20 + 20],
@@ -136,7 +136,7 @@ class VitalityIndexProcessorTest extends UnitTestCase {
    * The summary of expected points follows a specific order: User community
    * range + Code activity range + Release history range + Longevity range.
    */
-  public function providerUserCommunityRange(): array {
+  public static function providerUserCommunityRange(): array {
     return [
       'user community range 24' => [24, min(32 + 38 + 20 + 20, 100)],
       'user community range 16' => [16, 24 + 32 + 20 + 20],
@@ -176,7 +176,7 @@ class VitalityIndexProcessorTest extends UnitTestCase {
    * The summary of expected points follows a specific order: User community
    * range + Code activity range + Release history range + Longevity range.
    */
-  public function providerReleaseHistory(): array {
+  public static function providerReleaseHistory(): array {
     return [
       'release history 4' => [4, 4 + 8 + 50 + 20],
       'release history 2' => [2, 4 + 2 + 40 + 20],
