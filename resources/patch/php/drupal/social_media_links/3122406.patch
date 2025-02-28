@@ -1,0 +1,175 @@
+From aa27ede65eec2d42a0342ce0f3de07e7eb8e4a7e Mon Sep 17 00:00:00 2001
+From: Shyamaladevi Sankar <devishyamalasankar@gmail.com>
+Date: Tue, 28 Jan 2025 20:39:27 -0500
+Subject: [PATCH] Issue #3122406: Rerolled patch to comply with current version
+ 2.10
+
+---
+ .../SocialMediaLinksFieldDefaultFormatter.php | 115 +++++++++---------
+ 1 file changed, 60 insertions(+), 55 deletions(-)
+
+diff --git a/modules/social_media_links_field/src/Plugin/Field/FieldFormatter/SocialMediaLinksFieldDefaultFormatter.php b/modules/social_media_links_field/src/Plugin/Field/FieldFormatter/SocialMediaLinksFieldDefaultFormatter.php
+index 9393f8e..08e08e2 100644
+--- a/modules/social_media_links_field/src/Plugin/Field/FieldFormatter/SocialMediaLinksFieldDefaultFormatter.php
++++ b/modules/social_media_links_field/src/Plugin/Field/FieldFormatter/SocialMediaLinksFieldDefaultFormatter.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\Core\Template\Attribute;
+ use Drupal\social_media_links\IconsetBase;
++use Drupal\social_media_links_field\Plugin\Field\FieldType\SocialMediaLinksFieldItem;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+
+ /**
+@@ -54,11 +55,9 @@ class SocialMediaLinksFieldDefaultFormatter extends FormatterBase implements Con
+    * {@inheritdoc}
+    */
+   public function viewElements(FieldItemListInterface $items, $langcode) {
+-    $platforms = $this->getPlatformsWithValues($items);
+-    if (count($platforms) < 1) {
+-      return [];
+-    }
++    $elements = [];
+
++    $platform_settings = $items->getSetting('platforms');
+     $iconset_style = IconsetBase::explodeStyle($items->getSetting('iconset'));
+     $iconset = $this->getIconset($iconset_style['iconset']);
+
+@@ -70,33 +69,42 @@ class SocialMediaLinksFieldDefaultFormatter extends FormatterBase implements Con
+       }
+     }
+
+-    foreach ($platforms as $platform_id => $platform) {
+-      $platforms[$platform_id]['element'] = (array) $iconset['instance']->getIconElement($platform['instance'], $iconset_style['style']);
+-      $platforms[$platform_id]['attributes'] = new Attribute($link_attributes);
++    foreach ($items as $item) {
++      $platforms = $this->getPlatformsWithValues($item, $platform_settings);
++      if (empty($platforms)) {
++        continue;
++      }
++
++      foreach ($platforms as $platform_id => $platform) {
++        $platforms[$platform_id]['element'] = (array) $iconset['instance']->getIconElement($platform['instance'], $iconset_style['style']);
++        $platforms[$platform_id]['attributes'] = new Attribute($link_attributes);
+
+-      if (!empty($platform['instance']->getDescription())) {
+-        $platforms[$platform_id]['attributes']->setAttribute('aria-label', $platform['instance']->getDescription());
+-        $platforms[$platform_id]['attributes']->setAttribute('title', $platform['instance']->getDescription());
++        if (!empty($platform['instance']->getDescription())) {
++          $platforms[$platform_id]['attributes']->setAttribute('aria-label', $platform['instance']->getDescription());
++          $platforms[$platform_id]['attributes']->setAttribute('title', $platform['instance']->getDescription());
++        }
+       }
+-    }
+
+-    $output = [
+-      '#theme' => 'social_media_links_platforms',
+-      '#platforms' => $platforms,
+-      '#appearance' => $this->getSetting('appearance'),
+-      '#attached' => [
+-        'library' => ['social_media_links/social_media_links.theme'],
+-      ],
+-      '#field_name' => $items->getName(),
+-      '#entity_type' => $items->getParent()->getEntity()->getEntityTypeId(),
+-      '#entity_bundle' => $items->getParent()->getEntity()->bundle(),
+-    ];
++      $element = [
++        '#theme' => 'social_media_links_platforms',
++        '#platforms' => $platforms,
++        '#appearance' => $this->getSetting('appearance'),
++        '#attached' => [
++          'library' => ['social_media_links/social_media_links.theme'],
++        ],
++        '#field_name' => $items->getName(),
++        '#entity_type' => $items->getParent()->getEntity()->getEntityTypeId(),
++        '#entity_bundle' => $items->getParent()->getEntity()->bundle(),
++      ];
++
++      if ($iconset['instance']->getPath() === 'library' && (array) $library = $iconset['instance']->getLibrary()) {
++        $element['#attached']['library'] = array_merge_recursive($element['#attached']['library'], $library);
++      }
+
+-    if ($iconset['instance']->getPath() === 'library' && (array) $library = $iconset['instance']->getLibrary()) {
+-      $output['#attached']['library'] = array_merge_recursive($output['#attached']['library'], $library);
++      $elements[] = $element;
+     }
+
+-    return $output;
++    return $elements;
+   }
+
+   /**
+@@ -196,8 +204,7 @@ class SocialMediaLinksFieldDefaultFormatter extends FormatterBase implements Con
+    * @return array
+    *   $platforms.
+    */
+-  protected function getPlatformsWithValues(FieldItemListInterface $items) {
+-    $platform_settings = $items->getSetting('platforms');
++  protected function getPlatformsWithValues(SocialMediaLinksFieldItem $item, $platform_settings) {
+
+     $all_platforms_available = TRUE;
+     foreach ($platform_settings as $platform_id => $platform) {
+@@ -208,35 +215,33 @@ class SocialMediaLinksFieldDefaultFormatter extends FormatterBase implements Con
+     }
+
+     $platforms = [];
+-    foreach ($items as $item) {
+-      // We have two possible structures where the platform values can be
+-      // stored.
+-      // * If the select widget was used the values are saved in two fields
+-      // (platform and value).
+-      // * If the default list widget was used the values are saved in a
+-      // multidimensional array structure (platform_values).
+-      if (empty($item->platform_values)) {
+-        // Select widget fields handling.
+-        if ($all_platforms_available || isset($platform_settings[$item->platform]['enabled']) && $platform_settings[$item->platform]['enabled']) {
+-          $platforms[$item->platform] = [
+-            'value' => $item->value,
+-            'weight' => $platform_settings[$item->platform]['weight'] ?? 0,
+-            'description' => $platform_settings[$item->platform]['description'] ?? '',
+-          ];
+-        }
++    // We have two possible structures where the platform values can be
++    // stored.
++    // * If the select widget was used the values are saved in two fields
++    // (platform and value).
++    // * If the default list widget was used the values are saved in a
++    // multidimensional array structure (platform_values).
++    if (empty($item->platform_values)) {
++      // Select widget fields handling.
++      if ($all_platforms_available || isset($platform_settings[$item->platform]['enabled']) && $platform_settings[$item->platform]['enabled']) {
++        $platforms[$item->platform] = [
++          'value' => $item->value,
++          'weight' => $platform_settings[$item->platform]['weight'] ?? 0,
++          'description' => $platform_settings[$item->platform]['description'] ?? '',
++        ];
+       }
+-      else {
+-        // Default list field handling.
+-        $platform_values = $item->platform_values;
+-
+-        foreach ($platform_values as $platform_id => $platform_value) {
+-          if ($all_platforms_available || !empty($platform_value['value']) && isset($platform_settings[$platform_id]['enabled']) && $platform_settings[$platform_id]['enabled']) {
+-            $platforms[$platform_id] = [
+-              'value' => $platform_value['value'],
+-              'weight' => $platform_settings[$platform_id]['weight'] ?? 0,
+-              'description' => $platform_settings[$platform_id]['description'] ?? '',
+-            ];
+-          }
++    }
++    else {
++      // Default list field handling.
++      $platform_values = $item->platform_values;
++
++      foreach ($platform_values as $platform_id => $platform_value) {
++        if ($all_platforms_available || !empty($platform_value['value']) && isset($platform_settings[$platform_id]['enabled']) && $platform_settings[$platform_id]['enabled']) {
++          $platforms[$platform_id] = [
++            'value' => $platform_value['value'],
++            'weight' => $platform_settings[$platform_id]['weight'] ?? 0,
++            'description' => $platform_settings[$platform_id]['description'] ?? '',
++          ];
+         }
+       }
+     }
+--
+2.39.3 (Apple Git-146)
+

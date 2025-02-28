@@ -6,7 +6,6 @@ namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * List file field instances.
@@ -16,15 +15,6 @@ class FileFields extends ControllerBase {
   public function __construct(
     protected readonly EntityFieldManagerInterface $entityFieldManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_field.manager')
-    );
-  }
 
   /**
    * Generates the list.

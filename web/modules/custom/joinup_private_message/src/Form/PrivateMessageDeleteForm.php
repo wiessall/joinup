@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,7 +13,7 @@ use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\private_message\Form\PrivateMessageDeleteForm as OriginalPrivateMessageDeleteForm;
 use Drupal\private_message\Service\PrivateMessageServiceInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Overrides the form for deleting a private message.
@@ -21,25 +22,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageDeleteForm extends OriginalPrivateMessageDeleteForm {
 
+  use AutowireTrait;
+
   public function __construct(
     EntityRepositoryInterface $entityRepository,
     EntityTypeBundleInfoInterface $entityTypeBundleInfo,
     TimeInterface $time,
+    #[Autowire(service: 'private_message.service')]
     protected PrivateMessageServiceInterface $privateMessageService,
   ) {
     parent::__construct($entityRepository, $entityTypeBundleInfo, $time);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity.repository'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time'),
-      $container->get('private_message.service')
-    );
   }
 
   /**

@@ -1,0 +1,40 @@
+uuid: 3ef27396-288a-444b-900b-94cf6747bb38
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_taxonomy_related_term
+    - taxonomy.vocabulary.eira
+    - taxonomy.vocabulary.solution_type
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2004/02/skos/core#related'
+      type: resource
+id: taxonomy_term.solution_type.field_taxonomy_related_term
+field_name: field_taxonomy_related_term
+entity_type: taxonomy_term
+bundle: solution_type
+label: 'Related terms'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      eira: eira
+      solution_type: solution_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: eira
+field_type: entity_reference
