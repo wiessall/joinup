@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 
@@ -79,6 +80,7 @@ class HostingPlatformUITest extends BrowserTestBase {
       'id' => 'test_hosting_platform',
       'label' => 'Test hosting platform',
       'description' => 'Description for Test hosting platform',
+      'weblinks[0][url]' => 'https://code.europa.eu',
       'platformId' => 'github',
     ];
     $this->submitForm($data, 'Save');
@@ -86,7 +88,7 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('hosting_platform:test_hosting_platform');
     $assertSession->pageTextContains('Test hosting platform');
 
-    $this->clickLink('Edit');
+    $this->clickTableRowAction('hosting_platform:test_hosting_platform', 'Edit');
 
     // Type correct namespace and name.
     $data = [
@@ -99,7 +101,7 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('Test hosting platform updated');
 
     // Check deletion.
-    $this->clickLink('Delete');
+    $this->clickTableRowAction('hosting_platform:test_hosting_platform', 'Delete');
     $assertSession->pageTextContains('This action cannot be undone.');
 
     $this->submitForm([], 'Delete');
@@ -114,12 +116,15 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/add', ['query' => ['platformId' => 'gitlab_self_hosted']]);
-    $this->assertSession()->fieldEnabled('URL');
+    $this->assertSession()->fieldEnabled('platformSettings[baseUrl]');
 
     $data = [
       'label' => 'Test hosting platform',
       'id' => 'test_hosting_platform',
       'description' => 'Description for Test hosting platform',
+      'type' => 'municipal',
+      'country' => 'AO',
+      'weblinks[0][url]' => 'https://test-hosting-platform.com',
       'platformSettings[baseUrl]' => 'https://github.self-hosted.com',
       'platformSettings[projects][0][namespace]' => 'dummy-namespace-1',
       'platformSettings[projects][0][name]' => 'dummy-name-1',
@@ -127,7 +132,7 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->submitForm($data, 'Save');
 
     $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/manage/test_hosting_platform');
-    $this->assertSession()->fieldDisabled('URL');
+    $this->assertSession()->fieldDisabled('platformSettings[baseUrl]');
   }
 
   /**
@@ -144,6 +149,28 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('Test GitHub hosting provider');
     // Platform label for github_example and github_mockup.
     $assertSession->pageTextContains('GitLab');
+  }
+
+  /**
+   * Clicks a specific action link inside a table row.
+   *
+   * @param string $rowText
+   *   The unique text to locate the correct row.
+   * @param string $action
+   *   The action to perform ('Edit' or 'Delete').
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function clickTableRowAction(string $rowText, string $action): void {
+    $xpath = "//tr[td//text()[contains(., '{$rowText}')]]//a[normalize-space(text())='{$action}']";
+    $link = $this->getSession()->getPage()->find('xpath', $xpath);
+
+    if (!$link) {
+      throw new ElementNotFoundException($this->getSession()
+        ->getDriver(), 'link', 'xpath', $xpath);
+    }
+
+    $link->click();
   }
 
 }

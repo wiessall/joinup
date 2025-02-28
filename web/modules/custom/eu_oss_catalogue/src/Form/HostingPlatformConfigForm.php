@@ -13,12 +13,14 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
+use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
+use Drupal\multivalue_form_element\Element\MultiValue;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +34,8 @@ class HostingPlatformConfigForm extends EntityForm {
 
   public function __construct(
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.hosting_platform')]
-    protected readonly EuOssCataloguePluginManagerInterface $platformManager,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected CountryManagerInterface $countryManager,
   ) {}
 
   /**
@@ -62,15 +65,44 @@ class HostingPlatformConfigForm extends EntityForm {
       '#description' => $this->t('A unique string identifier. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
-    $form['type'] = [
-      '#type' => 'hidden',
-      '#value' => CatalogueType::Local->value,
-    ];
-
     $form['description'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Description'),
       '#default_value' => $this->getEntity()->getDescription(),
+    ];
+
+    $type = $this->getEntity()
+      ->isNew() ? CatalogueType::Local->value : $this->getEntity()
+      ->getCatalogueType()->value;
+    $form['type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Type'),
+      '#options' => $this->getOptionTypes(),
+      '#default_value' => $type,
+    ];
+
+    $form['country'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Country'),
+      '#options' => ['' => $this->t('- Select -')] + $this->countryManager->getList(),
+      '#default_value' => $this->getEntity()->getCountryCode(),
+    ];
+
+    $form['weblinks'] = [
+      '#type' => 'multivalue',
+      '#title' => $this->t('Weblinks'),
+      '#default_value' => $this->entity->getWeblinks(),
+      '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
+      '#required' => TRUE,
+      'url' => [
+        '#type' => 'url',
+        '#title' => $this->t('URL'),
+        '#required' => TRUE,
+      ],
+      'title' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Title'),
+      ],
     ];
 
     $platformId = $this->getEntity()->get('platformId')
@@ -102,6 +134,22 @@ class HostingPlatformConfigForm extends EntityForm {
   }
 
   /**
+   * Get option types.
+   *
+   * @return array
+   *   Options.
+   */
+  protected function getOptionTypes(): array {
+    $options = [];
+
+    foreach (CatalogueType::cases() as $type) {
+      $options[$type->value] = $type->getLabel();
+    }
+
+    return $options;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $formState): void {
@@ -110,6 +158,10 @@ class HostingPlatformConfigForm extends EntityForm {
     // Remove leading or trailing whitespaces.
     $formState->setValue('id', trim($formState->getValue('id')));
     $formState->setValue('label', trim($formState->getValue('label')));
+    $formState->setValue('type', trim($formState->getValue('type')));
+    $country = trim($formState->getValue('country'));
+    $formState->setValue('country', empty($country) ? NULL : $country);
+    $formState->setValue('weblinks', $formState->getValue('weblinks'));
     $formState->setValue('description', trim($formState->getValue('description')));
 
     // Ask plugin to add its validations.
@@ -149,12 +201,13 @@ class HostingPlatformConfigForm extends EntityForm {
 
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $plugin */
     $plugin = $this->platformManager->createInstance($platformId, [
-      // Pass also the entity as plugin configuration for plugins that might
-      // need it. It's removed from configuration on form submit.
+        // Pass also the entity as plugin configuration for plugins that might
+        // need it. It's removed from configuration on form submit.
       'hosting_platform' => $this->getEntity(),
     ] +
-    // Pass the settings if the platform already exists.
-    ($this->getEntity()->isNew() ? [] : $this->getEntity()->getPlatformSettings()));
+      // Pass the settings if the platform already exists.
+      ($this->getEntity()->isNew() ? [] : $this->getEntity()
+        ->getPlatformSettings()));
 
     // This plugin doesn't support forms.
     if (!$plugin instanceof PluginFormInterface) {
