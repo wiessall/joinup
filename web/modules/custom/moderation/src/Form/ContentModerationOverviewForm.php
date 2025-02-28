@@ -8,18 +8,20 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form that allows to display and filter the content moderation overview.
  */
 class ContentModerationOverviewForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The node storage class.
@@ -32,15 +34,6 @@ class ContentModerationOverviewForm extends FormBase {
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
   }
 
   /**

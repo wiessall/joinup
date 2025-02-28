@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Controller;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides route controllers.
@@ -15,17 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EuOssCatalogueController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
     protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('plugin.manager.eu_oss_catalogue.provider'),
-    );
-  }
 
   /**
    * Provides a controller for the 'eu_oss_catalogue.provider.collection' route.

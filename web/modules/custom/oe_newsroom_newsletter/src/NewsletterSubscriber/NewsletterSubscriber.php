@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\oe_newsroom_newsletter\NewsletterSubscriber;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Site\Settings;
 use Drupal\oe_newsroom_newsletter\Exception\BadResponseException;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
 use Drupal\oe_newsroom_newsletter\Exception\InvalidEmailAddressException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Default newsletter subscriber using the Newsroom Newsletter API.
  */
 class NewsletterSubscriber implements NewsletterSubscriberInterface {
+
+  use AutowireTrait;
 
   /**
    * The URL for the Newsroom newsletter subscription API endpoint.
@@ -37,15 +39,6 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
     if (!empty($settings) && $settings = json_decode($settings)) {
       $this->settings = (array) $settings;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('http_client')
-    );
   }
 
   /**

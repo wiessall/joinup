@@ -108,6 +108,7 @@ class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
           $entity->getEntityTypeId(),
           $entity->id(),
           $flag->id(),
+          'default',
         ],
       ],
       '#create_placeholder' => TRUE,
