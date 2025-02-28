@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityDeleteForm;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Delete form for 'hosting_platform' config entities.
  */
 class HostingPlatformConfigDeleteForm extends EntityDeleteForm {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityFieldManagerInterface $entityFieldManager,
   ) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_field.manager')
-    );
   }
 
   /**

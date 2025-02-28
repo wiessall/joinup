@@ -7,12 +7,12 @@ namespace Drupal\joinup_core\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller of the route used by "joinup_core_more_in_modal" formatter.
@@ -21,18 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 readonly class ModalFormatterEntityViewController implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
     protected EntityDisplayRepositoryInterface $displayRepository,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_display.repository')
-    );
-  }
 
   /**
    * Returns the title of the modal page.

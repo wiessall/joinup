@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -18,18 +18,11 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueDistributionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-    );
-  }
 
   /**
    * {@inheritdoc}

@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -15,12 +16,14 @@ use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Form to send an announcement message.
  */
 class AnnouncementForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The announcement to be added/updated.
@@ -28,23 +31,13 @@ class AnnouncementForm extends FormBase {
   protected AnnouncementInterface $announcement;
 
   public function __construct(
+    #[Autowire(service: 'joinup_notification.message_delivery')]
     protected readonly JoinupMessageDeliveryInterface $messageDelivery,
     protected readonly TimeInterface $time,
+    #[Autowire(service: 'logger.channel.group_membership')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly Connection $connection,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('joinup_notification.message_delivery'),
-      $container->get('datetime.time'),
-      $container->get('logger.channel.group_membership'),
-      $container->get('database'),
-    );
-  }
 
   /**
    * Sets the announcement.

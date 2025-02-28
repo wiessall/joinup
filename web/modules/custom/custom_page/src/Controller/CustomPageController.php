@@ -6,12 +6,12 @@ namespace Drupal\custom_page\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,19 +21,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CustomPageController implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
+  use AutowireTrait;
 
   public function __construct(
     protected readonly FileUrlGeneratorInterface $urlGenerator,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('file_url_generator')
-    );
-  }
 
   /**
    * Altered title callback for the navigation menu edit form.
