@@ -150,8 +150,7 @@ Feature: Subscribing to community content in solutions
       | Products of Bulgaria |
       | Canned cherries      |
       | Rose oil             |
-      # @todo Re-enable this in ISAICP-8943.
-      # | 21/03/2021           |
+      | 21/03/2021           |
       | Spring 2021          |
     And the content subscription digest sent to bisera should have the subject "Interoperable Europe Portal: Weekly digest message"
 
