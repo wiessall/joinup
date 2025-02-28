@@ -25,3 +25,12 @@ Feature: Minimal install clone testing.
     Given I am an anonymous user
     When I visit "/publiccode-editor"
     And I should see "publiccode.yml Editor"
+
+  @javascript
+  Scenario: Regression test for "Reporting Statistics per group".
+    Given I am logged in as a user with the moderator role
+    When I am on "/admin/reporting/statistics-per-group"
+    Then I should see the heading "Statistics per group"
+    And I press "Generate data"
+    Then I should see the heading "Exporting statistics per group"
+    And I wait for the batch process to finish
