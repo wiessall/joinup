@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Drush\Commands;
 
+use Consolidation\AnnotatedCommand\AnnotationData;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -15,7 +16,6 @@ use Drush\Commands\DrushCommands;
 use Drush\Commands\sql\sanitize\SanitizeCommands;
 use Drush\Commands\sql\sanitize\SanitizePluginInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Consolidation\AnnotatedCommand\AnnotationData;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -41,6 +41,8 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
    *
    * @param \Symfony\Component\Console\Input\InputInterface $input
    *   Input.
+   * @param \Consolidation\AnnotatedCommand\AnnotationData $annotationData
+   *   Annotation data.
    *
    * @see \Drupal\webform\Commands\WebformSanitizeSubmissionsCommands::sanitize()
    */
