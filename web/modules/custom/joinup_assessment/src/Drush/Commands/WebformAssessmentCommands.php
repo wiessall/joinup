@@ -72,8 +72,7 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
     if ($this->moduleHandler->moduleExists('webform_submission_log')) {
       $this->database->truncate('webform_submission_log')->execute();
     }
-
-    $webformStorage->resetCache();
+    
     $this->logger()
       ->success('Webform submission tables truncated except for the assessment.');
   }
