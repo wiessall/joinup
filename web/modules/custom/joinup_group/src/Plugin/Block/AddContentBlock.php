@@ -23,8 +23,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
   admin_label: new TranslatableMarkup("Add content"),
   context_definitions: [
     'og' => new ContextDefinition(
-    data_type: 'entity',
-    label: new TranslatableMarkup("Organic group"),
+      data_type: 'entity',
+      label: new TranslatableMarkup("Organic group"),
     ),
   ],
 )]
