@@ -7,7 +7,7 @@ namespace Drupal\joinup_group\Plugin\Block;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -22,9 +22,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
   id: "add_content_block",
   admin_label: new TranslatableMarkup("Add content"),
   context_definitions: [
-    'og' => new EntityContextDefinition(
-      data_type: 'entity:node',
-      label: new TranslatableMarkup("Organic group"),
+    'og' => new ContextDefinition(
+    data_type: 'entity',
+    label: new TranslatableMarkup("Organic group"),
     ),
   ],
 )]

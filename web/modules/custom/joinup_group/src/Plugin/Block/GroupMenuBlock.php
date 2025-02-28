@@ -9,11 +9,12 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\MenuTreeParameters;
-use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\og_menu\Plugin\Block\OgMenuBlock;
+use Drupal\og_menu\Plugin\Derivative\OgMenuBlock as OgMenuBlockDeriver;
 
 /**
  * Provides the block that displays the menu containing group pages.
@@ -23,12 +24,12 @@ use Drupal\og_menu\Plugin\Block\OgMenuBlock;
   admin_label: new TranslatableMarkup("Group menu"),
   category: new TranslatableMarkup("Group"),
   context_definitions: [
-    'og' => new EntityContextDefinition(
-      data_type: 'entity:node',
+    'og' => new ContextDefinition(
+      data_type: 'entity',
       label: new TranslatableMarkup("Group"),
     ),
   ],
-  deriver: "Drupal\og_menu\Plugin\Derivative\OgMenuBlock"
+  deriver: OgMenuBlockDeriver::class
 )]
 class GroupMenuBlock extends OgMenuBlock {
 

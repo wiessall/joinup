@@ -13,6 +13,7 @@ use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
@@ -27,8 +28,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   admin_label: new TranslatableMarkup("Table of contents outline"),
   category: new TranslatableMarkup("Custom page"),
   context_definitions: [
-    'og' => new EntityContextDefinition(
-      data_type: 'entity:node',
+    'og' => new ContextDefinition(
+      data_type: 'entity',
       label: new TranslatableMarkup("Group"),
     ),
     'node' => new EntityContextDefinition(
