@@ -10,7 +10,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -28,8 +28,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "entity_unpublished",
   admin_label: new TranslatableMarkup("Unpublished content of group"),
   context_definitions: [
-    'og' => new EntityContextDefinition(
-      data_type: 'entity:node',
+    'og' => new ContextDefinition(
+      data_type: 'entity',
       label: new TranslatableMarkup("Organic group"),
     ),
   ],
