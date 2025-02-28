@@ -11,5 +11,5 @@ Feature: Check documents published on.
       | path                                                                                                                              | date       | state     |
       | /collection/cyprus-egovernment-initiatives/document/cyprus-ecollaboration-platform                                                |            | draft     |
       | /collection/rolling-plan-ict-standardisation/document/uitp-international-association-public-transport                             |            | proposed  |
-      | /collection/open-source-observatory-osor/document/e-municipalities                                                                | 30/05/2008 | archived  |
+      | /collection/ict-security/solution/cybershare-conference/document/cybershare2022-presentations                                     | 11/10/2022 | archived  |
       | /collection/governance-board/document/rules-procedure-interoperable-europe-board-adopted-during-its-first-meeting-5-december-2024 | 20/01/2025 | published |
