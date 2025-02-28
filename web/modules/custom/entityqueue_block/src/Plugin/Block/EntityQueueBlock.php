@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\entityqueue_block\Plugin\Derivative\EntityQueueBlock as EntityQueueBlockDeriver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "entityqueue_block",
   admin_label: new TranslatableMarkup("Entityqueue block"),
   category: new TranslatableMarkup("Entityqueue"),
-  deriver: 'Drupal\entityqueue_block\Plugin\Derivative\EntityQueueBlock'
+  deriver: EntityQueueBlockDeriver::class
 )]
 class EntityQueueBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
