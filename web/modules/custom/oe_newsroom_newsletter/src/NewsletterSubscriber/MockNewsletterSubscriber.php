@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\oe_newsroom_newsletter\NewsletterSubscriber;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A mocked newsletter subscriber to use in tests.
@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * The subscriptions are stored in state.
  */
 class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
+
+  use AutowireTrait;
 
   /**
    * The key of the state entry that contains the mocked subscriptions.
@@ -36,15 +38,6 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
     if (!empty($settings) && $settings = json_decode($settings)) {
       $this->settings = (array) $settings;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('state')
-    );
   }
 
   /**

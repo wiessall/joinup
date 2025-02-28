@@ -8,7 +8,7 @@ third_party_settings:
   joinup_taxonomy:
     locked: true
   rdf_sync:
-    type: 'http://data.europa.eu/dr8/'
+    type: 'http://data.europa.eu/dr8/egovera'
     uri_plugin: topic
     fields:
       vid:

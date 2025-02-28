@@ -10,5 +10,9 @@ services:
     shared: false
 
   Drupal\joinup_taxonomy\EventSubscriber\NormalizeSubscriber: { }
-
-  Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber: { }
+  joinup_taxonomy.prepare_vocabulary_graph.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber
+    arguments:
+      - '@database'
+    tags:
+      - { name: event_subscriber }

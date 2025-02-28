@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -12,12 +13,14 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgRoleInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Form to add a member with a certain role in a group.
  */
 abstract class GroupFormBase extends InviteFormBase {
+
+  use AutowireTrait;
 
   /**
    * The OG role to assign if the invitation is accepted.
@@ -26,23 +29,14 @@ abstract class GroupFormBase extends InviteFormBase {
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'joinup_invite.invitation_message_helper')]
     InvitationMessageHelperInterface $invitationMessageHelper,
+    #[Autowire(service: 'logger.channel.group_membership')]
     LoggerChannelInterface $logger,
+    #[Autowire(service: 'og.membership_manager')]
     protected MembershipManagerInterface $ogMembershipManager,
   ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('logger.channel.group_membership'),
-      $container->get('og.membership_manager'),
-    );
   }
 
   /**

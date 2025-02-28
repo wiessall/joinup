@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.egovera.extra_properties
+    - field.field.taxonomy_term.egovera.field_taxonomy_related_term
     - taxonomy.vocabulary.egovera
   module:
     - text
@@ -21,6 +22,7 @@ content:
     region: content
 hidden:
   extra_properties: true
+  field_taxonomy_related_term: true
   langcode: true
   search_api_excerpt: true
   uri: true

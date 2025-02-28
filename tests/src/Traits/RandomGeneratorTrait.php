@@ -41,7 +41,7 @@ trait RandomGeneratorTrait {
     $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('vid', $vocabulary);
     // Only get last level terms for the EIRA vocabulary.
-    if ($vocabulary === 'eira') {
+    if ($vocabulary === 'solution_type') {
       $query->condition('parent', '0', '<>');
     }
 
