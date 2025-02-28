@@ -28,11 +28,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   category: new TranslatableMarkup("Custom page"),
   context_definitions: [
     'og' => new EntityContextDefinition(
-      data_type: 'entity',
+      data_type: 'entity:node',
       label: new TranslatableMarkup("Group"),
     ),
     'node' => new EntityContextDefinition(
-      data_type: 'entity',
+      data_type: 'entity:node',
       label: new TranslatableMarkup("Custom page"),
     ),
   ],

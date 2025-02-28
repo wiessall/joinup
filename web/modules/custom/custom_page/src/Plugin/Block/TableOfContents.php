@@ -19,7 +19,7 @@ use Drupal\joinup_group\Plugin\Block\GroupMenuBlock;
   category: new TranslatableMarkup("Custom page"),
   context_definitions: [
     'og' => new EntityContextDefinition(
-      data_type: 'entity',
+      data_type: 'entity:node',
       label: new TranslatableMarkup("Group"),
     ),
   ],
