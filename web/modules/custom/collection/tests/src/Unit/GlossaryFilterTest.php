@@ -52,7 +52,7 @@ class GlossaryFilterTest extends TestCase {
    * @return array[]
    *   A list of test cases.
    */
-  public function provideTestIsLinkTextDate(): array {
+  public static function provideTestIsLinkTextDate(): array {
     return [
       'plain' => [
         'The quick brown fox jumps over the lazy dog',
