@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -14,12 +15,13 @@ use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to select the destination collection when moving solutions.
  */
 class ChangeCollectionForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The private tempstore.
@@ -43,18 +45,6 @@ class ChangeCollectionForm extends FormBase {
   ) {
     $this->tempStore = $privateTempStoreFactory->get('change_collection');
     $this->logger = $loggerFactory->get('joinup');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('tempstore.private'),
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.entity_reference_selection'),
-      $container->get('logger.factory')
-    );
   }
 
   /**

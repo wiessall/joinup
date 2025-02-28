@@ -17,7 +17,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -26,15 +26,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ReleaseController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'rdf_sync.mapper')]
     protected readonly RdfSyncMapper $rdfSyncMapper,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static($container->get('rdf_sync.mapper'));
-  }
 
   /**
    * Controller for the base form.

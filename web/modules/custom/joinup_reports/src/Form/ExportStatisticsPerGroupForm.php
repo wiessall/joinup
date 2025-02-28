@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
 use Drupal\node\NodeInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
@@ -27,26 +27,15 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   use DependencySerializationTrait;
 
   public function __construct(
+    #[Autowire(service: 'cache.default')]
     protected readonly CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'database')]
     protected readonly Connection $mysql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('cache.default'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time'),
-      $container->get('entity_type.manager'),
-      $container->get('database')
-    );
   }
 
   /**

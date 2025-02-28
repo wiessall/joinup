@@ -8,14 +8,12 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\Form\AnonymousDownloadForm;
-use Drupal\node\NodeStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,23 +22,13 @@ use Symfony\Component\HttpFoundation\Response;
 class DownloadTrackingController extends ControllerBase {
 
   public function __construct(
-    protected readonly NodeStorageInterface $nodeStorage,
-    protected readonly ContentEntityStorageInterface $eventStorage,
+    #[Autowire(service: 'entity_type.manager')]
+    protected $entityTypeManager,
+    #[Autowire(service: 'file_url.handler')]
     protected readonly FileUrlHandler $fileUrlHandler,
+    #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('node'),
-      $container->get('entity_type.manager')->getStorage('download_event'),
-      $container->get('file_url.handler'),
-      $container->get('file.usage')
-    );
-  }
 
   /**
    * Tracks a distribution file download done by a user.
@@ -90,11 +78,11 @@ class DownloadTrackingController extends ControllerBase {
     if (count($usages['file']['node']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $file->id());
     }
-    $distribution = $this->nodeStorage->load(key($usages['file']['node']));
+    $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
 
     $parent = $distribution->getParent();
 
-    $event = $this->eventStorage->create([
+    $event = $this->entityTypeManager->getStorage('download_event')->create([
       'uid' => $this->currentUser()->id(),
       'file' => $file->id(),
       'parent_entity_type' => $parent->getEntityTypeId(),
@@ -120,11 +108,11 @@ class DownloadTrackingController extends ControllerBase {
    *   Allowed when the file exists, neutral otherwise.
    */
   public function isDistributionFile(FileInterface $file, AccountInterface $account): AccessResultInterface {
-    $query = $this->nodeStorage->getQuery()->accessCheck(FALSE);
+    $query = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(FALSE);
     $file_url_handler = $this->fileUrlHandler;
 
     // Verify that the file exists and it's attached to a solution.
-    $query->condition($this->nodeStorage->getEntityType()->getKey('bundle'), 'distribution')
+    $query->condition($this->entityTypeManager->getStorage('node')->getEntityType()->getKey('bundle'), 'distribution')
       ->condition('access_url', $file_url_handler::fileToUrl($file));
     $results = $query->execute();
 
@@ -132,7 +120,7 @@ class DownloadTrackingController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    $entity = $this->nodeStorage->load(array_pop($results));
+    $entity = $this->entityTypeManager->getStorage('node')->load(array_pop($results));
 
     return $entity->access('view', $account, TRUE);
   }

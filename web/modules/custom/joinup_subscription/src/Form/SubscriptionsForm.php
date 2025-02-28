@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -20,31 +21,23 @@ use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Joinup subscription form.
  */
 class SubscriptionsForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+    #[Autowire(service: 'joinup_group.group_manager')]
     protected readonly JoinupGroupManagerInterface $groupManager,
+    #[Autowire(service: 'og.membership_manager')]
     protected readonly MembershipManagerInterface $membershipManager,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('joinup_group.group_manager'),
-      $container->get('og.membership_manager')
-    );
-  }
 
   /**
    * {@inheritdoc}

@@ -6,6 +6,7 @@ namespace Drupal\joinup_invite\Form;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -19,12 +20,14 @@ use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Base class for forms that allow to search for users to invite.
  */
 abstract class InviteFormBase extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * The value indicating a successful invitation.
@@ -69,20 +72,11 @@ abstract class InviteFormBase extends FormBase {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'joinup_invite.invitation_message_helper')]
     protected InvitationMessageHelperInterface $invitationMessageHelper,
+    #[Autowire(service: 'logger.channel.group_membership')]
     protected LoggerChannelInterface $logger,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('logger.channel.group_membership'),
-    );
-  }
 
   /**
    * {@inheritdoc}

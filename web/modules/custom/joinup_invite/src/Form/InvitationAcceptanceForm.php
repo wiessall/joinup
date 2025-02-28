@@ -7,6 +7,7 @@ namespace Drupal\joinup_invite\Form;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -18,7 +19,7 @@ use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,6 +38,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class InvitationAcceptanceForm extends FormBase {
 
+  use AutowireTrait;
+
   /**
    * The identifier for accepting an invitation.
    *
@@ -52,19 +55,11 @@ class InvitationAcceptanceForm extends FormBase {
   const string ACTION_REJECT = 'reject';
 
   public function __construct(
+    #[Autowire(service: 'event_dispatcher')]
     protected readonly EventDispatcherInterface $eventDispatcher,
+    #[Autowire(service: 'current_route_match')]
     protected readonly CurrentRouteMatch $currentRouteMatch,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('event_dispatcher'),
-      $container->get('current_route_match'),
-    );
-  }
 
   /**
    * {@inheritdoc}

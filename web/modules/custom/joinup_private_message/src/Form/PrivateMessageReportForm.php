@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -22,37 +23,28 @@ use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\private_message\Service\PrivateMessageBanManager;
 use Drupal\private_message\Service\PrivateMessageService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a Private Message Report form.
  */
 class PrivateMessageReportForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'private_message.ban_manager')]
     protected readonly PrivateMessageBanManager $privateMessageBanManager,
+    #[Autowire(service: 'plugin.manager.mail')]
     protected readonly MailManager $mailManager,
+    #[Autowire(service: 'private_message.service')]
     protected readonly PrivateMessageService $privateMessageService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
+    #[Autowire(service: 'joinup_private_message.user_service')]
     protected readonly PrivateMessageUserServiceInterface $privateMessageUserService,
     protected readonly AccountInterface $currentUser,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): PrivateMessageReportForm|static {
-    return new static(
-      $container->get('private_message.ban_manager'),
-      $container->get('plugin.manager.mail'),
-      $container->get('private_message.service'),
-      $container->get('entity_type.manager'),
-      $container->get('datetime.time'),
-      $container->get('joinup_private_message.user_service'),
-      $container->get('current_user'),
-    );
-  }
 
   /**
    * {@inheritdoc}
