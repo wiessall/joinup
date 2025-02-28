@@ -171,7 +171,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    * @return array[]
    *   The test cases.
    */
-  public function providerTestIsFileRawUrl(): array {
+  public static function providerTestIsFileRawUrl(): array {
     return [
       'Bitbucket with exclamation mark' => [
         'URL' => 'https://bitbucket.org/!api/2.0/repositories/foo/bar/src/da001cdf6ce8f3fd3f/publiccode.yml',
@@ -251,7 +251,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
    * @return array[]
    *   The test cases.
    */
-  public function providerTestGetFileRawUrl(): array {
+  public static function providerTestGetFileRawUrl(): array {
     return [
       'Missing file' => [
         'source' => 'https://bitbucket.org/fooNamespace/bar-project/missing.csv',

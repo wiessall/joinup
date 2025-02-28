@@ -6,31 +6,26 @@ namespace Drupal\oe_newsroom_newsletter\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\oe_newsroom_newsletter\Exception\BadResponseException;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
 use Drupal\oe_newsroom_newsletter\Exception\InvalidEmailAddressException;
 use Drupal\oe_newsroom_newsletter\SubscriberFactory;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a form that allows a user to subscribe to a newsletter.
  */
 class NewsletterSubscribeForm extends FormBase {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'oe_newsroom_newsletter.subscriber_factory')]
     protected readonly SubscriberFactory $subscriberFactory,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('oe_newsroom_newsletter.subscriber_factory')
-    );
-  }
 
   /**
    * {@inheritdoc}

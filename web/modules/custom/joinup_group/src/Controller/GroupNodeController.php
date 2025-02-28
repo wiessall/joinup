@@ -16,7 +16,7 @@ use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Controller for group node content.
@@ -24,15 +24,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GroupNodeController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('og.access'));
-  }
 
   /**
    * Provides a title callback for the group node add page.

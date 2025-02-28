@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -16,12 +17,14 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides a confirmation form for deleting group memberships.
  */
 class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
+
+  use AutowireTrait;
 
   /**
    * The user private tempstore.
@@ -39,22 +42,12 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   protected GroupInterface $group;
 
   public function __construct(
+    #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
     protected readonly PrivateTempStoreFactory $privateTempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.access'),
-      $container->get('tempstore.private'),
-      $container->get('entity_type.manager'),
-    );
   }
 
   /**

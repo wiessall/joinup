@@ -24,8 +24,8 @@
         "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
         "drupal/calendar_view": "^2.1",
-        "drupal/cas": "^2.0",
-        "drupal/cas_attributes": "^2.0",
+        "drupal/cas": "^3.0",
+        "drupal/cas_attributes": "^3.0",
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
@@ -54,7 +54,7 @@
         "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
-        "drupal/flag": "4.0.0-beta5",
+        "drupal/flag": "^4.0@beta",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
@@ -117,6 +117,7 @@
         "drupal/theme_rule": "^1.0",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
+        "drupal/twig_field_value": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^1.0@beta",
@@ -125,7 +126,7 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drupal/webform_views": "^5.4",
-        "drush/drush": "^12.1",
+        "drush/drush": "^13.3",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
@@ -398,8 +399,7 @@
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
-                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
-                "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch"
+                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
@@ -461,7 +461,8 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
             "drupal/social_media_links": {
-                "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch"
+                "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
+                "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
             },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"

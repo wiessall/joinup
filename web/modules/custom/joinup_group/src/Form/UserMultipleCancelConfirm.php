@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormHelper;
@@ -12,8 +13,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\user\Form\UserMultipleCancelConfirm as CoreUserMultipleCancelConfirm;
-use Drupal\user\UserStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Overrides the default implementation of the form to cancel multiple users.
@@ -23,27 +23,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
 
+  use AutowireTrait;
+
   public function __construct(
     PrivateTempStoreFactory $temp_store_factory,
-    UserStorageInterface $user_storage,
     EntityTypeManagerInterface $entity_type_manager,
+    #[Autowire(service: 'joinup_group.group_manager')]
     protected JoinupGroupManagerInterface $groupManager,
     protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {
+    $user_storage = $entity_type_manager->getStorage('user');
     parent::__construct($temp_store_factory, $user_storage, $entity_type_manager);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('tempstore.private'),
-      $container->get('entity_type.manager')->getStorage('user'),
-      $container->get('entity_type.manager'),
-      $container->get('joinup_group.group_manager'),
-      $container->get('entity_type.bundle.info')
-    );
   }
 
   /**
