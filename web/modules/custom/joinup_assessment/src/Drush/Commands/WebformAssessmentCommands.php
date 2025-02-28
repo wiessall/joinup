@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Drush\Commands;
 
-use Consolidation\AnnotatedCommand\AnnotationData;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -41,13 +40,11 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
    *
    * @param \Symfony\Component\Console\Input\InputInterface $input
    *   Input.
-   * @param \Consolidation\AnnotatedCommand\AnnotationData $annotationData
-   *   Annotation data.
    *
    * @see \Drupal\webform\Commands\WebformSanitizeSubmissionsCommands::sanitize()
    */
   #[CLI\Hook(type: HookManager::INITIALIZE, target: 'sql-sanitize')]
-  public function disableDefaultWebformSanitization(InputInterface $input, AnnotationData $annotationData): void {
+  public function disableDefaultWebformSanitization(InputInterface $input): void {
     // @see \Drupal\webform\Commands\WebformSanitizeSubmissionsCommands::sanitize()
     $input->setOption('sanitize-webform-submissions', 'no');
   }
