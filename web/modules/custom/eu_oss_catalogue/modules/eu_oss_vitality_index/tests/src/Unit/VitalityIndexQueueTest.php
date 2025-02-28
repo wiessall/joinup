@@ -71,7 +71,7 @@ class VitalityIndexQueueTest extends UnitTestCase {
   /**
    * Data provider for testAddingToQueue().
    */
-  public function providerForQueue(): array {
+  public static function providerForQueue(): array {
     return [
       'Less queue items than nodes' => [
         'number of items in queue' => 1,

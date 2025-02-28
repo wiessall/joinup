@@ -64,7 +64,7 @@ class TokenTest extends JoinupExistingSiteTestBase {
   /**
    * Provides data for the testShortIdOrTitleToken method.
    */
-  public function shortIdOrTitleDataProvider(): array {
+  public static function shortIdOrTitleDataProvider(): array {
     return [
       'solution with a short ID' => [
         'solution', 'some-short-id', 'some title', 'some-short-id',
