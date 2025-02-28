@@ -70,8 +70,7 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
           $webformStorage->loadMultiple($sids)
         );
       }
-    }
-    while (!empty($sids));
+    } while (!empty($sids));
 
     if ($this->moduleHandler->moduleExists('webform_submission_log')) {
       $this->database->truncate('webform_submission_log')->execute();
