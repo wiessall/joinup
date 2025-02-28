@@ -24,7 +24,7 @@ use Drupal\og_menu\Plugin\Block\OgMenuBlock;
   category: new TranslatableMarkup("Group"),
   context_definitions: [
     'og' => new EntityContextDefinition(
-      data_type: 'entity',
+      data_type: 'entity:node',
       label: new TranslatableMarkup("Group"),
     ),
   ],
