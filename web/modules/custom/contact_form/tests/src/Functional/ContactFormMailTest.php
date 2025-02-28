@@ -127,7 +127,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
   /**
    * Data provider for ::testEmailSending.
    */
-  public function providerTestEmailSending(): array {
+  public static function providerTestEmailSending(): array {
     return [
       'Withouth copy' => [FALSE],
       'With copy' => [TRUE],

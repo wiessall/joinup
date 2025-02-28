@@ -28,7 +28,7 @@
         </a>
       {% endif %}
     </h1>
-    {% if additional_content.field_short_title|render %}
+    {% if additional_content.field_short_title|field_value %}
       <h2 class="page-title__headline order-0 mt-2 mb-2">{{ additional_content.field_short_title }}</h2>
     {% endif %}
 
