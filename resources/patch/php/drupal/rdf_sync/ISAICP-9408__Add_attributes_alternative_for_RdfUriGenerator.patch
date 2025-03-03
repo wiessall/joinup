@@ -1,0 +1,70 @@
+Subject: [PATCH] ISAICP-9408: Add attributes alternative for RdfUriGenerator
+---
+Index: web/modules/contrib/rdf_sync/src/Attribute/RdfUriGenerator.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/modules/contrib/rdf_sync/src/Attribute/RdfUriGenerator.php b/web/modules/contrib/rdf_sync/src/Attribute/RdfUriGenerator.php
+new file mode 100644
+--- /dev/null	(date 1741011648960)
++++ b/web/modules/contrib/rdf_sync/src/Attribute/RdfUriGenerator.php	(date 1741011648960)
+@@ -0,0 +1,20 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Attribute;
++
++use Drupal\Component\Plugin\Attribute\Plugin;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++
++/**
++ * Defines a code RdfUriGenerator plugin.
++ */
++#[\Attribute(\Attribute::TARGET_CLASS)]
++class RdfUriGenerator extends Plugin {
++
++  public function __construct(
++    public readonly string $id,
++    public readonly TranslatableMarkup $label,
++  ) {}
++}
+Index: web/modules/contrib/rdf_sync/src/Plugin/rdf_sync/RdfUriGenerator/DefaultRdfUriGenerator.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/modules/contrib/rdf_sync/src/Plugin/rdf_sync/RdfUriGenerator/DefaultRdfUriGenerator.php b/web/modules/contrib/rdf_sync/src/Plugin/rdf_sync/RdfUriGenerator/DefaultRdfUriGenerator.php
+new file mode 100644
+--- /dev/null	(date 1741011992288)
++++ b/web/modules/contrib/rdf_sync/src/Plugin/rdf_sync/RdfUriGenerator/DefaultRdfUriGenerator.php	(date 1741011992288)
+@@ -0,0 +1,28 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Plugin\rdf_sync\RdfUriGenerator;
++
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\rdf_sync\Attribute\RdfUriGenerator;
++use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
++
++/**
++ * Provides a fallback entity ID generator plugin.
++ */
++#[RdfUriGenerator(
++  id: "default",
++  label: new TranslatableMarkup("Default URI generator"),
++)]
++class DefaultRdfUriGenerator extends RdfUriGeneratorPluginBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function generate(): string {
++    $uri = "{$GLOBALS['base_url']}/{$this->getEntity()->getEntityTypeId()}/{$this->getEntity()->bundle()}/{$this->getEntity()->uuid()}";
++    return str_replace('_', '-', $uri);
++  }
++
++}

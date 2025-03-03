@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace Drupal\topic\Plugin\rdf_sync\RdfUriGenerator;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\rdf_sync\Attribute\RdfUriGenerator;
 use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Generates the RDF URI for 'topic' taxonomy terms.
- *
- * @RdfUriGenerator(
- *   id = "topic",
- *   name = @Translation("Topic terms"),
- * )
  */
+#[RdfUriGenerator(
+  id: "topic",
+  label: new TranslatableMarkup("Topic term"),
+)]
 class TopicVocabulary extends RdfUriGeneratorPluginBase {
 
   public function __construct(
