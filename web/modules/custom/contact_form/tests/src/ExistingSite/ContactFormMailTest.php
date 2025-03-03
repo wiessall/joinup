@@ -4,26 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\contact_form\Functional;
 
-use Drupal\Tests\joinup_core\Functional\Mail\JoinupMailFunctionalTestBase;
-use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
+use Drupal\Tests\joinup_core\Traits\MailTestTrait;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Tests emails sent on contact form submission including message digest email.
  *
  * @contact_form
  */
-class ContactFormMailTest extends JoinupMailFunctionalTestBase {
+class ContactFormMailTest extends JoinupExistingSiteTestBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'contact_form',
-    'slick',
-    'oe_bootstrap_theme_helper',
-    'joinup_bookmark',
-  ];
+  use MailTestTrait;
 
   /**
    * {@inheritdoc}
@@ -31,21 +22,10 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
   public function setUp(): void {
     parent::setUp();
 
-    $this->installFromConfigCollection([
-      'contact_form.settings',
-      'filter.format.basic_html',
-      'filter.format.content_editor',
-      'message.template.contact_form_submission',
-      'field.storage.message.field_contact_*',
-      'field.field.message.contact_form_submission',
-      'core.entity_form_display.message.contact_form_submission',
-      'core.entity_view_display.message.contact_form_submission.*',
-    ]);
+    //    $this->overrideConfig('system.mail', 'interface.default', 'test_mail_collector');
+    //    $this->overrideConfig('mailsystem.settings', 'defaults.sender', 'test_mail_collector');
 
-    Role::load(RoleInterface::ANONYMOUS_ID)
-      ->grantPermission('access content')
-      ->grantPermission('use text format basic_html')
-      ->save();
+    $this->resetStoredEmails();
   }
 
   /**
@@ -68,6 +48,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
         'field_contact_subject[0][value]' => 'Question subject',
         'field_contact_message[0][value]' => 'Question about Interoperable Europe Portal',
         'field_contact_copy[value]' => $with_copy,
+        'legal' => TRUE,
       ],
       'Submit'
     );
@@ -89,10 +70,10 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Interoperable Europe Portal <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
-            'return-path' => 'joinup@example.com',
-            'sender' => 'joinup@example.com',
+            'sender' => 'admin@example.com',
+            'return-path' => 'admin@example.com',
             'x-mailer' => 'Drupal',
           ],
           'plain' => self::NOTIFICATION_PLAIN,
@@ -102,7 +83,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'module' => 'contact_form',
           'key' => 'contact_form_sender',
           'to' => 'jane.doe@example.com',
-          'from' => 'joinup@example.com',
+          'from' => 'admin@example.com',
           'reply-to' => NULL,
           'langcode' => 'en',
           'send' => TRUE,
@@ -111,16 +92,16 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Interoperable Europe Portal <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
-            'return-path' => 'joinup@example.com',
-            'sender' => 'joinup@example.com',
+            'sender' => 'admin@example.com',
+            'return-path' => 'admin@example.com',
             'x-mailer' => 'Drupal',
           ],
           'plain' => $with_copy ? self::COPY_PLAIN : self::WITHOUT_COPY_PLAIN,
         ],
       ],
-      $this->getCatchedEmailsNormalized()
+      $this->getCatchedEmailsNormalized(),
     );
   }
 
@@ -257,7 +238,6 @@ Kind regards,
 
 The Portal Support Team
 EOS;
-
 
   const WITHOUT_COPY_HTML = <<<'EOS'
 <html>
