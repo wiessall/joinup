@@ -207,7 +207,7 @@ SQL;
     $sandbox['progress'] = 0;
   }
 
-  $nids = array_splice($sandbox['nids'], 0, 100);
+  $nids = array_splice($sandbox['nids'], 0, 50);
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $storage->delete($storage->loadMultiple($nids));
 
