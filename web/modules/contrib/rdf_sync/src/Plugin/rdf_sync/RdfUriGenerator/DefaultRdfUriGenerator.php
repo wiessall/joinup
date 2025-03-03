@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\rdf_sync\Plugin\rdf_sync\RdfUriGenerator;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\rdf_sync\Attribute\RdfUriGenerator;
 use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 
 /**
  * Provides a fallback entity ID generator plugin.
- *
- * @RdfUriGenerator(
- *   id = "default",
- *   name = @Translation("Default URI generator"),
- * )
  */
+#[RdfUriGenerator(
+  id: "default",
+  label: new TranslatableMarkup("Default URI generator"),
+)]
 class DefaultRdfUriGenerator extends RdfUriGeneratorPluginBase {
 
   /**
