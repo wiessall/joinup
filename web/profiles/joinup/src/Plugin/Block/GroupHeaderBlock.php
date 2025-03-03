@@ -8,7 +8,7 @@ use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup\Traits\GroupHeaderAccessTrait;
@@ -24,8 +24,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "group_header_block",
   admin_label: new TranslatableMarkup("Group header"),
   context_definitions: [
-    'og' => new EntityContextDefinition(
-      data_type: 'entity:node',
+    'og' => new ContextDefinition(
+      data_type: 'entity',
       label: new TranslatableMarkup("Organic group"),
     ),
   ]
