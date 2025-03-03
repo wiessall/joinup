@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Drupal\collection\Form;
 
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
+use Drupal\og\OgMembershipInterface;
 
 /**
  * A simple form with a button to join or leave a collection.
@@ -51,6 +53,23 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   protected function getRequestWrapperFormat(): string {
     return $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    if ($this->group->hasCodeOfConductToAccept()) {
+      // Membership is created only after user accepted the code of conduct
+      // document.
+      return;
+    }
+    $state = $this->group->isClosed()
+      ? OgMembershipInterface::STATE_PENDING
+      : OgMembershipInterface::STATE_ACTIVE;
+    $membership = $this->createSaveNewMembership($state, $this->user, $this->group);
+
+    $this->messenger->addStatus($this->group->getNewMembershipSuccessMessage($membership));
   }
 
 }

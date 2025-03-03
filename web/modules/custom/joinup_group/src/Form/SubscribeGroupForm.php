@@ -47,7 +47,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6330
  * @see \Drupal\collection\Form\JoinCollectionForm::showSubscribeDialog()
  */
-class SubscribeGroupFormBase extends FormBase {
+class SubscribeGroupForm extends FormBase {
 
   use MembershipCreateTrait;
   use AutowireTrait;
@@ -70,7 +70,7 @@ class SubscribeGroupFormBase extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'subscribe_group_form_base';
+    return 'subscribe_group_form';
   }
 
   /**
