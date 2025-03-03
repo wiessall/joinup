@@ -11,10 +11,7 @@ use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 /**
  * Provides a fallback entity ID generator plugin.
  */
-#[RdfUriGenerator(
-  id: "default",
-  label: new TranslatableMarkup("Default URI generator"),
-)]
+
 class DefaultRdfUriGenerator extends RdfUriGeneratorPluginBase {
 
   /**
