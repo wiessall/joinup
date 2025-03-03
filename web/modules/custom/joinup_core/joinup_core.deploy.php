@@ -183,3 +183,36 @@ function joinup_core_deploy_200304(): string {
   \Drupal::state()->delete('joinup_core_deploy_200200');
   return 'Solution type field and revision values have been restored.';
 }
+
+/**
+ * Delete content of an orphaned group.
+ */
+function joinup_core_deploy_200305(array &$sandbox): string {
+  if (empty($sandbox['nids'])) {
+    $query = <<<SQL
+SELECT n1.nid, n1.type, n1.title, n2.type, n2.title
+FROM node_field_data n1
+         LEFT JOIN node__og_audience oa ON n1.nid = oa.entity_id
+         LEFT JOIN node_field_data n2 ON oa.og_audience_target_id = n2.nid
+WHERE n1.type IN('news', 'discussion', 'document', 'event', 'solution', 'distribution', 'release')
+  AND n2.nid IS NULL
+SQL;
+
+    $sandbox['nids'] = \Drupal::database()->query($query)->fetchCol();
+    if (empty($sandbox['nids'])) {
+      return 'No orphaned content found.';
+    }
+
+    $sandbox['total'] = count($sandbox['nids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $nids = array_splice($sandbox['nids'], 0, 100);
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $storage->delete($storage->loadMultiple($nids));
+
+  $sandbox['progress'] += count($nids);
+  $sandbox['#finished'] = (int) empty($sandbox['nids']);
+
+  return "Deleted {$sandbox['progress']} out of {$sandbox['total']} orphaned content.";
+}
