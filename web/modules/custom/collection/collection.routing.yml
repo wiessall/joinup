@@ -1,16 +1,3 @@
-# Collection routing definition
-entity.node.subscribe:
-  path: /node/{node}/subscribe
-  defaults:
-    _form: \Drupal\joinup_group\Form\SubscribeGroupFormBase
-#    _title_callback: Drupal\collection\Form\SubscribeToCollectionForm::title
-  requirements:
-    _custom_access: \Drupal\joinup_group\Form\SubscribeGroupFormBase::access
-  options:
-    parameters:
-      node:
-        type: entity:node
-
 entity.node.glossary:
   path: /node/{node}/glossary/{letter}
   defaults:

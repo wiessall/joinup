@@ -19,7 +19,6 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\Collection;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
@@ -237,19 +236,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
           'destination' => Url::fromRoute('<current>')->toString(),
         ])
     );
-    if ($this->group instanceof Collection) {
-      if ($this->group->hasCodeOfConductToAccept()) {
-        // Membership is created only after user accepted the code of conduct
-        // document.
-        return;
-      }
-      $state = $this->group->isClosed()
-        ? OgMembershipInterface::STATE_PENDING
-        : OgMembershipInterface::STATE_ACTIVE;
-      $membership = $this->createSaveNewMembership($state, $this->user, $this->group);
-
-      $this->messenger->addStatus($this->group->getNewMembershipSuccessMessage($membership));
-    }
   }
 
   /**
@@ -277,11 +263,11 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
       // button or the "Membership is pending" button.
       $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $form_state, $form);
       $response->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
-      $modal_form = $this->formBuilder->getForm(SubscribeGroupFormBase::class, $this->group);
+      $modal_form = $this->formBuilder->getForm(SubscribeGroupForm::class, $this->group);
       $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
       // Allow modules to alter or replace the Ajax command.
-      $event = new AjaxCommandEvent(new OpenModalDialogCommand(SubscribeGroupFormBase::title($this->group), $modal_form, [
+      $event = new AjaxCommandEvent(new OpenModalDialogCommand(SubscribeGroupForm::title($this->group), $modal_form, [
         'width' => '500',
       ]), [
         'instance' => 'join_group.subscribe_dialog.open',
