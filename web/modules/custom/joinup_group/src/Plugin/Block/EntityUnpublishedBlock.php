@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -20,15 +23,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block with the unpublished community content of the entity.
- *
- * @Block(
- *   id = "entity_unpublished",
- *   admin_label = @Translation("Unpublished content of group"),
- *   context_definitions = {
- *     "og" = @ContextDefinition("entity:node", label = @Translation("Organic group"))
- *   }
- * )
  */
+#[Block(
+  id: "entity_unpublished",
+  admin_label: new TranslatableMarkup("Unpublished content of group"),
+  context_definitions: [
+    'og' => new ContextDefinition(
+      data_type: 'entity',
+      label: new TranslatableMarkup("Organic group"),
+    ),
+  ],
+)]
 class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\interoperable_europe\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
  * Provides an IOP footer block.
- *
- * @Block(
- *   id = "interoperable_europe_iop_footer",
- *   admin_label = @Translation("IOP Footer"),
- *   category = @Translation("Interoperable Europe")
- * )
  */
+#[Block(
+  id: "interoperable_europe_iop_footer",
+  admin_label: new TranslatableMarkup("IOP Footer"),
+  category: new TranslatableMarkup("Interoperable Europe"),
+)]
 class IopFooterBlock extends BlockBase {
 
   /**

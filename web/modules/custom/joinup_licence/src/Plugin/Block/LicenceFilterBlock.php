@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_licence\LicenceComparerHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the block that displays the menu containing group pages.
- *
- * @Block(
- *   id = "licence_filter_block",
- *   admin_label = @Translation("Licence filter block"),
- *   category = @Translation("Joinup")
- * )
  */
+#[Block(
+  id: "licence_filter_block",
+  admin_label: new TranslatableMarkup("Licence filter block"),
+  category: new TranslatableMarkup("Joinup"),
+)]
 class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
