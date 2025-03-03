@@ -6,6 +6,8 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -13,13 +15,12 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Intercepts any HTTP requests made to static files.
- *
- * @ServiceMock(
- *   id = "static_file",
- *   label = @Translation("Static files"),
- *   weight = 0,
- * )
  */
+#[ServiceMock(
+  id: "static_file",
+  label: new TranslatableMarkup("Static files"),
+  weight: 0,
+)]
 class StaticFile extends PluginBase implements ServiceMockPluginInterface {
 
   /**
