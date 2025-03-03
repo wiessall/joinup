@@ -19,5 +19,4 @@ settings:
   provider: collection
   context_mapping:
     og: '@og.context:og'
-    user: '@user.current_user_context:current_user'
 visibility: {  }
