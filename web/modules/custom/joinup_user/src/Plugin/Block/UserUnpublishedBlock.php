@@ -6,12 +6,15 @@ namespace Drupal\joinup_user\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
@@ -21,15 +24,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block with the unpublished community content owned by the user.
- *
- * @Block(
- *   id = "user_unpublished",
- *   admin_label = @Translation("Unpublished content of user"),
- *   context_definitions = {
- *     "user_route" = @ContextDefinition("entity:user", label = @Translation("User from URL"))
- *   }
- * )
  */
+#[Block(
+  id: "user_unpublished",
+  admin_label: new TranslatableMarkup("Unpublished content of user"),
+  context_definitions: [
+    'user_route' => new EntityContextDefinition(
+      data_type: 'entity:user',
+      label: new TranslatableMarkup("User from URL"),
+    ),
+  ]
+)]
 class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
