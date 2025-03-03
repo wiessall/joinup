@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\eira\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block showing information about deprecated EIRA building blocks.
- *
- * @Block(
- *  id = "eira_deprecated_term_block",
- *  admin_label = @Translation("Eira deprecated term message"),
- * )
  */
+#[Block(
+  id: "eira_deprecated_term_block",
+  admin_label: new TranslatableMarkup("Eira deprecated term message"),
+)]
 class EiraDeprecatedTermBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

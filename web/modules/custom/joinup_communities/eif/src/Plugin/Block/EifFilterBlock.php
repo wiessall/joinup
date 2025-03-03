@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\eif\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\EifInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the block that displays the Eif filters.
- *
- * @Block(
- *   id = "eif_filter_block",
- *   admin_label = @Translation("EIF filter block"),
- *   category = @Translation("EIF")
- * )
  */
+#[Block(
+  id: "eif_filter_block",
+  admin_label: new TranslatableMarkup("EIF filter block"),
+  category: new TranslatableMarkup("EIF"),
+)]
 class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

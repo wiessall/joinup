@@ -6,22 +6,23 @@ namespace Drupal\joinup_acceptance\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_acceptance\Form\AcceptanceTasksForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block containing an acceptance tasks form.
- *
- * @Block(
- *   id = "acceptance_tasks",
- *   admin_label = @Translation("Acceptance tasks"),
- *   category = @Translation("Forms"),
- * )
  */
+#[Block(
+  id: "acceptance_tasks",
+  admin_label: new TranslatableMarkup("Acceptance tasks"),
+  category: new TranslatableMarkup("Forms"),
+)]
 class AcceptanceTasksBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
