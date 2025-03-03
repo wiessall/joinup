@@ -6,6 +6,8 @@ namespace Drupal\eu_oss_catalogue_test_not_allowed_mock\Plugin\ServiceMock;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -15,13 +17,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Intercepts any HTTP request made to unknown directions and returns 501.
- *
- * @ServiceMock(
- *   id = "not_allowed",
- *   label = @Translation("Request catcher"),
- *   weight = 100,
- * )
  */
+#[ServiceMock(
+  id: "not_allowed",
+  label: new TranslatableMarkup("Request catcher"),
+  weight: 100,
+)]
 class NotAllowedMock extends PluginBase implements ServiceMockPluginInterface, ContainerFactoryPluginInterface {
 
   public function __construct(
