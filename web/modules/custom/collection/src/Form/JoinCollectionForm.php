@@ -70,6 +70,6 @@ class JoinCollectionForm extends JoinGroupFormBase {
     $membership = $this->createSaveNewMembership($state, $this->user, $this->group);
 
     $this->messenger->addStatus($this->group->getNewMembershipSuccessMessage($membership));
+    parent::submitForm($form, $form_state);
   }
-
 }
