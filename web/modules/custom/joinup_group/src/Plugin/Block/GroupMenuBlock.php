@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\og_menu\Plugin\Block\OgMenuBlock;
+use Drupal\og_menu\Plugin\Derivative\OgMenuBlock as OgMenuBlockDeriver;
 
 /**
  * Provides the block that displays the menu containing group pages.
- *
- * @Block(
- *   id = "group_menu_block",
- *   admin_label = @Translation("Group menu"),
- *   category = @Translation("Group"),
- *   deriver = "Drupal\og_menu\Plugin\Derivative\OgMenuBlock",
- *   context_definitions = {
- *     "og" = @ContextDefinition("entity", label = @Translation("Group")),
- *   },
- * )
  */
+#[Block(
+  id: "group_menu_block",
+  admin_label: new TranslatableMarkup("Group menu"),
+  category: new TranslatableMarkup("Group"),
+  context_definitions: [
+    'og' => new ContextDefinition(
+      data_type: 'entity',
+      label: new TranslatableMarkup("Group"),
+    ),
+  ],
+  deriver: OgMenuBlockDeriver::class
+)]
 class GroupMenuBlock extends OgMenuBlock {
 
   /**
