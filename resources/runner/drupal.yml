@@ -140,7 +140,7 @@ drupal:
         - OpenEuropa Webtools Geocoding Cache
         - GitHub Token Setup
         - Verbose error logging
-        - Development mail collector
+        - Test mail collector
         - Memcache
         - Custom queue services
         - Monolog
