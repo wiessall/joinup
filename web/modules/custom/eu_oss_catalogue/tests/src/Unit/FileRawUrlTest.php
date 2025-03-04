@@ -65,7 +65,7 @@ class FileRawUrlTest extends UnitTestCase {
    *   A list of testing cases. For the structure of each array element please
    *   check ::testFileRawUrl() signature.
    */
-  public function providerFileRawUrl(): array {
+  public static function providerFileRawUrl(): array {
     return Yaml::decode(file_get_contents(__DIR__ . '/../../fixtures/expectancy/file_raw_url.yml'));
   }
 

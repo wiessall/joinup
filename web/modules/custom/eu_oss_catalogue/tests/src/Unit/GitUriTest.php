@@ -46,7 +46,7 @@ class GitUriTest extends UnitTestCase {
    * @return array[]
    *   The test cases.
    */
-  public function providerFromUriString(): array {
+  public static function providerFromUriString(): array {
     return [
       'Gitlab URL with deep namespace' => [
         'https://gitlab.opencode.de/xleitstelle/xplanung/validierungsregeln/profile/berlin/',

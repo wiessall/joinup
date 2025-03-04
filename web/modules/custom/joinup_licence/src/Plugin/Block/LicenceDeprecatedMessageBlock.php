@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Displays a deprecation warning in a block.
- *
- * @Block(
- *  id = "licence_deprecated_message_block",
- *  admin_label = @Translation("Licence deprecated term message"),
- * )
  */
+#[Block(
+  id: "licence_deprecated_message_block",
+  admin_label: new TranslatableMarkup("Licence deprecated term message"),
+)]
 class LicenceDeprecatedMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

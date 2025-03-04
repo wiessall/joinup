@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Menu\InaccessibleMenuLink;
@@ -12,23 +13,31 @@ use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block with the outline of a table of content in a custom page.
- *
- * @Block(
- *  id = "toc_outline",
- *  admin_label = @Translation("Table of contents outline"),
- *  category = @Translation("Custom page"),
- *  context_definitions = {
- *    "og" = @ContextDefinition("entity", label = @Translation("Group")),
- *    "node" = @ContextDefinition("entity", label = @Translation("Custom page")),
- *  },
- * )
  */
+#[Block(
+  id: "toc_outline",
+  admin_label: new TranslatableMarkup("Table of contents outline"),
+  category: new TranslatableMarkup("Custom page"),
+  context_definitions: [
+    'og' => new ContextDefinition(
+      data_type: 'entity',
+      label: new TranslatableMarkup("Group"),
+    ),
+    'node' => new EntityContextDefinition(
+      data_type: 'entity:node',
+      label: new TranslatableMarkup("Custom page"),
+    ),
+  ],
+)]
 class TableOfContentsOutline extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
