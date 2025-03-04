@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup('Collections'),
   context_definitions: [
     'og' => new ContextDefinition(
-      data_type: 'entity:node:collection',
+      data_type: 'node:collection',
       label: new TranslatableMarkup('Collection'),
     ),
   ]
