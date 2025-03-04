@@ -21,10 +21,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-
-    $this->overrideConfig('system.mail', 'interface.default', 'test_mail_collector');
-    $this->overrideConfig('mailsystem.settings', 'defaults.sender', 'test_mail_collector');
-
+    
     $this->resetStoredEmails();
   }
 
