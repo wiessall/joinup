@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 #[RdfUriGenerator(
   id: "topic",
-  label: new TranslatableMarkup("Topic term"),
+  label: new TranslatableMarkup("Topic terms"),
 )]
 class TopicVocabulary extends RdfUriGeneratorPluginBase {
 
