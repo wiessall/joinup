@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace Drupal\eira\Plugin\Block;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an EIRA properties block.
- *
- * @Block(
- *   id = "eira_properties_block",
- *   admin_label = @Translation("EIRA properties block"),
- *   category = @Translation("EIRA")
- * )
  */
+#[Block(
+  id: "eira_properties_block",
+  admin_label: new TranslatableMarkup("EIRA properties block"),
+  category: new TranslatableMarkup("EIRA"),
+)]
 class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

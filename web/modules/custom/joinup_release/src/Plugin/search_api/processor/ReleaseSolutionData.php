@@ -8,6 +8,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\search_api\SearchApiException;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Attaches necessary data from the solution to the release.
@@ -50,8 +51,16 @@ class ReleaseSolutionData extends ProcessorPluginBase {
         return;
       }
 
-      $field = $this->getIndex()->getField('topic');
-      $field->addValue($solution->get('field_topic')->target_id);
+      $field = $item->getField('topic');
+      $solutionTopicIds = array_map(
+        static fn (TermInterface $term) => $term->id(),
+        $solution->get('field_topic')->referencedEntities()
+      );
+
+      // ::setValues does not override the existing values, so we need to clear
+      // them first.
+      $field->setValues([]);
+      $field->setValues($solutionTopicIds);
       $item->setField('topic', $field);
 
       // Include also the contact & owner labels of the parent solution.
