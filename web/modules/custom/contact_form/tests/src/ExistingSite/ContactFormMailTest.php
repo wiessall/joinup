@@ -48,7 +48,6 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
         'field_contact_subject[0][value]' => 'Question subject',
         'field_contact_message[0][value]' => 'Question about Interoperable Europe Portal',
         'field_contact_copy[value]' => $with_copy,
-        'legal' => TRUE,
       ],
       'Submit'
     );
