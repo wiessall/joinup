@@ -21,7 +21,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    
+
     $this->resetStoredEmails();
   }
 
