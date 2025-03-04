@@ -8,11 +8,14 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Security\Attribute\TrustedCallback;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -25,6 +28,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
   admin_label: new TranslatableMarkup('Collection CoC message'),
   context_definitions: [
     'og' => new ContextDefinition('entity', new TranslatableMarkup('Organic group')),
+    'user' => new EntityContextDefinition('entity:user', new TranslatableMarkup('User Context')),
   ],
 )]
 class CollectionCoCMessageBlock extends BlockBase {
@@ -33,7 +37,9 @@ class CollectionCoCMessageBlock extends BlockBase {
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIf($this->getContextValue('og') instanceof GroupInterface);
+    $user = $this->getContextValue('user');
+    $group = $this->getContextValue('og');
+    return AccessResult::allowedIf($user instanceof AccountInterface && $user->isAuthenticated() && $group instanceof GroupInterface);
   }
 
   /**
@@ -57,10 +63,7 @@ class CollectionCoCMessageBlock extends BlockBase {
 
     // Inject a lazy_builder to render CoC messages.
     $build['messages'] = [
-      '#lazy_builder' => [
-        'joinup_collection.lazy_builders:renderCocMessages',
-        [$collection->id()],
-      ],
+      '#lazy_builder' => [static::class . '::renderCocMessages', [$collection->id()]],
       '#create_placeholder' => TRUE,
     ];
     return $build;
@@ -70,12 +73,58 @@ class CollectionCoCMessageBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function getCacheContexts(): array {
-    $contexts = parent::getCacheContexts();
+    // Ignore cache contexts from context_definition, we need to vary per
+    // og_group_context, and user.permissions (part of required_cache_contexts).
+    return ['og_group_context', 'user.permissions'];
+  }
 
-    // Unset route coming from the "og" context_definition, we only need to vary
-    // this per og_group_context.
-    unset($contexts['route']);
-    return Cache::mergeContexts($contexts, ['og_group_context']);
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags(): array {
+    // Ignore cache tags from context_definition, we only need the one from
+    // collection (added in ::build).
+    return [];
+  }
+
+  /**
+   * Lazy builder callback; renders the CoC messages (e.g.: new CoC to accept).
+   *
+   * @param string $collection_id
+   *   The collection ID.
+   *
+   * @return array
+   *   A renderable array containing the CoC messages.
+   */
+  #[TrustedCallback]
+  public static function renderCocMessages(string $collection_id): array {
+    $build = [];
+    $collection = \Drupal::entityTypeManager()->getStorage('node')->load($collection_id);
+    if (!$collection instanceof CollectionInterface || !$collection->hasCodeOfConductToAccept()) {
+      return $build;
+    }
+
+    // Get the active membership for the current user, if any.
+    $membership = $collection->getMembership();
+    if (!$membership instanceof CodeOfConductMembershipInterface || $membership->isLastDocumentRevisionAccepted()) {
+      return $build;
+    }
+
+    return [
+      '#theme' => 'status_messages',
+      '#message_list' => [
+        'warning' => [
+          t('We updated our <a href=":coc_url" target="_blank">Code of Conduct</a> to ensure safe and respectful environment for all members of %collection.<br> You can accept or decline it <a href=":coc_form_url" target="_blank">here</a>.', [
+            '%collection' => $collection->label(),
+            ':coc_url' => $collection->getCodeOfConduct()->toUrl()->toString(),
+            ':coc_form_url' => Url::fromRoute('collection.code_of_conduct_consent', ['node' => $collection->id()])->toString(),
+          ]),
+        ],
+      ],
+      '#status_headings' => [
+        'warning' => t('Important information'),
+      ],
+    ];
   }
 
 }
