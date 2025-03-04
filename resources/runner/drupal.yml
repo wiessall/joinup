@@ -81,6 +81,7 @@ drupal:
         - Custom queue services
         - Monolog
         - EU OSS Catalogue
+        - Stage file proxy
       behat:
         - Main settings
         - Databases
