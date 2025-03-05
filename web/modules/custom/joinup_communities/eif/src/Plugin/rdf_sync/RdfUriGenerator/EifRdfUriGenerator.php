@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\eif\Plugin\rdf_sync\RdfUriGenerator;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\rdf_sync\Attribute\RdfUriGenerator;
 use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 
 /**
  * Generates RDF URIs for EIF perspective class.
- *
- * @RdfUriGenerator(
- *   id = "eif_perspective",
- *   name = @Translation("EIF Perspective"),
- * )
  */
+#[RdfUriGenerator(
+  id: "eif_perspective",
+  label: new TranslatableMarkup("EIF Perspective"),
+)]
 class EifRdfUriGenerator extends RdfUriGeneratorPluginBase {
 
   /**
