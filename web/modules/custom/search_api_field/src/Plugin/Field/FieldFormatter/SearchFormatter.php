@@ -7,6 +7,7 @@ namespace Drupal\search_api_field\Plugin\Field\FieldFormatter;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
@@ -14,6 +15,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
@@ -29,15 +31,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Plugin implementation of the 'search_api_field' formatter.
- *
- * @FieldFormatter(
- *   id = "search_api_field",
- *   label = @Translation("Search"),
- *   field_types = {
- *     "search_api_field"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'search_api_field',
+  label: new TranslatableMarkup('Search'),
+  field_types: [
+    'search_api_field',
+  ],
+)]
 class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

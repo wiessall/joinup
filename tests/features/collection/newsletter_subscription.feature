@@ -23,18 +23,15 @@ Feature: Subscribing to collection newsletters
 
   Scenario: Only moderators can enter the subscription information for a collection.
     Given I am logged in as a moderator
-    And I go to the "Volkor X" collection
-    When I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Volkor X"
     Then the following fields should be present "Enable newsletter subscriptions, Universe acronym, Newsletter service ID"
 
     When I am logged in as "Filippos Demetriou"
-    And I go to the "Volkor X" collection
-    When I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Volkor X"
     Then the following fields should not be present "Enable newsletter subscriptions, Universe acronym, Newsletter service ID"
 
     When I am logged in as "Tatiana Andreas"
-    And I go to the "Volkor X" collection
-    When I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Volkor X"
     Then the following fields should not be present "Enable newsletter subscriptions, Universe acronym, Newsletter service ID"
 
   Scenario: Configure the newsletter subscription
@@ -83,9 +80,7 @@ Feature: Subscribing to collection newsletters
   @javascript @newsroom_newsletter
   Scenario: Subscribe to a newsletter
     Given I am logged in as "Magdalini Kokinos"
-    When I go to the "Volkor X" collection
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "collection" with the title "Volkor X"
     Then I expand the "Additional fields" accordion section
     And I check "Enable newsletter subscriptions"
     And I fill in "Universe acronym" with "volkor-x"

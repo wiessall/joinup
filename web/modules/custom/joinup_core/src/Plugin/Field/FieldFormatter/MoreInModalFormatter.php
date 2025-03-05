@@ -7,6 +7,7 @@ namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
@@ -14,17 +15,17 @@ use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Formatter returning the configured number of items, then the rest in a modal.
- *
- * @FieldFormatter(
- *   id = "joinup_core_more_in_modal",
- *   label = @Translation("Shows all items in modal"),
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_core_more_in_modal',
+  label: new TranslatableMarkup('Shows all items in modal'),
+)]
 class MoreInModalFormatter extends FormatterBase {
 
   public function __construct(

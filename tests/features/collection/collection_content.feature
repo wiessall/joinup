@@ -64,8 +64,7 @@ Feature: Collection content
 
     # Create a draft version of the solution to verify that counters are not affected.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
-    When I go to the homepage of the "Solution from draft to published" solution
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "solution" with the title "Solution from draft to published"
     And I fill in "Title" with "Solution from draft to published but draft"
     And I press "Save as draft"
     Then I should see the heading "Solution from draft to published"
