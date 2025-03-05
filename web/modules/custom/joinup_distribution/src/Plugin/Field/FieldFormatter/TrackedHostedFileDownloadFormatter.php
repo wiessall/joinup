@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 use Drupal\file_url\Entity\RemoteFile;
@@ -18,15 +20,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'tracked_hosted_file_download' formatter.
- *
- * @FieldFormatter(
- *   id = "tracked_hosted_file_download",
- *   label = @Translation("Tracked hosted file download"),
- *   field_types = {
- *     "file_url"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'tracked_hosted_file_download',
+  label: new TranslatableMarkup('Tracked hosted file download'),
+  field_types: [
+    'file_url',
+  ],
+)]
 class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
