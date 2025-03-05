@@ -31,9 +31,7 @@ Feature: Event moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I go to the homepage of the "Wet Lords" collection
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
     And I expand the "Additional fields" accordion section
     And I check "Moderated"
     Then I press "Publish"
@@ -51,9 +49,7 @@ Feature: Event moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I go to the homepage of the "Wet Lords" collection
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
     And I expand the "Additional fields" accordion section
     And I check "Closed collection"
     And I select the radio button "Only members can create content."
