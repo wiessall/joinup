@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\github_feed\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\github_feed\GitHubFeedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'github_feed_default' formatter.
- *
- * @FieldFormatter(
- *   id = "github_feed_default",
- *   label = @Translation("Default"),
- *   field_types = {"github_feed"}
- * )
  */
+#[FieldFormatter(
+  id: 'github_feed_default',
+  label: new TranslatableMarkup('Default'),
+  field_types: [
+    'github_feed',
+  ],
+)]
 class GitHubFeedDefaultFormatter extends FormatterBase {
 
   public function __construct(
