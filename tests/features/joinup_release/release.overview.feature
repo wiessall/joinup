@@ -101,8 +101,7 @@ Feature: Asset distribution overview on solution.
 
     # Publish the release as a solution facilitator.
     When I am logged in as a facilitator of the "Lovely Butterfly" solution
-    And I go to the homepage of the "The Deep Doors" release
-    When I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "release" with the title "The Deep Doors"
     And I press "Publish"
     Then I should see the text "The Deep Doors 4" in the "Page title" region
 

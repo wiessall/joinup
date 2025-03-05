@@ -296,9 +296,7 @@ Feature:
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
-    And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
@@ -309,17 +307,13 @@ Feature:
     # When a query preset is entered, the query builder should not be available
     # anymore to facilitators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
     When I am logged in as a moderator
-    And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should be present "Available filters"
 
