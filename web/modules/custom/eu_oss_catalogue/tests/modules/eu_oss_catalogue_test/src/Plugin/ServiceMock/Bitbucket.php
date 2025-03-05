@@ -8,6 +8,8 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -16,13 +18,12 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * Mocks requests made to Bitbucket API.
- *
- * @ServiceMock(
- *   id = "eu_oss_catalogue_test_bitbucket",
- *   label = @Translation("API Guesser Bitbucket Mock"),
- *   weight = 10,
- * )
  */
+#[ServiceMock(
+  id: "eu_oss_catalogue_test_bitbucket",
+  label: new TranslatableMarkup("API Guesser Bitbucket Mock"),
+  weight: 10,
+)]
 class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
 
   const JSON_RESPONSE_HEADERS = ['content-type' => 'application/json'];

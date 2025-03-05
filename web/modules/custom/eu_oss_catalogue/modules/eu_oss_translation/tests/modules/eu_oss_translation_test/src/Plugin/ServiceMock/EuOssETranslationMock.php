@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_translation_test\Plugin\ServiceMock;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\tmgmt_ec_etranslation_test\Plugin\ServiceMock\ETranslationMock;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Intercepts any HTTP requests made to eTranslation API.
- *
- * @ServiceMock(
- *   id = "eu_oss_etranslation",
- *   label = @Translation("EU OSS eTranslation API"),
- *   weight = -1,
- * )
  */
+#[ServiceMock(
+  id: "eu_oss_etranslation",
+  label: new TranslatableMarkup("EU OSS eTranslation API"),
+  weight: -1,
+)]
 class EuOssETranslationMock extends ETranslationMock {
 
   /**

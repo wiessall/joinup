@@ -9,10 +9,6 @@ declare(strict_types=1);
 
 /**
  * Implements hook_requirements().
- *
- * Adds some additional security related warnings to the status report:
- * - UID1 should be blocked.
- * - Config Read Only should be enabled.
  */
 function joinup_core_requirements($phase): array {
   $requirements = [];

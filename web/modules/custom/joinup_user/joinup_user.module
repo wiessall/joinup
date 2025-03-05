@@ -10,23 +10,19 @@ declare(strict_types=1);
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_notification\MessageArgumentGenerator;
-use Drupal\joinup_user\Entity\JoinupUser;
-use Drupal\joinup_user\Entity\JoinupUserInterface;
-use Drupal\joinup_user\JoinupUserViewsData;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
-use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
 /**
@@ -42,17 +38,16 @@ function joinup_user_notify_on_account_change(array $form, FormStateInterface $f
   $form_object = $form_state->getFormObject();
   $account = $form_object->getEntity() ?? NULL;
 
-  // Sanity check. If we don't get a user object for some reason there is
-  // nothing to do.
-  if (!$account instanceof JoinupUserInterface) {
+  // Sanity check. Don't get a user object? There's nothing to do.
+  if (!$account instanceof UserInterface) {
     return;
   }
 
   // If the status of the user changed, do not send an e-mail as it is already
   // handled. We are sending messages for account activation and blocking.
-  /** @var \Drupal\joinup_user\Entity\JoinupUserInterface $original_account */
   $original_account = \Drupal::entityTypeManager()->getStorage('user')
     ->loadUnchanged($account->id());
+  assert($original_account instanceof UserInterface);
   if ($original_account->isActive() !== (bool) $form_state->getValue('status')) {
     return;
   }
@@ -136,11 +131,6 @@ function joinup_user_mail_tokens(array &$replacements, array $data, array $optio
  * Implements hook_mail_alter().
  */
 function joinup_user_mail_alter(&$message): void {
-  if (isset($message['params']['account']) && $message['params']['account']->isCancelled()) {
-    // Don't send email for a cancelled user account.
-    $message['send'] = FALSE;
-  }
-
   if ($message['key'] !== 'status_canceled') {
     return;
   }
@@ -299,13 +289,6 @@ function joinup_user_form_user_form_alter(array &$form, FormStateInterface $form
   //   notification to the user.
   // - Redirect to the canonical user page after updating the user profile.
   $submit_callbacks[] = 'joinup_user_user_form_submit';
-
-  /** @var \Drupal\joinup_user\Entity\JoinupUserInterface $account */
-  $account = $form_state->getFormObject()->getEntity();
-  if ($account->isCancelled()) {
-    $form['#disabled'] = TRUE;
-    \Drupal::messenger()->addWarning(t('This user account is cancelled. Edit is disabled.'));
-  }
 }
 
 /**
@@ -435,16 +418,6 @@ function joinup_user_invalidate_user_cache_tags(OgMembershipInterface $entity): 
 }
 
 /**
- * Implements hook_user_cancel_methods_alter().
- */
-function joinup_user_user_cancel_methods_alter(array &$methods): void {
-  $methods['joinup_user_cancel'] = [
-    'title' => t("Cancels the user account"),
-    'description' => t("Cancels the account but keep user's content and authorship."),
-  ];
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Disallow access to the cancellation method.
@@ -485,7 +458,6 @@ function joinup_user_form_user_cancel_form_alter(array &$form, FormStateInterfac
       ],
     ];
   }
-  $form['user_cancel_method']['#default_value'] = 'joinup_user_cancel';
 }
 
 /**
@@ -503,63 +475,12 @@ function joinup_user_alter_account_cancel_form(array &$form): void {
 }
 
 /**
- * Implements hook_user_cancel().
- */
-function joinup_user_user_cancel(array $edit, JoinupUserInterface $account, string $method): void {
-  if ($method === 'joinup_user_cancel') {
-    // Send the email and do the logging before anonymizing, so that we still
-    // have the field values in place.
-    if (!empty($edit['user_cancel_notify'])) {
-      _user_mail_notify('status_canceled', $account);
-    }
-    \Drupal::messenger()->addStatus(t('%name has been deleted.', ['%name' => $account->getDisplayName()]));
-    \Drupal::logger('user')->notice(
-      'Deleted user: %name %email.',
-      [
-        '%name' => $account->getAccountName(),
-        '%email' => '<' . $account->getEmail() . '>',
-      ]
-    );
-
-    // Actually cancel the user account.
-    $account->cancel()->save();
-  }
-}
-
-/**
  * Implements hook_user_format_name_alter().
- *
- * Replaces the username with a concatenation of the user's first and last name.
- * If either the first name or last name is known then this will be returned. If
- * neither are known this will fall back to the username.
- *
- * The first name and last name are both required during user registration so in
- * normal usage the combination of first name and last name will always be
- * returned. Incomplete data may be present in migrated legacy accounts.
  */
-function joinup_user_user_format_name_alter(&$name, $account): void {
+function joinup_user_user_format_name_alter(string &$name, AccountInterface $account): void {
   // Skip if the user is anonymous.
-  if ($account->isAnonymous()) {
-    return;
-  }
-
-  // Load the full user object if needed.
-  if (!$account instanceof UserInterface) {
-    $account = User::load($account->id());
-  }
-
-  // Default to the account name.
-  $name = $account->getAccountName();
-
-  /** @var \Drupal\user\UserInterface $account */
-  $name_components = [];
-  foreach (['field_user_first_name', 'field_user_family_name'] as $field_name) {
-    if (!$account->get($field_name)->isEmpty()) {
-      $name_components[] = $account->get($field_name)->value;
-    }
-  }
-  if (!empty($name_components)) {
-    $name = implode(' ', $name_components);
+  if ($account->isAuthenticated()) {
+    $name = \Drupal::getContainer()->get('joinup_user.deleted')->getFullName($account);
   }
 }
 
@@ -599,66 +520,6 @@ function joinup_user_local_tasks_alter(&$local_tasks): void {
 }
 
 /**
- * Implements hook_entity_type_alter().
- */
-function joinup_user_entity_type_alter(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $entity_type */
-  $entity_type = $entity_types['user'];
-  $entity_type
-    ->setClass(JoinupUser::class)
-    ->setHandlerClass('views_data', JoinupUserViewsData::class);
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * Removed the check boxes from the cancelled users in the administrative UI.
- */
-function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  if (empty($form['user_bulk_form'])) {
-    return;
-  }
-
-  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
-
-  // Unfortunately we cannot access BulkForm::loadEntityFromBulkFormKey(), so we
-  // fork a copy tailored for the 'user' entity type.
-  // @see \Drupal\views\Plugin\views\field\BulkForm::loadEntityFromBulkFormKey()
-  $get_account = function (string $bulk_form_key) use ($user_storage): JoinupUserInterface {
-    $key = base64_decode($bulk_form_key);
-    $key_parts = json_decode($key);
-    // The first item is always the user ID.
-    $uid = array_pop($key_parts);
-    /** @var \Drupal\joinup_user\Entity\JoinupUserInterface $account */
-    $account = $user_storage->load($uid);
-    return $account;
-  };
-
-  foreach (Element::children($form['user_bulk_form']) as $delta) {
-    $account = $get_account($form['user_bulk_form'][$delta]['#return_value']);
-    if ($account->isCancelled()) {
-      // Cancelled users cannot be deleted, not even from the admin UI.
-      unset($form['user_bulk_form'][$delta]);
-    }
-  }
-}
-
-/**
- * Implements hook_entity_presave().
- */
-function joinup_user_entity_presave(EntityInterface $entity): void {
-  if ($entity->isNew() || !$entity instanceof ContentEntityInterface ||
-    empty($entity->original) || !$entity->original instanceof ContentEntityInterface) {
-    return;
-  }
-
-  // Prevent changes to update date in case content is reassigned to anonymous.
-  if (isset($entity->joinupUserCancelReassign)) {
-    $entity->setChangedTime($entity->original->getChangedTime());
-  }
-}
-
-/**
  * Implements hook_preprocess_username().
  *
  * Truncates user names longer than 24 characters but also passes full name
@@ -667,7 +528,7 @@ function joinup_user_entity_presave(EntityInterface $entity): void {
 function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
   $variables['name_full'] = $account->getDisplayName();
-  $variables['name'] = Unicode::truncate($account->getDisplayName(), 24, FALSE, TRUE);
+  $variables['name'] = Unicode::truncate($variables['name_full'], 24, FALSE, TRUE);
 }
 
 /**
@@ -683,6 +544,12 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
     $group = $implementations['joinup_user'];
     unset($implementations['joinup_user']);
     $implementations['joinup_user'] = $group;
+  }
+
+  if ($hook === 'user_predelete') {
+    // Preserve deleted user content.
+    unset($implementations['node']);
+    unset($implementations['comment']);
   }
 }
 
@@ -702,4 +569,28 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
       ->setName('type')
       ->setClass(UserBundle::class),
   ];
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function joinup_user_user_delete(UserInterface $account): void {
+  \Drupal::getContainer()->get('joinup_user.deleted')->onUserDelete($account);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function joinup_user_entity_delete(EntityInterface $entity): void {
+  \Drupal::getContainer()->get('joinup_user.deleted')->onEntityDelete($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_user_user_access(UserInterface $account): AccessResultInterface {
+  // Forbid access to a deleted user mocked entity instance.
+  $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted')->isAccountDeleted($account);
+  return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
+    ->addCacheableDependency($account);
 }

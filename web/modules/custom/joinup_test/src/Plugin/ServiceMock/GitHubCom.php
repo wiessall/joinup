@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_test\Plugin\ServiceMock;
 
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -12,13 +14,12 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Intercepts any HTTP request made to github.com.
- *
- * @ServiceMock(
- *   id = "api_github_com",
- *   label = @Translation("api.github.com"),
- *   weight = 0,
- * )
  */
+#[ServiceMock(
+  id: "api_github_com",
+  label: new TranslatableMarkup("api.github.com"),
+  weight: 0,
+)]
 class GitHubCom extends PluginBase implements ServiceMockPluginInterface {
 
   /**
