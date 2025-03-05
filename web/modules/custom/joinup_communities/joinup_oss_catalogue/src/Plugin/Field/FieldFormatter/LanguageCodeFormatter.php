@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolve the lang codes known by Drupal to full name.
- *
- * @FieldFormatter(
- *   id = "joinup_language_code",
- *   label = @Translation("Language code resolver"),
- *   field_types = {
- *     "string",
- *     "text",
- *   },
- *   settings = {}
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_language_code',
+  label: new TranslatableMarkup('Language code resolver'),
+  field_types: [
+    'string',
+    'text',
+  ],
+)]
 class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

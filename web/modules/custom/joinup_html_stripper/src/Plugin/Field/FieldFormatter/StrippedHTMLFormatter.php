@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_html_stripper\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\smart_trim\TruncateHTML;
 
 /**
@@ -22,22 +24,18 @@ use Drupal\smart_trim\TruncateHTML;
  *
  * This prevents for example JSON metadata to be shown to the end user in places
  * where only plain text is desired (for example in tiles or teasers).
- *
- * @FieldFormatter(
- *   id = "joinup_html_stripper_stripped",
- *   label = @Translation("Stripped"),
- *   field_types = {
- *     "string",
- *     "string_long",
- *     "text",
- *     "text_long",
- *     "text_with_summary"
- *   },
- *   settings = {
- *     "trim_length" = "300"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_html_stripper_stripped',
+  label: new TranslatableMarkup('Stripped'),
+  field_types: [
+    'string',
+    'string_long',
+    'text',
+    'text_long',
+    'text_with_summary',
+  ],
+)]
 class StrippedHTMLFormatter extends FormatterBase {
 
   /**
