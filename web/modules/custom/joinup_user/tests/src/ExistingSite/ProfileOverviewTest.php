@@ -40,6 +40,8 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
     /** @var \Drupal\og\MembershipManagerInterface $og_membership_manager */
     $og_membership_manager = $this->container->get('og.membership_manager');
 
+    $this->overrideConfig('joinup_user.settings', 'membership_group_limit', 3);
+
     $this->owner = $this->createUser([], 'some_owner', FALSE, [
       'mail' => "some_user@example.com",
       'pass' => 'plain',
@@ -59,7 +61,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
 
     // Sign a user up for more than 100 groups in total. Also, the owner will
     // transparently become a member of all these groups.
-    for ($count = 0; $count < 52; $count++) {
+    for ($count = 0; $count < 2; $count++) {
       $collection = $this->createNode([
         'type' => 'collection',
         'title' => 'Collection ' . $count,
@@ -88,6 +90,8 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
     $this->drupalGet("/user/{$this->owner->id()}");
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContainsOnce('You have joined a large number of collections and solutions.');
+    $this->assertSession()
+      ->pageTextContainsOnce('Only the content of the first 3 groups is shown.');
 
     // Assert the user does not see the same message on another user's profile
     // that is also a member of too many groups.
