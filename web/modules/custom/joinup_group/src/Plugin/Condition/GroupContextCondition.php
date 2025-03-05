@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\Condition;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Condition\Attribute\Condition;
 use Drupal\Core\Condition\ConditionPluginBase;
@@ -12,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\node\NodeInterface;
@@ -57,7 +59,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    */
   public function defaultConfiguration(): array {
     return [
-      'group_context' => FALSE,
       'limit_to_groups' => [],
     ] + parent::defaultConfiguration();
   }
@@ -66,11 +67,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
-    $form['group_context'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Group context is active'),
-      '#default_value' => $this->getConfiguration()['group_context'],
-    ];
     $form['limit_to_groups'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Limit to groups'),
@@ -105,7 +101,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       // Cannot negate if the condition is not enabled.
       $this->setConfig('negate', FALSE);
     }
-    $this->setConfig('group_context', $group_context);
     $this->setConfig('limit_to_groups', $form_state->getValue('limit_to_groups'));
     parent::submitConfigurationForm($form, $form_state);
   }
@@ -114,10 +109,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function summary(): ?MarkupInterface {
-    if (!$this->getConfiguration()['group_context']) {
-      return NULL;
-    }
-
     if ($groups = $this->getGroups()) {
       $group_labels = array_map(function (GroupInterface $group): string {
         return $group->get('type')->entity->label() . ': ' . $group->label();
@@ -141,12 +132,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function evaluate(): bool {
-    if (!$this->getConfiguration()['group_context']) {
-      // Cannot negate if the condition is not enabled.
-      $this->setConfig('negate', FALSE);
-      return FALSE;
-    }
-
     if (!$group_from_context = $this->groupManager->getGroupFromContext()) {
       return FALSE;
     }
@@ -176,18 +161,37 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
   /**
    * Returns a list of groups this condition is limited to.
    *
-   * @param array|null $uris
+   * @param array|null $ids
    *   (optional) A list of group URIs candidates.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface[]
    *   The list of groups this condition is limited to.
    */
-  protected function getGroups(?array $uris = NULL): array {
-    $uris ??= $this->getConfiguration()['limit_to_groups'];
-    return array_filter(
-      $uris ? $this->entityTypeManager->getStorage('node')->loadMultiple($uris) : [],
-      fn(NodeInterface $node): bool => $node instanceof GroupInterface,
-    );
+  protected function getGroups(?array $ids = NULL): array {
+    $ids ??= $this->getConfiguration()['limit_to_groups'];
+    $groups = [];
+    foreach ($ids as $id) {
+      if (is_numeric($id)) {
+        $groups[$id] = $this->entityTypeManager->getStorage('node')->load($id);
+      }
+      elseif ($entity = $this->mapper->getEntityByUri($id)) {
+        // Try to load the group by URI for backwards compatibility.
+        $groups[$entity->id()] = $this->mapper->getEntityByUri($id);
+      }
+      // Further attempt to recognize the group from the URL if the ID is
+      // a URI and is internal.
+      elseif (!UrlHelper::isExternal($id) || UrlHelper::externalIsLocal($id, \Drupal::request()->getSchemeAndHttpHost())) {
+        $url = Url::fromUri('internal:' . UrlHelper::parse($id)['path']);
+        if ($url->isRouted() && $url->getRouteName() === 'entity.node.canonical') {
+          $node = $this->entityTypeManager->getStorage('node')->load($url->getRouteParameters()['node']);
+          if ($node instanceof GroupInterface) {
+            $groups[$node->id()] = $node;
+          }
+        }
+      }
+    }
+
+    return $groups;
   }
 
   /**
