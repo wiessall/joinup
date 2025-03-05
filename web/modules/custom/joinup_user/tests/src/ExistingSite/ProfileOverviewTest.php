@@ -59,7 +59,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
       'mail' => "some_user@example.com",
     ]);
 
-    // Sign a user up for more than 100 groups in total. Also, the owner will
+    // Sign a user up for more than {membership_group_limit} groups in total. Also, the owner will
     // transparently become a member of all these groups.
     for ($count = 0; $count < 2; $count++) {
       $collection = $this->createNode([
