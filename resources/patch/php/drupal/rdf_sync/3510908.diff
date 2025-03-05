@@ -73,3 +73,31 @@ index 3ae9588fb2021564a96c02a56e61115638252ee0..6cb67a643b493b0314315789edf9b3cd
  
  /**
   * Plugin manager for RDF URI generator plugins.
+Index: src/RdfUriGeneratorPluginManager.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/RdfUriGeneratorPluginManager.php b/src/RdfUriGeneratorPluginManager.php
+--- a/src/RdfUriGeneratorPluginManager.php	(revision d87b880d32860a81b1184fec7497629b748b7209)
++++ b/src/RdfUriGeneratorPluginManager.php	(date 1741165795638)
+@@ -8,7 +8,8 @@
+ use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Plugin\DefaultPluginManager;
+-use Drupal\rdf_sync\Attribute\RdfUriGenerator;
++use Drupal\rdf_sync\Annotation\RdfUriGenerator as AnnotationRdfUriGenerator;
++use Drupal\rdf_sync\Attribute\RdfUriGenerator as AttributeRdfUriGenerator;
+ 
+ /**
+  * Plugin manager for RDF URI generator plugins.
+@@ -27,7 +28,8 @@
+    *   The module handler.
+    */
+   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+-    parent::__construct('Plugin/rdf_sync/RdfUriGenerator', $namespaces, $module_handler, RdfUriGeneratorPluginInterface::class, RdfUriGenerator::class);
++    parent::__construct('Plugin/rdf_sync/RdfUriGenerator', $namespaces, $module_handler, RdfUriGeneratorPluginInterface::class,
++      AttributeRdfUriGenerator::class, AnnotationRdfUriGenerator::class);
+     $this->alterInfo('rdf_uri_generator_info');
+     $this->setCacheBackend($cache_backend, 'rdf_uri_generator_plugins');
+   }
