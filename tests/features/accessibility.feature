@@ -26,6 +26,7 @@ Feature: Accessibility
       | /collection/open-source-observatory-osor/event/pass-salt-conference                                                             |
       | /collection/open-source-observatory-osor/news/co2-tool-accounting-code                                                          |
       | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
+      | /collection/digital-skills-public-sector/solution/iop-bdti                                                                      |
       | /interoperable-europe/event/register-biggest-2023-open-source-conference-brussels                                               |
       | /interoperable-europe/news/govtech-incubator-launched-2023-digital-government-summit                                            |
       | /search                                                                                                                         |

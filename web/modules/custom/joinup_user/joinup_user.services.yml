@@ -20,14 +20,20 @@ services:
 
   Drupal\joinup_user\Routing\RouteSubscriber: { }
 
-  Drupal\joinup_user\Access\UserStatusAccessCheck:
-    tags:
-      - { name: access_check, applies_to: _user_status }
-
-  Drupal\joinup_user\EventSubscriber\JoinupUserUserCancelSubscriber: { }
-
-  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber: { }
+  Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber: {  }
 
   joinup_user.notification_helper:
     class: Drupal\joinup_user\JoinupUserNotificationHelper
   Drupal\joinup_user\JoinupUserNotificationHelperInterface: '@joinup_user.notification_helper'
+
+  joinup_user.memory_cache:
+    class: Drupal\Core\Cache\MemoryCache\MemoryCacheInterface
+    tags:
+      - { name: cache.bin.memory, default_backend: cache.backend.memory.memory }
+    factory: [ '@cache_factory', 'get' ]
+    arguments: [ memory_cache ]
+
+  joinup_user.deleted:
+    class: Drupal\joinup_user\JoinupUserDeleted
+    tags:
+      - { name: needs_destruction, priority: 100 }

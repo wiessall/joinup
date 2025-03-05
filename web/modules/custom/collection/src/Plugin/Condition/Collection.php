@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Condition;
 
+use Drupal\Core\Condition\Attribute\Condition;
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Collection' condition.
- *
- * @Condition(
- *   id = "collection",
- *   label = @Translation("Collections"),
- *   context_definitions = {
- *     "og" = @ContextDefinition("entity:node:collection", label = @Translation("Collection"))
- *   }
- * )
  */
+#[Condition(
+  id: 'collection',
+  label: new TranslatableMarkup('Collections'),
+  context_definitions: [
+    'og' => new ContextDefinition(
+      data_type: 'node:collection',
+      label: new TranslatableMarkup('Collection'),
+    ),
+  ]
+)]
 class Collection extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
