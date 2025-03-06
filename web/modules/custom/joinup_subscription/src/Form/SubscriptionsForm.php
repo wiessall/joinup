@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_subscription\Form;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -16,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
@@ -108,10 +108,10 @@ class SubscriptionsForm extends FormBase {
         if ($group === NULL) {
           continue;
         }
-        $clean_group_id = Html::cleanCssIdentifier($group->id());
         $form['groups'][$group->id()] = [
           '#type' => 'container',
-          '#id' => 'group-' . $clean_group_id,
+          '#id' => 'group-' . $group->id(),
+          '#uuid' => $group->uuid(),
           '#attributes' => [
             'class' => ['group-subscription'],
           ],
@@ -139,7 +139,6 @@ class SubscriptionsForm extends FormBase {
         ];
 
         $subscription_status = [];
-
         $active_subscription_bundles = $membership->get('subscription_bundles')->getIterator()->getArrayCopy();
         foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
           foreach ($bundle_ids as $bundle_id) {
@@ -180,7 +179,7 @@ class SubscriptionsForm extends FormBase {
           '#ajax' => [
             'callback' => '::reloadGroup',
           ],
-          '#name' => 'submit-' . $clean_group_id,
+          '#name' => 'submit-' . $group->id(),
           '#submit' => ['::submitForm'],
           '#type' => 'submit',
           '#extra_suggestion' => 'subscribe_save',
@@ -320,6 +319,13 @@ class SubscriptionsForm extends FormBase {
     $subscription_status = [];
     $subscription_type = $form_state->getTriggeringElement()['#group_type'];
     $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$subscription_type];
+    $group = $this->entityTypeManager->getStorage('node')->load($submitted_group_id);
+    if ($group->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $excluded_bundles = ['assessment_report'];
+      $subscription_bundles['node'] = array_values(array_filter($subscription_bundles['node'], function ($item) use ($excluded_bundles) {
+        return !in_array($item, $excluded_bundles, TRUE);
+      }));
+    }
     foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
       foreach ($bundle_ids as $bundle_id) {
         $key = static::getSubscriptionKey($entity_type_id, $bundle_id);

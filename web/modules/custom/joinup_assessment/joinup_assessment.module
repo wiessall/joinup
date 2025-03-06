@@ -10,10 +10,14 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReport;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\og\Og;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -121,5 +125,68 @@ function joinup_assessment_preprocess_page_title(array &$variables): void {
     $variables['additional_content']['organization'] = $report->get('organization')->value;
     $variables['additional_content']['publication_date'] = $dateFormatter->format($report->getCreatedTime(), 'date_only');
     $variables['bundle_label'] = $report->get('type')->entity->label();
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function joinup_assessment_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if ($form_id === 'joinup_subscription_my_subscriptions') {
+    foreach ($form['groups'] as $key => &$group) {
+      if (is_int($key) && $group['#uuid'] !== AssessmentInterface::GROUP_UUID && isset($group['options']['node|assessment_report'])) {
+        unset($group['options']['node|assessment_report']);
+        $subscriptions = $group['options']['submit']['#attributes']['data-joinup-subscriptions'];
+        // Replace only the first occurrence of "false".
+        $subscriptions = preg_replace('/\bfalse,\b/', '', $subscriptions, 1);
+        $group['options']['submit']['#attributes']['data-joinup-subscriptions'] = $subscriptions;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * Override collection_node_insert.
+ */
+function joinup_assessment_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'collection') {
+    return;
+  }
+
+  // When a new collection is proposed, give the user the 'group owner' role.
+  // This will not occur if the user is the anonymous, i.e. the entity was
+  // created by some batch process or some importing.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+    // Remove the 'assessment_report' subscription for all collections,
+    // except the assessment collection.
+    if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+        return $bundle['bundle'] !== 'assessment_report';
+      }));
+    }
+    Og::getMembership($entity, $entity->getOwner())
+      ->set('subscription_bundles', $subscription_bundles)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_assessment_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'node_insert') {
+    // Make sure joinup_assessment_entity_insert() runs after
+    // og_entity_insert(). The latter creates an OgMembership
+    // entry for the collection owner when a new collection is
+    // proposed, and joinup_assessment_entity_insert() needs to
+    // modify this membership to add the required OG roles to it.
+    $assessment = $implementations['joinup_assessment'];
+    unset($implementations['joinup_assessment']);
+    $implementations['joinup_assessment'] = $assessment;
   }
 }
