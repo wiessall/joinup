@@ -18,17 +18,14 @@ class CatalogueSourceController extends ControllerBase {
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $plugin
    *   Provider plugin.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request.
    *
    * @return array
    *   Render array.
    */
-  public function getContent(EuOssCatalogueProviderInterface $plugin, Request $request): array {
+  public function getContent(EuOssCatalogueProviderInterface $plugin): array {
     return [
       '#theme' => 'catalogue_source',
       '#provider' => $plugin,
-      '#is_modal' => $request->isXmlHttpRequest(),
     ];
   }
 

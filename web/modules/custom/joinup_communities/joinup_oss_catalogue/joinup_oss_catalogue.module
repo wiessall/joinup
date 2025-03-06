@@ -51,7 +51,6 @@ function joinup_oss_catalogue_theme(): array {
     'catalogue_source' => [
       'variables' => [
         'provider' => NULL,
-        'is_modal' => NULL,
       ],
     ],
     'catalogue_link' => [

@@ -10,7 +10,6 @@
  * - country: Optional country.
  * - description: Propvider description.
  * - wenlinks: Array of links.
- * - is_modal: (bool) TRUE if the template is loaded inside a modal via AJAX.
  *
  * @ingroup themeable
  */
@@ -18,11 +17,9 @@
 
 <div class="catalogue-source">
 
-  {% if is_modal %}
-    <div class="page-title mb-3">
-      <h3 class="page-title__title">{{ label }}</h3>
-    </div>
-  {% endif %}
+  <div class="page-title mb-3">
+    <h3 class="page-title__title">{{ label }}</h3>
+  </div>
 
   <p>
     <strong>{{ 'Type:'|t }}</strong> {{ type }}
