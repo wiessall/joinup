@@ -7,12 +7,14 @@ namespace Drupal\search_api_field\Plugin\Field\FieldWidget;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
 use Drupal\search_api\IndexInterface;
@@ -24,15 +26,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_default' widget.
- *
- * @FieldWidget(
- *   id = "search_api_field_default",
- *   label = @Translation("Search widget"),
- *   field_types = {
- *     "search_api_field"
- *   }
- * )
  */
+#[FieldWidget(
+  id: 'search_api_field_default',
+  label: new TranslatableMarkup('Search widget'),
+  field_types: ['search_api_field'],
+)]
 class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

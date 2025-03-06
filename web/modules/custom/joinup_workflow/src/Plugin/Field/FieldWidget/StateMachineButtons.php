@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_workflow\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
@@ -18,16 +19,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Field widget showing the available workflow transition states as buttons.
- *
- * @FieldWidget(
- *   id = "state_machine_buttons",
- *   label = @Translation("State machine buttons"),
- *   field_types = {
- *     "state",
- *   },
- *   multiple_values = TRUE,
- * )
  */
+#[FieldWidget(
+  id: 'state_machine_buttons',
+  label: new TranslatableMarkup('State machine buttons'),
+  field_types: ['state'],
+  multiple_values: TRUE
+)]
 class StateMachineButtons extends OptionsSelectWidget implements ContainerFactoryPluginInterface {
 
   public function __construct(
