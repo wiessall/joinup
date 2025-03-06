@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
@@ -92,6 +93,13 @@ class InvitationSubscriber implements EventSubscriberInterface {
     if ($event->getSubscribe()) {
       $group = $invitation->getEntity();
       $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField($group->bundle());
+      // Remove the 'assessment_report' subscription for all collections,
+      // except the assessment collection.
+      if ($group->bundle() === 'collection' && $group->uuid() !== AssessmentInterface::GROUP_UUID) {
+        $subscriptionBundles = array_values(array_filter($subscriptionBundles, function ($bundle) {
+          return $bundle['bundle'] !== 'assessment_report';
+        }));
+      }
       $membership->set('announcements', TRUE);
       $membership->set('subscription_bundles', $subscriptionBundles)->save();
     }
