@@ -207,7 +207,6 @@ function ventuno_preprocess_node__digest_message(&$variables): void {
   // Digest item date.
   $variables['digest_item_date'] = match (TRUE) {
     isset($variables['content']['field_event_date']) => $variables['content']['field_event_date'],
-    isset($variables['content']['field_document_publication_date']) => $variables['content']['field_document_publication_date'],
     $node instanceof EntityPublicationTimeInterface && $node->getPublicationTime() => $date_formatter->format($node->getPublicationTime(), $date_format),
     default => $date_formatter->format($node->getCreatedTime(), $date_format),
   };
