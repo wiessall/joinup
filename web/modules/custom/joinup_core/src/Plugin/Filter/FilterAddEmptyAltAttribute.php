@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\filter\Attribute\Filter;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
+use Drupal\filter\Plugin\FilterInterface;
 
 /**
  * Provides a filter which adds an empty alt attribute to all images.
- *
- * @Filter(
- *   id = "filter_add_empty_alt_attribute",
- *   title = @Translation("Add empty alt attribute"),
- *   description = @Translation("It adds empty alt attribute to all images."),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE,
- *   weight = 9,
- * )
  */
+#[Filter(
+  id: "filter_add_empty_alt_attribute",
+  title: new TranslatableMarkup("Add empty alt attribute"),
+  type: FilterInterface::TYPE_TRANSFORM_REVERSIBLE,
+  description: new TranslatableMarkup("It adds empty alt attribute to all images."),
+  weight: 9
+)]
 class FilterAddEmptyAltAttribute extends FilterBase {
 
   /**
