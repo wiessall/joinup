@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if an entity field has a unique value within its bundle.
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'UniqueShortIdInsensitive',
   label: new TranslatableMarkup('Unique case insensitive field within a bundle constraint.', [], ['context' => 'Validation']),
 )]
-class UniqueShortIdInsensitiveConstraint extends Constraint {
+class UniqueShortIdInsensitiveConstraint extends SymfonyConstraint {
 
   /**
    * The message to show when validation fails.

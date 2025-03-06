@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Provides a validator for the CustomPageUnpublished constraint.
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraint;
   label: new TranslatableMarkup('Custom page published Constraint', [], ['context' => 'Validation']),
   type: 'string'
 )]
-class CustomPageUnpublishedConstraint extends Constraint {
+class CustomPageUnpublishedConstraint extends SymfonyConstraint {
 
   /**
    * The violation message.

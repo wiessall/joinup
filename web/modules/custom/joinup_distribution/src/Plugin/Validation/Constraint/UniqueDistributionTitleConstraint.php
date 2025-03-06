@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if a distribution's title is unique within its release.
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'UniqueDistributionTitle',
   label: new TranslatableMarkup('Unique distribution title within release', [], ['context' => 'Validation']),
 )]
-class UniqueDistributionTitleConstraint extends Constraint {
+class UniqueDistributionTitleConstraint extends SymfonyConstraint {
 
   /**
    * The message to show when the constraint is not met.
