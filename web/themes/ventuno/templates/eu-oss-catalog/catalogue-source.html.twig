@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Default theme implementation of catalogue_source.
+ *
+ * Available variables:
+ * - provider: Provider object.
+ * - label: Provider label.
+ * - type: Provider type.
+ * - country: Optional country.
+ * - description: Propvider description.
+ * - wenlinks: Array of links.
+ * - is_modal: (bool) TRUE if the template is loaded inside a modal via AJAX.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set title_attributes = create_attribute() %}
+{% set title_classes = [
+  'page-title',
+  is_modal ? 'mb-3' : 'my-3',
+] %}
+
+<div class="catalogue-source">
+
+  <div {{ title_attributes.addClass(title_classes) }}>
+    <h4 class="page-title__title">{{ label }}</h4>
+  </div>
+
+  <p>
+    <strong>{{ 'Type:'|t }}</strong> {{ type }}
+  </p>
+
+  {% if country %}
+    <p>
+      <strong>{{ 'Country:'|t }}</strong> {{ country }}
+    </p>
+  {% endif %}
+
+  <div>
+    <strong>{{ 'Description:'|t }}</strong>
+    {{ description }}
+  </div>
+
+  <div>
+    <strong>{{ 'Weblinks:'|t }}</strong>
+    <ul>
+      {% for weblink in weblinks %}
+        <li>{{ weblink }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>

@@ -6,6 +6,7 @@ namespace Drupal\joinup_oss_catalogue\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a controller for 'joinup_oss_catalogue.catalogue_source' route.
@@ -21,10 +22,11 @@ class CatalogueSourceController extends ControllerBase {
    * @return array
    *   Render array.
    */
-  public function getContent(EuOssCatalogueProviderInterface $plugin): array {
+  public function getContent(EuOssCatalogueProviderInterface $plugin, Request $request): array {
     return [
       '#theme' => 'catalogue_source',
       '#provider' => $plugin,
+      '#is_modal' => $request->isXmlHttpRequest(),
     ];
   }
 
