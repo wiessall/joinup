@@ -5,6 +5,7 @@
  *
  * Available variables:
  * - provider: Provider object.
+ * - label: Provider label.
  * - type: Provider type.
  * - country: Optional country.
  * - description: Propvider description.
@@ -15,6 +16,8 @@
 #}
 
 <div class="catalogue-source">
+
+  <h2>{{ label }}</h2>
 
   <p>
     <strong>{{ 'Type:'|t }}</strong> {{ type }}
