@@ -18,6 +18,8 @@ class CatalogueSourceController extends ControllerBase {
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $plugin
    *   Provider plugin.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
    *
    * @return array
    *   Render array.
