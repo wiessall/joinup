@@ -6,20 +6,21 @@ namespace Drupal\eu_oss_translation\Plugin\QueueWorker;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_translation\JobBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines 'eu_oss_translation_requester' queue worker.
- *
- * @QueueWorker(
- *   id = \Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester::ID,
- *   title = @Translation("Translation requester"),
- *   cron = {"time" = 60},
- * )
  */
+#[QueueWorker(
+  id: '\Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester::ID',
+  title: new TranslatableMarkup('Translation requester'),
+  cron: ['time' => 60],
+)]
 class TranslationRequester extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
