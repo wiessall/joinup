@@ -383,8 +383,8 @@ Feature:
     And I should see the link "https://developers.italia.it/en/software"
 
     When I go to "eu-oss-catalogue/source/hosting_platform:code_europa_eu"
+    Then I should see the heading "Source Catalogue Info"
     Then I should see the following lines of text:
-      | Code Europa EU                                                                                                                                                                                      |
       | Type: European                                                                                                                                                                                      |
       | Description:                                                                                                                                                                                        |
       | Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights. |
