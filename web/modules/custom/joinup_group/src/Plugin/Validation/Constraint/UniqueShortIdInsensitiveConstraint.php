@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -11,12 +12,11 @@ use Symfony\Component\Validator\Constraint;
  *
  * The validation is case insensitive. Works only for RDF entities. This
  * constraint was created explicitly for the RDF entity "Short ID" field.
- *
- * @Constraint(
- *   id = "UniqueShortIdInsensitive",
- *   label = @Translation("Unique case insensitive field within a bundle constraint.", context = "Validation"),
- * )
  */
+#[Constraint(
+  id: 'UniqueShortIdInsensitive',
+  label: new TranslatableMarkup('Unique case insensitive field within a bundle constraint.', [], ['context' => 'Validation']),
+)]
 class UniqueShortIdInsensitiveConstraint extends Constraint {
 
   /**
