@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Makes a field required if another field has a certain value.
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'RequiredIfOtherFieldHasValue',
   label: new TranslatableMarkup('Required if other field has value', [], ['context' => 'Validation']),
 )]
-class RequiredIfOtherFieldHasValueConstraint extends Constraint {
+class RequiredIfOtherFieldHasValueConstraint extends SymfonyConstraint {
 
   /**
    * The default violation message.

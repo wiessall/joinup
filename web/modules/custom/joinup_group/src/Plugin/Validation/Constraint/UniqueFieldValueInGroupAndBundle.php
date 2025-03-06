@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Entity label is unique within the entities of the same bundle from the group.
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'UniqueFieldValueInGroupAndBundle',
   label: new TranslatableMarkup('Entity label is unique within the entities of the same bundle from the group', [], ['context' => 'Validation']),
 )]
-class UniqueFieldValueInGroupAndBundle extends Constraint {
+class UniqueFieldValueInGroupAndBundle extends SymfonyConstraint {
 
   /**
    * Constraint violation message.

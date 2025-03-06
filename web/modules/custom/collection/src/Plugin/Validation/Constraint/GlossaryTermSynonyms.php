@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\collection\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Provides a constraint for the glossary term synonyms.
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'GlossaryTermSynonyms',
   label: new TranslatableMarkup('Glossary term synonyms constraint', [], ['context' => 'Validation']),
 )]
-class GlossaryTermSynonyms extends Constraint {
+class GlossaryTermSynonyms extends SymfonyConstraint {
 
   /**
    * The violation message for a synonym same as the glossary term name.

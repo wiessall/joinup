@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Validation\Constraint;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if an entity field has a unique value.
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraint;
   id: 'SingleValueUniqueField',
   label: new TranslatableMarkup('Unique field constraint (for single value fields)', [], ['context' => 'Validation']),
 )]
-class SingleValueUniqueFieldConstraint extends Constraint {
+class SingleValueUniqueFieldConstraint extends SymfonyConstraint {
 
   /**
    * The violation message template.
