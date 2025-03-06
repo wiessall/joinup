@@ -7,7 +7,6 @@ namespace Drupal\joinup_replicate\EventSubscriber;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\replicate\Events\ReplicateAlterEvent;
@@ -119,10 +118,6 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
 
     if ($clone instanceof GroupContentInterface) {
       $clone->set('published_at', NULL);
-    }
-
-    if ($clone instanceof DocumentInterface) {
-      $clone->set('field_document_publication_date', NULL);
     }
   }
 

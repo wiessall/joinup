@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_oss_catalogue\Form\OssSoftwareName;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an OSS your software name block.
- *
- * @Block(
- *   id = "joinup_oss_software_name",
- *   admin_label = @Translation("OSS your software name"),
- *   category = @Translation("OSS Catalogue")
- * )
  */
+#[Block(
+  id: "joinup_oss_software_name",
+  admin_label: new TranslatableMarkup("OSS your software name"),
+  category: new TranslatableMarkup("OSS Catalogue"),
+)]
 class OssSoftwareBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

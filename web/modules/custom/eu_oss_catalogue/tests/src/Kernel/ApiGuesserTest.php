@@ -74,7 +74,7 @@ class ApiGuesserTest extends KernelTestBase {
    * @return array[]
    *   The test cases.
    */
-  public function providerTestApiGuesser(): array {
+  public static function providerTestApiGuesser(): array {
     return [
       'GitLab home' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
@@ -203,7 +203,7 @@ class ApiGuesserTest extends KernelTestBase {
    * @return array[]
    *   The test cases.
    */
-  public function providerTestApiGuesserExceptions(): array {
+  public static function providerTestApiGuesserExceptions(): array {
     return [
       'Invalid URL' => [
         'URL' => 'sdivsdoifvsfo sftestApiGuessersdflvsdfv;∂ßńvsdfv',

@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\addtocal\Plugin\Field\FieldFormatter\AddtocalView;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
 
 /**
  * Plugin of the 'Condensed' formatter for 'daterange' and 'Add to Cal' fields.
- *
- * @FieldFormatter(
- *   id = "addtocall_daterange_condensed",
- *   label = @Translation("Add to Cal condensed date range"),
- *   field_types = {
- *     "daterange"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'addtocall_daterange_condensed',
+  label: new TranslatableMarkup('Add to Cal condensed date range'),
+  field_types: [
+    'daterange',
+  ],
+)]
 class CondensedAddToCallDateFormatter extends AddtocalView {
 
   /**

@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a "UserHeaderBlock" block.
- *
- * @Block(
- *   id = "user_header_block",
- *   admin_label = @Translation("User header"),
- *   context_definitions = {
- *     "user_route" = @ContextDefinition("entity:user", label = @Translation("User from URL"))
- *   }
- * )
  */
+#[Block(
+  id: "user_header_block",
+  admin_label: new TranslatableMarkup("User header"),
+  context_definitions: [
+    'user_route' => new EntityContextDefinition(
+      data_type: 'entity:user',
+      label: new TranslatableMarkup("User from URL"),
+    ),
+  ]
+)]
 class UserHeaderBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

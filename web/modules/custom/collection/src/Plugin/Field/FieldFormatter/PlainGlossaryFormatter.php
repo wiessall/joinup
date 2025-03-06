@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\filter\FilterPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'Glossary plain' formatter.
- *
- * @FieldFormatter(
- *   id = "collection_plain_glossary",
- *   label = @Translation("Plain text with glossary proccessing"),
- *   field_types = {
- *     "string",
- *     "text_long",
- *   },
- * )
  */
+#[FieldFormatter(
+  id: 'collection_plain_glossary',
+  label: new TranslatableMarkup('Plain text with glossary proccessing'),
+  field_types: [
+    'string',
+    'text_long',
+  ],
+)]
 final class PlainGlossaryFormatter extends FormatterBase {
 
   public function __construct(

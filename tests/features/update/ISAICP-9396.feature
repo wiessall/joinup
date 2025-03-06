@@ -19,6 +19,13 @@ Feature: Library import check.
     # Text from the EIRA properties.
     And I should see the text "eira:InformationBusinessObject"
 
+    # Ensure the upstream redirection works as well.
+    Given I go to "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fegovera/InvoiceBusinessObject"
+    Then I should see the heading "Invoice"
+    And I should see the text "EIRA properties"
+    # Text from the EIRA properties.
+    And I should see the text "egovera:InvoiceBusinessObject"
+
   @update:joinup_core_deploy_200301
   Scenario: Sample check that options are available in the solution type field.
     Given I am logged in as a moderator
