@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -11,12 +12,11 @@ use Symfony\Component\Validator\Constraint;
  *
  * This is specifically useful for base field, as you can limit the constraint
  * to certain bundles.
- *
- * @Constraint(
- *   id = "UniqueFieldInBundle",
- *   label = @Translation("Unique field within a bundle constraint", context = "Validation"),
- * )
  */
+#[Constraint(
+  id: 'UniqueFieldInBundle',
+  label: new TranslatableMarkup('Unique field within a bundle constraint', [], ['context' => 'Validation']),
+)]
 class UniqueFieldInBundleConstraint extends Constraint {
 
   /**

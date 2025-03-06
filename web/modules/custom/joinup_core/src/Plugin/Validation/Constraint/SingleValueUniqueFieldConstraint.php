@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Validation\Constraint;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -16,12 +17,11 @@ use Symfony\Component\Validator\Constraint;
  * committed.
  *
  * @see https://www.drupal.org/i/2478663
- *
- * @Constraint(
- *   id = "SingleValueUniqueField",
- *   label = @Translation("Unique field constraint (for single value fields)", context = "Validation"),
- * )
  */
+#[Constraint(
+  id: 'SingleValueUniqueField',
+  label: new TranslatableMarkup('Unique field constraint (for single value fields)', [], ['context' => 'Validation']),
+)]
 class SingleValueUniqueFieldConstraint extends Constraint {
 
   /**

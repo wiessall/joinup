@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * Checks that the alias does not belong to restricted list.
- *
- * @Constraint(
- *   id = "LandingPagePathFieldConstraint",
- *   label = @Translation(
- *    "Landing page path constraint",
- *    context = "Validation"
- *   ),
- *   type = "string"
- * )
  */
+#[Constraint(
+  id: 'LandingPagePathFieldConstraint',
+  label: new TranslatableMarkup('Landing page path constraint', [], ['context' => 'Validation']),
+  typs: "string"
+)]
 class LandingPagePathFieldConstraint extends Constraint {
 
   /**

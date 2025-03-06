@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * Provides a validator for the CustomPageUnpublished constraint.
- *
- * @Constraint(
- *   id = "CustomPageUnpublishedConstraint",
- *   label = @Translation("Custom page published Constraint", context = "Validation"),
- *   type = "string"
- * )
  */
+#[Constraint(
+  id: 'CustomPageUnpublishedConstraint',
+  label: new TranslatableMarkup('Custom page published Constraint', [], ['context' => 'Validation']),
+  type: 'string'
+)]
 class CustomPageUnpublishedConstraint extends Constraint {
 
   /**
