@@ -6,7 +6,6 @@ namespace Drupal\joinup_oss_catalogue\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a controller for 'joinup_oss_catalogue.catalogue_source' route.
