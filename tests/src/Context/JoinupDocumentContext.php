@@ -73,20 +73,6 @@ class JoinupDocumentContext extends RawDrupalContext {
       unset($node->{'file type'});
     }
 
-    if (isset($node->field_document_publication_date)) {
-      $time = $node->field_document_publication_date;
-      if (!is_numeric($time)) {
-        $time = strtotime($time);
-        if (empty($time)) {
-          throw new \Exception("{$node->field_document_publication_date} could not be converted to timestamp.");
-        }
-      }
-
-      /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-      $date_formatter = \Drupal::service('date.formatter');
-      $node->field_document_publication_date = $date_formatter->format($time, 'custom', 'Y-m-d H:i:s');
-    }
-
     // The document type is a required field and in normal usage a document
     // cannot be created without it. If the scenario doesn't specify a type,
     // default to 'document'.

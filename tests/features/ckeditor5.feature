@@ -268,9 +268,7 @@ Feature: CKEditor5
     Then I go to "/collection/antiruin-development/solution/one-exclusion-advantages/contact"
     And I should see the heading "Contact us"
 
-    When I go to the homepage of the "One exclusion advantages" solution
-    Then I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "solution" with the title "One exclusion advantages"
     And I press the button "Contact us" in the "Description" wysiwyg editor
     Then I press "Publish"
     And I should see the heading "One exclusion advantages"

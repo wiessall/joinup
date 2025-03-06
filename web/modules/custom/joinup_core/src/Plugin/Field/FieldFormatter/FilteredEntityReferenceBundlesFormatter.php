@@ -6,26 +6,27 @@ namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\entity_reference_revisions\Plugin\Field\FieldFormatter\EntityReferenceRevisionsEntityFormatter;
 use Drupal\smart_trim\TruncateHTML;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'filtered entity reference bundles' formatter.
- *
- * @FieldFormatter(
- *   id = "filtered_entity_reference_bundles",
- *   label = @Translation("Filtered rendered entity bundles"),
- *   description = @Translation("Filtered referenced entities bundles."),
- *   field_types = {
- *     "entity_reference_revisions"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'filtered_entity_reference_bundles',
+  label: new TranslatableMarkup('Filtered rendered entity bundles'),
+  description: new TranslatableMarkup('Filtered referenced entities bundles.'),
+  field_types: [
+    'entity_reference_revisions',
+  ],
+)]
 class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEntityFormatter {
 
   /**

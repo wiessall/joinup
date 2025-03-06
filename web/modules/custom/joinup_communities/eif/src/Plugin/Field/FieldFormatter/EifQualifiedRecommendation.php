@@ -6,22 +6,23 @@ namespace Drupal\eif\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\text\Plugin\Field\FieldFormatter\TextDefaultFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'text_default' formatter.
- *
- * @FieldFormatter(
- *   id = "eif_qualified_recommendation",
- *   label = @Translation("EIF Qualified Recommendation"),
- *   field_types = {
- *     "eif_qualified_recommendation",
- *   },
- * )
  */
+#[FieldFormatter(
+  id: 'eif_qualified_recommendation',
+  label: new TranslatableMarkup('EIF Qualified Recommendation'),
+  field_types: [
+    'eif_qualified_recommendation',
+  ],
+)]
 class EifQualifiedRecommendation extends TextDefaultFormatter {
 
   public function __construct(

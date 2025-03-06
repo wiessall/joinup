@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block with the proposed collections and solutions.
- *
- * @Block(
- *   id = "proposed_entities",
- *   admin_label = @Translation("Rdf entities in proposed state")
- * )
  */
+#[Block(
+  id: "proposed_entities",
+  admin_label: new TranslatableMarkup("Rdf entities in proposed state"),
+)]
 class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

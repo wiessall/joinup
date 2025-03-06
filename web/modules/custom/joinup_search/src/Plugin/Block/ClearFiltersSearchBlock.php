@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_search\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,12 +17,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * This block is used in the sidebar Search Page. It allows to
  * do a clear filters in search.
- *
- * @Block(
- *   id = "joinup_search_clear_filters",
- *   admin_label = @Translation("Search clear filters")
- * )
  */
+#[Block(
+  id: "joinup_search_clear_filters",
+  admin_label: new TranslatableMarkup("Search clear filters"),
+)]
 class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

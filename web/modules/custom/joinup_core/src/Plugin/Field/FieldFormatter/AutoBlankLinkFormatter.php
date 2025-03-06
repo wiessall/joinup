@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\link\LinkItemInterface;
 use Drupal\link\Plugin\Field\FieldFormatter\LinkFormatter;
 
 /**
  * Plugin implementation of the 'link' formatter.
- *
- * @FieldFormatter(
- *   id = "auto_blank_link",
- *   label = @Translation("Auto blank link"),
- *   field_types = {
- *     "link"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'auto_blank_link',
+  label: new TranslatableMarkup('Auto blank link'),
+  field_types: [
+    'link',
+  ],
+)]
 class AutoBlankLinkFormatter extends LinkFormatter {
 
   /**

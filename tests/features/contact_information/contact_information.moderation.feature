@@ -19,8 +19,7 @@ Feature: Contact Information moderation
 
     # Add contact information to the collection as a facilitator.
     When I am logged in as "Sæwine Cynebald"
-    And I go to the homepage of the "Games of the Anglo-Saxon age" collection
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "Games of the Anglo-Saxon age"
     And I press "Add new contact information"
     And I fill in "Name" with "Mildþryð Mildgyð"
     And I fill in "E-mail address" with "mildred@anglo-saxon-museum.co.uk"
@@ -30,8 +29,7 @@ Feature: Contact Information moderation
     Then I should see the heading "Games of the Anglo-Saxon age"
 
     # Try changing the details of the contact information entity.
-    When I go to the "Mildþryð Mildgyð" contact information page
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "contact_information" with the title "Mildþryð Mildgyð"
     Then I should see the heading "Edit Contact information Mildþryð Mildgyð"
     And the following 1 button should be present "Update"
     And the current workflow state should be "Validated"
@@ -42,16 +40,14 @@ Feature: Contact Information moderation
 
     # Another facilitator should be able to edit the contact entity.
     When I am logged in as "Secondary facilitator"
-    And I go to the "Ceolwulf II of Mercia" contact information page
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "contact_information" with the title "Ceolwulf II of Mercia"
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following 1 button should be present "Update"
     And I should see the link "Delete"
 
     # Request an update as moderator: Ceolwulf II is deceased.
     When I am logged in as a moderator
-    When I go to the "Ceolwulf II of Mercia" contact information page
-    And I click "Edit" in the "Entity actions" region
+    When I go to the "edit-form" content page of the type "contact_information" with the title "Ceolwulf II of Mercia"
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following fields should not be present "Langcode, Translation"
     And the following 2 buttons should be present "Update, Request changes"
@@ -71,8 +67,7 @@ Feature: Contact Information moderation
     # The original author is allowed to update the entity with the requested
     # changes.
     Given I am logged in as "Sæwine Cynebald"
-    And I go to the "Ceolwulf II of Mercia" contact information page
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "contact_information" with the title "Ceolwulf II of Mercia"
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following 1 button should be present "Update"
     And the current workflow state should be "Needs update"
@@ -84,8 +79,7 @@ Feature: Contact Information moderation
 
     # The moderator approves the changes.
     Given I am logged in as a moderator
-    And I go to the "Æthelred, Lord of the Mercians" contact information page
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "contact_information" with the title "Æthelred, Lord of the Mercians"
     And the following 2 buttons should be present "Update, Approve changes"
     And the current workflow state should be "Needs update"
     And I press "Approve changes"
@@ -93,8 +87,7 @@ Feature: Contact Information moderation
 
     # The facilitator can request deletion.
     Given I am logged in as "Sæwine Cynebald"
-    And I go to the "Æthelred, Lord of the Mercians" contact information page
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "contact_information" with the title "Æthelred, Lord of the Mercians"
     And the following 1 buttons should be present "Update"
     And the current workflow state should be "Validated"
     And I should see the link "Delete"

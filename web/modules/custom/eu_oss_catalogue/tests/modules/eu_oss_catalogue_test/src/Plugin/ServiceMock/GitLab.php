@@ -7,7 +7,9 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -16,13 +18,12 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * Intercepts any HTTP requests made to GitLab API.
- *
- * @ServiceMock(
- *   id = "gitlab",
- *   label = @Translation("GitLab API"),
- *   weight = 0,
- * )
  */
+#[ServiceMock(
+  id: "gitlab",
+  label: new TranslatableMarkup("GitLab API"),
+  weight: 0,
+)]
 class GitLab extends PluginBase implements ServiceMockPluginInterface {
 
   use IntegrationTestTrait;

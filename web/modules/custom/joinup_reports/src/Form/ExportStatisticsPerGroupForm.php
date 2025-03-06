@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -19,6 +20,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Provides a form to export the list of group facilitators and administrators.
  */
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
+
+  // Use the serialization trait to ensure the read only params get instantiated
+  // given the fact that their read only status prevents the parent class from
+  // doing so.
+  use DependencySerializationTrait;
 
   public function __construct(
     #[Autowire(service: 'cache.default')]

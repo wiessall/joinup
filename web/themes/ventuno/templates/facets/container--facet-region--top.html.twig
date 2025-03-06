@@ -27,6 +27,6 @@
     has_parent ? 'form-wrapper',
   ]
 %}
-{% if children|render|striptags|trim %}
+{% if children %}
   <div{{ attributes.addClass(classes) }}>{{ children }}</div>
 {% endif %}

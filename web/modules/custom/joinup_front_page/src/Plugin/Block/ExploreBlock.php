@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_front_page\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,12 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * using the `explore_item` view mode which is exclusive for this block.
  *
  * The user can switch between the 4 types by clicking on tabs.
- *
- * @Block(
- *   id = "joinup_front_page_explore_block",
- *   admin_label = @Translation("Explore block")
- * )
  */
+#[Block(
+  id: "joinup_front_page_explore_block",
+  admin_label: new TranslatableMarkup("Explore block"),
+)]
 class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**

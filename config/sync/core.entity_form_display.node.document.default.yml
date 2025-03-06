@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_document_publication_date
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
@@ -23,7 +22,6 @@ dependencies:
     - node.type.document
   module:
     - comment
-    - datetime
     - file_url
     - joinup_workflow
     - layout_paragraphs
@@ -63,12 +61,6 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
-    third_party_settings: {  }
-  field_document_publication_date:
-    type: datetime_default
-    weight: 5
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_file:
     type: file_url_generic

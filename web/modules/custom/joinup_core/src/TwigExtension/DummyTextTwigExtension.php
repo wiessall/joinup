@@ -20,7 +20,7 @@ class DummyTextTwigExtension extends AbstractExtension {
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('get_dummy_text', [$this, 'getDummyText']),
+      new TwigFunction('get_dummy_text', $this->getDummyText(...)),
     ];
   }
 
