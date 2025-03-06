@@ -16,17 +16,13 @@
  */
 #}
 
-{% set title_attributes = create_attribute() %}
-{% set title_classes = [
-  'page-title',
-  is_modal ? 'mb-3' : 'my-3',
-] %}
-
 <div class="catalogue-source">
 
-  <div {{ title_attributes.addClass(title_classes) }}>
-    <h4 class="page-title__title">{{ label }}</h4>
-  </div>
+  {% if is_modal %}
+    <div class="page-title mb-3">
+      <h4 class="page-title__title">{{ label }}</h4>
+    </div>
+  {% endif %}
 
   <p>
     <strong>{{ 'Type:'|t }}</strong> {{ type }}

@@ -29,7 +29,6 @@ visibility:
       - entity.meta_entity.canonical
       - view.content_overview.page_1
       - view.discussions.overview
-      - joinup_oss_catalogue.catalogue_source
   request_path:
     id: request_path
     negate: true
