@@ -14,6 +14,13 @@
     }
   }
 
+  // #ISAICP-9550 Updates to OSS catalogue sources table.
+  .oss-catalogue-list & {
+    @include media-breakpoint-up(md) {
+      table-layout: auto;
+    }
+  }
+
   @at-root &--columns-equal {
     table-layout: fixed;
   }
