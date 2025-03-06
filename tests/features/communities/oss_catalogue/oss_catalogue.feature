@@ -384,6 +384,7 @@ Feature:
 
     When I go to "eu-oss-catalogue/source/hosting_platform:code_europa_eu"
     Then I should see the following lines of text:
+      | Code Europa EU                                                                                                                                                                                      |
       | Type: European                                                                                                                                                                                      |
       | Description:                                                                                                                                                                                        |
       | Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights. |
@@ -400,5 +401,6 @@ Feature:
     And I click "Get more details on Code Europa EU"
 
     Then a modal should open
-    And I should see the text "Code Europa EU" in the "Modal title"
+    And I should see the text "Source Catalogue Info" in the "Modal title"
+    And I should see the text "Code Europa EU" in the "Modal content"
     And I should see the text "Code development platform for Open Source projects shared by the institutions of the European Union" in the "Modal content"
