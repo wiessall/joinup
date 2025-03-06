@@ -203,8 +203,11 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: joinp_user_account_status
-          settings: {  }
+          type: boolean
+          settings:
+            format: yes-no
+            format_custom_false: ''
+            format_custom_true: ''
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -740,42 +743,45 @@ display:
           admin_label: ''
           entity_type: user
           entity_field: status
-          plugin_id: user_tristate_status
-          operator: in
-          value: {  }
+          plugin_id: boolean
+          operator: '='
+          value: All
           group: 1
           exposed: true
           expose:
-            operator_id: status_op
-            label: Status
-            description: ''
+            operator_id: ''
+            label: Active
+            description: null
             use_operator: false
             operator: status_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: status
-            required: false
+            required: true
             remember: false
-            multiple: true
+            multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
+          is_grouped: true
           group_info:
-            label: ''
+            label: Status
             description: ''
-            identifier: ''
+            identifier: status
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: Active
+                operator: '='
+                value: '1'
+              2:
+                title: Blocked
+                operator: '='
+                value: '0'
         default_langcode:
           id: default_langcode
           table: users_field_data

@@ -81,6 +81,7 @@ drupal:
         - Custom queue services
         - Monolog
         - EU OSS Catalogue
+        - Stage file proxy
       behat:
         - Main settings
         - Databases
@@ -137,10 +138,12 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
-        - GitHub Feed Cache
+        - GitHub Token Setup
         - Verbose error logging
-        - Custom queue services
         - Test mail collector
+        - Memcache
+        - Custom queue services
+        - Monolog
         - EU OSS Catalogue
       prod:
         - Main settings

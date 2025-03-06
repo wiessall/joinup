@@ -12,6 +12,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\Workflow;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
+use Drupal\user\UserInterface;
 
 /**
  * Handles notifications related to collections.
@@ -352,9 +353,9 @@ class CollectionSubscriber extends NotificationSubscriberBase {
 
     // Send a custom notification to the owner if their collection was deleted
     // by a moderator.
-    /** @var \Drupal\joinup_user\Entity\JoinupUser $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    if ($actor->isModerator() && $this->operation === 'delete') {
+    assert($actor instanceof UserInterface);
+    if ($actor->hasRole('moderator') && $this->operation === 'delete') {
       $template_id = self::TEMPLATE_DELETION_BY_MODERATOR;
     }
 

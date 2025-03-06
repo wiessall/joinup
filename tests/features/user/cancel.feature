@@ -25,14 +25,8 @@ Feature:
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                                            |
       | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Interoperable Europe Portal platform. If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     And 1 e-mail should have been sent
-    And the "alicia__1997" user account is cancelled
-    And the "Alicia Potter" table row doesn't contain a checkbox
 
-    When I click "Edit" in the "Alicia Potter" row
-    Then I should see the warning message "This user account is cancelled. Edit is disabled."
-    # On a cancelled account edit form all fields are disabled.
-    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,X,Vimeo,Youtube,Save"
-
+  @deletedUser
   Scenario: A moderator deletes a user using the administrative UI.
     Given collection content:
       | title           |
@@ -45,7 +39,7 @@ Feature:
     And I click "People"
 
     When I select the "Alicia Potter" row
-    And I select "Delete selected account(s) and their content" from "Action"
+    And I select "Cancel the selected user account(s) but keep their content" from "Action"
     And I press "Apply to selected items"
 
     Then I should see the heading "Are you sure you want to cancel these user accounts?"
@@ -69,9 +63,12 @@ Feature:
       | subject        | Your account was just blocked. |
     And the "Alicia Potter" user doesn't exist
 
-    # The content created by an account deleted via admin UI has been deleted.
+    # The content created by an account deleted should still show the full name
+    # of the author, but the author should not be clickable.
     When I go to "/collection/test-collection/news/news-item"
-    Then the response status code should be 404
+    Then the response status code should be 200
+    And I should see "Alicia Potter"
+    But I should not see the link "Alicia Potter"
 
   Scenario: Cancel own account.
     Given collection content:
@@ -116,15 +113,6 @@ Feature:
       | recipient_mail | AliciaPotter@example.com                                                                                 |
       | subject        | Your account has been deleted.                                                                           |
       | body           | If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
-    # We cannot assert the number of emails because of created content that
-    # sends messages to administrators and moderators. Depending on environment
-    # the list of recipients might differ. That's why we're only asserting that
-    # a "status blocked" message has not been sent.
-    And the following email should not have been sent:
-      | template       | status_blocked                 |
-      | recipient_mail | AliciaPotter@example.com       |
-      | subject        | Your account was just blocked. |
-    And the "alicia__1997" user account is cancelled
 
     # The content author is no more clickable.
     When I visit the "News item" news
@@ -136,3 +124,44 @@ Feature:
     When I visit the "Disqus" discussion
     Then I should see "Alicia Potter"
     Then I should not see the link "Alicia Potter"
+
+  @deletedUser
+  Scenario Outline:
+    Given collection content:
+      | title          |
+      | Macroeconomics |
+    Given <content type> content:
+      | title                 | author       | collection     |
+      | Canada hit by tariffs | alicia__1997 | Macroeconomics |
+    And users:
+      | Username | E-mail          | First name | Family name |
+      | viviene  | viv@example.com | Viviene    | De Québec   |
+    And comments:
+      | message  | author  | parent                |
+      | Too much | viviene | Canada hit by tariffs |
+
+    # Authors of node & comment are linked because their accounts exist.
+    When I visit the "Canada hit by tariffs" <content type>
+    Then I should see the link "Alicia Potter"
+    And I should see the link "Viviene De Québec"
+
+    # Author of comment lacks a link because the account has been deleted.
+    When I delete the "viviene" user
+    And I reload the page
+    Then I should see "Viviene De Québec"
+    But I should not see the link "Viviene De Québec"
+
+    # Authors of node & comment lack links because their accounts were deleted.
+    When I delete the "alicia__1997" user
+    And I reload the page
+    Then I should see "Alicia Potter"
+    But I should not see the link "Alicia Potter"
+    And I should see "Viviene De Québec"
+    But I should not see the link "Viviene De Québec"
+
+    Examples:
+      | content type |
+      | discussion   |
+      | document     |
+      | event        |
+      | news         |

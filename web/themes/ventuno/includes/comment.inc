@@ -17,8 +17,15 @@ use Drupal\image\Entity\ImageStyle;
 function ventuno_preprocess_comment(array &$variables): void {
   /** @var \Drupal\comment\CommentInterface $comment */
   $comment = $variables['comment'];
-  /** @var \Drupal\user\Entity\User $user */
+  /** @var \Drupal\user\UserInterface $user */
   $user = $variables['user_picture']['#user'];
+
+  if ($comment->getOwner()->isAnonymous()) {
+    $service = \Drupal::getContainer()->get('joinup_user.deleted');
+    if ($uid = $service->getContentDeletedAuthor($comment)) {
+      $user = $service->getDeletedUserPseudoAccount($uid);
+    }
+  }
 
   $username = [
     '#theme' => 'username',

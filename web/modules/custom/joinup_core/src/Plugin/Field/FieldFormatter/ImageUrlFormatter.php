@@ -6,6 +6,7 @@ namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
@@ -13,20 +14,20 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'image_url_formatter' formatter.
- *
- * @FieldFormatter(
- *   id = "image_url_formatter",
- *   label = @Translation("Image URL formatter"),
- *   field_types = {
- *     "image"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'image_url_formatter',
+  label: new TranslatableMarkup('Image URL formatter'),
+  field_types: [
+    'image',
+  ],
+)]
 class ImageUrlFormatter extends ImageFormatter {
 
   public function __construct(

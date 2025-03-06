@@ -7,37 +7,93 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\joinup_user\Entity\JoinupUser;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
-use Drupal\joinup_user\JoinupUserViewsData;
+use Drupal\joinup_user\JoinupUserDeletedInterface;
+
+/**
+ * Implements hook_schema().
+ */
+function joinup_user_schema(): array {
+  return [
+    JoinupUserDeletedInterface::TABLE_USER => [
+      'fields' => [
+        'uid' => [
+          'description' => 'The {users}.uid.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'full_name' => [
+          'description' => 'The user full name.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['uid'],
+      'indexes' => [
+        'full_name' => ['full_name'],
+      ],
+      'foreign keys' => [
+        'data_user' => [
+          'table' => 'users',
+          'columns' => [
+            'uid' => 'uid',
+          ],
+        ],
+      ],
+    ],
+    JoinupUserDeletedInterface::TABLE_USER_CONTENT => [
+      'fields' => [
+        'uid' => [
+          'description' => 'The {users}.uid.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'entity_type' => [
+          'description' => 'The entity type.',
+          'type' => 'varchar',
+          'length' => EntityTypeInterface::ID_MAX_LENGTH,
+          'not null' => TRUE,
+        ],
+        // In more generic scenario, this field should be a string. But we only
+        // deal with entity types having their IDs as integers.
+        // @see \Drupal\joinup_user\JoinupUserDeletedInterface::ENTITY_TYPES
+        'entity_id' => [
+          'description' => 'The entity ID.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['uid', 'entity_type', 'entity_id'],
+      'foreign keys' => [
+        'data_user' => [
+          'table' => 'users',
+          'columns' => [
+            'uid' => 'uid',
+          ],
+        ],
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_install().
  */
 function joinup_user_install(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
+}
 
-  // Update some classes for the 'user' entity type.
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  $entity_type = $manager->getEntityType('user');
-  $entity_type
-    ->setClass(JoinupUser::class)
-    ->setHandlerClass('views_data', JoinupUserViewsData::class);
-  $manager->updateEntityType($entity_type);
-
-  // Uninstall and recreate the field definition.
-  $definition = $manager->getFieldStorageDefinition('status', 'user');
-  $manager->uninstallFieldStorageDefinition($definition);
-  $definition = BaseFieldDefinition::create('integer')
-    ->setLabel(t('User status'))
-    ->setDescription(t('Whether the user is active, blocked or cancelled.'))
-    ->setSetting('size', 'tiny')
-    ->setDefaultValue(0);
-  $manager->installFieldStorageDefinition('status', 'user', 'user', $definition);
-  // The anonymous account was created before.
-  \Drupal::database()->update('users_field_data')
-    ->fields(['status' => 0])
-    ->condition('uid', 0)
-    ->execute();
+/**
+ * Create deleted users tables.
+ */
+function joinup_user_update_200300(): void {
+  $schema = \Drupal::database()->schema();
+  foreach (joinup_user_schema() as $table => $specification) {
+    $schema->createTable($table, $specification);
+  }
 }

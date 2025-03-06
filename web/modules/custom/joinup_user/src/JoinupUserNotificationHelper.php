@@ -7,7 +7,7 @@ namespace Drupal\joinup_user;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_user\Entity\JoinupUserInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Service to assist with sending notifications about actions taken on users.
@@ -23,7 +23,7 @@ readonly class JoinupUserNotificationHelper implements JoinupUserNotificationHel
   /**
    * {@inheritdoc}
    */
-  public function notifyOnAccountChange(JoinupUserInterface $user): void {
+  public function notifyOnAccountChange(UserInterface $user): void {
     // Drupal allows accounts without E-mail when the account is created by an
     // administrator. We skip them because they cannot receive notifications.
     if (!$user->getEmail()) {
