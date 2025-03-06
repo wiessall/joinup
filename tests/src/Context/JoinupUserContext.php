@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
+use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -23,8 +26,14 @@ class JoinupUserContext extends RawDrupalContext {
 
   use MailCollectorTrait;
   use StringTranslationTrait;
+  use TagTrait;
   use UserTrait;
   use UtilityTrait;
+
+  /**
+   * Stores the latest deleted user UID.
+   */
+  protected int $latestDeletedUserUid;
 
   /**
    * Navigates to the canonical page display of a collection.
@@ -156,7 +165,6 @@ class JoinupUserContext extends RawDrupalContext {
     self::convertObjectPropertyValues($user, 'status', [
       'blocked' => 0,
       'active' => 1,
-      'cancelled' => -1,
     ]);
   }
 
@@ -166,7 +174,7 @@ class JoinupUserContext extends RawDrupalContext {
    * @param string $name
    *   The user name.
    * @param string $status
-   *   The user status: 'active', 'blocked' or 'cancelled'.
+   *   The user status: 'active' or 'blocked'.
    *
    * @throws \Exception
    *   If an invalid status has been passed.
@@ -177,11 +185,10 @@ class JoinupUserContext extends RawDrupalContext {
     $allowed_statuses = [
       'active' => 1,
       'blocked' => 0,
-      'cancelled' => -1,
     ];
 
     if (!isset($allowed_statuses[$status])) {
-      throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked' or 'cancelled'.");
+      throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked'.");
     }
     $uids = \Drupal::entityQuery('user')->accessCheck(FALSE)
       ->condition('name', $name)
@@ -251,6 +258,51 @@ class JoinupUserContext extends RawDrupalContext {
       // @see https://www.drupal.org/project/drupal/issues/2548095
       'base_url' => $GLOBALS['base_url'],
     ])->toString();
+  }
+
+  /**
+   * Registers the latest deleted user UID for cleaning-up after scenario.
+   *
+   * @BeforeScenario @api
+   */
+  public function registerLatestDeletedUser(): void {
+    $this->latestDeletedUserUid = (int) \Drupal::database()
+      ->query("SELECT MAX(uid) FROM {" . JoinupUserDeletedInterface::TABLE_USER . "}")
+      ->fetchField();
+  }
+
+  /**
+   * Removes the deleted user entries created during the test.
+   *
+   * @AfterScenario @api
+   */
+  public function remmoveDeletedUserEntries(): void {
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER_CONTENT)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
+      ->execute();
+    \Drupal::database()->delete(JoinupUserDeletedInterface::TABLE_USER)
+      ->condition('uid', $this->latestDeletedUserUid, '>')
+      ->execute();
+  }
+
+  /**
+   * Runs the destructor of joinup_user.deleted service.
+   *
+   * Such operation might slow the whole Behat suite runs after each step. Limit
+   * to tests where this operation is meaningful.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
+   *   The step.after event.
+   *
+   * @AfterStep
+   */
+  public function runUserDeletedDestruct(AfterStepScope $event): void {
+    if (!$this->getScenario()->hasTag('api') && !$event->getFeature()->hasTag('api')) {
+      return;
+    }
+    if ($this->getScenario()->hasTag('deletedUser') || $event->getFeature()->hasTag('deletedUser')) {
+      \Drupal::service('joinup_user.deleted')->destruct();
+    }
   }
 
 }

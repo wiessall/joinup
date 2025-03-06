@@ -10,10 +10,6 @@ joinup_user.mail:
       type: mail
       label: 'Password reset confirmation'
 
-views.filter.user_tristate_status:
-  type: views.filter.in_operator
-  label: 'User tristate status'
-
 views.filter.joinup_user_group:
   type: views_filter
   label: 'OG groups the user belongs to.'

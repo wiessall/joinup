@@ -18,8 +18,8 @@ Feature:
       | Outdated published discussion | Outdated content | -11 years    | -11 years | published |
       | Not published discussion      | Outdated content |              | -12 years | draft     |
     And document content:
-      | title             | collection       | document publication date |
-      | Very old document | Outdated content | 1985-03-04                |
+      | title             | collection       | published at |
+      | Very old document | Outdated content | 1985-03-04   |
     And event content:
       | title                    | collection       | published at     | created          | state     |
       | Recent published event   | Outdated content | -3 months        | -3 months        | published |

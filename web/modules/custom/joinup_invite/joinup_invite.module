@@ -16,11 +16,9 @@ use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Implements hook_user_cancel().
- *
- * A user account cancellation removes all its invitations.
+ * Implements hook_ENTITY_TYPE_predelete().
  */
-function joinup_invite_user_cancel(array $edit, UserInterface $account, string $method): void {
+function joinup_invite_user_predelete(UserInterface $account): void {
   $storage = \Drupal::entityTypeManager()->getStorage('invitation');
   if ($ids = $storage->getQuery()->accessCheck(FALSE)->condition('uid', $account->id())->execute()) {
     $storage->delete($storage->loadMultiple($ids));

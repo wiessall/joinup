@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace Drupal\oe_newsroom_newsletter\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Field formatter which displays a subscription form.
- *
- * @FieldFormatter(
- *   id = "oe_newsroom_newsletter_subscribe_form",
- *   label = @Translation("Subscribe form"),
- *   field_types = {
- *     "oe_newsroom_newsletter"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'oe_newsroom_newsletter_subscribe_form',
+  label: new TranslatableMarkup('Subscribe form'),
+  field_types: [
+    'oe_newsroom_newsletter',
+  ],
+)]
 class NewsletterSubscribeFormFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

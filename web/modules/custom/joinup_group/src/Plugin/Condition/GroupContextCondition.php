@@ -6,10 +6,12 @@ namespace Drupal\joinup_group\Plugin\Condition;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Condition\Attribute\Condition;
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\node\NodeInterface;
@@ -18,12 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a group context condition plugin.
- *
- * @Condition(
- *   id = "group_context",
- *   label = @Translation("Group context"),
- * )
  */
+#[Condition(
+  id: "group_context",
+  label: new TranslatableMarkup("Group context"),
+)]
 class GroupContextCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

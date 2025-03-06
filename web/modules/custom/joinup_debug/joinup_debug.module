@@ -27,7 +27,7 @@ function joinup_debug_node_presave(NodeInterface $node): void {
   // @see: \Drupal\Core\Entity\EntityStorageBase::doPreSave.
   $last_revision_id = _joinup_debug_get_last_published_node_revision_id($node);
   // The node prior to saving should be the latest revision id.
-  if (!isset($node->joinupUserCancelReassign) && !empty($last_revision_id) && $node->getRevisionId() !== NULL && $node->getRevisionId() < $last_revision_id) {
+  if (!empty($last_revision_id) && $node->getRevisionId() !== NULL && $node->getRevisionId() < $last_revision_id) {
     _joinup_debug_log_wrong_revision_error($node);
   }
 }
@@ -37,7 +37,7 @@ function joinup_debug_node_presave(NodeInterface $node): void {
  */
 function joinup_debug_node_update(NodeInterface $node): void {
   $last_revision_id = _joinup_debug_get_last_published_node_revision_id($node);
-  if (!isset($node->joinupUserCancelReassign) && !empty($last_revision_id) && $node->getRevisionId() < $last_revision_id) {
+  if (!empty($last_revision_id) && $node->getRevisionId() < $last_revision_id) {
     _joinup_debug_log_wrong_revision_error($node);
   }
 }

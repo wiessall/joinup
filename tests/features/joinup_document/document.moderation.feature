@@ -30,9 +30,7 @@ Feature: Document moderation
     And I should see the button "Publish"
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I go to the homepage of the "The Naked Ashes" collection
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "The Naked Ashes"
     And I expand the "Additional fields" accordion section
     And I check "Moderated"
     Then I press "Publish"
@@ -50,9 +48,7 @@ Feature: Document moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I go to the homepage of the "The Naked Ashes" collection
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "collection" with the title "The Naked Ashes"
     And I expand the "Additional fields" accordion section
     And I select the radio button "Only members can create content."
     And I press "Publish"

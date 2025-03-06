@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldFormatter\DateTimeFormatterBase;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
 
 /**
  * Plugin implementation of the 'Condensed' formatter for 'daterange' fields.
- *
- * @FieldFormatter(
- *   id = "daterange_condensed",
- *   label = @Translation("Condensed date range"),
- *   field_types = {
- *     "daterange"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'daterange_condensed',
+  label: new TranslatableMarkup('Condensed date range'),
+  field_types: [
+    'daterange',
+  ],
+)]
 class CondensedDateRangeFormatter extends DateTimeFormatterBase {
 
   /**
