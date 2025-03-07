@@ -24,7 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
   id: 'state_machine_buttons',
   label: new TranslatableMarkup('State machine buttons'),
   field_types: ['state'],
-  multiple_values: TRUE
+  multiple_values: TRUE,
 )]
 class StateMachineButtons extends OptionsSelectWidget implements ContainerFactoryPluginInterface {
 
