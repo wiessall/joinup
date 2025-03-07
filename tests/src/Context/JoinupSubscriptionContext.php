@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -486,7 +487,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     foreach ($actual_messages as $actual_message) {
       $actual_message_content = $this->getRenderedMessage($actual_message, 'mail_body');
       foreach ($expected_messages as $expected_message) {
-        if (strpos($actual_message_content, $expected_message) !== FALSE) {
+        if (strpos(Html::decodeEntities($actual_message_content), $expected_message) !== FALSE) {
           $found_messages[] = $expected_message;
           break 1;
         }
