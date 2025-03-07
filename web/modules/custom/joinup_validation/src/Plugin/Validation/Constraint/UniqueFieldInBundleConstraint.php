@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if an entity field has a unique value (unique within it's bundle).
  *
  * This is specifically useful for base field, as you can limit the constraint
  * to certain bundles.
- *
- * @Constraint(
- *   id = "UniqueFieldInBundle",
- *   label = @Translation("Unique field within a bundle constraint", context = "Validation"),
- * )
  */
-class UniqueFieldInBundleConstraint extends Constraint {
+#[Constraint(
+  id: 'UniqueFieldInBundle',
+  label: new TranslatableMarkup('Unique field within a bundle constraint', [], ['context' => 'Validation']),
+)]
+class UniqueFieldInBundleConstraint extends SymfonyConstraint {
 
   /**
    * The message to show when validation fails.

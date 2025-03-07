@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace Drupal\github_feed\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\github_feed\GitHubFeedInterface;
 
 /**
  * Defines the 'github_feed' field widget.
- *
- * @FieldWidget(
- *   id = "github_feed",
- *   label = @Translation("GitHub feed"),
- *   field_types = {"github_feed"},
- * )
  */
+#[FieldWidget(
+  id: 'github_feed',
+  label: new TranslatableMarkup('GitHub feed'),
+  field_types: ['github_feed'],
+)]
 class GitHubFeedWidget extends WidgetBase {
 
   /**

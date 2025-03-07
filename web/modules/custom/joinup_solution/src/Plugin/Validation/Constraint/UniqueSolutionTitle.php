@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Plugin\Validation\Constraint;
 
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if a solution's title is unique within the collections it belongs to.
- *
- * @Constraint(
- *   id = "UniqueSolutionTitle",
- *   label = @Translation("Unique solution title within collections", context = "Validation"),
- * )
  */
-class UniqueSolutionTitle extends Constraint {
+#[Constraint(
+  id: 'UniqueSolutionTitle',
+  label: new TranslatableMarkup('Unique solution title within collections', [], ['context' => 'Validation']),
+)]
+class UniqueSolutionTitle extends SymfonyConstraint {
 
   /**
    * The message to show when validation fails.

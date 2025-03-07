@@ -1336,6 +1336,7 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the tile is not found or the text is found in the tile.
    *
    * @Then I( should) not see the text :text in the :heading tile
+   * @Then I( should) not see the text :text in the :heading card
    */
   public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
