@@ -9,7 +9,9 @@ use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
+use Drupal\views\Attribute\ViewsAccess;
 use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
@@ -18,13 +20,12 @@ use Symfony\Component\Routing\Route;
  * Access plugin that provides access to manage solutions.
  *
  * @ingroup views_access_plugins
- *
- * @ViewsAccess(
- *   id = "manage_solutions",
- *   title = @Translation("Manage solutions"),
- *   help = @Translation("Access will be granted to users with 'manage solutions' permission."),
- * )
  */
+#[ViewsAccess(
+  id: 'manage_solutions',
+  title: new TranslatableMarkup('Manage solutions'),
+  help: new TranslatableMarkup("Access will be granted to users with 'manage solutions' permission."),
+)]
 class ManageSolutionsAccess extends AccessPluginBase implements CacheableDependencyInterface {
 
   public function __construct(

@@ -7,7 +7,9 @@ namespace Drupal\joinup_group\Plugin\views\access;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\AnnouncementsAccessTrait;
+use Drupal\views\Attribute\ViewsAccess;
 use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
@@ -16,13 +18,12 @@ use Symfony\Component\Routing\Route;
  * Checks OG or site permissions and if announcements are enabled.
  *
  * @ingroup views_access_plugins
- *
- * @ViewsAccess(
- *   id = "joinup_group_announcements",
- *   title = @Translation("Announcements access"),
- *   help = @Translation("Access will be granted to users with the specified OG or site permission and whether group announcements are enabled."),
- * )
  */
+#[ViewsAccess(
+  id: 'joinup_group_announcements',
+  title: new TranslatableMarkup('Announcements access'),
+  help: new TranslatableMarkup('Access will be granted to users with the specified OG or site permission and whether group announcements are enabled.'),
+)]
 class GroupAnnouncementsAccess extends AccessPluginBase implements CacheableDependencyInterface {
 
   use AnnouncementsAccessTrait;

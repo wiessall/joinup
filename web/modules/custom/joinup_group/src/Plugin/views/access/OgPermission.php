@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\user\PermissionHandlerInterface;
+use Drupal\views\Attribute\ViewsAccess;
 use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
@@ -20,14 +21,13 @@ use Symfony\Component\Routing\Route;
  * Access plugin that provides permission-based access control.
  *
  * @ingroup views_access_plugins
- *
- * @ViewsAccess(
- *   id = "og_permission",
- *   title = @Translation("OG permission"),
- *   help = @Translation("Access will be granted to users with the specified
- *   permission string in group or site wide.")
- * )
  */
+#[ViewsAccess(
+  id: 'og_permission',
+  title: new TranslatableMarkup('OG permission'),
+  help: new TranslatableMarkup('Access will be granted to users with the specified
+ *   permission string in group or site wide.'),
+)]
 class OgPermission extends AccessPluginBase implements CacheableDependencyInterface {
 
   /**
