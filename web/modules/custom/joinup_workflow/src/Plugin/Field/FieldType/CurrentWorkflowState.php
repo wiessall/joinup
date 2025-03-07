@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_workflow\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -13,17 +14,16 @@ use Drupal\Core\TypedData\DataDefinition;
 
 /**
  * Computed field that shows the current workflow state.
- *
- * @FieldType(
- *   id = "current_workflow_state",
- *   label = @Translation("Current workflow state"),
- *   description = @Translation("Computed field that shows the current workflow state."),
- *   no_ui = TRUE,
- *   list_class = "\Drupal\joinup_workflow\Plugin\Field\FieldType\CurrentWorkflowStateFieldItemList",
- *   default_widget = "current_workflow_state_widget",
- *   default_formatter = "current_workflow_state_field_formatter"
- * )
  */
+#[FieldType(
+  id: "current_workflow_state",
+  label: new TranslatableMarkup("Current workflow state"),
+  description: new TranslatableMarkup("Computed field that shows the current workflow state."),
+  no_ui: TRUE,
+  list_class: CurrentWorkflowStateFieldItemList::class,
+  default_widget: "current_workflow_state_widget",
+  default_formatter: "current_workflow_state_field_formatter",
+)]
 class CurrentWorkflowState extends FieldItemBase {
 
   /**

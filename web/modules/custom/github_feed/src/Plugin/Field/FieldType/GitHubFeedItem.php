@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace Drupal\github_feed\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\github_feed\GitHubFeedInterface;
 
 /**
  * Defines the 'github_feed' field type.
- *
- * @FieldType(
- *   id = "github_feed",
- *   label = @Translation("GitHub feed"),
- *   description = @Translation("Exposes a GitHub feed"),
- *   default_widget = "github_feed",
- *   default_formatter = "github_feed_default"
- * )
  */
+#[FieldType(
+  id: "github_feed",
+  label: new TranslatableMarkup("GitHub feed"),
+  description: new TranslatableMarkup("Exposes a GitHub feed"),
+  category: "reference",
+  default_widget: "github_feed",
+  default_formatter: "github_feed_default",
+)]
 class GitHubFeedItem extends FieldItemBase {
 
   /**

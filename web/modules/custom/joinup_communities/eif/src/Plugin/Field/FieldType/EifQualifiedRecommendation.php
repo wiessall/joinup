@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace Drupal\eif\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Field\Attribute\FieldType;
+use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\text\Plugin\Field\FieldType\TextLongItem;
 
 /**
  * EIF qualified recommendation field type.
- *
- * @FieldType(
- *   id = "eif_qualified_recommendation",
- *   label = @Translation("EIF qualified recommendation"),
- *   description = @Translation("EIF qualified recommendation"),
- *   category = "reference",
- *   default_widget = "eif_qualified_recommendation",
- *   default_formatter = "eif_qualified_recommendation",
- *   list_class = "\Drupal\Core\Field\EntityReferenceFieldItemList",
- * )
  */
+#[FieldType(
+  id: "eif_qualified_recommendation",
+  label: new TranslatableMarkup("EIF qualified recommendation"),
+  description: new TranslatableMarkup("EIF qualified recommendation"),
+  category: "reference",
+  default_widget: "eif_qualified_recommendation",
+  default_formatter: "eif_qualified_recommendation",
+  list_class: EntityReferenceFieldItemList::class
+)]
 class EifQualifiedRecommendation extends EntityReferenceItem {
 
   /**
