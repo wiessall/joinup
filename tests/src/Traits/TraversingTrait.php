@@ -301,6 +301,8 @@ trait TraversingTrait {
   protected function getTileByHeading(string $heading): NodeElement {
     $selectors = [
       'tile',
+      // Allow the cards in the "My subscriptions" page to be selected.
+      'group-subscription',
     ];
 
     foreach ($selectors as $selector) {

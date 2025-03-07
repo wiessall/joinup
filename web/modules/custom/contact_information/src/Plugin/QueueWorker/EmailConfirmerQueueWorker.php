@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Drupal\contact_information\Plugin\QueueWorker;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Process queued email confirmation requests on CRON run.
- *
- * @QueueWorker(
- *   id = "joinup_email_confirmer",
- *   title = @Translation("Delayed email confirmation request dispatcher"),
- *   cron = {"time" = 5},
- * )
  */
+#[QueueWorker(
+  id: 'joinup_email_confirmer',
+  title: new TranslatableMarkup('Delayed email confirmation request dispatcher'),
+  cron: ['time' => 5],
+)]
 class EmailConfirmerQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\StringTextfieldWidget;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Traits\LegacyMultipleCardinalitySupportingFieldWidgetTrait;
 
 /**
@@ -14,15 +16,12 @@ use Drupal\joinup_core\Traits\LegacyMultipleCardinalitySupportingFieldWidgetTrai
  * for some text fields, but in the new version we only allow to enter a single
  * value. However, it should still be possible to edit existing multivalue data
  * for content that was migrated from Drupal 6.
- *
- * @FieldWidget(
- *   id = "string_textfield_legacy_multicardinality",
- *   label = @Translation("Textfield with legacy multivalue support"),
- *   field_types = {
- *     "string"
- *   }
- * )
  */
+#[FieldWidget(
+  id: 'string_textfield_legacy_multicardinality',
+  label: new TranslatableMarkup('Textfield with legacy multivalue support'),
+  field_types: ['string'],
+)]
 class LegacyMultipleCardinalitySupportingTextFieldWidget extends StringTextfieldWidget {
 
   use LegacyMultipleCardinalitySupportingFieldWidgetTrait;
