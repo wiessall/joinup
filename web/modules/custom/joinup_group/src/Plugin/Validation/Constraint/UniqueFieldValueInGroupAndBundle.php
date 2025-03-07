@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Entity label is unique within the entities of the same bundle from the group.
  *
  * @todo Is it worth it moving this constraint upstream, in the OG module?
- *
- * @Constraint(
- *   id = "UniqueFieldValueInGroupAndBundle",
- *   label = @Translation("Entity label is unique within the entities of the same bundle from the group", context = "Validation"),
- * )
  */
-class UniqueFieldValueInGroupAndBundle extends Constraint {
+#[Constraint(
+  id: 'UniqueFieldValueInGroupAndBundle',
+  label: new TranslatableMarkup('Entity label is unique within the entities of the same bundle from the group', [], ['context' => 'Validation']),
+)]
+class UniqueFieldValueInGroupAndBundle extends SymfonyConstraint {
 
   /**
    * Constraint violation message.
