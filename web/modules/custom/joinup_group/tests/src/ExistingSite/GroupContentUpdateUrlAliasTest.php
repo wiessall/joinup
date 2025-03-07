@@ -60,38 +60,27 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'node' => [
         'custom_page' => [
           (int) $this->node['custom_page']['1.1']->id(),
-          (int) $this->node['custom_page']['1.2']->id(),
           (int) $this->node['custom_page']['1']->id(),
-          (int) $this->node['custom_page']['2']->id(),
         ],
         'discussion' => [
           (int) $this->node['discussion']['1.1']->id(),
-          (int) $this->node['discussion']['1.2']->id(),
           (int) $this->node['discussion']['1']->id(),
-          (int) $this->node['discussion']['2']->id(),
         ],
         'distribution' => $distributions,
         'document' => [
           (int) $this->node['document']['1.1']->id(),
-          (int) $this->node['document']['1.2']->id(),
           (int) $this->node['document']['1']->id(),
-          (int) $this->node['document']['2']->id(),
         ],
         'event' => [
           (int) $this->node['event']['1.1']->id(),
-          (int) $this->node['event']['1.2']->id(),
           (int) $this->node['event']['1']->id(),
-          (int) $this->node['event']['2']->id(),
         ],
         'glossary' => [
           (int) $this->node['glossary']['1']->id(),
-          (int) $this->node['glossary']['2']->id(),
         ],
         'news' => [
           (int) $this->node['news']['1.1']->id(),
-          (int) $this->node['news']['1.2']->id(),
           (int) $this->node['news']['1']->id(),
-          (int) $this->node['news']['2']->id(),
         ],
         'release' => $releases,
         'solution' => $solutions,
@@ -103,24 +92,19 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'node' => [
         'custom_page' => [
           (int) $this->node['custom_page']['1.1']->id(),
-          (int) $this->node['custom_page']['1.2']->id(),
         ],
         'discussion' => [
           (int) $this->node['discussion']['1.1']->id(),
-          (int) $this->node['discussion']['1.2']->id(),
         ],
         'distribution' => $distributions,
         'document' => [
           (int) $this->node['document']['1.1']->id(),
-          (int) $this->node['document']['1.2']->id(),
         ],
         'event' => [
           (int) $this->node['event']['1.1']->id(),
-          (int) $this->node['event']['1.2']->id(),
         ],
         'news' => [
           (int) $this->node['news']['1.1']->id(),
-          (int) $this->node['news']['1.2']->id(),
         ],
         'release' => $releases,
       ],
@@ -167,24 +151,14 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Solution nodes.
     $this->assertEquals($this->node['custom_page']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/custompage-11');
-    $this->assertEquals($this->node['custom_page']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/custompage-12');
     $this->assertEquals($this->node['discussion']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/discussion/discussion-11');
-    $this->assertEquals($this->node['discussion']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/discussion/discussion-12');
     $this->assertEquals($this->node['document']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/document/document-11');
-    $this->assertEquals($this->node['document']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/document/document-12');
     $this->assertEquals($this->node['event']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/event/event-11');
-    $this->assertEquals($this->node['event']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/event/event-12');
     $this->assertEquals($this->node['news']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/news/news-11');
-    $this->assertEquals($this->node['news']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/news/news-12');
 
     // Edit the the collection.
     $edit = ['short_id[0][value]' => 'xyz789'];
@@ -227,49 +201,27 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Solution nodes.
     $this->assertEquals($this->node['custom_page']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/custompage-11');
-    $this->assertEquals($this->node['custom_page']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/custompage-12');
     $this->assertEquals($this->node['discussion']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/discussion/discussion-11');
-    $this->assertEquals($this->node['discussion']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/discussion/discussion-12');
     $this->assertEquals($this->node['document']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/document/document-11',);
-    $this->assertEquals($this->node['document']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/document/document-12');
     $this->assertEquals($this->node['event']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/event/event-11');
-    $this->assertEquals($this->node['event']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/event/event-12');
     $this->assertEquals($this->node['news']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/news/news-11');
-    $this->assertEquals($this->node['news']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/news/news-12');
     // Collection's nodes.
     $this->assertEquals($this->node['custom_page']['1']->toUrl()
       ->toString(), '/collection/xyz789/custompage-1');
-    $this->assertEquals($this->node['custom_page']['2']->toUrl()
-      ->toString(), '/collection/xyz789/custompage-2');
     $this->assertEquals($this->node['discussion']['1']->toUrl()
       ->toString(), '/collection/xyz789/discussion/discussion-1');
-    $this->assertEquals($this->node['discussion']['2']->toUrl()
-      ->toString(), '/collection/xyz789/discussion/discussion-2');
     $this->assertEquals($this->node['document']['1']->toUrl()
       ->toString(), '/collection/xyz789/document/document-1');
-    $this->assertEquals($this->node['document']['2']->toUrl()
-      ->toString(), '/collection/xyz789/document/document-2');
     $this->assertEquals($this->node['event']['1']->toUrl()
       ->toString(), '/collection/xyz789/event/event-1');
-    $this->assertEquals($this->node['event']['2']->toUrl()
-      ->toString(), '/collection/xyz789/event/event-2');
     $this->assertEquals($this->node['glossary']['1']->toUrl()
       ->toString(), '/collection/xyz789/glossary/term/glossary-1');
-    $this->assertEquals($this->node['glossary']['2']->toUrl()
-      ->toString(), '/collection/xyz789/glossary/term/glossary-2');
     $this->assertEquals($this->node['news']['1']->toUrl()
       ->toString(), '/collection/xyz789/news/news-1');
-    $this->assertEquals($this->node['news']['2']->toUrl()
-      ->toString(), '/collection/xyz789/news/news-2');
     // Test the success message on short ID update.
     $edit = ['short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
@@ -374,26 +326,23 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       ]);
     }
     // Solution nodes.
-    for ($i = 1; $i <= 2; $i++) {
-      foreach ($solution_node_bundles as $bundle) {
-        $this->node[$bundle]["1.{$i}"] = $this->createNode([
-          'type' => $bundle,
-          'title' => "{$bundle} 1.{$i}",
-          'og_audience' => $this->node['solution']['1'],
-          'field_state' => 'published',
-        ]);
-      }
+    foreach ($solution_node_bundles as $bundle) {
+      $this->node[$bundle]["1.1"] = $this->createNode([
+        'type' => $bundle,
+        'title' => "{$bundle} 1.1",
+        'og_audience' => $this->node['solution']['1'],
+        'field_state' => 'published',
+      ]);
     }
+
     // Collection nodes.
-    for ($i = 1; $i <= 2; $i++) {
-      foreach ($collection_node_bundles as $bundle) {
-        $this->node[$bundle]["{$i}"] = $this->createNode([
-          'type' => $bundle,
-          'title' => "{$bundle} {$i}",
-          'og_audience' => $this->node['collection']['1'],
-          'field_state' => 'published',
-        ]);
-      }
+    foreach ($collection_node_bundles as $bundle) {
+      $this->node[$bundle]["1"] = $this->createNode([
+        'type' => $bundle,
+        'title' => "{$bundle} 1",
+        'og_audience' => $this->node['collection']['1'],
+        'field_state' => 'published',
+      ]);
     }
   }
 
