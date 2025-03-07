@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
-use Symfony\Component\Validator\Constraint;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Validation\Attribute\Constraint;
+use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 
 /**
  * Checks if an entity field has unique values.
- *
- * @Constraint(
- *   id = "UniqueFieldValue",
- *   label = @Translation("Unique values in a field constraint", context = "Validation"),
- * )
  */
-class UniqueFieldValueConstraint extends Constraint {
+#[Constraint(
+  id: 'UniqueFieldValue',
+  label: new TranslatableMarkup('Unique values in a field constraint', [], ['context' => 'Validation']),
+)]
+class UniqueFieldValueConstraint extends SymfonyConstraint {
 
   /**
    * The default violation message.
