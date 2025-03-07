@@ -131,7 +131,7 @@ function joinup_subscription_message_digest_aggregate_alter(array &$context, Use
  */
 function joinup_subscription_mail_alter(array &$message): void {
   if ($message['key'] === 'digest') {
-    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    // $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
     $notifier = $message['params']['notifier'] ?? NULL;
     if ($notifier instanceof MessageNotifierInterface) {
       $interval = $notifier->getPluginDefinition()['title'];
