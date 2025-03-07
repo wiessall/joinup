@@ -291,5 +291,6 @@ Feature: OSS catalogue search
     When I visit the OSS search page
     And I click "Get more details on Developers Italia"
     Then a modal should open
-    And I should see the text "Developers Italia" in the "Modal title"
+    And I should see the text "Source Catalogue Info" in the "Modal title"
+    And I should see the text "Developers Italia" in the "Modal content"
     And I should see the text "Developers Italia is a community of developers" in the "Modal content"
