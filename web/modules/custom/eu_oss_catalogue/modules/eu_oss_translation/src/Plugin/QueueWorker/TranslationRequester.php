@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Defines 'eu_oss_translation_requester' queue worker.
  */
 #[QueueWorker(
-  id: 'eu_oss_translation_requester',
+  id: self::ID,
   title: new TranslatableMarkup('Translation requester'),
   cron: ['time' => 60],
 )]
