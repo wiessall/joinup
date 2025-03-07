@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\oe_newsroom_newsletter\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * The default field widget for the Newsroom newsletter field.
- *
- * @FieldWidget(
- *   id = "oe_newsroom_newsletter_default",
- *   label = @Translation("Default"),
- *   field_types = {
- *     "oe_newsroom_newsletter"
- *   },
- * )
  */
+#[FieldWidget(
+  id: 'oe_newsroom_newsletter_default',
+  label: new TranslatableMarkup('Default'),
+  field_types: ['oe_newsroom_newsletter'],
+)]
 class NewsletterWidget extends WidgetBase {
 
   /**
