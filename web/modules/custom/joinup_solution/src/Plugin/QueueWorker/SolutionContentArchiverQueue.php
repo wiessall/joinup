@@ -10,9 +10,11 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
@@ -29,13 +31,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Archives entities related to an archived solution.
- *
- * @QueueWorker(
- *   id = "solution_archive_related_content",
- *   title = @Translation("Archive solution's related content"),
- *   cron = {"time" = 60},
- * )
  */
+#[QueueWorker(
+  id: 'solution_archive_related_content',
+  title: new TranslatableMarkup("Archive solution's related content"),
+  cron: ['time' => 60],
+)]
 class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
