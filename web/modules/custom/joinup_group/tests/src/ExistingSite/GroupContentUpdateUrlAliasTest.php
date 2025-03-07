@@ -245,7 +245,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       ->toString(), '/collection/xyz789/solution/abc123/news/news-11');
     $this->assertEquals($this->node['news']['1.2']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/news/news-12');
-
     // Collection's nodes.
     $this->assertEquals($this->node['custom_page']['1']->toUrl()
       ->toString(), '/collection/xyz789/custompage-1');
