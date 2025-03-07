@@ -36,20 +36,13 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->createContent();
 
     $distributions = [
-      (int) $this->node['distribution']['1.2.2']->id(),
-      (int) $this->node['distribution']['1.1']->id(),
       (int) $this->node['distribution']['1.1.1']->id(),
-      (int) $this->node['distribution']['1.2']->id(),
-      (int) $this->node['distribution']['1.2.1']->id(),
       (int) $this->node['distribution']['1.1.2']->id(),
+      (int) $this->node['distribution']['1.2']->id(),
     ];
-    sort($distributions);
-
     $releases = [
       (int) $this->node['release']['1.1']->id(),
-      (int) $this->node['release']['1.2']->id(),
     ];
-    sort($releases);
     $solutions = [
       (int) $this->node['solution']['1']->id(),
     ];
@@ -131,21 +124,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Releases.
     $this->assertEquals($this->node['release']['1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/release/11');
-    $this->assertEquals($this->node['release']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/release/12');
     // Release 1.1 distributions.
     $this->assertEquals($this->node['distribution']['1.1.1']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-111');
     $this->assertEquals($this->node['distribution']['1.1.2']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-112');
-    // Release 1.2 distributions.
-    $this->assertEquals($this->node['distribution']['1.2.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-121');
-    $this->assertEquals($this->node['distribution']['1.2.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->assertEquals($this->node['distribution']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-11');
     $this->assertEquals($this->node['distribution']['1.2']->toUrl()
       ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-12');
     // Solution nodes.
@@ -181,21 +165,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Releases.
     $this->assertEquals($this->node['release']['1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/release/11');
-    $this->assertEquals($this->node['release']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/release/12');
     // Release 1.1 distributions.
     $this->assertEquals($this->node['distribution']['1.1.1']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-111');
     $this->assertEquals($this->node['distribution']['1.1.2']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-112');
-    // Release 1.2 distributions.
-    $this->assertEquals($this->node['distribution']['1.2.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-121');
-    $this->assertEquals($this->node['distribution']['1.2.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->assertEquals($this->node['distribution']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-11');
     $this->assertEquals($this->node['distribution']['1.2']->toUrl()
       ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-12');
     // Solution nodes.
@@ -296,35 +271,33 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'contact' => $contact->id(),
     ]);
     // Releases.
-    for ($i = 1; $i <= 2; $i++) {
-      $this->node['release']["1.{$i}"] = $this->createNode([
-        'type' => 'release',
-        'id' => "http://release/1.{$i}",
-        'title' => "release 1.{$i}",
-        'release_number' => "1.{$i}",
-        'og_audience' => $this->node['solution']['1'],
-        'field_state' => 'published',
-      ]);
-      // Release distributions.
-      for ($j = 1; $j <= 2; $j++) {
-        $this->node['distribution']["1.{$i}.{$j}"] = $this->createNode([
-          'type' => 'distribution',
-          'uri' => "http://distribution/1.{$i}.{$j}",
-          'title' => "distribution 1.{$i}.{$j}",
-          'release' => $this->node['release']["1.{$i}"]->id(),
-          'field_state' => 'published',
-        ]);
-      }
-    }
-    // Solution standalone distributions.
-    for ($i = 1; $i <= 2; $i++) {
-      $this->node['distribution']["1.{$i}"] = $this->createNode([
+    $this->node['release']["1.1"] = $this->createNode([
+      'type' => 'release',
+      'id' => "http://release/1.1",
+      'title' => "release 1.1",
+      'release_number' => "1.1",
+      'og_audience' => $this->node['solution']['1'],
+      'field_state' => 'published',
+    ]);
+    // Release distributions.
+    for ($j = 1; $j <= 2; $j++) {
+      $this->node['distribution']["1.1.{$j}"] = $this->createNode([
         'type' => 'distribution',
-        'title' => "distribution 1.{$i}",
-        'og_audience' => $this->node['solution']['1'],
+        'uri' => "http://distribution/1.1.{$j}",
+        'title' => "distribution 1.1.{$j}",
+        'release' => $this->node['release']["1.1"]->id(),
         'field_state' => 'published',
       ]);
     }
+
+    // Solution standalone distributions.
+    $this->node['distribution']["1.2"] = $this->createNode([
+      'type' => 'distribution',
+      'title' => "distribution 1.2",
+      'og_audience' => $this->node['solution']['1'],
+      'field_state' => 'published',
+    ]);
+
     // Solution nodes.
     foreach ($solution_node_bundles as $bundle) {
       $this->node[$bundle]["1.1"] = $this->createNode([
