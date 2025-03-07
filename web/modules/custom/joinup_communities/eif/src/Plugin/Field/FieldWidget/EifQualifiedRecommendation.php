@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: 'eif_qualified_recommendation',
   label: new TranslatableMarkup('EIF Qualified Recommendation select'),
   field_types: ['eif_qualified_recommendation'],
-  multiple_values: FALSE
 )]
 class EifQualifiedRecommendation extends TextareaWidget {
 
