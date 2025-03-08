@@ -16,9 +16,9 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
-use Drupal\node\NodeInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a group context condition plugin.
@@ -34,6 +34,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
     string $plugin_id,
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RequestStack $requestStack,
     protected readonly JoinupGroupManagerInterface $groupManager,
     protected readonly RdfSyncMapper $mapper,
   ) {
@@ -49,6 +50,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
+      $container->get('request_stack'),
       $container->get('joinup_group.group_manager'),
       $container->get('rdf_sync.mapper'),
     );
@@ -186,7 +188,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       }
       // Further attempt to recognize the group from the URL if the ID is
       // a URI and is internal.
-      elseif (!UrlHelper::isExternal($id) || UrlHelper::externalIsLocal($id, \Drupal::request()->getSchemeAndHttpHost())) {
+      elseif (!UrlHelper::isExternal($id) || UrlHelper::externalIsLocal($id, $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost())) {
         $url = Url::fromUri('internal:' . UrlHelper::parse($id)['path']);
         if ($url->isRouted() && $url->getRouteName() === 'entity.node.canonical') {
           $node = $this->entityTypeManager->getStorage('node')->load($url->getRouteParameters()['node']);
