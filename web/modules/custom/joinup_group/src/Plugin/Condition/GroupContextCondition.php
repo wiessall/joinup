@@ -80,16 +80,17 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
-    $uris = $this->textToArray($form_state->getValue('limit_to_groups'));
-    if ($uris) {
-      $groups = $this->getGroups($uris);
-      if ($invalid_uris = array_diff($uris, array_keys($groups))) {
-        $form_state->setErrorByName('limit_to_groups', $this->t('The following group URIs are invalid: @uris', [
-          '@uris' => implode(', ', $invalid_uris),
+    $ids = $this->textToArray($form_state->getValue('limit_to_groups'));
+    if ($ids) {
+      [$groups, $invalidIds] = $this->getGroups($ids);
+      if ($invalidIds) {
+        $form_state->setErrorByName('limit_to_groups', $this->t('The following group URIs are invalid: @ids', [
+          '@ids' => implode(', ', $invalidIds),
         ]));
       }
     }
-    $form_state->setValue('limit_to_groups', $uris);
+
+    $form_state->setValue('limit_to_groups', array_keys($groups));
     parent::validateConfigurationForm($form, $form_state);
   }
 
@@ -97,7 +98,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
-    if (!$group_context = (bool) $form_state->getValue('group_context')) {
+    if (!$form_state->getValue('group_context')) {
       // Cannot negate if the condition is not enabled.
       $this->setConfig('negate', FALSE);
     }
@@ -109,11 +110,12 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function summary(): ?MarkupInterface {
-    if ($groups = $this->getGroups()) {
-      $group_labels = array_map(function (GroupInterface $group): string {
+    [$groups] = $this->getGroups();
+    if ($groups) {
+      $groupLabels = array_map(function (GroupInterface $group): string {
         return $group->get('type')->entity->label() . ': ' . $group->label();
       }, $groups);
-      $args = ['@groups' => implode(', ', $group_labels)];
+      $args = ['@groups' => implode(', ', $groupLabels)];
       if (!$this->isNegated()) {
         return $this->t('Return true when any of the following groups context is active: @groups', $args);
       }
@@ -132,16 +134,16 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function evaluate(): bool {
-    if (!$group_from_context = $this->groupManager->getGroupFromContext()) {
+    if (!$groupFromContext = $this->groupManager->getGroupFromContext()) {
       return FALSE;
     }
 
-    $limit_to_groups = $this->getConfiguration()['limit_to_groups'];
-    if (!$limit_to_groups) {
+    $limitToGroups = $this->getConfiguration()['limit_to_groups'];
+    if (!$limitToGroups) {
       return TRUE;
     }
 
-    return in_array($group_from_context->getUri(), $limit_to_groups);
+    return in_array($groupFromContext->id(), $limitToGroups);
   }
 
   /**
@@ -152,7 +154,9 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       'node_list:collection',
       'node_list:solution',
     ]);
-    foreach ($this->getGroups() as $group) {
+
+    [$groups] = $this->getGroups();
+    foreach ($groups as $group) {
       $tags = Cache::mergeTags($tags, $group->getCacheTagsToInvalidate());
     }
     return $tags;
@@ -161,21 +165,23 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
   /**
    * Returns a list of groups this condition is limited to.
    *
-   * @param array|null $ids
-   *   (optional) A list of group URIs candidates.
+   * @param array|null $data
+   *   (optional) A list of group URI, URL or Id candidates.
    *
-   * @return \Drupal\joinup_group\Entity\GroupInterface[]
-   *   The list of groups this condition is limited to.
+   * @return array
+   *   Returns both the list of groups and the list of invalid IDs.
    */
-  protected function getGroups(?array $ids = NULL): array {
-    $ids ??= $this->getConfiguration()['limit_to_groups'];
+  protected function getGroups(?array $data = NULL): array {
+    $data ??= $this->getConfiguration()['limit_to_groups'];
     $groups = [];
-    foreach ($ids as $id) {
+    $invalidIds = [];
+    foreach ($data as $id) {
       if (is_numeric($id)) {
         $groups[$id] = $this->entityTypeManager->getStorage('node')->load($id);
       }
+      // Try to load the group by URI for backwards compatibility or URL for
+      // convenience.
       elseif ($entity = $this->mapper->getEntityByUri($id)) {
-        // Try to load the group by URI for backwards compatibility.
         $groups[$entity->id()] = $this->mapper->getEntityByUri($id);
       }
       // Further attempt to recognize the group from the URL if the ID is
@@ -189,9 +195,12 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
           }
         }
       }
+      else {
+        $invalidIds[$id] = $id;
+      }
     }
 
-    return $groups;
+    return [$groups, $invalidIds];
   }
 
   /**

@@ -15,4 +15,4 @@ conditions:
     id: group_context
     negate: false
     limit_to_groups:
-      - 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'
+      - '723208'
