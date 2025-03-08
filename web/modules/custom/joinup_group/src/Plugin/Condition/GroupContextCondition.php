@@ -71,7 +71,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       '#type' => 'textarea',
       '#title' => $this->t('Limit to groups'),
       '#default_value' => implode("\n", $this->getConfiguration()['limit_to_groups']),
-      '#description' => $this->t('Enter one group URI per line.'),
+      '#description' => $this->t('Enter one group entry per line. The entry can be either the Node ID, the RDF sync URI, or the internal path of the group.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
   }
