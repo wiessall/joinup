@@ -23,7 +23,7 @@ use Drupal\link\Plugin\Field\FieldType\LinkItem;
     "LinkAccess" => [],
     "LinkExternalProtocols" => [],
     "LinkNotExistingInternal" => [],
-  ]
+  ],
 )]
 class ReportLinkItem extends LinkItem {
 
