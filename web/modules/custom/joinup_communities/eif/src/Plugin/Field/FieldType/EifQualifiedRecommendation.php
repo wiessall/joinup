@@ -23,7 +23,7 @@ use Drupal\text\Plugin\Field\FieldType\TextLongItem;
   category: "reference",
   default_widget: "eif_qualified_recommendation",
   default_formatter: "eif_qualified_recommendation",
-  list_class: EntityReferenceFieldItemList::class
+  list_class: EntityReferenceFieldItemList::class,
 )]
 class EifQualifiedRecommendation extends EntityReferenceItem {
 
