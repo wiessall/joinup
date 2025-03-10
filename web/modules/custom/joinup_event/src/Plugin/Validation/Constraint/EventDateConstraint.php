@@ -12,13 +12,13 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
  * Validates the event duration for field_event_date.
  */
 #[Constraint(
-  id: 'EventDurationConstraint',
+  id: 'EventDateConstraint',
   label: new TranslatableMarkup('Event duration fields constraint', [], ['context' => 'Validation']),
 )]
-class EventDurationConstraint extends SymfonyConstraint {
+class EventDateConstraint extends SymfonyConstraint {
 
   /**
-   * The message to show if validation fails.
+   * The message to show if date range is longer than 2 weeks.
    *
    * @var string
    */
