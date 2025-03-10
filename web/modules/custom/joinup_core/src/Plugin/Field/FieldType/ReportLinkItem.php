@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldType;
 
+use Drupal\Core\Field\Attribute\FieldType;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 /**
  * Variant of the 'link' field intended for reporting inappropriate content.
- *
- * @FieldType(
- *   id = "report_link",
- *   label = @Translation("Report"),
- *   description = @Translation("A link that can be used to report inappropriate content."),
- *   default_widget = "link_default",
- *   default_formatter = "link",
- *   constraints = {
- *     "LinkType" = {},
- *     "LinkAccess" = {},
- *     "LinkExternalProtocols" = {},
- *     "LinkNotExistingInternal" = {}
- *   }
- * )
  */
+#[FieldType(
+  id: "report_link",
+  label: new TranslatableMarkup("Report"),
+  description: new TranslatableMarkup("A link that can be used to report inappropriate content."),
+  default_widget: "link_default",
+  default_formatter: "link",
+  constraints: [
+    "LinkType" => [],
+    "LinkAccess" => [],
+    "LinkExternalProtocols" => [],
+    "LinkNotExistingInternal" => [],
+  ],
+)]
 class ReportLinkItem extends LinkItem {
 
   use ComputedItemListTrait;
