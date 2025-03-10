@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessControlHandler implements EntityHandlerInterface {
 
+  private const string ADMIN_PERMISSION = 'administer comments';
+
   public function __construct(
     readonly EntityTypeInterface $entity_type,
     readonly OgAccessInterface $ogAccess,
@@ -41,53 +43,43 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $comment, $operation, AccountInterface $account): AccessResultInterface {
-    if ($operation === 'reply') {
-      return parent::checkAccess($comment, $operation, $account);
-    }
-
     $community_content = $comment->getCommentedEntity();
     if (!$community_content instanceof CommunityContentInterface) {
       return parent::checkAccess($comment, $operation, $account);
     }
 
-    $is_comment_admin = $this->isAllowedIfHasPermission('administer comments', $community_content, $account);
-    if ($operation === 'approve') {
-      return AccessResult::allowedIf($is_comment_admin && !$comment->isPublished())
-        ->cachePerPermissions()
-        ->addCacheableDependency($comment);
-    }
-
-    if ($is_comment_admin) {
-      $access = AccessResult::allowed()->cachePerPermissions();
-      return ($operation !== 'view') ? $access : $access->andIf($community_content->access($operation, $account, TRUE));
+    // Delegate reply op to parent, which will check view and create access.
+    if ($operation === 'reply') {
+      return parent::checkAccess($comment, $operation, $account);
     }
 
     switch ($operation) {
+      case 'approve':
+        return $this->hasCommentAdminAccess($community_content, $account)
+          ->andIf(AccessResult::allowedIf(!$comment->isPublished()))
+          ->addCacheableDependency($comment);
+
       case 'view':
-        return AccessResult::allowedIf(
-          $this->isAllowedIfHasPermission('access comments', $community_content, $account)
-          && $comment->isPublished()
-        )
-          ->cachePerPermissions()
+        $access = $comment->isPublished()
+          ? $this->hasCommentAccess('access comments', $community_content, $account)
+          : $this->hasCommentAdminAccess($community_content, $account);
+
+        return $access->andIf($community_content->access($operation, $account, TRUE))
           ->addCacheableDependency($comment);
 
       case 'update':
-        return AccessResult::allowedIf(
-          $account->id() === $comment->getOwnerId()
-          && $comment->isPublished()
-          && $this->isAllowedIfHasPermission('edit own comments', $community_content, $account)
-        )
-          ->cachePerUser()
-          ->addCacheableDependency($comment);
+        $access = ($account->id() === $comment->getOwnerId() && $comment->isPublished())
+          ? $this->hasCommentAccess('edit own comments', $community_content, $account)
+          : $this->hasCommentAdminAccess($community_content, $account);
+
+        return $access->addCacheableDependency($comment);
 
       case 'delete':
-        return AccessResult::allowedIf(
-          $account->id() === $comment->getOwnerId()
-          && $comment->isPublished()
-          && $this->isAllowedIfHasPermission('delete own comments', $community_content, $account)
-        )
-          ->cachePerUser()
-          ->addCacheableDependency($comment);
+        $access = ($account->id() === $comment->getOwnerId() && $comment->isPublished())
+          ? $this->hasCommentAccess('delete own comments', $community_content, $account)
+          : $this->hasCommentAdminAccess($community_content, $account);
+
+        return $access->addCacheableDependency($comment);
     }
 
     // No opinion.
@@ -95,26 +87,34 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
   }
 
   /**
-   * Checks whether the account has the given permission.
+   * Checks whether the account has the given permission, site-wide or in group.
    *
-   * This method check first the site-wide permission, as that always takes
-   * precedent over the organic group permission.
-   *
-   * @param string $permission
-   *   The permission to check.
-   * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $community_content
-   *   The commented entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The account object.
-   *
-   * @return bool
-   *   Whether the account has the given permission.
+   * This also checks the "administer comments" permission.
    */
-  protected function isAllowedIfHasPermission(string $permission, CommunityContentInterface $community_content, AccountInterface $account): bool {
-    // Has site-wide permission.
-    return $account->hasPermission($permission)
-      // Or organic groups permission.
-      || $this->ogAccess->userAccess($community_content->getGroup(), $permission, $account)->isAllowed();
+  protected function hasCommentAccess(string $permission, CommunityContentInterface $community_content, AccountInterface $account): AccessResultInterface {
+    // First check site-wide permissions.
+    $access = AccessResult::allowedIfHasPermissions($account, [$permission, self::ADMIN_PERMISSION], 'OR');
+
+    // Then organic groups permissions, if not allowed yet.
+    // This condition prevents merging expensive cacheability, such as "user"
+    // cache context, if we already have site-wide access.
+    if (!$access->isAllowed()) {
+      $access = $access
+        ->orIf($this->ogAccess->userAccess($community_content->getGroup(), $permission, $account))
+        ->orIf($this->ogAccess->userAccess($community_content->getGroup(), self::ADMIN_PERMISSION, $account));
+    }
+
+    return $access;
+  }
+
+  /**
+   * Checks whether the account can administer comments, site-wide or in group.
+   */
+  protected function hasCommentAdminAccess(CommunityContentInterface $community_content, AccountInterface $account): AccessResultInterface {
+    // First check site-wide permissions.
+    $access = AccessResult::allowedIfHasPermission($account, self::ADMIN_PERMISSION);
+    // Then organic groups permissions, if not allowed yet.
+    return !$access->isAllowed() ? $access->orIf($this->ogAccess->userAccess($community_content->getGroup(), self::ADMIN_PERMISSION, $account)) : $access;
   }
 
 }
