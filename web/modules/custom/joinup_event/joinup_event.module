@@ -48,6 +48,7 @@ function joinup_event_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface $entity_types */
   if (isset($entity_types['node'])) {
     $entity_types['node']->addConstraint('EventLocationConstraint');
+    $entity_types['node']->addConstraint('EventDurationConstraint');
   }
 }
 
