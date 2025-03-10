@@ -7,22 +7,21 @@ namespace Drupal\joinup_group\Plugin\QueueWorker;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a worker to consume the 'joinup_group:group_update' queue.
- *
- * @QueueWorker(
- *   id = "joinup_group:group_update",
- *   title = @Translation("Push data about entities to be updated in 'joinup_group:group_content_update' queue"),
- *   cron = {
- *     "time" = 10,
- *   },
- * ),
  */
+#[QueueWorker(
+  id: 'joinup_group:group_update',
+  title: new TranslatableMarkup('Push data about entities to be updated in "joinup_group:group_content_update" queue'),
+  cron: ['time' => 10],
+)]
 class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
