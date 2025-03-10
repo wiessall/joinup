@@ -11,7 +11,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 /**
  * Validates the duration fields.
  */
-class EventDurationConstraintValidator extends ConstraintValidator {
+class EventDateConstraintValidator extends ConstraintValidator {
 
   /**
    * {@inheritdoc}
@@ -21,6 +21,9 @@ class EventDurationConstraintValidator extends ConstraintValidator {
       return;
     }
     $dateRange = $entity->getDateRange();
+    if (!is_string($dateRange['value']) || !is_string($dateRange['end_value'])) {
+      return;
+    }
     $startDate = strtotime($dateRange['value']);
     $endDate = strtotime($dateRange['end_value']);
     $diffDays = ($endDate - $startDate) / 86400;
