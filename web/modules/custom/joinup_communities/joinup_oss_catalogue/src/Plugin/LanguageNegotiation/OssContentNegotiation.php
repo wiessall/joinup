@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation;
 
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\language\Attribute\LanguageNegotiation;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
@@ -15,15 +18,14 @@ use Symfony\Component\Routing\Route;
  *
  * Allows users with appropriate permissions to view and edit content
  * translations for OSS solutions, without affecting the entire website.
- *
- * @LanguageNegotiation(
- *   id = Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation::METHOD_ID,
- *   types = {Drupal\Core\Language\LanguageInterface::TYPE_CONTENT},
- *   weight = -9,
- *   name = @Translation("OSS Content language"),
- *   description = @Translation("Custom language negotiation handler for OSS Solutions."),
- * )
  */
+#[LanguageNegotiation(
+  id: self::METHOD_ID,
+  name: new TranslatableMarkup("OSS Content language"),
+  types: [LanguageInterface::TYPE_CONTENT],
+  weight: -9,
+  description: new TranslatableMarkup("Custom language negotiation handler for OSS Solutions."),
+)]
 class OssContentNegotiation extends LanguageNegotiationContentEntity {
 
   /**
