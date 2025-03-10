@@ -80,6 +80,8 @@ Feature: Add comments
     And I should see the "Create comment" wysiwyg editor
     When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
     And I press "Post comment"
+    # Check status message to ensure the POST request completed and emails were sent.
+    And I should see the success message "Your comment has been posted"
     # Parent comment owner receives an email.
     And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Salma Coster posted a comment in <parent> "<parent title>".                             |
@@ -168,6 +170,8 @@ Feature: Add comments
     And I should see the "Create comment" wysiwyg editor
     When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
     And I press "Post comment"
+    # Check status message to ensure the POST request completed and emails were sent.
+    And I should see the success message "Your comment has been posted"
     # Parent comment owner receives an email.
     And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Salma Coster posted a comment in <parent> "<parent title>".                             |
