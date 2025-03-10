@@ -21,9 +21,9 @@ use Symfony\Component\Routing\Route;
  */
 #[LanguageNegotiation(
   id: self::METHOD_ID,
+  name: new TranslatableMarkup('OSS Content language'),
   types: [LanguageInterface::TYPE_CONTENT],
   weight: -9,
-  name: new TranslatableMarkup('OSS Content language'),
   description: new TranslatableMarkup("Custom language negotiation handler for OSS Solutions."),
 )]
 class OssContentNegotiation extends LanguageNegotiationContentEntity {
