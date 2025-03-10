@@ -20,9 +20,9 @@ use Symfony\Component\Routing\Route;
  * @ingroup views_access_plugins
  */
 #[ViewsAccess(
-  id: 'joinup_group_announcements',
-  title: new TranslatableMarkup('Announcements access'),
-  help: new TranslatableMarkup('Access will be granted to users with the specified OG or site permission and whether group announcements are enabled.'),
+  id: "joinup_group_announcements",
+  title: new TranslatableMarkup("Announcements access"),
+  help: new TranslatableMarkup("Access will be granted to users with the specified OG or site permission and whether group announcements are enabled."),
 )]
 class GroupAnnouncementsAccess extends AccessPluginBase implements CacheableDependencyInterface {
 

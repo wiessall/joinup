@@ -22,8 +22,8 @@ use Symfony\Component\Routing\Route;
  * @ingroup views_access_plugins
  */
 #[ViewsAccess(
-  id: 'manage_solutions',
-  title: new TranslatableMarkup('Manage solutions'),
+  id: "manage_solutions",
+  title: new TranslatableMarkup("Manage solutions"),
   help: new TranslatableMarkup("Access will be granted to users with 'manage solutions' permission."),
 )]
 class ManageSolutionsAccess extends AccessPluginBase implements CacheableDependencyInterface {
