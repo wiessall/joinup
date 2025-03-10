@@ -7,8 +7,10 @@ namespace Drupal\joinup_group\Plugin\QueueWorker;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,13 +29,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   delivering the announcement.
  * This complexity is required as we need offload the transition subscriber for
  * doing intensive operations for groups with a huge number of members.
- *
- * @QueueWorker(
- *   id = "send_group_announcements",
- *   title = @Translation("Delayed announcements request dispatcher"),
- *   cron = {"time" = 10},
- * )
  */
+#[QueueWorker(
+  id: 'send_group_announcements',
+  title: new TranslatableMarkup('Delayed announcements request dispatcher'),
+  cron: ['time' => 10],
+)]
 class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
