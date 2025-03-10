@@ -23,10 +23,9 @@ use Symfony\Component\Routing\Route;
  * @ingroup views_access_plugins
  */
 #[ViewsAccess(
-  id: 'og_permission',
-  title: new TranslatableMarkup('OG permission'),
-  help: new TranslatableMarkup('Access will be granted to users with the specified
- *   permission string in group or site wide.'),
+  id: "og_permission",
+  title: new TranslatableMarkup("OG permission"),
+  help: new TranslatableMarkup("Access will be granted to users with the specified permission string in group or site wide."),
 )]
 class OgPermission extends AccessPluginBase implements CacheableDependencyInterface {
 

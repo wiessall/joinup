@@ -20,8 +20,8 @@ use Symfony\Component\Routing\Route;
  * @ingroup views_access_plugins
  */
 #[ViewsAccess(
-  id: 'joinup_discussion_overview',
-  title: new TranslatableMarkup('Discussion overview'),
+  id: "joinup_discussion_overview",
+  title: new TranslatableMarkup("Discussion overview"),
 )]
 class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDependencyInterface {
 
