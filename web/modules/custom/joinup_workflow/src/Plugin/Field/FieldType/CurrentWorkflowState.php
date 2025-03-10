@@ -19,10 +19,10 @@ use Drupal\Core\TypedData\DataDefinition;
   id: "current_workflow_state",
   label: new TranslatableMarkup("Current workflow state"),
   description: new TranslatableMarkup("Computed field that shows the current workflow state."),
-  no_ui: TRUE,
-  list_class: CurrentWorkflowStateFieldItemList::class,
   default_widget: "current_workflow_state_widget",
   default_formatter: "current_workflow_state_field_formatter",
+  no_ui: TRUE,
+  list_class: CurrentWorkflowStateFieldItemList::class,
 )]
 class CurrentWorkflowState extends FieldItemBase {
 
