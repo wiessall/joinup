@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_subscription\Plugin\Field\FieldType;
 
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -18,13 +19,12 @@ use Drupal\Core\TypedData\DataDefinition;
  *
  * @todo If this is useful for other subsystems in Joinup this can be split off
  *   to a separate module.
- *
- * @FieldType(
- *   id = "entity_bundle_pair",
- *   label = @Translation("Entity bundle pair"),
- *   description = @Translation("A simple field referencing to bundles")
- * )
  */
+#[FieldType(
+  id: "entity_bundle_pair",
+  label: new TranslatableMarkup("Entity bundle pair"),
+  description: new TranslatableMarkup("A simple field referencing to bundles"),
+)]
 class EntityBundlePairItem extends FieldItemBase {
 
   /**
