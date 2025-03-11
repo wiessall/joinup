@@ -3,6 +3,7 @@ status: true
 dependencies: {  }
 id: github_mockup
 label: 'Github mockup'
+type: local
 description: 'Test GitHub hosting provider'
 platformId: github
 platformSettings:

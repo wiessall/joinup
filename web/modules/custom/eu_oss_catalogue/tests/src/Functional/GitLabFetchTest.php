@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 
 /**
@@ -67,6 +68,7 @@ class GitLabFetchTest extends FetchTestBase {
     $config = HostingPlatformConfig::create([
       'id' => 'gitlab_self_hosted_wrong',
       'label' => 'GitLab self-hosted (wrong)',
+      'type' => CatalogueType::Local->value,
       'platformId' => 'gitlab_self_hosted',
       'platformSettings' => [
         'baseUrl' => 'https://wrong.self-hosted.gitlab.example.com',

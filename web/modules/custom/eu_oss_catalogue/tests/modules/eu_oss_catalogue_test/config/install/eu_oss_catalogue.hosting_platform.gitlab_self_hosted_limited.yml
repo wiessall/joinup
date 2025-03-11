@@ -3,6 +3,7 @@ status: true
 dependencies: {  }
 id: gitlab_self_hosted_limited
 label: 'GitLab self-hosted (limited)'
+type: local
 platformId: gitlab_self_hosted
 platformSettings:
   baseUrl: https://limited.self-hosted.gitlab.example.com
