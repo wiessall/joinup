@@ -116,11 +116,10 @@ Feature: "Add event" visibility options.
     Then I should see the text "29/08 to 01/09/2018"
 
     When I go to the edit form of the "An amazing event" event
+    And I fill the start date of the Date widget with "2018-12-29"
     And I fill the end date of the Date widget with "2019-01-02"
     And I press "Save as draft"
-    Then I should see the following error messages:
-      | error messages                                           |
-      | The duration of the event cannot be longer than 2 weeks. |
+    Then I should see the text "29/12/2018 to 02/01/2019"
 
   @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
