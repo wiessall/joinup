@@ -9,6 +9,3 @@ services:
   Drupal\joinup_eulogin\Routing\JoinupEuLoginRouteSubscriber: { }
 
   Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber: { }
-
-  Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginUserCancelSubscriber: { }
-

@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_vitality_index\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Plugin implementation of the 'Vitality index chart' formatter.
- *
- * @FieldFormatter(
- *   id = "vitality_index_chart",
- *   label = @Translation("Vitality index chart"),
- *   field_types = {
- *     "string"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'vitality_index_chart',
+  label: new TranslatableMarkup('Vitality index chart'),
+  field_types: [
+    'string',
+  ],
+)]
 class VitalityIndexChartFormatter extends FormatterBase {
 
   /**

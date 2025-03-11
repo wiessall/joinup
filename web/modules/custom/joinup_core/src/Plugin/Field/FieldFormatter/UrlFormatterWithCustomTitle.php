@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\link\Plugin\Field\FieldFormatter\LinkFormatter;
 
 /**
  * Plugin implementation of the 'link' formatter.
- *
- * @FieldFormatter(
- *   id = "joinup_core_link_custom_title",
- *   label = @Translation("Link with Custom Title"),
- *   field_types = {
- *     "link"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_core_link_custom_title',
+  label: new TranslatableMarkup('Link with Custom Title'),
+  field_types: [
+    'link',
+  ],
+)]
 class UrlFormatterWithCustomTitle extends LinkFormatter {
 
   /**

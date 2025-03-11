@@ -236,7 +236,6 @@ joinup_group.unshare_content_form:
           - event
           - news
           - solution
-          -
 
 entity.node.subscribe:
   path: /node/{node}/subscribe

@@ -9,11 +9,14 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\filter\Attribute\Filter;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
+use Drupal\filter\Plugin\FilterInterface;
 use Drupal\og\OgContextInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Psr\Log\LoggerInterface;
@@ -21,14 +24,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Wraps glossary terms with links to their definition page.
- *
- * @Filter(
- *   id = "collection_glossary",
- *   title = @Translation("Collection glossary"),
- *   description = @Translation("Replaces glossary terms with their link version."),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
- * )
  */
+#[Filter(
+  id: "collection_glossary",
+  title: new TranslatableMarkup("Collection glossary"),
+  type: FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
+  description: new TranslatableMarkup("Replaces glossary terms with their link version."),
+)]
 class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

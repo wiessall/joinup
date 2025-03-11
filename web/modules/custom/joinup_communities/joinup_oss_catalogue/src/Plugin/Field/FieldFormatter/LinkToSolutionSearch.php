@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceFieldItemListInterface;
 
 /**
  * Plugin implementation 'joinup_oss_catalogue_link_to_solution_search'.
- *
- * @FieldFormatter(
- *   id = "joinup_oss_catalogue_link_to_solution_search",
- *   label = @Translation("Link to solution search "),
- *   field_types = {
- *     "plugin_reference",
- *     "entity_reference",
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_oss_catalogue_link_to_solution_search',
+  label: new TranslatableMarkup('Link to solution search'),
+  field_types: [
+    'plugin_reference',
+    'entity_reference',
+  ],
+)]
 class LinkToSolutionSearch extends FormatterBase {
 
   const SEARCH_PAGE_ROUTE = 'view.search_oss_catalogue.search';

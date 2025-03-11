@@ -99,13 +99,14 @@ class CalendarContext extends RawDrupalContext implements Context {
   public function iNavigateTheCalendarTo(string $date, string $mode): void {
     $pagerSelector = $this->getPagerByDate($date);
     $dateTimestamp = strtotime($date);
-    $dateFormatted = date("Y-m-d", $dateTimestamp);
     switch (strtolower($mode)) {
       case 'month':
+        $dateFormatted = date("Y-m-15", $dateTimestamp);
         $maxAttempts = $this->calculateMonthDifference($dateTimestamp);
         break;
 
       case 'week':
+        $dateFormatted = date("Y-m-d", $dateTimestamp);
         $maxAttempts = $this->calculateWeekDifference($dateTimestamp);
         break;
 

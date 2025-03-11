@@ -23,8 +23,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -262,7 +262,7 @@ class SubscribeGroupForm extends FormBase {
     parent::validateForm($form, $form_state);
 
     $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
-    if ($node instanceof Collection) {
+    if ($node instanceof CollectionInterface) {
       $membership = $this->getUserNonBlockedMembership($node);
       if (!$membership && !isset($form[static::COC_CHECKBOX_KEY])) {
         $form_state->setErrorByName('collection', $this->t('Please join the collection before subscribing to it.'));
@@ -276,7 +276,7 @@ class SubscribeGroupForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
     $subscribe = (bool) $form_state->getValue('subscribe');
-    if ($node instanceof Collection) {
+    if ($node instanceof CollectionInterface) {
       if (!$this->isAjax()) {
         $redirectValue = $form_state->getValue('redirect');
         $redirect = $redirectValue
@@ -347,6 +347,13 @@ class SubscribeGroupForm extends FormBase {
       foreach (CommunityContentHelper::BUNDLES as $bundle) {
         $subscription_bundles[] = ['entity_type' => 'node', 'bundle' => $bundle];
       }
+    }
+    // Remove the 'assessment_report' subscription for all collections,
+    // except the assessment collection.
+    if ($membership->getGroup()->uuid() !== AssessmentInterface::GROUP_UUID) {
+      $subscription_bundles = array_values(array_filter($subscription_bundles, function ($bundle) {
+        return $bundle['bundle'] !== 'assessment_report';
+      }));
     }
     $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();
@@ -429,7 +436,7 @@ class SubscribeGroupForm extends FormBase {
    */
   public function access(NodeInterface $node): AccessResultInterface {
     $user = $this->getUser();
-    if ($node instanceof Collection) {
+    if ($node instanceof CollectionInterface) {
       $hasCodeOfConductToAccept = $node instanceof CollectionInterface && $node->hasCodeOfConductToAccept();
       return AccessResult::allowedIf(
         $user->isAuthenticated() &&

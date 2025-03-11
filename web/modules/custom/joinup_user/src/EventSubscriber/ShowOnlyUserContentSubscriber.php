@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -27,6 +28,7 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected AccountInterface $currentUser,
     protected MessengerInterface $messenger,
+    protected ConfigFactoryInterface $configFactory,
   ) {}
 
   /**
@@ -63,13 +65,18 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
     }
 
     if ($groups) {
-      if (count($groups) > 100) {
-        $subset = array_chunk($groups, 100);
+      $maxNumber = $this->configFactory->get('joinup_user.settings')
+        ->get('membership_group_limit');
+      if (count($groups) > $maxNumber) {
+        $subset = array_chunk($groups, $maxNumber);
         $groups = reset($subset);
         // If the user is the owner of the profile, show a warning message.
         if ($user->id() === $this->currentUser->id()) {
           $this->messenger
-            ->addWarning($this->t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'));
+            ->addWarning($this->t(
+              'You have joined a large number of collections and solutions.<br /> Only the content of the first @max groups is shown.',
+              ['@max' => $maxNumber])
+            );
         }
       }
       $or = $query->createConditionGroup('OR');
