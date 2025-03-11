@@ -59,9 +59,7 @@ Feature: User interface for the File URL field
       | Document title | Abstract | Body                  | draft | document      | Regression tests |
 
     Given I am logged in as a moderator
-    And I go to the "Document title" document
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "document" with the title "Document title"
     Then I should see the text "Upload a new file or enter a URL"
     And I select the radio button "Remote file URL"
     And I fill in "field_file[0][file_url_remote]" with "foo"

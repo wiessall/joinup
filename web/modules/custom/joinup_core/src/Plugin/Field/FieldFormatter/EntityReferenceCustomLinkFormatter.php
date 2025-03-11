@@ -6,27 +6,28 @@ namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\token\TokenInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'custom link' formatter.
- *
- * @FieldFormatter(
- *   id = "entity_reference_custom_link",
- *   label = @Translation("Custom link"),
- *   description = @Translation("Displays the label as a link to a customized path."),
- *   field_types = {
- *     "entity_reference",
- *   },
- * )
  */
+#[FieldFormatter(
+  id: 'entity_reference_custom_link',
+  label: new TranslatableMarkup('Custom link'),
+  description: new TranslatableMarkup('Displays the label as a link to a customized path.'),
+  field_types: [
+    'entity_reference',
+  ],
+)]
 class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
 
   public function __construct(

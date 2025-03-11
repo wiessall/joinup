@@ -952,37 +952,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a date/time field is prefilled with the current time.
-   *
-   * @param string $field
-   *   The date/time field name.
-   *
-   * @throws \Exception
-   *   When the field is not found.
-   *
-   * @Then I see :field filled with the current time
-   */
-  public function assertDateTimeFieldValue(string $field): void {
-    $now = new \DateTimeImmutable();
-
-    $date_part = $this->findDateRangeComponent($field, 'date')->getAttribute('value');
-    $time_part = $this->findDateRangeComponent($field, 'time')->getAttribute('value');
-    if (empty($date_part) || empty($time_part)) {
-      throw new ExpectationFailedException("The '{$field}' date/time field is not filled with the current time.");
-    }
-
-    $date = new \DateTimeImmutable("{$date_part} {$time_part}");
-
-    $interval = $now->diff($date);
-    // Given that such a test cannot do an exact assertion, because of the
-    // testing environment latency, we consider 3 seconds as an acceptable
-    // fuzziness.
-    if ($interval->f > 3000) {
-      throw new ExpectationFailedException("The '{$field}' date/time field is not filled with the current time.");
-    }
-  }
-
-  /**
    * Finds a datetime field.
    *
    * First, get the fields that use a datetime widget. Fields of type 'created'
@@ -1367,6 +1336,7 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the tile is not found or the text is found in the tile.
    *
    * @Then I( should) not see the text :text in the :heading tile
+   * @Then I( should) not see the text :text in the :heading card
    */
   public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
@@ -2037,6 +2007,32 @@ class JoinupContext extends RawDrupalContext {
       catch (\Exception $e) {
         Error::logException(\Drupal::logger('cron'), $e);
       }
+    }
+  }
+
+  /**
+   * Cleans up orphaned content in non clone group.
+   *
+   * @AfterScenario ~@group-clone
+   *
+   * @todo Remove this in ISAICP-9358
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
+   */
+  public function cleanLeftoverContent(AfterScenarioScope $event): void {
+    // Delete data that are not created through the behat API.
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
+    $query->fields('n', ['nid']);
+    $query->isNull('u.uid');
+    // Avoid deleting default content that belong to the anonymous user or user
+    // 1 in tests.
+    $query->condition('n.uid', 1, '>');
+    $nids = $query->execute()->fetchCol();
+
+    if (!empty($nids)) {
+      $storage = \Drupal::entityTypeManager()->getStorage('node');
+      $nodes = $storage->loadMultiple($nids);
+      $storage->delete($nodes);
     }
   }
 

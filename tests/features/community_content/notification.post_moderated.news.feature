@@ -47,8 +47,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
 
     # Test 'update' operation.
     When I am logged in as "CC member"
-    And I go to the "CCN post publish" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN post publish"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                           |
@@ -56,8 +55,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | body      | CC Member has published the new news - "CCN post publish" in the collection: "CC post collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN post request changes" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN post request changes"
     And I press "Request changes"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
@@ -67,8 +65,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                                                    |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN post report" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN post report"
     And I press "Report"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
@@ -78,8 +75,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                                           |
 
     When I am logged in as "CC facilitator"
-    And I go to the "CCN post approve proposed" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN post approve proposed"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                   |
@@ -88,8 +84,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
 
     # Test 'delete' operation.
     When I am logged in as "CC facilitator"
-    And I go to the "CCN post delete" news
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "news" with the title "CCN post delete"
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:

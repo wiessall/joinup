@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_document_publication_date
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
@@ -119,7 +118,6 @@ content:
 hidden:
   featured: true
   field_comments: true
-  field_document_publication_date: true
   field_file: true
   field_keywords: true
   field_licence: true

@@ -6,24 +6,25 @@ namespace Drupal\joinup_oss_catalogue\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceLabelFormatter;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Token;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Display the label with tooltip of the referenced entities.
- *
- * @FieldFormatter(
- *   id = "joinup_entity_reference_label_tooltip",
- *   label = @Translation("Label + tooltip"),
- *   description = @Translation("Display the label with tooltip of the referenced entities."),
- *   field_types = {
- *     "entity_reference"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'joinup_entity_reference_label_tooltip',
+  label: new TranslatableMarkup('Label + tooltip'),
+  description: new TranslatableMarkup('Display the label with tooltip of the referenced entities.'),
+  field_types: [
+    'entity_reference',
+  ],
+)]
 class EntityReferenceLabelTooltip extends EntityReferenceLabelFormatter {
 
   /**

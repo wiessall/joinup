@@ -62,9 +62,6 @@ Feature: "Add document" visibility options.
       | Short title | Amazing document    |
       | Abstract    | Amazing document    |
     And I select "Document" from "Type"
-    # Regression test: Document is successfully displayed even when a publication date is not set.
-    And I clear the date of the "Publication date" widget
-    And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
     Then I should see the following error messages:
@@ -85,11 +82,6 @@ Feature: "Add document" visibility options.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
 
-    # Check that the publication date field is prefilled with the current time.
-    When I go to the homepage of the "Hunter in the Swords" collection
-    And I click "Add document" in the plus button menu
-    Then I see "Publication date" filled with the current time
-
   # Regression test to ensure that no critical errors are thrown when a new
   # revision is created for a document that has a remote file attached.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3670
@@ -105,8 +97,7 @@ Feature: "Add document" visibility options.
       | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
-    And I go to the "Laser types" document
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "document" with the title "Laser types"
     And I press "Update"
     Then I should see the success message "Document Laser types has been updated"
 
@@ -122,8 +113,7 @@ Feature: "Add document" visibility options.
       | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | Red blaser |
 
     When I am logged in as a facilitator of the "Red blaser" collection
-    And I go to the "Red blaser types" document
-    And I click "Edit" in the "Entity actions" region
+    And I go to the "edit-form" content page of the type "document" with the title "Red blaser types"
     And the "Remote file URL" radio button should not be selected
     And I should see the text "Unlimited number of files can be uploaded to this field."
     And I should see the text "32 MB limit."

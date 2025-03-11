@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_workflow\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Plugin implementation of the 'current_workflow_state_widget' widget.
- *
- * @FieldWidget(
- *   id = "current_workflow_state_widget",
- *   label = @Translation("Plain text"),
- *   field_types = {
- *     "current_workflow_state"
- *   }
- * )
  */
+#[FieldWidget(
+  id: 'current_workflow_state_widget',
+  label: new TranslatableMarkup('Plain text'),
+  field_types: ['current_workflow_state'],
+)]
 class CurrentWorkflowStateWidget extends WidgetBase {
 
   /**

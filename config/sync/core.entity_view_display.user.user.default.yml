@@ -28,11 +28,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  masquerade:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 50
-    region: content
   user_user_field_user_content_top:
     settings: {  }
     third_party_settings: {  }

@@ -7,7 +7,9 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
+use Drupal\http_request_mock\Attribute\ServiceMock;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -15,13 +17,12 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Intercepts any HTTP requests made to Dutch catalogue API.
- *
- * @ServiceMock(
- *   id = "dutch_catalogue",
- *   label = @Translation("Dutch catalogue API"),
- *   weight = 0,
- * )
  */
+#[ServiceMock(
+  id: "dutch_catalogue",
+  label: new TranslatableMarkup("Dutch catalogue API"),
+  weight: 0,
+)]
 class DutchCatalogue extends PluginBase implements ServiceMockPluginInterface {
 
   use IntegrationTestTrait;

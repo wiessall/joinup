@@ -5,25 +5,26 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Condition;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Condition\Attribute\Condition;
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Request Route' condition plugin.
- *
- * @Condition(
- *   id = "request_route",
- *   label = @Translation("Request route"),
- * )
  *
  * @todo Replace this with the Route Condition module.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6062
  * @see https://www.drupal.org/project/route_condition
  */
+#[Condition(
+  id: "request_route",
+  label: new TranslatableMarkup("Request route"),
+)]
 class RequestRouteCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
