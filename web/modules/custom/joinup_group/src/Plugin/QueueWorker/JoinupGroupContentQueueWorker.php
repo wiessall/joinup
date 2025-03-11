@@ -7,21 +7,20 @@ namespace Drupal\joinup_group\Plugin\QueueWorker;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pathauto\PathautoGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a worker to consume the 'joinup_group:group_content_update' queue.
- *
- * @QueueWorker(
- *   id = "joinup_group:group_content_update",
- *   title = @Translation("Recreate the group content URL aliases"),
- *   cron = {
- *     "time" = 10,
- *   },
- * ),
  */
+#[QueueWorker(
+  id: 'joinup_group:group_content_update',
+  title: new TranslatableMarkup('Recreate the group content URL aliases'),
+  cron: ['time' => 10],
+)]
 class JoinupGroupContentQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

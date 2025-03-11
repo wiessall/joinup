@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Consumes the 'eu_oss_catalogue' queue.
- *
- * @QueueWorker(
- *   id = "eu_oss_catalogue",
- *   title = @Translation("EU OSS Catalogue queue worker"),
- *   cron = {"time" = 10},
- * )
  */
+#[QueueWorker(
+  id: 'eu_oss_catalogue',
+  title: new TranslatableMarkup('EU OSS Catalogue queue worker'),
+  cron: ['time' => 10],
+)]
 class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

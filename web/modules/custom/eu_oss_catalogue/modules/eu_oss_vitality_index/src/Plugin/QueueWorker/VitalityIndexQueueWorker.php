@@ -6,20 +6,21 @@ namespace Drupal\eu_oss_vitality_index\Plugin\QueueWorker;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * VitalityIndex queue for the solution.
- *
- * @QueueWorker(
- *   id = "eu_oss_vitality_index",
- *   title = @Translation("Vitality Index worker queue"),
- *   cron = {"time" = 60}
- * )
  */
+#[QueueWorker(
+  id: 'eu_oss_vitality_index',
+  title: new TranslatableMarkup('Vitality Index worker queue'),
+  cron: ['time' => 60],
+)]
 class VitalityIndexQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
