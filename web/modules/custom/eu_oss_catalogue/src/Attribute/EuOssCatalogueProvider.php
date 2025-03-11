@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Attribute;
 
 use Drupal\Component\Plugin\Attribute\Plugin;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 
 /**
  * Defines a EU OSS Catalogue provider.
@@ -17,6 +18,9 @@ class EuOssCatalogueProvider extends Plugin {
     public readonly string $id,
     public readonly TranslatableMarkup $label,
     public readonly string $parser,
+    public readonly CatalogueType $type,
+    public readonly array $weblinks = [],
+    public readonly ?string $country = NULL,
     public readonly ?TranslatableMarkup $description = NULL,
     public readonly ?string $deriver = NULL,
     public readonly ?string $configuredBy = NULL,

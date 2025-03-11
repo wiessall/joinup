@@ -36,4 +36,28 @@ interface HostingPlatformConfigInterface extends ConfigEntityInterface, EntityWi
    */
   public function getDescription(): ?string;
 
+  /**
+   * Gets the catalogue type.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\CatalogueType
+   *   The catalogue type.
+   */
+  public function getCatalogueType(): CatalogueType;
+
+  /**
+   * Gets weblinks.
+   *
+   * @return array
+   *   Weblinks.
+   */
+  public function getWeblinks(): array;
+
+  /**
+   * Gets the country code.
+   *
+   * @return string|null
+   *   The country code.
+   */
+  public function getCountryCode(): ?string;
+
 }

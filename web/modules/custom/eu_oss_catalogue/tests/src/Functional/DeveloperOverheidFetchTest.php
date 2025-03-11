@@ -9,7 +9,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
  *
  * @group eu_oss_catalogue
  */
-class DutchCatalogueFetchTest extends FetchTestBase {
+class DeveloperOverheidFetchTest extends FetchTestBase {
 
   /**
    * {@inheritdoc}
@@ -23,7 +23,7 @@ class DutchCatalogueFetchTest extends FetchTestBase {
    * @covers
    */
   public function testImport(): void {
-    $this->fetchSolutions('dutch_catalogue', 3);
+    $this->fetchSolutions('developer_overheid', 3);
 
     $this->assertOssSolution('GitHub solution 1', 'en');
     $this->assertOssSolution('Project 1.1', 'it');
