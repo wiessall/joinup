@@ -30,82 +30,37 @@
 
 // Hero
 .region-featured {
-  background-image:
-    url(../images/wave.svg), url(../images/background.svg),
-    linear-gradient($ec-blue 0%, $ec-blue 50%, #001e2f 50%, #001e2f 100%);
-  background-repeat: no-repeat;
-  background-position:
-    0 55%,
-    0 55%;
-  background-size: 100% auto;
+  background-color: #001e2f;
   .block-views-exposed-filter-blocksearch-page-1 {
-    padding-bottom: $spacer * 0.5; // 8px
-    .search-bar {
-      .search-bar__input {
-        padding-top: $spacer;
-        padding-right: $spacer * 1.5;
-        padding-bottom: $spacer;
-        padding-left: $spacer * 1.5;
-        border-style: none;
-        border-top-left-radius: $border-radius-pill;
-        border-bottom-left-radius: $border-radius-pill;
-        font-size: $font-size-base;
-        @include media-breakpoint-up(md) {
-          padding-top: 0;
-          padding-bottom: 0;
-        }
-      }
-      .btn-search {
-        padding: $spacer * 0.425 $spacer;
-        color: $dark;
-        border-top-right-radius: $border-radius-pill;
-        border-bottom-right-radius: $border-radius-pill;
-        background-color: $white;
-        font-size: 0;
-        &::before {
-          @include get-bootstrap-icon("search", $primary);
+    @include media-breakpoint-up(lg) {
+      background:
+        url("../images/portal-left.svg") left/contain no-repeat,
+        url("../images/portal-right.svg") right/contain no-repeat,
+        #001e2f;
+    }
+  }
+  .search-bar {
+    .search-bar__input {
+      padding-left: $spacer * 2.6;
+      background: url("#{$bootstrap-icons-path}/search.svg") $spacer no-repeat
+        $white;
+    }
+    .btn-search {
+      padding: $spacer * 0.425 $spacer;
+      color: $white;
+      background-color: $brand-darker;
+      font-size: 0;
+      &::before {
+        @include get-bootstrap-icon("arrow-up", $white);
 
-          margin: $spacer * 0.25 0; // 4px 0
-          font-size: 1.2rem;
-        }
-        &:hover {
-          box-shadow: none;
-        }
+        margin: $spacer * 0.25 0; // 4px 0
+        font-size: 1.4rem;
+      }
+      &:hover {
+        box-shadow: none;
       }
     }
-    @include media-breakpoint-up(lg) {
-      margin-right: $spacer; // 16px
-    }
   }
-  .joinup-becomes {
-    font-size: 1.5rem;
-    @include media-breakpoint-up(md) {
-      font-size: 1.75rem;
-    }
-    @include media-breakpoint-up(lg) {
-      font-size: 2.5rem;
-    }
-  }
-  @include media-breakpoint-up(md) {
-    background-image:
-      url(../images/banner-md.svg),
-      linear-gradient(
-        to right,
-        $ec-blue 0%,
-        $ec-blue 45%,
-        #001e2f 45%,
-        #001e2f 100%
-      );
-    background-position: center;
-    background-size: auto 100%;
-  }
-}
-
-// About
-.about-what,
-.about-who,
-.about-how {
-  color: $gray-700;
 }
 
 // In the Spotlight
