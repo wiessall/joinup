@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 
 /**
  * Provider to be used in testing.
@@ -15,7 +16,8 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 #[EuOssCatalogueProvider(
   id: "yaml_become_invalid_provider",
   label: new TranslatableMarkup("YAML become invalid"),
-  parser: "publiccode_yml"
+  parser: "publiccode_yml",
+  type: CatalogueType::Local,
 )]
 class YamlBecomeInvalidProvider extends SelectedProjectProvider {
 

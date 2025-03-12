@@ -116,8 +116,10 @@
       margin-top: $spacer * 0.75; // 12px
     }
   }
-  .facet-item label {
-    display: inline;
+  .facet-item {
+    label {
+      display: inline;
+    }
   }
   .facets-widget-date_range {
     h3 {
