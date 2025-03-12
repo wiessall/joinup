@@ -13,6 +13,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
@@ -87,6 +88,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
     $hostingPlatformConfig = $hostingPlatformConfigStorage->create([
       'id' => $pluginId,
       'label' => $pluginId,
+      'type' => CatalogueType::Local->value,
       'platformId' => $pluginId,
       'platformSettings' => $config,
     ]);

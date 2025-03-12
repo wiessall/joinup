@@ -30,7 +30,7 @@ GitHub solution 1:
     oss_software_type: standalone/web
     oss_software_version: '1.4'
     oss_source:
-      - dutch_catalogue
+      - developer_overheid
     oss_source_hash: _RnRGlJcP5QA_tiadP_JTMJyyOypigHzRYjIY-LlQMM
     oss_long_description: |
       [EN] Solution 1: Long description

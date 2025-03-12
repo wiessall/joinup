@@ -84,8 +84,7 @@ Feature: OSS catalogue search
     And the "OSS intended audience" checkbox facet should allow selecting the following values "agriculture (2),culture (2),defence (1),education (2)"
     And the "OSS software type" checkbox facet should allow selecting the following values "standalone/mobile (1), standalone/desktop (2), standalone/backend (1), standalone/other (1)"
     And the "OSS development status" checkbox facet should allow selecting the following values "Beta (1),Development (1),Obsolete (1),Stable (2)"
-    And I should see the "li" element with the "title" attribute set to "Italian National OSS Catalogue, by https://developers.italia.it website." in the "Search filters" region
-    And the page should contain the html text "Italian National OSS Catalogue, by https://developers.italia.it website."
+    And I should see the "li" element with the "title" attribute set to "Developers Italia is a community of developers who design and code Italian digital public services, and provide the Italian National Catalogue for the acquisition and reuse of software by and for the Public Administration, as envisaged and required by national legislation." in the "Search filters" region
 
     # Check facet filtering.
     Then I click "application-development (1)"
@@ -282,3 +281,16 @@ Feature: OSS catalogue search
       | Magic Data Converter     |
       | Open AI Helper           |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=vitality"
+
+  @javascript
+  Scenario: User can click on info icon for source catalogue.
+    Given oss_solution content:
+      | title | oss_development_status | oss_source        | status    |
+      | macOS | development            | developers_italia | published |
+
+    When I visit the OSS search page
+    And I click "Get more details on Developers Italia"
+    Then a modal should open
+    And I should see the text "Source Catalogue Info" in the "Modal title"
+    And I should see the text "Developers Italia" in the "Modal content"
+    And I should see the text "Developers Italia is a community of developers" in the "Modal content"

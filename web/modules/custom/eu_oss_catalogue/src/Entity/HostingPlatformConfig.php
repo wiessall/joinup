@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Stores the configuration of a 'hosting_platform' plugin instance.
@@ -36,6 +37,9 @@ use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
  *   config_export = {
  *     "id",
  *     "label",
+ *     "type",
+ *     "weblinks",
+ *     "country",
  *     "description",
  *     "platformId",
  *     "platformSettings",
@@ -53,6 +57,21 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    * A meaningful label.
    */
   protected string $label;
+
+  /**
+   * The catalogue type.
+   */
+  protected string $type;
+
+  /**
+   * List of weblinks.
+   */
+  protected array $weblinks = [];
+
+  /**
+   * The country code.
+   */
+  protected ?string $country = NULL;
 
   /**
    * The description.
@@ -79,6 +98,27 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
    */
   public function getDescription(): ?string {
     return $this->description;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCatalogueType(): CatalogueType {
+    return CatalogueType::from($this->type);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWeblinks(): array {
+    return $this->weblinks;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCountryCode(): ?string {
+    return $this->country;
   }
 
   /**
@@ -116,6 +156,33 @@ class HostingPlatformConfig extends ConfigEntityBase implements HostingPlatformC
       $this->platform = new DefaultSingleLazyPluginCollection($platformManager, $this->platformId, $this->platformSettings);
     }
     return $this->platform;
+  }
+
+  /**
+   * Config validation callback for weblinks.
+   *
+   * @param array $values
+   *   The configuration.
+   * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
+   *   The validation execution context.
+   */
+  public static function validateWeblinks(array $values, ExecutionContextInterface $context): void {
+    if (empty($values)) {
+      $context->buildViolation('It is required')
+        ->atPath('weblinks')
+        ->addViolation();
+    }
+
+    foreach ($values as $weblink) {
+      $url = $weblink['url'] ?? '';
+
+      if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        $context->buildViolation('Invalid URL: @url')
+          ->setParameter('@url', $url)
+          ->atPath('weblinks')
+          ->addViolation();
+      }
+    }
   }
 
 }
