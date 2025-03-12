@@ -6,6 +6,7 @@ namespace Drupal\search_api_field\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -176,9 +177,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#type' => 'submit',
       '#value' => $this->t('Refresh'),
       '#op' => 'refresh_table',
-      '#submit' => ['::multistepSubmit'],
+      '#submit' => [[get_class($this), 'multistepSubmit']],
       '#ajax' => [
-        'callback' => '::multistepAjax',
+        'callback' => get_class($this) . '::multistepAjax',
         'wrapper' => 'field-display-overview-wrapper',
         'effect' => 'fade',
         // The button stays hidden, so we hide the Ajax spinner too. Ad-hoc
@@ -187,7 +188,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ],
       '#attributes' => [
         'class' => [
-          'visually-hidden',
+          'js-hide',
           'row-refresher',
         ],
       ],
@@ -267,7 +268,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   /**
    * Form submission handler for multistep buttons.
    */
-  public function multistepSubmit($form, FormStateInterface $form_state): void {
+  public static function multistepSubmit($form, FormStateInterface $form_state): void {
     $trigger = $form_state->getTriggeringElement();
     $op = $trigger['#op'];
 
@@ -284,7 +285,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         $field_name = $trigger['#field_name'];
         $form_state->set('plugin_settings_edit', NULL);
         $form_state->set('plugin_settings_update', $field_name);
-        $this->entity = $this->buildEntity($form, $form_state);
+        $form_object = $form_state->getFormObject();
+        if ($form_object instanceof EntityFormInterface) {
+          $form_object->setEntity($form_object->buildEntity($form, $form_state));
+        }
         break;
 
       case 'cancel':
@@ -308,7 +312,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   /**
    * Ajax handler for multistep buttons.
    */
-  public function multistepAjax($form, FormStateInterface $form_state): array {
+  public static function multistepAjax($form, FormStateInterface $form_state): array {
     $trigger = $form_state->getTriggeringElement();
     $op = $trigger['#op'];
 
