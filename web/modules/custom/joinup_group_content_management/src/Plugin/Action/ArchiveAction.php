@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
@@ -18,12 +16,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a VBO action that archive content.
+ *
+ * @Action(
+ *    id = "joinup_archive",
+ *    label = @Translation("Archive content"),
+ *    type = "node",
+ *    requirements = {
+ *       "_custom_access" = TRUE,
+ *    },
+ *  )
  */
-#[Action(
-  id: "joinup_archive",
-  label: new TranslatableMarkup("Archive content"),
-  type: "node",
-)]
 class ArchiveAction extends StateActionBase {
 
   public function __construct(

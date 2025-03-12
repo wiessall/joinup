@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
-use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\GroupArchivableEntityInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -18,12 +16,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a VBO action that unarchive content.
+ *
+ * @Action(
+ *    id = "joinup_unarchive",
+ *    label = @Translation("Unarchive content"),
+ *    type = "node",
+ *    requirements = {
+ *       "_permission" = "vbo joinup unarchive action",
+ *    },
+ *  )
  */
-#[Action(
-  id: "joinup_unarchive",
-  label: new TranslatableMarkup("Unarchive content"),
-  type: "node",
-)]
 class UnarchiveAction extends StateActionBase {
 
   public function __construct(
