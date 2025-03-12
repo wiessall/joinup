@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\DisplayVariant;
 
+use Drupal\Core\Display\Attribute\PageDisplayVariant;
 use Drupal\Core\Display\PageVariantInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\block\BlockRepositoryInterface;
 use Drupal\block\Plugin\DisplayVariant\BlockPageVariant;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -14,12 +16,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Page display variant allowing to configure a custom landing page for groups.
- *
- * @PageDisplayVariant(
- *   id = "joinup_group_canonical_page",
- *   admin_label = @Translation("Group landing page"),
- * )
  */
+#[PageDisplayVariant(
+  id: "joinup_group_canonical_page",
+  admin_label: new TranslatableMarkup("Group landing page")
+)]
 class JoinupGroupPageDisplayVariant extends BlockPageVariant {
 
   public function __construct(
