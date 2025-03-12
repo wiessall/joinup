@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
@@ -14,12 +15,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: Compatible=Permissive
  * - <Licence-B>: SPDX=any licence
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T12",
- *   weight = 1200,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T12",
+  weight: 1200
+)]
 class T12AnyLicenceCanRedistributePermissiveLicence extends JoinupLicenceCompatibilityRulePluginBase {
 
   /**
