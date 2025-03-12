@@ -1,0 +1,11 @@
+joinup_oss_catalogue.catalogue_source:
+  path: '/eu-oss-catalogue/source/{plugin}'
+  defaults:
+    _controller: '\Drupal\joinup_oss_catalogue\Controller\CatalogueSourceController::getContent'
+    _title: 'Source Catalogue Info'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      plugin:
+        type: 'hosting_platform'
