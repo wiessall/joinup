@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\comment\CommentInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_community_content\Entity\JoinupCommunityContentComment;
@@ -22,6 +24,7 @@ use Drupal\joinup_community_content\JoinupCommunityContentCommentAccessControlHa
 use Drupal\joinup_community_content\Plugin\views\filter\JoinupContentState;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -384,4 +387,44 @@ function joinup_community_content_form_node_revision_revert_confirm_submit(array
   if ($entity instanceof CommunityContentInterface) {
     $entity->setWorkflowState('proposed');
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function joinup_community_content_comment_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  $commented_entity = $context['commented_entity'] ?? NULL;
+  return _joinup_community_content_comment_access($commented_entity, 'create', $account);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_community_content_comment_access(CommentInterface $comment, string $operation, AccountInterface $account): AccessResultInterface {
+  return _joinup_community_content_comment_access($comment->getCommentedEntity(), $operation, $account);
+}
+
+/**
+ * Common helper for comment access hooks.
+ */
+function _joinup_community_content_comment_access(mixed $commented_entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation === 'view' || !$commented_entity instanceof CommunityContentInterface) {
+    return AccessResult::neutral();
+  }
+
+  // If commented entity is archived, comment is in "view only" state.
+  $cacheability = new CacheableMetadata();
+  $cacheability->addCacheableDependency($commented_entity);
+  if ($commented_entity instanceof ArchivableEntityInterface && $commented_entity->isArchived()) {
+    return AccessResult::forbidden('Commented entity is archived')->addCacheableDependency($cacheability);
+  }
+
+  // Restrict access if the commented entity is in an archived collection.
+  $collection = $commented_entity->getCollection();
+  $cacheability->addCacheableDependency($collection);
+  if ($collection->isArchived()) {
+    return AccessResult::forbidden('Collection is archived')->addCacheableDependency($cacheability);
+  }
+
+  return AccessResult::neutral()->addCacheableDependency($cacheability);
 }

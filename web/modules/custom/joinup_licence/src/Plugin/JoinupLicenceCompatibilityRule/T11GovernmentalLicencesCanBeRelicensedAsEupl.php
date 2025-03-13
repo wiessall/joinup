@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: SPDX=CeCILL-2.1 OR LiLiQ-Rplus-1.1
  * - <Licence-B>: SPDX=EUPL-1.1 OR EUPL-1.2
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T11",
- *   weight = 1100,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T11",
+  weight: 1100
+)]
 class T11GovernmentalLicencesCanBeRelicensedAsEupl extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = [
@@ -27,6 +27,7 @@ class T11GovernmentalLicencesCanBeRelicensedAsEupl extends JoinupLicenceCompatib
       'LiLiQ-Rplus-1.1',
     ],
   ];
+
   const OUTBOUND_CRITERIA = [
     'SPDX' => [
       'EUPL-1.1',
