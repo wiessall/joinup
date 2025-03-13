@@ -40,6 +40,9 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
       $this->derivatives[$hostingPlatform->id()] = [
         'label' => $hostingPlatform->label(),
         'description' => $hostingPlatform->getDescription(),
+        'type' => $hostingPlatform->getCatalogueType(),
+        'weblinks' => $hostingPlatform->getWeblinks(),
+        'country' => $hostingPlatform->getCountryCode(),
         'platformId' => $hostingPlatform->getPlatformPluginId(),
         'platformSettings' => $hostingPlatform->getPlatformSettings(),
       ] + $base_plugin_definition;

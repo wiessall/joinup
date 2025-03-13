@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: SPDX=GPL-2.0-only OR GPL-2.0+ OR GPL-3.0-only OR GPL-3.0-or-later OR AGPL-3.0-only
  * - <Licence-B>: SPDX=GPL-2.0-only OR SPDX=GPL-3.0-only
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T07",
- *   weight = 700,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T07",
+  weight: 700
+)]
 class T07GplCompatibleLicencesAreCompatibleWithGpl extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = [

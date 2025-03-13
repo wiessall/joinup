@@ -7,7 +7,9 @@ namespace Drupal\joinup_discussion\Plugin\views\access;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
+use Drupal\views\Attribute\ViewsAccess;
 use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
@@ -16,12 +18,11 @@ use Symfony\Component\Routing\Route;
  * Discussion overview access.
  *
  * @ingroup views_access_plugins
- *
- * @ViewsAccess(
- *   id = "joinup_discussion_overview",
- *   title = @Translation("Discussion overview")
- * )
  */
+#[ViewsAccess(
+  id: "joinup_discussion_overview",
+  title: new TranslatableMarkup("Discussion overview"),
+)]
 class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDependencyInterface {
 
   public function __construct(

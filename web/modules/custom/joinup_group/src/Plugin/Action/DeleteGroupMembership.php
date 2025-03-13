@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -16,14 +18,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Deletes a group membership.
- *
- * @Action(
- *   id = "joinup_og_membership_delete_action",
- *   label = @Translation("Delete the selected membership(s) from solution/collection"),
- *   type = "og_membership",
- *   confirm_form_route_name = "joinup_group.membership_delete_action.confirm",
- * )
  */
+#[Action(
+  id: "joinup_og_membership_delete_action",
+  label: new TranslatableMarkup("Delete the selected membership(s) from solution/collection"),
+  type: "og_membership",
+  confirm_form_route_name: "joinup_group.membership_delete_action.confirm"
+)]
 class DeleteGroupMembership extends DeleteOgMembership {
 
   /**

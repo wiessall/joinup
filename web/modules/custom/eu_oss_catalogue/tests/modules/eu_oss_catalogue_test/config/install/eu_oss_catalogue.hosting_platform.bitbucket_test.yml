@@ -4,6 +4,7 @@ status: true
 dependencies: {  }
 id: bitbucket_test
 label: 'Bitbucket Test'
+type: local
 description: 'Test provider for Bitbucket hosting platform plugin'
 platformId: bitbucket_org
 platformSettings:

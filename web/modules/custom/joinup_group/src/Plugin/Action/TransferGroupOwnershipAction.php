@@ -6,9 +6,11 @@ namespace Drupal\joinup_group\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\ActionBase;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -18,14 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an action allowing an admin to transfer a group ownership.
- *
- * @Action(
- *   id = "joinup_transfer_group_ownership",
- *   label = @Translation("Transfer group ownership"),
- *   type = "og_membership",
- *   confirm_form_route_name = "joinup_group.transfer_group_ownership_confirm",
- * )
  */
+#[Action(
+  id: "joinup_transfer_group_ownership",
+  label: new TranslatableMarkup("Transfer group ownership"),
+  type: "og_membership",
+  confirm_form_route_name: "joinup_group.transfer_group_ownership_confirm"
+)]
 class TransferGroupOwnershipAction extends ActionBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
