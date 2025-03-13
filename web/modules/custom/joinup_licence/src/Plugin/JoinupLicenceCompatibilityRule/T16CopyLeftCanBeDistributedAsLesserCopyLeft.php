@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: Must=Copyleft
  * - <Licence-B>: Must=Lesser copyleft
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T16",
- *   weight = 1600,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T16",
+  weight: 1600
+)]
 class T16CopyLeftCanBeDistributedAsLesserCopyLeft extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = [

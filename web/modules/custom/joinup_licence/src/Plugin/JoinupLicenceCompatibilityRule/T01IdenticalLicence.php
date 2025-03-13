@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
@@ -14,12 +15,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: SPDX=any licence
  * - <Licence-B>: SPDX=(same as <Licence-A>)
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T01",
- *   weight = 100,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T01",
+  weight: 100
+)]
 class T01IdenticalLicence extends JoinupLicenceCompatibilityRulePluginBase {
 
   /**

@@ -8,18 +8,19 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\facets\Utility\FacetsDateHandler;
+use Drupal\search_api_arbitrary_facet\Attribute\ArbitraryFacet;
 use Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides 'Upcoming events', 'My events' and 'Past events' facets.
- *
- * @ArbitraryFacet(
- *   id = "events_arbitrary",
- *   label = @Translation("Upcoming/My/Past events"),
- * )
  */
+#[ArbitraryFacet(
+  id: "events_arbitrary",
+  label: new TranslatableMarkup("Upcoming/My/Past events"),
+)]
 class EventsArbitraryFacet extends ArbitraryFacetBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

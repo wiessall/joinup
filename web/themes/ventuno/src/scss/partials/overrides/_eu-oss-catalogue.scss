@@ -16,7 +16,8 @@
     background-color: $oss-secondary !important;
   }
   .btn-link,
-  .button--link {
+  .button--link,
+  .catalogue-link > a {
     color: $oss-brand-darker !important;
   }
   .btn-brand,
@@ -101,6 +102,12 @@
           background-color: $oss-secondary;
         }
       }
+    }
+  }
+  .catalogue-source {
+    ul {
+      padding-left: 0;
+      list-style-type: none;
     }
   }
 }

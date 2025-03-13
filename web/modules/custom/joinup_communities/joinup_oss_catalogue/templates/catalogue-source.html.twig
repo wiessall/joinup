@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Default theme implementation of catalogue_source.
+ *
+ * Available variables:
+ * - provider: Provider object.
+ * - label: Provider label.
+ * - type: Provider type.
+ * - country: Optional country.
+ * - description: Propvider description.
+ * - wenlinks: Array of links.
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="catalogue-source">
+
+  <h2>{{ label }}</h2>
+
+  <p>
+    <strong>{{ 'Type:'|t }}</strong> {{ type }}
+  </p>
+
+  {% if country %}
+    <p>
+      <strong>{{ 'Country:'|t }}</strong> {{ country }}
+    </p>
+  {% endif %}
+
+  <div>
+    <strong>{{ 'Description:'|t }}</strong>
+    {{ description }}
+  </div>
+
+  <div>
+    <strong>{{ 'Weblinks:'|t }}</strong>
+    <ul>
+      {% for weblink in weblinks %}
+        <li>{{ weblink }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
