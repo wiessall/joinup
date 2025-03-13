@@ -31,12 +31,6 @@
 // Hero
 .region-featured {
   background-color: #001e2f;
-  @include media-breakpoint-up(lg) {
-    background:
-      url("../images/portal-left.svg") left/contain no-repeat,
-      url("../images/portal-right.svg") right/contain no-repeat,
-      #001e2f;
-  }
   .search-bar {
     .search-bar__input {
       padding-left: $spacer * 2.6;
@@ -58,6 +52,12 @@
         box-shadow: none;
       }
     }
+  }
+  @include media-breakpoint-up(lg) {
+    background:
+      url("../images/portal-left.svg") left/contain no-repeat,
+      url("../images/portal-right.svg") right/contain no-repeat,
+      #001e2f;
   }
 }
 
