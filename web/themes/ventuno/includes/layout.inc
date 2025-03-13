@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
 use Drupal\block\Entity\Block;
-use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\node\NodeInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
