@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 #[PageDisplayVariant(
   id: "joinup_group_canonical_page",
-  admin_label: new TranslatableMarkup("Group landing page")
+  admin_label: new TranslatableMarkup("Group landing page"),
 )]
 class JoinupGroupPageDisplayVariant extends BlockPageVariant {
 
