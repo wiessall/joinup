@@ -142,6 +142,8 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           foreach ($allowed_roles as $user_var => $expected_target_states) {
             $content->setOwnerId($this->{$user_var}->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: -new entity-, Ownership: any, Moderation: {$moderation}, Content creation: {$content_creation}, User variable: {$user_var}, Operation: {$operation}";
+            // Clear the static cache from the access handler.
+            $this->entityAccess->resetCache();
             $access = $this->entityAccess->createAccess($this->getEntityBundle(), $this->{$user_var}, [
               'group' => $parent,
             ]);
@@ -152,6 +154,8 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           foreach ($non_allowed_roles as $user_var) {
             $content->setOwnerId($this->{$user_var}->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: -new entity-, Ownership: any, Moderation: {$moderation}, Content creation: {$content_creation}, User variable: {$user_var}, Operation: {$operation}";
+            // Clear the static cache from the access handler.
+            $this->entityAccess->resetCache();
             $access = $this->entityAccess->createAccess($this->getEntityBundle(), $this->{$user_var}, [
               'group' => $parent,
             ]);

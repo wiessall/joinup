@@ -8,8 +8,8 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_assessment\AssessmentInterface;
-use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -20,6 +20,7 @@ class AssessmentContext extends RawDrupalContext {
 
   use EntityTrait;
   use TestingEntitiesTrait;
+  use UtilityTrait;
 
   /**
    * Latest submission ID before scenario.
@@ -84,41 +85,39 @@ class AssessmentContext extends RawDrupalContext {
    * @BeforeScenario @demoAssessment
    */
   public function beforeAssessmentsDemo(): void {
-    $collection = Node::create([
+    $collection = $this->nodeCreate((object) [
       'type' => 'collection',
       'uuid' => AssessmentInterface::GROUP_UUID,
       'title' => 'Interoperability assessments space',
       'short_id' => 'assessments',
       'field_state' => 'published',
     ]);
-    $collection->save();
-    $this->entities['node'][$collection->id()] = $collection;
 
-    $reportsPage = Node::create([
-      'type' => 'custom_page',
-      'title' => 'Assessment reports',
-      'og_audience' => $collection,
-      'field_state' => 'published',
-      'uuid' => AssessmentInterface::ASSESSMENT_REPORTS_UUID,
-      'field_paragraphs_body' => [
-        Paragraph::create([
-          'type' => 'block',
-          'paragraph_block' => [
-            'plugin_id' => 'views_block:assessment_reports-list',
-            'settings' => [
-              'id' => 'views_block:assessment_reports-list',
-              'label' => '',
-              'label_display' => FALSE,
-              'provider' => 'views',
-              'views_label' => '',
-              'items_per_page' => 10,
-            ],
-          ],
-        ]),
+    $paragraph = Paragraph::create([
+      'type' => 'block',
+      'paragraph_block' => [
+        'plugin_id' => 'views_block:assessment_reports-list',
+        'settings' => [
+          'id' => 'views_block:assessment_reports-list',
+          'label' => '',
+          'label_display' => FALSE,
+          'provider' => 'views',
+          'views_label' => '',
+          'items_per_page' => 10,
+        ],
       ],
     ]);
-    $reportsPage->save();
-    $this->entities['node'][$reportsPage->id()] = $reportsPage;
+    $paragraph->save();
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->nodeCreate((object) [
+      'type' => 'custom_page',
+      'title' => 'Assessment reports',
+      'og_audience' => $collection->title,
+      'field_state' => 'published',
+      'uuid' => AssessmentInterface::ASSESSMENT_REPORTS_UUID,
+      'field_paragraphs_body:target_id' => $paragraph->id(),
+      'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
+    ]);
 
     $this->latestSubmissionId = $this->getLatestSubmissionId() ?? 0;
   }

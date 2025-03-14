@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\search_api_field\Plugin\Field\FieldType;
 
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\search_api\Entity\Index as SearchApiIndex;
 
 /**
  * Plugin implementation of the 'search_api_field' field type.
- *
- * @FieldType(
- *   id = "search_api_field",
- *   label = @Translation("Search API field"),
- *   description = @Translation("Stores the search settings related to this field."),
- *   default_widget = "search_api_field_default",
- *   default_formatter = "search_api_field",
- * )
  */
+#[FieldType(
+  id: "search_api_field",
+  label: new TranslatableMarkup("Search API field"),
+  description: new TranslatableMarkup("Stores the search settings related to this field."),
+  default_widget: "search_api_field_default",
+  default_formatter: "search_api_field",
+)]
 class SearchItem extends FieldItemBase implements SearchItemInterface {
 
   /**

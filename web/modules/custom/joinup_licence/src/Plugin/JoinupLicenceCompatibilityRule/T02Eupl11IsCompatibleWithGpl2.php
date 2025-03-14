@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: SPDX=GPL-2.0-only OR GPL-2.0+
  * - <Licence-B>: SPDX=EUPL-1.1
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T02",
- *   weight = 200,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T02",
+  weight: 200
+)]
 class T02Eupl11IsCompatibleWithGpl2 extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = ['SPDX' => ['GPL-2.0-only', 'GPL-2.0+']];

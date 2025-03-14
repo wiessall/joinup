@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\views\argument_validator;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\views\Attribute\ViewsArgumentValidator;
 use Drupal\views\Plugin\views\argument_validator\ArgumentValidatorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -13,13 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Validates that the argument is a group.
  *
  * @ingroup views_argument_validate_plugins
- *
- * @ViewsArgumentValidator(
- *   id = "joinup_group",
- *   title = @Translation("Joinup group"),
- *   entity_type = "node",
- * )
  */
+#[ViewsArgumentValidator(
+  id: "joinup_group",
+  title: new TranslatableMarkup("Joinup group"),
+  entity_type: "node",
+)]
 class JoinupGroupValidator extends ArgumentValidatorPluginBase {
 
   public function __construct(

@@ -8,23 +8,24 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\og\PermissionManagerInterface;
 use Drupal\user\PermissionHandlerInterface;
+use Drupal\views\Attribute\ViewsArgumentValidator;
 use Drupal\views\Plugin\views\argument_validator\ArgumentValidatorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines an argument validator plugin for groups.
- *
- * @ViewsArgumentValidator(
- *   id = "joinup_group_user_permission",
- *   title = @Translation("User permissions on group"),
- *   entity_type = "node",
- * )
  */
+#[ViewsArgumentValidator(
+  id: "joinup_group_user_permission",
+  title: new TranslatableMarkup("User permissions on group"),
+  entity_type: "node",
+)]
 class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
 
   public function __construct(
