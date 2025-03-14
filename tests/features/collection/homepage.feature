@@ -16,8 +16,8 @@ Feature: Collection homepage
       | name          |
       | Bilbo Baggins |
     And collection content:
-      | title              | description        | owner         | contact information | logo     | moderation | content creation | topic                            | published at      | modification date |
-      | Middle earth daily | Middle earth daily | Bilbo Baggins | Contact name        | logo.png | yes        | members          | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
+      | title              | description        | owner         | contact information | logo     | group_moderation | content_creation | topic                            | published at      | modification date |
+      | Middle earth daily | Middle earth daily | Bilbo Baggins | Contact name        | logo.png | yes              | members          | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
     And solution content:
       | title        | collection         | description           | content creation | creation date     | topic |
       | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | Info  |
