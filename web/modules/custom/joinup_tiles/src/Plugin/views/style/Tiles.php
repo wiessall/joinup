@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_tiles\Plugin\views\style;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views\Attribute\ViewsStyle;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 
 /**
@@ -29,15 +31,14 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
  * @see template_preprocess_joinup_tiles()
  *
  * @ingroup views_style_plugins
- *
- * @ViewsStyle(
- *   id = "tiles",
- *   title = @Translation("Tiles"),
- *   help = @Translation("Uses the Tiles component."),
- *   theme = "joinup_tiles",
- *   display_types = {"normal"}
- * )
  */
+#[ViewsStyle(
+  id: "tiles",
+  title: new TranslatableMarkup("Tiles"),
+  help: new TranslatableMarkup("Uses the Tiles component."),
+  theme: "joinup_tiles",
+  display_types: ["normal"],
+)]
 class Tiles extends StylePluginBase {
 
   /**
