@@ -5,25 +5,23 @@ declare(strict_types=1);
 namespace Drupal\eif\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\Entity\EifRecommendationInterface;
 use Drupal\text\Plugin\Field\FieldWidget\TextareaWidget;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Widget for the 'eif_qualified_recommendation' field type.
- *
- * @FieldWidget(
- *   id = "eif_qualified_recommendation",
- *   label = @Translation("EIF Qualified Recommendation select"),
- *   field_types = {
- *     "eif_qualified_recommendation",
- *   },
- *   multiple_values = FALSE,
- * )
  */
+#[FieldWidget(
+  id: 'eif_qualified_recommendation',
+  label: new TranslatableMarkup('EIF Qualified Recommendation select'),
+  field_types: ['eif_qualified_recommendation'],
+)]
 class EifQualifiedRecommendation extends TextareaWidget {
 
   /**

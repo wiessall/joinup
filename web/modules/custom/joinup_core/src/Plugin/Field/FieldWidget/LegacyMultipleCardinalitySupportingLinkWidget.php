@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Traits\LegacyMultipleCardinalitySupportingFieldWidgetTrait;
 use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
 
@@ -16,15 +18,12 @@ use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
  * for some link fields, but in the new version we only allow to enter a single
  * value. However, it should still be possible to edit existing multivalue data
  * for content that was migrated from Drupal 6.
- *
- * @FieldWidget(
- *   id = "link_legacy_multicardinality",
- *   label = @Translation("Link with legacy multivalue support"),
- *   field_types = {
- *     "link"
- *   }
- * )
  */
+#[FieldWidget(
+  id: 'link_legacy_multicardinality',
+  label: new TranslatableMarkup('Link with legacy multivalue support'),
+  field_types: ['link'],
+)]
 class LegacyMultipleCardinalitySupportingLinkWidget extends LinkWidget {
 
   use LegacyMultipleCardinalitySupportingFieldWidgetTrait {

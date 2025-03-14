@@ -1,95 +1,62 @@
-diff --git a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-index 5d7ba3aa5f..25bd50dd2c 100644
---- a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-+++ b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-@@ -2,6 +2,7 @@
- 
- namespace Drupal\Core\Entity;
- 
-+use Drupal\Component\Utility\Crypt;
- use Drupal\Core\Access\AccessResult;
- use Drupal\Core\Field\FieldItemListInterface;
- use Drupal\Core\Field\FieldDefinitionInterface;
-@@ -238,7 +239,7 @@ public function createAccess($entity_bundle = NULL, ?AccountInterface $account =
-       'langcode' => LanguageInterface::LANGCODE_DEFAULT,
-     ];
- 
--    $cid = $entity_bundle ? 'create:' . $entity_bundle : 'create';
-+    $cid = $this->buildCreateAccessCid($entity_bundle, $context);
-     if (($access = $this->getCache($cid, 'create', $context['langcode'], $account)) !== NULL) {
-       // Cache hit, no work necessary.
-       return $return_as_object ? $access : $access->isAllowed();
-@@ -403,4 +404,32 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
-     return AccessResult::allowed();
-   }
- 
-+  /**
-+   * Builds the create access result cache ID.
-+   *
-+   * @param string|null $entity_bundle
-+   *   The entity bundle, if any.
-+   * @param array $context
-+   *   The create access context.
-+   *
-+   * @return string
-+   *   The create access result cache ID.
-+   */
-+  protected function buildCreateAccessCid(?string $entity_bundle, array $context): ?string {
-+    $cid = $entity_bundle ? 'create:' . $entity_bundle : 'create';
-+
-+    // Remove the context entries that are already used to vary the cache.
-+    $context_array = array_diff_key($context, [
-+      'langcode' => TRUE,
-+      'entity_type_id' => TRUE,
-+    ]);
-+    if ($context_array) {
-+      // Make the cache ID predictable.
-+      ksort($context_array);
-+      $cid .= ':' . Crypt::hashBase64(serialize($context_array));
-+    }
-+
-+    return $cid;
-+  }
-+
- }
-diff --git a/core/modules/comment/comment.install b/core/modules/comment/comment.install
-index 2a0808b5c022ef0d3c5c89e21a95f649cac2930f..9171234f3be61cdbdb3828f40380d01fb535e804 100644
---- a/core/modules/comment/comment.install
-+++ b/core/modules/comment/comment.install
-@@ -5,8 +5,11 @@
-  * Install, update and uninstall functions for the Comment module.
-  */
- 
-+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
-+use Drupal\Core\Config\Entity\ConfigEntityUpdater;
- use Drupal\Core\Entity\EntityTypeInterface;
- use Drupal\field\Entity\FieldStorageConfig;
-+use Drupal\field\FieldConfigInterface;
- 
+diff --git a/core/modules/comment/comment.api.php b/core/modules/comment/comment.api.php
+index adb7c586302..cf5624baf27 100644
+--- a/core/modules/comment/comment.api.php
++++ b/core/modules/comment/comment.api.php
+@@ -46,3 +46,52 @@ function hook_comment_links_alter(array &$links, CommentInterface $entity, array
  /**
-  * Implements hook_uninstall().
-@@ -134,3 +137,19 @@ function comment_update_10100(&$sandbox = NULL) {
-     $connection->schema()->changeField('comment_entity_statistics', 'last_comment_timestamp', 'last_comment_timestamp', $new);
-   }
- }
+  * @} End of "addtogroup hooks".
+  */
 +
 +/**
-+ * Set the default value of 'thread_limit' setting for all comment fields.
++ * @defgroup comment_field_access Comment field access operations
++ * @{
++ * The comment field access method supports the main entity field access
++ * operations, such as 'view' and 'edit', but allows also some more complex
++ * comment specific operations. The complexity derives from the fact that the
++ * comment field is mixing the actions of viewing and posting when it is placed
++ * as an entity display component.
++ *
++ * @see \Drupal\comment\CommentFieldItemList::access()
++ *
++ * The comment field access supports the following operations:
++ *
++ * @section view 'view'
++ * Used to check the access when the field is placed on an entity view display.
++ * Even if it's a standard entity field access operation, this is a composite
++ * operation as involves at the same time viewing the list of existing comments
++ * and accessing the post comment form beneath. This is a standard core
++ * operation as is used typically when the field is a visible component of a
++ * commented entity view display.
++ *
++ * @see \Drupal\Core\Entity\Entity\EntityViewDisplay::buildMultiple()
++ *
++ * @section create 'create'
++ * Used to check whether the user can post comments. This operation is mainly
++ * used to check the access to the comment form or to a page where the form is
++ * located, if the field is configured to place the form on a different page.
++ *
++ * @see \Drupal\comment\Controller\CommentController::replyFormAccess()
++ *
++ * @section view_comment_list 'view comment list'
++ * Unlike 'view', this operation limit its scope only to view the field list
++ * of comments. Such an operation will be allowed only if the user can access at
++ * least one comment from the thread. This is typically used to assemble the
++ * access check for 'view', as the later is a composite operation but also in
++ * other places, like comment_node_search_result(), where the number of comments
++ * is attached to the nodes search result and we need to check if the user is
++ * able to view the comments.
++ *
++ * @see comment_node_search_result()
++ *
++ * @section edit 'edit'
++ * This is a standard entity operation that allows access to the comment field
++ * widget in the commented entity form.
++ *
++ * @see \Drupal\Core\Entity\Entity\EntityFormDisplay::buildForm()
++ * @}
 + */
-+function comment_update_10101(?array &$sandbox = NULL) {
-+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'field_config', function (FieldConfigInterface $field_config): bool {
-+    if ($field_config->getType() === 'comment') {
-+      $field_config->setSetting('thread_limit', [
-+        'depth' => 2,
-+        'mode' => CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW,
-+      ]);
-+      return TRUE;
-+    }
-+    return FALSE;
-+  });
-+}
 diff --git a/core/modules/comment/comment.module b/core/modules/comment/comment.module
-index 0928695ed156de4b00bb5705823440f381221152..70b81b84731bfa1bfb925e2609b1ee6b9d116830 100644
+index 0928695ed15..d96891f413d 100644
 --- a/core/modules/comment/comment.module
 +++ b/core/modules/comment/comment.module
 @@ -431,13 +431,15 @@ function comment_node_search_result(EntityInterface $node) {
@@ -106,14 +73,49 @@ index 0928695ed156de4b00bb5705823440f381221152..70b81b84731bfa1bfb925e2609b1ee6b
          $open = TRUE;
        }
 -      $comments += $node->get($field_name)->comment_count;
-+      if ($node->get($field_name)->access('view only')) {
++      if ($node->get($field_name)->access('view comment list')) {
 +        $comments += $node->get($field_name)->comment_count;
 +      }
      }
    }
    // Do not make a string if there are no comment fields, or no comments exist
+diff --git a/core/modules/comment/comment.post_update.php b/core/modules/comment/comment.post_update.php
+index 2c07518c49c..8af798d1a7d 100644
+--- a/core/modules/comment/comment.post_update.php
++++ b/core/modules/comment/comment.post_update.php
+@@ -5,6 +5,10 @@
+  * Post update functions for the comment module.
+  */
+ 
++use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
++use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\field\FieldConfigInterface;
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
+@@ -14,3 +18,19 @@ function comment_removed_post_updates() {
+     'comment_post_update_add_ip_address_setting' => '9.0.0',
+   ];
+ }
++
++/**
++ * Set the default value of 'thread_limit' setting for all comment fields.
++ */
++function comment_post_update_add_thread_limit_field_setting(?array &$sandbox = NULL): void {
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'field_config', function (FieldConfigInterface $field_config): bool {
++    if ($field_config->getType() === 'comment') {
++      $field_config->setSetting('thread_limit', [
++        'depth' => 2,
++        'mode' => CommentItemInterface::THREAD_DEPTH_REPLY_MODE_ALLOW,
++      ]);
++      return TRUE;
++    }
++    return FALSE;
++  });
++}
 diff --git a/core/modules/comment/config/schema/comment.schema.yml b/core/modules/comment/config/schema/comment.schema.yml
-index 33b3e55ac3ab7ea9f22df95e8f06bcde6e5edd6b..2e5603c8bf03b825a4532849670733ecd08a29c4 100644
+index 33b3e55ac3a..2e5603c8bf0 100644
 --- a/core/modules/comment/config/schema/comment.schema.yml
 +++ b/core/modules/comment/config/schema/comment.schema.yml
 @@ -79,6 +79,16 @@ field.field_settings.comment:
@@ -134,61 +136,113 @@ index 33b3e55ac3ab7ea9f22df95e8f06bcde6e5edd6b..2e5603c8bf03b825a4532849670733ec
        type: integer
        label: 'Comments per page'
 diff --git a/core/modules/comment/src/CommentAccessControlHandler.php b/core/modules/comment/src/CommentAccessControlHandler.php
-index 87805f39357a64f43cb648c81536bb5ac3c87a36..e1877ad73bf7c21ab9a6beef6841f0a2248bf154 100644
+index 87805f39357..453f97e3f13 100644
 --- a/core/modules/comment/src/CommentAccessControlHandler.php
 +++ b/core/modules/comment/src/CommentAccessControlHandler.php
-@@ -63,6 +63,31 @@ protected function checkAccess(EntityInterface $entity, $operation, AccountInter
-    * {@inheritdoc}
-    */
-   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-+    // Forbid if this reply, to a threaded comment, is about to exceed the
-+    // maximum thread depth.
-+    if (isset($context['commented_entity']) && isset($context['parent_comment'])) {
-+      $commented_entity = $context['commented_entity'];
-+      /** @var \Drupal\comment\CommentInterface $parent_comment */
-+      $parent_comment = $context['parent_comment'];
-+      $field_definition = $commented_entity->getFieldDefinition($parent_comment->getFieldName());
-+      $field_settings = $field_definition->getSettings();
-+      // Only check if the depth is limited.
-+      if ($field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
-+        $thread_limit_settings = $field_settings['thread_limit'];
-+        assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
-+        // Only check if the depth limitation is configured to deny replies.
-+        if ($thread_limit_settings['mode'] === CommentItemInterface::THREAD_DEPTH_REPLY_MODE_DENY) {
-+          // Prevent replying to the deepest comment.
-+          $comment_indent = count(explode('.', $parent_comment->getThread())) - 1;
-+          $max_indent = $field_settings['thread_limit']['depth'] - 1;
-+          if ($comment_indent >= $max_indent - 1) {
-+            return AccessResult::forbidden('Thread limit hit')
-+              // The result depends on the field configuration.
-+              ->addCacheableDependency($field_definition->getConfig($commented_entity->bundle()));
-+          }
-+        }
+@@ -4,6 +4,7 @@
+ 
+ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+ use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Access\AccessResultInterface;
+ use Drupal\Core\Entity\EntityAccessControlHandler;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+@@ -30,6 +31,23 @@ protected function checkAccess(EntityInterface $entity, $operation, AccountInter
+         ->addCacheableDependency($entity);
+     }
+ 
++    if ($operation === 'reply') {
++      $access = $this->checkReplyThreadAccess($entity)->addCacheableDependency($entity);
++
++      if (!$access->isForbidden()) {
++        $context = ['commented_entity' => $entity->getCommentedEntity()];
++        $access = $access->orIf(
++          // The user must be able to view the comment.
++          $this->checkAccess($entity, 'view', $account)
++            // And must be able to create comments.
++            ->andIf($this->createAccess($entity->bundle(), $account, $context, TRUE))
++            // And comment must be published.
++            ->andIf(AccessResult::allowedIf($entity->isPublished()))
++        );
 +      }
++      return $access;
 +    }
++
+     if ($comment_admin) {
+       $access = AccessResult::allowed()->cachePerPermissions();
+       return ($operation != 'view') ? $access : $access->andIf($entity->getCommentedEntity()->access($operation, $account, TRUE));
+@@ -66,6 +84,42 @@ protected function checkCreateAccess(AccountInterface $account, array $context,
      return AccessResult::allowedIfHasPermission($account, 'post comments');
    }
  
-@@ -159,4 +184,14 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
++  /**
++   * Checks if this comment accepts replies according to field config.
++   */
++  protected function checkReplyThreadAccess(CommentInterface $comment): AccessResultInterface {
++    $access_result = AccessResult::neutral();
++    $commented_entity = $comment->getCommentedEntity();
++    if (!$commented_entity instanceof EntityInterface) {
++      return $access_result;
++    }
++
++    // Forbid if this reply, to a threaded comment, is about to exceed the
++    // maximum thread depth.
++    $field_definition = $commented_entity->getFieldDefinition($comment->getFieldName());
++    \assert($field_definition instanceof FieldDefinitionInterface);
++    $access_result->addCacheableDependency($field_definition->getConfig($commented_entity->bundle()));
++    $field_settings = $field_definition->getSettings();
++
++    // Only check if the depth is limited.
++    if ($field_settings && $field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
++      $thread_limit_settings = $field_settings['thread_limit'];
++      \assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
++
++      // Only check if the depth limitation is configured to deny replies.
++      if ($thread_limit_settings['mode'] === CommentItemInterface::THREAD_DEPTH_REPLY_MODE_DENY) {
++        // Prevent replying to the deepest comment.
++        $comment_indent = count(explode('.', $comment->getThread()));
++        $max_indent = $field_settings['thread_limit']['depth'];
++        if ($comment_indent >= $max_indent) {
++          return $access_result->andIf(AccessResult::forbidden('Thread limit hit'));
++        }
++      }
++    }
++
++    return $access_result;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -159,4 +213,14 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
      return parent::checkFieldAccess($operation, $field_definition, $account, $items);
    }
  
 +  /**
 +   * {@inheritdoc}
 +   */
-+  protected function buildCreateAccessCid(?string $entity_bundle, array $context): string {
-+    $cid = parent::buildCreateAccessCid($entity_bundle, $context);
++  protected function buildCreateAccessCid(array $context, ?string $entity_bundle): string {
++    $cid = parent::buildCreateAccessCid($context, $entity_bundle);
++    // Vary the static access cache depending on the commented/host entity.
 +    $cid .= ':' . (isset($context['commented_entity']) ? $context['commented_entity']->id() : '0');
-+    $cid .= ':' . (isset($context['parent_comment']) ? $context['parent_comment']->id() : '0');
 +    return $cid;
 +  }
 +
  }
 diff --git a/core/modules/comment/src/CommentFieldItemList.php b/core/modules/comment/src/CommentFieldItemList.php
-index 909636f13280e45208c30405b5bd431935eabdf7..c782532167576cf9134079a4270dbf7117a29212 100644
+index 909636f1328..2600e89a745 100644
 --- a/core/modules/comment/src/CommentFieldItemList.php
 +++ b/core/modules/comment/src/CommentFieldItemList.php
-@@ -44,24 +44,88 @@ public function offsetExists($offset) {
+@@ -3,6 +3,8 @@
+ namespace Drupal\comment;
+ 
+ use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Access\AccessResultInterface;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Field\FieldItemList;
+ use Drupal\Core\Session\AccountInterface;
+ 
+@@ -44,24 +46,83 @@ public function offsetExists($offset) {
     * {@inheritdoc}
     */
    public function access($operation = 'view', ?AccountInterface $account = NULL, $return_as_object = FALSE) {
@@ -210,53 +264,44 @@ index 909636f13280e45208c30405b5bd431935eabdf7..c782532167576cf9134079a4270dbf71
 -      $result = AccessResult::allowedIfHasPermission($account ?: \Drupal::currentUser(), 'access comments')
 -        ->orIf(AccessResult::allowedIfHasPermission($account ?: \Drupal::currentUser(), 'post comments'));
 +      // This operation is only used by EntityViewDisplay::buildMultiple(). In
-+      // this case check both: 'view' or 'create' access, since this field is
-+      // considered a composition of listed comments and comment form. The
-+      // decision to show only comments, only comment form or both will be made
-+      // by CommentDefaultFormatter::viewElements() later. Uses recursive calls
-+      // on same method invoking lower operations.
-+      $result = $this->access('view only', $account, TRUE);
++      // this case check both: 'view comment list' or 'create' access, since
++      // this field is considered a composition of listed comments and comment
++      // form. The decision to show only comments, only comment form or both
++      // will be made by CommentDefaultFormatter::viewElements() later. Uses
++      // recursive calls on same method invoking lower operations.
++      $result = $this->access('view comment list', $account, TRUE);
 +      if (!$result->isAllowed()) {
 +        $result = $result->orIf($this->access('create', $account, TRUE));
 +      }
 +
-+      return $return_as_object ? $result : $result->isAllowed();
-+    }
-+    if ($operation === 'view only') {
+       return $return_as_object ? $result : $result->isAllowed();
+     }
++    if ($operation === 'view comment list') {
 +      // In contrast to 'view', this operation is used as the lowest operation
 +      // by various methods to check only a single permission on last comment.
++      // If a user is able to view the last published comments, they are able
++      // to view the whole list of comments.
 +      return $this->lastPublishedCommentAccess($account, $return_as_object);
 +    }
 +
-+    // Replying to an existing comment is also comment creation. Normalize the
-+    // operation name after extracting the parent comment ID.
-+    $parent_comment_id = NULL;
-+    if (strpos($operation, 'reply to ') === 0) {
-+      $parent_comment_id = (int) substr($operation, 9);
-+      $operation = 'create';
-+    }
 +    if ($operation === 'create') {
-+      $entity_type_manager = \Drupal::entityTypeManager();
-+
 +      // In contrast to 'view', this operation is used as the lowest operation
 +      // by various methods to check only the single 'create' permission on the
 +      // comment entity.
 +      $bundle = $this->getSetting('comment_type');
-+      $access_control_handler = $entity_type_manager->getAccessControlHandler('comment');
++      $access_control_handler = \Drupal::entityTypeManager()->getAccessControlHandler('comment');
 +
 +      // The commented entity and, when replying, the parent comment are
 +      // valuable information when comment entity 'create access' handler makes
 +      // the decision.
-+      $context = ['commented_entity' => $this->getEntity()];
-+      if ($parent_comment_id) {
-+        $context += [
-+          'parent_comment' => $entity_type_manager->getStorage('comment')->load($parent_comment_id),
-+        ];
-+      }
-+      $result = $access_control_handler->createAccess($bundle, $account, $context, TRUE);
++      $commented_entity = $this->getEntity();
++      $cache_metadata = (new CacheableMetadata())->addCacheableDependency($commented_entity);
++      $context = ['commented_entity' => $commented_entity];
 +
-       return $return_as_object ? $result : $result->isAllowed();
-     }
++      /** @var \Drupal\Core\Access\AccessResult $result */
++      $result = $access_control_handler->createAccess($bundle, $account, $context, TRUE);
++      return $return_as_object ? $result->addCacheableDependency($cache_metadata) : $result->isAllowed();
++    }
      return parent::access($operation, $account, $return_as_object);
    }
  
@@ -272,13 +317,17 @@ index 909636f13280e45208c30405b5bd431935eabdf7..c782532167576cf9134079a4270dbf71
 +   *   The access result either as an access result object or a boolean,
 +   *   depending on $return_as_object
 +   */
-+  protected function lastPublishedCommentAccess(AccountInterface $account, bool $return_as_object) {
++  protected function lastPublishedCommentAccess(AccountInterface $account, bool $return_as_object): bool|AccessResultInterface {
 +    // Load the last published comment in the thread.
 +    $last_published_comment_id = $this->first()->getValue()['cid'] ?? NULL;
 +    if ($last_published_comment_id) {
 +      if ($comment = \Drupal::entityTypeManager()->getStorage('comment')->load($last_published_comment_id)) {
 +        // Allow if access on comment is allowed.
-+        return $comment->access('view', $account, $return_as_object);
++        $access = $comment->access('view', $account, $return_as_object);
++        if ($return_as_object) {
++          $access->addCacheableDependency($comment);
++        }
++        return $access;
 +      }
 +    }
 +    // If there are no comments, make no opinion.
@@ -287,7 +336,7 @@ index 909636f13280e45208c30405b5bd431935eabdf7..c782532167576cf9134079a4270dbf71
 +
  }
 diff --git a/core/modules/comment/src/CommentForm.php b/core/modules/comment/src/CommentForm.php
-index c9daaa1859e05cc75ce0a118667d6c87acdb216e..5d2a09f2589bd187389136f526d47ba4a9151b2d 100644
+index c9daaa1859e..5d2a09f2589 100644
 --- a/core/modules/comment/src/CommentForm.php
 +++ b/core/modules/comment/src/CommentForm.php
 @@ -385,7 +385,7 @@ public function save(array $form, FormStateInterface $form_state) {
@@ -300,20 +349,32 @@ index c9daaa1859e05cc75ce0a118667d6c87acdb216e..5d2a09f2589bd187389136f526d47ba4
        $form_state->setValue('cid', $comment->id());
  
 diff --git a/core/modules/comment/src/CommentLazyBuilders.php b/core/modules/comment/src/CommentLazyBuilders.php
-index a3d3df36848d032f27bf37381a6f9e9621a9b527..47275c33b05298650fbf0c697f03f7fc715cf24f 100644
+index a3d3df36848..2255f74fbc0 100644
 --- a/core/modules/comment/src/CommentLazyBuilders.php
 +++ b/core/modules/comment/src/CommentLazyBuilders.php
-@@ -186,7 +186,7 @@ protected function buildLinks(CommentInterface $entity, EntityInterface $comment
+@@ -109,7 +109,7 @@ public function renderForm($commented_entity_type_id, $commented_entity_id, $fie
+       'pid' => NULL,
+     ];
+     $comment = $this->entityTypeManager->getStorage('comment')->create($values);
+-    return $this->entityFormBuilder->getForm($comment);
++    return $comment->access('create', $this->currentUser) ? $this->entityFormBuilder->getForm($comment) : [];
+   }
+ 
+   /**
+@@ -184,9 +184,8 @@ protected function buildLinks(CommentInterface $entity, EntityInterface $comment
+         ];
+       }
        $field_definition = $commented_entity->getFieldDefinition($entity->getFieldName());
-       if ($entity->isPublished()
-         && $entity->access('create')
+-      if ($entity->isPublished()
+-        && $entity->access('create')
 -        && $field_definition->getSetting('default_mode') === CommentManagerInterface::COMMENT_MODE_THREADED) {
-+        && $field_definition->getSetting('default_mode') !== CommentManagerInterface::COMMENT_MODE_FLAT) {
++      $is_threaded = $field_definition->getSetting('default_mode') !== CommentManagerInterface::COMMENT_MODE_FLAT;
++      if ($is_threaded && $entity->access('reply')) {
          $links['comment-reply'] = [
            'title' => t('Reply'),
            'url' => Url::fromRoute('comment.reply', [
 diff --git a/core/modules/comment/src/CommentLinkBuilder.php b/core/modules/comment/src/CommentLinkBuilder.php
-index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932beb590dde 100644
+index b7a12faab19..cb91b073dfa 100644
 --- a/core/modules/comment/src/CommentLinkBuilder.php
 +++ b/core/modules/comment/src/CommentLinkBuilder.php
 @@ -93,7 +93,8 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
@@ -326,30 +387,49 @@ index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932b
        if ($commenting_status != CommentItemInterface::HIDDEN) {
          // Entity has commenting status open or closed.
          $field_definition = $entity->getFieldDefinition($field_name);
-@@ -101,10 +102,10 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
+@@ -101,32 +102,30 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
            // Teaser view: display the number of comments that have been posted,
            // or a link to add new comments if the user has permission, the
            // entity is open to new comments, and there currently are none.
 -          if ($this->currentUser->hasPermission('access comments')) {
 -            if (!empty($entity->get($field_name)->comment_count)) {
-+          if ($field->access('view only', $this->currentUser)) {
-+            if ($field->comment_count > 0) {
-               $links['comment-comments'] = [
+-              $links['comment-comments'] = [
 -                'title' => $this->formatPlural($entity->get($field_name)->comment_count, '1 comment', '@count comments'),
-+                'title' => $this->formatPlural($field->comment_count, '1 comment', '@count comments'),
-                 'attributes' => ['title' => $this->t('Jump to the first comment.')],
-                 'fragment' => 'comments',
-                 'url' => $entity->toUrl(),
-@@ -116,7 +117,7 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
-                   'attributes' => [
-                     'class' => 'hidden',
-                     'title' => $this->t('Jump to the first new comment.'),
+-                'attributes' => ['title' => $this->t('Jump to the first comment.')],
+-                'fragment' => 'comments',
+-                'url' => $entity->toUrl(),
++          if ($field->comment_count > 0 && $field->access('view comment list', $this->currentUser)) {
++            $links['comment-comments'] = [
++              'title' => $this->formatPlural($field->comment_count, '1 comment', '@count comments'),
++              'attributes' => ['title' => $this->t('Jump to the first comment.')],
++              'fragment' => 'comments',
++              'url' => $entity->toUrl(),
++            ];
++            if ($this->moduleHandler->moduleExists('history')) {
++              $links['comment-new-comments'] = [
++                'title' => '',
++                'url' => Url::fromRoute('<current>'),
++                'attributes' => [
++                  'class' => 'hidden',
++                  'title' => $this->t('Jump to the first new comment.'),
++                  'data-history-node-last-comment-timestamp' => $field->last_comment_timestamp,
++                  'data-history-node-field-name' => $field_name,
++                ],
+               ];
+-              if ($this->moduleHandler->moduleExists('history')) {
+-                $links['comment-new-comments'] = [
+-                  'title' => '',
+-                  'url' => Url::fromRoute('<current>'),
+-                  'attributes' => [
+-                    'class' => 'hidden',
+-                    'title' => $this->t('Jump to the first new comment.'),
 -                    'data-history-node-last-comment-timestamp' => $entity->get($field_name)->last_comment_timestamp,
-+                    'data-history-node-last-comment-timestamp' => $field->last_comment_timestamp,
-                     'data-history-node-field-name' => $field_name,
-                   ],
-                 ];
-@@ -126,7 +127,7 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
+-                    'data-history-node-field-name' => $field_name,
+-                  ],
+-                ];
+-              }
+             }
+           }
            // Provide a link to new comment form.
            if ($commenting_status == CommentItemInterface::OPEN) {
              $comment_form_location = $field_definition->getSetting('form_location');
@@ -358,7 +438,7 @@ index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932b
                $links['comment-add'] = [
                  'title' => $this->t('Add new comment'),
                  'language' => $entity->language(),
-@@ -157,10 +158,12 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
+@@ -157,10 +156,12 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
            // comments.
            if ($commenting_status == CommentItemInterface::OPEN) {
              $comment_form_location = $field_definition->getSetting('form_location');
@@ -368,12 +448,12 @@ index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932b
                // if there are existing comments that the link will skip past.
 -              if ($comment_form_location == CommentItemInterface::FORM_SEPARATE_PAGE || (!empty($entity->get($field_name)->comment_count) && $this->currentUser->hasPermission('access comments'))) {
 +              $separate_form_location = $comment_form_location === CommentItemInterface::FORM_SEPARATE_PAGE;
-+              $existing_comments = $field->comment_count > 0 && $field->access('view only', $this->currentUser);
++              $existing_comments = $field->comment_count > 0 && $field->access('view comment list', $this->currentUser);
 +              if ($separate_form_location || $existing_comments) {
                  $links['comment-add'] = [
                    'title' => $this->t('Add new comment'),
                    'attributes' => ['title' => $this->t('Share your thoughts and opinions.')],
-@@ -203,7 +206,7 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
+@@ -203,7 +204,7 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
            if ($new_comments > 0) {
              $page_number = $this->entityTypeManager
                ->getStorage('comment')
@@ -383,7 +463,7 @@ index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932b
              $value = [
                'new_comment_count' => (int) $new_comments,
 diff --git a/core/modules/comment/src/CommentManager.php b/core/modules/comment/src/CommentManager.php
-index ba26943fe470479fbe91ca424b840ff395889032..9cef6b6793804b285c77d5472dfbb2098080d602 100644
+index ba26943fe47..9cef6b67938 100644
 --- a/core/modules/comment/src/CommentManager.php
 +++ b/core/modules/comment/src/CommentManager.php
 @@ -11,12 +11,12 @@
@@ -436,7 +516,7 @@ index ba26943fe470479fbe91ca424b840ff395889032..9cef6b6793804b285c77d5472dfbb209
            'entity_type' => $entity->getEntityTypeId(),
            'entity' => $entity->id(),
 diff --git a/core/modules/comment/src/CommentManagerInterface.php b/core/modules/comment/src/CommentManagerInterface.php
-index 1cbac6692bc21639f99c6a1acb445dfbdd4a80ad..f1ea4721272528f47c978f566c397dfdf42a50b5 100644
+index 1cbac6692bc..f1ea4721272 100644
 --- a/core/modules/comment/src/CommentManagerInterface.php
 +++ b/core/modules/comment/src/CommentManagerInterface.php
 @@ -15,10 +15,15 @@ interface CommentManagerInterface {
@@ -457,7 +537,7 @@ index 1cbac6692bc21639f99c6a1acb445dfbdd4a80ad..f1ea4721272528f47c978f566c397dfd
     * Utility function to return an array of comment fields.
     *
 diff --git a/core/modules/comment/src/CommentStorageInterface.php b/core/modules/comment/src/CommentStorageInterface.php
-index 764a5e4a9b958067ea3b419bd745da989aba8b43..8a90310f760aa1ec876531b593bc4770bad3c2d7 100644
+index 764a5e4a9b9..8a90310f760 100644
 --- a/core/modules/comment/src/CommentStorageInterface.php
 +++ b/core/modules/comment/src/CommentStorageInterface.php
 @@ -59,8 +59,9 @@ public function getNewCommentPageNumber($total_comments, $new_comments, Fieldabl
@@ -485,7 +565,7 @@ index 764a5e4a9b958067ea3b419bd745da989aba8b43..8a90310f760aa1ec876531b593bc4770
     *   (optional) The amount of comments to display per page.
     *   Defaults to 0, which means show all comments.
 diff --git a/core/modules/comment/src/CommentViewBuilder.php b/core/modules/comment/src/CommentViewBuilder.php
-index 0e4e024dd574300e854de0bb3303d74f0eff55d8..cbb47b5baa1313e96beca06e0527dc2eb4827821 100644
+index 0e4e024dd57..b0beba12c53 100644
 --- a/core/modules/comment/src/CommentViewBuilder.php
 +++ b/core/modules/comment/src/CommentViewBuilder.php
 @@ -84,7 +84,7 @@ protected function getBuildDefaults(EntityInterface $entity, $view_mode) {
@@ -510,9 +590,9 @@ index 0e4e024dd574300e854de0bb3303d74f0eff55d8..cbb47b5baa1313e96beca06e0527dc2e
 +    if ($commented_entity) {
 +      $field_settings = $commented_entity
 +        ->getFieldDefinition($entity->getFieldName())
-+        ->getSettings();
-+      if ($field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
-+        assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
++        ?->getSettings();
++      if (isset($field_settings['default_mode']) && $field_settings['default_mode'] === CommentManagerInterface::COMMENT_MODE_THREADED_DEPTH_LIMIT) {
++        \assert($field_settings['thread_limit']['depth'] >= 2, 'Thread depth limit should be greater than or equal to 2.');
 +        $max_indent = $field_settings['thread_limit']['depth'] - 1;
 +      }
 +    }
@@ -548,57 +628,32 @@ index 0e4e024dd574300e854de0bb3303d74f0eff55d8..cbb47b5baa1313e96beca06e0527dc2e
        $bundle = $commented_entity ? $commented_entity->bundle() : '';
        $is_node = $commented_entity ? $commented_entity->getEntityTypeId() === 'node' : NULL;
 diff --git a/core/modules/comment/src/Controller/CommentController.php b/core/modules/comment/src/Controller/CommentController.php
-index 4dfa517a7b126f97220df3977e2ddd4144f66f15..d3ce3fd79b5c9fda1697da8af62fa7670b8fd0ed 100644
+index 4dfa517a7b1..64480f5afbe 100644
 --- a/core/modules/comment/src/Controller/CommentController.php
 +++ b/core/modules/comment/src/Controller/CommentController.php
-@@ -276,31 +276,51 @@ public function replyFormAccess(EntityInterface $entity, $field_name, $pid = NUL
+@@ -276,32 +276,29 @@ public function replyFormAccess(EntityInterface $entity, $field_name, $pid = NUL
        throw new NotFoundHttpException();
      }
  
 -    $account = $this->currentUser();
-+    $create_operation = 'create';
-+    if ($pid) {
-+      $parent_comment = $this->entityTypeManager()->getStorage('comment')->load($pid);
-+      if (!$parent_comment) {
-+        return AccessResult::forbidden('Cannot reply to a non-existing comment');
-+      }
-+      // Distinguish between a reply and a first-tier comment creation.
-+      // @see \Drupal\comment\CommentFieldItemList::access()
-+      $create_operation = "reply to {$pid}";
-+    }
- 
+-
 -    // Check if the user has the proper permissions.
 -    $access = AccessResult::allowedIfHasPermission($account, 'post comments');
-+    /** @var \Drupal\comment\CommentFieldItemList $field */
-+    $field = $entity->{$field_name};
- 
+-
 -    // If commenting is open on the entity.
 -    $status = $entity->{$field_name}->status;
 -    $access = $access->andIf(AccessResult::allowedIf($status == CommentItemInterface::OPEN)
 -      ->addCacheableDependency($entity))
 -      // And if user has access to the host entity.
 -      ->andIf(AccessResult::allowedIf($entity->access('view')));
-+    // Check if the user is able to create comments.
-+    $access = $field->access($create_operation, NULL, TRUE);
-+    if (!$access->isAllowed()) {
-+      // Exit if the user is not allowed to create new comments.
-+      return $access;
-+    }
++    /** @var \Drupal\comment\CommentFieldItemList $field */
++    $field = $entity->{$field_name};
++    // The user must have view access to the host entity.
++    $access = $entity->access('view', NULL, TRUE)
++      // And commenting must be open on this entity.
++      ->andIf(AccessResult::allowedIf((int) $field->status === CommentItemInterface::OPEN));
  
 -    // $pid indicates that this is a reply to a comment.
-+    $status = (int) $field->status;
-+    $access = AccessResult::allowedIf(
-+      // Commenting is open on this entity.
-+      $status === CommentItemInterface::OPEN
-+      // And the user has access to the host entity.
-+      && $entity->access('view')
-+    )->addCacheableDependency($entity);
-+    if (!$access->isAllowed()) {
-+      // Exit if comments are closed or the user cannot view the host entity.
-+      return $access;
-+    }
-+
-+    // Comment replies require some additional checks.
      if ($pid) {
 -      // Check if the user has the proper permissions.
 -      $access = $access->andIf(AccessResult::allowedIfHasPermission($account, 'access comments'));
@@ -609,22 +664,27 @@ index 4dfa517a7b126f97220df3977e2ddd4144f66f15..d3ce3fd79b5c9fda1697da8af62fa767
 -      $access = $access->andIf(AccessResult::allowedIf($comment && $comment->isPublished() && $comment->getCommentedEntityId() == $entity->id()));
 -      if ($comment) {
 -        $access->addCacheableDependency($comment);
--      }
-+      return AccessResult::allowedIf(
-+        // The parent comment is published.
-+        $parent_comment->isPublished()
-+        // And the parent comment host belongs to the entity.
-+        && $parent_comment->getCommentedEntityId() === $entity->id()
-+        // And the user is allowed to view the parent comment.
-+        && $parent_comment->access('view')
-+      )->addCacheableDependency($parent_comment);
-     }
++      // If replying, load the parent comment.
++      $parent_comment = $this->entityTypeManager()->getStorage('comment')->load($pid);
++      if (!$parent_comment instanceof CommentInterface) {
++        return $access->andIf(AccessResult::forbidden('Cannot reply to a non-existing comment'));
+       }
 +
-     return $access;
++      return $access
++        // The user must be able to reply.
++        ->andIf($parent_comment->access('reply', NULL, TRUE))
++        // And the parent comment host belongs to the entity.
++        ->andIf(AccessResult::allowedIf($parent_comment->getCommentedEntityId() === $entity->id()));
+     }
+-    return $access;
++
++    // The user must be able to create comments.
++    return $access->andIf($field->access('create', NULL, TRUE));
    }
  
+   /**
 diff --git a/core/modules/comment/src/Entity/Comment.php b/core/modules/comment/src/Entity/Comment.php
-index 43123b7a17ff697b5a34a5d3fc85938aa4f586f3..d26bea4260d50596be6a44d9cd96ff9a2f323794 100644
+index 43123b7a17f..78ccaa7ee4b 100644
 --- a/core/modules/comment/src/Entity/Comment.php
 +++ b/core/modules/comment/src/Entity/Comment.php
 @@ -11,6 +11,7 @@
@@ -635,7 +695,7 @@ index 43123b7a17ff697b5a34a5d3fc85938aa4f586f3..d26bea4260d50596be6a44d9cd96ff9a
  use Drupal\field\Entity\FieldStorageConfig;
  use Drupal\user\Entity\User;
  use Drupal\user\EntityOwnerTrait;
-@@ -521,6 +522,25 @@ public function getOwner() {
+@@ -521,6 +522,19 @@ public function getOwner() {
      return $user;
    }
  
@@ -644,13 +704,7 @@ index 43123b7a17ff697b5a34a5d3fc85938aa4f586f3..d26bea4260d50596be6a44d9cd96ff9a
 +   */
 +  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
 +    if ($operation === 'create') {
-+      // The commented entity and, when replying, the parent comment entity are
-+      // valuable information when comment entity 'create access' handler makes
-+      // the decision.
 +      $context = ['commented_entity' => $this->getCommentedEntity()];
-+      if ($this->hasParentComment()) {
-+        $context += ['parent_comment' => $this->getParentComment()];
-+      }
 +      return $this->entityTypeManager()
 +        ->getAccessControlHandler($this->entityTypeId)
 +        ->createAccess($this->bundle(), $account, $context, $return_as_object);
@@ -662,19 +716,40 @@ index 43123b7a17ff697b5a34a5d3fc85938aa4f586f3..d26bea4260d50596be6a44d9cd96ff9a
     * Get the comment type ID for this comment.
     *
 diff --git a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php b/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
-index d46189b81044f41229cbb94ca95ded2799322527..9a3a133e239e4b2ca64f1519f61632e17e34a2a4 100644
+index d46189b8104..10ff8bb42e3 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
-@@ -161,13 +161,14 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+@@ -3,6 +3,7 @@
+ namespace Drupal\comment\Plugin\Field\FieldFormatter;
+ 
+ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Entity\Entity\EntityViewDisplay;
+ use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+ use Drupal\Core\Entity\EntityFormBuilderInterface;
+@@ -143,6 +144,7 @@ public function __construct($plugin_id, $plugin_definition, FieldDefinitionInter
+   public function viewElements(FieldItemListInterface $items, $langcode) {
+     $elements = [];
+     $output = [];
++    $cacheability = new CacheableMetadata();
+ 
+     $field_name = $this->fieldDefinition->getName();
+     $entity = $items->getEntity();
+@@ -160,14 +162,18 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+       // Unpublished comments are not included in
        // $entity->get($field_name)->comment_count, but unpublished comments
        // should display if the user is an administrator.
-       $elements['#cache']['contexts'][] = 'user.permissions';
+-      $elements['#cache']['contexts'][] = 'user.permissions';
 -      if ($this->currentUser->hasPermission('access comments') || $this->currentUser->hasPermission('administer comments')) {
-+      if ($items->access('view only', $this->currentUser) || $this->currentUser->hasPermission('administer comments')) {
++      $comment_admin = $this->currentUser->hasPermission('administer comments');
++      $cacheability->addCacheContexts(['user.permissions']);
++      $items_access = $items->access('view comment list', $this->currentUser, TRUE);
++      $cacheability->addCacheableDependency($items_access);
++      if ($comment_admin || $items_access->isAllowed()) {
          $output['comments'] = [];
  
 -        if ($entity->get($field_name)->comment_count || $this->currentUser->hasPermission('administer comments')) {
-+        if ($items->comment_count || $this->currentUser->hasPermission('administer comments')) {
++        if ($items->comment_count || $comment_admin) {
            $mode = $comment_settings['default_mode'];
            $comments_per_page = $comment_settings['per_page'];
            $comments = $this->storage->loadThread($entity, $field_name, $mode, $comments_per_page, $this->getSetting('pager_id'));
@@ -682,17 +757,52 @@ index d46189b81044f41229cbb94ca95ded2799322527..9a3a133e239e4b2ca64f1519f61632e1
            if ($comments) {
              $build = $this->viewBuilder->viewMultiple($comments, $this->getSetting('view_mode'));
              $build['pager']['#type'] = 'pager';
-@@ -190,7 +191,7 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+@@ -188,22 +194,20 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+       // Append comment form if the comments are open and the form is set to
+       // display below the entity. Do not show the form for the print view mode.
        if ($status == CommentItemInterface::OPEN && $comment_settings['form_location'] == CommentItemInterface::FORM_BELOW && $this->viewMode != 'print') {
-         // Only show the add comment form if the user has permission.
-         $elements['#cache']['contexts'][] = 'user.roles';
+-        // Only show the add comment form if the user has permission.
+-        $elements['#cache']['contexts'][] = 'user.roles';
 -        if ($this->currentUser->hasPermission('post comments')) {
-+        if ($items->access('create', $this->currentUser)) {
-           $output['comment_form'] = [
-             '#lazy_builder' => [
-               'comment.lazy_builders:renderForm',
+-          $output['comment_form'] = [
+-            '#lazy_builder' => [
+-              'comment.lazy_builders:renderForm',
+-              [
+-                $entity->getEntityTypeId(),
+-                $entity->id(),
+-                $field_name,
+-                $this->getFieldSetting('comment_type'),
+-              ],
++        // Inject a lazy builder which will show the add comment form if the
++        // user has access.
++        $output['comment_form'] = [
++          '#lazy_builder' => [
++            'comment.lazy_builders:renderForm',
++            [
++              $entity->getEntityTypeId(),
++              $entity->id(),
++              $field_name,
++              $this->getFieldSetting('comment_type'),
+             ],
+-            '#create_placeholder' => TRUE,
+-          ];
+-        }
++          ],
++          '#create_placeholder' => TRUE,
++        ];
+       }
+ 
+       $elements[] = $output + [
+@@ -214,6 +218,7 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+       ];
+     }
+ 
++    $cacheability->applyTo($elements);
+     return $elements;
+   }
+ 
 diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php b/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
-index 1f16bf7386f5c48ec888e9c6331c2d15f364f3b6..6b83d7b66f4228a3318a3fd246ee088bb28c46b0 100644
+index 1f16bf7386f..6b83d7b66f4 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
 @@ -45,6 +45,10 @@ public static function defaultStorageSettings() {
@@ -777,7 +887,7 @@ index 1f16bf7386f5c48ec888e9c6331c2d15f364f3b6..6b83d7b66f4228a3318a3fd246ee088b
      $element['form_location'] = [
        '#type' => 'checkbox',
 diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php b/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
-index 1caee562975cfc9dd30f8ab7f27ce5e6df20c5ce..eacccdad9bc18a663afe6a7f78ceaf198f00a4f1 100644
+index 1caee562975..eacccdad9bc 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
 @@ -32,4 +32,14 @@ interface CommentItemInterface {
@@ -796,18 +906,10 @@ index 1caee562975cfc9dd30f8ab7f27ce5e6df20c5ce..eacccdad9bc18a663afe6a7f78ceaf19
 +
  }
 diff --git a/core/modules/comment/tests/modules/comment_test/comment_test.module b/core/modules/comment/tests/modules/comment_test/comment_test.module
-index 3dd4f427909aa1e0e3365046e5224dea2f891205..57d1202c45a5063f7924b16e2a6b267bc9603b0c 100644
+index 3dd4f427909..90d96bee7fc 100644
 --- a/core/modules/comment/tests/modules/comment_test/comment_test.module
 +++ b/core/modules/comment/tests/modules/comment_test/comment_test.module
-@@ -6,6 +6,7 @@
-  */
- 
- use Drupal\comment\CommentInterface;
-+use Drupal\comment_test\CommentTestAccessControlHandler;
- use Drupal\Core\Url;
- 
- /**
-@@ -19,6 +20,8 @@ function comment_test_entity_type_alter(array &$entity_types) {
+@@ -19,6 +19,8 @@ function comment_test_entity_type_alter(array &$entity_types) {
      $translation['comment_test'] = TRUE;
      $entity_types['comment']->set('translation', $translation);
    }
@@ -818,13 +920,13 @@ index 3dd4f427909aa1e0e3365046e5224dea2f891205..57d1202c45a5063f7924b16e2a6b267b
  /**
 diff --git a/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php b/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..c01c8159d37fa30b191210ced257a486cd24d1da
+index 00000000000..34aae9d9d2b
 --- /dev/null
 +++ b/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php
 @@ -0,0 +1,29 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\comment_test;
 +
@@ -851,9 +953,22 @@ index 0000000000000000000000000000000000000000..c01c8159d37fa30b191210ced257a486
 +  }
 +
 +}
+diff --git a/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php b/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
+index 0048839f5d4..15a881100f3 100644
+--- a/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
++++ b/core/modules/comment/tests/src/Functional/CommentTranslationUITest.php
+@@ -49,7 +49,7 @@ class CommentTranslationUITest extends ContentTranslationUITestBase {
+     'url.query_args.pagers:0',
+     'url.site',
+     'user.permissions',
+-    'user.roles',
++    'user.roles:authenticated',
+   ];
+ 
+   /**
 diff --git a/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php b/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..33c5b8c16dc6cfc87f26a2f25e871b4322bab04d
+index 00000000000..3d7cc494622
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php
 @@ -0,0 +1,45 @@
@@ -877,16 +992,16 @@ index 0000000000000000000000000000000000000000..33c5b8c16dc6cfc87f26a2f25e871b43
 +  /**
 +   * {@inheritdoc}
 +   */
-+  protected function setDatabaseDumpFiles() {
++  protected function setDatabaseDumpFiles(): void {
 +    $this->databaseDumpFiles = [
-+      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-8.8.0.bare.standard.php.gz',
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-10.3.0.bare.standard.php.gz',
 +    ];
 +  }
 +
 +  /**
-+   * Tests comment_update_9200().
++   * Tests comment_post_update_add_thread_limit_field_setting().
 +   *
-+   * @see comment_update_9200()
++   * @see comment_post_update_add_thread_limit_field_setting()
 +   */
 +  public function testCommentUpdate9100(): void {
 +    $config_factory = \Drupal::configFactory();
@@ -904,10 +1019,10 @@ index 0000000000000000000000000000000000000000..33c5b8c16dc6cfc87f26a2f25e871b43
 +}
 diff --git a/core/modules/comment/tests/src/Kernel/CommentControllerTest.php b/core/modules/comment/tests/src/Kernel/CommentControllerTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02bf042f64
+index 00000000000..7bc562a890f
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentControllerTest.php
-@@ -0,0 +1,173 @@
+@@ -0,0 +1,198 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -917,6 +1032,7 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +use Drupal\comment\Controller\CommentController;
 +use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 +use Drupal\comment\Tests\CommentTestTrait;
++use Drupal\Core\Cache\Cache;
 +use Drupal\KernelTests\KernelTestBase;
 +use Drupal\node\Entity\NodeType;
 +use Drupal\Tests\comment\Traits\CommentCreationTrait;
@@ -963,15 +1079,14 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +  protected function setUp(): void {
 +    parent::setUp();
 +
-+    $this->installConfig(['comment', 'filter', 'user']);
 +    $this->installEntitySchema('comment');
 +    $this->installEntitySchema('node');
 +    $this->installEntitySchema('user');
 +    $this->installSchema('comment', ['comment_entity_statistics']);
 +    $this->installSchema('node', ['node_access']);
-+    $this->installSchema('system', ['sequences']);
++    $this->installConfig(['comment', 'filter', 'user']);
 +
-+    NodeType::create(['type' => 'page'])->save();
++    NodeType::create(['type' => 'page', 'name' => 'page'])->save();
 +    $this->addDefaultCommentField('node', 'page');
 +    // Create a comment controller instance.
 +    $this->controller = $this->container->get('class_resolver')->getInstanceFromDefinition(CommentController::class);
@@ -997,7 +1112,12 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +    $node->save();
 +
 +    // Check that it's forbidden to comment on a non-accessible entity.
-+    $this->assertTrue($this->controller->replyFormAccess($node, 'comment')->isNeutral());
++    /** @var \Drupal\Core\Access\AccessResult $access_result */
++    $access_result = $this->controller->replyFormAccess($node, 'comment');
++    $this->assertTrue($access_result->isNeutral());
++    $this->assertSame($node->getCacheTags(), $access_result->getCacheTags());
++    // @see \Drupal\comment\CommentAccessControlHandler::checkCreateAccess()
++    $this->assertSame(['user.permissions'], $access_result->getCacheContexts());
 +
 +    // Publish the node.
 +    $node->setPublished()->save();
@@ -1006,13 +1126,17 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +
 +    // Check that only users granted with proper permissions are able comment on
 +    // an accessible entity.
-+    $this->assertEquals($expectation, $this->controller->replyFormAccess($node, 'comment')->isAllowed());
++    $access_result = $this->controller->replyFormAccess($node, 'comment');
++    $this->assertEquals($expectation, $access_result->isAllowed());
++    $this->assertSame($node->getCacheTags(), $access_result->getCacheTags());
 +
 +    // Close commenting on this node.
 +    $node->get('comment')->status = CommentItemInterface::CLOSED;
 +
 +    // Check that is not possible to comment when comments are closed.
-+    $this->assertTrue($this->controller->replyFormAccess($node, 'comment')->isNeutral());
++    $access_result = $this->controller->replyFormAccess($node, 'comment');
++    $this->assertTrue($access_result->isNeutral());
++    $this->assertSame($node->getCacheTags(), $access_result->getCacheTags());
 +
 +    // Reopen commenting on this node.
 +    $node->get('comment')->status = CommentItemInterface::OPEN;
@@ -1030,20 +1154,36 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +    ]);
 +
 +    // Check that users granted with proper permissions can reply to a comment.
-+    $this->assertEquals($expectation, $this->controller->replyFormAccess($node, 'comment', $comment->id())->isAllowed());
++    $access_result = $this->controller->replyFormAccess($node, 'comment', $comment->id());
++    $this->assertEquals($expectation, $access_result->isAllowed());
++    // Now the parent comment cache metadata should have been merged.
++    $commented_entity = $comment->getCommentedEntity();
++    $field_config = $commented_entity->getFieldDefinition($comment->getFieldName())->getConfig($commented_entity->bundle());
++    $expected_cache_tags = Cache::mergeTags($node->getCacheTags(), $field_config->getCacheTags(), $comment->getCacheTags());
++    $this->assertSame($expected_cache_tags, $access_result->getCacheTags());
 +
 +    // Unpublish the comment.
 +    $comment->setUnpublished()->save();
++    // Clear the comment access static cache (reply operation).
++    $this->container->get('entity_type.manager')->getAccessControlHandler('comment')->resetCache();
 +
 +    // Check that users cannot reply to an unpublished comment.
-+    $this->assertTrue($this->controller->replyFormAccess($node, 'comment', $comment->id())->isNeutral());
++    $access_result = $this->controller->replyFormAccess($node, 'comment', $comment->id());
++    $this->assertTrue($access_result->isNeutral());
++    $this->assertSame($expected_cache_tags, $access_result->getCacheTags());
 +
-+    // Publish the parent comment but move it to a different node to a different node.
++    // Publish the parent comment but move it to a different node.
 +    $other_node = $this->createNode(['type' => 'page']);
 +    $comment->setPublished()->set('entity_id', $other_node->id())->save();
 +
 +    // Check that users cannot reply to a comment from other entity.
-+    $this->assertTrue($this->controller->replyFormAccess($node, 'comment', $comment->id())->isNeutral());
++    $access_result = $this->controller->replyFormAccess($node, 'comment', $comment->id());
++    $this->assertTrue($access_result->isNeutral());
++    $this->assertSame($expected_cache_tags, $access_result->getCacheTags());
++
++    // Check that users cannot reply to a non-existing comment.
++    $access_result = $this->controller->replyFormAccess($node, 'comment', 123456);
++    $this->assertTrue($access_result->isForbidden());
 +  }
 +
 +  /**
@@ -1083,10 +1223,10 @@ index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02
 +}
 diff --git a/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php b/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..ede943517512be08ec812c09051ba295f6e5cc73
+index 00000000000..1633e1038f9
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,97 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -1127,11 +1267,11 @@ index 0000000000000000000000000000000000000000..ede943517512be08ec812c09051ba295
 +  protected function setUp(): void {
 +    parent::setUp();
 +
-+    $this->installConfig(['user', 'comment']);
 +    $this->installSchema('comment', ['comment_entity_statistics']);
 +    $this->installEntitySchema('comment');
 +    $this->installEntitySchema('entity_test');
 +    $this->installEntitySchema('user');
++    $this->installConfig(['user', 'comment']);
 +
 +    $this->createCommentType('entity_test', ['id' => 'comment']);
 +    $this->addDefaultCommentField('entity_test', 'entity_test');
@@ -1159,18 +1299,19 @@ index 0000000000000000000000000000000000000000..ede943517512be08ec812c09051ba295
 +    $field = $entity->get('comment');
 +
 +    // Check that the comment create access handler receives the commented
-+    // entity as context but no parent comment entity when is called from the
-+    // comment entity ::access() method.
++    // entity as context when called from the comment entity ::access() method.
 +    $comment->access('create');
 +    $create_access_context = $state->get('comment_test.create_access.context');
 +    $this->assertSame($entity->id(), $create_access_context['commented_entity']->id());
-+    $this->assertArrayNotHasKey('parent_comment', $create_access_context);
++
++    $comment->access('reply');
++    $create_access_context = $state->get('comment_test.create_access.context');
++    $this->assertSame($entity->id(), $create_access_context['commented_entity']->id());
 +
 +    // Check the same for comment field item list ::access() method.
 +    $field->access('create');
 +    $create_access_context = $state->get('comment_test.create_access.context');
 +    $this->assertSame($entity->id(), $create_access_context['commented_entity']->id());
-+    $this->assertArrayNotHasKey('parent_comment', $create_access_context);
 +
 +    // Reply to comment.
 +    $reply = $this->createComment(['pid' => $comment->id()]);
@@ -1180,18 +1321,38 @@ index 0000000000000000000000000000000000000000..ede943517512be08ec812c09051ba295
 +    $reply->access('create');
 +    $create_access_context = $state->get('comment_test.create_access.context');
 +    $this->assertSame($entity->id(), $create_access_context['commented_entity']->id());
-+    $this->assertSame($comment->id(), $create_access_context['parent_comment']->id());
-+
-+    // Check the same for comment field item list ::access() method.
-+    $field->access("reply to {$comment->id()}");
-+    $create_access_context = $state->get('comment_test.create_access.context');
-+    $this->assertSame($entity->id(), $create_access_context['commented_entity']->id());
-+    $this->assertSame($comment->id(), $create_access_context['parent_comment']->id());
 +  }
 +
 +}
+diff --git a/core/modules/comment/tests/src/Kernel/CommentDefaultFormatterCacheTagsTest.php b/core/modules/comment/tests/src/Kernel/CommentDefaultFormatterCacheTagsTest.php
+index 699df300f06..b79a896841e 100644
+--- a/core/modules/comment/tests/src/Kernel/CommentDefaultFormatterCacheTagsTest.php
++++ b/core/modules/comment/tests/src/Kernel/CommentDefaultFormatterCacheTagsTest.php
+@@ -126,19 +126,15 @@ public function testCacheTags(): void {
+       ->view($commented_entity);
+     $renderer->renderRoot($build);
+     $expected_cache_tags = [
+-      'entity_test_view',
+-      'entity_test:' . $commented_entity->id(),
+-      'comment_view',
+-      'comment:' . $comment->id(),
+-      'config:filter.format.plain_text',
+-      'user_view',
+       'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
+-      'user:' . $user->id(),
++      'comment:' . $comment->id(),
+       'config:core.entity_form_display.comment.comment.default',
+       'config:field.field.comment.comment.comment_body',
+       'config:field.field.entity_test.entity_test.comment',
+       'config:field.storage.comment.comment_body',
+       'config:user.settings',
++      'entity_test:' . $commented_entity->id(),
++      'entity_test_view',
+     ];
+     $this->assertEqualsCanonicalizing($expected_cache_tags, $build['#cache']['tags']);
+ 
 diff --git a/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php b/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
-index 99bbd7e2a5a7b2aebc79eaaa138cf3ccefb9703d..a7489e62595485002ce461a9856de908b14b27a8 100644
+index 99bbd7e2a5a..b050d0d00e9 100644
 --- a/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
 +++ b/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
 @@ -13,6 +13,7 @@
@@ -1210,104 +1371,47 @@ index 99bbd7e2a5a7b2aebc79eaaa138cf3ccefb9703d..a7489e62595485002ce461a9856de908
    use CommentTestTrait;
    use GeneratePermutationsTrait;
  
-@@ -81,6 +83,13 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
-     'homepage',
-   ];
- 
-+  /**
-+   * Testing host entity.
-+   *
-+   * @var \Drupal\entity_test\Entity\EntityTest
-+   */
-+  protected $host;
-+
-   /**
-    * {@inheritdoc}
-    */
-@@ -88,6 +97,13 @@ protected function setUp(): void {
-     parent::setUp();
-     $this->installConfig(['user', 'comment']);
-     $this->installSchema('comment', ['comment_entity_statistics']);
-+
-+    // Create a comment type and attach a comment field to entity_test.
-+    $this->createCommentType('entity_test');
-+    $this->addDefaultCommentField('entity_test', 'entity_test', 'comment');
-+    // Create a testing host entity.
-+    $this->host = EntityTest::create();
-+    $this->host->save();
-   }
- 
-   /**
-@@ -133,8 +149,7 @@ public function testAccessToAdministrativeFields(): void {
- 
-     $anonymous_user = new AnonymousUserSession();
- 
--    // Add two fields.
--    $this->addDefaultCommentField('entity_test', 'entity_test', 'comment');
-+    // Add a second field.
-     $this->addDefaultCommentField('entity_test', 'entity_test', 'comment_other');
- 
-     // Create a comment against a test entity.
-@@ -159,7 +174,7 @@ public function testAccessToAdministrativeFields(): void {
-       'hostname' => 'magic.example.com',
-       'mail' => 'tonythemagicalpony@example.com',
-       'subject' => 'Bruce the Mesopotamian moose',
--      'entity_id' => $host->id(),
-+      'entity_id' => $this->host->id(),
-       'comment_type' => 'comment',
-       'field_name' => 'comment',
-       'pid' => 0,
-@@ -171,7 +186,7 @@ public function testAccessToAdministrativeFields(): void {
-       'entity_type' => 'entity_test',
-       'hostname' => 'magic.example.com',
-       'subject' => 'Brian the messed up lion',
--      'entity_id' => $host->id(),
-+      'entity_id' => $this->host->id(),
-       'comment_type' => 'comment',
-       'field_name' => 'comment',
-       'status' => 1,
-@@ -199,7 +214,7 @@ public function testAccessToAdministrativeFields(): void {
-       // Unpublished.
-       'status' => 0,
-       'subject' => 'Daniel the Cocker-Spaniel',
--      'entity_id' => $host->id(),
-+      'entity_id' => $this->host->id(),
-       'comment_type' => 'comment',
-       'field_name' => 'comment_other',
-       'pid' => 0,
-@@ -352,4 +367,48 @@ public function testAccessToAdministrativeFields(): void {
+@@ -352,4 +354,56 @@ public function testAccessToAdministrativeFields(): void {
      }
    }
  
 +  /**
-+   * Tests the comment field item list 'view only' access.
++   * Tests the comment field item list 'view comment list' access.
 +   */
 +  public function testFieldViewOnlyOperationAccess(): void {
++    // Create a comment type and attach a comment field to entity_test.
++    $this->createCommentType('entity_test');
++    $this->addDefaultCommentField('entity_test', 'entity_test', 'comment');
++
++    // Create a testing host entity.
++    $host = EntityTest::create();
++    $host->save();
++
 +    // Enable comment statistics creation.
 +    $this->container->get('state')->set('comment.maintain_entity_statistics', TRUE);
 +
 +    // An initial published comment.
 +    $enabled = $this->createComment([
 +      'entity_type' => 'entity_test',
-+      'entity_id' => $this->host->id(),
++      'entity_id' => $host->id(),
 +    ]);
 +
 +    // The last comment is disabled.
 +    $this->createComment([
 +      'entity_type' => 'entity_test',
-+      'entity_id' => $this->host->id(),
++      'entity_id' => $host->id(),
 +      'status' => FALSE,
 +    ]);
 +
-+    $account = $this->createUser([], ['access comments']);
++    $account = $this->createUser(['access comments', 'view test entity']);
 +
 +    // Reload the entity.
-+    $this->host = EntityTest::load($this->host->id());
++    $host = EntityTest::load($host->id());
 +    /** @var \Drupal\comment\CommentFieldItemList $comment_field */
-+    $comment_field = $this->host->get('comment');
++    $comment_field = $host->get('comment');
 +
-+    // Check that the 'view only' access to the field is permitted.
-+    $this->assertTrue($comment_field->access('view only', $account));
++    // Check that the 'view comment list' access to the field is permitted.
++    $this->assertTrue($comment_field->access('view comment list', $account));
 +    // And the last comment is comment statistic is the enabled comment.
 +    $this->assertSame($enabled->id(), $comment_field->cid);
 +
@@ -1316,33 +1420,20 @@ index 99bbd7e2a5a7b2aebc79eaaa138cf3ccefb9703d..a7489e62595485002ce461a9856de908
 +    $enabled->delete();
 +
 +    // Reload the entity.
-+    $this->host = EntityTest::load($this->host->id());
++    $host = EntityTest::load($host->id());
 +    /** @var \Drupal\comment\CommentFieldItemList $comment_field */
-+    $comment_field = $this->host->get('comment');
-+    // Check that the 'view only' access to the field is not permitted.
-+    $this->assertFalse($comment_field->access('view only', $account));
++    $comment_field = $host->get('comment');
++    // Check that the 'view comment list' access to the field is not permitted.
++    $this->assertFalse($comment_field->access('view comment list', $account));
 +  }
 +
  }
-diff --git a/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php b/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
-index 8c31076f47512c44f8897d3d79f5b4ae1623cfa6..b728e8d2bf3b4fa13d45aeed55f867805a59b115 100644
---- a/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
-+++ b/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
-@@ -64,7 +64,7 @@ public function testOrphan($property): void {
- 
-     // Create comment field.
-     $this->entityTypeManager->getStorage('field_storage_config')->create([
--      'type' => 'text_long',
-+      'type' => 'comment',
-       'entity_type' => 'node',
-       'field_name' => 'comment',
-     ])->save();
 diff --git a/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php b/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..275ffda8667a1e9dd19345188e837d1381eb6b2c
+index 00000000000..7cf1bb571b5
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php
-@@ -0,0 +1,320 @@
+@@ -0,0 +1,319 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -1403,12 +1494,11 @@ index 0000000000000000000000000000000000000000..275ffda8667a1e9dd19345188e837d13
 +  protected function setUp(): void {
 +    parent::setUp();
 +
-+    $this->installConfig(['comment']);
 +    $this->installEntitySchema('entity_test');
 +    $this->installEntitySchema('comment');
-+    $this->installSchema('comment', ['comment_entity_statistics']);
 +    $this->installEntitySchema('user');
-+    $this->installSchema('system', ['sequences']);
++    $this->installSchema('comment', ['comment_entity_statistics']);
++    $this->installConfig(['comment']);
 +    $this->addDefaultCommentField('entity_test', 'entity_test');
 +  }
 +
@@ -1538,7 +1628,7 @@ index 0000000000000000000000000000000000000000..275ffda8667a1e9dd19345188e837d13
 +      ])->save();
 +    $this->createTestComments();
 +
-+    $account = $this->createUser(['view test entity', 'access comments']);
++    $account = $this->createUser(['view test entity', 'access comments', 'post comments']);
 +    $this->setCurrentUser($account);
 +
 +    // Check that replying to comments not on the deepest level is allowed.
@@ -1663,9 +1753,63 @@ index 0000000000000000000000000000000000000000..275ffda8667a1e9dd19345188e837d13
 +  }
 +
 +}
+diff --git a/core/modules/comment/tests/src/Kernel/Views/CommentLinksTest.php b/core/modules/comment/tests/src/Kernel/Views/CommentLinksTest.php
+index 8465b928f64..8ea9f62ded4 100644
+--- a/core/modules/comment/tests/src/Kernel/Views/CommentLinksTest.php
++++ b/core/modules/comment/tests/src/Kernel/Views/CommentLinksTest.php
+@@ -5,6 +5,7 @@
+ namespace Drupal\Tests\comment\Kernel\Views;
+ 
+ use Drupal\comment\CommentManagerInterface;
++use Drupal\comment\Entity\CommentType;
+ use Drupal\Core\Session\AnonymousUserSession;
+ use Drupal\Core\Link;
+ use Drupal\Core\Url;
+@@ -39,6 +40,14 @@ protected function setUp($import_test_views = TRUE): void {
+     parent::setUp($import_test_views);
+ 
+     $this->installEntitySchema('entity_test');
++
++    // Create the comment type for entity_test.
++    CommentType::create([
++      'id' => 'entity_test_comment',
++      'label' => 'foo',
++      'description' => '',
++      'target_entity_type_id' => 'entity_test',
++    ])->save();
+   }
+ 
+   /**
+@@ -54,7 +63,7 @@ public function testLinkApprove(): void {
+       'entity_type' => 'entity_test',
+       'field_name' => 'comment',
+       'entity_id' => $host->id(),
+-      'comment_type' => 'entity_test',
++      'comment_type' => 'entity_test_comment',
+       'status' => 0,
+     ]);
+     $comment->save();
+@@ -139,7 +148,7 @@ public function testLinkReply(): void {
+       'uid' => $this->adminUser->id(),
+       'entity_type' => 'entity_test',
+       'entity_id' => $host->id(),
+-      'comment_type' => 'entity_test',
++      'comment_type' => 'entity_test_comment',
+       'field_name' => $field_storage_comment->getName(),
+       'status' => 0,
+     ]);
+@@ -171,6 +180,8 @@ public function testLinkReply(): void {
+     // Approve the comment.
+     $comment->setPublished();
+     $comment->save();
++    // Clear the comment access static cache (reply operation).
++    $this->container->get('entity_type.manager')->getAccessControlHandler('comment')->resetCache();
+     $view = Views::getView('test_comment');
+     $view->preview();
+ 
 diff --git a/core/modules/comment/tests/src/Traits/CommentCreationTrait.php b/core/modules/comment/tests/src/Traits/CommentCreationTrait.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..079b1492bf3f3416f84515497444c78857d12856
+index 00000000000..079b1492bf3
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Traits/CommentCreationTrait.php
 @@ -0,0 +1,81 @@
@@ -1751,10 +1895,10 @@ index 0000000000000000000000000000000000000000..079b1492bf3f3416f84515497444c788
 +
 +}
 diff --git a/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php b/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
-index 1d26daaf4a91a8a46a841aa2a0cc37b7f482a31d..d8f9de97ed18ac146b78e948ac6dadd9b4a873bd 100644
+index 1d26daaf4a9..dab553cb62a 100644
 --- a/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
 +++ b/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
-@@ -281,11 +281,33 @@ protected function getMockNode($has_field, $comment_status, $form_location, $com
+@@ -281,11 +281,26 @@ protected function getMockNode($has_field, $comment_status, $form_location, $com
      if (empty($this->timestamp)) {
        $this->timestamp = time();
      }
@@ -1766,37 +1910,43 @@ index 1d26daaf4a91a8a46a841aa2a0cc37b7f482a31d..d8f9de97ed18ac146b78e948ac6dadd9
 +    $field_item = $this->getMockBuilder('\Drupal\Core\Field\FieldItemListInterface')
 +      ->disableOriginalConstructor()
 +      ->getMock();
-+    $field_item->expects($this->any())
++    $field_item
 +      ->method('__get')
 +      ->willReturnMap([
 +        ['status', $comment_status],
 +        ['comment_count', $comment_count],
 +        ['last_comment_timestamp', $this->timestamp],
 +      ]);
-+    $field_item->expects($this->any())
++    $field_item
 +      ->method('access')
 +      ->willReturnCallback(function ($operation, $account) {
-+        switch ($operation) {
-+          case 'view only':
-+            return $account->hasPermission('access comments');
-+
-+          case 'view':
-+            return $account->hasPermission('access comments') || $account->hasPermission('post comments');
-+
-+          case 'create':
-+            return $account->hasPermission('post comments');
-+
-+          default:
-+            return FALSE;
-+        }
++        return match ($operation) {
++          'view comment list' => $account->hasPermission('access comments'),
++          'view' => $account->hasPermission('access comments') || $account->hasPermission('post comments'),
++          'create' => $account->hasPermission('post comments'),
++          default => FALSE,
++        };
 +      });
      $node->expects($this->any())
        ->method('get')
        ->with('comment')
-diff --git a/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml b/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
-index e5edd7e086c688ae3a9f10706479eaf9421a0b66..c8e39eac1e8a6a402faf748b96800767e47f1c8d 100644
---- a/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
-+++ b/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
+diff --git a/core/modules/page_cache/tests/src/Functional/PageCacheTagsIntegrationTest.php b/core/modules/page_cache/tests/src/Functional/PageCacheTagsIntegrationTest.php
+index 41f2e8b8e4f..5c8a74d730f 100644
+--- a/core/modules/page_cache/tests/src/Functional/PageCacheTagsIntegrationTest.php
++++ b/core/modules/page_cache/tests/src/Functional/PageCacheTagsIntegrationTest.php
+@@ -132,7 +132,7 @@ public function testPageCacheTags(): void {
+       'cookies:big_pipe_nojs',
+       'session.exists',
+       'user.permissions',
+-      'user.roles',
++      'user.roles:authenticated',
+     ];
+ 
+     // Full node page 1.
+diff --git a/core/modules/system/tests/modules/config_mapping_test/config/optional/field.field.node.config_mapping_test.comment_config_mapping_test.yml b/core/modules/system/tests/modules/config_mapping_test/config/optional/field.field.node.config_mapping_test.comment_config_mapping_test.yml
+index 65072da485e..5ca51229264 100644
+--- a/core/modules/system/tests/modules/config_mapping_test/config/optional/field.field.node.config_mapping_test.comment_config_mapping_test.yml
++++ b/core/modules/system/tests/modules/config_mapping_test/config/optional/field.field.node.config_mapping_test.comment_config_mapping_test.yml
 @@ -25,6 +25,9 @@ default_value:
  default_value_callback: ''
  settings:
@@ -1807,27 +1957,22 @@ index e5edd7e086c688ae3a9f10706479eaf9421a0b66..c8e39eac1e8a6a402faf748b96800767
    per_page: 50
    anonymous: 0
    form_location: true
-diff --git a/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php b/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
-index 96d6fa4f5bcf509b23455f267cc8e23d602f661d..5bd83680ac20798e29f25dc3d9532df1fcf89e76 100644
---- a/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
-+++ b/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
-@@ -100,4 +100,14 @@ protected function checkCreateAccess(AccountInterface $account, array $context,
-     ], 'OR');
-   }
- 
-+  /**
-+   * {@inheritdoc}
-+   */
-+  protected function buildCreateAccessCid(?string $entity_bundle, array $context): string {
-+    $cid = parent::buildCreateAccessCid($entity_bundle, $context);
-+    $cid .= isset($context['context_var1']) ? ":{$context['context_var1']}" : '';
-+    $cid .= isset($context['context_var2']) ? ":{$context['context_var2']}" : '';
-+    return $cid;
-+  }
-+
- }
+diff --git a/core/modules/system/tests/modules/olivero_test/config/install/field.field.node.article.comment.yml b/core/modules/system/tests/modules/olivero_test/config/install/field.field.node.article.comment.yml
+index cf3b12af98f..0f22e33e3dc 100644
+--- a/core/modules/system/tests/modules/olivero_test/config/install/field.field.node.article.comment.yml
++++ b/core/modules/system/tests/modules/olivero_test/config/install/field.field.node.article.comment.yml
+@@ -25,6 +25,9 @@ default_value:
+ default_value_callback: ''
+ settings:
+   default_mode: 1
++  thread_limit:
++    depth: 2
++    mode: 0
+   per_page: 50
+   anonymous: 0
+   form_location: true
 diff --git a/core/profiles/standard/config/install/field.field.node.article.comment.yml b/core/profiles/standard/config/install/field.field.node.article.comment.yml
-index cf3b12af98f5e10296a4e896f974f8aa5487155b..0f22e33e3dce854396f0af1dab141ccc5350855b 100644
+index cf3b12af98f..0f22e33e3dc 100644
 --- a/core/profiles/standard/config/install/field.field.node.article.comment.yml
 +++ b/core/profiles/standard/config/install/field.field.node.article.comment.yml
 @@ -25,6 +25,9 @@ default_value:
@@ -1840,9 +1985,23 @@ index cf3b12af98f5e10296a4e896f974f8aa5487155b..0f22e33e3dce854396f0af1dab141ccc
    per_page: 50
    anonymous: 0
    form_location: true
+diff --git a/core/recipes/article_comment/config/field.field.node.article.comment.yml b/core/recipes/article_comment/config/field.field.node.article.comment.yml
+index cf3b12af98f..0f22e33e3dc 100644
+--- a/core/recipes/article_comment/config/field.field.node.article.comment.yml
++++ b/core/recipes/article_comment/config/field.field.node.article.comment.yml
+@@ -25,6 +25,9 @@ default_value:
+ default_value_callback: ''
+ settings:
+   default_mode: 1
++  thread_limit:
++    depth: 2
++    mode: 0
+   per_page: 50
+   anonymous: 0
+   form_location: true
 diff --git a/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php b/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..a0c22dec7ebb32f90923b081dbe325e241af6f73
+index 00000000000..a0c22dec7eb
 --- /dev/null
 +++ b/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php
 @@ -0,0 +1,105 @@
