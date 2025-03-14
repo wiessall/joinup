@@ -11,10 +11,10 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Reports all groups and features execution times.
@@ -82,21 +82,24 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
       return;
     }
 
-    // Collect results.
-    $results = [];
-    foreach ($this->timerStore as $group => $features) {
-      arsort($features);
-      $results[$group]['total'] = number_format(array_sum($features), 2) . 's';
-      $results[$group]['features'] = array_map(static fn($v) => number_format($v, 2) . 's', $features);
-    }
-
     // Print results.
-    $this->output->write(
-      '--------------------------------------------------------------------' . PHP_EOL
-      . 'Execution times:' . PHP_EOL
-      . Yaml::dump($results, 30, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK)
-      . '--------------------------------------------------------------------' . PHP_EOL
-    );
+    foreach ($this->timerStore as $group => $features) {
+      // Sort by execution time DESC.
+      arsort($features);
+      $total = number_format(array_sum($features), 2) . 's';
+
+      $rows = [];
+      foreach ($features as $feature => $value) {
+        $rows[] = [$feature, number_format($value, 2) . 's'];
+      }
+
+      $table = new Table($this->output);
+      $table
+        ->setHeaders(["@$group features", "Duration"])
+        ->setRows($rows)
+        ->setFooterTitle("Total: $total")
+        ->render();
+    }
   }
 
   /**
