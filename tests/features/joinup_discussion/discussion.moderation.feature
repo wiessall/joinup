@@ -87,7 +87,7 @@ Feature: Discussion moderation
       | Lance Rustici | lance.rustici@example.com |
       | Denny Winslow | denny.winslow@example.com |
     And collection content:
-      | title                        | description                                    | logo     | content creation | state     |
+      | title                        | description                                    | logo     | content_creation | state     |
       | Valentine's day survival kit | How to survive the most scary day of the year. | logo.png | members          | published |
     And the following collection user membership:
       | collection                   | user          | roles       |

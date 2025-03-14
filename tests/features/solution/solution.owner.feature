@@ -9,8 +9,8 @@ Feature:
       | title             |
       | Author collection |
     And solution content:
-      | title           | moderation   | content creation   | collection        |
-      | Author solution | <moderation> | <content creation> | Author collection |
+      | title           | group_moderation | content_creation   | collection        |
+      | Author solution | <moderation>     | <content creation> | Author collection |
 
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
@@ -36,8 +36,8 @@ Feature:
       | Username          |
       | Solution API user |
     And collection content:
-      | title                    | logo     | moderation | content creation         |
-      | This is a klm collection | logo.png | no         | facilitators and authors |
+      | title                    | logo     | group_moderation | content_creation         |
+      | This is a klm collection | logo.png | no               | facilitators and authors |
     And the following collection user memberships:
       | user              | collection               | roles       |
       | Solution API user | This is a klm collection | facilitator |
