@@ -1,7 +1,7 @@
 type: module
 name: 'Statistics test'
 description: 'Used to test Joinup Statistics.'
-core_version_requirement: ">= 9.4"
+core_version_requirement: "^10.4 || ^11"
 package: Testing
 dependecies:
   - joinup:joinup_stats

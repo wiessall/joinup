@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
 use Drupal\block\Entity\Block;
-use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\node\NodeInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -23,13 +21,6 @@ function ventuno_preprocess_page(array &$variables): void {
   $joinup_version = \Drupal::service('joinup_core.joinup_version');
   $variables['version'] = $joinup_version->getVersion();
   $variables['version_url'] = $joinup_version->getUrl();
-
-  // Export the URL of the homepage "Discover more" news link.
-  $news_page = \Drupal::getContainer()->get('entity.repository')
-    ->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::JOINUP_TO_PORTAL_NEWS);
-  if ($news_page instanceof NodeInterface) {
-    $variables['discover_more_url'] = $news_page->toUrl()->toString();
-  }
 
   $current_user = \Drupal::currentUser();
   // Export the username to display in the header.
