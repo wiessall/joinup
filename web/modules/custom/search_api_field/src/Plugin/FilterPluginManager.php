@@ -8,7 +8,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\search_api\Item\FieldInterface;
-use Drupal\search_api_field\Annotation\SearchApiFieldFilter;
+use Drupal\search_api_field\Attribute\SearchApiFieldFilter;
 
 /**
  * Default implementation of filter plugin manager.
