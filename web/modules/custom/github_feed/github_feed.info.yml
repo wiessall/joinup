@@ -2,4 +2,4 @@ name: GitHub feed
 type: module
 description: Provides integration with github and fetches feeds.
 package: Custom
-core_version_requirement: ">=9.5"
+core_version_requirement: "^10.4 || ^11"

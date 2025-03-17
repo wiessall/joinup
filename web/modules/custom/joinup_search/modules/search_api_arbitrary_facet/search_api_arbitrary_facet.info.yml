@@ -1,7 +1,7 @@
 name: Joinup search arbitrary facet
 type: module
 description: Allows adding facets based on arbitrary queries.
-core_version_requirement: ">= 9.4"
+core_version_requirement: "^10.4 || ^11"
 package: Joinup
 
 dependencies:
