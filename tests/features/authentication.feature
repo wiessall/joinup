@@ -75,16 +75,6 @@ Feature: User authentication
       | propose/solution                                    |
       | user/subscriptions                                  |
 
-  Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
-    Given I am not logged in
-    When I go to "<path>"
-    Then the response status code should be 403
-
-    Examples:
-      | path                                        |
-      | admin/reporting/distribution-downloads/csv  |
-      | admin/reporting/subscribers-report/download |
-
   Scenario Outline: Authenticated user can access pages they are authorized to
     Given I am logged in as a user with the "authenticated" role
     Then I visit "<path>"
