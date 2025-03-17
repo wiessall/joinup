@@ -33,13 +33,6 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getCacheTagName(): string {
-    return 'group_administration_list';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function getRedirectRouteName(): string {
     return 'joinup_reports.group_administrators_report';
   }
