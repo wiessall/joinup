@@ -22,7 +22,7 @@ Feature:
       | /admin/reporting/distribution-downloads/csv  | authenticated | 403  |
       | /admin/reporting/distribution-downloads/csv  | administrator | 403  |
       | /admin/reporting/distribution-downloads/csv  | moderator     | 200  |
-      | /admin/reporting/distribution-downloads/csv  | develop       | 200  |
+      | /admin/reporting/distribution-downloads/csv  | developer     | 200  |
       | /admin/reporting/export-user-list            | authenticated | 403  |
       | /admin/reporting/export-user-list            | moderator     | 200  |
       | /admin/reporting/group-administrators        | authenticated | 403  |
