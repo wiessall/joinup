@@ -62,16 +62,7 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
 
     // Make sure account wasn't deleted in the meantime.
     if ($account instanceof UserInterface) {
-      user_cancel(['user_cancel_notify' => TRUE], $account->id(), 'user_cancel_delete');
-      // Process batch correctly based on execution environment.
-      if (PHP_SAPI === 'cli' && function_exists('drush_backend_batch_process')) {
-        // Process batch using Drush.
-        drush_backend_batch_process();
-      }
-      else {
-        // Process batch using Drupal's batch processing.
-        batch_process();
-      }
+      _user_cancel(['user_cancel_notify' => TRUE], $account, 'user_cancel_delete');
 
       // Commit changes.
       $this->userDeleted->destruct();
