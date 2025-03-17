@@ -2,7 +2,7 @@ name: 'Contact information'
 description: 'Provides Contact information entities for the Joinup project.'
 type: module
 package: Joinup
-core_version_requirement: ">= 9.4"
+core_version_requirement: "^10.4 || ^11"
 
 dependencies:
   - drupal:language
