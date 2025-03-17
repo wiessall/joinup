@@ -33,12 +33,6 @@ Feature: User authentication
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
-      | admin/reporting/distribution-downloads              |
-      | admin/reporting/export-user-list                    |
-      | admin/reporting/group-administrators                |
-      | admin/reporting/solutions-by-licences               |
-      | admin/reporting/solutions-by-type                   |
-      | admin/reporting/subscribers-report                  |
       | admin/structure                                     |
       | admin/structure/compatibility-document              |
       | admin/structure/compatibility-document/display      |
@@ -264,8 +258,6 @@ Feature: User authentication
       | admin/content/media                        |
       | admin/legal-notice                         |
       | admin/legal-notice/add                     |
-      | admin/reporting/distribution-downloads     |
-      | admin/reporting/distribution-downloads/csv |
       | admin/structure                            |
       | node/add                                   |
       | node/add/collection                        |
