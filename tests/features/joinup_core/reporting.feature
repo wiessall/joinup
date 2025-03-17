@@ -21,8 +21,8 @@ Feature:
       | /admin/reporting/distribution-downloads/csv  | moderator     | 200  |
       | /admin/reporting/export-user-list            | authenticated | 403  |
       | /admin/reporting/export-user-list            | moderator     | 200  |
-      | /admin/reporting/group-administrators/export | authenticated | 403  |
-      | /admin/reporting/group-administrators/export | moderator     | 200  |
+      | /admin/reporting/group-administrators        | authenticated | 403  |
+      | /admin/reporting/group-administrators        | moderator     | 200  |
       | /admin/reporting/legal-notice-report         | authenticated | 403  |
       | /admin/reporting/legal-notice-report         | moderator     | 200  |
       | /admin/reporting/messages-overview           | authenticated | 403  |
