@@ -16,8 +16,10 @@ Feature:
       | /admin/reporting/actions-log                 | authenticated | 403  |
       | /admin/reporting/actions-log                 | moderator     | 200  |
       | /admin/reporting/distribution-downloads      | authenticated | 403  |
+      | /admin/reporting/distribution-downloads      | administrator | 403  |
       | /admin/reporting/distribution-downloads      | moderator     | 200  |
       | /admin/reporting/distribution-downloads/csv  | authenticated | 403  |
+      | /admin/reporting/distribution-downloads/csv  | administrator | 403  |
       | /admin/reporting/distribution-downloads/csv  | moderator     | 200  |
       | /admin/reporting/export-user-list            | authenticated | 403  |
       | /admin/reporting/export-user-list            | moderator     | 200  |
@@ -37,6 +39,20 @@ Feature:
       | /admin/reporting/subscribers-report          | moderator     | 200  |
       | /admin/reporting/subscribers-report/download | authenticated | 403  |
       | /admin/reporting/subscribers-report/download | moderator     | 200  |
+
+  Scenario Outline: Anonymous user cannot access restricted pages
+    Given I am not logged in
+    When I go to "<path>"
+    Then I should see the heading "Sign in to continue"
+
+    Examples:
+      | path                                   |
+      | admin/reporting/distribution-downloads |
+      | admin/reporting/export-user-list       |
+      | admin/reporting/group-administrators   |
+      | admin/reporting/solutions-by-licences  |
+      | admin/reporting/solutions-by-type      |
+      | admin/reporting/subscribers-report     |
 
   Scenario: Links should be visible on the reporting page for a moderator.
     Given I am logged in as a user with the moderator role
