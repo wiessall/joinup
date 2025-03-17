@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: Compatible=For software
  * - <Licence-B>: Compatible=For data
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T17",
- *   weight = 1700,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T17",
+  weight: 1700
+)]
 class T17ForSoftwareVsForData extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = [

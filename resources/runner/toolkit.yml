@@ -37,19 +37,6 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/node_modules
 
-  test:
-    behat:
-      commands:
-        before:
-          - task: exec
-            command: |
-              if [ "${BEHATSUITE}" != "default" ]; then
-                ${drush.bin} search-api:clear published
-                ${drush.bin} search-api:rebuild-tracker published
-                ${drush.bin} search-api-index published
-                ${drush.bin} search-api:status published
-              fi
-
   install:
     clone:
       commands:
@@ -119,13 +106,6 @@ commands:
       command: drupal:settings
       arguments:
         - site-clean
-    # Checks for extensions metadata deprecations. Note that we run this after
-    # site install as we need a bootstrapped Drupal.
-    # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15, in ISAICP-8337.
-    # See Re-enable this check when PHP is 8.2.14 or 8.2.15.
-    # See https://github.com/php/php-src/issues/8251
-    # - task: exec
-    #   command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -138,6 +118,14 @@ commands:
       arguments:
         - php:eval
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+    # UID1 is a regular user, but for local development we keep its powers.
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - user:role:add
+        - developer
+      options:
+        uid: 1
     - task: exec
       command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
