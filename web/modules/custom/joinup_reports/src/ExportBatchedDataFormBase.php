@@ -126,7 +126,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
   abstract protected function generateData(array &$form, FormStateInterface $form_state): void;
 
   /**
-   * Returns the routename for the report download.
+   * Returns the route name for the report download.
    *
    * @return string
    *   The route name.
