@@ -10,7 +10,10 @@ services:
 
   Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber: { }
 
-
+  eu_oss_translation.commands:
+    class: Drupal\eu_oss_translation\Commands\EuOssTranslationCommands
+    tags:
+      - { name: drush.command }
 
 
 

@@ -11,3 +11,7 @@ services:
     class: Drupal\eu_oss_vitality_index\VitalityIndexQueue
   Drupal\eu_oss_vitality_index\VitalityIndexQueueInterface: '@eu_oss_vitality_index.queue'
 
+  eu_oss_vitality_index.commands:
+    class: Drupal\eu_oss_vitality_index\Commands\EuOssVitalityIndexCommands
+    tags:
+      - { name: drush.command }

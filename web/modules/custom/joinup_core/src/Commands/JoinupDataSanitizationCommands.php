@@ -12,12 +12,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
-use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Commands\sql\sanitize\SanitizeCommands;
 use Drush\Commands\sql\sanitize\SanitizePluginInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Additional Drush sanitization plugins.
@@ -30,7 +31,8 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     protected readonly Connection $db,
     protected readonly EntityFieldManagerInterface $entityFieldManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly KeyValueFactoryInterface $keyValue,
+    #[Autowire('keyvalue')]
+    protected readonly KeyValueFactory $keyValue,
     protected readonly FieldTypePluginManagerInterface $fieldTypePluginManager,
   ) {
     parent::__construct();
@@ -117,10 +119,8 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
 
   /**
    * Truncates the given table.
-   *
-   * @param string $tableName
-   *   The table name to truncate.
    */
+  #[CLi\Argument(name: 'tableName', description: 'The table name to truncate.')]
   protected function truncateTable(string $tableName): void {
     $this->db->truncate($tableName)->execute();
     $this->logger()->success(dt('@table_name table sanitized.', ['@table_name' => $tableName]));
@@ -128,12 +128,9 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
 
   /**
    * Sanitizes the corresponding entity field tables.
-   *
-   * @param string $entityType
-   *   The entity type ID.
-   * @param array $fieldNames
-   *   An array of field names.
    */
+  #[CLi\Argument(name: 'entityType', description: 'The entity type ID.')]
+  #[CLi\Argument(name: 'fieldNames', description: 'An array of field names.')]
   protected function sanitizeEntityFieldsData(string $entityType, array $fieldNames): void {
     $fieldStorageDefinitions = $this->entityFieldManager->getFieldStorageDefinitions($entityType);
     $fieldStorageDefinitions = array_intersect_key($fieldStorageDefinitions, array_flip($fieldNames));
