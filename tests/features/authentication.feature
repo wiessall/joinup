@@ -35,7 +35,7 @@ Feature: User authentication
       | admin/people                                        |
       | admin/reporting/distribution-downloads              |
       | admin/reporting/export-user-list                    |
-      | admin/reporting/group-administrators/export         |
+      | admin/reporting/group-administrators                |
       | admin/reporting/solutions-by-licences               |
       | admin/reporting/solutions-by-type                   |
       | admin/reporting/subscribers-report                  |
@@ -124,7 +124,7 @@ Feature: User authentication
       | admin/people                                        |
       | admin/reporting/distribution-downloads              |
       | admin/reporting/export-user-list                    |
-      | admin/reporting/group-administrators/export         |
+      | admin/reporting/group-administrators                |
       | admin/reporting/solutions-by-licences               |
       | admin/reporting/solutions-by-type                   |
       | admin/reporting/subscribers-report                  |
@@ -195,7 +195,7 @@ Feature: User authentication
       | admin/reporting/distribution-downloads                        |
       | admin/reporting/distribution-downloads/csv                    |
       | admin/reporting/export-user-list                              |
-      | admin/reporting/group-administrators/export                   |
+      | admin/reporting/group-administrators                          |
       | admin/reporting/messages-overview                             |
       | admin/reporting/solutions-by-licences                         |
       | admin/reporting/solutions-by-type                             |
