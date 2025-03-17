@@ -30,20 +30,10 @@ a {
 
 // Layout
 .layout-container {
-  &:not(.listing) {
-    .page-header {
-      margin-bottom: $spacer * 1; // 16px
-      @include media-breakpoint-up(md) {
-        margin-bottom: $spacer * 2; // 32px
-      }
-    }
-  }
-  &.listing {
-    .page-header + .content .paragraph--type--content-listing {
-      margin-top: $spacer * -1; // -16px
-      @include media-breakpoint-up(md) {
-        margin-top: $spacer * -2; // -32px
-      }
+  .page-header {
+    margin-bottom: $spacer * 1; // 16px
+    @include media-breakpoint-up(md) {
+      margin-bottom: $spacer * 2; // 32px
     }
   }
 }

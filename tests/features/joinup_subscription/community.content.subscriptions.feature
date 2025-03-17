@@ -39,10 +39,10 @@ Feature: Subscribing to community content in collections and solutions
       | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | published | junfukue |
       | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
     And document content:
-      | title             | abstract         | field_paragraphs_body           | collection         | solution              | author   |
-      | Doppler effect    |                  | Caused by disk rotation         | Black hole imaging |                       | junfukue |
-      | Distant observers | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | junfukue |
-      | Close observers   |                  | Close observers body            |                    | Bolometric appearance | junfukue |
+      | title               | abstract         | field_paragraphs_body           | collection         | solution              | author   |
+      | Doppler's effect    |                  | Caused by disk rotation         | Black hole imaging |                       | junfukue |
+      | Distant observers   | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | junfukue |
+      | Close observers     |                  | Close observers body            |                    | Bolometric appearance | junfukue |
     And event content:
       | title               | field_paragraphs_body | collection         | solution       | author   | start date          | end date            | abstract |
       | Effective potential | Schwarzschild metric  | Black hole imaging |                | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |          |
@@ -56,7 +56,7 @@ Feature: Subscribing to community content in collections and solutions
     # collection and the solution.
     Then the daily group content subscription digest for jpluminet should match the following messages:
       | Active galactic nuclei |
-      | Doppler effect         |
+      | Doppler's effect       |
       | Effective potential    |
       | The periastron         |
       | Close observers        |
@@ -71,7 +71,7 @@ Feature: Subscribing to community content in collections and solutions
       | title                  |
       | Black hole imaging     |
       | Active galactic nuclei |
-      | Doppler effect         |
+      | Doppler's effect       |
       | Effective potential    |
       | The periastron         |
       | Bolometric appearance  |
@@ -87,7 +87,7 @@ Feature: Subscribing to community content in collections and solutions
       | Active galactic nuclei                                                                        |
       | A thin relativistic accretion disk                                                            |
       | Read more                                                                                     |
-      | Doppler effect                                                                                |
+      | Doppler's effect                                                                              |
       | Caused by disk rotation                                                                       |
       | Read more                                                                                     |
       | 28 November 2019                                                                              |

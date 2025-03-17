@@ -18,13 +18,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a VBO action that unarchive content.
  *
  * @Action(
- *   id = "joinup_unarchive",
- *   label = @Translation("Unarchive content"),
- *   type = "node",
- *   requirements = {
- *      "_permission" = "vbo joinup unarchive action",
- *   },
- * )
+ *    id = "joinup_unarchive",
+ *    label = @Translation("Unarchive content"),
+ *    type = "node",
+ *    requirements = {
+ *       "_permission" = "vbo joinup unarchive action",
+ *    },
+ *  )
  */
 class UnarchiveAction extends StateActionBase {
 

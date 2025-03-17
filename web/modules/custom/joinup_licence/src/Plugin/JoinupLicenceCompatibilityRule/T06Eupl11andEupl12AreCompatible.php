@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Plugin\JoinupLicenceCompatibilityRule;
 
+use Drupal\joinup_licence\Attribute\JoinupLicenceCompatibilityRule;
 use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
 
 /**
@@ -13,12 +14,11 @@ use Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginBase;
  * - <Licence-A>: SPDX=EUPL-1.1 or SPDX=EUPL-1.2
  * - <Licence-B>: SPDX=EUPL-1.1 or SPDX=EUPL-1.2
  * @codingStandardsIgnoreEnd
- *
- * @JoinupLicenceCompatibilityRule(
- *   id = "T06",
- *   weight = 600,
- * )
  */
+#[JoinupLicenceCompatibilityRule(
+  id: "T06",
+  weight: 600
+)]
 class T06Eupl11andEupl12AreCompatible extends JoinupLicenceCompatibilityRulePluginBase {
 
   const INBOUND_CRITERIA = [
