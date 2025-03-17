@@ -130,7 +130,7 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Argument(name: 'modules', description: 'A space separated list of installed modules whose codebase is gone.')]
   #[CLI\Command(name: 'joinup:force-uninstall-modules')]
   #[CLI\Bootstrap(level: DrupalBootLevels::DATABASE)]
-  #[CLI\Usage(name: 'joinup:force-uninstall-modules module1 module2',description:  'Uninstalls module1 and module2')]
+  #[CLI\Usage(name: 'joinup:force-uninstall-modules module1 module2', description:  'Uninstalls module1 and module2')]
   public function uninstallModules(array $modules): void {
     if (empty($modules)) {
       throw new \Exception('No modules passed.');
