@@ -80,4 +80,3 @@ Feature:
       | Legal notice report                   |
       | Messages overview                     |
       | Distribution downloads                |
-
