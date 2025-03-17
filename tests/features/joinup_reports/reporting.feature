@@ -54,6 +54,16 @@ Feature:
       | admin/reporting/solutions-by-type      |
       | admin/reporting/subscribers-report     |
 
+  Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
+    Given I am not logged in
+    When I go to "<path>"
+    Then the response status code should be 403
+
+    Examples:
+      | path                                        |
+      | admin/reporting/distribution-downloads/csv  |
+      | admin/reporting/subscribers-report/download |
+
   Scenario: Links should be visible on the reporting page for a moderator.
     Given I am logged in as a user with the moderator role
     And I am on "/admin/reporting"
