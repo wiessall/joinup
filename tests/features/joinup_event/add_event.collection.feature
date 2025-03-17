@@ -69,16 +69,17 @@ Feature: "Add event" visibility options.
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
     And I fill the start time of the Date widget with "23:59:59"
-    And I fill the end date of the Date widget with "2018-08-30"
+    And I fill the end date of the Date widget with "2018-09-30"
     And I fill the end time of the Date widget with "12:57:00"
     # And I fill in "Scope" with values "pan_european, national"
     And I select "National" from "Scope"
     And  I additionally select "Regional" from "Scope"
     And I press "Save as draft"
     Then I should see the following error messages:
-      | error messages                                   |
-      | At least one location field should be filled in. |
-      | Topic field is required.                         |
+      | error messages                                           |
+      | At least one location field should be filled in.         |
+      | Topic field is required.                                 |
+      | The duration of the event cannot be longer than 2 weeks. |
 
     When I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
     And I enter the following for the "Virtual location" link field:
@@ -86,6 +87,8 @@ Feature: "Add event" visibility options.
       | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
       | https://drupal.org/                        |                                      |
     And I select "EU and European Policies" from "Topic"
+    And I fill the end date of the Date widget with "2018-08-30"
+    And I fill the end time of the Date widget with "12:57:00"
     And I press "Save as draft"
     Then I should see the heading "An amazing event"
     But I should not see the text "National"
@@ -113,9 +116,10 @@ Feature: "Add event" visibility options.
     Then I should see the text "29/08 to 01/09/2018"
 
     When I go to the edit form of the "An amazing event" event
+    And I fill the start date of the Date widget with "2018-12-29"
     And I fill the end date of the Date widget with "2019-01-02"
     And I press "Save as draft"
-    Then I should see the text "29/08/2018 to 02/01/2019"
+    Then I should see the text "29/12/2018 to 02/01/2019"
 
   @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.

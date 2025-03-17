@@ -32,25 +32,25 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * since it would introduce a circular dependency between the `joinup_group` and
  * `custom_page` modules.
  *
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5969
+ *
+ *  @Action(
+ *    id = "joinup_change_group",
+ *    label = @Translation("Move to other group"),
+ *    type = "node",
+ *    confirm = FALSE,
+ *    pass_context = TRUE,
+ *    pass_view = FALSE,
+ *    requirements = {
+ *       "_permission" = "vbo joinup change group action",
+ *    },
+ *  )
+ *
  * @todo Implement an event subscriber inside `ChangeGroupAction` that allows to
  *   alter the list of actions. This will allow us to move all the custom logic
  *   into a listener in the `custom_page` module and solve the circular
  *   dependency. The action can then be moved inside `joinup_group` and this
  *   module is no longer needed.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5969
- *
- * @Action(
- *   id = "joinup_change_group",
- *   label = @Translation("Move to other group"),
- *   type = "node",
- *   confirm = FALSE,
- *   pass_context = TRUE,
- *   pass_view = FALSE,
- *   requirements = {
- *      "_permission" = "vbo joinup change group action",
- *   },
- * )
  */
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
 

@@ -6,8 +6,10 @@ namespace Drupal\joinup_solution\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\ActionBase;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\node\NodeInterface;
@@ -15,14 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an action that changes the collection for solutions.
- *
- * @Action(
- *   id = "change_collection",
- *   label = @Translation("Move to other collection"),
- *   type = "node",
- *   confirm_form_route_name = "joinup_solution.change_collection",
- * )
  */
+#[Action(
+  id: "change_collection",
+  label: new TranslatableMarkup("Move to other collection"),
+  type: "node",
+  confirm_form_route_name: "joinup_solution.change_collection"
+)]
 class ChangeCollectionAction extends ActionBase implements ContainerFactoryPluginInterface {
 
   /**
