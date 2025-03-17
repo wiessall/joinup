@@ -2,7 +2,7 @@ name: 'Joinup Group'
 description: 'Services and API methods useful for Joinup groups.'
 type: module
 package: Joinup
-core_version_requirement: ">= 9.4"
+core_version_requirement: "^10.4 || ^11"
 
 dependencies:
   - 'joinup:topic'
