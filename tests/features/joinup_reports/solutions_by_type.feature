@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-a
 Feature: Solutions by type report
   As a moderator of the site
   In order to be able to manage the website
