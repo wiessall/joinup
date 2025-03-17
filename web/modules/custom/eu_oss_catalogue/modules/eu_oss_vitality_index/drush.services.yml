@@ -1,8 +1,0 @@
-services:
-  eu_oss_vitality_index.commands:
-    class: Drupal\eu_oss_vitality_index\Commands\EuOssVitalityIndexCommands
-    arguments:
-      - '@eu_oss_vitality_index.generator'
-      - '@entity_type.manager'
-    tags:
-      - { name: drush.command }

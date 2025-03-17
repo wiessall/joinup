@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Joinup\TaskRunner\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Drush\Attributes as CLI;
 use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 use Robo\Exception\AbortTasksException;
@@ -16,15 +18,9 @@ class DrushCommands extends AbstractCommands {
 
   /**
    * Install one or more modules.
-   *
-   * @param string[] $modules
-   *   List of modules to install separated by space.
-   *
-   * @return \Robo\Collection\CollectionBuilder
-   *   The Robo collection builder.
-   *
-   * @command drush:module-install
    */
+  #[CLI\Argument(name: 'modules', description: 'List of modules to install separated by space.')]
+  #[CLI\Command(name: 'drush:module-install')]
   public function installModule(array $modules): CollectionBuilder {
     $config = $this->getConfig();
     $modules_concatenated = implode(',', $modules);
@@ -34,15 +30,9 @@ class DrushCommands extends AbstractCommands {
 
   /**
    * Validates the drush:module-install command.
-   *
-   * @param \Consolidation\AnnotatedCommand\CommandData $commandData
-   *   The command data object.
-   *
-   * @throws \Robo\Exception\AbortTasksException
-   *   When no module has been passed.
-   *
-   * @hook validate drush:module-install
    */
+  #[CLI\Argument(name: 'commandData', description: 'The command data object')]
+  #[CLI\Hook(type: HookManager::ARGUMENT_VALIDATOR, target: 'drush:module-install')]
   public function validateInstallModule(CommandData $commandData): void {
     if (!$commandData->arguments()['modules']) {
       throw new AbortTasksException('At least one module should be specified as command argument.');

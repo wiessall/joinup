@@ -41,3 +41,8 @@ services:
   eu_oss_catalogue.git_remote.api_guesser:
     class: Drupal\eu_oss_catalogue\ApiGuesser
   Drupal\eu_oss_catalogue\ApiGuesserInterface: '@eu_oss_catalogue.git_remote.api_guesser'
+
+  eu_oss_catalogue.commands:
+    class: Drupal\eu_oss_catalogue\Commands\EuOssCatalogueCommands
+    tags:
+      - { name: drush.command }

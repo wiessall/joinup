@@ -11,6 +11,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Drush commands.
@@ -18,7 +19,9 @@ use Drush\Commands\DrushCommands;
 class EuOssCatalogueCommands extends DrushCommands {
 
   public function __construct(
+    #[Autowire(service: 'eu_oss_catalogue')]
     protected readonly EuOssCatalogueInterface $euOssCatalogueService,
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
     protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {
     parent::__construct();
