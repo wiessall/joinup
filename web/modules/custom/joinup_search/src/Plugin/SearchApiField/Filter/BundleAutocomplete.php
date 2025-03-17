@@ -8,19 +8,21 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_search\Plugin\Derivative\BundleAutocompleteDeriver;
 use Drupal\search_api\Query\ConditionSetInterface;
+use Drupal\search_api_field\Attribute\SearchApiFieldFilter;
 use Drupal\search_api_field\Plugin\FilterPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A plugin that allows to autocomplete on entities of a single bundle.
- *
- * @SearchApiFieldFilter(
- *   id = "bundle_autocomplete",
- *   label = @Translation("Bundle autocomplete"),
- *   deriver = "Drupal\joinup_search\Plugin\Derivative\BundleAutocompleteDeriver"
- * )
  */
+#[SearchApiFieldFilter(
+  id: "bundle_autocomplete",
+  label: new TranslatableMarkup("Bundle autocomplete"),
+  deriver: BundleAutocompleteDeriver::class,
+)]
 class BundleAutocomplete extends FilterPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

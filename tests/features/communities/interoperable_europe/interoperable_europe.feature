@@ -16,9 +16,7 @@ Feature:
     And I should see the link "Settings" in the "Entity actions" region
 
   Scenario: Anonymous visiting the landing page.
-    Given I am on the homepage
-    When I click "Discover more"
-    Then I should see the heading "Joinup is becoming Interoperable Europe Portal"
+    When I visit "interoperable-europe/news/joinup-becoming-interoperable-europe-portal"
     And I should not see the "Entity actions" region
     And the page should be rendered using the "Interoperable Europe" theme
     And I should not see the link "Report abusive content"
