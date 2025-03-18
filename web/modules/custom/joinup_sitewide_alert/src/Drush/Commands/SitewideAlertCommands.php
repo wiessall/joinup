@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_sitewide_alert\Commands;
+namespace Drupal\joinup_sitewide_alert\Drush\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Attributes as CLI;
@@ -24,8 +24,8 @@ class SitewideAlertCommands extends DrushCommands {
   /**
    * Unpublish Sitewide entity.
    */
-  #[CLi\Argument(name: 'options', description: 'Command options.')]
-  #[Cli\Command(name: "joinup:unpublish-alert")]
+  #[Cli\Command(name: 'joinup:unpublish-alert')]
+  #[CLI\Option(name: 'category', description: 'Command options.')]
   public function unpublishAlert(array $options = ['category' => NULL]): void {
     $storage = $this->entityTypeManager->getStorage('sitewide_alert');
 
