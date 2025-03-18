@@ -31,9 +31,6 @@ condition.plugin.group_context:
   type: condition.plugin
   label: Group context condition
   mapping:
-    group_context:
-      type: boolean
-      label: Group context is active
     limit_to_groups:
       type: sequence
       label: Limit to groups
