@@ -17,6 +17,19 @@ url:
     sl: sl
     el: el
     '': null
+    pt: pt
+    fi: fi
+    sv: sv
+    hu: hu
+    lv: lv
+    lt: lt
+    mt: mt
+    pl: pl
+    sk: sk
+    bg: bg
+    ga: ga
+    ro: ro
+    hr: hr
   domains:
     en: ''
     de: ''
@@ -29,4 +42,17 @@ url:
     nl: ''
     sl: ''
     el: ''
+    pt: ''
+    fi: ''
+    sv: ''
+    hu: ''
+    lv: ''
+    lt: ''
+    mt: ''
+    pl: ''
+    sk: ''
+    bg: ''
+    ga: ''
+    ro: ''
+    hr: ''
 selected_langcode: site_default

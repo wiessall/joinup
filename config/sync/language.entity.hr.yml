@@ -1,0 +1,9 @@
+uuid: 4659c443-ec00-4540-971e-1a7d465a0f46
+langcode: en
+status: true
+dependencies: {  }
+id: hr
+label: Croatian
+direction: ltr
+weight: -11
+locked: false
