@@ -94,7 +94,6 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       }
     }
 
-    $form_state->setValue('limit_to_groups', array_keys($groups));
     parent::validateConfigurationForm($form, $form_state);
   }
 
