@@ -1,7 +1,7 @@
 uuid: 50e2afe8-22dc-41fc-be32-981551ec066c
 langcode: en
 status: true
-dependencies: { }
+dependencies: {  }
 id: sv
 label: Swedish
 direction: ltr
