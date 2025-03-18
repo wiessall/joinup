@@ -1,0 +1,26 @@
+diff --git a/src/DigestFormatter.php b/src/DigestFormatter.php
+index 707fc956dbc74d7305e5a9373ecaabbdfdd06465..8f337ba449638a36da1d175b8481df5691670c0b 100644
+--- a/src/DigestFormatter.php
++++ b/src/DigestFormatter.php
+@@ -62,7 +62,7 @@ class DigestFormatter implements DigestFormatterInterface {
+       $output[] = $rows;
+     }
+ 
+-    return $this->renderer->renderPlain($output);
++    return $this->renderer->renderInIsolation($output);
+   }
+ 
+ }
+diff --git a/src/Traits/MessageDigestTrait.php b/src/Traits/MessageDigestTrait.php
+index e3940cac170c48dbb14050e23e199737f4b0e746..a24efc4caf7d34d63ed00c84d1fe0e5d7e0ac6b1 100644
+--- a/src/Traits/MessageDigestTrait.php
++++ b/src/Traits/MessageDigestTrait.php
+@@ -68,7 +68,7 @@ trait MessageDigestTrait {
+    */
+   protected function getRenderedMessage(MessageInterface $message, $view_mode) {
+     $content = \Drupal::entityTypeManager()->getViewBuilder('message')->view($message, $view_mode);
+-    return (string) \Drupal::service('renderer')->renderPlain($content);
++    return (string) \Drupal::service('renderer')->renderInIsolation($content);
+   }
+ 
+   /**
