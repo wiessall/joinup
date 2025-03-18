@@ -1,17 +1,15 @@
+uuid: f65c1fad-6ef2-4ec3-8fa8-af461764b9dc
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.hu
+dependencies: {  }
+_core:
+  default_config_hash: ULjJ_eIYTx4ig5OBVA8TCvMjVhUO8Qe-Yb01aW8cMjY
 id: text_hu_7_0_0
 label: 'Hungarian Text Field'
 minimum_solr_version: 7.0.0
 custom_code: ''
 field_type_language_code: hu
-domains: {}
+domains: {  }
 field_type:
   name: text_hu
   class: solr.TextField
@@ -160,6 +158,7 @@ unstemmed_field_type:
           words: stopwords_hu.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_hu
   class: solr.ICUCollationField
@@ -1038,6 +1037,7 @@ text_files:
   synonyms: |
     drupal, durpal
   protwords: |
+
   accents: |
     # À => A
     "\u00C0" => "A"

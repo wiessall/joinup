@@ -1,17 +1,15 @@
+uuid: 823a659c-4314-4bae-928c-f0e26540cb35
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.bg
+dependencies: {  }
+_core:
+  default_config_hash: hPeNZvfaGs133o23oF-cTmIUmmQm18VwkOjZz5BY9N0
 id: text_bg_7_0_0
 label: 'Bulgarian Text Field'
 minimum_solr_version: 7.0.0
 custom_code: ''
 field_type_language_code: bg
-domains: {}
+domains: {  }
 field_type:
   name: text_bg
   class: solr.TextField
@@ -134,6 +132,7 @@ unstemmed_field_type:
           ignoreCase: true
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_bg
   class: solr.ICUCollationField
@@ -414,5 +413,7 @@ text_files:
   synonyms: |
     drupal, durpal
   nouns: |
+
   protwords: |
-  accents: |
+
+  accents: ''

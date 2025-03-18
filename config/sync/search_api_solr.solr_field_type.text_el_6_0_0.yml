@@ -1,22 +1,19 @@
+uuid: 9f6c6345-9cc3-4d4a-9af6-a0aef41d99e5
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.el
+dependencies: {  }
+_core:
+  default_config_hash: ZhABy8stZ7C3IXycoYkSGfJeN8OM9HkoT9PaMlUBhzY
 id: text_el_6_0_0
 label: 'Greek Text Field'
 minimum_solr_version: 6.0.0
 custom_code: ''
 field_type_language_code: el
-domains: {}
+domains: {  }
 field_type:
   name: text_el
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -25,7 +22,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -54,7 +51,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -70,9 +67,9 @@ field_type:
           class: solr.GreekLowerCaseFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_el.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
@@ -85,7 +82,6 @@ unstemmed_field_type:
   name: text_unstemmed_el
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -94,7 +90,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -121,7 +117,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_el.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -137,15 +133,16 @@ unstemmed_field_type:
           class: solr.GreekLowerCaseFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_el.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
           words: stopwords_el.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_el
   class: solr.ICUCollationField
@@ -208,9 +205,6 @@ solr_configs:
               name: name
               VALUE: el
             -
-              name: indexPath
-              VALUE: ./el
-            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -231,6 +225,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./el
 text_files:
   stopwords: |
     ο
@@ -308,10 +305,7 @@ text_files:
     ισωσ
     οσο
     οτι
-  synonyms: |
-    drupal, durpal
-  nouns: |
-  protwords: |
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
@@ -498,3 +492,6 @@ text_files:
     "\u014D" => "o"
     # ū => u
     "\u016B" => "u"
+  synonyms: |
+    drupal, durpal
+  nouns: ''
