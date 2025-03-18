@@ -10,3 +10,4 @@ services:
   eu_oss_vitality_index.queue:
     class: Drupal\eu_oss_vitality_index\VitalityIndexQueue
   Drupal\eu_oss_vitality_index\VitalityIndexQueueInterface: '@eu_oss_vitality_index.queue'
+
