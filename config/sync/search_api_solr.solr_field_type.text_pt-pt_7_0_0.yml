@@ -1,9 +1,12 @@
 uuid: 2c59319e-6e17-4337-9130-6031eb0856e7
 langcode: en
 status: true
-dependencies: {  }
-_core:
-  default_config_hash: '-tgFeWwpD_MFUFqSeybCi3hx8ukIhfsv2cDYWt24-CM'
+dependencies:
+  config:
+    - language.entity.pt-pt
+  module:
+    - search_api_solr
+    - language
 id: text_pt-pt_7_0_0
 label: 'Portuguese, Portugal Text Field'
 minimum_solr_version: 7.0.0
@@ -72,9 +75,9 @@ field_type:
           words: stopwords_pt_pt.txt
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_pt_pt.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.PortugueseStemFilterFactory
         -
@@ -135,9 +138,9 @@ unstemmed_field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_pt_pt.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
@@ -452,10 +455,6 @@ text_files:
     teria
     teríamos
     teriam
-  synonyms: |
-    drupal, durpal
-  nouns: |
-
   protwords: |
 
   accents: |
@@ -644,3 +643,7 @@ text_files:
     "\u014D" => "o"
     # ū => u
     "\u016B" => "u"
+  synonyms: |
+    drupal, durpal
+  nouns: |
+

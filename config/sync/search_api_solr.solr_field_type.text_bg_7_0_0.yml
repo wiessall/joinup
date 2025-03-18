@@ -1,9 +1,12 @@
 uuid: 823a659c-4314-4bae-928c-f0e26540cb35
 langcode: en
 status: true
-dependencies: {  }
-_core:
-  default_config_hash: hPeNZvfaGs133o23oF-cTmIUmmQm18VwkOjZz5BY9N0
+dependencies:
+  config:
+    - language.entity.bg
+  module:
+    - search_api_solr
+    - language
 id: text_bg_7_0_0
 label: 'Bulgarian Text Field'
 minimum_solr_version: 7.0.0
@@ -66,9 +69,9 @@ field_type:
           words: stopwords_bg.txt
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_bg.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.BulgarianStemFilterFactory
         -
@@ -127,9 +130,9 @@ unstemmed_field_type:
           words: stopwords_bg.txt
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_bg.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
 spellcheck_field_type: null
@@ -410,10 +413,10 @@ text_files:
     ще
     щом
     я
+  protwords: |
+
+  accents: ''
   synonyms: |
     drupal, durpal
   nouns: |
 
-  protwords: |
-
-  accents: ''
