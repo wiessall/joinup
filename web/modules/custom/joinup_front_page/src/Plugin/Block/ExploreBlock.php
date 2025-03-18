@@ -80,18 +80,6 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
         'data' => $this->getContent('solution'),
         'url' => $get_url('solution'),
       ],
-      'news' => [
-        'label' => $this->t('News'),
-        'plural_type' => $this->t('news'),
-        'data' => $this->getContent('news'),
-        'url' => $get_url('news'),
-      ],
-      'events' => [
-        'label' => $this->t('Events'),
-        'plural_type' => $this->t('events'),
-        'data' => $this->getContent('event'),
-        'url' => $get_url('event'),
-      ],
     ];
 
     return [
