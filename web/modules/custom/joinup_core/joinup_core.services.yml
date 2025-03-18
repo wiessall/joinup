@@ -41,8 +41,3 @@ services:
     class: Drupal\joinup_core\TwigExtension\DummyTextTwigExtension
     tags:
       - { name: twig.extension }
-
-  joinup_core.sanitize.commands:
-    class: Drupal\joinup_core\Commands\JoinupDataSanitizationCommands
-    tags:
-      - { name: drush.command }
