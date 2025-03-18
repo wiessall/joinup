@@ -1,18 +1,15 @@
+uuid: 39b9c306-7211-453a-8dc0-e2abe9829e25
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.pl
-    - search_api_solr.solr_field_type.text_pl_7_0_0
+dependencies: {  }
+_core:
+  default_config_hash: yrpaaldCfxbdlp4NAsHzX3mzaVB_72KvmW11u4kgU4g
 id: text_phonetic_pl_7_0_0
 label: 'Fulltext Phonetic Polish'
 minimum_solr_version: 7.0.0
 custom_code: phonetic
 field_type_language_code: pl
-domains: {}
+domains: {  }
 field_type:
   name: text_phonetic_pl
   class: solr.TextField
@@ -27,9 +24,7 @@ field_type:
         -
           class: solr.WordDelimiterGraphFilterFactory
           protected: protwords_pl.txt
-          # If non-zero, splits words at delimiters. For example:"CamelCase", "hot-spot" -> "Camel", "Case", "hot", "spot"
           generateWordParts: 1
-          # If non-zero, splits numeric strings at delimiters:"1947-32" -> "1947", "32"
           generateNumberParts: 1
           splitOnCaseChange: 0
           splitOnNumerics: 1
@@ -91,5 +86,8 @@ field_type:
           concat: true
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
-solr_configs: {}
-text_files: {}
+unstemmed_field_type: null
+spellcheck_field_type: null
+collated_field_type: null
+solr_configs: {  }
+text_files: {  }

@@ -1,17 +1,15 @@
+uuid: beddf7b3-c71a-4fac-990a-b99ed08f030d
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.sk
+dependencies: {  }
+_core:
+  default_config_hash: '-ru-oLA60k5Vd_2kfW0V6VerGE7nqt7ahjmjJGIFUmY'
 id: text_sk_6_0_0
 label: 'Slovak Text Field'
 minimum_solr_version: 6.0.0
 custom_code: ''
 field_type_language_code: sk
-domains: {}
+domains: {  }
 field_type:
   name: text_sk
   class: solr.TextField
@@ -45,9 +43,6 @@ field_type:
           words: stopwords_sk.txt
         -
           class: solr.SnowballPorterFilterFactory
-          # https://www.drupal.org/project/search_api_solr/issues/2894527
-          # Using the Porter Stemmer but without any language?
-          # We're using it on two projects now and well ... it works and is better than having nothing.
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
     -
@@ -86,9 +81,6 @@ field_type:
           words: stopwords_sk.txt
         -
           class: solr.SnowballPorterFilterFactory
-          # https://www.drupal.org/project/search_api_solr/issues/2894527
-          # Using the Porter Stemmer but without any language?
-          # We're using it on two projects now and well ... it works and is better than having nothing.
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
 unstemmed_field_type:
@@ -160,6 +152,7 @@ unstemmed_field_type:
           words: stopwords_sk.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_sk
   class: solr.ICUCollationField
@@ -423,6 +416,7 @@ text_files:
   synonyms: |
     drupal, durpal
   protwords: |
+
   accents: |
     # À => A
     "\u00C0" => "A"

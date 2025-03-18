@@ -1,22 +1,19 @@
+uuid: fa81344a-b526-4a27-a67b-2a44aa885ebb
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.da
+dependencies: {  }
+_core:
+  default_config_hash: uY4kBJmyOlsabbPTOs9pN2Trb4VPibu1a9DqUgw4iRg
 id: text_da_7_0_0
 label: 'Danish Text Field'
 minimum_solr_version: 7.0.0
 custom_code: ''
 field_type_language_code: da
-domains: {}
+domains: {  }
 field_type:
   name: text_da
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -25,7 +22,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_da.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -37,6 +34,8 @@ field_type:
           preserveOriginal: 1
           catenateAll: 0
           catenateWords: 1
+        -
+          class: solr.FlattenGraphFilterFactory
         -
           class: solr.LengthFilterFactory
           min: 2
@@ -56,8 +55,8 @@ field_type:
           words: stopwords_da.txt
         -
           class: solr.SnowballPorterFilterFactory
-          language: Danish
           protected: protwords_da.txt
+          language: Danish
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
     -
@@ -67,7 +66,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_da.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -83,24 +82,23 @@ field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_da.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
           words: stopwords_da.txt
         -
           class: solr.SnowballPorterFilterFactory
-          language: Danish
           protected: protwords_da.txt
+          language: Danish
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
 unstemmed_field_type:
   name: text_unstemmed_da
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -109,7 +107,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_da.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -121,6 +119,8 @@ unstemmed_field_type:
           preserveOriginal: 1
           catenateAll: 0
           catenateWords: 1
+        -
+          class: solr.FlattenGraphFilterFactory
         -
           class: solr.LengthFilterFactory
           min: 2
@@ -147,7 +147,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_da.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterGraphFilterFactory
@@ -163,15 +163,16 @@ unstemmed_field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymGraphFilterFactory
+          ignoreCase: true
           synonyms: synonyms_da.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
           words: stopwords_da.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_da
   class: solr.ICUCollationField
@@ -234,9 +235,6 @@ solr_configs:
               name: name
               VALUE: da
             -
-              name: indexPath
-              VALUE: ./da
-            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -257,6 +255,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./da
 text_files:
   stopwords: |
     af
@@ -315,10 +316,7 @@ text_files:
     under
     ved
     vi
-  synonyms: |
-    drupal, durpal
-  nouns: |
-  protwords: |
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
@@ -505,3 +503,6 @@ text_files:
     "\u014D" => "o"
     # ū => u
     "\u016B" => "u"
+  synonyms: |
+    drupal, durpal
+  nouns: ''

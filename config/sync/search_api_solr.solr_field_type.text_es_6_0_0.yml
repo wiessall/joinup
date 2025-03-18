@@ -1,22 +1,19 @@
+uuid: c2c3a32c-9edb-4260-9c54-093e58f3dd7b
 langcode: en
 status: true
-dependencies:
-  module:
-    - search_api_solr
-    - language
-  config:
-    - language.entity.es
+dependencies: {  }
+_core:
+  default_config_hash: jnaL5MHwilD0PzIGla_HqozecpwTPyrtmVlN0xKhvpY
 id: text_es_6_0_0
 label: 'Spanish Text Field'
 minimum_solr_version: 6.0.0
 custom_code: ''
 field_type_language_code: es
-domains: {}
+domains: {  }
 field_type:
   name: text_es
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -25,7 +22,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_es.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -45,8 +42,8 @@ field_type:
           words: stopwords_es.txt
         -
           class: solr.SnowballPorterFilterFactory
-          language: Spanish
           protected: protwords_es.txt
+          language: Spanish
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
     -
@@ -56,7 +53,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_es.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -72,24 +69,23 @@ field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_es.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
           words: stopwords_es.txt
         -
           class: solr.SnowballPorterFilterFactory
-          language: Spanish
           protected: protwords_es.txt
+          language: Spanish
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
 unstemmed_field_type:
   name: text_unstemmed_es
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -98,7 +94,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_es.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -125,7 +121,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_es.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -141,15 +137,16 @@ unstemmed_field_type:
           class: solr.LowerCaseFilterFactory
         -
           class: solr.SynonymFilterFactory
+          ignoreCase: true
           synonyms: synonyms_es.txt
           expand: true
-          ignoreCase: true
         -
           class: solr.StopFilterFactory
           ignoreCase: true
           words: stopwords_es.txt
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
+spellcheck_field_type: null
 collated_field_type:
   name: collated_es
   class: solr.ICUCollationField
@@ -212,9 +209,6 @@ solr_configs:
               name: name
               VALUE: es
             -
-              name: indexPath
-              VALUE: ./es
-            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -235,6 +229,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./es
 text_files:
   stopwords: |
     de
@@ -545,10 +542,7 @@ text_files:
     tenidos
     tenidas
     tened
-  synonyms: |
-    drupal, durpal
-  nouns: |
-  protwords: |
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
@@ -735,3 +729,6 @@ text_files:
     "\u014D" => "o"
     # ū => u
     "\u016B" => "u"
+  synonyms: |
+    drupal, durpal
+  nouns: ''
