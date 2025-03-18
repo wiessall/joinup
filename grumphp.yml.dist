@@ -18,6 +18,7 @@ grumphp:
     phpcs:
       standard: [ './phpcs.xml' ]
       triggered_by: '%grumphp.tasks.php_extensions%'
+      ignore_patterns: ["web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php"]
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpmd.md
     phpmd:
@@ -68,11 +69,6 @@ grumphp:
     lint-yaml:
       metadata:
         task: yamllint
-      ignore_patterns:
-        - "web/modules/custom/eu_oss_catalogue/drush.services.yml"
-        - "web/modules/custom/joinup_core/drush.services.yml"
-        - "web/modules/custom/eu_oss_catalogue/modules/eu_oss_translation/drush.services.yml"
-        - "web/modules/custom/eu_oss_catalogue/modules/eu_oss_vitality_index/drush.services.yml"
 
   testsuites:
     # On git pre-push, often initiating a full scan, omit phpstan which is slow.
