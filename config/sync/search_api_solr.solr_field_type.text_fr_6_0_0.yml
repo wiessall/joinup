@@ -219,7 +219,8 @@ solr_configs:
             -
               name: name
               VALUE: fr
-            - name: indexPath
+            -
+              name: indexPath
               VALUE: ./fr
             -
               name: lookupImpl
@@ -597,5 +598,4 @@ text_files:
     "\u016B" => "u"
   synonyms: |
     drupal, durpal
-  nouns: |
-
+  nouns: ''
