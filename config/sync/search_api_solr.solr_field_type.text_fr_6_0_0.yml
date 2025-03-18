@@ -17,7 +17,6 @@ field_type:
   name: text_fr
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -26,7 +25,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_fr.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.ElisionFilterFactory
@@ -59,7 +58,7 @@ field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_fr.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.ElisionFilterFactory
@@ -94,7 +93,6 @@ unstemmed_field_type:
   name: text_unstemmed_fr
   class: solr.TextField
   positionIncrementGap: 100
-  storeOffsetsWithPositions: true
   analyzers:
     -
       type: index
@@ -103,7 +101,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_fr.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.ElisionFilterFactory
@@ -132,7 +130,7 @@ unstemmed_field_type:
           class: solr.MappingCharFilterFactory
           mapping: accents_fr.txt
       tokenizer:
-        class: solr.StandardTokenizerFactory
+        class: solr.WhitespaceTokenizerFactory
       filters:
         -
           class: solr.WordDelimiterFilterFactory
@@ -220,9 +218,6 @@ solr_configs:
               name: name
               VALUE: fr
             -
-              name: indexPath
-              VALUE: ./fr
-            -
               name: lookupImpl
               VALUE: AnalyzingInfixLookupFactory
             -
@@ -243,6 +238,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./fr
 text_files:
   stopwords: |
     au
@@ -408,8 +406,7 @@ text_files:
     quelles
     sans
     soi
-  protwords: |
-
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
