@@ -1,15 +1,17 @@
-uuid: 58d6c08e-8d10-4e50-8f73-53e6b93dc438
 langcode: en
 status: true
-dependencies: {  }
-_core:
-  default_config_hash: YCdkkpF7hxo2ddTWU3LO512JBE7Ua1AgiN7wJtW-TJY
+dependencies:
+  module:
+    - search_api_solr
+    - language
+  config:
+    - language.entity.sv
 id: text_sv_7_0_0
 label: 'Swedish Text Field'
 minimum_solr_version: 7.0.0
 custom_code: ''
 field_type_language_code: sv
-domains: {  }
+domains: {}
 field_type:
   name: text_sv
   class: solr.TextField
@@ -168,11 +170,10 @@ unstemmed_field_type:
           class: solr.ScandinavianNormalizationFilterFactory
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
-spellcheck_field_type: null
 collated_field_type:
   name: collated_sv
   class: solr.ICUCollationField
-  locale: 'no'
+  locale: no
   strength: primary
   caseLevel: false
 solr_configs:
@@ -373,9 +374,7 @@ text_files:
   synonyms: |
     drupal, durpal
   nouns: |
-
   protwords: |
-
   accents: |
     # À => A
     "\u00C0" => "A"
