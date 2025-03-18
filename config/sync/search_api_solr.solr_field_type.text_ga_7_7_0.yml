@@ -1,15 +1,17 @@
-uuid: 658085d4-2264-4cb8-86df-a7541aaf27b7
 langcode: en
 status: true
-dependencies: {  }
-_core:
-  default_config_hash: RDsE-BmI0Mhkrr9W6KUtegmXeLkc5B6CexWYqYkecIQ
+dependencies:
+  module:
+    - search_api_solr
+    - language
+  config:
+    - language.entity.ga
 id: text_ga_7_7_0
 label: 'Irish/Gaelic Text Field'
 minimum_solr_version: 7.7.0
 custom_code: ''
 field_type_language_code: ga
-domains: {  }
+domains: {}
 field_type:
   name: text_ga
   class: solr.TextField
@@ -172,7 +174,6 @@ unstemmed_field_type:
           class: solr.IrishLowerCaseFilterFactory
         -
           class: solr.RemoveDuplicatesTokenFilterFactory
-spellcheck_field_type: null
 collated_field_type:
   name: collated_ga
   class: solr.ICUCollationField
@@ -372,7 +373,6 @@ text_files:
   synonyms: |
     drupal, durpal
   protwords: |
-
   accents: |
     # À => A
     "\u00C0" => "A"
