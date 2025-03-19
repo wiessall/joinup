@@ -296,28 +296,11 @@ Feature: Homepage
       | solution   | Proton Global               | 2019-07-05 10:00     | An inlined image:Text after image.                                                                                                                                                                                            |
       | solution   | Cities of France            | 2018-12-14 17:36     | There are many variations                                                                                                                                                                                                     |
       | solution   | Cities of Bulgaria          | 2018-11-14 17:36     | Supports fields                                                                                                                                                                                                               |
-      | news       | Current biodiversity adapt  | 2021-04-30T19:09:00Z | Biodiversity adapt abstract                                                                                                                                                                                                   |
-      | news       | Super-Alfvenic plasma flow  | 2021-04-29T10:18:00Z | Magnetic draping                                                                                                                                                                                                              |
-      | news       | H-rich Wolf-Rayet star      | 2021-03-29T10:18:00Z | Polarimetric analysis Watch our video                                                                                                                                                                                         |
-      | news       | Spatial construction        | 2021-02-26T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                     |
-      | news       | Environmental tests         | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in...                      |
-      | news       | Easier transformations      | 2021-01-09T10:18:00Z | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left...                    |
-      | event      | SXR plasma supply           | 2021-05-30T10:18:00Z |                                                                                                                                                                                                                               |
-      | event      | Dark material               | 2021-04-30T10:18:00Z | The presence of a relatively large magnetic field is acting as a quenching agent. The authors say the observations confirm their hypothesis that there is a strong active magnetic field interacting...                       |
-      | event      | Thick-target news           | 2021-04-27T19:05:00Z | Abstract: Evaporation                                                                                                                                                                                                         |
-      | event      | Cooling losses              | 2021-03-20T10:18:00Z | Single-loop                                                                                                                                                                                                                   |
-      | event      | Source of SXR plasma supply | 2021-02-27T13:15:00Z | Fast electrons                                                                                                                                                                                                                |
-      | event      | Plasma supply               | 2021-01-30T10:18:00Z | Fast electrons                                                                                                                                                                                                                |
-      | event      | Stars material              | 2021-01-10T10:18:00Z | Colossal material! Read our greypaper.                                                                                                                                                                                        |
 
     And I should see the button "Solutions" in the "Explore block"
     And I should see the button "Collections" in the "Explore block"
-    And I should see the button "News" in the "Explore block"
-    And I should see the button "Events" in the "Explore block"
     And I should see the link "See more solutions" in the "Explore block"
     And I should see the link "See more collections" in the "Explore block"
-    And I should see the link "See more news" in the "Explore block"
-    And I should see the link "See more events" in the "Explore block"
 
     And the page should be cacheable
     And the page should not be cached
@@ -334,14 +317,9 @@ Feature: Homepage
     And I should see the following facet summary "Collections"
 
     When I am on the homepage
-    And I click "See more news"
+    And I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-
-    When I am on the homepage
-    And I click "See more events"
-    Then I should be on the advanced search page
-    And I should see the following facet summary "Events"
 
     # Check archived items.
     Given collection content:
@@ -368,9 +346,3 @@ Feature: Homepage
     Given I am on the homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
-
-  @group-clone
-  Scenario: The /events path redirects to upcoming events page.
-    Given I am on the homepage
-    When I click "More events"
-    Then I should be on "/upcoming-events"
