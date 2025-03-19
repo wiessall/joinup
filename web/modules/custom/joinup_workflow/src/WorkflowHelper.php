@@ -187,7 +187,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
     string|Stringable|TranslatableMarkup|null $revisionLogMessage = NULL,
   ): EntityInterface {
     if (
-      !$entity instanceof EntityWorkflowStateInterface ||
       !$entity instanceof ArchivableEntityInterface ||
       !$entity->isArchived()
     ) {
