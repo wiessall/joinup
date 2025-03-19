@@ -7,6 +7,7 @@ namespace Drupal\state_machine_revisions;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
@@ -83,8 +84,11 @@ readonly class RevisionManager implements RevisionManagerInterface {
    */
   public function loadLatestRevision(ContentEntityInterface $entity): ?ContentEntityInterface {
     if ($latest_revision_id = $this->getLatestRevisionId($entity)) {
+      /** @var \Drupal\Core\Entity\RevisionableStorageInterface $storage */
+      $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
+      assert($storage instanceof RevisionableStorageInterface);
       /** @var \Drupal\Core\Entity\ContentEntityInterface|NULL $revision */
-      $revision = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadRevision($latest_revision_id);
+      $revision = $storage->loadRevision($latest_revision_id);
       return $revision;
     }
 

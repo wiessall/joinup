@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -204,6 +205,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
       return $entity;
     }
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
+    assert($entityStorage instanceof RevisionableStorageInterface);
 
     // Load the previous published revision's IDs.
     $revisionIdsQuery = $entityStorage->getQuery()
