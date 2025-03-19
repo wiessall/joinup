@@ -8,9 +8,6 @@ services:
     tags:
       - { name: path_processor_outbound, priority: 1001 }
 
-  topic.vocabulary_manager:
-    class: Drupal\topic\VocabularyManager
-
   Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber: { }
 
   Drupal\topic\EventSubscriber\QueryPresetSubscriber: { }
