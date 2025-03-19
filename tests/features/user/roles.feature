@@ -19,6 +19,7 @@ Feature: User role management
     And the "Roles" checkboxes should contain the following options:
       | Licence manager            |
       | Moderator                  |
+      | Translator                 |
       | Administrator              |
       | Developer                  |
       | Interoperability validator |
@@ -38,6 +39,7 @@ Feature: User role management
       | Developer                  |
       | Licence manager            |
       | Moderator                  |
+      | Translator                 |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.
