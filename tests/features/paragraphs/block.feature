@@ -1,11 +1,13 @@
 @api @group-h
 Feature: Block paragraph tests.
 
-  @javascript
-  Scenario: Recommended solutions
+  Background:
     Given collection content:
       | title            |
       | Block collection |
+
+  @javascript
+  Scenario: Recommended solutions
     Given solution content:
       | title        | collection       |
       | Early Omega  | Block collection |
@@ -27,3 +29,19 @@ Feature: Block paragraph tests.
     And I visit the "Recommended solutions" custom page
     Then I should see the "Early Omega" tile
     But I should not see the "Snake Timely" tile
+
+  Scenario: Oss catalogue sources
+    Given custom_page content:
+      | title                 | collection       |
+      | Oss catalogue sources | Block collection |
+    And I append "block" to "field_paragraphs_body" field in "node" entity with following "Oss catalogue sources" title:
+      | paragraph_block | joinup_oss_catalogue_sources |
+
+    When I go to the "Oss catalogue sources" custom_page
+    Then the "OSS catalogue list" table should be:
+      | Catalogue          | Type     | Country     | Description                                                                                                                                                                                                                                                                       | Weblinks                                 |
+      | Awesome CodeGouvFr | National | France      | CodeGouvFr, the French National Catalogue with mission to use and contribute to free software and digital commons provides. Awesome Open Source projects actively maintained and funded by Public Administrations and Public Sector organizations.                                | https://code.gouv.fr/sources/#/awesome   |
+      | Code Europa EU     | European |             | Code development platform for Open Source projects shared by the institutions of the European Union, for which EU institutions, bodies, offices and agencies hold the intellectual property rights.                                                                               | https://code.europa.eu                   |
+      | Developer Overheid | National | Netherlands | Developer Overheid is the Dutch National Catalogue, one central location for OSS Solutions developed by and for Dutch government organizations.                                                                                                                                   | https://developer.overheid.nl            |
+      | Developers Italia  | National | Italy       | Developers Italia is a community of developers who design and code Italian digital public services, and provide the Italian National Catalogue for the acquisition and reuse of software by and for the Public Administration, as envisaged and required by national legislation. | https://developers.italia.it/en/software |
+      | Open CoDE          | National | Germany     | Open CoDE is the German National Catalogue, an official, certified and secure central platform for providing direct access to validated open-source-solutions successfully used in other Public Administrations.                                                                  | https://opencode.de/en/software          |

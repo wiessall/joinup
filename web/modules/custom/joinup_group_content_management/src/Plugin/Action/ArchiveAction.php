@@ -18,13 +18,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a VBO action that archive content.
  *
  * @Action(
- *   id = "joinup_archive",
- *   label = @Translation("Archive content"),
- *   type = "node",
- *   requirements = {
- *      "_custom_access" = TRUE,
- *   },
- * )
+ *    id = "joinup_archive",
+ *    label = @Translation("Archive content"),
+ *    type = "node",
+ *    requirements = {
+ *       "_custom_access" = TRUE,
+ *    },
+ *  )
  */
 class ArchiveAction extends StateActionBase {
 

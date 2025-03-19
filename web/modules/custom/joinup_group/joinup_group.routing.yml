@@ -236,3 +236,17 @@ joinup_group.unshare_content_form:
           - event
           - news
           - solution
+
+entity.node.subscribe:
+  path: /node/{node}/subscribe
+  defaults:
+    _form: \Drupal\joinup_group\Form\SubscribeGroupForm
+  requirements:
+    _custom_access: \Drupal\joinup_group\Form\SubscribeGroupForm::access
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection
+          - solution

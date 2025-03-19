@@ -7,6 +7,7 @@ namespace Drupal\search_api_arbitrary_facet\Plugin;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\search_api_arbitrary_facet\Attribute\ArbitraryFacet;
 
 /**
  * Provides the Arbitrary facet plugin manager.
@@ -29,7 +30,7 @@ class ArbitraryFacetManager extends DefaultPluginManager {
     CacheBackendInterface $cache_backend,
     ModuleHandlerInterface $module_handler,
   ) {
-    parent::__construct('Plugin/ArbitraryFacet', $namespaces, $module_handler, 'Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface', 'Drupal\search_api_arbitrary_facet\Annotation\ArbitraryFacet');
+    parent::__construct('Plugin/ArbitraryFacet', $namespaces, $module_handler, 'Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface', ArbitraryFacet::class);
 
     $this->alterInfo('search_api_arbitrary_facet_arbitrary_facet_info');
     $this->setCacheBackend($cache_backend, 'search_api_arbitrary_facet_arbitrary_facet_plugins', [

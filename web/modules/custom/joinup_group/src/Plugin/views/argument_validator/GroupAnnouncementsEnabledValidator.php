@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\views\argument_validator;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\views\Attribute\ViewsArgumentValidator;
 
 /**
  * Defines an argument validator plugin for groups.
- *
- * @ViewsArgumentValidator(
- *   id = "joinup_group_announcements_enabled",
- *   title = @Translation("Group announcements"),
- *   entity_type = "node",
- * )
  */
+#[ViewsArgumentValidator(
+  id: "joinup_group_announcements_enabled",
+  title: new TranslatableMarkup("Group announcements"),
+  entity_type: "node",
+)]
 class GroupAnnouncementsEnabledValidator extends JoinupGroupUserPermissionValidator {
 
   /**

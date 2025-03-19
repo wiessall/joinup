@@ -42,7 +42,7 @@ Feature: Joining a collection as an anonymous user
     And I check "I have read and accept the Legal notice"
     And I press "Submit"
     Then I should see the text "Reannual plants" in the Header region
-    And I should see the heading "Welcome to Reannual plants"
+    And I should see the success message "You are now a member of Reannual plants"
     And I should see the success message "You have been logged in."
     And the "Reannual plants" collection should have 1 active member
     And the "Reannual plants" collection should have 0 pending member
@@ -106,6 +106,8 @@ Feature: Joining a collection as an anonymous user
     # receiving notifications.
     Then I should see the heading "Reannual plants"
     And I should see the success message "You have been logged in."
+    # Wait for Drupal.behaviors.collectionSubscribeDialog to click.
+    And a modal should open
     And I should see the success message "You are now a member of Reannual plants."
     And the "Reannual plants" collection should have 1 active member
     And a modal should open
@@ -156,6 +158,8 @@ Feature: Joining a collection as an anonymous user
     And I press "Log in"
     Then I should see the heading "Vul nuts"
     And I should see the success message "You have been logged in."
+    # Wait for Drupal.behaviors.collectionSubscribeDialog to click.
+    And a modal should open
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
@@ -212,6 +216,8 @@ Feature: Joining a collection as an anonymous user
     # receiving notifications.
     Then I should see the heading "Reannual plants"
     And I should see the success message "You have been logged in."
+    # Wait for Drupal.behaviors.collectionSubscribeDialog to click.
+    And a modal should open
     And I should see the success message "You are now a member of Reannual plants."
     And the "Reannual plants" collection should have 1 active member
     And a modal should open
@@ -246,9 +252,10 @@ Feature: Joining a collection as an anonymous user
 
     Then I should see the heading "Vul nuts"
     And I should see the success message "You have been logged in."
+    # Wait for Drupal.behaviors.collectionSubscribeDialog to click.
+    And a modal should open
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
-    And a modal should open
     And I should see the text "Welcome to Vul nuts" in the "Modal title"
     And I should see the button "Confirm" in the "Modal buttons" region
 

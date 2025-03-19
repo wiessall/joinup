@@ -6,19 +6,20 @@ namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Consumes the 'eu_oss_catalogue_fetcher' queue.
- *
- * @QueueWorker(
- *   id = "eu_oss_catalogue_fetcher",
- *   title = @Translation("EU OSS Catalogue fetcher"),
- *   cron = {"time" = 60}
- * )
  */
+#[QueueWorker(
+  id: 'eu_oss_catalogue_fetcher',
+  title: new TranslatableMarkup('EU OSS Catalogue fetcher'),
+  cron: ['time' => 60],
+)]
 class EuOssCatalogueFetcher extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

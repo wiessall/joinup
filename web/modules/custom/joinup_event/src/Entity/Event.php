@@ -70,4 +70,12 @@ class Event extends CommunityContentBase implements EventInterface {
     return NULL;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getDateRange(): array {
+    $dateRange = $this->get('field_event_date')->getValue();
+    return (!empty($dateRange)) ? array_shift($dateRange) : [];
+  }
+
 }

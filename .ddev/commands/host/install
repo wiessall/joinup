@@ -8,6 +8,3 @@ ddev solr:empty
 ddev exec vendor/bin/run toolkit:install-clean
 ddev virtuoso:clear-data
 ddev exec vendor/bin/run dev:install-modules
-
-# UID1 is a regular user but for local development we keep its powers.
-ddev drush user:role:add developer --uid=1

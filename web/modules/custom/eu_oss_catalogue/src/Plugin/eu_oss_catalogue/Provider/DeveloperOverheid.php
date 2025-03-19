@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -18,15 +19,23 @@ use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Dutch catalogue provider.
+ * Developer Overheid provider.
  */
 #[EuOssCatalogueProvider(
-  id: "dutch_catalogue",
+  id: "developer_overheid",
   label: new TranslatableMarkup("Developer Overheid"),
   parser: "publiccode_yml",
-  description: new TranslatableMarkup("Dutch National OSS Catalogue, by https://developer.overheid.nl website.")
+  type: CatalogueType::National,
+  weblinks: [
+    [
+      'url' => 'https://developer.overheid.nl',
+      'title' => NULL,
+    ],
+  ],
+  country: "NL",
+  description: new TranslatableMarkup("Developer Overheid is the Dutch National Catalogue, one central location for OSS Solutions developed by and for Dutch government organizations."),
 )]
-class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
+class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
   /**
    * Dutch catalogue endpoint.

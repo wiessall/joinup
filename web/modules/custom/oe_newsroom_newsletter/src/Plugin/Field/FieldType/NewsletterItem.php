@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\Exception\MissingDataException;
 
 /**
  * Defines the field type for OpenEuropa Newsroom Newsletter fields.
- *
- * @FieldType(
- *   id = "oe_newsroom_newsletter",
- *   label = @Translation("Newsroom newsletter"),
- *   description = @Translation("Stores the configuration for a Newsroom newsletter."),
- *   default_widget = "oe_newsroom_newsletter_default",
- *   default_formatter = "oe_newsroom_newsletter_subscribe_form"
- * )
  */
+#[FieldType(
+  id: "oe_newsroom_newsletter",
+  label: new TranslatableMarkup("Newsroom newsletter"),
+  description: new TranslatableMarkup("Stores the configuration for a Newsroom newsletter."),
+  default_widget: "oe_newsroom_newsletter_default",
+  default_formatter: "oe_newsroom_newsletter_subscribe_form",
+)]
 class NewsletterItem extends FieldItemBase implements NewsletterItemInterface {
 
   /**
