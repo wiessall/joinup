@@ -7,7 +7,6 @@ dependencies:
   module:
     - search_api
     - search_api_spellcheck
-    - views_autosubmit
     - views_block_area
 _core:
   default_config_hash: IZ_1De9xX5-8975-JeHxZJ0f_58o9R3nM9pxnxboN_k
@@ -119,7 +118,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: autosubmit
+        type: basic
         options:
           submit_button: 'Search site-wide'
           reset_button: false
@@ -128,8 +127,6 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
-          autosubmit_hide: true
-          timeout: 500
       access:
         type: none
         options: {  }
