@@ -493,7 +493,8 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
-                "Incorrect use of 'render element' for webform_submission_data @see https://www.drupal.org/i/3492193": "resources/patch/php/drupal/webform/3492193.diff"
+                "Incorrect use of 'render element' for webform_submission_data @see https://www.drupal.org/i/3492193": "resources/patch/php/drupal/webform/3492193.diff",
+                "Warning: Undefined array key '#webform_key' in WebformManagedFileBase.php @see https://www.drupal.org/i/3502992": "resources/patch/php/drupal/webform/3502992.diff"
             },
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff"

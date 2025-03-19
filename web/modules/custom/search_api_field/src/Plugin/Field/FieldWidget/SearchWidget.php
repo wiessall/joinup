@@ -171,28 +171,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       $element['wrapper']['fields'] = $table;
     }
 
-    $element['wrapper']['refresh_rows'] = ['#type' => 'hidden'];
-    $element['wrapper']['refresh'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Refresh'),
-      '#op' => 'refresh_table',
-      '#submit' => ['::multistepSubmit'],
-      '#ajax' => [
-        'callback' => '::multistepAjax',
-        'wrapper' => 'field-display-overview-wrapper',
-        'effect' => 'fade',
-        // The button stays hidden, so we hide the Ajax spinner too. Ad-hoc
-        // spinners will be added manually by the client-side script.
-        'progress' => 'none',
-      ],
-      '#attributes' => [
-        'class' => [
-          'visually-hidden',
-          'row-refresher',
-        ],
-      ],
-    ];
-
     // Show a select that allows users to choose whether to include all content
     // items, show only unarchived content or show only archived content.
     $element['wrapper']['show_archived'] = [
@@ -262,86 +240,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    */
   public static function getRowRegion(array $row): ?string {
     return $row['plugin']['type']['#value'];
-  }
-
-  /**
-   * Form submission handler for multistep buttons.
-   */
-  public function multistepSubmit($form, FormStateInterface $form_state): void {
-    $trigger = $form_state->getTriggeringElement();
-    $op = $trigger['#op'];
-
-    switch ($op) {
-      case 'edit':
-        // Store the field whose settings are currently being edited.
-        $field_name = $trigger['#field_name'];
-        $form_state->set('plugin_settings_edit', $field_name);
-        break;
-
-      case 'update':
-        // Set the field back to 'non edit' mode, and update $this->entity with
-        // the new settings from the next rebuild.
-        $field_name = $trigger['#field_name'];
-        $form_state->set('plugin_settings_edit', NULL);
-        $form_state->set('plugin_settings_update', $field_name);
-        $this->entity = $this->buildEntity($form, $form_state);
-        break;
-
-      case 'cancel':
-        // Set the field back to 'non edit' mode.
-        $form_state->set('plugin_settings_edit', NULL);
-        break;
-
-      case 'refresh_table':
-        // If the currently edited field is one of the rows to be refreshed, set
-        // it back to 'non edit' mode.
-        $updated_rows = explode(' ', $form_state->getValue('refresh_rows'));
-        $plugin_settings_edit = $form_state->get('plugin_settings_edit');
-        if ($plugin_settings_edit && in_array($plugin_settings_edit, $updated_rows)) {
-          $form_state->set('plugin_settings_edit', NULL);
-        }
-        break;
-    }
-    $form_state->setRebuild();
-  }
-
-  /**
-   * Ajax handler for multistep buttons.
-   */
-  public function multistepAjax($form, FormStateInterface $form_state): array {
-    $trigger = $form_state->getTriggeringElement();
-    $op = $trigger['#op'];
-
-    // Pick the elements that need to receive the ajax-new-content effect.
-    $updated_rows = $updated_columns = [];
-    switch ($op) {
-      case 'edit':
-        $updated_rows = [$trigger['#field_name']];
-        $updated_columns = ['plugin'];
-        break;
-
-      case 'update':
-      case 'cancel':
-        $updated_rows = [$trigger['#field_name']];
-        $updated_columns = ['plugin', 'settings_summary', 'settings_edit'];
-        break;
-
-      case 'refresh_table':
-        $updated_rows = array_values(explode(' ', $form_state->getValue('refresh_rows')));
-        $updated_columns = ['settings_summary', 'settings_edit'];
-        break;
-    }
-
-    foreach ($updated_rows as $name) {
-      foreach ($updated_columns as $key) {
-        $element = &$form['wrapper']['fields'][$name][$key];
-        $element['#prefix'] = '<div class="ajax-new-content">' . ($element['#prefix'] ?? '');
-        $element['#suffix'] = ($element['#suffix'] ?? '') . '</div>';
-      }
-    }
-
-    // Return the whole table.
-    return $form['fields'];
   }
 
   /**
