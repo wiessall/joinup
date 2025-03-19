@@ -46,7 +46,7 @@ Feature: Solution homepage
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
-      | title           | content creation | landing page                   |
+      | title           | content_creation | landing page                   |
       | Jira restarters | registered users | http://foo-example.com/landing |
     And news content:
       | title                             | solution        |

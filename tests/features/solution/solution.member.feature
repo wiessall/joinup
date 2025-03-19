@@ -6,7 +6,7 @@ Feature: Content Creation Permissions
 
   Scenario Outline: Content creation availability based on solution settings
     And solution content:
-      | title               | content creation   |
+      | title               | content_creation   |
       | ResolveTech Systems | <content creation> |
 
     Given I am logged in as a member of the "ResolveTech Systems" solution
@@ -21,7 +21,7 @@ Feature: Content Creation Permissions
   @javascript
   Scenario: A member can add a layout to new content
     And solution content:
-      | title               | content creation |
+      | title               | content_creation |
       | NexaFix Innovations | registered users |
 
     Given I am logged in as a member of the "NexaFix Innovations" solution
