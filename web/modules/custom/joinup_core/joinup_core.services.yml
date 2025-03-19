@@ -11,9 +11,6 @@ services:
     parent: logger.channel_base
     arguments: ['joinup_core']
 
-  joinup_core.requirements_helper:
-    class: Drupal\joinup_core\RequirementsHelper
-
   joinup_core.local_task_links_helper:
     class: Drupal\joinup_core\LocalTaskLinksHelper
   Drupal\joinup_core\LocalTaskLinksHelperInterface: '@joinup_core.local_task_links_helper'
