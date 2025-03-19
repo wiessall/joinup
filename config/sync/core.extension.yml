@@ -261,7 +261,6 @@ module:
   user: 0
   ventuno_helper: 0
   view_unpublished: 0
-  views_autosubmit: 0
   views_block_area: 0
   views_bulk_operations: 0
   views_data_export: 0

@@ -7,7 +7,6 @@ dependencies:
   module:
     - search_api
     - search_api_spellcheck
-    - views_autosubmit
     - views_block_area
 id: search_oss_catalogue
 label: 'Search oss catalogue'
@@ -103,7 +102,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: autosubmit
+        type: basic
         options:
           submit_button: 'Search OSS catalogue'
           reset_button: false
@@ -112,8 +111,6 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
-          autosubmit_hide: true
-          timeout: 500
       access:
         type: none
         options: {  }
