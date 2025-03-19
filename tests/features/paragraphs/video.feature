@@ -81,3 +81,30 @@ Feature: Video paragraph tests.
     When I press "Delete"
     And I go to the "Video discussion" discussion
     And I should see the "iframe" element with the "src" attribute set to "/media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DdQw4w9WgXcQ" in the "Content" region
+
+  @javascript
+  Scenario: Regression test for "cannot use the video component in layout editor of dashboards custom landing pages".
+    Given I am logged in as a "moderator"
+    When I am on the homepage
+    Then I open the account menu
+    And I click "Dashboard"
+    Then I should see the heading "Dashboard"
+
+    Then I click "Custom landing pages"
+    And I click "Add custom landing page"
+    And the following field should be present "URL alias"
+    And I fill in the following:
+      | Title    | Twelve Video Tables          |
+      | Abstract | Twelve video tables abstract |
+    And I select "Data gathering and processing" from "Topic"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
+    And a modal should open
+    And I click "Video"
+    And I fill in "Remote video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+    And I press "Publish"
