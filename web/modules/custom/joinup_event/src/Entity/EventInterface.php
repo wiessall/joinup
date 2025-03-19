@@ -39,4 +39,12 @@ interface EventInterface extends CommunityContentInterface, LogoInterface, Archi
    */
   public function getWebUrl(): ?Url;
 
+  /**
+   * Returns duration of the event.
+   *
+   * @return array
+   *   Array with start date and end date of the event.
+   */
+  public function getDateRange(): array;
+
 }

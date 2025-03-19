@@ -2,7 +2,7 @@ name: Joinup Taxonomy
 description: Customizing the core's Taxonomy module.
 type: module
 package: Joinup
-core_version_requirement: ">= 9.4"
+core_version_requirement: "^10.4 || ^11"
 dependencies:
   - drupal:taxonomy
   - rdf_sync:rdf_sync

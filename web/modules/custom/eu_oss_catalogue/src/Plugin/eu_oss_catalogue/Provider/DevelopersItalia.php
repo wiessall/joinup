@@ -11,6 +11,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
+use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -26,7 +27,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "developers_italia",
   label: new TranslatableMarkup("Developers Italia"),
   parser: "publiccode_yml",
-  description: new TranslatableMarkup("Italian National OSS Catalogue, by https://developers.italia.it website.")
+  type: CatalogueType::National,
+  weblinks: [
+    [
+      'url' => 'https://developers.italia.it/en/software',
+      'title' => NULL,
+    ],
+  ],
+  country: "IT",
+  description: new TranslatableMarkup("Developers Italia is a community of developers who design and code Italian digital public services, and provide the Italian National Catalogue for the acquisition and reuse of software by and for the Public Administration, as envisaged and required by national legislation."),
 )]
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 

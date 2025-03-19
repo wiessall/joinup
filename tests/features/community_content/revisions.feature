@@ -6,8 +6,8 @@ Feature:
 
   Scenario Outline: Community content revisions
     Given <group type> content:
-      | title        | description                               | moderation   |
-      | Hellow world | Because I do not know how to spell Hello. | <moderation> |
+      | title        | description                               | group_moderation |
+      | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -147,6 +147,8 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "Goodbi world" discussion
     And I press "<join button>"
+    And I check "Notify me when content is published in Hellow world"
+    And I press "Confirm"
     And I visit the "Goodbi world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
 
@@ -197,7 +199,7 @@ Feature:
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
-      | title        | description                               | moderation   |
+      | title        | description                               | group_moderation   |
       | Hellow world | Because I do not know how to spell Hello. | <moderation> |
     And users:
       | Username           | E-mail                    | Roles     |
@@ -338,6 +340,8 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "<final title>" <content type>
     And I press "<join button>"
+    And I check "Notify me when content is published in Hellow world"
+    And I press "Confirm"
     When I visit the "<final title>" <content type>
     Then I should see the link "Revisions" in the "Entity actions" region
 

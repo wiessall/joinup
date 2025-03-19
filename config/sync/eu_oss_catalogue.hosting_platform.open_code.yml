@@ -4,7 +4,13 @@ status: true
 dependencies: {  }
 id: open_code
 label: 'Open CoDE'
-description: 'German National OSS Catalogue, by https://opencode.de website.'
+type: national
+country: DE
+weblinks:
+  -
+    url: 'https://opencode.de/en/software'
+    title: null
+description: 'Open CoDE is the German National Catalogue, an official, certified and secure central platform for providing direct access to validated open-source-solutions successfully used in other Public Administrations.'
 platformId: gitlab_self_hosted
 platformSettings:
   baseUrl: 'https://gitlab.opencode.de'

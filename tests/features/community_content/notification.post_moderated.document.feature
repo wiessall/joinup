@@ -12,8 +12,8 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title         | content creation | moderation   |
-      | CC collection | members          | <moderation> |
+      | title         | content_creation | group_moderation |
+      | CC collection | members          | <moderation>     |
     And the following collection user memberships:
       | collection    | user           | roles       |
       | CC collection | CC owner       | owner       |
