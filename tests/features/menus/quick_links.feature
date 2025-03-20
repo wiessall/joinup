@@ -3,8 +3,8 @@ Feature: Test the visibility of the quick links menu.
 
   Background:
     Given collection content:
-      | title           | content creation         | moderation |
-      | Some collection | facilitators and authors | yes        |
+      | title           | content_creation         | group_moderation |
+      | Some collection | facilitators and authors | yes              |
 
   Scenario: Test visibility for collections.
     When I am not logged in
@@ -54,8 +54,8 @@ Feature: Test the visibility of the quick links menu.
 
   Scenario: Test visibility for solutions.
     Given collection content:
-      | title           | content creation         | moderation |
-      | Some collection | facilitators and authors | yes        |
+      | title           | content_creation         | group_moderation |
+      | Some collection | facilitators and authors | yes              |
     Given solution content:
       | title         | collection      |
       | Some solution | Some collection |
