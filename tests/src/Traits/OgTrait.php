@@ -53,6 +53,10 @@ trait OgTrait {
       $membership->setState($state);
     }
 
+    // Assign the full_member role by default as it is a complementary role of
+    // the member.
+    $roles[] = OgRole::loadByGroupAndName($group, 'full_member');
+
     $membership->setRoles($roles);
     $membership->save();
   }

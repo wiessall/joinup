@@ -49,6 +49,7 @@ Feature:
     # Update the CoC, check message presence.
     Given the Code of Conduct for "Knowledge Hive" collection is updated
     When I visit the "Knowledge Hive" collection
+    Then I should not see the link "Add news"
     Then I should see the warning message "We updated our Code of Conduct to ensure safe and respectful environment for all members of Knowledge Hive. You can accept or decline it here."
     And I visit the "Think Tank" solution
     And I should see the warning message "We updated our Code of Conduct to ensure safe and respectful environment for all members of Knowledge Hive. You can accept or decline it here."
@@ -57,6 +58,7 @@ Feature:
     Given the Code of Conduct for "Knowledge Hive" collection is unpublished
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
+    And I should not see the link "Add news"
     Given the Code of Conduct for "Knowledge Hive" collection is published
     When I visit the "Knowledge Hive" collection
     Then I should see the warning message "We updated our Code of Conduct"
@@ -67,6 +69,7 @@ Feature:
     And I press "Accept"
     And I visit the "Knowledge Hive" collection
     And I should not see the warning message "We updated our Code of Conduct"
+    And I should see the link "Add news"
     And I visit the "Think Tank" solution
     And I should not see the warning message "We updated our Code of Conduct"
 
@@ -74,6 +77,7 @@ Feature:
     Given I am logged in as "Eleanor Vaughn"
     And I visit the "Knowledge Hive" collection
     And I should see the warning message "We updated our Code of Conduct"
+    But I should not see the link "Add news"
 
     # Ensure anonymous and blocked/pending users do not see the message.
     Given I am not logged in
