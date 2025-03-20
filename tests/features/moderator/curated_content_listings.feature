@@ -10,7 +10,6 @@ Feature: Curated content listings
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
     And I should see the following links:
-      | Highlighted event   |
       | Highlighted content |
       | In the spotlight    |
     When I click "In the spotlight"
@@ -25,28 +24,21 @@ Feature: Curated content listings
     Given I am an anonymous user
     And I am on the homepage
     Then I should not see any contextual links in the "In the spotlight" region
-    And I should not see any contextual links in the "Highlighted event" region
     And I should not see any contextual links in the "Highlighted content" region
 
     Given I am logged in as an "authenticated user"
     And I am on the homepage
     Then I should not see any contextual links in the "In the spotlight" region
-    And I should not see any contextual links in the "Highlighted event" region
     And I should not see any contextual links in the "Highlighted content" region
 
     Given I am logged in as a "moderator"
     And I am on the homepage
     Then I should see the contextual link "Update curated content" in the "In the spotlight" region
-    And I should see the contextual link "Update curated content" in the "Highlighted event" region
     And I should see the contextual link "Update curated content" in the "Highlighted content" region
 
     Given I am on the homepage
     When I click the contextual link "Update curated content" in the "In the spotlight" region
     Then I should see the heading "Update curated content listing In the spotlight"
-
-    Given I am on the homepage
-    When I click the contextual link "Update curated content" in the "Highlighted event" region
-    Then I should see the heading "Update curated content listing Highlighted event"
 
     Given I am on the homepage
     When I click the contextual link "Update curated content" in the "Highlighted content" region
@@ -71,9 +63,6 @@ Feature: Curated content listings
     And event content:
       | title           | collection      | topic                    |
       | Stay at the CSS | Spacex in space | EU and European Policies |
-    And the "Highlighted event" content listing contains:
-      | type    | label           |
-      | content | Stay at the CSS |
     And the "Highlighted content" content listing contains:
       | type     | label        |
       | document | Licrogravity |
@@ -90,13 +79,8 @@ Feature: Curated content listings
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
     And I should see the following links:
-      | Highlighted event   |
       | Highlighted content |
       | In the spotlight    |
-
-    When I click "Highlighted event"
-    And I press "Save"
-    Then I should see the heading "Curated content listings"
 
     When I click "Highlighted content"
     And I press "Save"
