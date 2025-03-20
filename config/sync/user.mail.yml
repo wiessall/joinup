@@ -64,9 +64,7 @@ register_pending_approval:
   body: |-
     Dear [user:field_user_first_name],
 
-    Thank you for registering on the [site:name]. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in and other details.
-
-    We would like to inform you that our system automatically places accounts registered with certain generic email domains under review. This measure helps us maintain the integrity of the platform by minimising the risk of spam or misuse. If your account has not been validated in the following 3 business days, please contact us through our contact form.
+    Thank you for registering at [site:name]. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in, and other details.
 
     Kind regards,
 
