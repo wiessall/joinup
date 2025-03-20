@@ -14,6 +14,7 @@ use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Commands\sql\sanitize\SanitizeCommands;
 use Drush\Commands\sql\sanitize\SanitizePluginInterface;
@@ -26,6 +27,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @see \Drush\Commands\sql\sanitize\SanitizeCommands::sanitize()
  */
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
+
+  use AutowireTrait;
 
   public function __construct(
     protected readonly Connection $db,
