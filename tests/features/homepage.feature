@@ -140,42 +140,24 @@ Feature: Homepage
     Then I should see the "Light and height" tile
     And I should see the link "Like this content" in the "Light and height" tile
 
-  Scenario: An event can be highlighted on the homepage
+  Scenario: Latest event is shown on the homepage
     Given event content:
-      | title                     | start date       | end date         |
-      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 |
-    And the "Highlighted event" content listing contains:
-      | type    | label                     |
-      | content | Florentine steak festival |
-#    And the "Highlighted event" content listing has the following fields:
-#      | header text  | We don't serve 'well done' |
-#      | link text    | Eat our divine meat        |
-#      | external url | http://raresteaktown.com/  |
+      | title               | created    | start date | end date       |
+      | CodeCraft Summit    | 2 day ago  | +5 days    | + 5days 1 hour |
+      | Future Forward Tech | 3 days ago | +8 days    | + 8days 1 hour |
+      | DevSync Meetup      | 1 days ago | +9 days    | + 9days 1 hour |
 
     When I am on the homepage
-    Then I should see the heading "We don't serve 'well done'" in the "Highlighted event"
-    And I should see the heading "Florentine steak festival" in the "Highlighted event"
-    And I should see the text "04 to 05/06/2021" in the "Highlighted event"
-    And I should see the link "Eat our divine meat" in the "Highlighted event"
-    And the response should contain "http://raresteaktown.com"
-    And I should see the link "More events" in the "Highlighted event"
+    Then I should see the link "Future Forward Tech" in the "Latest events"
+    But I should not see the link "CodeCraft Summit" in the "Latest events"
+    And I should not see the link "DevSync Meetup" in the "Latest events"
 
-    # When all the fields in the Highlighted event content listing are left
-    # empty, a "Read more" link to the event page should be shown by default.
-#    Given the "Highlighted event" content listing has the following fields:
-#      | header text  |  |
-#      | link text    |  |
-#      | external url |  |
+    When I click "Read more" in the "Latest events"
+    Then the url should match "/collection/portal/event/future-forward-tech"
+
     When I am on the homepage
-    And I should see the heading "Florentine steak festival" in the "Highlighted event"
-    And I should see the text "04 to 05/06/2021" in the "Highlighted event"
-    And I should see the link "Read more" in the "Highlighted event"
-    And I should see the link "More events" in the "Highlighted event"
-    But I should not see the heading "We don't serve 'well done'"
-    And the response should not contain "http://raresteaktown.com"
-
-    When I click "Read more" in the "Highlighted event"
-    Then the url should match "/collection/portal/event/florentine-steak-festival"
+    And I click "More events" in the "Latest events"
+    Then the url should match "/events"
 
   @joinupVersion
   Scenario Outline: The current version of the Interoperable Europe Portal platform is shown in the footer.
