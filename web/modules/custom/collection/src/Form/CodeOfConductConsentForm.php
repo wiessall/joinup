@@ -86,14 +86,10 @@ class CodeOfConductConsentForm extends FormBase {
     $collection = $this->getRouteMatch()->getParameter('node');
     assert($collection instanceof CollectionInterface);
 
-    $membership = $collection->getMembership((int) $this->currentUser()->id());
-    assert($membership instanceof CodeOfConductMembershipInterface);
-
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
 
-    $membership->setAcceptedDocument($codeOfConduct);
-    $membership->save();
+    $collection->grantFullMembership($codeOfConduct, $this->currentUser()->id());
 
     $this->messenger()
       ->addStatus($this->t('Thank you for confirming your agreement to the Code of Conduct.'));

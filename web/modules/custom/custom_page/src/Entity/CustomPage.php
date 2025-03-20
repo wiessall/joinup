@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
@@ -33,6 +35,25 @@ class CustomPage extends Node implements CustomPageInterface {
   use NodeCollectionContentTrait;
   use TopicReferencingEntityTrait;
   use PermalinkTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
+    parent::postSave($storage, $update);
+
+    // If this page is the code of conduct page for the group, and was updated,
+    // reset the group's full memberships.
+    if ($this->isGroupCodeOfConductPage() && $update) {
+      $group = $this->getGroup();
+      // Currently, this only applies to collections.
+      if (!$group instanceof CollectionInterface) {
+        return;
+      }
+
+      $group->resetFullMemberships();
+    }
+  }
 
   /**
    * {@inheritdoc}
