@@ -10,6 +10,7 @@ use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -17,6 +18,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Drush commands.
  */
 class EuOssCatalogueCommands extends DrushCommands {
+
+  use AutowireTrait;
 
   public function __construct(
     #[Autowire(service: 'eu_oss_catalogue')]

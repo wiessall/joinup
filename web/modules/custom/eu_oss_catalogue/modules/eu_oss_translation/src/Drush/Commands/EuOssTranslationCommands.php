@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_translation\JobBuilderInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -17,6 +18,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Drush commands.
  */
 class EuOssTranslationCommands extends DrushCommands {
+
+  use AutowireTrait;
 
   public function __construct(
     #[Autowire('eu_oss_translation.job_builder')]
@@ -42,8 +45,13 @@ class EuOssTranslationCommands extends DrushCommands {
 
   /**
    * Gets solution.
+   *
+   * @param string $nid
+   *   Solution node id.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   OSS solution.
    */
-  #[CLI\Argument(name: 'nid', description: 'The solution node ID')]
   protected function getSolution(string $nid): ?OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $solution = $nodeStorage->load($nid);

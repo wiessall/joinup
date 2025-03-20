@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -17,6 +18,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Drush commands.
  */
 class EuOssVitalityIndexCommands extends DrushCommands {
+
+  use AutowireTrait;
 
   public function __construct(
     #[Autowire('eu_oss_vitality_index.generator')]

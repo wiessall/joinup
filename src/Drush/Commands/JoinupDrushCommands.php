@@ -47,18 +47,6 @@ class JoinupDrushCommands extends DrushCommands {
   }
 
   /**
-   * Install modules.
-   */
-  #[CLI\Argument(name: 'modules', description: 'List of modules.')]
-  #[CLI\Command(name: 'joinup:install')]
-  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
-  public function installModules(array $modules): void {
-    /** @var \Drush\Drupal\Commands\pm\PmCommands $original */
-    $original = \Drupal::service('pm.commands');
-    $original->install($modules);
-  }
-
-  /**
    * Rebuilds node access if case.
    */
   #[CLI\Command(name: 'joinup:node-access-rebuild')]
@@ -178,6 +166,9 @@ class JoinupDrushCommands extends DrushCommands {
 
   /**
    * Returns all modules from codebase regardless if they are installed or not.
+   *
+   * @return string[]
+   *   A list of modules.
    */
   protected function scanFileSystemModules(): array {
     $discovery = new ExtensionDiscovery(DRUPAL_ROOT, FALSE, ['profiles/joinup']);

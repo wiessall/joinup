@@ -18,7 +18,6 @@ grumphp:
     phpcs:
       standard: [ './phpcs.xml' ]
       triggered_by: '%grumphp.tasks.php_extensions%'
-      ignore_patterns: ["web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php"]
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpmd.md
     phpmd:
