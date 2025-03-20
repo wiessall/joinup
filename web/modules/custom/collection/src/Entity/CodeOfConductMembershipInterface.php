@@ -26,7 +26,8 @@ interface CodeOfConductMembershipInterface {
    * Marks the given Code of Conduct document as accepted.
    *
    * This records the user's acceptance of a specific Code of Conduct
-   * document, which can later be referenced to verify compliance.
+   * document, which can later be referenced to verify compliance. Also grants
+   * the user the `full_member` role.
    *
    * @param \Drupal\node\NodeInterface $codeOfConduct
    *   The Code of Conduct document node.
@@ -34,6 +35,6 @@ interface CodeOfConductMembershipInterface {
    * @return self
    *   The current membership instance, for method chaining.
    */
-  public function setAcceptedDocument(NodeInterface $codeOfConduct): self;
+  public function grantFullMembershipWithCocAcceptance(NodeInterface $codeOfConduct): self;
 
 }

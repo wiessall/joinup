@@ -309,7 +309,9 @@ class SubscribeGroupForm extends FormBase {
 
       if ($membership instanceof CodeOfConductMembershipInterface &&
         $codeOfConduct = $group->getCodeOfConduct()) {
-        $group->grantFullMembership($codeOfConduct, $this->getUser()->id());
+        $membership
+          ->grantFullMembershipWithCocAcceptance($codeOfConduct)
+          ->save();
       }
 
       if ($subscribe) {

@@ -11,7 +11,6 @@ use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
@@ -186,17 +185,6 @@ class Collection extends Node implements CollectionInterface {
 
     $this->entityTypeManager()->getStorage('node')
       ->resetCache([$this->id()]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function grantFullMembership(CustomPageInterface $codeOfConduct, string|int $uid): void {
-    $membership = $this->getMembership($uid);
-    assert($membership instanceof CodeOfConductMembershipInterface);
-
-    $membership->setAcceptedDocument($codeOfConduct);
-    $membership->save();
   }
 
   /**
