@@ -34,6 +34,7 @@ function ventuno_preprocess_block(array &$variables): void {
     'in_the_spotlight-block',
     'highlighted_content',
     'latest_news-block',
+    'latest_events-block',
     'highlighted_event',
   ];
   $derivative_plugin_id = $variables['elements']['#derivative_plugin_id'];
