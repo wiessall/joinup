@@ -316,11 +316,6 @@ Feature: Homepage
     Then I should be on the advanced search page
     And I should see the following facet summary "Collections"
 
-    When I am on the homepage
-    And I click "More news"
-    Then I should be on the advanced search page
-    And I should see the following facet summary "News"
-
     # Check archived items.
     Given collection content:
       | title          | state    | description                                    | creation date    |
@@ -346,3 +341,9 @@ Feature: Homepage
     Given I am on the homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
+
+  @group-clone
+  Scenario: The /events path redirects to upcoming events page.
+    Given I am on the homepage
+    When I click "More events"
+    Then I should be on "/upcoming-events"
