@@ -3,7 +3,6 @@
 # - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
 
 ddev_version_constraint: ">=v1.23.0"
-name: joinup
 type: drupal
 docroot: web
 php_version: "8.3"
