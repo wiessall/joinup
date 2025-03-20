@@ -300,7 +300,7 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $membership = $entity->getMembership((int) $account->id());
+  $membership = $entity->getMembership($account->id());
   return AccessResult::allowedIf(
     $membership
     && !$entity->isPublished()

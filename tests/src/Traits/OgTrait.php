@@ -40,7 +40,7 @@ trait OgTrait {
    */
   protected function subscribeUserToGroup(AccountInterface $user, GroupInterface $group, array $roles = [], ?string $state = NULL, ?int $created = NULL): void {
     // If a membership already exists, load it. Otherwise create a new one.
-    $membership = $group->getMembership((int) $user->id(), OgMembershipInterface::ALL_STATES);
+    $membership = $group->getMembership($user->id(), OgMembershipInterface::ALL_STATES);
     if (!$membership) {
       $membership = OgMembership::create()
         ->setOwner($user)
@@ -268,7 +268,7 @@ trait OgTrait {
    *   Thrown if a membership with the given criteria is not found.
    */
   protected function getMembershipByGroupAndUser(GroupInterface $group, AccountInterface $user, array $states = [OgMembershipInterface::STATE_ACTIVE]): OgMembershipInterface {
-    $membership = $group->getMembership((int) $user->id(), $states);
+    $membership = $group->getMembership($user->id(), $states);
     if (empty($membership)) {
       throw new \Exception("Og membership for user {$user->getDisplayName()} in group {$group->label()} was not found.");
     }

@@ -478,7 +478,7 @@ class CollectionContext extends RawDrupalContext {
     foreach ($this->explodeCommaSeparatedStepArgument($labels) as $label) {
       /** @var \Drupal\collection\Entity\CollectionInterface $collection */
       $collection = $this->getEntityByLabel('node', $label, 'collection');
-      if (!$collection->getMembership((int) $account->id(), [])) {
+      if (!$collection->getMembership($account->id(), [])) {
         $failures[] = $label;
       }
     }
