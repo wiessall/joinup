@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgMembership;
 
@@ -69,6 +70,23 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
           'target_revision_id' => $codeOfConduct->getRevisionId(),
         ],
       );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    if ($this->isNew()) {
+      // In every case a membership is created, the code of conduct either has
+      // to be accepted prior to the membership creation, or is not valid for
+      // the group. In either case, the full membership is always granted on
+      // creation. This is also a safe add for any case in the API and tests as
+      // it avoids handling it explicitly everywhere.
+      $fullMemberRoleId = $this->getGroupEntityType() . '-' . $this->getGroupBundle() . '-full_member';
+      $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
+      $this->addRole($fullMemberRole);
+    }
+    parent::preSave($storage);
   }
 
 }
