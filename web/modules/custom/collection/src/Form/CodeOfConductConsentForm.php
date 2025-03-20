@@ -89,8 +89,12 @@ class CodeOfConductConsentForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
 
-    $collection->grantFullMembership($codeOfConduct, $this->currentUser()->id());
+    $membership = $collection->getMembership((int) $this->currentUser()->id());
+    assert($membership instanceof CodeOfConductMembershipInterface);
 
+    $membership
+      ->grantFullMembershipWithCocAcceptance($codeOfConduct)
+      ->save();
     $this->messenger()
       ->addStatus($this->t('Thank you for confirming your agreement to the Code of Conduct.'));
     $form_state->setRedirect('entity.node.canonical', ['node' => $collection->id()]);
