@@ -35,16 +35,10 @@ Feature: Homepage
     Then I should see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
 
   Scenario: Latest news is shown on the homepage
-    Given collection content:
-      | title             |
-      | Shaping of nature |
-    And the following "Remote video" media:
-      | name      | video                                       | group             | uuid                                 |
-      | The Video | https://www.youtube.com/watch?v=C0DPdy98e4c | Shaping of nature | 32b3beae-2218-11ee-be56-0242ac120002 |
-    And news content:
-      | title                       | headline                 | collection        | topic                                                 | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                         |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples. |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.            |
+    Given news content:
+      | title                       | headline                 | topic                                                 | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                         |
+      | Current biodiversity crisis | Preserve habitats        | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples. |
+      | Environmental stewardship   | Transformative practices | Employment and Support Allowance                      | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.            |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
       | date   | topics                                      | title                       | body                        |
