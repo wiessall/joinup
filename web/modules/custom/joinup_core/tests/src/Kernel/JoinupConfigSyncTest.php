@@ -34,7 +34,8 @@ class JoinupConfigSyncTest extends KernelTestBase {
     // Offers the CKEditor5EnabledConfigurablePlugins constraint used to
     // validate some configurations.
     'ckeditor5',
-    // Blazy depends on media.
+    // Blazy depends on media and file.
+    'file',
     'media',
     // This module alters the schema of facet.widget.default_config.
     // @see search_api_arbitrary_facet_config_schema_info_alter()
