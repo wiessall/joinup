@@ -19,7 +19,7 @@ class EntityQueueContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
   use EntityTrait;
-  
+
   /**
    * Sets the content of the given entity queue to what is listed in the table.
    *
