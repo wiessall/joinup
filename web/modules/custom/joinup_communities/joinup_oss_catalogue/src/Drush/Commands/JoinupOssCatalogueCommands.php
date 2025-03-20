@@ -6,10 +6,10 @@ namespace Drupal\joinup_oss_catalogue\Drush\Commands;
 
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\eu_oss_catalogue\Commands\EuOssCatalogueCommands;
+use Drupal\eu_oss_catalogue\Drush\Commands\EuOssCatalogueCommands;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
-use Drupal\eu_oss_vitality_index\Commands\EuOssVitalityIndexCommands;
+use Drupal\eu_oss_vitality_index\Drush\Commands\EuOssVitalityIndexCommands;
 use Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
