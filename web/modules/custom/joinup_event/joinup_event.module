@@ -8,12 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\FieldItemInterface;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\TypedData\Exception\MissingDataException;
-use Drupal\entityqueue\EntitySubqueueInterface;
 use Drupal\joinup_event\Entity\Event;
 use Drupal\joinup_event\Entity\EventInterface;
 use Drupal\joinup_event\Plugin\Field\FieldFormatter\WebtoolsMapFormatter;
