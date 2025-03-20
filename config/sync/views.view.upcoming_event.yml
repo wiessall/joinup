@@ -10,8 +10,8 @@ dependencies:
     - node
     - state_machine
     - user
-id: latest_events
-label: 'Latest events'
+id: upcoming_event
+label: 'Upcoming event'
 module: views
 description: ''
 tag: ''
@@ -266,7 +266,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      block_description: 'Latest events'
+      block_description: 'Upcoming event'
     cache_metadata:
       max-age: -1
       contexts:

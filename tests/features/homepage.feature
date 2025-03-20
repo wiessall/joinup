@@ -140,7 +140,7 @@ Feature: Homepage
     Then I should see the "Light and height" tile
     And I should see the link "Like this content" in the "Light and height" tile
 
-  Scenario: Latest event is shown on the homepage
+  Scenario: Upcoming event is shown on the homepage
     Given event content:
       | title               | created    | start date | end date       |
       | CodeCraft Summit    | 2 day ago  | +5 days    | + 5days 1 hour |
@@ -148,15 +148,15 @@ Feature: Homepage
       | DevSync Meetup      | 1 days ago | +9 days    | + 9days 1 hour |
 
     When I am on the homepage
-    Then I should see the link "Future Forward Tech" in the "Latest events"
-    But I should not see the link "CodeCraft Summit" in the "Latest events"
-    And I should not see the link "DevSync Meetup" in the "Latest events"
-
-    When I click "Read more" in the "Latest events"
+    Then I should see the link "Future Forward Tech" in the "Upcoming event"
+    But I should not see the link "CodeCraft Summit" in the "Upcoming event"
+    And I should not see the link "DevSync Meetup" in the "Upcoming event"
+    
+    When I click "Read more" in the "Upcoming event"
     Then the url should match "/collection/portal/event/future-forward-tech"
 
     When I am on the homepage
-    And I click "More events" in the "Latest events"
+    And I click "More events" in the "Upcoming event"
     Then the url should match "/events"
 
   @joinupVersion
