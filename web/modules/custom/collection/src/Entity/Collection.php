@@ -168,7 +168,8 @@ class Collection extends Node implements CollectionInterface {
 
     \Drupal::database()->delete('og_membership__roles')
       ->condition('entity_id', $ids, 'IN')
-      ->condition('roles_target_id', 'node-collection-full_member');
+      ->condition('roles_target_id', 'node-collection-full_member')
+      ->execute();
 
     // @todo Verify if these are the tags to invalidate.
     // Invalidate the cache of the collection and membership entities.
