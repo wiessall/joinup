@@ -75,6 +75,20 @@ class CustomPage extends Node implements CustomPageInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function isGroupCodeOfConductPage(): bool {
+    if ($this->hasGroup()) {
+      $group = $this->getGroup();
+      // Add the nullsafe operator to ensure that this does not break for
+      // solutions that do not have the code of conduct functionality.
+      $coc_page = $group->getSetting('code_of_conduct')?->entity;
+      return $coc_page && ($coc_page->id() === $this->id());
+    }
+    return FALSE;
+  }
+
+  /**
    * Returns an array of field names to skip in ::hasTranslationChanges.
    *
    * @return array
