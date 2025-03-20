@@ -159,6 +159,48 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
+  public function resetFullMemberships(): void {
+    $query = $this->entityTypeManager()
+      ->getStorage('og_membership')
+      ->getQuery()
+      ->condition('entity_id', $this->id())
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+    $ids = $query->execute();
+
+    if (empty($ids)) {
+      return;
+    }
+
+    \Drupal::database()->delete('og_membership__roles')
+      ->condition('entity_id', $ids, 'IN')
+      ->condition('roles_target_id', 'node-collection-full_member');
+
+    // @todo Verify if these are the tags to invalidate.
+    // Invalidate the cache of the collection and membership entities.
+    $this->entityTypeManager()
+      ->getStorage('og_membership')
+      ->resetCache($ids);
+
+    $this->entityTypeManager()->getStorage('node')
+      ->resetCache([$this->id()]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function grantFullMembership(string|int $uid): void {
+    $membership = $this->getMembership($uid);
+    if (!$membership) {
+      return;
+    }
+
+    $membership->addRole($this->entityTypeManager()->getStorage('og_role')->load('node-collection-full_member'));
+    $membership->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getNewMembershipSuccessMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
       '%group' => $this->label(),

@@ -66,6 +66,24 @@ interface CollectionInterface extends GroupInterface {
   public function hasCodeOfConductToAccept(): bool;
 
   /**
+   * Blocks the full membership of all users on change of the Code of Conduct.
+   *
+   * This method is called when the Code of Conduct is added or changed. It
+   * uses direct queries to block the full membership of all users in the
+   * collection. The direct queries are used for performance purposes. It also
+   * clears the cache of the collection.
+   */
+  public function resetFullMemberships(): void;
+
+  /**
+   * Grants full membership to a user.
+   *
+   * @param string|int $uid
+   *   The user ID.
+   */
+  public function grantFullMembership(string|int $uid): void;
+
+  /**
    * Returns the Code of Conduct, if any.
    *
    * @return \Drupal\Core\Entity\ContentEntityInterface|null
