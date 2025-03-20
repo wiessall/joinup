@@ -108,7 +108,7 @@ class CodeOfConductConsentForm extends FormBase {
    *   The access result.
    */
   public function access(CollectionInterface $node, AccountInterface $account): AccessResultInterface {
-    $membership = $node->getMembership((int) $account->id());
+    $membership = $node->getMembership($account->id());
 
     $access = AccessResult::allowedIf(
       $node->hasCodeOfConductToAccept() &&
