@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
@@ -180,12 +181,11 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function grantFullMembership(string|int $uid): void {
+  public function grantFullMembership(CustomPageInterface $codeOfConduct, string|int $uid): void {
     $membership = $this->getMembership($uid);
-    if (!$membership) {
-      return;
-    }
+    assert($membership instanceof CodeOfConductMembershipInterface);
 
+    $membership->setAcceptedDocument($codeOfConduct);
     $membership->addRole($this->entityTypeManager()->getStorage('og_role')->load('node-collection-full_member'));
     $membership->save();
   }

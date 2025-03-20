@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\collection\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -78,10 +79,12 @@ interface CollectionInterface extends GroupInterface {
   /**
    * Grants full membership to a user.
    *
+   * @param \Drupal\custom_page\Entity\CustomPageInterface $codeOfConduct
+   *   The Code of Conduct document that the user has accepted.
    * @param string|int $uid
    *   The user ID.
    */
-  public function grantFullMembership(string|int $uid): void;
+  public function grantFullMembership(CustomPageInterface $codeOfConduct, string|int $uid): void;
 
   /**
    * Returns the Code of Conduct, if any.

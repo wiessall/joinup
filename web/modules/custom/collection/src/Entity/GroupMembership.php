@@ -61,6 +61,10 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
    * {@inheritdoc}
    */
   public function setAcceptedDocument(NodeInterface $codeOfConduct): self {
+    // Grant the full member role to the user.
+    $roleId = $this->getGroupEntityType() . '-' . $this->getGroupBundle() . '-full_member';
+    $this->addRole(\Drupal::entityTypeManager()->getStorage('user_role')->load($roleId));
+
     return $this
       ->set(self::COC_DATE, \Drupal::time()->getCurrentTime())
       ->set(self::COC_DOCUMENT_FIELD,
