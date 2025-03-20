@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -154,8 +155,15 @@ class Collection extends Node implements CollectionInterface {
    * {@inheritdoc}
    */
   public function resetFullMemberships(): void {
-    $query = $this->entityTypeManager()
-      ->getStorage('og_membership')
+    $storage = $this->entityTypeManager()->getStorage('og_membership');
+    // The Interoperable Europe Portal entity types are only supporting SQL
+    // storage. This check is heads-up in the very unlikely case when the entity
+    // type is switched to a non-SQL storage. Making sure we only run on SQL
+    // storage allows us to use direct SQL queries to improve the performance of
+    // this task that might be very intensive with entity API.
+    \assert($storage instanceof SqlEntityStorageInterface);
+
+    $query = $storage
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_id', $this->id())
