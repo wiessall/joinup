@@ -27,6 +27,7 @@ use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
 /**
@@ -156,6 +157,7 @@ class Collection extends Node implements CollectionInterface {
     $query = $this->entityTypeManager()
       ->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
     $ids = $query->execute();
@@ -185,8 +187,10 @@ class Collection extends Node implements CollectionInterface {
     $membership = $this->getMembership($uid);
     assert($membership instanceof CodeOfConductMembershipInterface);
 
+    $fullMembershipRole = $this->entityTypeManager()->getStorage('og_role')->load('node-collection-full_member');
+    assert($fullMembershipRole instanceof OgRoleInterface);
     $membership->setAcceptedDocument($codeOfConduct);
-    $membership->addRole($this->entityTypeManager()->getStorage('og_role')->load('node-collection-full_member'));
+    $membership->addRole($fullMembershipRole);
     $membership->save();
   }
 
