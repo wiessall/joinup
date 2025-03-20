@@ -34,9 +34,20 @@ trait MembershipCreateTrait {
       OgRoleInterface::AUTHENTICATED,
     ]);
 
+    // The user will either have to accept the CoC on join or the group does
+    // not have a CoC. In either case, the user will be a full member.
+    $fullMemberRoleId = implode('-', [
+      $group->getEntityTypeId(),
+      $group->bundle(),
+      'full_member',
+    ]);
+
     $membership = $this->createMembership(
       $state,
-      [$this->loadOgRole($authenticatedRoleId)],
+      [
+        $this->loadOgRole($authenticatedRoleId),
+        $this->loadOgRole($fullMemberRoleId),
+      ],
       $user,
       $group,
     );
