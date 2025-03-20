@@ -82,10 +82,8 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
       return;
     }
 
-    // Print results.
     foreach ($this->timerStore as $group => $features) {
-      // Sort by execution time DESC.
-      arsort($features);
+      asort($features);
       $total = number_format(array_sum($features), 2) . 's';
 
       $rows = [];
