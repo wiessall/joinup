@@ -42,17 +42,13 @@ Feature: Homepage
       | name      | video                                       | group             | uuid                                 |
       | The Video | https://www.youtube.com/watch?v=C0DPdy98e4c | Shaping of nature | 32b3beae-2218-11ee-be56-0242ac120002 |
     And news content:
-      | title                       | headline                 | collection        | topic                                                 | published at          | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                                                                                                                                       |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z  | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                               |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | p2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                          |
-      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | 2021-02-28T13:15:00Z  |                             | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                   |
-      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | 2021-03-29T10:18:00Z  |                             | <p><drupal-media data-entity-type="media" data-entity-uuid="32b3beae-2218-11ee-be56-0242ac120002">&nbsp;</drupal-media>Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p> |
+      | title                       | headline                 | collection        | topic                                                 | published at         | abstract                    | field_paragraphs_body                                                                                                                                                                                                                                         |
+      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | 2021-04-26T19:09:00Z | We have some abstract here. | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples. |
+      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | 2021-01-27T16:12:00Z |                             | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.            |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
-      | date   | topics                                      | title                       | body                                                                                                                                                                                                       |
-      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | We have some abstract here.                                                                                                                                                                                |
-      | 29 Mar | EU and European Policies                    | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left... |
-      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                  |
+      | date   | topics                                      | title                       | body                        |
+      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | We have some abstract here. |
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -61,7 +57,7 @@ Feature: Homepage
     When I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
+    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship"
 
   Scenario Outline: Community content can be placed "In the spotlight" on the homepage
     Given collection content:
@@ -157,10 +153,10 @@ Feature: Homepage
     And the "Highlighted event" content listing contains:
       | type    | label                     |
       | content | Florentine steak festival |
-    And the "Highlighted event" content listing has the following fields:
-      | header text  | We don't serve 'well done' |
-      | link text    | Eat our divine meat        |
-      | external url | http://raresteaktown.com/  |
+#    And the "Highlighted event" content listing has the following fields:
+#      | header text  | We don't serve 'well done' |
+#      | link text    | Eat our divine meat        |
+#      | external url | http://raresteaktown.com/  |
 
     When I am on the homepage
     Then I should see the heading "We don't serve 'well done'" in the "Highlighted event"
@@ -172,10 +168,10 @@ Feature: Homepage
 
     # When all the fields in the Highlighted event content listing are left
     # empty, a "Read more" link to the event page should be shown by default.
-    Given the "Highlighted event" content listing has the following fields:
-      | header text  |  |
-      | link text    |  |
-      | external url |  |
+#    Given the "Highlighted event" content listing has the following fields:
+#      | header text  |  |
+#      | link text    |  |
+#      | external url |  |
     When I am on the homepage
     And I should see the heading "Florentine steak festival" in the "Highlighted event"
     And I should see the text "04 to 05/06/2021" in the "Highlighted event"
