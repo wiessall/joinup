@@ -43,4 +43,4 @@ permissions:
   - 'perform node:pre_moderated workflow save_as_draft transition on own entity'
   - 'perform node:pre_moderated workflow save_new_draft transition on own entity'
   - 'create content for only_members option'
-role_type: required
+role_type: standard
