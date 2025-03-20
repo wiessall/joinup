@@ -7,7 +7,7 @@ dependencies:
     - page_manager.page.homepage
     - views.view.homepage_topics
     - views.view.in_the_spotlight
-    - views.view.latest_events
+    - views.view.upcoming_event
     - views.view.latest_news
   module:
     - custom_markup_block
@@ -100,7 +100,7 @@ variant_settings:
           uuid: 6f843070-3c02-4fb0-8a5a-f99787ffc5d5
           region: second
           configuration:
-            id: 'views_block:latest_events-block'
+            id: 'views_block:upcoming_event-block'
             label: ''
             label_display: visible
             provider: views
