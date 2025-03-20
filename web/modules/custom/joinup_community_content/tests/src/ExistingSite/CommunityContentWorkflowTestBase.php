@@ -1217,13 +1217,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $this->assertInstanceOf(NodeInterface::class, $parent, "The $bundle group was created.");
 
     $member_role = OgRole::getRole('node', $bundle, 'member');
-    // The full member role is what the member role should have been if CoC did
-    // not exist. For these tests, we do not care about the code of conduct,
-    // thus, we give the full_member role to all users.
-    $full_member_role = OgRole::getRole('node', $bundle, 'full_member');
     $facilitator_role = OgRole::getRole('node', $bundle, 'facilitator');
     $administrator_role = OgRole::getRole('node', $bundle, 'administrator');
-    $this->createOgMembership($parent, $this->userOgMember, [$member_role, $full_member_role]);
+    $this->createOgMembership($parent, $this->userOgMember, [$member_role]);
     $this->createOgMembership($parent, $this->userOgFacilitator, [$facilitator_role]);
     $this->createOgMembership($parent, $this->userOgAdministrator, [$administrator_role]);
 
