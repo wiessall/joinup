@@ -4,10 +4,10 @@ status: true
 dependencies:
   config:
     - entityqueue.entity_queue.highlighted_content
-    - entityqueue.entity_queue.highlighted_event
     - page_manager.page.homepage
     - views.view.homepage_topics
     - views.view.in_the_spotlight
+    - views.view.latest_events
     - views.view.latest_news
   module:
     - entityqueue_block
@@ -95,17 +95,18 @@ variant_settings:
             items_per_page: none
           weight: 0
           additional: {  }
-        7cc83b30-0be3-4f89-940b-3e7f72d7b16d:
-          uuid: 7cc83b30-0be3-4f89-940b-3e7f72d7b16d
+        8fc92d7e-8761-4b54-b538-d95432184ca2:
+          uuid: 8fc92d7e-8761-4b54-b538-d95432184ca2
           region: second
           configuration:
-            id: 'entityqueue_block:highlighted_event'
-            label: 'Highlighted event'
+            id: 'views_block:latest_events-block'
+            label: ''
             label_display: visible
-            provider: entityqueue_block
-            view_mode: highlighted_event
+            provider: views
             context_mapping: {  }
-          weight: 0
+            views_label: ''
+            items_per_page: none
+          weight: 1
           additional: {  }
       third_party_settings: {  }
     -
