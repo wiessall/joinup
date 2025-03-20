@@ -1,0 +1,12 @@
+uuid: e007cf37-db09-4af7-9734-0bb4e67a9c41
+langcode: en
+status: true
+dependencies:
+  module:
+    - config_translation
+id: translator
+label: Translator
+weight: -3
+is_admin: null
+permissions:
+  - 'translate configuration'
