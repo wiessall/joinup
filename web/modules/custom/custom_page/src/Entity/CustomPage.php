@@ -99,7 +99,7 @@ class CustomPage extends Node implements CustomPageInterface {
    * {@inheritdoc}
    */
   public function isGroupCodeOfConductPage(): bool {
-    if ($this->hasGroup()) {
+    if ($this->hasGroup() && $this->getGroup() instanceof CollectionInterface) {
       $group = $this->getGroup();
       // Add the nullsafe operator to ensure that this does not break for
       // solutions that do not have the code of conduct functionality.
