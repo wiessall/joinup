@@ -151,7 +151,7 @@ Feature: Homepage
     Then I should see the link "Future Forward Tech" in the "Upcoming event"
     But I should not see the link "CodeCraft Summit" in the "Upcoming event"
     And I should not see the link "DevSync Meetup" in the "Upcoming event"
-    
+
     When I click "Read more" in the "Upcoming event"
     Then the url should match "/collection/portal/event/future-forward-tech"
 
