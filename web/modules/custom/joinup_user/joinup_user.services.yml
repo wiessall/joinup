@@ -37,3 +37,5 @@ services:
     class: Drupal\joinup_user\JoinupUserDeleted
     tags:
       - { name: needs_destruction, priority: 100 }
+
+  Drupal\joinup_user\EventSubscriber\CasAdminApprovalRegistrationSubscriber: { }
