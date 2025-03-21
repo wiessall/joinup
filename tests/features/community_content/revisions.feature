@@ -6,8 +6,8 @@ Feature:
 
   Scenario Outline: Community content revisions
     Given <group type> content:
-      | title        | description                               | moderation   |
-      | Hellow world | Because I do not know how to spell Hello. | <moderation> |
+      | title        | description                               | group_moderation |
+      | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -199,7 +199,7 @@ Feature:
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
-      | title        | description                               | moderation   |
+      | title        | description                               | group_moderation   |
       | Hellow world | Because I do not know how to spell Hello. | <moderation> |
     And users:
       | Username           | E-mail                    | Roles     |

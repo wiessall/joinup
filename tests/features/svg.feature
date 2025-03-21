@@ -3,8 +3,8 @@ Feature: Test SVG attachments.
 
   Background:
     Given collection content:
-      | title | content creation         | moderation |
-      | SVG   | facilitators and authors | yes        |
+      | title | content_creation         | group_moderation |
+      | SVG   | facilitators and authors | yes              |
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.
