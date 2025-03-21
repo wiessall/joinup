@@ -19,8 +19,6 @@ Feature: Variety tests for the developer role.
       | /admin/content/media                               |
       | /admin/legal-notice                                |
       | /admin/config/system/symfony-mailer-lite/transport |
-      | /admin/reporting/distribution-downloads            |
-      | /admin/reporting/distribution-downloads/csv        |
       | /admin/config/user-interface/antibot               |
       | /admin/config/people                               |
       | /admin/config/people/accounts                      |
