@@ -5,7 +5,7 @@ dependencies:
   config:
     - node.type.solution
 id: node-solution-full_member
-label: Member
+label: 'Full member'
 weight: 1
 group_id: null
 group_type: node
