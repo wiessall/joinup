@@ -249,3 +249,27 @@ function joinup_core_deploy_200306(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
   return sprintf('Reindexed %d of %d releases.', $sandbox['current'], $sandbox['total']);
 }
+
+/**
+ * Remove users inactive for 3 years.
+ */
+function joinup_core_deploy_200307(array &$sandbox): string {
+  $queue = \Drupal::queue('joinup_removed_users');
+
+  if (empty($sandbox['usernames'])) {
+    $sandbox['usernames'] = str_getcsv(file_get_contents(__DIR__ . "/fixtures/inactive_users.csv"));
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['usernames']);
+  }
+
+  $usernames = array_splice($sandbox['usernames'], 0, 500);
+
+  $queue->createQueue();
+  foreach ($usernames as $username) {
+    $queue->createItem(['name' => $username]);
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
+}

@@ -15,7 +15,7 @@ Feature: Group member permissions table
       | Hex              |
       | Mustrum Ridcully |
     Given collection content:
-      | title                                       | content creation         | moderation |
+      | title                                       | content_creation         | group_moderation |
       | Applied astrology                           | facilitators and authors | yes        |
       | Illiberal studies                           | facilitators and authors | no         |
       | Approximate accuracy                        | members                  | yes        |
@@ -23,7 +23,7 @@ Feature: Group member permissions table
       | Creative uncertainty                        | registered users         | yes        |
       | Woolly thinking                             | registered users         | no         |
     Given solution content:
-      | title                         | content creation         | moderation |
+      | title                         | content_creation         | group_moderation |
       | Applied anthropics            | facilitators and authors | yes        |
       | Extreme horticulture          | facilitators and authors | no         |
       | Prehumous morbid bibliomancy  | registered users         | yes        |

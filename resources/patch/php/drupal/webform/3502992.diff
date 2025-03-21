@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/WebformElement/WebformManagedFileBase.php b/src/Plugin/WebformElement/WebformManagedFileBase.php
+index 2a31992773336d46d83717198548eb4a2145ae3c..68146f608ef297511f8c8edcbf95b165fd232081 100644
+--- a/src/Plugin/WebformElement/WebformManagedFileBase.php
++++ b/src/Plugin/WebformElement/WebformManagedFileBase.php
+@@ -295,7 +295,7 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
+     // @see \Drupal\webform\Plugin\WebformElementBase::preRenderFixFlexboxWrapper
+     $request_params = \Drupal::request()->request->all();
+     if (\Drupal::request()->request->get('_drupal_ajax')
+-      && (!empty($request_params['files']) || !empty($request_params[$element['#webform_key']]))) {
++      && (!empty($request_params['files']) || (isset($element['#webform_key']) && !empty($request_params[$element['#webform_key']])))) {
+       $element['#webform_wrapper'] = FALSE;
+     }
+

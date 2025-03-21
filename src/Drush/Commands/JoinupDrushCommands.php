@@ -47,26 +47,10 @@ class JoinupDrushCommands extends DrushCommands {
   }
 
   /**
-   * Install modules.
-   *
-   * @param array $modules
-   *   List of modules.
-   *
-   * @command joinup:install
-   * @bootstrap full
-   */
-  public function installModules(array $modules): void {
-    /** @var \Drush\Drupal\Commands\pm\PmCommands $original */
-    $original = \Drupal::service('pm.commands');
-    $original->install($modules);
-  }
-
-  /**
    * Rebuilds node access if case.
-   *
-   * @command joinup:node-access-rebuild
-   * @bootstrap full
    */
+  #[CLI\Command(name: 'joinup:node-access-rebuild')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function nodeAccessRebuild(): void {
     if (node_access_needs_rebuild()) {
       $this->logger()->notice('Rebuilding node access... (patience, it takes a while)');
@@ -96,10 +80,9 @@ class JoinupDrushCommands extends DrushCommands {
 
   /**
    * Runs specific acceptance tasks.
-   *
-   * @command joinup:acc
-   * @bootstrap full
    */
+  #[CLI\Command(name: 'joinup:acc')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function acceptanceTasks(): void {
     \Drupal::service('module_installer')->install(['joinup_acceptance']);
   }
@@ -131,16 +114,11 @@ class JoinupDrushCommands extends DrushCommands {
    * Note that this command is only bootstrapping the database to avoid any
    * interaction with the container, which might be damaged due to missing
    * modules code.
-   *
-   * @param array $modules
-   *   A space separated list of installed modules whose codebase is gone.
-   *
-   * @command joinup:force-uninstall-modules
-   *
-   * @bootstrap database
-   * @usage joinup:force-uninstall-modules module1 module2
-   *   Uninstalls module1 and module2
    */
+  #[CLI\Argument(name: 'modules', description: 'A space separated list of installed modules whose codebase is gone.')]
+  #[CLI\Command(name: 'joinup:force-uninstall-modules')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::DATABASE)]
+  #[CLI\Usage(name: 'joinup:force-uninstall-modules module1 module2', description:  'Uninstalls module1 and module2')]
   public function uninstallModules(array $modules): void {
     if (empty($modules)) {
       throw new \Exception('No modules passed.');
