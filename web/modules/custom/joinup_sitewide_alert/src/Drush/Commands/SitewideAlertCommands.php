@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_sitewide_alert\Commands;
+namespace Drupal\joinup_sitewide_alert\Drush\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -13,6 +15,8 @@ use Drush\Commands\DrushCommands;
  * @see \Drush\Commands\sql\sanitize\SanitizeCommands::sanitize()
  */
 class SitewideAlertCommands extends DrushCommands {
+
+  use AutowireTrait;
 
   public function __construct(
     public readonly EntityTypeManagerInterface $entityTypeManager,
@@ -23,15 +27,12 @@ class SitewideAlertCommands extends DrushCommands {
   /**
    * Unpublish Sitewide entity.
    *
-   * @param array[] $options
-   *   Command options.
-   *
-   * @command joinup:unpublish-alert
-   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
+  #[CLI\Command(name: 'joinup:unpublish-alert')]
+  #[CLI\Option(name: 'category', description: 'Site wide category.')]
   public function unpublishAlert(array $options = ['category' => NULL]): void {
     $storage = $this->entityTypeManager->getStorage('sitewide_alert');
 
