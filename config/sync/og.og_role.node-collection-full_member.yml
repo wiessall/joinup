@@ -5,7 +5,7 @@ dependencies:
   config:
     - node.type.collection
 id: node-collection-full_member
-label: Member
+label: 'Full member'
 weight: 5
 group_id: null
 group_type: node
