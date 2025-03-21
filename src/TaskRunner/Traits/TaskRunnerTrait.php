@@ -25,8 +25,12 @@ trait TaskRunnerTrait {
     $initialDir = getcwd();
     $input = new StringInput("{$command} --working-dir=" . static::getPath());
     $runner = new Runner(static::getClassLoader(), $input, new NullOutput());
-    $runner->run();
+    $exitCode = $runner->run();
     chdir($initialDir);
+
+    if ($exitCode !== 0) {
+      throw new \RuntimeException("Task Runner command '{$command}' failed with exit code {$exitCode}.");
+    }
   }
 
   /**
