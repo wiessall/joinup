@@ -11,10 +11,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\SchemaCheckTestTrait;
 use Drupal\config_test\TestInstallStorage;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
  * Tests Joinup sync configuration.
@@ -53,14 +49,6 @@ class JoinupConfigSyncTest extends KernelTestBase {
    */
   public function register(ContainerBuilder $container): void {
     parent::register($container);
-    // Mock a request with a session to avoid deprecated request_stack usage.
-    $request_stack = new RequestStack();
-    $request = new Request();
-    $request->setSession(new Session(new MockArraySessionStorage()));
-    $request_stack->push($request);
-
-    $container->register('request_stack', RequestStack::class)
-      ->addMethodCall('push', [$request]);
 
     // Use a testing schema storage service that records all schemas from all
     // extensions, regardless if they are installed or not.
