@@ -1603,7 +1603,6 @@ class FeatureContext extends RawDrupalContext {
     static::toggleModule('install', ['error_page_test']);
 
     // Pipe error log entries to a file rather than to standard PHP log.
-    static::runCommand('drupal:settings error_page_test --root=' . static::getPath('web') . ' --sites-subdir=default');
     $settings = Settings::getAll();
     $settings['error_page']['log']['method'] = 3;
     $settings['error_page']['log']['destination'] = 'php://temp';
@@ -1622,7 +1621,6 @@ class FeatureContext extends RawDrupalContext {
     $settings = Settings::getAll();
     unset($settings['error_page']['log']);
     new Settings($settings);
-    static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
 
     // Restore the site's error logging verbosity.
     $this->setSiteErrorLevel();
