@@ -38,4 +38,4 @@ permissions:
   - 'perform node:pre_moderated workflow request_deletion transition on own entity'
   - 'perform node:pre_moderated workflow save_as_draft transition on own entity'
   - 'perform node:pre_moderated workflow save_new_draft transition on own entity'
-role_type: standard
+role_type: required
