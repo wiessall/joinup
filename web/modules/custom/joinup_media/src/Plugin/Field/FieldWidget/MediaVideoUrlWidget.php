@@ -124,12 +124,15 @@ class MediaVideoUrlWidget extends InlineEntityFormSimple {
    * Lookup for an existing remote_video entity.
    */
   protected function lookupEntity(string $url): ?MediaInterface {
+    $conditions = [
+      'bundle' => 'remote_video',
+      'media_oembed_video' => $url,
+    ];
+    if ($this->ogContext->getGroup()) {
+      $conditions['og_audience'] = $this->ogContext->getGroup()->id();
+    }
     $existing_entity = $this->entityTypeManager->getStorage('media')
-      ->loadByProperties([
-        'bundle' => 'remote_video',
-        'media_oembed_video' => $url,
-        'og_audience' => $this->ogContext->getGroup()?->id(),
-      ]);
+      ->loadByProperties($conditions);
     return $existing_entity ? reset($existing_entity) : NULL;
   }
 
