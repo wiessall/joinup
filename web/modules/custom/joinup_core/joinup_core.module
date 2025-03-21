@@ -179,12 +179,24 @@ function joinup_core_file_delete(EntityInterface $entity): void {
   /** @var \Drupal\file\FileInterface $entity */
   $uri = $entity->getFileUri();
   $scheme = StreamWrapperManager::getScheme($uri);
+  $current_user = \Drupal::currentUser();
+  $current_time = \Drupal::time()->getRequestTime();
+  $group = \Drupal::service('og.context')->getGroup();
+  $path = 'base:/' . \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/' . StreamWrapperManager::getTarget($uri);
+  \Drupal::service('logger.channel.group_membership')->info('The file @filepath has been deleted on @deleted_time by @user in @group.', [
+    '@type' => $entity->bundle(),
+    '@title' => $entity->label(),
+    '@group' => $group ? $group->label() : NULL,
+    '@user' => $current_user->getDisplayName(),
+    '@filepath' => $path,
+    '@deleted_time' => date('Y-m-d H:i:s', $current_time),
+    'type' => 'joinup:delete_file',
+    'actor' => $current_user->id(),
+  ]);
+
   if ($scheme !== 'public') {
     return;
   }
-
-  $path = 'base:/' . \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/' . StreamWrapperManager::getTarget($uri);
-
   // Delete all redirects targeting this path.
   redirect_delete_by_path($path);
 }
