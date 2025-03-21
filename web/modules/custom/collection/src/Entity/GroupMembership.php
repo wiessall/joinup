@@ -63,6 +63,7 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
    */
   public function grantFullMembershipWithCocAcceptance(NodeInterface $codeOfConduct): self {
     return $this
+      ->addFullMemberRole()
       ->set(self::COC_DATE, \Drupal::time()->getCurrentTime())
       ->set(self::COC_DOCUMENT_FIELD,
         [
@@ -88,11 +89,22 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
       // this.
       // @see \Drupal\collection\Entity\Collection::resetFullMemberships
       // @see \Drupal\collection\Entity\Collection::grantFullMembership
-      $fullMemberRoleId = $this->getGroupEntityType() . '-' . $this->getGroupBundle() . '-full_member';
-      $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
-      $this->addRole($fullMemberRole);
+      $this->addFullMemberRole();
     }
     parent::preSave($storage);
+  }
+
+  /**
+   * Adds the full member role to the membership.
+   *
+   * @return self
+   *   The membership object itself for chaining.
+   */
+  protected function addFullMemberRole(): self {
+    $fullMemberRoleId = $this->getGroupEntityType() . '-' . $this->getGroupBundle() . '-full_member';
+    $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
+    $this->addRole($fullMemberRole);
+    return $this;
   }
 
 }
