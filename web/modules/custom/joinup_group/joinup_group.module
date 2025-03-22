@@ -25,6 +25,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\GroupMembership;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
@@ -522,6 +523,12 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     return;
   }
 
+  // Escape early if we are on an admin preview but do not skip if a view
+  // argument has been passed there.
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.view.preview_form' && empty($view->args)) {
+    return;
+  }
+
   // Retrieve the collection or solution for which the membership overview is
   // being built.
   $group = \Drupal::entityTypeManager()->getStorage($view->args[0])->load($view->args[1]);
@@ -788,6 +795,41 @@ function joinup_group_extract_bulk_form_entity_id(string $bulk_form_key): string
 
   // The first two items will always be langcode and ID.
   return array_pop($key_parts);
+}
+
+/**
+ * Implements hook_entity_display_build_alter().
+ */
+function joinup_group_entity_display_build_alter(array &$build, array $context): void {
+  // Views use the \Drupal\views\Entity\Render\EntityFieldRenderer::buildFields
+  // in order to build the labels of a reference field. It does this by
+  // building a custom entity view component and dynamically generating a
+  // rendered view of the entity with the component and extracting the values
+  // from it. With the code below, we are stripping the full member role from
+  // the roles field in the group membership view and any other place in the
+  // website as it mainly is the same role with the default `member`.
+  $group_membership = $context['entity'];
+  /** @var \Drupal\collection\Entity\GroupMembership $group_membership */
+  if (!$group_membership instanceof GroupMembership) {
+    return;
+  }
+
+  if (empty($build['roles']['#items']) || $build['roles']['#items']->isEmpty()) {
+    return;
+  }
+
+  $group_entity_type_id = $group_membership->getGroupEntityType();
+  $group_bundle = $group_membership->getGroupBundle();
+  $full_member_role_id = $group_entity_type_id . '-' . $group_bundle . '-full_member';
+
+  /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $items */
+  $items = $build['roles']['#items'];
+  foreach ($items->getValue() as $delta => $item) {
+    if ($item['target_id'] === $full_member_role_id) {
+      $items->removeItem($delta);
+      unset($build['roles'][$delta]);
+    }
+  }
 }
 
 /**
