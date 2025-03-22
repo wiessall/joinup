@@ -826,7 +826,9 @@ function joinup_group_entity_display_build_alter(array &$build, array $context):
   $items = $build['roles']['#items'];
   foreach ($items->getValue() as $delta => $item) {
     if ($item['target_id'] === $full_member_role_id) {
-      $items->removeItem($delta);
+      // We only unset the role from the build, not from the $item object, as
+      // that would affect the entity on save - the build is used to determine
+      // the values on bulk operations for example.
       unset($build['roles'][$delta]);
     }
   }
