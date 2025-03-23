@@ -394,6 +394,11 @@ function collection_meta_entity_delete(EntityInterface $entity): void {
 
   /** @var \Drupal\collection\Entity\CollectionInterface $group */
   $group = $entity->getTargetEntity();
+  if (empty($group)) {
+    // This can happen when the deletion of the meta entity is the result of
+    // the deletion of the parent entity.
+    return;
+  }
   $group->restoreFullMemberships();
 }
 
