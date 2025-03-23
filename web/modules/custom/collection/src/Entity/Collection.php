@@ -19,6 +19,7 @@ use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
+use Drupal\joinup_group\Entity\CodeOfConductTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
@@ -37,6 +38,7 @@ class Collection extends Node implements CollectionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
+  use CodeOfConductTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
@@ -214,79 +216,6 @@ class Collection extends Node implements CollectionInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function revokeFullMemberships(): void {
-    $ogMembershipStorage = $this->getOgMembershipStorage();
-    $query = $ogMembershipStorage
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('entity_type', $this->getEntityTypeId())
-      ->condition('entity_id', $this->id())
-      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
-    $ids = $query->execute();
-
-    if (empty($ids)) {
-      return;
-    }
-
-    \Drupal::database()->delete('og_membership__roles')
-      ->condition('entity_id', $ids, 'IN')
-      ->condition('roles_target_id', self::OG_ROLE_FULL_MEMBER)
-      ->execute();
-
-    $this->invalidateMembershipsAndSelf($ids);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function restoreFullMemberships(): void {
-    // Clean up any existing full memberships to avoid duplicates.
-    $this->revokeFullMemberships();
-    $database = \Drupal::database();
-    $query = $database->select('og_membership', 'ogm');
-    $query->leftJoin('og_membership__roles', 'ogmr', 'ogm.id = ogmr.entity_id');
-    $query->fields('ogm');
-    $query->fields('ogmr', ['delta', 'roles_target_id']);
-    $query->condition('ogm.entity_type', $this->getEntityTypeId());
-    $query->condition('ogm.entity_id', $this->id());
-    $query->condition('ogm.state', OgMembershipInterface::STATE_ACTIVE);
-
-    $data = $query->execute()->fetchAll();
-    if (empty($data)) {
-      return;
-    }
-
-    $insertRows = [];
-    foreach ($data as $row) {
-      $nextDelta = $row->delta ? $row->delta + 1 : 0;
-      if (isset($insertRows[$row->id])) {
-        $insertRows[$row->id]['delta'] = max($nextDelta, $insertRows[$row->id]['delta']);
-      }
-      else {
-        $insertRows[$row->id] = [
-          'bundle' => 'default',
-          'deleted' => 0,
-          'entity_id' => $row->id,
-          'revision_id' => $row->id,
-          'langcode' => $row->language,
-          'roles_target_id' => self::OG_ROLE_FULL_MEMBER,
-          'delta' => $nextDelta,
-        ];
-      }
-    }
-
-    $query = $database->insert('og_membership__roles');
-    $query->fields(['bundle', 'deleted', 'entity_id', 'revision_id', 'langcode', 'roles_target_id', 'delta']);
-    foreach ($insertRows as $insertRow) {
-      $query->values($insertRow);
-    }
-    $query->execute();
-    $this->invalidateMembershipsAndSelf(array_keys($insertRows));
-  }
-
-  /**
    * Returns the storage handler for the 'og_membership' entity type.
    *
    * @return \Drupal\Core\Entity\EntityStorageInterface
@@ -301,18 +230,6 @@ class Collection extends Node implements CollectionInterface {
     // this task that might be very intensive with entity API.
     \assert($storage instanceof SqlEntityStorageInterface);
     return $storage;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function invalidateMembershipsAndSelf(array $membershipIds): void {
-    $this->entityTypeManager()
-      ->getStorage('og_membership')
-      ->resetCache($membershipIds);
-
-    $this->entityTypeManager()->getStorage('node')
-      ->resetCache([$this->id()]);
   }
 
   /**

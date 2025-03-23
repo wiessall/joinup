@@ -376,4 +376,22 @@ interface GroupInterface extends
    */
   public function getActiveMemberCount(): int;
 
+  /**
+   * Revokes the full membership of all users in the group.
+   */
+  public function revokeFullMemberships(): void;
+
+  /**
+   * Restores the full membership of all users in the group.
+   */
+  public function restoreFullMemberships(): void;
+
+  /**
+   * Returns the name of the role that represents a full member.
+   *
+   * @return string
+   *   The role name.
+   */
+  public function getFullMemberRoleName(): string;
+
 }
