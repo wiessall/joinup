@@ -123,6 +123,69 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
+    parent::postSave($storage, $update);
+
+    // Calculate if we need to revoke or grant full memberships. When the
+    // collection is updated and is changed from open to closed, AND there is a
+    // Code of Conduct page, we need to revoke all full memberships. If the
+    // collection is updated and is changed from closed to open, we need to
+    // restore all full memberships. 2 special cases here: If the current saved
+    // version is not a published one, we don't need to do anything. If the
+    // collection is updated and the current version is published, we need to
+    // compare with the last published version to decide if we need to revoke
+    // or grant full memberships. If there is no previous published version, we
+    // only act if the current version is a closed group.
+    if (!$update || !$this->isPublished()) {
+      return;
+    }
+
+    $original = $this->original;
+    if (empty($original)) {
+      return;
+    }
+
+    $nodeStorage = $this->entityTypeManager()->getStorage('node');
+
+    // ::hasCodeOfConductToAccept() method already checks if the collection is
+    // closed.
+    if (!$original->isPublished()) {
+      // We need to retrieve the last published version to compare with the
+      // current one.
+      $revisionIds = $nodeStorage->revisionIds($this);
+
+      $lastPublishedRevisionId = NULL;
+      foreach (array_reverse($revisionIds) as $revisionId) {
+        $revision = $nodeStorage->loadRevision($revisionId);
+        if ($revision->isPublished()) {
+          $lastPublishedRevisionId = $revisionId;
+          break;
+        }
+      }
+
+      if ($lastPublishedRevisionId === NULL) {
+        // There is no previous published version, we only act if the current
+        // version is a closed group.
+        if ($this->isClosed()) {
+          $this->revokeFullMemberships();
+        }
+      }
+      else {
+        $lastPublished = $nodeStorage->loadRevision($lastPublishedRevisionId);
+        // Only act if the membership moderation has changed.
+        if ($this->isClosed() && !$lastPublished?->isClosed()) {
+          $this->revokeFullMemberships();
+        }
+        elseif (!$this->isClosed() && $lastPublished?->isClosed()) {
+          $this->restoreFullMemberships();
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isClosed(): bool {
     return (bool) $this->getMainPropertyValue('closed_group');
   }
