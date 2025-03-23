@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
@@ -113,6 +115,23 @@ trait CodeOfConductTrait {
 
     $this->entityTypeManager()->getStorage('node')
       ->resetCache([$this->id()]);
+  }
+
+  /**
+   * Returns the storage handler for the 'og_membership' entity type.
+   *
+   * @return \Drupal\Core\Entity\EntityStorageInterface
+   *   The storage handler.
+   */
+  protected function getOgMembershipStorage(): EntityStorageInterface {
+    $storage = $this->entityTypeManager()->getStorage('og_membership');
+    // The Interoperable Europe Portal entity types are only supporting SQL
+    // storage. This check is heads-up in the very unlikely case when the entity
+    // type is switched to a non-SQL storage. Making sure we only run on SQL
+    // storage allows us to use direct SQL queries to improve the performance of
+    // this task that might be very intensive with entity API.
+    \assert($storage instanceof SqlEntityStorageInterface);
+    return $storage;
   }
 
 }
