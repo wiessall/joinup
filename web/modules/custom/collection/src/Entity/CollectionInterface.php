@@ -78,7 +78,7 @@ interface CollectionInterface extends GroupInterface {
    * collection. The direct queries are used for performance purposes. It also
    * clears the cache of the collection.
    */
-  public function resetFullMemberships(): void;
+  public function revokeFullMemberships(): void;
 
   /**
    * Restores the full membership of all users in the collection.

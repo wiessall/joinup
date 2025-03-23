@@ -101,15 +101,15 @@ Feature:
     When I check "accept"
     And I press "Accept"
     And I visit the "Knowledge Hive" collection
-    And I should not see the warning message "We updated our Code of Conduct"
-    And I visit the "Think Tank" solution
-    And I should not see the warning message "We updated our Code of Conduct"
     And I should see the following links:
       | Add discussion |
       | Add document   |
       | Add event      |
       | Add news       |
       | Add solution   |
+    And I should not see the warning message "We updated our Code of Conduct"
+    And I visit the "Think Tank" solution
+    And I should not see the warning message "We updated our Code of Conduct"
 
     # Ensure previously existing member sees the message.
     Given I am logged in as "Eleanor Vaughn"
