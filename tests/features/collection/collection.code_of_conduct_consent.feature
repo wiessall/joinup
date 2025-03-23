@@ -11,8 +11,8 @@ Feature:
       | title      | collection     |
       | Think Tank | Knowledge Hive |
     Given custom_page content:
-      | title              | collection     |
-      | Agreement of usage | Knowledge Hive |
+      | title              | collection     | status    |
+      | Agreement of usage | Knowledge Hive | published |
     And users:
       | Username         | E-mail                       | First name | Family name |
       | Some facilitator | some.facilitator@example.com | Some       | facilitator |
