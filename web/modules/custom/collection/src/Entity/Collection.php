@@ -153,7 +153,7 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function resetFullMemberships(): void {
+  public function revokeFullMemberships(): void {
     $ogMembershipStorage = $this->getOgMembershipStorage();
     $query = $ogMembershipStorage
       ->getQuery()
@@ -180,7 +180,7 @@ class Collection extends Node implements CollectionInterface {
    */
   public function restoreFullMemberships(): void {
     // Clean up any existing full memberships to avoid duplicates.
-    $this->resetFullMemberships();
+    $this->revokeFullMemberships();
     $database = \Drupal::database();
     $query = $database->select('og_membership', 'ogm');
     $query->leftJoin('og_membership__roles', 'ogmr', 'ogm.id = ogmr.entity_id');
