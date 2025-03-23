@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -153,17 +154,11 @@ class Collection extends Node implements CollectionInterface {
    * {@inheritdoc}
    */
   public function resetFullMemberships(): void {
-    $storage = $this->entityTypeManager()->getStorage('og_membership');
-    // The Interoperable Europe Portal entity types are only supporting SQL
-    // storage. This check is heads-up in the very unlikely case when the entity
-    // type is switched to a non-SQL storage. Making sure we only run on SQL
-    // storage allows us to use direct SQL queries to improve the performance of
-    // this task that might be very intensive with entity API.
-    \assert($storage instanceof SqlEntityStorageInterface);
-
-    $query = $storage
+    $ogMembershipStorage = $this->getOgMembershipStorage();
+    $query = $ogMembershipStorage
       ->getQuery()
       ->accessCheck(FALSE)
+      ->condition('entity_type', $this->getEntityTypeId())
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
     $ids = $query->execute();
@@ -174,14 +169,84 @@ class Collection extends Node implements CollectionInterface {
 
     \Drupal::database()->delete('og_membership__roles')
       ->condition('entity_id', $ids, 'IN')
-      ->condition('roles_target_id', 'node-collection-full_member')
+      ->condition('roles_target_id', self::OG_ROLE_FULL_MEMBER)
       ->execute();
 
-    // @todo Verify if these are the tags to invalidate.
-    // Invalidate the cache of the collection and membership entities.
+    $this->invalidateMembershipsAndSelf($ids);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function restoreFullMemberships(): void {
+    // Clean up any existing full memberships to avoid duplicates.
+    $this->resetFullMemberships();
+    $database = \Drupal::database();
+    $query = $database->select('og_membership', 'ogm');
+    $query->leftJoin('og_membership__roles', 'ogmr', 'ogm.id = ogmr.entity_id');
+    $query->fields('ogm');
+    $query->fields('ogmr', ['delta', 'roles_target_id']);
+    $query->condition('ogm.entity_type', $this->getEntityTypeId());
+    $query->condition('ogm.entity_id', $this->id());
+    $query->condition('ogm.state', OgMembershipInterface::STATE_ACTIVE);
+
+    $data = $query->execute()->fetchAll();
+    if (empty($data)) {
+      return;
+    }
+
+    $insertRows = [];
+    foreach ($data as $row) {
+      $nextDelta = $row->delta ? $row->delta + 1 : 0;
+      if (isset($insertRows[$row->id])) {
+        $insertRows[$row->id]['delta'] = max($nextDelta, $insertRows[$row->id]['delta']);
+      }
+      else {
+        $insertRows[$row->id] = [
+          'bundle' => 'default',
+          'deleted' => 0,
+          'entity_id' => $row->id,
+          'revision_id' => $row->id,
+          'langcode' => $row->language,
+          'roles_target_id' => self::OG_ROLE_FULL_MEMBER,
+          'delta' => $nextDelta,
+        ];
+      }
+    }
+
+    $query = $database->insert('og_membership__roles');
+    $query->fields(['bundle', 'deleted', 'entity_id', 'revision_id', 'langcode', 'roles_target_id', 'delta']);
+    foreach ($insertRows as $insertRow) {
+      $query->values($insertRow);
+    }
+    $query->execute();
+    $this->invalidateMembershipsAndSelf(array_keys($insertRows));
+  }
+
+  /**
+   * Returns the storage handler for the 'og_membership' entity type.
+   *
+   * @return \Drupal\Core\Entity\EntityStorageInterface
+   *   The storage handler.
+   */
+  protected function getOgMembershipStorage(): EntityStorageInterface {
+    $storage = $this->entityTypeManager()->getStorage('og_membership');
+    // The Interoperable Europe Portal entity types are only supporting SQL
+    // storage. This check is heads-up in the very unlikely case when the entity
+    // type is switched to a non-SQL storage. Making sure we only run on SQL
+    // storage allows us to use direct SQL queries to improve the performance of
+    // this task that might be very intensive with entity API.
+    \assert($storage instanceof SqlEntityStorageInterface);
+    return $storage;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function invalidateMembershipsAndSelf(array $membershipIds): void {
     $this->entityTypeManager()
       ->getStorage('og_membership')
-      ->resetCache($ids);
+      ->resetCache($membershipIds);
 
     $this->entityTypeManager()->getStorage('node')
       ->resetCache([$this->id()]);

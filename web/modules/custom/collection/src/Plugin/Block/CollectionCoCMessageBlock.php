@@ -110,6 +110,11 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
+    // If the membership has a bypass for the CoC, do not show the message.
+    if ($membership->bypassesCodeOfConduct()) {
+      return $build;
+    }
+
     return [
       '#theme' => 'status_messages',
       '#message_list' => [

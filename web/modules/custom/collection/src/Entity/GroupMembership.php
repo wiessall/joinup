@@ -74,6 +74,20 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   }
 
   /**
+   * Returns true if the membership has the permission to bypass CoC.
+   *
+   * Note, that this does not give any extra permissions by itself. Permissions
+   * should be granted to the role having the `bypass code of conduct`
+   * permission explicitly for each action that the user should be able to do.
+   *
+   * @return bool
+   *   TRUE if the membership has the permission to bypass the code of conduct.
+   */
+  public function bypassesCodeOfConduct(): bool {
+    return $this->hasPermission('bypass code of conduct');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {

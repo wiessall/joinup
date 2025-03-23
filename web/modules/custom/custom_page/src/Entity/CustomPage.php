@@ -38,6 +38,12 @@ class CustomPage extends Node implements CustomPageInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * This function is a group of hooks that affect memberships according to
+   * specific requirements/changes.
+   *
+   * @see \_collection_meta_entity_handle_coc
+   * @see \collection_meta_entity_delete
    */
   public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
     parent::postSave($storage, $update);
