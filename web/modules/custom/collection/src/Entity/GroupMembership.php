@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\collection\Entity;
 
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgMembership;
 
@@ -115,7 +116,9 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
    *   The membership object itself for chaining.
    */
   protected function addFullMemberRole(): self {
-    $fullMemberRoleId = $this->getGroupEntityType() . '-' . $this->getGroupBundle() . '-full_member';
+    $group = $this->getGroup();
+    \assert($group instanceof GroupInterface);
+    $fullMemberRoleId = $group->getFullMemberRoleId();
     $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
     $this->addRole($fullMemberRole);
     return $this;

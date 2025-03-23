@@ -13,11 +13,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 interface CollectionInterface extends GroupInterface {
 
   /**
-   * The role for full members of a collection.
-   */
-  const string OG_ROLE_FULL_MEMBER = 'node-collection-full_member';
-
-  /**
    * Returns the solutions that are affiliated with this collection.
    *
    * @param bool $onlyPublished
@@ -69,34 +64,6 @@ interface CollectionInterface extends GroupInterface {
    *   Code of Conduct, FALSE otherwise.
    */
   public function hasCodeOfConductToAccept(): bool;
-
-  /**
-   * Blocks the full membership of all users on change of the Code of Conduct.
-   *
-   * This method is called when the Code of Conduct is added or changed. It
-   * uses direct queries to block the full membership of all users in the
-   * collection. The direct queries are used for performance purposes. It also
-   * clears the cache of the collection.
-   */
-  public function revokeFullMemberships(): void;
-
-  /**
-   * Restores the full membership of all users in the collection.
-   *
-   * This method is called when the Code of Conduct is removed or the
-   * collection is set to closed. It uses direct queries to restore the full
-   * membership of all users in the collection. The direct queries are used for
-   * performance purposes. It also clears the cache of the collection.
-   */
-  public function restoreFullMemberships(): void;
-
-  /**
-   * Invalidates the memberships of all users and the collection itself.
-   *
-   * @param array $membershipIds
-   *   The membership IDs to invalidate.
-   */
-  public function invalidateMembershipsAndSelf(array $membershipIds): void;
 
   /**
    * Returns the Code of Conduct, if any.
