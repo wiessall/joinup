@@ -392,6 +392,6 @@ interface GroupInterface extends
    * @return string
    *   The role name.
    */
-  public function getFullMemberRoleName(): string;
+  public function getFullMemberRoleId(): string;
 
 }

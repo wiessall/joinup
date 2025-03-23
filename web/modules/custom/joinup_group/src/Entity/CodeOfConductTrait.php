@@ -98,7 +98,7 @@ trait CodeOfConductTrait {
   /**
    * {@inheritdoc}
    */
-  public function getFullMemberRoleName(): string {
+  public function getFullMemberRoleId(): string {
     return $this->getEntityTypeId() . '-' . $this->bundle() . '-full_member';
 
   }
