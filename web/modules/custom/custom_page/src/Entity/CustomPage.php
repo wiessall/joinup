@@ -51,9 +51,9 @@ class CustomPage extends Node implements CustomPageInterface {
     // If this page is the code of conduct page for the group, and was updated,
     // reset the group's full memberships. The ::isGroupCodeOfConductPage
     // method also checks if the parent group is a collection.
-    if ($update && $this->isPublished() && $this->isGroupCodeOfConductPage()) {
+    if ($update && $this->isGroupCodeOfConductPage()) {
       $group = $this->getGroup();
-      $group->resetFullMemberships();
+      $this->isPublished() ? $group->resetFullMemberships() : $group->restoreFullMemberships();
     }
   }
 
