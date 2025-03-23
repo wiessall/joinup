@@ -18,6 +18,7 @@ use Drupal\Core\Database\Database;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\og\OgMembershipInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
 use EasyRdf\Graph;
@@ -272,4 +273,34 @@ function joinup_core_deploy_200307(array &$sandbox): string {
 
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
   return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
+}
+
+/**
+ * Grant full membership to all users in all groups.
+ */
+function joinup_core_deploy_200308(array &$sandbox): string {
+  if (empty($sandbox['group_ids'])) {
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', ['collection', 'solution'], 'IN')
+      ->accessCheck(FALSE);
+    $sandbox['group_ids'] = $query->execute();
+    if (empty($sandbox['group_ids'])) {
+      return 'No groups found.';
+    }
+
+    $sandbox['total'] = count($sandbox['group_ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $group_ids = array_splice($sandbox['group_ids'], 0, 100);
+
+  /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+  foreach ($node_storage->loadMultiple($group_ids) as $group) {
+    $group->restoreFullMemberships();
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} of groups.";
 }
