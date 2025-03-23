@@ -466,6 +466,30 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
+   * Creates a new revision of a group and changes the membership moderation.
+   *
+   * @param string $groupLabel
+   *   The label of the group.
+   * @param string $groupType
+   *   The type of the group.
+   * @param string $state
+   *   The state of the new revision. Affects group published state.
+   * @param string $membershipModeration
+   *   The new membership moderation state. Either 'open' or 'closed'.
+   *
+   * @Given the :groupLabel :groupType has a new :state revision with :membershipModeration membership moderation
+   */
+  public function createGroupRevisionWithMembershipModeration(string $groupLabel, string $groupType, string $state, string $membershipModeration): void {
+    \assert(in_array($membershipModeration, ['open', 'closed']));
+
+    $group = $this->getEntityByLabel('node', $groupLabel, $groupType);
+    $group->set('field_state', $state);
+    $group->set('closed_group', $membershipModeration === 'closed');
+    $group->setNewRevision();
+    $group->save();
+  }
+
+  /**
    * Deletes an entity, user, or message based on identifier and type alias.
    *
    * @param string $identifier

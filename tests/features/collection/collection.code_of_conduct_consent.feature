@@ -181,3 +181,40 @@ Feature:
       | Add event      |
       | Add news       |
       | Add solution   |
+
+  Scenario: Changing the membership moderation of collections affect members.
+    Given I am logged in as "Cedric Hawthorne"
+    And I visit the "Knowledge Hive" collection
+    And I should see the warning message "We updated our Code of Conduct"
+
+    # Creating a new unpublished CoC should not affect the members.
+    Given the "Knowledge Hive" "collection" has a new "draft" revision with "open" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should see the warning message "We updated our Code of Conduct"
+
+    # Changing the membership moderation between published revisions affect the
+    # memberships.
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+
+    # Changing the membership moderation between unpublished revisions does not
+    # affect the memberships. Change to closed to check the effect.
+    Given the "Knowledge Hive" "collection" has a new "draft" revision with "closed" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+
+    # Not changing the membership moderation between published revisions does
+    # not affect the memberships.
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+
+    # Change again to closed with an inbetween unpublished revision to check
+    # that full memberships are revoked.
+    Given the "Knowledge Hive" "collection" has a new "draft" revision with "closed" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "closed" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should see the warning message "We updated our Code of Conduct"
