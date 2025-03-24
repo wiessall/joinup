@@ -24,32 +24,6 @@ function joinup_core_requirements($phase): array {
         'value' => t('Database logging is enabled'),
       ];
     }
-
-    $requirements_helper = \Drupal::getContainer()
-      ->get('joinup_core.requirements_helper');
-
-    // Ensure that a cache state inconsistency will not cause also
-    // inconsistencies with the published revisions of the entities.
-    //
-    // @see: \joinup_core_post_update_set_news_default_version
-    // @see: \Drupal\joinup_core\RequirementsHelper::getNodesWithProblematicRevisions
-    // @see: ISAICP-5191
-    $requirements['joinup_core_forward_revisions'] = [
-      'title' => t('Forward published revisions'),
-      'description' => t('In all content, the last published revision should be the latest of the published revisions.'),
-      'severity' => REQUIREMENT_OK,
-      'value' => t('No entities were found without a parent.'),
-    ];
-
-    $results = $requirements_helper->getNodesWithProblematicRevisions();
-    if (!empty($results)) {
-      $nids = array_keys($results);
-      $error = t('Issues with the latest revision have been found in the following nid(s): :nids', [
-        ':nids' => implode(', ', $nids),
-      ]);
-      $requirements['joinup_core_forward_revisions']['severity'] = REQUIREMENT_ERROR;
-      $requirements['joinup_core_forward_revisions']['value'] = $error;
-    }
   }
 
   return $requirements;
