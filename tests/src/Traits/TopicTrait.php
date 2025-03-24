@@ -39,4 +39,26 @@ trait TopicTrait {
     return $storage->load($tids[array_rand($tids)]);
   }
 
+  /**
+   * Gets Topic by name.
+   *
+   * @param string $name
+   *   Topic taxonomy ter name.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getTopicByName(string $name): ?TopicInterface {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $tid = array_values($storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', 'topic')
+      ->condition('name', $name)
+      ->range(0, 1)
+      ->execute());
+    if (!empty($tid)) {
+      return $storage->load(reset($tid));
+    }
+    return NULL;
+  }
+
 }
