@@ -293,7 +293,7 @@ function joinup_core_deploy_200308(array &$sandbox): string {
   }
 
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-  $group_ids = array_splice($sandbox['group_ids'], 0, 100);
+  $group_ids = array_splice($sandbox['group_ids'], 0, 50);
 
   /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
   foreach ($node_storage->loadMultiple($group_ids) as $group) {
