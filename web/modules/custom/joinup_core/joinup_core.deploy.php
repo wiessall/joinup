@@ -18,7 +18,6 @@ use Drupal\Core\Database\Database;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-use Drupal\og\OgMembershipInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
 use EasyRdf\Graph;
