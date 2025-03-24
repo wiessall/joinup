@@ -10,6 +10,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -3000,28 +3001,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * A list of entities to cleanup.
-   *
-   * @var string[]
-   */
-  const array CLEANUP_ENTITY_TYPES = [
-    'comment',
-    'entity_legal_document_acceptance',
-    'entity_legal_document_version',
-    'media',
-    'menu_link_content',
-    'message',
-    'meta_entity',
-    'node',
-    'node',
-    'ogmenu_instance',
-    'path_alias',
-    'taxonomy_term',
-    'user',
-    'user',
-  ];
-
-  /**
    * Stores most recent IDs of entity types that should be cleaned up.
    *
    * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
@@ -3030,17 +3009,21 @@ class JoinupContext extends RawDrupalContext {
    * @BeforeScenario
    */
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
-    foreach (self::CLEANUP_ENTITY_TYPES as $entity_type) {
-      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
-      $id_key = $entity_type->getKey('id');
-      $state_key = 'behat_cleanup_' . $entity_type->id();
-      $id = \Drupal::state()->get($state_key, NULL);
-      // Escape early if there is a value in the database, as it means that the
-      // test ended abruptly, and by keeping it, we clean entities from the
-      // previous executions as well.
-      if ($id !== NULL) {
+    $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
+    foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
+      if (isset($behat_cleanup_data[$entity_type_id])) {
+        // Keep the original ID so that even broken tests get properly cleaned.
         continue;
       }
+      if (!$entity_type->entityClassImplements(FieldableEntityInterface::class)) {
+        continue;
+      }
+      $field_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type_id);
+      if ($field_definitions[$entity_type->getKey('id')]->getType() !== 'integer') {
+        continue;
+      }
+      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
+      $id_key = $entity_type->getKey('id');
 
       // Get the latest ID of the entity type in the database.
       $ids = \Drupal::entityQuery($entity_type->id())
@@ -3049,9 +3032,10 @@ class JoinupContext extends RawDrupalContext {
         ->range(0, 1)
         ->execute();
 
-      // Store the ID in the state.
-      \Drupal::state()->set($state_key, $ids ? reset($ids) : 0);
+      $behat_cleanup_data[$entity_type_id] = reset($ids) ?: 0;
     }
+
+    \Drupal::state()->set('behat_cleanup_data', $behat_cleanup_data);
   }
 
   /**
@@ -3063,26 +3047,18 @@ class JoinupContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function afterScenarioCleanupEntities(AfterScenarioScope $scope): void {
-    foreach (self::CLEANUP_ENTITY_TYPES as $entity_type) {
+    $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
+    foreach ($behat_cleanup_data as $entity_type => $id) {
       $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
-      $id_key = $entity_type->getKey('id');
-      $state_key = 'behat_cleanup_' . $entity_type->id();
-      $id = \Drupal::state()->get($state_key, NULL);
       if ($id === NULL) {
         continue;
       }
 
+      $id_key = $entity_type->getKey('id');
       // Delete all entities created during the scenario.
       $query = \Drupal::entityQuery($entity_type->id())
         ->accessCheck(FALSE)
         ->condition($id_key, $id, '>');
-
-      if ($entity_type->id() === 'meta_entity') {
-        // Avoid interfering with the @topic afterScenario as that hook deletes
-        // but also recreates the meta entities.
-        // @see \Drupal\joinup\Context\JoinupContext::resetTopicMetaEntity.
-        $query->condition('type', 'topic', '<>');
-      }
 
       $ids = $query->execute();
       if ($ids) {
@@ -3090,9 +3066,6 @@ class JoinupContext extends RawDrupalContext {
         $entities = $storage->loadMultiple($ids);
         $storage->delete($entities);
       }
-
-      // Reset the state.
-      \Drupal::state()->delete($state_key);
     }
   }
 
