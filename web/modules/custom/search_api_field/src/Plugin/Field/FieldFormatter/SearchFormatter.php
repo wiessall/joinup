@@ -17,6 +17,7 @@ use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\search_api\Query\QueryInterface;
@@ -25,7 +26,6 @@ use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Drupal\topic\Entity\Topic;
-use Drupal\topic\Entity\TopicInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,6 +40,8 @@ use Symfony\Component\HttpFoundation\Request;
   ],
 )]
 class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
+
+  use TopicTrait;
 
   public function __construct(
     string $plugin_id,
@@ -394,9 +396,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
-      // Try to convert the topic URI to term ID, fallback to NULL.
-      $entity = Topic::loadByUri($value);
-      $value = $entity instanceof TopicInterface ? $entity->id() : NULL;
+      $entity = $this->getTopicByName($value);
+      $value = ($entity instanceof Topic) ? $entity->id() : NULL;
     }
 
     return $value;
