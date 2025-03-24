@@ -9,7 +9,7 @@ use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
- * Reusable methods for group bundles.
+ * Reusable methods for group bundles related to memberships and CoC.
  */
 trait CodeOfConductTrait {
 
@@ -95,7 +95,10 @@ trait CodeOfConductTrait {
   }
 
   /**
-   * {@inheritdoc}
+   * Invalidates the memberships and the group entity.
+   *
+   * @param int[] $membershipIds
+   *   The membership IDs to invalidate.
    */
   protected function invalidateMembershipsAndSelf(array $membershipIds): void {
     $this->entityTypeManager()

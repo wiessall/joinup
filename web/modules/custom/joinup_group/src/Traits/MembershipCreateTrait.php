@@ -36,9 +36,7 @@ trait MembershipCreateTrait {
 
     $membership = $this->createMembership(
       $state,
-      [
-        $this->loadOgRole($authenticatedRoleId),
-      ],
+      [$this->loadOgRole($authenticatedRoleId)],
       $user,
       $group,
     );

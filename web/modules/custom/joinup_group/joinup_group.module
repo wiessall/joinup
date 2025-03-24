@@ -818,10 +818,7 @@ function joinup_group_entity_display_build_alter(array &$build, array $context):
     return;
   }
 
-  $group_entity_type_id = $group_membership->getGroupEntityType();
-  $group_bundle = $group_membership->getGroupBundle();
-  $full_member_role_id = $group_entity_type_id . '-' . $group_bundle . '-full_member';
-
+  $full_member_role_id = $group_membership->getGroup()->getFullMemberRoleId();
   /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $items */
   $items = $build['roles']['#items'];
   foreach ($items->getValue() as $delta => $item) {

@@ -121,8 +121,8 @@ class CustomPage extends Node implements CustomPageInterface {
       $group = $this->getGroup();
       // Add the nullsafe operator to ensure that this does not break for
       // solutions that do not have the code of conduct functionality.
-      $coc_page = $group->getSetting('code_of_conduct')?->entity;
-      return $coc_page && ($coc_page->id() === $this->id());
+      $cocPage = $group->getSetting('code_of_conduct')?->entity;
+      return $cocPage && ($cocPage->id() === $this->id());
     }
     return FALSE;
   }

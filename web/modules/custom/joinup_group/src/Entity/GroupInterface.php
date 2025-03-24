@@ -390,7 +390,8 @@ interface GroupInterface extends
    * Returns the name of the role that represents a full member.
    *
    * @return string
-   *   The role name.
+   *   The role ID which is in the format of
+   *   <entity_type>-<bundle>-<role_name>.
    */
   public function getFullMemberRoleId(): string;
 
