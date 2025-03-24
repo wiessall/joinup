@@ -159,17 +159,17 @@
                       {{ link.label }}
                     </button>
                     <div
-                      class="dropdown-menu get-started__menu"
+                      class="dropdown-menu get-started__menu pt-2 pb-3 px-3"
                       aria-labelledby="{{ link.id }}"
                       data-popper-placement="right"
                     >
-                      <a class="get-started__cta" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
+                      <p class="mb-1"><a class="get-started__cta fw-bold" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
                         {{ link.popover.cta.text }}
                         <svg class="bi icon--s ms-2">
                           <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
                         </svg>
-                      </a>
-                      <p class="get-started__description">{{ link.popover.description }}</p>
+                      </a></p>
+                      <p class="get-started__description mb-0 fs-sm">{{ link.popover.description }}</p>
                     </div>
                   {% endif %}
                 </li>
