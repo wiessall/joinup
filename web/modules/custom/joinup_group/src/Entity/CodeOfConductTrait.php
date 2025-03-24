@@ -4,20 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_core\Entity\OutdatedContentTrait;
-use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\og\Entity\OgRole;
-use Drupal\og\MembershipManagerInterface;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\og\OgRoleInterface;
-use Drupal\user\Entity\User;
-use Drupal\user\UserInterface;
 
 /**
  * Reusable methods for group bundles.
