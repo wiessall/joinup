@@ -29,6 +29,7 @@ Feature: User role management
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
       | Licence manager |
+      | Translator      |
 
     Given I am logged in as "Awesome dev"
     And I go to "/admin/people"
