@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
-use Drupal\topic\Entity\Topic;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
 
@@ -19,6 +19,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;
   use LoginTrait;
+  use TopicTrait;
 
   /**
    * Testing entities.
@@ -253,7 +254,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
+      'field_topic' => $this->getRandomTopic(),
       'contact' => $contact->id(),
     ]);
 
@@ -266,7 +267,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
+      'field_topic' => $this->getRandomTopic(),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/testing/PublicServiceProvider')->id(),
       'contact' => $contact->id(),
     ]);
