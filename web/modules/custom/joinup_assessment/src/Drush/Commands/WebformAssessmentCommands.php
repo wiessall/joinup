@@ -38,11 +38,9 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
   /**
    * Disables default webform sanitization.
    *
-   * @param \Symfony\Component\Console\Input\InputInterface $input
-   *   Input.
-   *
    * @see \Drupal\webform\Commands\WebformSanitizeSubmissionsCommands::sanitize()
    */
+  #[CLi\Argument(name: 'input', description: 'Input')]
   #[CLI\Hook(type: HookManager::INITIALIZE, target: 'sql-sanitize')]
   public function disableDefaultWebformSanitization(InputInterface $input): void {
     // @see \Drupal\webform\Commands\WebformSanitizeSubmissionsCommands::sanitize()
