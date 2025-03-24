@@ -3019,11 +3019,10 @@ class JoinupContext extends RawDrupalContext {
         continue;
       }
       $field_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type_id);
-      if ($field_definitions[$entity_type->getKey('id')]->getType() !== 'integer') {
+      $id_key = $entity_type->getKey('id');
+      if ($field_definitions[$id_key]->getType() !== 'integer') {
         continue;
       }
-      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
-      $id_key = $entity_type->getKey('id');
 
       // Get the latest ID of the entity type in the database.
       $ids = \Drupal::entityQuery($entity_type->id())
@@ -3050,9 +3049,6 @@ class JoinupContext extends RawDrupalContext {
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach ($behat_cleanup_data as $entity_type => $id) {
       $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
-      if ($id === NULL) {
-        continue;
-      }
 
       $id_key = $entity_type->getKey('id');
       // Delete all entities created during the scenario.
