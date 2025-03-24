@@ -273,3 +273,22 @@ function joinup_core_deploy_200307(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
   return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
 }
+
+/**
+ * Delete rdf sync for topic vocabulary.
+ */
+function joinup_core_deploy_200308(array &$sandbox): string {
+  if (!isset($sandbox['total'])) {
+    $sandbox['total'] = \Drupal::database()->query("SELECT COUNT(*) FROM {rdf_sync_uri} WHERE bundle = :bundle", [
+      ':bundle' => 'topic',
+    ])->fetchField();
+    $sandbox['current'] = 0;
+  }
+  $query = \Drupal::database()->delete('rdf_sync_uri')
+    ->condition('bundle', 'topic');
+  $deleted = $query->execute();
+  $sandbox['current'] += $deleted;
+  if ($sandbox['current'] >= $sandbox['total']) {
+    return sprintf('Deletion of RDF storage for "topic" vocabulary completed. %d records removed.', $sandbox['total']);
+  }
+}
