@@ -11,8 +11,8 @@ Feature: Event moderation
       | Rosa Vaughn     |
       | Patricia Lynch  |
     And collection content:
-      | title     | description           | logo     | content creation | moderation | topic       |
-      | Wet Lords | The Forgotten Female. | logo.png | registered users | no         | E-inclusion |
+      | title     | description           | logo     | content_creation | group_moderation | topic       |
+      | Wet Lords | The Forgotten Female. | logo.png | registered users | no               | E-inclusion |
     And the following collection user membership:
       | collection | user           | roles       |
       | Wet Lords  | Rosa Vaughn    | member      |

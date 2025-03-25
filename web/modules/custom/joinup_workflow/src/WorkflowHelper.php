@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Entity\RevisionableInterface;
+use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -186,7 +187,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
     string|Stringable|TranslatableMarkup|null $revisionLogMessage = NULL,
   ): EntityInterface {
     if (
-      !$entity instanceof EntityWorkflowStateInterface ||
       !$entity instanceof ArchivableEntityInterface ||
       !$entity->isArchived()
     ) {
@@ -204,6 +204,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
       return $entity;
     }
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
+    assert($entityStorage instanceof RevisionableStorageInterface);
 
     // Load the previous published revision's IDs.
     $revisionIdsQuery = $entityStorage->getQuery()

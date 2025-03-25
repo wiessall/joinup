@@ -19,4 +19,3 @@ index c14ab95..d90e60a 100644
 +      '#default_value' => isset($setting) ? Xss::filter($setting, ['br', 'hr', 'span', 'img', 'wbr']) : '',
      ];
    }
- 

@@ -12,8 +12,8 @@ Feature: Collections/Solutions settings
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     And collection content:
-      | title             | access url        | closed | creation date    | content creation         | moderation |
-      | Jillian Land Eels | http://spice.com/ | yes    | 28-01-1995 12:05 | facilitators and authors | yes        |
+      | title             | access url        | closed | creation date    | content_creation         | group_moderation |
+      | Jillian Land Eels | http://spice.com/ | yes    | 28-01-1995 12:05 | facilitators and authors | yes              |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region

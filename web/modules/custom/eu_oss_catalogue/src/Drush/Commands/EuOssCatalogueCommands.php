@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Commands;
+namespace Drupal\eu_oss_catalogue\Drush\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
@@ -10,15 +10,21 @@ use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Drush commands.
  */
 class EuOssCatalogueCommands extends DrushCommands {
 
+  use AutowireTrait;
+
   public function __construct(
+    #[Autowire(service: 'eu_oss_catalogue')]
     protected readonly EuOssCatalogueInterface $euOssCatalogueService,
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
     protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {
     parent::__construct();

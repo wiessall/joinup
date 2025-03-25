@@ -7,12 +7,14 @@ namespace Drupal\joinup\Listener;
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Gherkin\Node\TaggedNodeInterface;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Reports all groups and features execution times.
@@ -28,30 +30,86 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
   use DigitQaPipelineAwareTrait;
 
   /**
+   * Whether this listener should run.
+   *
+   * @var bool
+   */
+  private bool $enabled = TRUE;
+
+  /**
    * Stores execution times.
    *
    * @var array
    */
   private array $timerStore = [];
 
+  public function __construct(
+    protected string $basePath,
+    protected InputInterface $input,
+    protected OutputInterface $output,
+  ) {
+  }
+
   /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $enabled = self::isDigitQaPipeline() || getenv('JOINUP_BEHAT_STATS');
-    return $enabled ? [
+    return [
+      ExerciseCompleted::BEFORE => 'beforeExercise',
+      ExerciseCompleted::AFTER => 'afterExercise',
       FeatureTested::BEFORE => 'beforeFeature',
       FeatureTested::AFTER => 'afterFeature',
-      ExerciseCompleted::AFTER => 'afterExercise',
-    ] : [];
+    ];
+  }
+
+  /**
+   * Setup.
+   */
+  public function beforeExercise(): void {
+    $dry_run = $this->input->getOption('dry-run');
+    $this->enabled = !$dry_run && (self::isDigitQaPipeline() || getenv('JOINUP_BEHAT_STATS'));
+  }
+
+  /**
+   * Teardown.
+   */
+  public function afterExercise(): void {
+    if (!$this->enabled) {
+      return;
+    }
+
+    if (empty($this->timerStore)) {
+      return;
+    }
+
+    foreach ($this->timerStore as $group => $features) {
+      asort($features);
+      $total = number_format(array_sum($features), 2) . 's';
+
+      $rows = [];
+      foreach ($features as $feature => $value) {
+        $rows[] = [$feature, number_format($value, 2) . 's'];
+      }
+
+      $table = new Table($this->output);
+      $table
+        ->setHeaders(["@$group features", "Duration"])
+        ->setRows($rows)
+        ->setFooterTitle("Total: $total")
+        ->render();
+    }
   }
 
   /**
    * Starts the timer for this feature.
    */
   public function beforeFeature(BeforeFeatureTested $event): void {
-    $group = $this->getGroup($event->getFeature());
-    $feature = sprintf('%s:%d', $event->getFeature()->getFile(), $event->getFeature()->getLine());
+    if (!$this->enabled) {
+      return;
+    }
+
+    $group = $this->getFeatureGroup($event->getFeature());
+    $feature = $this->getFeaturePath($event->getFeature());
 
     $timer = new Timer();
     $timer->start();
@@ -62,8 +120,12 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
    * Stops the timer for this feature.
    */
   public function afterFeature(AfterFeatureTested $event): void {
-    $group = $this->getGroup($event->getFeature());
-    $feature = sprintf('%s:%d', $event->getFeature()->getFile(), $event->getFeature()->getLine());
+    if (!$this->enabled) {
+      return;
+    }
+
+    $group = $this->getFeatureGroup($event->getFeature());
+    $feature = $this->getFeaturePath($event->getFeature());
 
     $timer = $this->timerStore[$group][$feature] ?? NULL;
     if ($timer instanceof Timer) {
@@ -73,37 +135,23 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
   }
 
   /**
-   * Prints all features execution times.
+   * Get the feature group (group-a, group-b, group-c,...).
    */
-  public function afterExercise(): void {
-    if (empty($this->timerStore)) {
-      return;
-    }
-
-    // Gather results.
-    $results = [];
-    foreach ($this->timerStore as $group => $features) {
-      $results[$group]['total'] = array_sum($features);
-      $results[$group]['features'] = $features;
-    }
-
-    // Print results.
-    print "--------------------------------------------------------------------" . PHP_EOL;
-    print "Execution times:" . PHP_EOL;
-    print Yaml::dump($results, 30, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
-    print "--------------------------------------------------------------------" . PHP_EOL;
-  }
-
-  /**
-   * Get the Interoperable Europe Portal group for the scenario.
-   */
-  private function getGroup(TaggedNodeInterface $feature): string {
+  private function getFeatureGroup(FeatureNode $feature): string {
     foreach ($feature->getTags() as $tag) {
       if (str_starts_with($tag, 'group-')) {
         return $tag;
       }
     }
     return 'default';
+  }
+
+  /**
+   * Get the path to the feature.
+   */
+  private function getFeaturePath(FeatureNode $feature): string {
+    $path = sprintf('%s:%d', $feature->getFile(), $feature->getLine());
+    return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
   }
 
 }

@@ -12,7 +12,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title             | content creation | moderation |
+      | title             | content_creation | group_moderation |
       | CC pre collection | members          | yes        |
     And the following collection user memberships:
       | collection        | user           | roles       |

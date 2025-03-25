@@ -8,7 +8,7 @@ use Composer\Autoload\ClassLoader;
 use DrupalFinder\DrupalFinderComposerRuntime;
 use EcEuropa\Toolkit\TaskRunner\Runner;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Reusable methods to allow Task Runner usage from code.
@@ -24,9 +24,14 @@ trait TaskRunnerTrait {
   protected static function runCommand(string $command): void {
     $initialDir = getcwd();
     $input = new StringInput("{$command} --working-dir=" . static::getPath());
-    $runner = new Runner(static::getClassLoader(), $input, new NullOutput());
-    $runner->run();
+    $output = new BufferedOutput();
+    $runner = new Runner(static::getClassLoader(), $input, $output);
+    $exitCode = $runner->run();
     chdir($initialDir);
+
+    if ($exitCode !== 0) {
+      throw new \RuntimeException("Task Runner command '$command' failed with exit code $exitCode. {$output->fetch()}");
+    }
   }
 
   /**
