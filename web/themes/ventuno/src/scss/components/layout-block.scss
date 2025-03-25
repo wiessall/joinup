@@ -14,18 +14,6 @@
     &--homepage_topics-block_1 {
       display: block;
       border-bottom: 1px solid rgba($primary, 0.1);
-      &::before {
-        @include get-bootstrap-icon("lightning-charge", $warning);
-
-        margin-right: $spacer * 0.25;
-      }
-    }
-    &--listing-grid {
-      &::before {
-        @include get-bootstrap-icon("lightning-charge", $warning);
-
-        margin-right: $spacer * 0.25;
-      }
     }
   }
   &__link-wrapper {
