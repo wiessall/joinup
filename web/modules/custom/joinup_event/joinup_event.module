@@ -120,3 +120,16 @@ function joinup_event_library_info_alter(array &$libraries, string $extension): 
     $libraries['drupal.webtools-smartloader']['header'] = TRUE;
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_event_theme(): array {
+  return [
+    'joinup_event_date_tile' => [
+      'variables' => [
+        'date' => NULL,
+      ],
+    ],
+  ];
+}
