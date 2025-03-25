@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\joinup_event\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -19,7 +21,10 @@ use Drupal\datetime_range\Plugin\Field\FieldFormatter\DateRangePlainFormatter;
 )]
 class DateTileFormatter extends DateRangePlainFormatter {
 
-  protected function buildDate(DrupalDateTime $date) {
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildDate(DrupalDateTime $date): array {
     $this->setTimeZone($date);
 
     return [
