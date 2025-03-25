@@ -205,6 +205,7 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       'joinup:undefined' => new TranslatableMarkup('Undefined'),
       'joinup:flag_interoperable' => new TranslatableMarkup('Flag interoperable'),
       'joinup:unflag_interoperable' => new TranslatableMarkup('Unflag interoperable'),
+      'joinup:delete_file' => new TranslatableMarkup('File delete'),
     ];
   }
 
