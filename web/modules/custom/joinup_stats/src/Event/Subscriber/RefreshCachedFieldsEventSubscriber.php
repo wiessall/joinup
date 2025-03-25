@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactoryInterface;
 use Drupal\Core\File\FileUrlGenerator;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\cached_computed_field\Event\RefreshExpiredFieldsEventInterface;
