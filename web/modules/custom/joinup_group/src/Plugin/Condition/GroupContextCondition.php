@@ -102,11 +102,10 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     // At this point, all groups are valid and filtered.
-    $limit_to_groups = $form_state->getValue('limit_to_groups');
-    $groups = $this->getGroups($limit_to_groups);
+    $limit_to_groups = $form_state->getValue('limit_to_groups') ?? '';
+    $groups = $this->getGroups($this->textToArray($limit_to_groups));
     $limit_to_groups = array_map(fn (GroupInterface $group): string => $group->id(), $groups);
     $this->setConfig('limit_to_groups', array_unique($limit_to_groups));
-    $form_state->setValue('limit_to_groups', $limit_to_groups);
     parent::submitConfigurationForm($form, $form_state);
   }
 
@@ -115,9 +114,10 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    */
   public function summary(): ?MarkupInterface {
     $groups = $this->getGroups();
-    if ($groups) {
-      $groupLabels = array_map(function (GroupInterface $group): string {
-        return $group->get('type')->entity->label() . ': ' . $group->label();
+
+    if (!empty($groups)) {
+      $groupLabels = array_map(function (GroupInterface|null $group): string {
+        return $group ? $group->get('type')->entity->label() . ': ' . $group->label() : 'Invalid';
       }, $groups);
       $args = ['@groups' => implode(', ', $groupLabels)];
       if (!$this->isNegated()) {
@@ -192,7 +192,8 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       // Further attempt to recognize the group from the URL if the ID is
       // a URI and is internal.
       elseif (!UrlHelper::isExternal($id) || UrlHelper::externalIsLocal($id, $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost())) {
-        $url = Url::fromUri('internal:' . UrlHelper::parse($id)['path']);
+        $path = trim(UrlHelper::parse($id)['path'], '/');
+        $url = Url::fromUri("internal:/" . $path);
         if ($url->isRouted() && $url->getRouteName() === 'entity.node.canonical') {
           $node = $this->entityTypeManager->getStorage('node')->load($url->getRouteParameters()['node']);
           if ($node instanceof GroupInterface) {
