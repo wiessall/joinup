@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Joinup date tile.
+ *
+ * Available variables:
+ * - date: Date object.
+ */
+#}
+
+<span class="joinup-date-tile">
+  <span class="joinup-date-tile__day">{{ date|date('d') }}</span>
+  <span class="joinup-date-tile__month">{{ date|date('M') }}</span>
+  <span class="joinup-date-tile__year">{{ date|date('Y') }}</span>
+</span>
