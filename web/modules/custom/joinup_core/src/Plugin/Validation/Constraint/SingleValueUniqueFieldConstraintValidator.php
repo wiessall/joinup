@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Validation\Constraint;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -13,6 +14,10 @@ use Symfony\Component\Validator\ConstraintValidator;
  * @see \Drupal\joinup_core\Plugin\Validation\Constraint\SingleValueUniqueFieldConstraint
  */
 class SingleValueUniqueFieldConstraintValidator extends ConstraintValidator {
+
+  public function __construct(
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -27,7 +32,9 @@ class SingleValueUniqueFieldConstraintValidator extends ConstraintValidator {
     $entity_type_id = $entity->getEntityTypeId();
     $id_key = $entity->getEntityType()->getKey('id');
 
-    $query = \Drupal::entityQuery($entity_type_id)
+    $query = $this->entityTypeManager
+      ->getStorage($entity_type_id)
+      ->getQuery()
       ->accessCheck(FALSE);
 
     $entity_id = $entity->id();

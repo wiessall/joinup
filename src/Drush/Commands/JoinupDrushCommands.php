@@ -6,14 +6,23 @@ namespace Joinup\Drush\Commands;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ModuleInstaller;
+use Drupal\search_api\Task\TaskManager;
 use Drush\Attributes as CLI;
 use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Specific commands to run on Interoperable Europe Portal code deployment.
  */
 class JoinupDrushCommands extends DrushCommands {
+
+  public function __construct(
+    #[Autowire('search_api.task_manager')]
+    protected readonly TaskManager $sapiTaskManager,
+    protected readonly ModuleInstaller $moduleInstaller
+  ) {}
 
   /**
    * Flushes all Memcache backends.
@@ -67,9 +76,8 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function executeSearchApiPendingTasks(): void {
     /** @var \Drupal\search_api\Task\TaskManagerInterface $sapiTaskManager */
-    $sapiTaskManager = \Drupal::service('search_api.task_manager');
     // Execute all Search API pending tasks.
-    $pending_tasks = (bool) $sapiTaskManager->getTasksCount();
+    $pending_tasks = (bool) $this->sapiTaskManager->getTasksCount();
     if ($pending_tasks) {
       $sapiTaskManager->setTasksBatch();
       if (batch_get()) {
@@ -84,7 +92,7 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Command(name: 'joinup:acc')]
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function acceptanceTasks(): void {
-    \Drupal::service('module_installer')->install(['joinup_acceptance']);
+    $this->moduleInstaller->install(['joinup_acceptance']);
   }
 
   /**
