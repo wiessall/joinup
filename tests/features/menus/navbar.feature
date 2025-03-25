@@ -27,6 +27,7 @@ Feature:
     And I fill in "Menu link title" with "Navbar test 1 child"
     And I fill in "Link" with "http://example.com"
     And I select "-- Navbar test 1" from "Parent link"
+    And I uncheck the box "Enabled"
     And I press "Save"
 
     Given I am an anonymous user
