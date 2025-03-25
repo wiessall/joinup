@@ -2951,7 +2951,8 @@ class JoinupContext extends RawDrupalContext {
    * Cleans up the environment after a curated homepage topics scenarios.
    *
    * These scenarios are altering the topic term meta entities. We need to reset
-   * them after each run.
+   * them after each run. Because we have a mechanism to delete new content, we
+   * are simply resetting the values instead.
    *
    * @afterScenario @topic&&@api
    */
@@ -2963,25 +2964,18 @@ class JoinupContext extends RawDrupalContext {
       ->save();
 
     $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+    $ids = $meta_entity_storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('type', 'topic')
-      ->condition('published', TRUE)
       ->execute();
-
-    // Recreate topic terms corresponding meta entities.
     if ($ids) {
-      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
-      $meta_entities = $meta_entity_storage->loadMultiple($ids);
-      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
-      $meta_entity_storage->delete($meta_entities);
-      foreach ($tids as $tid) {
-        $meta_entity_storage->create([
-          'type' => 'topic',
-          'target' => [
-            'target_type' => 'taxonomy_term',
-            'target_id' => $tid,
-          ],
-        ])->save();
+      foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
+        $meta_entity
+          ->set('topics_paragraph', NULL)
+          ->set('published', FALSE)
+          ->set('image', NULL)
+          ->set('description', NULL)
+          ->save();
       }
     }
   }
