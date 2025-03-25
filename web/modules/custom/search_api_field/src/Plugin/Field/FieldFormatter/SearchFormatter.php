@@ -17,7 +17,6 @@ use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\search_api\Query\QueryInterface;
@@ -26,6 +25,8 @@ use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Drupal\topic\Entity\Topic;
+use Drupal\topic\Service\TopicServiceInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -41,8 +42,6 @@ use Symfony\Component\HttpFoundation\Request;
 )]
 class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
-  use TopicTrait;
-
   public function __construct(
     string $plugin_id,
     mixed $plugin_definition,
@@ -57,6 +56,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     protected readonly FilterPluginManagerInterface $filterPluginManager,
     protected readonly LoggerChannelInterface $logger,
     protected readonly PagerManagerInterface $pagerManager,
+    #[Autowire('topic')]
+    protected readonly TopicServiceInterface $topiService,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
@@ -78,7 +79,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $container->get('plugin.manager.search_api.parse_mode'),
       $container->get('plugin.manager.search_api_field.filter'),
       $container->get('logger.channel.search_api'),
-      $container->get('pager.manager')
+      $container->get('pager.manager'),
+      $container->get('topic')
     );
   }
 
@@ -396,7 +398,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
-      $entity = $this->getTopicByName($value);
+      $entity = $this->topiService->getTopicByName($value);
       $value = ($entity instanceof Topic) ? $entity->id() : NULL;
     }
 
