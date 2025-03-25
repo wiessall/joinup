@@ -21,7 +21,7 @@ class JoinupDrushCommands extends DrushCommands {
   public function __construct(
     #[Autowire('search_api.task_manager')]
     protected readonly TaskManager $sapiTaskManager,
-    protected readonly ModuleInstaller $moduleInstaller
+    protected readonly ModuleInstaller $moduleInstaller,
   ) {}
 
   /**

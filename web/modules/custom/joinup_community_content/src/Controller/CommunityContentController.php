@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_community_content\Controller;
 
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler;
