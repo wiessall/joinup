@@ -75,7 +75,7 @@ Feature: Global search
     # The Portal collection is always present and has 'Demography' as topic. Thus
     # the 'Demography' and its parent, 'Social and Political', will have the
     # count increased by one each. See joinup_test.install
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -83,7 +83,7 @@ Feature: Global search
     # Interoperable Europe Portal there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I check the "Social and Political (6)" checkbox from the "topic" facet
+    When I check the "Social and Political (7)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
     # The Portal collection is always present and has 'Demography' as topic. Thus
     # the 'Demography' and its parent, 'Social and Political', will have the
