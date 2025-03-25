@@ -3056,6 +3056,13 @@ class JoinupContext extends RawDrupalContext {
         $storage->delete($entities);
       }
     }
+
+    // Due to the nature of behat running everything in a single request, the
+    // cache is not cleared between scenarios. This means that the cache tags
+    // are not invalidated and the cache is not cleared. This causes the default
+    // icons of paragraphs to be cached when the files are deleted above which
+    // breaks tests trying to access paragraphs.
+    \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
   }
 
 }
