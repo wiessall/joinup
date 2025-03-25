@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_community_content\Controller;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler;
@@ -52,7 +53,7 @@ class CommunityContentController extends GroupNodeController {
       assert($node instanceof GroupInterface);
 
       $membership = $node->getMembership((int) $account->id());
-      return \Drupal::entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
+      return $this->entityTypeManager->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
         'group' => $node,
         'membership' => $membership?->id(),
       ], TRUE);

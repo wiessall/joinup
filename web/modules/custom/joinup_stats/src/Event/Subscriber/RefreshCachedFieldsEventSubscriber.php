@@ -8,6 +8,8 @@ use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryFactoryInterface;
+use Drupal\Core\File\FileUrlGenerator;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\cached_computed_field\Event\RefreshExpiredFieldsEventInterface;
 use Drupal\cached_computed_field\EventSubscriber\RefreshExpiredFieldsSubscriberBase;
@@ -33,6 +35,7 @@ class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberB
     protected readonly MatomoQueryFactoryInterface $matomoQueryFactory,
     protected readonly ConfigFactoryInterface $configFactory,
     protected readonly LoggerChannelFactoryInterface $loggerFactory,
+    protected readonly FileUrlGenerator $fileUrlGenerator,
   ) {
     parent::__construct($entityTypeManager, $time);
   }
@@ -181,7 +184,7 @@ class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberB
       if ($file !== NULL) {
         return ($file instanceof RemoteFile) ?
           $file->getFileUri() :
-          \Drupal::service('file_url_generator')->generate($file->getFileUri())->setAbsolute()->toString();
+          $this->fileUrlGenerator->generate($file->getFileUri())->setAbsolute()->toString();
       }
     }
 
