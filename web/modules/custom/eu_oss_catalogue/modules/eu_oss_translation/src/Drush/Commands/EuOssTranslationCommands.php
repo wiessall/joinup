@@ -2,38 +2,43 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_vitality_index\Commands;
+namespace Drupal\eu_oss_translation\Drush\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface;
+use Drupal\eu_oss_translation\JobBuilderInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Drush commands.
  */
-class EuOssVitalityIndexCommands extends DrushCommands {
+class EuOssTranslationCommands extends DrushCommands {
+
+  use AutowireTrait;
 
   public function __construct(
-    protected readonly VitalityIndexGeneratorInterface $vitalityIndexGenerator,
+    #[Autowire('eu_oss_translation.job_builder')]
+    protected readonly JobBuilderInterface $jobBuilder,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct();
   }
 
   /**
-   * Generates vitality index for the selected solution id.
+   * Generates translation job.
    */
-  #[CLI\Command(name: 'eu-oss:generate-vitality-index')]
+  #[CLI\Command(name: 'eu-oss:generate-translation-job')]
   #[CLI\Argument(name: 'nid', description: 'The solution node ID')]
   public function generate(string $nid): string {
     $solution = $this->getSolution($nid);
-    $this->vitalityIndexGenerator->processSolution($solution);
+    $this->jobBuilder->create($solution);
 
-    return dt('Generation of vitality index for @url was processed.', [
+    return dt('Generation of translation job for @url was processed.', [
       '@url' => $solution->toUrl()->setAbsolute()->toString(),
     ]);
   }
@@ -43,6 +48,9 @@ class EuOssVitalityIndexCommands extends DrushCommands {
    *
    * @param string $nid
    *   Solution node id.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   OSS solution.
    */
   protected function getSolution(string $nid): ?OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
@@ -54,7 +62,7 @@ class EuOssVitalityIndexCommands extends DrushCommands {
   /**
    * Validates the argument of eu-oss:generate-vitality-index.
    */
-  #[CLI\Hook(type: HookManager::ARGUMENT_VALIDATOR, target: 'eu-oss:generate-vitality-index')]
+  #[CLI\Hook(type: HookManager::ARGUMENT_VALIDATOR, target: 'eu-oss:generate-translation-job')]
   public function validateSolutionId(CommandData $commandData): void {
     $nid = $commandData->input()->getArgument('nid');
 

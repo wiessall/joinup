@@ -188,7 +188,7 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
-    # Translator user.
+      # Translator user.
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -202,8 +202,17 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
+        - user:role:add
+        - translator
+        - translator
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
         - cas-mock-server:user-create
-        - user
+        - translator
       options:
         email: translator@example.com
         password: translator
@@ -212,7 +221,7 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
-        - user:role:add
+        - cas:set-cas-username
         - translator
         - translator
       options:

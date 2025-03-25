@@ -42,11 +42,11 @@ Feature: Solution homepage
       | Release date                                      |
       | 21/12/2022                                        |
       | Only facilitators and authors can create content. |
-      | Non moderated                                     |
+      | Moderated                                         |
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
-      | title           | content creation | landing page                   |
+      | title           | content_creation | landing page                   |
       | Jira restarters | registered users | http://foo-example.com/landing |
     And news content:
       | title                             | solution        |

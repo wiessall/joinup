@@ -12,7 +12,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title             | content creation | moderation |
+      | title             | content_creation | group_moderation |
       | CC pre collection | members          | yes        |
     And the following collection user memberships:
       | collection        | user           | roles       |

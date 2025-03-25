@@ -6,8 +6,8 @@ Feature: Moderate community content
 
   Scenario: Content moderation overview
     Given collection content:
-      | title               | content creation | moderation |
-      | Black hole research | members          | yes        |
+      | title               | content_creation | group_moderation |
+      | Black hole research | members          | yes              |
     And solution content:
       | title                 | collection          |
       | Survey For Supernovae | Black hole research |
@@ -378,8 +378,8 @@ Feature: Moderate community content
     Given user:
       | Username | leo |
     And collection content:
-      | title               | moderation |
-      | Black hole research | yes        |
+      | title               | group_moderation |
+      | Black hole research | yes              |
     And the following collection user membership:
       | collection          | user |
       | Black hole research | leo  |

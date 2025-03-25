@@ -5,10 +5,12 @@ dependencies:
   module:
     - l10n_client_ui
     - locale
+    - config_translation
 id: translator
 label: Translator
 weight: -3
 is_admin: null
 permissions:
+  - 'translate configuration'
   - 'translate interface'
   - 'use localization client ui'

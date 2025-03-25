@@ -11,8 +11,8 @@ Feature: Document moderation
       | Gretchen Greene |
       | Kirk Collier    |
     And collection content:
-      | title           | content creation | moderation |
-      | The Naked Ashes | registered users | no         |
+      | title           | content_creation | group_moderation |
+      | The Naked Ashes | registered users | no               |
     And the following collection user membership:
       | collection      | user            | roles       |
       | The Naked Ashes | Gretchen Greene | member      |
