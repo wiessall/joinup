@@ -41,7 +41,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
