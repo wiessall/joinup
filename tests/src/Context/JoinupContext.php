@@ -12,7 +12,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
@@ -1980,62 +1979,6 @@ class JoinupContext extends RawDrupalContext {
     $link_element = $this->getSession()->getPage()->findLink($title);
     $href = $link_element->getAttribute('href');
     Assert::assertEquals($href, $link);
-  }
-
-  /**
-   * Forces a cleanup to run for og queue worker.
-   *
-   * Og enqueues items to be deleted instead of deleting them directly in order
-   * to counter cases like when an entity has a big amount of memberships. This
-   * causes behat to bubble all memberships to the end of the suite and attempt
-   * to delete them all together which causes memory issues. Thus, the following
-   * method processes the queue manually after every scenario. This turns every
-   * scenario to a pseudo request when it comes to og.
-   *
-   * @AfterScenario
-   */
-  public function ogCleanup(AfterScenarioScope $event): void {
-    /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')
-      ->createInstance('og_orphaned_group_content_cron');
-    $queue = \Drupal::queue('og_orphaned_group_content');
-
-    while ($item = $queue->claimItem()) {
-      try {
-        $worker->processItem($item->data);
-        $queue->deleteItem($item);
-      }
-      catch (\Exception $e) {
-        Error::logException(\Drupal::logger('cron'), $e);
-      }
-    }
-  }
-
-  /**
-   * Cleans up orphaned group content in non clone group.
-   *
-   * @AfterScenario ~@group-clone
-   */
-  public function cleanGroupContentClean(AfterScenarioScope $event): void {
-    // Because we are deleting the users but keep the UID in the content's
-    // uid field, OG is cleaning up the records from the og_membership table
-    // because the the UID is now still there on user deletion. We also need
-    // to clean up entities from the og_membership table that the users no
-    // longer exist.
-    $query = \Drupal::database()->select('node_field_data', 'n');
-    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
-    $query->fields('n', ['nid']);
-    $query->isNull('u.uid');
-    // Avoid deleting default content that belong to the anonymous user or user
-    // 1 in tests.
-    $query->condition('n.uid', 1, '>');
-    $nids = $query->execute()->fetchCol();
-
-    if (!empty($nids)) {
-      $storage = \Drupal::entityTypeManager()->getStorage('node');
-      $nodes = $storage->loadMultiple($nids);
-      $storage->delete($nodes);
-    }
   }
 
   /**
