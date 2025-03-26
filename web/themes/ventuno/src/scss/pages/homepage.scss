@@ -132,7 +132,8 @@
     padding: $spacer * 1.5; // 24px
     color: $white;
     border-radius: $border-radius-lg;
-    background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center center;
+    background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center
+      center;
     background-size: cover;
     header {
       margin-bottom: $spacer;
@@ -143,19 +144,19 @@
       }
     }
     .event--highlighted-date {
+      overflow: hidden;
+      margin: 0 1px 1px;
       border-top: 8px solid $joinup-info;
       border-radius: $border-radius-sm;
       background: $gray-300;
-      margin: 0 1px 1px;
-      overflow: hidden;
     }
     .field--name-field-event-date {
       display: flex;
       flex-flow: row;
-      background: white;
-      color: $dark;
-      justify-content: space-around;
       align-items: center;
+      justify-content: space-around;
+      color: $dark;
+      background: white;
       .joinup-date-tile {
         display: flex;
         flex-flow: column;
@@ -163,11 +164,11 @@
         text-align: center;
         & + .joinup-date-tile {
           position: relative;
-          &:before {
-            content: '-';
+          &::before {
             position: absolute;
-            left: -2px;
             top: 35%;
+            left: -2px;
+            content: "-";
           }
         }
         .joinup-date-tile__month {
@@ -180,8 +181,8 @@
           line-height: 1;
         }
         .joinup-date-tile__year {
-          background-color: $gray-100;
           border-top: 1px solid $gray-300;
+          background-color: $gray-100;
           line-height: 1.4;
         }
       }
