@@ -2996,7 +2996,7 @@ class JoinupContext extends RawDrupalContext {
       if ($ids) {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
         $entities = $storage->loadMultiple($ids);
-        $storage->delete($entities);
+        @$storage->delete($entities);
       }
     }
 
