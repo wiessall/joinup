@@ -89,7 +89,7 @@ class CodeOfConductConsentForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
 
-    $membership = $collection->getMembership((int) $this->currentUser()->id());
+    $membership = $collection->getMembership($this->currentUser()->id());
     assert($membership instanceof CodeOfConductMembershipInterface);
 
     $membership
