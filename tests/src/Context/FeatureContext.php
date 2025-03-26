@@ -1669,8 +1669,6 @@ class FeatureContext extends RawDrupalContext {
           'image_library_widget_image' => ImageItem::generateSampleValue($definition['image_library_widget_image']),
         ]);
         $media->save();
-
-        $this->entities['media'][$media->id()] = $media;
       }
     }
   }
