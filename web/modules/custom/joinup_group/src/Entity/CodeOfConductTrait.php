@@ -25,17 +25,30 @@ trait CodeOfConductTrait {
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
     $ids = $query->execute();
-
     if (empty($ids)) {
       return;
     }
 
+    $idsToInvalidate = $ids;
+    while (!empty($ids)) {
+      $batch = array_splice($ids, 0, 500);
+      $this->revokeBatchOfMemberships($batch);
+    }
+
+    $this->invalidateMembershipsAndSelf($idsToInvalidate);
+  }
+
+  /**
+   * Revokes full memberships for a batch of membership IDs.
+   *
+   * @param int[] $ids
+   *   The membership IDs to revoke.
+   */
+  protected function revokeBatchOfMemberships(array $ids): void {
     \Drupal::database()->delete('og_membership__roles')
       ->condition('entity_id', $ids, 'IN')
       ->condition('roles_target_id', $this->getFullMemberRoleId())
       ->execute();
-
-    $this->invalidateMembershipsAndSelf($ids);
   }
 
   /**
