@@ -80,8 +80,8 @@
   ]
 %}
 <article{{ attributes.addClass(classes) }}>
-  <div class="row">
-    <header class="col-8 order-1">
+  <div class="row g-3">
+    <header class="col-9 order-1">
       {% if header %}
         <h3 class="h2">{{ header }}</h3>
       {% endif %}
@@ -92,8 +92,8 @@
       {% endif %}
       {{ title_suffix }}
     </header>
-    <div class="col-4 order-0">
-      <div{{ content_attributes }}>
+    <div class="col-3 order-0">
+      <div class="event--highlighted-date">
         {{ content }}
       </div>
     </div>
