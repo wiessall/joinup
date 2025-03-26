@@ -56,11 +56,11 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
   #[CLI\Hook(type: HookManager::POST_COMMAND_HOOK, target: 'sql-sanitize')]
   public function sanitize($result, CommandData $commandData): void {
     $this->database->delete('webform_submission')
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '!=')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '<>')
       ->execute();
 
     $this->database->delete('webform_submission_data')
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '!=')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '<>')
       ->execute();
 
     if ($this->moduleHandler->moduleExists('webform_submission_log')) {
