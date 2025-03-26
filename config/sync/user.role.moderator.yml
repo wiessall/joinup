@@ -114,6 +114,7 @@ permissions:
   - 'administer users'
   - 'administer webform via ui'
   - 'assign licence_manager role'
+  - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'create collection content'
   - 'create collection_logo media'

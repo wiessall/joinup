@@ -104,6 +104,8 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
+    $currentUser = \Drupal::currentUser();
+
     // Get the active membership for the current user, if any.
     $membership = $collection->getMembership();
     if (!$membership instanceof CodeOfConductMembershipInterface || $membership->isLastDocumentRevisionAccepted()) {
@@ -111,7 +113,7 @@ class CollectionCoCMessageBlock extends BlockBase {
     }
 
     // If the membership has a bypass for the CoC, do not show the message.
-    if ($membership->bypassesCodeOfConduct()) {
+    if ($currentUser->hasPermission('bypass code of conduct') || $membership->bypassesCodeOfConduct()) {
       return $build;
     }
 
