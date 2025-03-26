@@ -32,8 +32,18 @@ Feature:
     And the "Code of Conduct" setting of the "Knowledge Hive" collection is set to "Agreement of usage" "custom page"
 
   Scenario: User can accept the latest version of Code of Conduct
-    Given I am logged in as "Cedric Hawthorne"
+    # Before all, check that a moderator bypasses the CoC.
+    Given I am logged in as a moderator
+    And I visit the "Knowledge Hive" collection
+    And I should not see the warning message "We updated our Code of Conduct"
+    And I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
 
+    Given I am logged in as "Cedric Hawthorne"
     When I visit the "Knowledge Hive" Code of Conduct consent page
     Then I should see the heading "Important information"
     And I should see the following lines of text:
