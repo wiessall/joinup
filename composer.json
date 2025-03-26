@@ -44,7 +44,7 @@
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
-        "drupal/error_page": "^2.0",
+        "drupal/error_page": "^2.1",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
@@ -372,9 +372,6 @@
             "drupal/entity_print": {
                 "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563-mr66-revf6d47588.diff",
                 "Missing schema for disable_log property. @see https://www.drupal.org/i/3014768": "resources/patch/php/drupal/entity_print/3014768.diff"
-            },
-            "drupal/error_page": {
-                "Creation of dynamic property deprecated in PHP 8.2 @see https://www.drupal.org/i/3376919": "resources/patch/php/drupal/error_page/3376919.patch"
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
