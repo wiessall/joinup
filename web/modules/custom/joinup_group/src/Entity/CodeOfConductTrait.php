@@ -22,8 +22,7 @@ trait CodeOfConductTrait {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', $this->getEntityTypeId())
-      ->condition('entity_id', $this->id())
-      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+      ->condition('entity_id', $this->id());
     $ids = $query->execute();
     if (empty($ids)) {
       return;
