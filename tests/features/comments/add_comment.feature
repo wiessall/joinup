@@ -240,10 +240,11 @@ Feature: Add comments
     But I should not see the text "Log in or register to post comments"
 
     Examples:
-      | content type | title           | state     |
-      | news         | Scandalous news | published |
-      | discussion   | Is gossip bad?  | published |
-      | document     | Wikileaks       | published |
+      | content type | title             | state     |
+      | news         | Scandalous news   | published |
+      | discussion   | Is gossip bad?    | published |
+      | document     | Wikileaks         | published |
+      | event        | Quantum Echo Fest | published |
 
   Scenario Outline: Comments are disallowed for anonymous users.
 
@@ -257,7 +258,7 @@ Feature: Add comments
     # Anonymous users should not be able to comment.
     Given I am an anonymous user
     When I go to the content page of the type "<content type>" with the title "<title>"
-    Then I should see the text "Login or create an account to comment"
+    Then I should see the text "Login or create an account to commenta"
     And the link "Login" should point to "caslogin"
     And the link "create an account" should point to "user/register"
     And the following fields should not be present "Create comment"
