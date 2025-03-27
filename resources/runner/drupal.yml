@@ -372,7 +372,7 @@ drupal:
         $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO;
       EU OSS Catalogue: |
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
-      String overrides:
+      String overrides: |
         $settings['locale_custom_strings_en'][''] = [
           'Thank you for applying for an account. Your account is currently pending approval by the site administrator.<br />In the meantime, a welcome message with further instructions has been sent to your email address.' => 'Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message has been sent to your email address. We would like to inform you that our system automatically places accounts registered with certain generic email domains under review. This measure helps us maintain the integrity of the platform by minimising the risk of spam or misuse. If your account has not been validated in the following 3 business days, please contact us through our <a href="/contact">contact form</a>.',
         ];
