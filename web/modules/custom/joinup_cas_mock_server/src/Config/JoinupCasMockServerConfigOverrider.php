@@ -40,9 +40,6 @@ readonly class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverri
           'path' => 'p3/serviceValidate',
         ],
       ],
-      'user.settings' => [
-        'register' => UserInterface::REGISTER_VISITORS,
-      ],
     ];
   }
 
