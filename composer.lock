@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42a977764da9d7157e502f2e714ea7ef",
+    "content-hash": "d95e9e0c5b4a9733f75feec0eaec8fb7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4082,29 +4082,29 @@
         },
         {
             "name": "drupal/error_page",
-            "version": "2.1.0-beta1",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/error_page.git",
-                "reference": "2.1.0-beta1"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/error_page-2.1.0-beta1.zip",
-                "reference": "2.1.0-beta1",
-                "shasum": "666e78750eee860121a6698441339bbe787d2b7e"
+                "url": "https://ftp.drupal.org/files/projects/error_page-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "98da29b52092acd624cd091ce357320384fdb8ef"
             },
             "require": {
-                "drupal/core": "^10 || ^11"
+                "drupal/core": "^9.3 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.0-beta1",
-                    "datestamp": "1742644666",
+                    "version": "2.0.3",
+                    "datestamp": "1669243138",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
