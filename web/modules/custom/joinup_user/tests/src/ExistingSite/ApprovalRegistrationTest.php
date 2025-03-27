@@ -26,9 +26,9 @@ class ApprovalRegistrationTest extends JoinupExistingSiteTestBase {
 
     $email = self::USERNAME . '@example.com';
     $this->createCasUser(self::USERNAME, $email, 'needtp', [
-        'firstname' => 'Beavis',
-        'lastname' => 'El Gran Cornholio',
-      ]
+      'firstname' => 'Beavis',
+      'lastname' => 'El Gran Cornholio',
+    ]
     );
     $this->casLogin($email, 'needtp');
 
