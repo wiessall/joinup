@@ -65,17 +65,17 @@ class DateTileFormatter extends DateRangePlainFormatter {
   }
 
   /**
-   * Builds tile.
+   * Builds the date tile render array.
    *
-   * @param \Drupal\Core\Datetime\DrupalDateTime $start_date
-   *   Start date.
-   * @param \Drupal\Core\Datetime\DrupalDateTime|NULL $end_date
-   *   Second date from the same month and year.
+   * @param DrupalDateTime $start_date
+   *   The start date.
+   * @param DrupalDateTime|null $end_date
+   *   The end date (optional, from the same month and year).
    *
    * @return array
-   *   Render array.
+   *   Render array for the date tile.
    */
-  protected function buildTileDate(DrupalDateTime $start_date, DrupalDateTime $end_date = NULL): array {
+  protected function buildTileDate(DrupalDateTime $start_date, ?DrupalDateTime $end_date = NULL): array {
     $this->setTimeZone($start_date);
     if ($end_date) {
       $this->setTimeZone($end_date);
