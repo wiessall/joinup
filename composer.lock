@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfd45a5eca9c6f077e301cdb370e2353",
+    "content-hash": "42a977764da9d7157e502f2e714ea7ef",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6734,31 +6734,30 @@
         },
         {
             "name": "drupal/og",
-            "version": "1.0.0-alpha12",
+            "version": "1.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
-                "reference": "8.x-1.0-alpha12"
+                "reference": "8.x-1.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha12.zip",
-                "reference": "8.x-1.0-alpha12",
-                "shasum": "23e366f2f6ad6d7109690b70c19d3f4fee997b5f"
+                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha10.zip",
+                "reference": "8.x-1.0-alpha10",
+                "shasum": "8f474c912e569e5d1dbe780556adcaa339291519"
             },
             "require": {
-                "drupal/core": "^9 || ^10 || ^11"
+                "drupal/core": "^9 || ^10"
             },
             "require-dev": {
                 "drupal/coder": "^8.3.16",
-                "drush/drush": "^12.5 || ^13.3",
-                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10.5"
+                "phpunit/phpunit": "^7 || ^8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha12",
-                    "datestamp": "1741361802",
+                    "version": "8.x-1.0-alpha10",
+                    "datestamp": "1669023300",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6832,6 +6831,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og",
                 "issues": "https://drupal.org/project/issues/og",
+                "irc": "irc://irc.freenode.org/drupal-og",
                 "slack": "https://drupal.slack.com/messages/CELR48EA0"
             }
         },
