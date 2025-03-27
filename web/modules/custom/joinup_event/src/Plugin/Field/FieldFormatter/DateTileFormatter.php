@@ -6,7 +6,9 @@ namespace Drupal\joinup_event\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\Attribute\FieldFormatter;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\datetime_range\DateTimeRangeConstantsInterface;
 use Drupal\datetime_range\Plugin\Field\FieldFormatter\DateRangePlainFormatter;
 
 /**
@@ -24,12 +26,65 @@ class DateTileFormatter extends DateRangePlainFormatter {
   /**
    * {@inheritdoc}
    */
-  protected function buildDate(DrupalDateTime $date): array {
-    $this->setTimeZone($date);
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
+    $elements = [];
+    $separator = $this->getSetting('separator');
+
+    foreach ($items as $delta => $item) {
+      if (empty($item->start_date) && empty($item->end_date)) {
+        continue;
+      }
+
+      /** @var \Drupal\Core\Datetime\DrupalDateTime $start_date */
+      $start_date = $item->start_date;
+      /** @var \Drupal\Core\Datetime\DrupalDateTime $end_date */
+      $end_date = $item->end_date;
+
+      if ($start_date->format('Y-m-d') === $end_date->format('Y-m-d')) {
+        $elements[$delta] = $this->buildTileDate($start_date);
+        continue;
+      }
+
+      if ($start_date->format('Y-m') === $end_date->format('Y-m')) {
+        $elements[$delta] = $this->buildTileDate($start_date, $end_date);
+        continue;
+      }
+
+      if ($this->startDateIsDisplayed()) {
+        $elements[$delta][DateTimeRangeConstantsInterface::START_DATE] = $this->buildTileDate($start_date);
+      }
+      if ($this->startDateIsDisplayed() && $this->endDateIsDisplayed()) {
+        $elements[$delta]['separator'] = ['#plain_text' => ' ' . $separator . ' '];
+      }
+      if ($this->endDateIsDisplayed()) {
+        $elements[$delta][DateTimeRangeConstantsInterface::END_DATE] = $this->buildTileDate($end_date);
+      }
+    }
+
+    return $elements;
+  }
+
+  /**
+   * Builds tile.
+   *
+   * @param \Drupal\Core\Datetime\DrupalDateTime $start_date
+   *   Start date.
+   * @param \Drupal\Core\Datetime\DrupalDateTime|NULL $end_date
+   *   Second date from the same month and year.
+   *
+   * @return array
+   *   Render array.
+   */
+  protected function buildTileDate(DrupalDateTime $start_date, DrupalDateTime $end_date = NULL): array {
+    $this->setTimeZone($start_date);
+    if ($end_date) {
+      $this->setTimeZone($end_date);
+    }
 
     return [
       '#theme' => 'joinup_event_date_tile',
-      '#date' => $date,
+      '#start_date' => $start_date,
+      '#end_date' => $end_date,
       '#cache' => [
         'contexts' => [
           'timezone',
