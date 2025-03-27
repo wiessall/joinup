@@ -3,7 +3,6 @@
 # - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
 
 ddev_version_constraint: ">=v1.23.0"
-name: joinup
 type: drupal
 docroot: web
 php_version: "8.3"
@@ -36,7 +35,8 @@ additional_fqdns: [ ]
 project_tld: ddev.local
 use_dns_when_possible: false
 composer_version: "2"
-web_environment: [ ]
+web_environment:
+    - DRUPAL_BASE_URL=https://${DDEV_SITENAME}.${DDEV_TLD}
 disable_settings_management: true
 nodejs_version: "20"
 # Affects only macOS developers.

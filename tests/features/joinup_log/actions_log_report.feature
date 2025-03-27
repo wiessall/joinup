@@ -85,6 +85,7 @@ Feature: Actions log
       | Andre Munson     | Mary Shotgun     | Skylight      | joinup:add_role             | Add x author role   | 1721115288 |
       | Dave Crash       |                  | Skylight      | joinup:flag_interoperable   | Flagged             | 1721111290 |
       | Dave Crash       |                  | Skylight      | joinup:unflag_interoperable | Unflagged           | 1721110295 |
+      | Dave Crash       |                  | Skylight      | joinup:delete_file          | Delete x file       | 1721110295 |
 
     Given I am logged in as a moderator
     When I go to the actions log report for "Tilt and Turn"
@@ -104,6 +105,7 @@ Feature: Actions log
     When I go to the actions log report for "Skylight"
     Then the "actions log report" table should be:
       | Date               | Type                 | Message             | User             | Actor            |
+      | 16/07/2024 - 06:11 | File delete          | Delete x file       | Dave Crash       |                  |
       | 16/07/2024 - 06:11 | Unflag interoperable | Unflagged           | Dave Crash       |                  |
       | 16/07/2024 - 06:28 | Flag interoperable   | Flagged             | Dave Crash       |                  |
       | 16/07/2024 - 07:34 | Add role             | Add x author role   | Andre Munson     | Mary Shotgun     |
@@ -112,6 +114,7 @@ Feature: Actions log
       | 19/07/2024 - 18:54 | Add content          | Add x event         | Branson Winthrop | Branson Winthrop |
     Then the content received from clicking the link "Download CSV" contains the following strings:
       | Date;Type;Message;User;Actor                                                                  |
+      | "16/07/2024 - 06:11";"File delete";"Delete x file";"Dave Crash";                                |
       | "16/07/2024 - 06:11";"Unflag interoperable";Unflagged;"Dave Crash";                           |
       | "16/07/2024 - 06:28";"Flag interoperable";Flagged;"Dave Crash";                               |
       | "16/07/2024 - 07:34";"Add role";"Add x author role";"Andre Munson";"Mary Shotgun"             |
