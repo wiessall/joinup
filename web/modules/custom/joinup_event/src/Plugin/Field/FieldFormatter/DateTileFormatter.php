@@ -67,9 +67,9 @@ class DateTileFormatter extends DateRangePlainFormatter {
   /**
    * Builds the date tile render array.
    *
-   * @param DrupalDateTime $start_date
+   * @param \Drupal\Core\Datetime\DrupalDateTime $start_date
    *   The start date.
-   * @param DrupalDateTime|null $end_date
+   * @param \Drupal\Core\Datetime\DrupalDateTime|null $end_date
    *   The end date (optional, from the same month and year).
    *
    * @return array
