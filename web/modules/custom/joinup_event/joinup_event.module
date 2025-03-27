@@ -128,7 +128,8 @@ function joinup_event_theme(): array {
   return [
     'joinup_event_date_tile' => [
       'variables' => [
-        'date' => NULL,
+        'start_date' => NULL,
+        'end_date' => NULL,
       ],
     ],
   ];
