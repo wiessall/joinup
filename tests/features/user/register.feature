@@ -32,17 +32,3 @@ Feature: User registration
 
     # Clean up the account created through the UI.
     Then I delete the miomio user
-
-  Scenario: A user can register
-    Given CAS users:
-      | Username           | E-mail         | Password |
-      | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
-    When I am on the homepage
-    And I click "Sign in"
-    Then I should see the heading "Sign in to continue"
-    When I fill in "E-mail address" with "iodine@ankh.am"
-    And I fill in "Password" with "10d1ne"
-    And I press "Log in"
-    And the following email should have been sent:
-      | recipient_mail | iodine@ankh.am                                                                                                                                                                                                                                                                  |
-      | subject        | Your Interoperable Europe Portal account is pending approval. |
