@@ -105,7 +105,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
     $limit_to_groups = $form_state->getValue('limit_to_groups', '');
     $groups = $this->getGroups($this->textToArray($limit_to_groups));
     $limit_to_groups = array_map(fn (GroupInterface $group): string => $group->id(), $groups);
-    $this->setConfig('limit_to_groups', array_unique($limit_to_groups));
+    $this->setConfig('limit_to_groups', array_values(array_unique($limit_to_groups)));
     parent::submitConfigurationForm($form, $form_state);
   }
 
