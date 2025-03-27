@@ -87,13 +87,3 @@ function joinup_user_schema(): array {
 function joinup_user_install(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 }
-
-/**
- * Create deleted users tables.
- */
-function joinup_user_update_200300(): void {
-  $schema = \Drupal::database()->schema();
-  foreach (joinup_user_schema() as $table => $specification) {
-    $schema->createTable($table, $specification);
-  }
-}
