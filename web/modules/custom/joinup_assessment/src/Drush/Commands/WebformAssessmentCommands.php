@@ -9,6 +9,7 @@ use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
@@ -52,24 +53,19 @@ class WebformAssessmentCommands extends DrushCommands implements SanitizePluginI
    */
   #[CLI\Hook(type: HookManager::POST_COMMAND_HOOK, target: 'sql-sanitize')]
   public function sanitize($result, CommandData $commandData): void {
-    $webformStorage = $this->entityTypeManager->getStorage('webform_submission');
-    $querySubmission = $webformStorage->getQuery()
-      ->condition('webform_id', 'assessment', '!=')
-      ->accessCheck(FALSE);
+    $this->database->delete('webform_submission')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '<>')
+      ->execute();
 
-    do {
-      $sids = $querySubmission->range(0, 50)->execute();
-
-      if (!empty($sids)) {
-        $webformStorage->delete(
-          $webformStorage->loadMultiple($sids)
-        );
-      }
-    } while (!empty($sids));
+    $this->database->delete('webform_submission_data')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID, '<>')
+      ->execute();
 
     if ($this->moduleHandler->moduleExists('webform_submission_log')) {
       $this->database->truncate('webform_submission_log')->execute();
     }
+
+    $this->entityTypeManager->getStorage('webform_submission')->resetCache();
 
     $this->logger()
       ->success('Webform submission tables truncated except for the assessment.');
