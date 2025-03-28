@@ -26,3 +26,54 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Replace rdf uri with term ID in paragraph content listing.
+ */
+function joinup_core_update_200400(): void {
+  $database = \Drupal::database();
+  $query = $database->select('paragraph__content_listing', 'pcl');
+  $query->addField('pcl', 'entity_id', 'paragraph_id');
+  $query->addField('pcl', 'content_listing_value', 'content_listing_value');
+  $query->join('rdf_sync_uri', 'rsu', 'pcl.content_listing_value LIKE CONCAT(\'%\', rsu.uri, \'%\')');
+  $query->addField('rsu', 'entity_id', 'topic_id');
+  $query->addField('rsu', 'uri');
+  $query->addField('rsu', 'bundle');
+  $query->condition('rsu.bundle', 'topic', '=');
+  $result = $query->execute()->fetchAllAssoc('paragraph_id');
+
+  $rowsUpdated = 0;
+  foreach ($result as $row) {
+    $data = unserialize($row->content_listing_value, ['allowed_classes' => FALSE]);
+    if (isset($data['query_presets']) && preg_match_all('/http[^,|]+[,\|]/', $data['query_presets'], $matches)) {
+      if (count($matches[0]) > 1) {
+        foreach ($matches[0] as $uri) {
+          $uri = substr($uri, 0, -1);
+          $uriQuery = $database->select('rdf_sync_uri', 'rsu');
+          $uriQuery->addField('rsu', 'entity_id', 'topic_id');
+          $uriQuery->condition('rsu.uri', $uri, '=');
+          $result = $uriQuery->execute()->fetchCol();
+          if ($result) {
+            $topic = reset($result);
+            $data['query_presets'] = str_replace($uri, $topic, $data['query_presets']);
+          }
+        }
+      }
+      else {
+        $data['query_presets'] = str_replace($row->uri, $row->topic_id, $data['query_presets']);
+      }
+      $serializedData = serialize($data);
+
+      $database->update('paragraph__content_listing')
+        ->fields(['content_listing_value' => $serializedData])
+        ->condition('entity_id', $row->paragraph_id)
+        ->execute();
+
+      $rowsUpdated++;
+      \Drupal::messenger()
+        ->addMessage("Entity ID: {$row->paragraph_id} was updated");
+    }
+  }
+  \Drupal::messenger()
+    ->addMessage(t('@count rows updated in paragraphs__content_listing.', ['@count' => $rowsUpdated]));
+}
