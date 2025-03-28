@@ -442,6 +442,9 @@
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
             },
+            "drupal/purge_users": {
+                "doMail(): Argument #1 ($to) must be of type string, null given @see https://www.drupal.org/i/3512695": "resources/patch/php/drupal/purge_users/3512695.diff"
+            },
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
                 "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff"

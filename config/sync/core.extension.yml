@@ -202,6 +202,7 @@ module:
   purge_processor_cron: 0
   purge_processor_lateruntime: 0
   purge_queuer_coretags: 0
+  purge_users: 0
   queue_ui: 0
   rdf_sync: 0
   rdf_sync_published: 0

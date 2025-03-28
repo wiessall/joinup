@@ -23,6 +23,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 
 /**
@@ -131,6 +132,16 @@ function joinup_user_mail_tokens(array &$replacements, array $data, array $optio
  * Implements hook_mail_alter().
  */
 function joinup_user_mail_alter(&$message): void {
+  if ($message['module'] === 'purge_users') {
+    // Convert new lines to paragraphs and line breaks. Also transform the body
+    // to markup.
+    // @see symfony_mailer_lite_mail()
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    $message['body'] = array_map(function ($text) {
+      return Markup::create(_filter_autop($text));
+    }, $message['body']);
+  }
+
   if ($message['key'] !== 'status_canceled') {
     return;
   }
@@ -593,4 +604,46 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
   $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted')->isAccountDeleted($account);
   return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
     ->addCacheableDependency($account);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function joinup_user_cron(): void {
+  $config = \Drupal::configFactory()->getEditable('purge_users.settings');
+  $state = \Drupal::state();
+  $queue_factory = \Drupal::service('queue');
+  $now = \Drupal::time()->getCurrentTime();
+  $one_year_ago = strtotime('-1 year', $now);
+
+  $last_notify = $state->get('joinup_user_last_notify_run');
+  $last_purge = $state->get('joinup_user_last_purge_run');
+  $scheduled_purge = $state->get('joinup_user_scheduled_purge_date');
+
+  // --- Run Notification Step (if not run in last year) ---
+  if ($last_notify < $one_year_ago) {
+    $config->set('send_email_user_before_notification', TRUE)->save();
+
+    $notify_ids = array_unique(purge_users_get_user_ids('notification_users'));
+    $notify_queue = $queue_factory->get('notification_users');
+    foreach ($notify_ids as $uid) {
+      $notify_queue->createItem($uid);
+    }
+    $config->set('send_email_user_before_notification', FALSE)->save();
+    $state->set('joinup_user_last_notify_run', $now);
+
+    // Set the scheduled purge date to 7 days from now.
+    $purge_date = $now + (7 * 24 * 60 * 60);
+    $state->set('joinup_user_scheduled_purge_date', $purge_date);
+  }
+
+  // --- Run Purge Step (if scheduled and eligible) ---
+  if ($scheduled_purge && $now >= $scheduled_purge && $last_purge < $scheduled_purge) {
+    $purge_ids = purge_users_get_user_ids();
+    $purge_queue = $queue_factory->get('purge_users');
+    foreach ($purge_ids as $uid) {
+      $purge_queue->createItem($uid);
+    }
+    $state->set('joinup_user_last_purge_run', $now);
+  }
 }
