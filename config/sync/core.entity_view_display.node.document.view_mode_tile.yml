@@ -74,6 +74,7 @@ content:
     weight: 2
     region: content
 hidden:
+  anonymous_comment_links: true
   featured: true
   field_comments: true
   field_file: true
