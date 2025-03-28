@@ -287,7 +287,7 @@ function _joinup_get_facets_by_facet_source_id($facet_source_id): array {
 /**
  * Implements hook_install_tasks_alter().
  */
-function _joinup_install_tasks_alter(&$tasks, $install_state): void {
+function joinup_install_tasks_alter(&$tasks, $install_state): void {
   // Do not download UI and config translations at installation time.
   unset($tasks['install_config_download_translations']);
   unset($tasks['install_import_translations']);
