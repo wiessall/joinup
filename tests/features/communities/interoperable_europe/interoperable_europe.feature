@@ -64,7 +64,7 @@ Feature:
     Then I should see the heading "Join our community!"
     And I should see the following links:
       | Follow us on LinkedIn                            |
-      | Follow us on X                             |
+      | Follow us on X                                   |
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
@@ -72,7 +72,7 @@ Feature:
     Then I should see the heading "Join our community!"
     And I should see the following links:
       | Follow us on LinkedIn                            |
-      | Follow us on X                             |
+      | Follow us on X                                   |
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
