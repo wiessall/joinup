@@ -329,11 +329,11 @@ class SubscribeGroupForm extends FormBase {
         return;
       }
 
+      $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $group);
       if ($subscribe) {
-        $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $group);
         $membership = $this->subscribe($membership);
-        $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
       }
+      $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
     }
   }
 
