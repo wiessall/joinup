@@ -6,6 +6,7 @@
  */
 
 declare(strict_types=1);
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_requirements().
@@ -54,13 +55,15 @@ function joinup_core_update_200400(): void {
           $uriQuery->condition('rsu.uri', $uri, '=');
           $result = $uriQuery->execute()->fetchCol();
           if ($result) {
-            $topic = reset($result);
-            $data['query_presets'] = str_replace($uri, $topic, $data['query_presets']);
+            $topicId = reset($result);
+            $topic = Term::load($topicId);
+            $data['query_presets'] = str_replace($uri, $topic->getName(), $data['query_presets']);
           }
         }
       }
       else {
-        $data['query_presets'] = str_replace($row->uri, $row->topic_id, $data['query_presets']);
+        $topic = Term::load($row->topic_id);
+        $data['query_presets'] = str_replace($row->uri, $topic->getName(), $data['query_presets']);
       }
       $serializedData = serialize($data);
 
