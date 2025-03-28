@@ -1,0 +1,13 @@
+diff --git a/core/includes/install.core.inc b/core/includes/install.core.inc
+index cfab412904..e1fc4acfca 100644
+--- a/core/includes/install.core.inc
++++ b/core/includes/install.core.inc
+@@ -2034,7 +2034,7 @@ function install_check_translations($langcode, $server_pattern) {
+     }
+   }
+ 
+-  if ($translations_directory_exists && $readable && $writable && $translation_available) {
++  if (locale_translation_use_remote_source() && $translations_directory_exists && $readable && $writable && $translation_available) {
+     $translation_downloaded = install_retrieve_file($translation_url, $translations_directory);
+ 
+     if (!$translation_downloaded) {
