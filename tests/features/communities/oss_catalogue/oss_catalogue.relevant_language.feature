@@ -1,4 +1,6 @@
 @api @group-clone @eu-oss-catalogue
+# Feature will be re-enabled in ISAICP-9622
+@wip
 Feature:
   In order to show the most data to visitors, EU OSS Catalogue provides a
   special equivalent of the OSS Solution's translatable fields which fetch and
