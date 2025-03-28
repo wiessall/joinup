@@ -10,7 +10,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 /**
  * Tests auto-registration with admin approval on registration.
  *
- * @group teste
+ * @group joinup_user
  */
 class ApprovalRegistrationTest extends JoinupExistingSiteTestBase {
 
