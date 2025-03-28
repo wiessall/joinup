@@ -284,7 +284,6 @@ function _joinup_get_facets_by_facet_source_id($facet_source_id): array {
   return $facets;
 }
 
-
 /**
  * Implements hook_install_tasks_alter().
  */
