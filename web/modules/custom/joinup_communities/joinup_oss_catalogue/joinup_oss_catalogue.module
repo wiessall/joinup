@@ -13,8 +13,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -226,105 +224,6 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
     ]),
     default => $url,
   };
-}
-
-/**
- * Checks whether the EU OSS Catalogue functionality is enabled.
- *
- * @return \Drupal\Core\Access\AccessResultInterface
- *   Access result.
- *
- * @todo Remove this function in ISAICP-9053.
- */
-function joinup_oss_catalogue_feature(): AccessResultInterface {
-  static $cache;
-  if (!isset($cache)) {
-    $collection = \Drupal::getContainer()->get('entity.repository')
-      ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
-    if (!$collection instanceof CollectionInterface) {
-      $cache = AccessResult::allowed();
-    }
-    else {
-      $state = $collection->get('field_state')->first()->getValue()['value'] ?? NULL;
-      $cache = AccessResult::allowedIf($state === 'published')->addCacheableDependency($collection);
-    }
-  }
-  return $cache;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- *
- * @todo Remove this function in ISAICP-9053.
- */
-function joinup_oss_catalogue_node_access(NodeInterface $entity): AccessResultInterface {
-  if (
-    // The entity is the EU OSS Catalogue collection...
-    ($entity instanceof CollectionInterface && $entity->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID) ||
-    // ...or the EU OSS Catalogue collection landing page...
-    ($entity instanceof CustomPageInterface && $entity->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) ||
-    // ...or an OSS Solution.
-    ($entity instanceof OssSolutionInterface)
-  ) {
-    return AccessResult::forbiddenIf(
-      !joinup_oss_catalogue_feature()->isAllowed(),
-      'EU OSS Catalogue functionality is disabled',
-    )->addCacheableDependency($entity);
-  }
-  return AccessResult::neutral();
-}
-
-/**
- * Implements hook_module_implements_alter().
- *
- * @todo Remove this function in ISAICP-9053.
- */
-function joinup_oss_catalogue_module_implements_alter(array &$implementations, string $hook): void {
-  if ($hook === 'cron') {
-    // Don't run original cron implementations.
-    // @see joinup_oss_catalogue_cron()
-    unset($implementations['eu_oss_catalogue']);
-    unset($implementations['eu_oss_vitality_index']);
-  }
-}
-
-/**
- * Implements hook_cron().
- *
- * @todo Remove this function in ISAICP-9053.
- */
-function joinup_oss_catalogue_cron(): void {
-  if (joinup_oss_catalogue_feature()->isAllowed()) {
-    // Only run if EU OSS Catalogue functionality is enabled.
-    eu_oss_catalogue_cron();
-    eu_oss_vitality_index_cron();
-  }
-}
-
-/**
- * Toggles the state of EU OSS Catalogue functionality.
- *
- * @param string $toggle
- *   The state: 'enable', 'disable'.
- *
- * @todo Remove this function in ISAICP-9053.
- */
-function joinup_oss_catalogue_toggle(string $toggle): void {
-  assert(in_array($toggle, ['enable', 'disable'], TRUE));
-
-  $collection = \Drupal::getContainer()->get('entity.repository')
-    ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
-  if (!$collection instanceof CollectionInterface) {
-    // Exit if the collection is missing. There's nothing we can do.
-    return;
-  }
-
-  $collection->skip_notification = TRUE;
-  $state = $toggle === 'enable' ? 'published' : 'draft';
-  $collection->set('field_state', $state)->save();
-
-  // The 'Explore' block caches is time-based (6h). Explicitly clear the cache.
-  \Drupal::getContainer()->get('cache_tags.invalidator')->invalidateTags(['homepage_explore_block']);
 }
 
 /**
