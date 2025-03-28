@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Database\Database;
-
 /**
  * Implements hook_requirements().
  */
@@ -24,105 +22,7 @@ function joinup_core_requirements($phase): array {
         'value' => t('Database logging is enabled'),
       ];
     }
-
-    $requirements_helper = \Drupal::getContainer()
-      ->get('joinup_core.requirements_helper');
-
-    // Ensure that a cache state inconsistency will not cause also
-    // inconsistencies with the published revisions of the entities.
-    //
-    // @see: \joinup_core_post_update_set_news_default_version
-    // @see: \Drupal\joinup_core\RequirementsHelper::getNodesWithProblematicRevisions
-    // @see: ISAICP-5191
-    $requirements['joinup_core_forward_revisions'] = [
-      'title' => t('Forward published revisions'),
-      'description' => t('In all content, the last published revision should be the latest of the published revisions.'),
-      'severity' => REQUIREMENT_OK,
-      'value' => t('No entities were found without a parent.'),
-    ];
-
-    $results = $requirements_helper->getNodesWithProblematicRevisions();
-    if (!empty($results)) {
-      $nids = array_keys($results);
-      $error = t('Issues with the latest revision have been found in the following nid(s): :nids', [
-        ':nids' => implode(', ', $nids),
-      ]);
-      $requirements['joinup_core_forward_revisions']['severity'] = REQUIREMENT_ERROR;
-      $requirements['joinup_core_forward_revisions']['value'] = $error;
-    }
   }
 
   return $requirements;
-}
-
-/**
- * Migrate documents published on into published at.
- */
-function joinup_core_update_200300(array &$sandbox): void {
-  $database = Database::getConnection();
-
-  // Initialize sandbox variables if not set.
-  if (!isset($sandbox['progress'])) {
-    $sandbox['progress'] = 0;
-    $sandbox['limit'] = 100;
-
-    // Fetch all node IDs that are not in "draft" or "proposed".
-    $sandbox['published_nodes'] = $database->select('node__field_state', 'fs')
-      ->fields('fs', ['entity_id'])
-      ->condition('fs.field_state_value', ['draft', 'proposed'], 'NOT IN')
-      ->execute()
-      ->fetchCol();
-
-    // Fetch all node IDs that are in "draft" or "proposed".
-    $sandbox['draft_nodes'] = $database->select('node__field_state', 'fs')
-      ->fields('fs', ['entity_id'])
-      ->condition('fs.field_state_value', ['draft', 'proposed'], 'IN')
-      ->execute()
-      ->fetchCol();
-
-    $sandbox['total'] = count($sandbox['published_nodes']);
-  }
-
-  // Process a batch of nodes for updating published_at.
-  $batch_nodes = array_slice($sandbox['published_nodes'], $sandbox['progress'], $sandbox['limit']);
-
-  if (!empty($batch_nodes)) {
-    $query = $database->select('node__field_document_publication_date', 'fdpd')
-      ->fields('fdpd', ['entity_id', 'field_document_publication_date_value'])
-      ->condition('entity_id', $batch_nodes, 'IN')
-      ->execute()
-      ->fetchAll();
-
-    foreach ($query as $record) {
-      if (!empty($record->field_document_publication_date_value)) {
-        $timestamp = strtotime($record->field_document_publication_date_value);
-        $database->update('node_field_data')
-          ->fields(['published_at' => $timestamp])
-          ->condition('nid', $record->entity_id)
-          ->execute();
-        $database->update('node_field_revision')
-          ->fields(['published_at' => $timestamp])
-          ->condition('nid', $record->entity_id)
-          ->execute();
-      }
-    }
-    $sandbox['progress'] += count($batch_nodes);
-  }
-
-  // Set published_at to NULL for draft/proposed nodes (only done once).
-  if (!isset($sandbox['draft_done']) && !empty($sandbox['draft_nodes'])) {
-    $database->update('node_field_data')
-      ->fields(['published_at' => NULL])
-      ->condition('nid', $sandbox['draft_nodes'], 'IN')
-      ->execute();
-
-    $sandbox['draft_done'] = TRUE;
-  }
-
-  if ($sandbox['progress'] >= $sandbox['total']) {
-    $sandbox['#finished'] = 1;
-  }
-  else {
-    $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  }
 }

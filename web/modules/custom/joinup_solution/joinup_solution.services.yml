@@ -18,9 +18,6 @@ services:
       # state_machine_permissions module.
       - { name: state_machine.guard, group: solution, priority: 5}
 
-  joinup_solution.requirements_helper:
-    class: Drupal\joinup_solution\RequirementsHelper
-
   joinup_solution.title_duplicate_helper:
     class: Drupal\joinup_solution\SolutionTitleDuplicateHelper
   Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface: '@joinup_solution.title_duplicate_helper'
