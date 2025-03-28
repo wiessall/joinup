@@ -99,50 +99,7 @@ class DashboardForm extends FormBase {
       '#value' => $this->t('Submit'),
     ];
 
-    // @todo Remove this button in ISAICP-9053.
-    $hasEnableDisablePermission = $this->currentUser()
-      ->hasPermission('toggle eu oss catalogue state');
-    $form['actions']['enable'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Enable EU OSS Catalogue'),
-      '#submit' => ['::enableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_feature()->isAllowed(),
-    ];
-    // @todo Remove this button in ISAICP-9053.
-    $form['actions']['disable'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Disable EU OSS Catalogue'),
-      '#submit' => ['::disableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_feature()->isAllowed(),
-    ];
-
     return $form;
-  }
-
-  /**
-   * Enable the configuration submit form.
-   *
-   * @todo Remove this method in ISAICP-9053.
-   */
-  public function enableEuOssCatalogueSubmitForm(): void {
-    joinup_oss_catalogue_toggle('enable');
-    // Only clear cache for anonymous.
-    $this->pageCache->deleteAll();
-    $this->messenger()
-      ->addStatus($this->t('EU OSS Catalogue has been enabled'));
-  }
-
-  /**
-   * Disables the config submit form.
-   *
-   * @todo Remove this method in ISAICP-9053.
-   */
-  public function disableEuOssCatalogueSubmitForm(): void {
-    joinup_oss_catalogue_toggle('disable');
-    // Only clear cache for anonymous.
-    $this->pageCache->deleteAll();
-    $this->messenger()
-      ->addStatus($this->t('EU OSS Catalogue has been disabled'));
   }
 
   /**
