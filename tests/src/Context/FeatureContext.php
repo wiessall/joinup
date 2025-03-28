@@ -2301,4 +2301,27 @@ class FeatureContext extends RawDrupalContext {
     Assert::assertSame(0, $queue->numberOfItems());
   }
 
+  /**
+   * Sets a Drupal state variable to a given value.
+   *
+   * This step allows you to manipulate internal Drupal state values directly
+   * from your Behat scenarios, which is useful for simulating time-based events
+   * (like cron triggers, scheduled purges, etc.).
+   *
+   * Example:
+   * Given I set state "joinup_user_last_notify_run" to 0
+   * Given I set state "joinup_user_scheduled_purge_date" to 1700000000
+   *
+   * @param string $key
+   *   The state system key to set.
+   * @param string|int $value
+   *   The value to store. If numeric, it will be cast to an integer.
+   *
+   * @Given I set state :key to :value
+   */
+  public function iSetStateTo(string $key, string|int $value): void {
+    $typed_value = is_numeric($value) ? (int) $value : $value;
+    \Drupal::state()->set($key, $typed_value);
+  }
+
 }

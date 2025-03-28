@@ -1,0 +1,36 @@
+user_never_lastlogin_value: 3
+user_never_lastlogin_period: year
+user_lastlogin_value: 3
+user_lastlogin_period: year
+user_inactive_value: 1
+user_inactive_period: year
+user_blocked_value: null
+user_blocked_period: days
+enabled_never_loggedin_users: true
+enabled_loggedin_users: true
+enabled_inactive_users: true
+enabled_blocked_users: false
+purge_included_users_roles:
+  authenticated: authenticated
+  licence_manager: '0'
+  interoperability_validator: '0'
+  moderator: '0'
+  administrator: '0'
+  developer: '0'
+purge_on_cron: false
+inactive_user_notify_subject: 'Your account is deleted'
+inactive_user_notify_text: "Dear User, \r\n\r\nYour account has been deleted due the website’s policy to automatically remove users who match certain criteria. If you have concerns regarding the deletion, please talk to the administrator of the website.\r\n\r\nThank you"
+send_email_notification: false
+purge_user_cancel_method: user_cancel_site_policy
+disregard_blocked_users: false
+purge_excluded_users_roles:
+  licence_manager: licence_manager
+  interoperability_validator: interoperability_validator
+  moderator: moderator
+  administrator: administrator
+  developer: developer
+user_before_deletion_subject: 'Important Notice - Action Required to Retain Your Interoperable Europe Portal Account'
+user_before_deletion_text: "Dear user,\r\n\r\nAs part of our regular maintenance on the Interoperable Europe Portal and in order to ensure the highest level of security on the platform, we routinely review account activity. Our records indicate that your account has been inactive for more than 3 years. Consequently, it is scheduled for deletion in one week from today.\r\n\r\nShould you wish to maintain your account, please click <a href=\"https://interoperable-europe.ec.europa.eu/caslogin?destination=/home\">here</a> in order to log in to your account before the described deletion date. Your login will automatically exclude your account from the deletion process. \r\nShould you have any questions or need assistance, please feel free to contact our support team by clicking on the <a href=\"https://interoperable-europe.ec.europa.eu/contact?destination=/home\">Contact Support form</a>.\r\n\r\nBest regards, \r\nInteroperable Europe Support team"
+send_email_user_before_notification: false
+user_before_notification_value: '7'
+user_before_notification_period: days
