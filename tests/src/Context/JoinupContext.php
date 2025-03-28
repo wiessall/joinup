@@ -3006,6 +3006,9 @@ class JoinupContext extends RawDrupalContext {
     // icons of paragraphs to be cached when the files are deleted above which
     // breaks tests trying to access paragraphs.
     \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
+
+    // Also, clean the media click counter.
+    \Drupal::state()->delete('image_library_widget.clicks');
   }
 
 }
