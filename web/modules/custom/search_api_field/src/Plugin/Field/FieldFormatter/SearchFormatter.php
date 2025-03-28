@@ -24,7 +24,7 @@ use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
-use Drupal\topic\Entity\Topic;
+use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Service\TopicServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -399,7 +399,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
       $entity = $this->topiService->getTopicByName($value);
-      $value = ($entity instanceof Topic) ? $entity->id() : NULL;
+      $value = ($entity instanceof TopicInterface) ? $entity->id() : NULL;
     }
 
     return $value;
