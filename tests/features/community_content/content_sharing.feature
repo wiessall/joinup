@@ -346,7 +346,7 @@ Feature: Sharing content between collections
     Then a modal should open
     And I should see the following lines of text:
       | Facebook |
-      | Twitter  |
+      | X        |
       | Linkedin |
 
     # Check that the collection the content is shared on is immediately shown in the "Shared on" tiles.
@@ -357,7 +357,7 @@ Feature: Sharing content between collections
     And I should see the following lines of text:
       | Share on                                    |
       | Facebook                                    |
-      | Twitter                                     |
+      | X                                           |
       | Linkedin                                    |
       | Other groups on Interoperable Europe Portal |
     When I check "Gossip"

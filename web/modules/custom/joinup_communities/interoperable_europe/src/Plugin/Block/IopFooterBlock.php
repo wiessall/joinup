@@ -29,7 +29,7 @@ class IopFooterBlock extends BlockBase {
         'url' => 'https://www.linkedin.com/groups/12907049/',
       ],
       'twitter' => [
-        'title' => $this->t('Twitter'),
+        'title' => $this->t('X'),
         'url' => 'https://twitter.com/InteroperableEU',
       ],
       'youtube' => [
