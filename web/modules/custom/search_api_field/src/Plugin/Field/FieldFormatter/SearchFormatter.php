@@ -398,7 +398,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
-      $entity = $this->topiService->getTopicByName($value);
+      $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($value);
       $value = ($entity instanceof TopicInterface) ? $entity->id() : NULL;
     }
 

@@ -19,7 +19,7 @@ use Drupal\rdf_sync\Model\SyncMethod;
 /**
  * Delete rdf sync for topic vocabulary.
  */
-function joinup_core_deploy_200308(array &$sandbox): string {
+function joinup_core_deploy_200400(array &$sandbox): string {
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $query = \Drupal::database()->select('rdf_sync_uri', 'r')
     ->fields('r', ['entity_id'])
