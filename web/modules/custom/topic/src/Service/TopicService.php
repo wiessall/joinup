@@ -17,18 +17,12 @@ class TopicService implements TopicServiceInterface {
   ) {}
 
   /**
-   * Retrieves a taxonomy term by its name from the 'topic' vocabulary.
-   *
-   * @param string $name
-   *   The name of the topic.
-   *
-   * @return \Drupal\taxonomy\TermInterface|null
-   *   The taxonomy term if found, or NULL otherwise.
+   * {@inheritdoc}
    */
   public function getTopicByName(string $name): ?TermInterface {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $tids = array_values($storage->getQuery()
-      ->accessCheck(FALSE)
+      ->accessCheck(TRUE)
       ->condition('vid', 'topic')
       ->condition('name', $name)
       ->range(0, 1)
