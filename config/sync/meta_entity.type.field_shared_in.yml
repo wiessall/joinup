@@ -1,0 +1,40 @@
+uuid: 5d8c8008-af3e-4bfd-b0fe-0b3ec47a778d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.discussion
+    - node.type.document
+    - node.type.event
+    - node.type.news
+    - node.type.solution
+  module:
+    - joinup_stats
+    - node
+third_party_settings:
+  joinup_stats:
+    matomo_method: ''
+    parameter_name: ''
+    parameter_method: ''
+    period: 7
+    type: null
+id: field_shared_in
+label: 'Shared in'
+description: ''
+mapping:
+  node:
+    discussion:
+      field_name: ''
+      auto_create: false
+    document:
+      field_name: ''
+      auto_create: false
+    event:
+      field_name: ''
+      auto_create: false
+    news:
+      field_name: ''
+      auto_create: false
+    solution:
+      field_name: ''
+      auto_create: false

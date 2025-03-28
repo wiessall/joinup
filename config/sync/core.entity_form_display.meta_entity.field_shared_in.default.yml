@@ -1,0 +1,47 @@
+uuid: 4bbb0566-8e73-45e6-b10c-c6993ce2c9a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.field_shared_in.field_shared_in
+    - meta_entity.type.field_shared_in
+  module:
+    - dynamic_entity_reference
+    - joinup_group
+    - path
+id: meta_entity.field_shared_in.default
+targetEntityType: meta_entity
+bundle: field_shared_in
+mode: default
+content:
+  field_shared_in:
+    type: joinup_group_reference_with_timestamp
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  target:
+    type: dynamic_entity_reference_default
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 40
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }
