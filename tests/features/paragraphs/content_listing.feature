@@ -24,7 +24,7 @@ Feature:
       | News carousel | Roman ruins | published |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "News carousel" title with:
     """
-  a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:27:"entity_bundle|news
+ a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:27:"entity_bundle|news
 topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;}
     """
     When I go to the "News carousel" custom page
