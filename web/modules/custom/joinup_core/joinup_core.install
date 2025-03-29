@@ -42,7 +42,6 @@ function joinup_core_update_200400(): void {
   $query->addField('rsu', 'bundle');
   $query->condition('rsu.bundle', 'topic', '=');
   $result = $query->execute()->fetchAllAssoc('paragraph_id');
-
   $rowsUpdated = 0;
   foreach ($result as $row) {
     $data = unserialize($row->content_listing_value, ['allowed_classes' => FALSE]);
