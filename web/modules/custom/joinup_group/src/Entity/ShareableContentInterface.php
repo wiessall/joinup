@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\Core\Field\EntityReferenceFieldItemList;
+use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 
+/**
+ * Interface of content items which can be shared between groups.
+ */
 interface ShareableContentInterface {
 
   /**
    * Returns the "shared in" field item list.
    *
-   * @return \Drupal\Core\Field\EntityReferenceFieldItemList
+   * @return \Drupal\Core\Field\EntityReferenceFieldItemListInterface
    *   The "shared in" field item list.
    */
-  public function getSharedInField(): EntityReferenceFieldItemList;
+  public function getSharedInField(): EntityReferenceFieldItemListInterface;
 
   /**
    * Shares the entity to the given group.
@@ -26,5 +29,13 @@ interface ShareableContentInterface {
    *   permanent. Defaults to NULL.
    */
   public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void;
+
+  /**
+   * Removes the current node from being shared inside a group.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group where to remove the node.
+   */
+  public function unShareFrom(GroupInterface $group): void;
 
 }

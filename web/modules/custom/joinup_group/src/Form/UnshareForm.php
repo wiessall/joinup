@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -173,12 +174,9 @@ class UnshareForm extends ShareFormBase {
    *   Thrown when the entity storage is read only.
    */
   protected function removeFromGroup(GroupInterface $group): void {
-    // Flipping is needed to easily unset the value.
-    $current_ids = array_flip($this->getAlreadySharedGroupIds());
-    unset($current_ids[$group->id()]);
-    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue(array_flip($current_ids));
-    $this->entity->skip_notification = TRUE;
-    $this->entity->save();
+    assert($this->entity instanceof ShareableContentInterface);
+    $this->entity->unShareFrom($group);
+
     $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
   }
 

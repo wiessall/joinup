@@ -19,6 +19,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -31,10 +32,12 @@ use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_group\Plugin\Field\SharedInFieldItemList;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -88,17 +91,39 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() === 'node' && in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES)) {
-    if (!empty($fields['short_id'])) {
+  if ($entity_type->id() === 'node') {
+    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES) && !empty($fields['short_id'])) {
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
       $fields['short_id']->addPropertyConstraints('value', [
         'Regex' => ['pattern' => '/^[a-z0-9-]{4,26}$/'],
       ]);
       $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
-  }
 
-  $d = 1;
+    $shareableBundles = [
+      'discussion',
+      'document',
+      'event',
+      'news',
+      'solution',
+    ];
+    if (in_array($bundle, $shareableBundles, TRUE)) {
+      $fields['field_shared_in'] = BaseFieldDefinition::create('joinup_group_reference_with_timestamp')
+        ->setLabel(t('Shared in'))
+        ->setName('field_shared_in')
+        ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+        ->setComputed(TRUE)
+        ->setSetting('target_type', 'node')
+        ->setSetting('handler', 'default')
+        ->setSetting('handler_settings', [
+          'target_bundles' => [
+            'collection' => 'collection',
+            'solution' => 'solution',
+          ],
+        ])
+        ->setClass(SharedInFieldItemList::class);
+    }
+  }
 }
 
 /**
@@ -166,7 +191,7 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
     // And belongs to a group.
     && ($parent = $group_content->getGroup())
     // And is shared.
-    && ($group_content->getSharedInField() && !$group_content->getSharedInField()->isEmpty())
+    && $group_content instanceof ShareableContentInterface
   ) {
     $variables['#attached']['library'][] = 'joinup_group/shared_entity';
     $variables['attributes']['data-joinup-parent-id'] = $parent->id();
