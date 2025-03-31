@@ -15,10 +15,10 @@ dependencies:
     - field.field.user.user.field_user_professional_domain
     - image.style.thumbnail
   module:
-    - image
     - path
     - search_api_field
     - social_media_links_field
+    - svg_image
     - user
 id: user.user.default
 targetEntityType: user
@@ -32,13 +32,13 @@ content:
     third_party_settings: {  }
   field_social_media:
     type: social_media_links_field_default
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   field_user_business_title:
     type: string_textfield
-    weight: 6
+    weight: 7
     region: content
     settings:
       size: 60
@@ -46,7 +46,7 @@ content:
     third_party_settings: {  }
   field_user_content:
     type: search_api_field_default
-    weight: 8
+    weight: 9
     region: content
     settings:
       query_builder: false
@@ -79,7 +79,7 @@ content:
     third_party_settings: {  }
   field_user_organisation:
     type: string_textfield
-    weight: 7
+    weight: 8
     region: content
     settings:
       size: 60
@@ -95,6 +95,11 @@ content:
     third_party_settings: {  }
   field_user_professional_domain:
     type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  language:
     weight: 5
     region: content
     settings: {  }
@@ -106,14 +111,13 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   field_user_frequency: true
   langcode: true
-  language: true
   matomo: true
   private_messages: true
   timezone: true
