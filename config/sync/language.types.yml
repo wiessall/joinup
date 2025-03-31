@@ -28,15 +28,16 @@ negotiation:
       language-url-fallback: 1
   language_interface:
     enabled:
-      language-user-admin: -20
+      joinup_admin_english: -20
       language-url: -19
       language-user: -18
       language-browser: -17
-      language-selected: -15
+      language-selected: -14
     method_weights:
-      language-user-admin: -20
+      language-user-admin: -15
+      joinup_admin_english: -20
       language-url: -19
-      language-session: -16
       language-user: -18
       language-browser: -17
-      language-selected: -15
+      language-session: -16
+      language-selected: -14
