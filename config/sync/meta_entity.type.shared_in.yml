@@ -18,23 +18,23 @@ third_party_settings:
     parameter_method: ''
     period: 7
     type: null
-id: field_shared_in
+id: shared_in
 label: 'Shared in'
 description: ''
 mapping:
   node:
     discussion:
-      field_name: ''
+      field_name: shared_in
       auto_create: false
     document:
-      field_name: ''
+      field_name: shared_in
       auto_create: false
     event:
-      field_name: ''
+      field_name: shared_in
       auto_create: false
     news:
-      field_name: ''
+      field_name: shared_in
       auto_create: false
     solution:
-      field_name: ''
+      field_name: shared_in
       auto_create: false

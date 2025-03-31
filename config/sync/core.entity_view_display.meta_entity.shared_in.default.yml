@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.meta_entity.field_shared_in.field_shared_in
-    - meta_entity.type.field_shared_in
+    - field.field.meta_entity.shared_in.field_shared_in
+    - meta_entity.type.shared_in
   module:
     - joinup_group
-id: meta_entity.field_shared_in.default
+id: meta_entity.shared_in.default
 targetEntityType: meta_entity
-bundle: field_shared_in
+bundle: shared_in
 mode: default
 content:
   changed:

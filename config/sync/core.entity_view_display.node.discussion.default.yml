@@ -150,4 +150,5 @@ hidden:
   published_at: true
   read_more: true
   search_api_excerpt: true
+  shared_in: true
   visit_count: true
