@@ -20,7 +20,6 @@ dependencies:
     - field.field.node.event.field_organisation_type
     - field.field.node.event.field_paragraphs_body
     - field.field.node.event.field_scope
-    - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
@@ -72,7 +71,6 @@ hidden:
   field_organisation_type: true
   field_paragraphs_body: true
   field_scope: true
-  field_shared_in: true
   field_short_title: true
   field_site_featured: true
   field_state: true
