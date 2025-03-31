@@ -628,9 +628,9 @@ class JoinupSearchContext extends RawDrupalContext {
       // so we cannot fake the pressing of the Enter key. We will simply
       // redirect to the search page.
       $this->visitPath('/');
-      $page = $this->getSession()->getPage();
-      $page->fillField('keys', $keywords);
-      $page->pressButton("Search site-wide");
+      $field = $this->getSession()->getPage()->findField('keys');
+      $field->setValue($keywords);
+      $field->getParent()->getParent()->submit();
       $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords));
     }
   }
