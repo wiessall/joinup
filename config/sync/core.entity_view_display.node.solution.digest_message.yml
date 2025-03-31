@@ -115,6 +115,7 @@ hidden:
   report: true
   search_api_excerpt: true
   share_link: true
+  shared_in: true
   short_id: true
   site_featured: true
   solution_subscribe: true

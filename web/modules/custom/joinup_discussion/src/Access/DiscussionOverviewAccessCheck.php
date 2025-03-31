@@ -67,7 +67,7 @@ readonly class DiscussionOverviewAccessCheck implements AccessInterface {
       // Start with the shared in field of the shared in meta entity, and
       // limit results to the records pointing to the current group.
       $sharedDiscussionCountQuery = $this->database->select($metaTableMapping->getFieldTableName('field_shared_in'), 'fsi')
-        ->condition('fsi.bundle', 'field_shared_in')
+        ->condition('fsi.bundle', 'shared_in')
         ->condition('fsi.field_shared_in_target_id', $group->id());
 
       // Join meta entity base table; this is where the target of the meta

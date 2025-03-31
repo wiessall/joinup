@@ -23,7 +23,7 @@ trait ShareableContentTrait {
    *   entity if this entity wasn't shared ever.
    */
   protected function getSharesMetaEntity(): MetaEntityInterface {
-    return MetaEntity::loadOrCreate('field_shared_in', $this);
+    return MetaEntity::loadOrCreate('shared_in', $this);
   }
 
   /**

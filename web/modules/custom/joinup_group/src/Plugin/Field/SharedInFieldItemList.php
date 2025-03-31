@@ -32,7 +32,7 @@ class SharedInFieldItemList extends EntityReferenceFieldItemList {
    */
   protected function getSharedInMetaEntity(): MetaEntityInterface {
     if (!isset($this->metaEntity)) {
-      $sharedInMeta = MetaEntity::loadOrCreate('field_shared_in', $this->getEntity());
+      $sharedInMeta = MetaEntity::loadOrCreate('shared_in', $this->getEntity());
       if (!$sharedInMeta->hasField('field_shared_in')) {
         throw new \InvalidArgumentException("Field field_shared_in doesn't exist");
       }
