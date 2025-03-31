@@ -97,6 +97,8 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
       $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
   }
+
+  $d = 1;
 }
 
 /**

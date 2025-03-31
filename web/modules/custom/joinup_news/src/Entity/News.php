@@ -7,6 +7,8 @@ namespace Drupal\joinup_news\Entity;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
@@ -17,6 +19,9 @@ class News extends CommunityContentBase implements NewsInterface {
   use AbstractTrait;
   use ArchivableEntityTrait;
   use LogoTrait;
+  use ShareableContentTrait {
+    shareWith as traitShareWith;
+  }
 
   /**
    * {@inheritdoc}
@@ -37,6 +42,14 @@ class News extends CommunityContentBase implements NewsInterface {
    */
   public function getLogoFieldName(): string {
     return 'field_news_logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void {
+    // News sharing is withdrawn after one month.
+    $this->traitShareWith($group, static::someMonthsLater(1));
   }
 
 }
