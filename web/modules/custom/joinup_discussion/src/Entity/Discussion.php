@@ -6,6 +6,7 @@ namespace Drupal\joinup_discussion\Entity;
 
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
@@ -15,6 +16,7 @@ class Discussion extends CommunityContentBase implements DiscussionInterface {
 
   use ArchivableEntityTrait;
   use LogoTrait;
+  use ShareableContentTrait;
 
   /**
    * {@inheritdoc}

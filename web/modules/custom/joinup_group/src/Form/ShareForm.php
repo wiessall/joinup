@@ -11,6 +11,7 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\node\NodeInterface;
 
@@ -188,7 +189,7 @@ class ShareForm extends ShareFormBase {
   protected function getShareableGroups(): array {
     // Being part also for the access check, do not allow the user to access
     // this page for entities without a field to store groups it is shared in.
-    if (!$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
+    if (!$this->entity instanceof ShareableContentInterface) {
       return [];
     }
 
@@ -216,15 +217,8 @@ class ShareForm extends ShareFormBase {
    *   Thrown when the entity storage is read only.
    */
   protected function shareOnGroup(GroupInterface $group): void {
-    $current_ids = $this->getAlreadySharedGroupIds();
-    $current_ids[] = $group->id();
-
-    // Entity references do not ensure uniqueness.
-    $current_ids = array_unique($current_ids);
-
-    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue($current_ids);
-    $this->entity->skip_notification = TRUE;
-    $this->entity->save();
+    assert($this->entity instanceof ShareableContentInterface);
+    $this->entity->shareWith($group);
 
     $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
   }
