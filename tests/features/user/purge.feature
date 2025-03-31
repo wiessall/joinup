@@ -19,6 +19,7 @@ Feature: Automated approach for identifying and deleting inactive users
     Then I run cron
     And the "purge_users" queue is empty
     And I run the "notification_users" queue worker
+    Then 2 e-mails should have been sent
     And the email sent to "Bunny Truth" with subject "Important Notice - Action Required to Retain Your Interoperable Europe Portal Account" contains the following lines of text:
       | As part of our regular maintenance on the Interoperable Europe Portal and in order to ensure the highest level of security on the platform |
       | Should you wish to maintain your account, please click here in order to log in to your account before the described deletion date.         |

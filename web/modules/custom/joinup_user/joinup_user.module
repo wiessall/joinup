@@ -620,7 +620,7 @@ function joinup_user_cron(): void {
   $last_purge = $state->get('joinup_user_last_purge_run');
   $scheduled_purge = $state->get('joinup_user_scheduled_purge_date');
 
-  // --- Run Notification Step (if not run in last year) ---
+  // Run Notification Step (if not run in last year)
   if ($last_notify < $one_year_ago) {
     $config->set('send_email_user_before_notification', TRUE)->save();
 
@@ -633,11 +633,12 @@ function joinup_user_cron(): void {
     $state->set('joinup_user_last_notify_run', $now);
 
     // Set the scheduled purge date to 7 days from now.
-    $purge_date = $now + (7 * 24 * 60 * 60);
+    $notification_interval = '+' . $config->get('user_before_notification_value') . ' ' . $config->get('user_before_notification_period');
+    $purge_date = (new \DateTime())->setTimestamp($now)->modify($notification_interval)->getTimestamp();
     $state->set('joinup_user_scheduled_purge_date', $purge_date);
   }
 
-  // --- Run Purge Step (if scheduled and eligible) ---
+  // Run Purge Step (if scheduled and eligible)
   if ($scheduled_purge && $now >= $scheduled_purge && $last_purge < $scheduled_purge) {
     $purge_ids = purge_users_get_user_ids();
     $purge_queue = $queue_factory->get('purge_users');
