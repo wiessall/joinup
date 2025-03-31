@@ -6,6 +6,11 @@
  */
 
 declare(strict_types=1);
+use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\SynchronizableInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Utility\UpdateException;
 
 /**
  * Implements hook_requirements().
@@ -25,4 +30,132 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function joinup_core_update_dependencies(): array {
+  $dependencies['joinup_core'][240002] = [
+    'joinup_core' => 240001,
+  ];
+  return $dependencies;
+}
+
+/**
+ * Install the meta entity type which stores shares.
+ */
+function joinup_core_update_240001(): void {
+  $fileName = Settings::get('config_sync_directory') . '/meta_entity.type.shared_in.yml';
+
+  // (Keep only UUID, ID and langcode.
+  if (!file_exists($fileName)) {
+    throw new UpdateException();
+  }
+  $yamlParser = \Drupal::service('serialization.yaml');
+  assert($yamlParser instanceof Yaml);
+  $config = $yamlParser::decode(file_get_contents($fileName));
+  $entityRepository = \Drupal::service('entity.repository');
+  assert($entityRepository instanceof EntityRepositoryInterface);
+
+  if (!isset($config['uuid'])) {
+    // This also causes config import exception.
+    throw new UpdateException();
+  }
+
+  $preexistingMetaEntityType = $entityRepository->loadEntityByUuid('meta_entity_type', $config['uuid']);
+
+  if ($preexistingMetaEntityType) {
+    if ($preexistingMetaEntityType->id() !== $config['id']) {
+      // This also causes config import exception.
+      throw new UpdateException();
+    }
+    // The entity is already installed.
+    return;
+  }
+
+  $metaEntityTypeStorage = \Drupal::entityTypeManager()->getStorage('meta_entity_type');
+  $metaType = $metaEntityTypeStorage->create($config);
+  assert($metaType instanceof SynchronizableInterface);
+
+  $metaType->setSyncing(TRUE)->trustData()->save();
+}
+
+/**
+ * Install the meta entity field storage where shares are stored.
+ */
+function joinup_core_update_240002(): void {
+  $fileName = Settings::get('config_sync_directory') . '/field.storage.meta_entity.field_shared_in.yml';
+  if (!file_exists($fileName)) {
+    throw new UpdateException();
+  }
+  $yamlParser = \Drupal::service('serialization.yaml');
+  assert($yamlParser instanceof Yaml);
+  $config = $yamlParser::decode(file_get_contents($fileName));
+  $entityRepository = \Drupal::service('entity.repository');
+  assert($entityRepository instanceof EntityRepositoryInterface);
+
+  if (!isset($config['uuid'])) {
+    // This also causes config import exception.
+    throw new UpdateException();
+  }
+
+  $preexistingFieldStorage = $entityRepository->loadEntityByUuid('field_storage_config', $config['uuid']);
+
+  if ($preexistingFieldStorage) {
+    if ($preexistingFieldStorage->id() !== $config['id']) {
+      // This also causes config import exception.
+      throw new UpdateException();
+    }
+    // The entity is already installed.
+    return;
+  }
+
+  $fieldStorage = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->create($config);
+  assert($fieldStorage instanceof SynchronizableInterface);
+
+  $fieldStorage->setSyncing(TRUE)->trustData()->save();
+}
+
+
+
+
+
+/**
+ * Install the sharing meta entity's field_shared_in field instance.
+ */
+function joinup_core_update_240003(): void {
+  $fileName = Settings::get('config_sync_directory') . '/field.field.meta_entity.shared_in.field_shared_in.yml';
+  if (!file_exists($fileName)) {
+    throw new UpdateException();
+  }
+  $yamlParser = \Drupal::service('serialization.yaml');
+  assert($yamlParser instanceof Yaml);
+  $config = $yamlParser::decode(file_get_contents($fileName));
+  $entityRepository = \Drupal::service('entity.repository');
+  assert($entityRepository instanceof EntityRepositoryInterface);
+
+  if (!isset($config['uuid'])) {
+    // This also causes config import exception.
+    throw new UpdateException();
+  }
+
+  $preexistingField = $entityRepository->loadEntityByUuid('field_config', $config['uuid']);
+
+  if ($preexistingField) {
+    if ($preexistingField->id() !== $config['id']) {
+      // This also causes config import exception.
+      throw new UpdateException();
+    }
+    // The entity is already installed.
+    return;
+  }
+
+  $field = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->create($config);
+  assert($field instanceof SynchronizableInterface);
+  $field->setSyncing(TRUE)->trustData()->save();
 }

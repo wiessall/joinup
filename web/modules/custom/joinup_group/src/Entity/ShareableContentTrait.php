@@ -114,26 +114,23 @@ trait ShareableContentTrait {
    * @return int
    *   The modified timestamp.
    */
-  protected static function someMonthsLater(int $monthsToAdd, ?int $timestamp = NULL): int {
+  protected static function someMonthsLater(int $monthsToAdd, int $timestamp): int {
     if ($monthsToAdd < 1) {
       throw new \LogicException(("Number of months must be higher than 0, got '%s'"));
     }
 
-    $timestamp ??= \Drupal::time()->getCurrentTime();
-    $dateFormatter = \Drupal::service('date.formatter');
-    assert($dateFormatter instanceof DateFormatterInterface);
-    $year = (int) $dateFormatter->format($timestamp, 'custom', 'Y');
-    $month = (int) $dateFormatter->format($timestamp, 'custom', 'n');
-    $dayInMonth = (int) $dateFormatter->format($timestamp, 'custom', 'j');
+    $dateTime = new \DateTime("@$timestamp");
 
-    $laterMonth = ($monthsToAdd + $month) % 12;
-    $laterYear = (int) ($year + floor(($monthsToAdd + $month) / 12));
+    $year = (int) $dateTime->format('Y');
+    $month = (int) $dateTime->format('n');
+    $dayInMonth = (int) $dateTime->format('j');
+
+    $laterMonth = ($monthsToAdd + $month - 1) % 12 + 1;
+    $laterYear = (int) ($year + floor(($monthsToAdd + $month - 1) / 12));
     $daysInLaterMonth = cal_days_in_month(CAL_GREGORIAN, $laterMonth, $laterYear);
-    $laterDay = $dayInMonth > $daysInLaterMonth
-      ? $daysInLaterMonth
-      : $dayInMonth;
+    $laterDay = $dayInMonth > $daysInLaterMonth ? $daysInLaterMonth : $dayInMonth;
 
-    return strtotime("$laterYear-$laterMonth-$laterDay");
+    return (new \DateTime("$laterYear-$laterMonth-$laterDay", new \DateTimeZone('UTC')))->getTimestamp();
   }
 
 }
