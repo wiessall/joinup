@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
-    - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
@@ -79,17 +78,6 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 4
-    region: content
-  field_shared_in:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: view_mode_tile
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: entity_reference__listing_tile
-    weight: 9
     region: content
   field_state:
     type: list_default

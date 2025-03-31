@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
-    - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
@@ -20,7 +19,7 @@ dependencies:
     - allowed_formats
     - comment
     - file
-    - joinup_core
+    - image_library_widget
     - joinup_workflow
     - text
 id: node.discussion.default
@@ -136,7 +135,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_shared_in: true
   field_site_featured: true
   og_audience: true
   path: true

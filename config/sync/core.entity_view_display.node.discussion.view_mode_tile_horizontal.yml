@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
-    - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
@@ -67,7 +66,6 @@ hidden:
   field_attachment: true
   field_keywords: true
   field_replies: true
-  field_shared_in: true
   field_site_featured: true
   field_state: true
   field_topic: true
