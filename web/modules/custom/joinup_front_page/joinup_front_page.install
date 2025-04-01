@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Joinup Front Page.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Removes 'Highlighted event' queue.
+ */
+function joinup_front_page_update_200400(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('entity_subqueue');
+  $subQueue = $storage->load('highlighted_event');
+  $subQueue?->delete();
+}
