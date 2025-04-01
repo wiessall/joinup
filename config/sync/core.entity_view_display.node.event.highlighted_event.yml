@@ -29,7 +29,7 @@ dependencies:
     - field.field.node.event.spatial_coverage
     - node.type.event
   module:
-    - joinup_core
+    - joinup_event
     - layout_builder
     - template_suggestion
     - user
@@ -43,16 +43,12 @@ bundle: event
 mode: highlighted_event
 content:
   field_event_date:
-    type: daterange_condensed
+    type: date_tile
     label: hidden
     settings:
       timezone_override: ''
-      separator: to
-      default_format: d/m/Y
-      day_diff_format: d
-      month_diff_format: d/m
-      year_diff_format: d/m/Y
-      plain_text: false
+      from_to: both
+      separator: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
