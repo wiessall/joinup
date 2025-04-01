@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Joinup\Drush\Commands;
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drush\Attributes as CLI;
 use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
@@ -14,6 +16,12 @@ use Drush\Commands\DrushCommands;
  * Specific commands to run on Interoperable Europe Portal code deployment.
  */
 class JoinupDrushCommands extends DrushCommands {
+
+  use AutowireTrait;
+
+  public function __construct(
+    protected readonly ModuleInstallerInterface $moduleInstaller,
+  ) {}
 
   /**
    * Flushes all Memcache backends.
@@ -84,7 +92,7 @@ class JoinupDrushCommands extends DrushCommands {
   #[CLI\Command(name: 'joinup:acc')]
   #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
   public function acceptanceTasks(): void {
-    \Drupal::service('module_installer')->install(['joinup_acceptance']);
+    $this->moduleInstaller->install(['joinup_acceptance']);
   }
 
   /**
