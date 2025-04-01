@@ -39,7 +39,18 @@ class UnshareForm extends ShareFormBase {
   public function access(NodeInterface $node): AccessResultInterface {
     $this->entity = $node;
 
-    return AccessResult::allowedIf(!empty($this->getGroups()));
+    $accessResult = AccessResult::allowedIf(
+      $node instanceof ShareableContentInterface &&
+      !empty($this->getGroups())
+    );
+
+    if ($node instanceof ShareableContentInterface) {
+      $sharingMeta = $node->getSharingMetaEntity();
+      if (!$sharingMeta->isNew()) {
+        $accessResult->addCacheableDependency($sharingMeta);
+      }
+    }
+    return $accessResult;
   }
 
   /**
