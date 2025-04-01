@@ -33,10 +33,10 @@ Feature: Automated approach for identifying and deleting inactive users
     Given I set state "joinup_user_scheduled_purge_date" to 5
     And I set state "joinup_user_last_purge_run" to 0
     And I mark all emails as read
-    Then the cache has been cleared
-    And the user "Beta Bunny" should exist
-    And the user "Arion Truth" should exist
-    And the user "Cosmic Admin" should exist
-    And the user "Orion Void" "should not" exist
-    And the user "Mona Lista" "should not" exist
-    And the user "Bunny Truth" "should not" exist
+    And I run cron
+    And the "Beta Bunny" user exist
+    And the "Arion Truth" user exist
+    And the "Cosmic Admin" user exist
+    And the "Mona Lista" user doesn't exist
+    And the "Bunny Truth" user doesn't exist
+    And the "Orion Void" user doesn't exist
