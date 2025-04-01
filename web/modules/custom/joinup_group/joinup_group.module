@@ -125,7 +125,7 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
     ];
     if (in_array($bundle, $shareableBundles, TRUE)) {
       $fields['field_shared_in'] = BaseFieldDefinition::create('joinup_group_reference_with_timestamp')
-        ->setLabel(t('Shared in'))
+        ->setLabel(t('Shared on'))
         ->setName('field_shared_in')
         ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
         ->setComputed(TRUE)
@@ -137,6 +137,7 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
             'solution' => 'solution',
           ],
         ])
+        ->setDisplayConfigurable('view', TRUE)
         ->setClass(SharedInFieldItemList::class);
     }
   }
@@ -1167,4 +1168,13 @@ function joinup_group_content_creation_allowed_values(FieldStorageDefinitionInte
 
   unset($values['only_members']);
   return $values;
+}
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function joinup_group_field_formatter_info_alter(array &$info): void {
+  // Make "entity_reference_entity_view" formatter available to
+  // "joinup_group_reference_with_timestamp" fields.
+  $info['entity_reference_entity_view']['field_types'][] = 'joinup_group_reference_with_timestamp';
 }

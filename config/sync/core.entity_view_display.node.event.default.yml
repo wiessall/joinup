@@ -191,6 +191,17 @@ content:
         template_suggestion: bare
     weight: 1
     region: content
+  field_shared_in:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: view_mode_tile
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: entity_reference__listing_tile
+    weight: 6
+    region: content
   report:
     type: link
     label: hidden
