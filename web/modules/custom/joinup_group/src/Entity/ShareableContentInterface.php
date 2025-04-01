@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
  * Interface of content items which can be shared between groups.
@@ -18,6 +19,14 @@ interface ShareableContentInterface {
    *   The "shared in" field item list.
    */
   public function getSharedInField(): EntityReferenceFieldItemListInterface;
+
+  /**
+   * Returns the "shared in" field item list.
+   *
+   * @return \Drupal\meta_entity\Entity\MetaEntityInterface
+   *   The "shared" meta entity.
+   */
+  public function getSharingMetaEntity(): MetaEntityInterface;
 
   /**
    * Shares the entity to the given group.
