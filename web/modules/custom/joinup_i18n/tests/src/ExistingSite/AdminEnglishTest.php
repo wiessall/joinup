@@ -27,6 +27,9 @@ class AdminEnglishTest extends JoinupExistingSiteTestBase {
    */
   protected AccountInterface $authenticatedUser;
 
+  /**
+   * {@inheritdoc }
+   */
   protected function setUp(): void {
     parent::setUp();
 
