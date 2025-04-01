@@ -15,10 +15,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\UpdateException;
-use Drupal\joinup_core\UpdateHelper;
+use Drupal\joinup_core\SharedInUpdateHelper;
 use Drupal\user\Entity\User;
 
 /**
@@ -27,11 +28,17 @@ use Drupal\user\Entity\User;
 function joinup_core_post_update_200401(array &$sandbox): string {
   $db = \Drupal::database();
   $sourceTable = 'node__field_shared_in';
-  $timestamp = \Drupal::time()->getCurrentTime();
   $shareStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
   $accountSwitcher = \Drupal::service('account_switcher');
   assert($accountSwitcher instanceof AccountSwitcherInterface);
   $serviceAccount = User::load(1);
+
+  if (!$db->schema()->tableExists($sourceTable)) {
+    throw new UpdateException(sprintf(
+      "The '%s' table we use as the source of the post update does not exist anymore.",
+      $sourceTable,
+    ));
+  }
 
   if (!isset($sandbox['nids_to_process'])) {
     $sandbox['nids_to_process'] = $db->select($sourceTable, 'n')
@@ -59,16 +66,13 @@ function joinup_core_post_update_200401(array &$sandbox): string {
     $type = current($data)['bundle'];
     $changed = (int) current($data)['changed'];
     $expireTimestamp = match($type) {
-      'event' => UpdateHelper::someMonthsLater(6, $changed),
-      'news' => UpdateHelper::someMonthsLater(1, $changed),
+      'event' => SharedInUpdateHelper::someMonthsLater(6, $changed),
+      'news' => SharedInUpdateHelper::someMonthsLater(1, $changed),
       default => NULL,
     };
 
-    if ($expireTimestamp && $expireTimestamp < $timestamp) {
-      // This share should not be created.
-      continue;
-    }
-
+    // We create sharing metas even for expired shares. These will be removed by
+    // the first cron run. Otherwise, they might be stuck in the index forever.
     $shares = array_map(
       function (array $data) use ($expireTimestamp): array {
         return array_filter([
@@ -91,8 +95,12 @@ function joinup_core_post_update_200401(array &$sandbox): string {
       ]);
       assert($share instanceof ContentEntityInterface);
 
-      if ($share->validate()->count()) {
-        throw new UpdateException();
+      $violations = $share->validate();
+      if ($violations->count()) {
+        throw new UpdateException(sprintf(
+          "The sharing entity we are about to create does not validate.\n%s",
+          Variable::export($share->toArray()),
+        ));
       }
       $share->save();
       $sandbox['migrated']++;
