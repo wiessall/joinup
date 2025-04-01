@@ -287,18 +287,27 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     $content = Node::load($node->nid);
-    $groupsLabels = array_filter(
-      array_map(
-        fn (string $groupLabel): string => trim($groupLabel),
-        explode(',', $node->field_shared_in),
-      ),
-    );
     Assert::assertInstanceOf(NodeInterface::class, $content);
-    if ($groupsLabels) {
+    $groupLabels = array_map(
+      fn (string $groupLabel): string => trim($groupLabel),
+      explode(',', $node->field_shared_in),
+    );
+    $sharedInAtString = $node->field_shared_in__at ?? '';
+    $groupSharingExpireTime = array_map(
+      function (string $relativeSharingTime): ?int {
+        $relativeSharingTime = trim($relativeSharingTime) ?: NULL;
+        if ($relativeSharingTime) {
+          $relativeSharingTime = strtotime($relativeSharingTime);
+        }
+        return $relativeSharingTime;
+      },
+      explode(',', $sharedInAtString),
+    );
+    if ($groupLabels) {
       Assert::assertInstanceOf(ShareableContentInterface::class, $content);
     }
 
-    foreach ($groupsLabels as $groupLabel) {
+    foreach ($groupLabels as $delta => $groupLabel) {
       // Right now content can be shared only between groups.
       $group = $this->getEntityByLabel('node', $groupLabel);
 
@@ -312,7 +321,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
         )
       );
 
-      $content->shareWith($group);
+      $expireTime = $groupSharingExpireTime[$delta] ?? NULL;
+      $content->shareWith($group, $expireTime);
     }
   }
 

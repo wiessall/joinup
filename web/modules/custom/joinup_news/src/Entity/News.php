@@ -9,7 +9,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
@@ -21,9 +20,7 @@ class News extends CommunityContentBase implements NewsInterface {
   use AbstractTrait;
   use ArchivableEntityTrait;
   use LogoTrait;
-  use ShareableContentTrait {
-    shareWith as traitShareWith;
-  }
+  use ShareableContentTrait;
   use StringTranslationTrait;
 
   /**
@@ -59,9 +56,8 @@ class News extends CommunityContentBase implements NewsInterface {
   /**
    * {@inheritdoc}
    */
-  public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void {
-    // News sharing is withdrawn after one month.
-    $this->traitShareWith($group, static::someMonthsLater(1));
+  protected function getShareExpireTimestamp(?int $currentTimestamp): ?int {
+    return static::someMonthsLater(1, $currentTimestamp);
   }
 
 }

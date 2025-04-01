@@ -4,6 +4,30 @@ Feature: Sharing content between collections
   I want to share content between collections
   So that useful information has more visibility
 
+  Scenario Outline: Sharing of specific content types expires by time
+    Given collection content:
+      | title        |
+      | Host group   |
+      | Target group |
+    And "<content type>" content:
+      | title          | collection | shared on    | shared at   |
+      | Shared content | Host group | Target group | <shared at> |
+
+    Given I go to the <page to visit>
+    Then I should see the "Shared content" tile
+    Given I run the "joinup_group" cron
+    And I run the "joinup_group_expired_sharing" queue worker
+    And I go to the <page to visit>
+    Then I <can or cant see> the "Shared content" tile
+
+    Examples:
+      | content type | page to visit                      | shared at | can or cant see |
+      | discussion   | discussions page of "Target group" | -10 years | should see      |
+      | document     | "Target group" collection          | -10 years | should see      |
+      | event        | "Target group" collection          | -7 months | should not see  |
+      | news         | "Target group" collection          | -32 days  | should not see  |
+      | solution     | "Target group" collection          | -10 years | should see      |
+
   @javascript
   Scenario Outline: Users can share content in the groups they are member of.
     Given users:

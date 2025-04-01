@@ -11,7 +11,6 @@ use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
@@ -24,9 +23,7 @@ class Event extends CommunityContentBase implements EventInterface {
   use LogoTrait;
   use ArchivableEntityTrait;
   use AbstractTrait;
-  use ShareableContentTrait {
-    shareWith as traitShareWith;
-  }
+  use ShareableContentTrait;
   use StringTranslationTrait;
 
   /**
@@ -98,9 +95,8 @@ class Event extends CommunityContentBase implements EventInterface {
   /**
    * {@inheritdoc}
    */
-  public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void {
-    // Event defaults to six month.
-    $this->traitShareWith($group, static::someMonthsLater(6));
+  protected function getShareExpireTimestamp(?int $currentTimestamp): ?int {
+    return static::someMonthsLater(6, $currentTimestamp);
   }
 
 }
