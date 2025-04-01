@@ -326,4 +326,42 @@ class JoinupUserContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Checks if a user with the given username exists or does not exist.
+   *
+   * This step allows verification of both the presence and absence of a user
+   * account in the system using a single step definition.
+   *
+   * Usage in .feature files:
+   *   Then the user "john_doe" should exist
+   *   Then the user "deleted_user" should not exist
+   *
+   * @param string $username
+   *   The username to check.
+   * @param string $shouldExist
+   *   A string indicating whether the user should exist ("should")
+   *   or should not exist ("should not"). Defaults to "should".
+   *
+   * @throws \Exception
+   *   Throws an exception if the expectation does not match the actual state.
+   *
+   * @Then the user :username :shouldExist exist
+   */
+  public function checkUserExists(string $username, string $shouldExist = 'should'): void {
+    // Load user(s) with the provided username.
+    $users = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->loadByProperties(['name' => $username]);
+
+    $userExists = !empty($users);
+
+    if ($shouldExist === 'should' && !$userExists) {
+      throw new \Exception("User '$username' does not exist.");
+    }
+
+    if ($shouldExist === 'should not' && $userExists) {
+      throw new \Exception("User '$username' exists, but it shouldn't.");
+    }
+  }
+
 }
