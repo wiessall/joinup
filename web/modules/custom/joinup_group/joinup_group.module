@@ -19,6 +19,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -1178,4 +1179,29 @@ function joinup_group_field_formatter_info_alter(array &$info): void {
   // Make "entity_reference_entity_view" formatter available to
   // "joinup_group_reference_with_timestamp" fields.
   $info['entity_reference_entity_view']['field_types'][] = 'joinup_group_reference_with_timestamp';
+}
+
+/**
+ * Implements hook_cron().
+ */
+function joinup_group_cron(): void {
+  $sharedMetaStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  assert($sharedMetaStorage instanceof SqlEntityStorageInterface);
+  $tableMapping = $sharedMetaStorage->getTableMapping();
+  $sharedInTable = $tableMapping->getFieldTableName('field_shared_in');
+  $currentTimestamp = \Drupal::time()->getCurrentTime();
+  $affectedMetaIds = \Drupal::database()->select($sharedInTable, 'f')
+    ->distinct()
+    ->fields('f', ['entity_id'])
+    ->condition('f.bundle', 'shared_in')
+    ->isNotNull('f.field_shared_in_timestamp')
+    ->condition('f.field_shared_in_timestamp', $currentTimestamp, '<')
+    ->execute()
+    ->fetchCol();
+
+  $queue = \Drupal::queue('joinup_group_expired_sharing');
+  $queue->createQueue();
+  foreach ($affectedMetaIds as $metaId) {
+    $queue->createItem($metaId);
+  }
 }
