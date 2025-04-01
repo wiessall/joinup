@@ -10,3 +10,4 @@ weight: -3
 is_admin: null
 permissions:
   - 'translate configuration'
+  - 'view the administration theme'
