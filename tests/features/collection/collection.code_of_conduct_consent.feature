@@ -201,24 +201,48 @@ Feature:
     Given the "Knowledge Hive" "collection" has a new "draft" revision with "open" membership moderation
     When I visit the "Knowledge Hive" collection
     Then I should see the warning message "We updated our Code of Conduct"
+    Then I should not see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
 
     # Changing the membership moderation between published revisions affect the
     # memberships.
     Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
 
     # Changing the membership moderation between unpublished revisions does not
     # affect the memberships. Change to closed to check the effect.
     Given the "Knowledge Hive" "collection" has a new "draft" revision with "closed" membership moderation
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
 
     # Not changing the membership moderation between published revisions does
     # not affect the memberships.
     Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
 
     # Change again to closed with an inbetween unpublished revision to check
     # that full memberships are revoked.
@@ -228,3 +252,30 @@ Feature:
     Given the "Knowledge Hive" "collection" has a new "published" revision with "closed" membership moderation
     When I visit the "Knowledge Hive" collection
     Then I should see the warning message "We updated our Code of Conduct"
+    Then I should not see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
+
+    # Regression test: Check that the same apply if the collection is directly
+    # changed from published to published.
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "closed" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should see the warning message "We updated our Code of Conduct"
+    Then I should not see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |

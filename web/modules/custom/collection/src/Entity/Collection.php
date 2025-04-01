@@ -137,50 +137,35 @@ class Collection extends Node implements CollectionInterface {
     // compare with the last published version to decide if we need to revoke
     // or grant full memberships. If there is no previous published version, we
     // only act if the current version is a closed group.
-    if (!$update || !$this->isPublished()) {
+    if (!$update || !$this->isPublished() || !$this->hasPublishedCodeOfConduct()) {
       return;
     }
 
     $original = $this->original;
     if (empty($original)) {
-      return;
-    }
-
-    $nodeStorage = $this->entityTypeManager()->getStorage('node');
-
-    // ::hasCodeOfConductToAccept() method already checks if the collection is
-    // closed.
-    if (!$original->isPublished()) {
       // We need to retrieve the last published version to compare with the
       // current one.
-      $revisionIds = $nodeStorage->revisionIds($this);
-
-      $lastPublishedRevisionId = NULL;
-      foreach (array_reverse($revisionIds) as $revisionId) {
+      $nodeStorage = $this->entityTypeManager()->getStorage('node');
+      foreach (array_reverse($nodeStorage->revisionIds($this)) as $revisionId) {
         $revision = $nodeStorage->loadRevision($revisionId);
         if ($revision->isPublished()) {
-          $lastPublishedRevisionId = $revisionId;
+          $original = $revision;
           break;
         }
       }
+    }
 
-      if ($lastPublishedRevisionId === NULL) {
-        // There is no previous published version, we only act if the current
-        // version is a closed group.
-        if ($this->isClosed()) {
-          $this->revokeFullMemberships();
-        }
-      }
-      else {
-        $lastPublished = $nodeStorage->loadRevision($lastPublishedRevisionId);
-        // Only act if the membership moderation has changed.
-        if ($this->isClosed() && !$lastPublished?->isClosed()) {
-          $this->revokeFullMemberships();
-        }
-        elseif (!$this->isClosed() && $lastPublished?->isClosed()) {
-          $this->restoreFullMemberships();
-        }
-      }
+    if ($original === NULL && $this->isClosed() || ($original !== NULL && !$original->isClosed() && $this->isClosed())) {
+      // Either there is no previous published version and the current version
+      // is a closed group, or the previous published version was an open group
+      // and the current version is a closed group.
+      $this->revokeFullMemberships();
+    }
+    elseif ($original === NULL && !$this->isClosed() || ($original !== NULL && $original->isClosed() && !$this->isClosed())) {
+      // Either there is no previous published version and the current version
+      // is an open group, or the previous published version was a closed group
+      // and the current version is an open group.
+      $this->restoreFullMemberships();
     }
   }
 
@@ -203,9 +188,16 @@ class Collection extends Node implements CollectionInterface {
    */
   public function hasCodeOfConductToAccept(): bool {
     // Open collections are not forcing users to accept their Code of Conduct.
-    if (!$this->isClosed()) {
-      return FALSE;
-    }
+    return $this->isClosed() && $this->hasPublishedCodeOfConduct();
+  }
+
+  /**
+   * Returns whether the collection has a published Code of Conduct.
+   *
+   * @return bool
+   *   TRUE if the collection has a published Code of Conduct, FALSE otherwise.
+   */
+  protected function hasPublishedCodeOfConduct(): bool {
     $codeOfConduct = $this->getCodeOfConduct();
     return $codeOfConduct &&
       (
