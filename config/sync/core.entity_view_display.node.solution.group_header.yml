@@ -117,6 +117,7 @@ hidden:
   eif_perspective: true
   featured: true
   field_keywords: true
+  field_shared_in: true
   field_state: true
   flag_like: true
   group_moderation: true
