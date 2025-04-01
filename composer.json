@@ -92,7 +92,7 @@
         "drupal/private_message": "4.0.0-alpha4 as 3.0.6",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
-        "drupal/purge_users": "^4.0@RC",
+        "drupal/purge_users": "^4.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
