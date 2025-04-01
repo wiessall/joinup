@@ -2970,13 +2970,6 @@ class JoinupContext extends RawDrupalContext {
       $behat_cleanup_data[$entity_type_id] = reset($ids) ?: 0;
     }
 
-    // Set the media and file entity types to be cleaned up last.
-    foreach (['media', 'file'] as $entity_type_id) {
-      $data = $behat_cleanup_data[$entity_type_id];
-      unset($behat_cleanup_data[$entity_type_id]);
-      $behat_cleanup_data[$entity_type_id] = $data;
-    }
-
     \Drupal::state()->set('behat_cleanup_data', $behat_cleanup_data);
   }
 
