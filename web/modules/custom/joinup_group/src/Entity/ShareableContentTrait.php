@@ -45,13 +45,27 @@ trait ShareableContentTrait {
    * {@inheritdoc}
    */
   public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void {
+    $expires = $this->getShareExpireTimestamp($timestamp);
     $sharedInMeta = $this->getSharingMetaEntity();
     $sharedInMeta->get('field_shared_in')->appendItem([
       'entity' => $group,
-      'timestamp' => $timestamp,
+      'timestamp' => $expires,
     ]);
     $this->invalidateCacheAfterShareOperation($group);
     $sharedInMeta->save();
+  }
+
+  /**
+   * Returns the timestamp when the share expires.
+   *
+   * @param int|null $currentTimestamp
+   *   The current timestamp.
+   *
+   * @return int|null
+   *   The share expire timestamp. Can return NULL if the share is permanent.
+   */
+  protected function getShareExpireTimestamp(?int $currentTimestamp): ?int {
+    return NULL;
   }
 
   /**

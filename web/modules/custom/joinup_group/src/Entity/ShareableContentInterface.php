@@ -56,8 +56,8 @@ interface ShareableContentInterface {
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to share the entity to.
    * @param int|null $timestamp
-   *   The timestamp when the sharing expires, or NULL if the sharing is
-   *   permanent. Defaults to NULL.
+   *   The timestamp of the share action. Use NULL if the share happened just
+   *   now. Defaults to NULL.
    */
   public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void;
 
