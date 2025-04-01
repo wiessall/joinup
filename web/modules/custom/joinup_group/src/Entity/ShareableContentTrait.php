@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
-use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Trait of content items which can be shared between groups.
@@ -49,50 +49,51 @@ trait ShareableContentTrait {
   /**
    * {@inheritdoc}
    */
-  public function unShareFrom(GroupInterface $group): void {
+  public function unShareFrom(array $groups): void {
     $sharedInMeta = $this->getSharingMetaEntity();
     if ($sharedInMeta->isNew()) {
       return;
     }
 
+    $groupIds = array_map(
+      fn (GroupInterface $group): string|int => $group->id(),
+      $groups,
+    );
+
     // Find the delta of the item.
     $fieldItemList = $sharedInMeta->get('field_shared_in');
     $rawValue = $fieldItemList->getValue();
-    $key = key(
+    $keys = array_keys(
       array_filter(
         $rawValue,
-        function (array $itemValue) use ($group): bool {
-          return $itemValue['target_id'] == $group->id();
+        function (array $itemValue) use ($groupIds): bool {
+          return in_array($itemValue['target_id'], $groupIds);
         }
       )
     );
-    if (is_null($key)) {
+    if (empty($keys)) {
       return;
     }
 
-    $fieldItemList->removeItem($key);
+    foreach ($keys as $key) {
+      $fieldItemList->removeItem($key);
+    }
     $sharedInMeta->save();
-    $this->invalidateCacheAfterShareOperation($group);
+    foreach ($groups as $group) {
+      $this->invalidateCacheAfterShareOperation($group);
+    }
   }
 
   /**
-   * Invalidates the cache.
+   * Invalidates the share target's cache and marks it to be re-indexed.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The share target group.
    */
   protected function invalidateCacheAfterShareOperation(GroupInterface $group): void {
-    static $cacheTagsInvalidator;
-    if (!isset($cacheTagsInvalidator)) {
-      $cacheTagsInvalidator = \Drupal::service('cache_tags.invalidator');
-      assert($cacheTagsInvalidator instanceof CacheTagsInvalidatorInterface);
-    }
-
-    // Tags of the meta entity target are invalidated, but the share target
-    // group's tags are invalidated here.
-    // @todo Consider adding bundle class for the shared_in meta entity and
-    //   handle this there.
-    $cacheTagsInvalidator->invalidateTags($group->getCacheTagsToInvalidate());
+    // Tags of the meta entity target are invalidated on save, but the share
+    // target group's tags are invalidated here.
+    Cache::invalidateTags($group->getCacheTagsToInvalidate());
 
     $contentTrackingManager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
     if ($contentTrackingManager instanceof ContentEntityTrackingManager) {
@@ -121,6 +122,8 @@ trait ShareableContentTrait {
    *
    * @return int
    *   The modified timestamp.
+   *
+   * @see \Drupal\Tests\joinup_group\Unit\ShareableContentTraitTest::providerTest()
    */
   protected static function someMonthsLater(int $monthsToAdd, ?int $timestamp = NULL): int {
     if ($monthsToAdd < 1) {
