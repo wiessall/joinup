@@ -29,3 +29,14 @@ Feature: Automated approach for identifying and deleting inactive users
       | As part of our regular maintenance on the Interoperable Europe Portal and in order to ensure the highest level of security on the platform |
       | Should you wish to maintain your account, please click here in order to log in to your account before the described deletion date.         |
       | Should you have any questions or need assistance, please feel free to contact our support team by clicking on the Contact Support form.    |
+    # Use custom configuration for purge_users in cron job.
+    Given I set state "joinup_user_scheduled_purge_date" to 5
+    And I set state "joinup_user_last_purge_run" to 0
+    And I mark all emails as read
+    Then the cache has been cleared
+    And the user "Beta Bunny" should exist
+    And the user "Arion Truth" should exist
+    And the user "Cosmic Admin" should exist
+    And the user "Orion Void" "should not" exist
+    And the user "Mona Lista" "should not" exist
+    And the user "Bunny Truth" "should not" exist
