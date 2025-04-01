@@ -56,6 +56,22 @@ use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 
 /**
+ * Implements hook_entity_view_alter().
+ */
+function joinup_group_entity_view_alter(array &$build, EntityInterface $entity): void {
+  $entityTypeId = $entity->getEntityTypeId();
+  if (
+    !$entity instanceof ShareableContentInterface ||
+    empty($build['#contextual_links'][$entityTypeId])
+  ) {
+    return;
+  }
+  // Force contextual links list to be re-rendered whenever sharing status
+  // changes, to make "Unshare" link appear and disappear as needed.
+  $build['#contextual_links'][$entityTypeId]['metadata']['shared'] = !$entity->getSharedInField()->isEmpty();
+}
+
+/**
  * Implements hook_theme().
  */
 function joinup_group_theme($existing, $type, $theme, $path): array {
