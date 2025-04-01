@@ -31,13 +31,12 @@ negotiation:
       joinup_admin_english: -20
       language-url: -19
       language-user: -18
-      language-browser: -17
       language-selected: -14
     method_weights:
-      language-user-admin: -15
       joinup_admin_english: -20
       language-url: -19
       language-user: -18
       language-browser: -17
       language-session: -16
+      language-user-admin: -15
       language-selected: -14
