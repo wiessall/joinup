@@ -137,6 +137,7 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
             'solution' => 'solution',
           ],
         ])
+        ->setTargetEntityTypeId('node')
         ->setDisplayConfigurable('view', TRUE)
         ->setClass(SharedInFieldItemList::class);
     }
