@@ -11,6 +11,7 @@ use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\node\NodeInterface;
@@ -114,20 +115,18 @@ class UnshareForm extends ShareFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $groups = [];
-    // We can safely loop through these ids, as invalid options are handled
-    // already by Drupal.
-    foreach ($form_state->getValue('groups') as $id => $checked) {
-      if ($checked) {
-        $group = $this->entityTypeManager->getStorage('node')->load($id);
-        assert($group instanceof GroupInterface);
-        $this->removeFromGroup($group);
-        $groups[] = $group->label();
-      }
+    $groupIds = array_keys(array_filter($form_state->getValue('groups')));
+    if (empty($groupIds)) {
+      return;
     }
-
-    if (!empty($groups)) {
-      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
+    $groups = $this->entityTypeManager->getStorage('node')->loadMultiple($groupIds);
+    $groupLabels = array_map(
+      fn (GroupInterface $group): TranslatableMarkup|string => $group->label(),
+      $groups,
+    );
+    $this->removeFromGroups($groups);
+    if (!empty($groupLabels)) {
+      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groupLabels) . '.');
     }
     $form_state->setRedirectUrl($this->entity->toUrl());
   }
@@ -175,8 +174,8 @@ class UnshareForm extends ShareFormBase {
   /**
    * Removes the current node from being shared inside a group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group where to remove the node.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups to remove the node from.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the unshared entity cannot be saved after the group is
@@ -184,11 +183,9 @@ class UnshareForm extends ShareFormBase {
    * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
    *   Thrown when the entity storage is read only.
    */
-  protected function removeFromGroup(GroupInterface $group): void {
+  protected function removeFromGroups(array $groups): void {
     assert($this->entity instanceof ShareableContentInterface);
-    $this->entity->unShareFrom($group);
-
-    $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
+    $this->entity->unShareFrom($groups);
   }
 
 }

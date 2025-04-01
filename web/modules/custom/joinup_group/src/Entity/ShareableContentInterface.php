@@ -42,9 +42,9 @@ interface ShareableContentInterface {
   /**
    * Removes the current node from being shared inside a group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group where to remove the node.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups to remove the content from.
    */
-  public function unShareFrom(GroupInterface $group): void;
+  public function unShareFrom(array $groups): void;
 
 }
