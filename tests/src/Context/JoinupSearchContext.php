@@ -627,9 +627,11 @@ class JoinupSearchContext extends RawDrupalContext {
       // pressing the Enter key. Sending keys is not supported by GoutteDriver,
       // so we cannot fake the pressing of the Enter key. We will simply
       // redirect to the search page.
-      $locate = $this->locatePath('search?keys=' . $keywords);
-      $this->getSession()->visit($locate);
-      $this->assertCurrentUrl($locate);
+      $this->visitPath('/');
+      $page = $this->getSession()->getPage();
+      $page->fillField('keys', $keywords);
+      $page->pressButton("Search site-wide");
+      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords));
     }
   }
 

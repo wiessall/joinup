@@ -76,7 +76,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     // Ensure the ID is unique, using "search-box" as base.
     $form['keys']['#id'] = Html::getUniqueId('search-box');
     $form['#id'] = Html::getUniqueId($form['#id']);
-    $form['actions']['submit']['#access'] = FALSE;
+    $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
   }
 
   if ($view->id() === 'search_oss_catalogue') {
@@ -89,7 +89,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['oss_keys']['#title_display'] = 'invisible';
     $form['oss_keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['oss_keys']['#joinup_parent'] = $form_id . '_' . $view->id();
-    $form['actions']['submit']['#access'] = FALSE;
+    $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
   }
 
   if ($route_name != 'view.search.page_1' && $view->id() === 'search' || $route_name != 'view.search_oss_catalogue.search' && $view->id() === 'search_oss_catalogue') {
