@@ -6,9 +6,11 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DestructableInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
 
 /**
  * Trait of content items which can be shared between groups.
@@ -16,13 +18,9 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 trait ShareableContentTrait {
 
   /**
-   * Returns the meta entity storing the "shares" of the current entity.
-   *
-   * @return \Drupal\meta_entity\Entity\MetaEntityInterface
-   *   Meta entity storing the "shares" of the current entity. Might be a new
-   *   entity if this entity wasn't shared ever.
+   * {@inheritdoc}
    */
-  protected function getSharesMetaEntity(): MetaEntityInterface {
+  public function getSharingMetaEntity(): MetaEntityInterface {
     return MetaEntity::loadOrCreate('shared_in', $this);
   }
 
@@ -30,7 +28,7 @@ trait ShareableContentTrait {
    * {@inheritdoc}
    */
   public function getSharedInField(): EntityReferenceFieldItemListInterface {
-    $field = $this->getSharesMetaEntity()->get('field_shared_in');
+    $field = $this->getSharingMetaEntity()->get('field_shared_in');
     assert($field instanceof EntityReferenceFieldItemListInterface);
     return $field;
   }
@@ -39,7 +37,7 @@ trait ShareableContentTrait {
    * {@inheritdoc}
    */
   public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void {
-    $sharedInMeta = $this->getSharesMetaEntity();
+    $sharedInMeta = $this->getSharingMetaEntity();
     $sharedInMeta->get('field_shared_in')->appendItem([
       'entity' => $group,
       'timestamp' => $timestamp,
@@ -52,7 +50,7 @@ trait ShareableContentTrait {
    * {@inheritdoc}
    */
   public function unShareFrom(GroupInterface $group): void {
-    $sharedInMeta = $this->getSharesMetaEntity();
+    $sharedInMeta = $this->getSharingMetaEntity();
     if ($sharedInMeta->isNew()) {
       return;
     }
@@ -95,6 +93,16 @@ trait ShareableContentTrait {
     // @todo Consider adding bundle class for the shared_in meta entity and
     //   handle this there.
     $cacheTagsInvalidator->invalidateTags($group->getCacheTagsToInvalidate());
+
+    $contentTrackingManager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    if ($contentTrackingManager instanceof ContentEntityTrackingManager) {
+      $contentTrackingManager->trackEntityChange($group);
+    }
+
+    $postRequestIndexing = \Drupal::getContainer()->get('search_api.post_request_indexing', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    if ($postRequestIndexing instanceof DestructableInterface) {
+      $postRequestIndexing->destruct();
+    }
   }
 
   /**
@@ -114,11 +122,12 @@ trait ShareableContentTrait {
    * @return int
    *   The modified timestamp.
    */
-  protected static function someMonthsLater(int $monthsToAdd, int $timestamp): int {
+  protected static function someMonthsLater(int $monthsToAdd, ?int $timestamp = NULL): int {
     if ($monthsToAdd < 1) {
       throw new \LogicException(("Number of months must be higher than 0, got '%s'"));
     }
 
+    $timestamp ??= \Drupal::time()->getCurrentTime();
     $dateTime = new \DateTime("@$timestamp");
 
     $year = (int) $dateTime->format('Y');
@@ -130,7 +139,11 @@ trait ShareableContentTrait {
     $daysInLaterMonth = cal_days_in_month(CAL_GREGORIAN, $laterMonth, $laterYear);
     $laterDay = $dayInMonth > $daysInLaterMonth ? $daysInLaterMonth : $dayInMonth;
 
-    return (new \DateTime("$laterYear-$laterMonth-$laterDay", new \DateTimeZone('UTC')))->getTimestamp();
+    $laterDateTime = new \DateTime(
+      "$laterYear-$laterMonth-$laterDay",
+      new \DateTimeZone('UTC')
+    );
+    return $laterDateTime->getTimestamp();
   }
 
 }
