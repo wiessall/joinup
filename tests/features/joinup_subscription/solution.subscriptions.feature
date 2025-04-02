@@ -205,3 +205,21 @@ Feature: Subscribing to a solution
       |             | Unsubscribe         |
       | author      | Leave this solution |
       | facilitator | Leave this solution |
+
+  @javascript
+  Scenario: Logged users can subscribe to a solution without receiving notifications
+    # Regression test for ISAICP-9624.
+    Given users:
+      | Username    |
+      | Rita Lavish |
+    When I am logged in as "Rita Lavish"
+    And I go to the "Some solution to subscribe" solution
+    Then I should see the button "Subscribe to this solution"
+
+    When I press "Subscribe to this solution"
+    Then a modal should open
+    And I should see the text "You're now an active member of this space and ready to participate fully!" in the "Modal content"
+    And I should see the text "You can update your notification preferences from your profile page at any time." in the "Modal content"
+    And I wait for 1 second
+    And I press "Confirm" in the "Modal buttons" region
+    Then I should see the success message "You have subscribed to this solution and will receive notifications for it. To manage your subscriptions go to My subscriptions in your user menu."
