@@ -1,4 +1,5 @@
-@api @group-i
+@wip @api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
 Feature: Related solution
   As a solution facilitator, I need to be able to relate my solution to other
   solutions and present the related solutions to the users.

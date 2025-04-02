@@ -208,7 +208,8 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @email
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  @wip @email
   Scenario: Email validator after submit a Collection/Solution.
     Given owner content:
       | name               | owner type |
