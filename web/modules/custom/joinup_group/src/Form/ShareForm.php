@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -59,7 +58,7 @@ class ShareForm extends ShareFormBase {
    * @return array
    *   The form structure.
    */
-  public function doBuildForm(array $form, FormStateInterface $form_state, ?ShareableContentInterface $entity = NULL): array {
+  public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
 
     $form['share'] = [
@@ -68,7 +67,9 @@ class ShareForm extends ShareFormBase {
     ];
 
     $groups = $this->getShareableGroups();
-    $notification = $this->entity->getSharingNotification();
+    $notification = $entity instanceof ShareableContentInterface
+      ? $this->entity->getSharingNotification()
+      : NULL;
     if ($groups && $notification) {
       $form['notification'] = [
         '#type' => 'html_tag',
@@ -146,27 +147,6 @@ class ShareForm extends ShareFormBase {
     }
 
     $form_state->setRedirectUrl($this->entity->toUrl());
-  }
-
-  /**
-   * Ajax callback to close the modal.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An ajax response that will close the modal.
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   *   Thrown when the canonical URL cannot be generated for the shared entity.
-   */
-  public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
-    $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand((string) $this->entity->toUrl()->toString()));
-
-    return $response;
   }
 
   /**
