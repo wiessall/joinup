@@ -79,7 +79,6 @@
     'node--event--highlighted',
   ]
 %}
-{{ link('More events'|t, 'base:events', {class: ['more-link']}) }}
 <article{{ attributes.addClass(classes) }}>
   {% if header %}
     <header>
@@ -99,7 +98,7 @@
 
   <footer>
     <a href="{{ url }}" rel="bookmark" class="btn btn-secondary">
-      {{ link_text }}
+      {{ 'Read more'|t }}
       <span class="visually-hidden"> {{ 'about'|t }} ~ ' ' ~ {{ label }}</span>
     </a>
   </footer>
