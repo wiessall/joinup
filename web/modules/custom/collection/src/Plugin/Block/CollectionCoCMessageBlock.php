@@ -57,7 +57,7 @@ class CollectionCoCMessageBlock extends BlockBase {
 
     // Add collection cacheability and ensure the collection is closed.
     CacheableMetadata::createFromObject($collection)->applyTo($build);
-    if (!$collection->isClosed()) {
+    if (!$collection->isClosed() || $collection->isArchived()) {
       return $build;
     }
 
