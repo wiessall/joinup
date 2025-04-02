@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Joinup date tile.
+ *
+ * Available variables:
+ * - start_date: Start date object.
+ * - end_date: End date object in case both dates are in the same month and year.
+ */
+#}
+
+<span class="joinup-date-tile">
+  <span class="joinup-date-tile__day">
+    {{ start_date|date('d') }}
+    {% if end_date %}
+      - {{ end_date|date('d') }}
+    {% endif %}
+  </span>
+  <span class="joinup-date-tile__month">{{ start_date|date('M') }}</span>
+  <span class="joinup-date-tile__year">{{ start_date|date('Y') }}</span>
+</span>

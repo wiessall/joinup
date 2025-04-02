@@ -179,7 +179,7 @@ class MenuHelper implements MenuHelperInterface {
    *   Menu links elements.
    */
   protected function getMenuLinkElements(string $menu): array {
-    $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu);
+    $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu)->onlyEnabledLinks();
     $tree = $this->menuLinkTree->load($menu, $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
