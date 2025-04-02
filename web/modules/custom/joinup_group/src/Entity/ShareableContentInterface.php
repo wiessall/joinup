@@ -13,6 +13,19 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 interface ShareableContentInterface {
 
   /**
+   * List of node bundles which can be shared.
+   *
+   * @const string[]
+   */
+  public const array NODE_BUNDLES = [
+    'discussion',
+    'document',
+    'event',
+    'news',
+    'solution',
+  ];
+
+  /**
    * Returns the "shared in" field item list.
    *
    * @return \Drupal\Core\Field\EntityReferenceFieldItemListInterface

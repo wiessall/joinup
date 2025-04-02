@@ -117,14 +117,7 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
       $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
 
-    $shareableBundles = [
-      'discussion',
-      'document',
-      'event',
-      'news',
-      'solution',
-    ];
-    if (in_array($bundle, $shareableBundles, TRUE)) {
+    if (in_array($bundle, ShareableContentInterface::NODE_BUNDLES, TRUE)) {
       $fields['field_shared_in'] = BaseFieldDefinition::create('joinup_group_reference_with_timestamp')
         ->setLabel(t('Shared on'))
         ->setName('field_shared_in')
