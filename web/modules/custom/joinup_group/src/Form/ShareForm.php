@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -60,7 +59,7 @@ class ShareForm extends ShareFormBase {
    * @return array
    *   The form structure.
    */
-  public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
+  public function doBuildForm(array $form, FormStateInterface $form_state, ?ShareableContentInterface $entity = NULL): array {
     $this->entity = $entity;
 
     $form['share'] = [
@@ -69,6 +68,14 @@ class ShareForm extends ShareFormBase {
     ];
 
     $groups = $this->getShareableGroups();
+    $notification = $this->entity->getSharingNotification();
+    if ($groups && $notification) {
+      $form['notification'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $notification,
+      ];
+    }
     foreach ($groups as $id => $group) {
       $bundle = $group->bundle();
       $form['groups'][$bundle][$id] = [

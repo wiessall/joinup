@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\Entity;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
@@ -16,6 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Trait of content items which can be shared between groups.
  */
 trait ShareableContentTrait {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSharingNotification(): ?TranslatableMarkup {
+    return NULL;
+  }
 
   /**
    * {@inheritdoc}

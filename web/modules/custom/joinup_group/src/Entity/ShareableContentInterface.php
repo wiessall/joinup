@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
@@ -24,6 +25,14 @@ interface ShareableContentInterface {
     'news',
     'solution',
   ];
+
+  /**
+   * Returns the notification to show on the share form.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+   *   The notification to show, or NULL if no extra notice is needed.
+   */
+  public function getSharingNotification(): ?TranslatableMarkup;
 
   /**
    * Returns the "shared in" field item list.
