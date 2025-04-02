@@ -192,6 +192,7 @@ Feature: Sharing content between collections
     When I click the contextual link "Share" in the "Iron throne" tile
     Then a modal should open
     And the following fields should be present "Essos city"
+    And I should see "<notification>"
     When I check "Essos city"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
@@ -219,15 +220,15 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     Examples:
-      | content type | group type |
-      | event        | collection |
-      | event        | solution   |
-      | document     | collection |
-      | document     | solution   |
-      | discussion   | collection |
-      | discussion   | solution   |
-      | news         | collection |
-      | news         | solution   |
+      | content type | group type | notification                                                                                                                                                                                                                            |
+      | event        | collection | Please note: You must be subscribed to the target space to share your content. Your event will be shared on that space for six months. After that, it will be considered obsolete and will be automatically removed from that space.    |
+      | event        | solution   | Please note: You must be subscribed to the target space to share your content. Your event will be shared on that space for six months. After that, it will be considered obsolete and will be automatically removed from that space.    |
+      | document     | collection |                                                                                                                                                                                                                                         |
+      | document     | solution   |                                                                                                                                                                                                                                         |
+      | discussion   | collection |                                                                                                                                                                                                                                         |
+      | discussion   | solution   |                                                                                                                                                                                                                                         |
+      | news         | collection | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
+      | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
   @javascript
   Scenario Outline: Shared content should show visual cues in the groups they are shared into.
