@@ -3,14 +3,18 @@ langcode: en
 status: true
 dependencies:
   module:
+    - config_translation
+    - dashboard
     - l10n_client_ui
     - locale
-    - config_translation
+    - toolbar
 id: translator
 label: Translator
 weight: -3
 is_admin: null
 permissions:
+  - 'access dashboard'
+  - 'access toolbar'
   - 'translate configuration'
   - 'translate interface'
   - 'use localization client ui'
