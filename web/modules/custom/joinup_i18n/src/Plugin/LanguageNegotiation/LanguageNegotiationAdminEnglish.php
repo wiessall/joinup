@@ -14,13 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
  * Identifies admin language from the user preferences.
  */
 #[LanguageNegotiation(
-  id: 'joinup_admin_english',
+  id: self::METHOD_ID,
   name: new TranslatableMarkup('Admin pages always in English'),
   types: [LanguageInterface::TYPE_INTERFACE],
   weight: -10,
   description: new TranslatableMarkup('Enforces English as the default language on all administrative pages for privileged users.')
 )]
 class LanguageNegotiationAdminEnglish extends LanguageNegotiationUserAdmin {
+
+  /**
+   * The language negotiation method id.
+   */
+  const string METHOD_ID = 'joinup_admin_english';
 
   /**
    * {@inheritdoc}
