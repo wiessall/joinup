@@ -9,8 +9,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Routing\AccessAwareRouterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Path processor which construct and reveals nice field view paths.
@@ -32,15 +32,9 @@ readonly class ModalRouteProcessor implements InboundPathProcessorInterface, Out
    */
   protected ?OutboundPathProcessorInterface $aliasPathProcessor;
 
-  /**
-   * The router service.
-   *
-   * We cannot inject it because circular reference.
-   */
-  protected RouterInterface $router;
-
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected AccessAwareRouterInterface $router,
   ) {}
 
   /**
@@ -65,7 +59,7 @@ readonly class ModalRouteProcessor implements InboundPathProcessorInterface, Out
     // Get back raw entity_type_id and entity_id from the canonical path.
     // First, get the route object.
     $hostAliasWithBase = $request->getBasePath() . $hostAlias;
-    $matchedRoute = $this->getRouter()->match($hostAlias);
+    $matchedRoute = $this->router->match($hostAlias);
     $entityCandidates = array_filter(
       $matchedRoute,
       function ($default) use ($hostAliasWithBase) {
@@ -166,16 +160,6 @@ readonly class ModalRouteProcessor implements InboundPathProcessorInterface, Out
     );
 
     return count($pathParts) === 5 && reset($pathParts) === 'modal';
-  }
-
-  /**
-   * Returns the router service.
-   */
-  protected function getRouter(): RouterInterface {
-    if (!isset($this->router)) {
-      return $this->router = \Drupal::service('router.no_access_checks');
-    }
-    return $this->router;
   }
 
 }
