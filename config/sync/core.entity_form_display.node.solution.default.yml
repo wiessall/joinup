@@ -45,49 +45,59 @@ dependencies:
     - text
 third_party_settings:
   field_group:
-    group_general:
-      children:
-        - group_main_fields
-        - group_additional_fields
-      label: General
-      region: content
-      parent_name: ''
-      weight: 0
-      format_type: accordion
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        effect: none
-    group_main_fields:
+    group_about_the_solution:
       children:
         - title
         - short_id
         - abstract
         - description
-        - contact
-        - field_topic
-        - owner
         - solution_type
         - group_moderation
         - content_creation
         - current_workflow_state
         - field_state
         - transition_motivation
-      label: 'Main fields'
+      label: 'About the solution'
       region: content
-      parent_name: group_general
-      weight: 31
-      format_type: accordion_item
+      parent_name: ''
+      weight: 0
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        formatter: open
-        description: ''
+        label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: Next
         required_fields: true
-    group_additional_fields:
+        step_help: ''
+    group_contact_information:
       children:
+        - contact
+        - owner
+      label: 'Contact information'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: Next
+        required_fields: true
+        step_help: ''
+    group_additional_information:
+      children:
+        - field_topic
         - logo
         - documentation
         - spatial_coverage
@@ -99,18 +109,42 @@ third_party_settings:
         - landing_page
         - metrics_page
         - listing_content
-      label: 'Additional fields'
+      label: 'Additional information'
       region: content
-      parent_name: group_general
-      weight: 32
-      format_type: accordion_item
+      parent_name: ''
+      weight: 2
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        formatter: closed
-        description: ''
+        label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: Next
         required_fields: true
+        step_help: ''
+    group_interoperability_informati:
+      children: {  }
+      label: 'Interoperability information'
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: Next
+        required_fields: true
+        step_help: ''
 id: node.solution.default
 targetEntityType: node
 bundle: solution
@@ -144,13 +178,13 @@ content:
     third_party_settings: {  }
   content_creation:
     type: options_buttons
-    weight: 9
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 10
+    weight: 8
     region: content
     settings:
       title: 'Current workflow state'
@@ -159,7 +193,7 @@ content:
     third_party_settings: {  }
   description:
     type: text_textarea
-    weight: 3
+    weight: 4
     region: content
     settings:
       rows: 5
@@ -167,7 +201,7 @@ content:
     third_party_settings: {  }
   documentation:
     type: file_url_generic
-    weight: 1
+    weight: 7
     region: content
     settings:
       progress_indicator: throbber
@@ -183,7 +217,7 @@ content:
     third_party_settings: {  }
   field_keywords:
     type: string_textfield
-    weight: 3
+    weight: 9
     region: content
     settings:
       size: 60
@@ -191,7 +225,7 @@ content:
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 16
+    weight: 9
     region: content
     settings:
       use_transition_label: 1
@@ -204,7 +238,7 @@ content:
     third_party_settings: {  }
   group_moderation:
     type: boolean_checkbox
-    weight: 8
+    weight: 6
     region: content
     settings:
       display_label: false
@@ -213,7 +247,7 @@ content:
         switch: false
   landing_page:
     type: link_default
-    weight: 8
+    weight: 14
     region: content
     settings:
       placeholder_url: ''
@@ -221,27 +255,27 @@ content:
     third_party_settings: {  }
   language:
     type: options_select
-    weight: 7
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   list_related_entities:
     type: boolean_checkbox
-    weight: 5
+    weight: 11
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   listing_content:
     type: search_api_field_default
-    weight: 10
+    weight: 16
     region: content
     settings:
       query_builder: true
     third_party_settings: {  }
   logo:
     type: image_library_widget
-    weight: 0
+    weight: 6
     region: content
     settings:
       progress_indicator: throbber
@@ -251,7 +285,7 @@ content:
     third_party_settings: {  }
   metrics_page:
     type: link_default
-    weight: 9
+    weight: 15
     region: content
     settings:
       placeholder_url: ''
@@ -259,7 +293,7 @@ content:
     third_party_settings: {  }
   owner:
     type: inline_entity_form_complex
-    weight: 6
+    weight: 5
     region: content
     settings:
       form_mode: inline
@@ -267,7 +301,7 @@ content:
       label_singular: owner
       label_plural: owners
       allow_new: true
-      allow_existing: true
+      allow_existing: false
       match_operator: CONTAINS
       allow_duplicate: false
       collapsible: false
@@ -277,13 +311,13 @@ content:
     third_party_settings: {  }
   process_status:
     type: options_select
-    weight: 6
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   related_solutions:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 10
     region: content
     settings:
       match_operator: CONTAINS
@@ -300,19 +334,19 @@ content:
       placeholder: 'Minimum 4 characters required.'
     third_party_settings: {  }
   simple_sitemap:
-    weight: 10
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 7
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 8
     region: content
     settings:
       match_operator: CONTAINS
@@ -329,7 +363,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 17
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
