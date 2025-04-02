@@ -4,10 +4,13 @@ status: true
 dependencies:
   module:
     - config_translation
+    - joinup_i18n
+    - system
 id: translator
 label: Translator
 weight: -3
 is_admin: null
 permissions:
+  - 'bypass enforced english'
   - 'translate configuration'
   - 'view the administration theme'
