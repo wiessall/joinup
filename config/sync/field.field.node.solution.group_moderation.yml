@@ -5,11 +5,6 @@ dependencies:
   config:
     - field.storage.node.group_moderation
     - node.type.solution
-  module:
-    - tmgmt_content
-third_party_settings:
-  tmgmt_content:
-    excluded: false
 id: node.solution.group_moderation
 field_name: group_moderation
 entity_type: node
@@ -17,10 +12,10 @@ bundle: solution
 label: Moderation
 description: 'If checked, community content items (news, events, discussions and documents) are pre-moderated: they have to be validated by the moderators of the solution before they will be published.'
 required: false
-translatable: false
+translatable: true
 default_value:
   -
-    value: 1
+    value: 0
 default_value_callback: ''
 settings:
   on_label: Moderated

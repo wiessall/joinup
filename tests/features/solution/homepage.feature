@@ -42,7 +42,7 @@ Feature: Solution homepage
       | Release date                                      |
       | 21/12/2022                                        |
       | Only facilitators and authors can create content. |
-      | Moderated                                         |
+      | Non moderated                                     |
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:

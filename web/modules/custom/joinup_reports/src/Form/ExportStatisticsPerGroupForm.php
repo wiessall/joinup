@@ -41,6 +41,13 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getCacheTagName(): string {
+    return 'group_administration_list';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getRedirectRouteName(): string {
     return 'joinup_reports.statistics_per_group';
   }

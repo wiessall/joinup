@@ -33,6 +33,12 @@ Feature: User authentication
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
+      | admin/reporting/distribution-downloads              |
+      | admin/reporting/export-user-list                    |
+      | admin/reporting/group-administrators/export         |
+      | admin/reporting/solutions-by-licences               |
+      | admin/reporting/solutions-by-type                   |
+      | admin/reporting/subscribers-report                  |
       | admin/structure                                     |
       | admin/structure/compatibility-document              |
       | admin/structure/compatibility-document/display      |
@@ -75,6 +81,16 @@ Feature: User authentication
       | propose/solution                                    |
       | user/subscriptions                                  |
 
+  Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
+    Given I am not logged in
+    When I go to "<path>"
+    Then the response status code should be 403
+
+    Examples:
+      | path                                        |
+      | admin/reporting/distribution-downloads/csv  |
+      | admin/reporting/subscribers-report/download |
+
   Scenario Outline: Authenticated user can access pages they are authorized to
     Given I am logged in as a user with the "authenticated" role
     Then I visit "<path>"
@@ -106,6 +122,12 @@ Feature: User authentication
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
+      | admin/reporting/distribution-downloads              |
+      | admin/reporting/export-user-list                    |
+      | admin/reporting/group-administrators/export         |
+      | admin/reporting/solutions-by-licences               |
+      | admin/reporting/solutions-by-type                   |
+      | admin/reporting/subscribers-report                  |
       | admin/structure                                     |
       | admin/structure/compatibility-document              |
       | admin/structure/compatibility-document/display      |
@@ -153,6 +175,8 @@ Feature: User authentication
 
     Examples:
       | path                                        |
+      | admin/reporting/distribution-downloads/csv  |
+      | admin/reporting/subscribers-report/download |
       | admin/structure/webform                     |
       | admin/structure/webform/submissions/manage  |
 
@@ -168,6 +192,14 @@ Feature: User authentication
       | admin/legal-notice                                            |
       | admin/legal-notice/add                                        |
       | admin/people                                                  |
+      | admin/reporting/distribution-downloads                        |
+      | admin/reporting/distribution-downloads/csv                    |
+      | admin/reporting/export-user-list                              |
+      | admin/reporting/group-administrators/export                   |
+      | admin/reporting/messages-overview                             |
+      | admin/reporting/solutions-by-licences                         |
+      | admin/reporting/solutions-by-type                             |
+      | admin/reporting/subscribers-report                            |
       | admin/structure/compatibility-document                        |
       | admin/structure/webform                                       |
       | admin/structure/webform/manage/assessment/results/submissions |
@@ -248,6 +280,8 @@ Feature: User authentication
       | admin/content/media                        |
       | admin/legal-notice                         |
       | admin/legal-notice/add                     |
+      | admin/reporting/distribution-downloads     |
+      | admin/reporting/distribution-downloads/csv |
       | admin/structure                            |
       | node/add                                   |
       | node/add/collection                        |

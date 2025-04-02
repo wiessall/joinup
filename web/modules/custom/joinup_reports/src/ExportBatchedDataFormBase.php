@@ -40,7 +40,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
       '#type' => 'container',
     ];
 
-    if ($data = $this->cacheStorage->get($this->getFormId())) {
+    if ($data = $this->cacheStorage->get($this->getCacheTagName())) {
       $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
         ':date' => $this->dateFormatter->format((int) $data->created),
         ':expire' => $this->dateFormatter->format((int) $data->expire),
@@ -107,7 +107,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
     // and the decimal separator is the same symbol.
     $csv_encoder = new CsvEncoder(';');
     $data = $csv_encoder->encode(array_values($results['data']), 'csv');
-    $this->cacheStorage->set($this->getFormId(), $data, $expire);
+    $this->cacheStorage->set($this->getCacheTagName(), $data, $expire);
     $this->messenger()->addMessage('Data have been rebuilt.');
 
     // Handle the file here.
@@ -126,7 +126,15 @@ abstract class ExportBatchedDataFormBase extends FormBase {
   abstract protected function generateData(array &$form, FormStateInterface $form_state): void;
 
   /**
-   * Returns the route name for the report download.
+   * Returns the name of the cache tag that is used to store the data.
+   *
+   * @return string
+   *   The cache tag name.
+   */
+  abstract protected function getCacheTagName(): string;
+
+  /**
+   * Returns the routename for the report download.
    *
    * @return string
    *   The route name.
