@@ -1,14 +1,14 @@
-user_never_lastlogin_value: 3
+user_never_lastlogin_value: 1
 user_never_lastlogin_period: year
-user_lastlogin_value: 3
+user_lastlogin_value: 0
 user_lastlogin_period: year
-user_inactive_value: 1
+user_inactive_value: 0
 user_inactive_period: year
-user_blocked_value: 1
+user_blocked_value: 3
 user_blocked_period: year
 enabled_never_loggedin_users: true
-enabled_loggedin_users: true
-enabled_inactive_users: true
+enabled_loggedin_users: false
+enabled_inactive_users: false
 enabled_blocked_users: true
 purge_included_users_roles:
   authenticated: authenticated
