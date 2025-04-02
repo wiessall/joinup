@@ -1,0 +1,5 @@
+# Schema for the configuration files of the Joinup event module.
+
+field.formatter.settings.date_tile:
+  type: field.formatter.settings.daterange_plain
+  label: 'Date tile default display format settings'
