@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -130,6 +133,27 @@ abstract class ShareFormBase extends FormBase {
    */
   protected function isAjaxForm(): bool {
     return $this->getRequest()->query->has(FormBuilderInterface::AJAX_FORM_REQUEST);
+  }
+
+  /**
+   * Ajax callback to close the modal.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An ajax response that will close the modal.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   *   Thrown when there is no destination and the canonical URL cannot be
+   *   generated for the shared entity.
+   */
+  public function ajaxSubmit(): AjaxResponse {
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseModalDialogCommand());
+    $destination = (string) $this->getRequest()->query->get('destination');
+    $response->addCommand(new RedirectCommand(
+      $destination ?: (string) $this->entity->toUrl()->toString()
+    ));
+
+    return $response;
   }
 
 }
