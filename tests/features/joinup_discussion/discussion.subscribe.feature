@@ -6,8 +6,8 @@ Feature: Following discussions
 
   Background:
     Given collection content:
-      | title          | state     | group_moderation |
-      | Dairy products | published | no               |
+      | title          | state     |
+      | Dairy products | published |
     And user:
       | Username | Dr. Hans Zarkov  |
       | E-mail   | hans@example.com |
@@ -79,18 +79,18 @@ Feature: Following discussions
     # Subscribers are receiving the notifications.
     And the following email should have been sent:
       | recipient_mail | dale@example.com                                                                              |
-      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"   |
+      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"                        |
       | body           | Flash Gordon has posted a comment on discussion "Rare Butter" in "Dairy products" collection. |
     # The user 'debater' is also a discussion subscriber but because he's the
     # author of the comment, he will not receive the notification.
     And the following email should not have been sent:
       | recipient_mail | flash@example.com                                                                             |
-      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"   |
+      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"                        |
       | body           | Flash Gordon has posted a comment on discussion "Rare Butter" in "Dairy products" collection. |
     # Discussion author is receiving the notifications too.
     And the following email should have been sent:
       | recipient_mail | hans@example.com                                                                              |
-      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"   |
+      | subject        | Interoperable Europe Portal: User Flash Gordon posted a comment in discussion "Rare Butter"                        |
       | body           | Flash Gordon has posted a comment on discussion "Rare Butter" in "Dairy products" collection. |
 
     # No E-mail notification is sent when the discussion is updated but no
@@ -107,18 +107,18 @@ Feature: Following discussions
     And I fill in "Content" with "The old content was wrong."
     And I press "Update"
     Then the following email should have been sent:
-      | recipient_mail | dale@example.com                                                                                       |
+      | recipient_mail | dale@example.com                                                                  |
       | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was updated in the space of "Dairy products" |
-      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.                           |
+      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.      |
     And the following email should have been sent:
-      | recipient_mail | flash@example.com                                                                                      |
+      | recipient_mail | flash@example.com                                                                 |
       | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was updated in the space of "Dairy products" |
-      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.                           |
+      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.      |
     # The author of the discussion update doesn't receive any notification.
     But the following email should not have been sent:
-      | recipient_mail | hans@example.com                                                                                       |
+      | recipient_mail | hans@example.com                                                                  |
       | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was updated in the space of "Dairy products" |
-      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.                           |
+      | body           | The discussion "Rare Butter" was updated in the "Dairy products" collection.      |
     # Check that no other mails have been unexpectedly sent.
     Then 2 e-mails should have been sent
 
@@ -145,7 +145,7 @@ Feature: Following discussions
     # sent to the content author.
     But the following email should have been sent:
       | recipient_mail | hans@example.com                                                          |
-      | subject        | Interoperable Europe Portal: Content has been updated                     |
+      | subject        | Interoperable Europe Portal: Content has been updated                                          |
       | body           | the Moderator, has requested you to modify the discussion - "Rare Butter" |
     And 1 e-mail should have been sent
 
@@ -154,21 +154,21 @@ Feature: Following discussions
     And I press "Delete"
 
     Then the following email should have been sent:
-      | recipient_mail | dale@example.com                                                                                       |
-      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | dale@example.com                                                                                     |
+      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection. |
     And the following email should have been sent:
-      | recipient_mail | flash@example.com                                                                                      |
-      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | flash@example.com                                                                                    |
+      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection. |
     And the following email should have been sent:
-      | recipient_mail | hans@example.com                                                                                       |
-      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | hans@example.com                                                                                     |
+      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection. |
     And the following email should not have been sent:
-      | recipient_mail | ming@example.com                                                                                       |
-      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | ming@example.com                                                                                     |
+      | subject        | Interoperable Europe Portal: The discussion "Rare Butter" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare Butter" was deleted from the "Dairy products" collection. |
 
     # Now check the notifications sent for a published discussion.
     Given discussion content:
@@ -185,23 +185,23 @@ Feature: Following discussions
     And I press "Delete"
 
     Then the following email should have been sent:
-      | recipient_mail | dale@example.com                                                                                     |
-      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | dale@example.com                                                                                   |
+      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection. |
     # Discussion author is receiving the notifications too.
     And the following email should have been sent:
-      | recipient_mail | hans@example.com                                                                                     |
-      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | hans@example.com                                                                                   |
+      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection. |
     # The user 'facilitator' is also a discussion subscriber but because she's
     # the person who has deleted the comment, she will not receive the
     # notification.
     But the following email should not have been sent:
-      | recipient_mail | ming@example.com                                                                                     |
-      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | ming@example.com                                                                                   |
+      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection. |
     # Flash Gordon is not subscribed. He should not retrieve the message.
     And the following email should not have been sent:
-      | recipient_mail | flash@example.com                                                                                    |
-      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products" |
-      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection.   |
+      | recipient_mail | flash@example.com                                                                                  |
+      | subject        | Interoperable Europe Portal: The discussion "Rare feta" was deleted in the space of "Dairy products"                    |
+      | body           | for your information, the discussion "Rare feta" was deleted from the "Dairy products" collection. |

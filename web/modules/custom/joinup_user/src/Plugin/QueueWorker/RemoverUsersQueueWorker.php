@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user\Plugin\QueueWorker;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
@@ -22,6 +23,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   cron: ['time' => 30],
 )]
 class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The node storage class.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected EntityStorageInterface $nodeStorage;
+
+  /**
+   * The comment storage class.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected EntityStorageInterface $commentStorage;
 
   public function __construct(
     array $configuration,
@@ -56,18 +71,14 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
     elseif (!empty($data['name'])) {
       $account = user_load_by_name($data['name']);
     }
-    else {
-      return;
-    }
 
     // Make sure account wasn't deleted in the meantime.
     if ($account instanceof UserInterface) {
-      _user_cancel(['user_cancel_notify' => TRUE], $account, 'user_cancel_delete');
-
-      // Commit changes.
-      $this->userDeleted->destruct();
+      user_cancel(['user_cancel_notify' => TRUE], $account->id(), 'user_cancel_delete');
     }
 
+    // Commit changes.
+    $this->userDeleted->destruct();
   }
 
 }
