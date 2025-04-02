@@ -1,12 +1,20 @@
-uuid: e007cf37-db09-4af7-9734-0bb4e67a9c41
+uuid: 2b0fa882-2509-4841-9d5a-efd942ebd0d9
 langcode: en
 status: true
 dependencies:
   module:
     - config_translation
+    - dashboard
+    - l10n_client_ui
+    - locale
+    - toolbar
 id: translator
 label: Translator
 weight: -3
 is_admin: null
 permissions:
+  - 'access dashboard'
+  - 'access toolbar'
   - 'translate configuration'
+  - 'translate interface'
+  - 'use localization client ui'
