@@ -235,32 +235,6 @@ trait NameMappingsTrait {
   }
 
   /**
-   * Returns field mappings for a given entity queue type.
-   *
-   * @param string $type
-   *   The entity queue type.
-   *
-   * @return array
-   *   Field mappings.
-   */
-  protected function getEntityQueueFieldMappings(string $type): array {
-    $aliases = [
-      'highlighted_event' => [
-        'header text' => 'header',
-        'link text' => 'link_text',
-        'external url' => 'external_url',
-        'link to external page' => 'link_to_external_url',
-      ],
-    ];
-
-    if (!isset($aliases[$type])) {
-      throw new \InvalidArgumentException("Invalid entity queue type, '$type' not found.");
-    }
-
-    return $aliases[$type];
-  }
-
-  /**
    * Returns information about the invitations related to the given entity type.
    *
    * @param string $type
