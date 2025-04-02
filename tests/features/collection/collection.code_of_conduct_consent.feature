@@ -279,3 +279,8 @@ Feature:
       | Add event      |
       | Add news       |
       | Add solution   |
+
+    # When a collection is archived, the CoC message should not show.
+    And the workflow state of the "Knowledge Hive" content is changed to "archived"
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
