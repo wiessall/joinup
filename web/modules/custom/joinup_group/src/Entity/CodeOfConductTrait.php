@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\og\OgMembershipInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
-use Drupal\og\OgMembershipInterface;
 
 /**
  * Reusable methods for group bundles related to memberships and CoC.
@@ -16,13 +17,18 @@ trait CodeOfConductTrait {
   /**
    * {@inheritdoc}
    */
-  public function revokeFullMemberships(): void {
+  public function revokeFullMemberships(bool $skipAccepted = FALSE): void {
     $ogMembershipStorage = $this->getOgMembershipStorage();
     $query = $ogMembershipStorage
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', $this->getEntityTypeId())
-      ->condition('entity_id', $this->id());
+      ->condition('entity_id', $this->id())
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+    if (!$skipAccepted && $membershipsWithAcceptedCoc = $this->getFullMembershipsWithAcceptedCoc()) {
+      $query->condition('id', $membershipsWithAcceptedCoc, 'NOT IN');
+    }
+
     $ids = $query->execute();
     if (empty($ids)) {
       return;
@@ -34,7 +40,32 @@ trait CodeOfConductTrait {
       $this->revokeBatchOfMemberships($batch);
     }
 
-    $this->invalidateMembershipsAndSelf($idsToInvalidate);
+    $this->invalidateMemberships($idsToInvalidate);
+  }
+
+  /**
+   * Returns the membership IDs of full memberships with accepted CoC.
+   *
+   * @return array
+   *   The membership IDs of full memberships with accepted CoC.
+   */
+  protected function getFullMembershipsWithAcceptedCoc(): array {
+    assert($this instanceof CollectionInterface);
+    $page = $this->getCodeOfConduct();
+    if ($page === NULL) {
+      return [];
+    }
+
+    $query = $this->getOgMembershipStorage()
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('entity_type', $this->getEntityTypeId())
+      ->condition('entity_id', $this->id())
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('coc_document.target_id', $page->id())
+      ->condition('coc_document.target_revision_id', $page->getRevisionId());
+
+    return $query->execute();
   }
 
   /**
@@ -55,7 +86,7 @@ trait CodeOfConductTrait {
    */
   public function restoreFullMemberships(): void {
     // Clean up any existing full memberships to avoid duplicates.
-    $this->revokeFullMemberships();
+    $this->revokeFullMemberships(TRUE);
     $database = \Drupal::database();
     $query = $database->select('og_membership', 'ogm');
     $query->leftJoin('og_membership__roles', 'ogmr', 'ogm.id = ogmr.entity_id');
@@ -95,7 +126,7 @@ trait CodeOfConductTrait {
       $query->values($insertRow);
     }
     $query->execute();
-    $this->invalidateMembershipsAndSelf(array_keys($insertRows));
+    $this->invalidateMemberships(array_keys($insertRows));
   }
 
   /**
@@ -112,13 +143,9 @@ trait CodeOfConductTrait {
    * @param int[] $membershipIds
    *   The membership IDs to invalidate.
    */
-  protected function invalidateMembershipsAndSelf(array $membershipIds): void {
-    $this->entityTypeManager()
-      ->getStorage('og_membership')
-      ->resetCache($membershipIds);
-
-    $this->entityTypeManager()->getStorage('node')
-      ->resetCache([$this->id()]);
+  protected function invalidateMemberships(array $membershipIds): void {
+    $ogMembershipStorage = $this->getOgMembershipStorage();
+    $ogMembershipStorage->resetCache($membershipIds);
   }
 
   /**

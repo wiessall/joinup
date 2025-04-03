@@ -378,8 +378,11 @@ interface GroupInterface extends
 
   /**
    * Revokes the full membership of all users in the group.
+   *
+   * @param bool $skipAccepted
+   *   (optional) If TRUE, skip the memberships that have accepted the CoC.
    */
-  public function revokeFullMemberships(): void;
+  public function revokeFullMemberships(bool $skipAccepted = FALSE): void;
 
   /**
    * Restores the full membership of all users in the group.
