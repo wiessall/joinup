@@ -140,32 +140,20 @@ class Collection extends Node implements CollectionInterface {
     if (!$update || !$this->isPublished() || !$this->hasPublishedCodeOfConduct()) {
       return;
     }
-
-    $original = $this->original;
-    if (empty($original)) {
-      // We need to retrieve the last published version to compare with the
-      // current one.
-      $nodeStorage = $this->entityTypeManager()->getStorage('node');
-      foreach (array_reverse($nodeStorage->revisionIds($this)) as $revisionId) {
-        $revision = $nodeStorage->loadRevision($revisionId);
-        if ($revision->isPublished()) {
-          $original = $revision;
-          break;
-        }
-      }
-    }
-
-    if ($original === NULL && $this->isClosed() || ($original !== NULL && !$original->isClosed() && $this->isClosed())) {
+    $originalWasClosed = $this->wasLastPublishedRevisionClosed();
+    if ($originalWasClosed === NULL && $this->isClosed() || ($originalWasClosed === FALSE && $this->isClosed())) {
       // Either there is no previous published version and the current version
       // is a closed group, or the previous published version was an open group
       // and the current version is a closed group.
       $this->revokeFullMemberships();
+      \Drupal::messenger()->addWarning($this->t('All full memberships have been revoked. You need to accept the Code of Conduct to become a full member again.'));
     }
-    elseif ($original === NULL && !$this->isClosed() || ($original !== NULL && $original->isClosed() && !$this->isClosed())) {
+    elseif ($originalWasClosed === NULL && !$this->isClosed() || ($originalWasClosed && !$this->isClosed())) {
       // Either there is no previous published version and the current version
       // is an open group, or the previous published version was a closed group
       // and the current version is an open group.
       $this->restoreFullMemberships();
+      \Drupal::messenger()->addWarning($this->t('All full memberships have been restored.'));
     }
   }
 
@@ -174,6 +162,29 @@ class Collection extends Node implements CollectionInterface {
    */
   public function isClosed(): bool {
     return (bool) $this->getMainPropertyValue('closed_group');
+  }
+
+  /**
+   * Checks if the last revision was closed.
+   *
+   * @return bool|null
+   *   TRUE if the last revision was closed, FALSE if it was not closed, or
+   *   NULL if there is no previous published revision.
+   */
+  protected function wasLastPublishedRevisionClosed(): bool|null {
+    $database = \Drupal::database();
+    $query = $database->select('node_field_revision', 'nr');
+    $query->join('node_revision__closed_group', 'nrcg', 'nr.vid = nrcg.revision_id');
+    $query->fields('nrcg', ['closed_group_value'])
+      ->condition('nr.nid', $this->id())
+      ->condition('nr.status', 1);
+    if ($currentVid = $this->getRevisionId()) {
+      $query->condition('nr.vid', $currentVid, '<');
+    }
+    $query->orderBy('nr.vid', 'DESC')
+      ->range(0, 1);
+    $result = $query->execute()->fetchField();
+    return is_numeric($result) ? (bool) $result : NULL;
   }
 
   /**

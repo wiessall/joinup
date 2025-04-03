@@ -75,7 +75,7 @@ class CollectionCoCMessageBlock extends BlockBase {
   public function getCacheContexts(): array {
     // Ignore cache contexts from context_definition, we need to vary per
     // og_group_context, and user.permissions (part of required_cache_contexts).
-    return ['og_group_context', 'user.permissions'];
+    return ['og_group_context', 'og_role', 'user.permissions'];
   }
 
   /**
