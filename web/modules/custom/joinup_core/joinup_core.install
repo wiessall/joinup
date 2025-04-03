@@ -34,51 +34,47 @@ function joinup_core_requirements($phase): array {
  */
 function joinup_core_update_200400(): void {
   $database = \Drupal::database();
-  $query = $database->select('paragraph__content_listing', 'pcl');
-  $query->addField('pcl', 'entity_id', 'paragraph_id');
-  $query->addField('pcl', 'content_listing_value', 'content_listing_value');
-  $query->join('rdf_sync_uri', 'rsu', 'pcl.content_listing_value LIKE CONCAT(\'%\', rsu.uri, \'%\')');
-  $query->addField('rsu', 'entity_id', 'topic_id');
-  $query->addField('rsu', 'uri');
-  $query->addField('rsu', 'bundle');
-  $query->condition('rsu.bundle', 'topic', '=');
-  $result = $query->execute()->fetchAllAssoc('paragraph_id');
+  $messenger = \Drupal::messenger();
+
+  $query = $database->select('paragraph__content_listing', 'p')
+    ->fields('p', ['entity_id', 'content_listing_value'])
+    ->condition('p.content_listing_value', '%topic|http%', 'LIKE');
+  $results = $query->execute()->fetchAll();
+
   $rowsUpdated = 0;
-  foreach ($result as $row) {
+
+  foreach ($results as $row) {
     $data = unserialize($row->content_listing_value, ['allowed_classes' => FALSE]);
-    if (isset($data['query_presets']) && preg_match_all('/http[^,|]+[,\|]/', $data['query_presets'], $matches)) {
-      if (count($matches[0]) > 1) {
-        foreach ($matches[0] as $uri) {
-          $uri = substr($uri, 0, -1);
-          $uriQuery = $database->select('rdf_sync_uri', 'rsu');
-          $uriQuery->addField('rsu', 'entity_id', 'topic_id');
-          $uriQuery->condition('rsu.uri', $uri, '=');
-          $result = $uriQuery->execute()->fetchCol();
-          if ($result) {
-            $topicId = reset($result);
-            $topic = Term::load($topicId);
-            $data['query_presets'] = str_replace($uri, $topic->getName(), $data['query_presets']);
-          }
+
+    if (preg_match_all('/http:\/\/[^,\s|\r]+/', $data['query_presets'], $matches)) {
+      foreach ($matches[0] as $uri) {
+        $query = $database->select('rdf_sync_uri', 'rsu')
+          ->fields('rsu', ['entity_id'])
+          ->condition('rsu.uri', $uri, '=')
+          ->range(0, 1);
+        $result = $query->execute()->fetchAll();
+        $term = reset($result);
+        if (!empty($term->entity_id)) {
+          $topic = Term::load($term->entity_id);
+          $data['query_presets'] = str_replace($uri, $topic->getName(), $data['query_presets']);
+        }
+        else {
+          $data['query_presets'] = str_replace('topic|' . $uri, '', $data['query_presets']);
         }
       }
-      else {
-        $topic = Term::load($row->topic_id);
-        $data['query_presets'] = str_replace($row->uri, $topic->getName(), $data['query_presets']);
-      }
+
       $serializedData = serialize($data);
 
       $database->update('paragraph__content_listing')
         ->fields(['content_listing_value' => $serializedData])
-        ->condition('entity_id', $row->paragraph_id)
+        ->condition('entity_id', $row->entity_id)
         ->execute();
-
       $rowsUpdated++;
-      \Drupal::messenger()
-        ->addMessage("Entity ID: {$row->paragraph_id} was updated");
+      $messenger->addMessage("Entity ID: {$row->entity_id} was updated");
     }
   }
-  \Drupal::messenger()
-    ->addMessage(t('@count rows updated in paragraphs__content_listing.', ['@count' => $rowsUpdated]));
+
+  $messenger->addMessage(t('@count rows updated in paragraph__content_listing.', ['@count' => $rowsUpdated]));
 }
 
 /**
