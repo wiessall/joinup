@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\og\OgMembershipInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\og\OgMembershipInterface;
 
 /**
  * Reusable methods for group bundles related to memberships and CoC.
