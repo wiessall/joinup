@@ -240,10 +240,11 @@ Feature: Add comments
     But I should not see the text "Log in or register to post comments"
 
     Examples:
-      | content type | title           | state     |
-      | news         | Scandalous news | published |
-      | discussion   | Is gossip bad?  | published |
-      | document     | Wikileaks       | published |
+      | content type | title             | state     |
+      | news         | Scandalous news   | published |
+      | discussion   | Is gossip bad?    | published |
+      | document     | Wikileaks         | published |
+      | event        | Quantum Echo Fest | published |
 
   Scenario Outline: Comments are disallowed for anonymous users.
 
