@@ -8,8 +8,8 @@ Feature: Automated approach for identifying and deleting inactive users
       | Pixel Panda    | Moderator       | pixel.panda@example.com    | -4 years    | -5 years    | -4 years    | active  |
       | Licence Queen  | Licence manager | licence.queen@example.com  | -5 months   | -1 year     | -1 year     | active  |
       | Dev Phoenix    | Developer       | dev.phoenix@example.com    | -6 months   | -2 years    | -2 years    | active  |
-      | Beta Bunny     |                 | beta.bunny@example.com     | -8 months   | -1 year     | -8 months   | blocked |
-      | Orion Void     |                 | orion.void@example.com     | -2 years    | -2 years    | -2 years    | blocked |
+      | Beta Bunny     |                 | beta.bunny@example.com     | -8 months   | -8 months   | -8 months   | blocked |
+      | Orion Void     |                 | orion.void@example.com     | -4 years    | -4 years    | -4 years    | blocked |
       | Arion Truth    |                 | arion.truth@example.com    | -2 years    | -2 years    | -2 years    | active  |
       | Mona Lista     |                 | mona.lista@example.com     | -5 years    | -5 years    | -4 years    | active  |
       | Bunny Truth    |                 | bunny.truth@example.com    | 0           | -4 years    | 0           | active  |
@@ -21,7 +21,7 @@ Feature: Automated approach for identifying and deleting inactive users
     And the "purge_users" queue is empty
     And I run the "notification_users" queue worker
     Then 2 e-mails should have been sent
-    And the email sent to "Arion Truth" with subject "Important Notice - Action Required to Retain Your Interoperable Europe Portal Account" contains the following lines of text:
+    And the email sent to "Orion Void" with subject "Important Notice - Action Required to Retain Your Interoperable Europe Portal Account" contains the following lines of text:
       | As part of our regular maintenance on the Interoperable Europe Portal and in order to ensure the highest level of security on the platform |
       | Should you wish to maintain your account, please click here in order to log in to your account before the described deletion date.         |
       | Should you have any questions or need assistance, please feel free to contact our support team by clicking on the Contact Support form.    |
@@ -34,9 +34,9 @@ Feature: Automated approach for identifying and deleting inactive users
     And I set state "joinup_user_last_purge_run" to 0
     And I mark all emails as read
     And I run cron
-    And the "Beta Bunny" user exist
     And the "Arion Truth" user exist
     And the "Cosmic Admin" user exist
-    And the "Mona Lista" user doesn't exist
+    And the "Mona Lista" user exist
+    And the "Beta Bunny" user doesn't exist
     And the "Bunny Truth" user doesn't exist
     And the "Orion Void" user doesn't exist
