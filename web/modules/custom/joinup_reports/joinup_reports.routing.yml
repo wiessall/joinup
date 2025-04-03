@@ -1,5 +1,5 @@
 joinup_reports.group_administrators_report:
-  path: '/admin/reporting/group-administrators/export'
+  path: '/admin/reporting/group-administrators'
   defaults:
     _form: '\Drupal\joinup_reports\Form\ExportGroupAdministratorsForm'
     _title: 'Group administrators and facilitators'
