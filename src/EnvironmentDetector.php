@@ -32,7 +32,7 @@ class EnvironmentDetector {
    * @return bool
    *   TRUE if running inside a GitLab pipeline, FALSE otherwise.
    */
-  protected static function isGitlabPipeline(): bool {
+  public static function isGitlabPipeline(): bool {
     return getenv('GITLAB_CI') === 'true' && getenv('TOOLKIT_PROJECT_ID') === 'digit-joinup';
   }
 
