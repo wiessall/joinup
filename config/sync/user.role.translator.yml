@@ -18,3 +18,4 @@ permissions:
   - 'translate configuration'
   - 'translate interface'
   - 'use localization client ui'
+  - 'view the administration theme'

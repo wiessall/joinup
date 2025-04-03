@@ -5,54 +5,53 @@ session:
 url:
   source: path_prefix
   prefixes:
-    en: ''
-    de: de
-    fr: fr
-    es: es
-    it: it
-    et: et
-    da: da
+    bg: bg
+    hr: hr
     cs: cs
+    da: da
     nl: nl
-    sl: sl
-    el: el
-    '': null
-    pt: pt
+    en: ''
+    et: et
     fi: fi
-    sv: sv
+    fr: fr
+    de: de
+    el: el
     hu: hu
+    ga: ga
+    it: it
     lv: lv
     lt: lt
     mt: mt
     pl: pl
-    sk: sk
-    bg: bg
-    ga: ga
+    pt: pt
     ro: ro
-    hr: hr
+    sk: sk
+    sl: sl
+    es: es
+    sv: sv
   domains:
-    en: ''
-    de: ''
-    fr: ''
-    es: ''
-    it: ''
-    et: ''
-    da: ''
+    bg: ''
+    hr: ''
     cs: ''
+    da: ''
     nl: ''
-    sl: ''
-    el: ''
-    pt: ''
+    en: ''
+    et: ''
     fi: ''
-    sv: ''
+    fr: ''
+    de: ''
+    el: ''
     hu: ''
+    ga: ''
+    it: ''
     lv: ''
     lt: ''
     mt: ''
     pl: ''
-    sk: ''
-    bg: ''
-    ga: ''
+    pt: ''
     ro: ''
-    hr: ''
+    sk: ''
+    sl: ''
+    es: ''
+    sv: ''
 selected_langcode: site_default
