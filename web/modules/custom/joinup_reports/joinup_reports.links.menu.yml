@@ -8,9 +8,6 @@ joinup_reports.admin_reporting:
 joinup_reports.group_administrators_report:
   title: 'Group administrators and facilitators'
   route_name: joinup_reports.group_administrators_report
-  route_parameters:
-    entity_type_id: 'node'
-    bundle_id: 'collection'
   description: 'Export group administrators and facilitators in a csv format.'
   parent: joinup_reports.admin_reporting
   weight: -1
