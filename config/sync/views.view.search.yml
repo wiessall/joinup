@@ -5,9 +5,9 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - better_exposed_filters
     - search_api
     - search_api_spellcheck
+    - views_autosubmit
     - views_block_area
 _core:
   default_config_hash: IZ_1De9xX5-8975-JeHxZJ0f_58o9R3nM9pxnxboN_k
@@ -119,7 +119,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: bef
+        type: autosubmit
         options:
           submit_button: 'Search site-wide'
           reset_button: false
@@ -128,42 +128,8 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
-          text_input_required: 'Select any filter and click on Apply to see results'
-          text_input_required_format: content_editor
-          bef:
-            general:
-              autosubmit: true
-              autosubmit_exclude_textfield: true
-              autosubmit_textfield_delay: 500
-              autosubmit_textfield_minimum_length: 3
-              autosubmit_hide: true
-              input_required: false
-              allow_secondary: false
-              secondary_label: 'Advanced options'
-              secondary_open: false
-              reset_button_always_show: false
-            sort:
-              plugin_id: default
-              advanced:
-                combine: false
-                combine_rewrite: ''
-                reset: false
-                reset_label: ''
-                collapsible: false
-                collapsible_label: 'Sort options'
-                is_secondary: false
-            filter:
-              search_api_fulltext:
-                plugin_id: default
-                advanced:
-                  placeholder_text: ''
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: false
-                  hide_label: false
+          autosubmit_hide: true
+          timeout: 500
       access:
         type: none
         options: {  }
