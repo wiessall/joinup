@@ -10,6 +10,7 @@ use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Joinup\EnvironmentDetector;
 
 /**
  * Provides a developers warning message block.
@@ -45,7 +46,7 @@ final class WarningMessageBlock extends BlockBase {
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
     // Allow the environment variable to not show this block on development
     // environment so that devs do not get used to the warning.
-    $access = !getenv('IS_DDEV_PROJECT');
+    $access = !EnvironmentDetector::isLocal();
     return AccessResult::allowedIf($access);
   }
 
