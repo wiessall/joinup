@@ -23,4 +23,17 @@ class EnvironmentDetector {
     return getenv('IS_DDEV_PROJECT') === 'true';
   }
 
+  /**
+   * Checks if the code is running inside a GitLab CI/CD pipeline.
+   *
+   * This function verifies whether the environment is a GitLab pipeline
+   * and, optionally, if it belongs to the DIGIT QA project.
+   *
+   * @return bool
+   *   TRUE if running inside a GitLab pipeline, FALSE otherwise.
+   */
+  protected static function isGitlabPipeline(): bool {
+    return getenv('GITLAB_CI') === 'true' && getenv('TOOLKIT_PROJECT_ID') === 'digit-joinup';
+  }
+
 }
