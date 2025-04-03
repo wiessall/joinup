@@ -37,7 +37,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
-use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -48,7 +47,6 @@ use Symfony\Component\Process\Process;
  */
 class FeatureContext extends RawDrupalContext {
 
-  use DigitQaPipelineAwareTrait;
   use AntispamTrait;
   use ContextualLinksTrait;
   use EntityTrait;
