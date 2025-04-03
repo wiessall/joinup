@@ -466,7 +466,8 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
             },
             "drupal/tmgmt_ec_etranslation": {
-                "Remove requesterCallback parameter see https://www.drupal.org/i/3504767": "resources/patch/php/drupal/tmgmt_ec_etranslation/21.diff"
+                "Remove requesterCallback parameter see https://www.drupal.org/i/3504767": "resources/patch/php/drupal/tmgmt_ec_etranslation/3504767.diff",
+                "Don't queue responses see https://www.drupal.org/i/3508220": "resources/patch/php/drupal/tmgmt_ec_etranslation/3508220.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
