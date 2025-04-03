@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_test\Utils\TestUtils;
+use Joinup\EnvironmentDetector;
 
 /**
  * Implements hook_page_attachments().
@@ -86,5 +87,5 @@ function joinup_test_autologout_prevent(): bool {
   // Joinup test is only enabled on local environments. Prevent autologout from
   // logging out users on local environments by blocking the JS refresh from
   // being attached.
-  return isset($_SERVER['IS_DDEV_PROJECT']) && $_SERVER['IS_DDEV_PROJECT'] === 'true';
+  return EnvironmentDetector::isLocal();
 }
