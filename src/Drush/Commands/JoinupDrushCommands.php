@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Joinup\Drush\Commands;
 
 use Drupal\Core\Database\Database;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\search_api\Task\TaskManagerInterface;
 use Drush\Attributes as CLI;
 use Drush\Boot\DrupalBootLevels;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
