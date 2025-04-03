@@ -280,6 +280,40 @@ Feature:
       | Add news       |
       | Add solution   |
 
+    # Accept the CoC to ensure that the message is gone.
+    When I visit the "Knowledge Hive" Code of Conduct consent page
+    And I check "accept"
+    And I press "Accept"
+    Then I should see the success message "Thank you for confirming your agreement to the Code of Conduct."
+    And I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
+
+    # Regression test: Check changing the workflow state of the collection
+    # to open and then to closed again, will not remove the full membership.
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "open" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
+
+    Given the "Knowledge Hive" "collection" has a new "published" revision with "closed" membership moderation
+    When I visit the "Knowledge Hive" collection
+    Then I should not see the warning message "We updated our Code of Conduct"
+    Then I should see the following links:
+      | Add discussion |
+      | Add document   |
+      | Add event      |
+      | Add news       |
+      | Add solution   |
+
     # When a collection is archived, the CoC message should not show.
     And the workflow state of the "Knowledge Hive" content is changed to "archived"
     When I visit the "Knowledge Hive" collection
