@@ -333,11 +333,6 @@ content:
       size: 60
       placeholder: 'Minimum 4 characters required.'
     third_party_settings: {  }
-  simple_sitemap:
-    weight: 4
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   solution_type:
     type: options_select
     weight: 5
@@ -377,6 +372,7 @@ hidden:
   promote: true
   published_at: true
   release_number: true
+  simple_sitemap: true
   site_featured: true
   status: true
   sticky: true
