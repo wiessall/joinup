@@ -113,10 +113,11 @@
 // Upcoming event.
 .block-views-blockupcoming-event-block {
   position: relative;
+  margin-bottom: $spacer * 3; // 48px;
   .more-link {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: $spacer * -3;
     &::after {
       @include get-bootstrap-icon("arrow-right");
 
