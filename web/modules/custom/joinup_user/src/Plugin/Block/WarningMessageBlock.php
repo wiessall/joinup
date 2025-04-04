@@ -33,7 +33,7 @@ final class WarningMessageBlock extends BlockBase {
     $build['content'] = [
       '#theme' => 'status_messages',
       '#message_list' => [
-        'warning' => $warnings,
+        'error' => $warnings,
       ],
     ];
 
@@ -44,10 +44,9 @@ final class WarningMessageBlock extends BlockBase {
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
-    // Allow the environment variable to not show this block on development
-    // environment so that devs do not get used to the warning.
-    $access = !EnvironmentDetector::isLocal();
-    return AccessResult::allowedIf($access);
+    return AccessResult::allowedIf(
+      EnvironmentDetector::isProduction()
+    );
   }
 
 }
