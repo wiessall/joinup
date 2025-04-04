@@ -36,4 +36,32 @@ class EnvironmentDetector {
     return getenv('GITLAB_CI') === 'true' && getenv('TOOLKIT_PROJECT_ID') === 'digit-joinup';
   }
 
+  /**
+   * Determines if the current environment is Acceptance (ACC).
+   *
+   * The environment is considered Acceptance if the
+   * 'joinup_acceptance' module is installed and enabled.
+   *
+   * @return bool
+   *   TRUE if in the Acceptance environment, FALSE otherwise.
+   */
+  public static function isAcceptance(): bool {
+    return \Drupal::moduleHandler()->moduleExists('joinup_acceptance');
+  }
+
+  /**
+   * Determines if the current environment is Production (PROD).
+   *
+   * The environment is considered Production if no development packages
+   * are installed and the 'joinup_acceptance' module is not enabled.
+   *
+   * @return bool
+   *   TRUE if in the Production environment, FALSE otherwise.
+   */
+  public static function isProduction(): bool {
+    $devPackageExist = !file_exists(DRUPAL_ROOT . '/modules/contrib/devel/devel.info.yml');
+
+    return $devPackageExist && !self::isAcceptance();
+  }
+
 }
