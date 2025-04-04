@@ -3,7 +3,7 @@ _core:
 theme: ventuno
 defaults:
   sender: php_mail
-  formatter: mime_mail
+  formatter: symfony_mailer_lite
 modules:
   symfony_mailer_lite:
     none:
@@ -13,6 +13,7 @@ modules:
     none:
       sender: mime_mail
       formatter: mime_mail
-  contact_form:
+  email_contact:
     none:
+      sender: mime_mail
       formatter: mime_mail
