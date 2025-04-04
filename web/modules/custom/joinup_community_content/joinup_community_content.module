@@ -44,6 +44,10 @@ function joinup_community_content_entity_extra_field_info(): array {
       'description' => t('A link to share the content'),
       'visible' => FALSE,
     ];
+    $fields['node'][$bundle]['display']['anonymous_comment_links'] = [
+      'label' => t('Anonymous comment links'),
+      'visible' => FALSE,
+    ];
   }
 
   return $fields;
@@ -77,6 +81,16 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
         'og_role',
       ],
     ];
+  }
+
+  if ($display->getComponent('anonymous_comment_links')) {
+    $current_user = \Drupal::currentUser();
+    $build['anonymous_comment_links']['#cache']['contexts'][] = 'user.roles:anonymous';
+    if ($current_user->isAnonymous()) {
+      $build['anonymous_comment_links']['content'] = [
+        '#theme' => 'anonymous_comment_links',
+      ];
+    }
   }
 }
 
@@ -201,6 +215,9 @@ function joinup_community_content_theme($existing, $type, $theme, $path): array 
         'title' => NULL,
         'url' => NULL,
       ],
+    ],
+    'anonymous_comment_links' => [
+      'variables' => [],
     ],
   ];
 }
