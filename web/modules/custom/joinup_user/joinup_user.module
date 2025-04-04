@@ -623,10 +623,14 @@ function joinup_user_cron(): void {
   // Run Notification Step (if not run in last year)
   if ($last_notify < $one_year_ago) {
     $config->set('send_email_user_before_notification', TRUE)->save();
-
-    $notify_ids = array_unique(purge_users_get_user_ids('notification_users'));
+    // Since we only run this once per year we need to call directly
+    // _purge_users_get_user_ids otherwise the users does
+    // not receive any notification.
+    $notify_ids = array_unique(_purge_users_get_user_ids('notification_users'));
+    // Only send notification to active users.
+    $active_users = joinup_user_get_active_users_by_uids($notify_ids);
     $notify_queue = $queue_factory->get('notification_users');
-    foreach ($notify_ids as $uid) {
+    foreach ($active_users as $uid) {
       $notify_queue->createItem($uid);
     }
     $config->set('send_email_user_before_notification', FALSE)->save();
@@ -647,4 +651,27 @@ function joinup_user_cron(): void {
     }
     $state->set('joinup_user_last_purge_run', $now);
   }
+}
+
+/**
+ * Get active users from an array of UIDs.
+ *
+ * @param array $uids
+ *   An array of user IDs (UIDs).
+ *
+ * @return array
+ *   An array of active user records (uid and name).
+ */
+function joinup_user_get_active_users_by_uids(array $uids): array {
+  if (empty($uids)) {
+    return [];
+  }
+
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u')
+    ->fields('u', ['uid', 'name'])
+    ->condition('u.uid', $uids, 'IN')
+    ->condition('u.status', 1);
+
+  return $query->execute()->fetchAllAssoc('uid');
 }
