@@ -1,0 +1,362 @@
+diff --git a/purge_users.module b/purge_users.module
+index e0f943d152225e205b36f507b6a5e00cacdfe628..15eff5b3a813bdfba4c3b82ce1a5e6951c39a0b1 100755
+--- a/purge_users.module
++++ b/purge_users.module
+@@ -76,12 +76,6 @@ function purge_users_cron() {
+  * Get users who never login at all.
+  */
+ function purge_users_never_loggedin_user_ids($param, $included_user_roles = [], $excluded_user_roles = []) {
+-  // Get a time stamp according to the period selected.
+-  $logindate = '';
+-  if (!empty($param['never_login_value'])) {
+-    $logindate = strtotime('-' . $param['never_login_value'] . ' ' . $param['never_login_period']);
+-  }
+-
+   // Query through db table to get users ids.
+   $db = \Drupal::database();
+   $exist_query = $db->select('user__roles', 'ur');
+@@ -92,8 +86,8 @@ function purge_users_never_loggedin_user_ids($param, $included_user_roles = [],
+   $query->leftjoin('user__roles', 'ur', 'ur.entity_id = u.uid');
+   $query->fields('u', ['uid']);
+   $query->condition('u.uid', 1, '>');
+-  if (!empty($param['never_login_value'])) {
+-    $query->condition('u.created', $logindate, '<');
++  if (!empty($param['never_login_date'])) {
++    $query->condition('u.created', $param['never_login_date'], '<');
+     $query->condition('u.login', 0);
+   }
+   if (in_array(AccountInterface::AUTHENTICATED_ROLE, $included_user_roles)) {
+@@ -127,11 +121,6 @@ function purge_users_never_loggedin_user_ids($param, $included_user_roles = [],
+  * Get users who didn't login at all.
+  */
+ function purge_users_not_loggedin_user_ids($param, $included_user_roles = [], $excluded_user_roles = []) {
+-  // Get a time stamp according to the period selected.
+-  $logindate = '';
+-  if (!empty($param['login_value'])) {
+-    $logindate = strtotime('-' . $param['login_value'] . ' ' . $param['login_period']);
+-  }
+   // Query through db table to get users ids.
+   $db = \Drupal::database();
+   $exist_query = $db->select('user__roles', 'ur');
+@@ -142,8 +131,8 @@ function purge_users_not_loggedin_user_ids($param, $included_user_roles = [], $e
+   $query->leftjoin('user__roles', 'ur', 'ur.entity_id = u.uid');
+   $query->fields('u', ['uid']);
+   $query->condition('u.uid', 1, '>');
+-  if (!empty($param['login_value'])) {
+-    $query->condition('u.login', $logindate, '<');
++  if (!empty($param['login_date'])) {
++    $query->condition('u.login', $param['login_date'], '<');
+     $query->condition('u.login', 0, '!=');
+   }
+   if (in_array(AccountInterface::AUTHENTICATED_ROLE, $included_user_roles)) {
+@@ -177,11 +166,6 @@ function purge_users_not_loggedin_user_ids($param, $included_user_roles = [], $e
+  * Get inactive user ids.
+  */
+ function purge_users_inactive_user_ids($param, $included_user_roles = [], $excluded_user_roles = []) {
+-  // Get a time stamp according to the period selected.
+-  $inactivedate = '';
+-  if (!empty($param['inactive_value'])) {
+-    $inactivedate = strtotime('-' . $param['inactive_value'] . ' ' . $param['inactive_period']);
+-  }
+   // Query through db table to get users ids.
+   $db = \Drupal::database();
+   $exist_query = $db->select('user__roles', 'ur');
+@@ -192,8 +176,8 @@ function purge_users_inactive_user_ids($param, $included_user_roles = [], $exclu
+   $query->leftjoin('user__roles', 'ur', 'ur.entity_id = u.uid');
+   $query->fields('u', ['uid']);
+   $query->condition('u.uid', 1, '>');
+-  if (!empty($param['inactive_value'])) {
+-    $query->condition('u.created', $inactivedate, '<');
++  if (!empty($param['inactive_date'])) {
++    $query->condition('u.created', $param['inactive_date'], '<');
+     $query->condition('u.login', 0);
+     $query->condition('u.status', 0);
+   }
+@@ -225,11 +209,6 @@ function purge_users_inactive_user_ids($param, $included_user_roles = [], $exclu
+  * Get blocked user ids.
+  */
+ function purge_users_blocked_user_ids($param, $included_user_roles = [], $excluded_user_roles = []) {
+-  // Get a time stamp according to the period selected.
+-  $blockdate = '';
+-  if (!empty($param['blocked_value'])) {
+-    $blockdate = strtotime('-' . $param['blocked_value'] . ' ' . $param['blocked_period']);
+-  }
+   // Query through db table to get users ids.
+   $db = \Drupal::database();
+   $exist_query = $db->select('user__roles', 'ur');
+@@ -240,9 +219,9 @@ function purge_users_blocked_user_ids($param, $included_user_roles = [], $exclud
+   $query->leftjoin('user__roles', 'ur', 'ur.entity_id = u.uid');
+   $query->fields('u', ['uid']);
+   $query->condition('u.uid', 1, '>');
+-  if (!empty($param['blocked_period'])) {
+-    $query->condition('u.created', $blockdate, '<');
+-    $query->condition('u.login', $blockdate, '<');
++  if (!empty($param['blocked_date'])) {
++    $query->condition('u.created', $param['blocked_date'], '<');
++    $query->condition('u.login', $param['blocked_date'], '<');
+     $query->condition('u.login', 0, '!=');
+     $query->condition('u.status', 0);
+   }
+@@ -327,23 +306,36 @@ function _purge_users_get_user_ids(string $op = 'purge_users') {
+   $enable_blocked = $config->get('enabled_blocked_users');
+   $send_email_user_before_notification = $config->get('send_email_user_before_notification');
+ 
+-  $param = [
+-    'never_login_value' => $config->get('user_never_lastlogin_value'),
+-    'never_login_period' => $config->get('user_never_lastlogin_period'),
+-    'login_value' => $config->get('user_lastlogin_value'),
+-    'login_period' => $config->get('user_lastlogin_period'),
+-    'inactive_value' => $config->get('user_inactive_value'),
+-    'inactive_period' => $config->get('user_inactive_period'),
+-    'blocked_value' => $config->get('user_blocked_value'),
+-    'blocked_period' => $config->get('user_blocked_period'),
+-    'disregard_blocked_users' => $config->get('disregard_blocked_users'),
+-  ];
++  $param['disregard_blocked_users'] = $config->get('disregard_blocked_users');
+ 
++  if ($enable_never_loggedin) {
++    $param['never_login_date'] = strtotime('-' . $config->get('user_never_lastlogin_value') . ' ' . $config->get('user_never_lastlogin_period'));
++  }
++  if ($enable_loggedin) {
++    $param['login_date'] = strtotime('-' . $config->get('user_lastlogin_value') . ' ' . $config->get('user_lastlogin_period'));
++  }
++  if ($enable_inactive) {
++    $param['inactive_date'] = strtotime('-' . $config->get('user_inactive_value') . ' ' . $config->get('user_inactive_period'));
++  }
++  if ($enable_blocked) {
++    $param['blocked_date'] = strtotime('-' . $config->get('user_blocked_value') . ' ' . $config->get('user_blocked_period'));
++  }
+   if ($op == 'notification_users' && $send_email_user_before_notification == 1) {
+     $user_before_notification_value = $config->get('user_before_notification_value');
+-    $param['never_login_value'] = $param['login_value'] = $param['inactive_value'] = $param['blocked_value'] = $user_before_notification_value;
+     $user_before_notification_period = $config->get('user_before_notification_period');
+-    $param['never_login_period'] = $param['login_period'] = $param['inactive_period'] = $param['blocked_period'] = $user_before_notification_period;
++    $notification_interval = '+' . $user_before_notification_value . ' ' . $user_before_notification_period;
++    if ($enable_never_loggedin) {
++      $param['never_login_date'] = strtotime($notification_interval, $param['never_login_date']);
++    }
++    if ($enable_loggedin) {
++      $param['login_date'] = strtotime($notification_interval, $param['login_date']);
++    }
++    if ($enable_inactive) {
++      $param['inactive_date'] = strtotime($notification_interval, $param['inactive_date']);
++    }
++    if ($enable_blocked) {
++      $param['blocked_date'] = strtotime($notification_interval, $param['blocked_date']);
++    }
+   }
+ 
+   $included_user_roles = array_filter($config->get('purge_included_users_roles'));
+diff --git a/tests/src/Functional/NotificationTest.php b/tests/src/Functional/NotificationTest.php
+index 9e7cfd919679493624ac3d792ce0ddf4c7e17a2c..15e6f005e63c621e16286b2bb425c8d1e06c5a9a 100644
+--- a/tests/src/Functional/NotificationTest.php
++++ b/tests/src/Functional/NotificationTest.php
+@@ -60,7 +60,7 @@ class NotificationTest extends BrowserTestBase {
+    *
+    * @var \Drupal\user\UserInterface
+    */
+-  protected $blockedUser3Days;
++  protected $blockedUser4Days;
+ 
+   /**
+    * An inactive user to be pre-notified and purged.
+@@ -74,7 +74,7 @@ class NotificationTest extends BrowserTestBase {
+    *
+    * @var \Drupal\user\UserInterface
+    */
+-  protected $inactiveUser3Days;
++  protected $inactiveUser4Days;
+ 
+   /**
+    * A user not logged in for 7 days.
+@@ -86,13 +86,13 @@ class NotificationTest extends BrowserTestBase {
+   protected $lastloginUser7Days;
+ 
+   /**
+-   * A user not logged in for 3 days.
++   * A user not logged in for 4 days.
+    *
+    * To be pre-notified.
+    *
+    * @var \Drupal\user\UserInterface
+    */
+-  protected $lastloginUser3Days;
++  protected $lastloginUser4Days;
+ 
+   /**
+    * A user that never logged in to be pre-notified and purged.
+@@ -106,7 +106,7 @@ class NotificationTest extends BrowserTestBase {
+    *
+    * @var \Drupal\user\UserInterface
+    */
+-  protected $neverLoggedUser3Days;
++  protected $neverLoggedUser4Days;
+ 
+   /**
+    * User storage.
+@@ -183,9 +183,9 @@ class NotificationTest extends BrowserTestBase {
+       'status' => 0,
+     ]);
+ 
+-    $this->inactiveUser3Days = $this->createUser([], NULL, FALSE, [
+-      'mail' => 'inactiveUser3Days@test.test',
+-      'created' => strtotime('-3 day'),
++    $this->inactiveUser4Days = $this->createUser([], NULL, FALSE, [
++      'mail' => 'inactiveUser4Days@test.test',
++      'created' => strtotime('-4 day'),
+       'login' => 0,
+       'status' => 0,
+     ]);
+@@ -197,10 +197,10 @@ class NotificationTest extends BrowserTestBase {
+       'status' => 1,
+     ]);
+ 
+-    $this->lastloginUser3Days = $this->createUser([], NULL, FALSE, [
+-      'mail' => 'lastloginUser3Days@test.test',
+-      'created' => strtotime('-3 day'),
+-      'login' => strtotime('-3 day'),
++    $this->lastloginUser4Days = $this->createUser([], NULL, FALSE, [
++      'mail' => 'lastloginUser4Days@test.test',
++      'created' => strtotime('-4 day'),
++      'login' => strtotime('-4 day'),
+       'status' => 1,
+     ]);
+ 
+@@ -211,10 +211,10 @@ class NotificationTest extends BrowserTestBase {
+       'status' => 0,
+     ]);
+ 
+-    $this->blockedUser3Days = $this->createUser([], NULL, FALSE, [
+-      'mail' => 'blockedUser3Days@test.test',
+-      'created' => strtotime('-3 day'),
+-      'login' => strtotime('-3 day'),
++    $this->blockedUser4Days = $this->createUser([], NULL, FALSE, [
++      'mail' => 'blockedUser4Days@test.test',
++      'created' => strtotime('-4 day'),
++      'login' => strtotime('-4 day'),
+       'status' => 0,
+     ]);
+ 
+@@ -225,9 +225,9 @@ class NotificationTest extends BrowserTestBase {
+       'status' => 1,
+     ]);
+ 
+-    $this->neverLoggedUser3Days = $this->createUser([], NULL, FALSE, [
+-      'mail' => 'neverLoggedUser3Days@test.test',
+-      'created' => strtotime('-3 day'),
++    $this->neverLoggedUser4Days = $this->createUser([], NULL, FALSE, [
++      'mail' => 'neverLoggedUser4Days@test.test',
++      'created' => strtotime('-4 day'),
+       'login' => 0,
+       'status' => 1,
+     ]);
+@@ -275,11 +275,11 @@ class NotificationTest extends BrowserTestBase {
+     // Users who are already blocked are not being purged.
+     $this->assertPurgeEmail($this->lastloginUser7Days);
+     $this->assertPurgeEmail($this->neverLoggedUser7Days);
+-    // The 3 day users receive a pre-notification email.
+-    $this->assertPreNotificationEmail($this->inactiveUser3Days);
+-    $this->assertPreNotificationEmail($this->lastloginUser3Days);
+-    $this->assertPreNotificationEmail($this->blockedUser3Days);
+-    $this->assertPreNotificationEmail($this->neverLoggedUser3Days);
++    // The 4 day users receive a pre-notification email.
++    $this->assertPreNotificationEmail($this->inactiveUser4Days);
++    $this->assertPreNotificationEmail($this->lastloginUser4Days);
++    $this->assertPreNotificationEmail($this->blockedUser4Days);
++    $this->assertPreNotificationEmail($this->neverLoggedUser4Days);
+     // No further emails.
+     $this->assertCount(6, $this->getMails());
+ 
+@@ -307,10 +307,10 @@ class NotificationTest extends BrowserTestBase {
+     $this->assertPreNotificationEmail($this->lastloginUser7Days);
+     $this->assertPreNotificationEmail($this->blockedUser7Days);
+     $this->assertPreNotificationEmail($this->neverLoggedUser7Days);
+-    $this->assertPreNotificationEmail($this->inactiveUser3Days);
+-    $this->assertPreNotificationEmail($this->lastloginUser3Days);
+-    $this->assertPreNotificationEmail($this->blockedUser3Days);
+-    $this->assertPreNotificationEmail($this->neverLoggedUser3Days);
++    $this->assertPreNotificationEmail($this->inactiveUser4Days);
++    $this->assertPreNotificationEmail($this->lastloginUser4Days);
++    $this->assertPreNotificationEmail($this->blockedUser4Days);
++    $this->assertPreNotificationEmail($this->neverLoggedUser4Days);
+     // No further emails.
+     $this->assertCount(8, $this->getMails());
+ 
+@@ -345,11 +345,11 @@ class NotificationTest extends BrowserTestBase {
+     // Users who are already blocked are not being purged.
+     $this->assertPurgeEmail($this->lastloginUser7Days);
+     $this->assertPurgeEmail($this->neverLoggedUser7Days);
+-    // The 3 day users receive a pre-notification email.
+-    $this->assertPreNotificationEmail($this->inactiveUser3Days);
+-    $this->assertPreNotificationEmail($this->lastloginUser3Days);
+-    $this->assertPreNotificationEmail($this->blockedUser3Days);
+-    $this->assertPreNotificationEmail($this->neverLoggedUser3Days);
++    // The 4 day users receive a pre-notification email.
++    $this->assertPreNotificationEmail($this->inactiveUser4Days);
++    $this->assertPreNotificationEmail($this->lastloginUser4Days);
++    $this->assertPreNotificationEmail($this->blockedUser4Days);
++    $this->assertPreNotificationEmail($this->neverLoggedUser4Days);
+     // No further emails.
+     $this->assertCount(6, $this->getMails());
+ 
+@@ -425,12 +425,13 @@ class NotificationTest extends BrowserTestBase {
+ 
+     $this->assertPurgeEmail($user);
+     // No further emails.
+-    $this->assertCount(1, $this->getMails());
++    // One deletion email and 2 pre-notification emails (4 days and 7 days).
++    $this->assertCount(3, $this->getMails());
+ 
+     $this->cronRun();
+ 
+     // Check the user does not receive any other notification.
+-    $this->assertCount(1, $this->getMails());
++    $this->assertCount(3, $this->getMails());
+   }
+ 
+   /**
+@@ -454,11 +455,11 @@ class NotificationTest extends BrowserTestBase {
+     // These receive an email from core user module.
+     $this->assertAccountSettingsEmail($this->lastloginUser7Days);
+     $this->assertAccountSettingsEmail($this->neverLoggedUser7Days);
+-    // The 3 day users all receive the pre-notification email.
+-    $this->assertPreNotificationEmail($this->inactiveUser3Days);
+-    $this->assertPreNotificationEmail($this->lastloginUser3Days);
+-    $this->assertPreNotificationEmail($this->blockedUser3Days);
+-    $this->assertPreNotificationEmail($this->neverLoggedUser3Days);
++    // The 4 day users all receive the pre-notification email.
++    $this->assertPreNotificationEmail($this->inactiveUser4Days);
++    $this->assertPreNotificationEmail($this->lastloginUser4Days);
++    $this->assertPreNotificationEmail($this->blockedUser4Days);
++    $this->assertPreNotificationEmail($this->neverLoggedUser4Days);
+     // No further emails.
+     $this->assertCount(6, $this->getMails());
+ 
+@@ -598,10 +599,10 @@ class NotificationTest extends BrowserTestBase {
+     $this->notifyManager->notifyUser($this->lastloginUser7Days);
+     $this->notifyManager->notifyUser($this->blockedUser7Days);
+     $this->notifyManager->notifyUser($this->neverLoggedUser7Days);
+-    $this->notifyManager->notifyUser($this->inactiveUser3Days);
+-    $this->notifyManager->notifyUser($this->lastloginUser3Days);
+-    $this->notifyManager->notifyUser($this->blockedUser3Days);
+-    $this->notifyManager->notifyUser($this->neverLoggedUser3Days);
++    $this->notifyManager->notifyUser($this->inactiveUser4Days);
++    $this->notifyManager->notifyUser($this->lastloginUser4Days);
++    $this->notifyManager->notifyUser($this->blockedUser4Days);
++    $this->notifyManager->notifyUser($this->neverLoggedUser4Days);
+   }
+ 
+   /**
+diff --git a/tests/src/Kernel/UserIdsTest.php b/tests/src/Kernel/UserIdsTest.php
+index ef5933f73bed241e0f8779cf5edd3957bca94c37..e13fa369561103c0ba48c6a6cf3ade808528f61c 100644
+--- a/tests/src/Kernel/UserIdsTest.php
++++ b/tests/src/Kernel/UserIdsTest.php
+@@ -153,7 +153,7 @@ class UserIdsTest extends KernelTestBase {
+         'user_lastlogin_value' => 5 * 12,
+         'user_lastlogin_period' => 'month',
+         // Enable pre-notifications, with short timespan.
+-        'user_before_notification_value' => '2',
++        'user_before_notification_value' => 4 * 12 + 1,
+         'user_before_notification_period' => 'month',
+         'send_email_user_before_notification' => TRUE,
+       ]);
