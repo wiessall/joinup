@@ -669,9 +669,9 @@ function joinup_user_get_active_users_by_uids(array $uids): array {
 
   $db = \Drupal::database();
   $query = $db->select('users_field_data', 'u')
-    ->fields('u', ['uid', 'name'])
+    ->fields('u', ['uid'])
     ->condition('u.uid', $uids, 'IN')
     ->condition('u.status', 1);
 
-  return $query->execute()->fetchAllAssoc('uid');
+  return $query->execute()->fetchCol();
 }
