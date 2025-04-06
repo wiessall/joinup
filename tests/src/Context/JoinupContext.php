@@ -2947,11 +2947,8 @@ class JoinupContext extends RawDrupalContext {
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
-      if ($entity_type_id === 'menu_link_content') {
-        // Menu link content is handled by menu_link_content module and
-        // og_menu. Skip it here.
-        // @see \menu_link_content_entity_predelete
-        // @see \menu_link_content_menu_delete
+      if ($entity_type_id === 'ogmenu_instance') {
+        // Skip the ogmenu_instance as it is already handled in og_menu.
         // @see \og_menu_entity_delete
         continue;
       }
@@ -2978,6 +2975,10 @@ class JoinupContext extends RawDrupalContext {
       $behat_cleanup_data[$entity_type_id] = reset($ids) ?: 0;
     }
 
+    // Process menu links last.
+    $menu_link_data = $behat_cleanup_data['menu_link_content'] ?? 0;
+    unset($behat_cleanup_data['menu_link_content']);
+    $behat_cleanup_data['menu_link_content'] = $menu_link_data;
     \Drupal::state()->set('behat_cleanup_data', $behat_cleanup_data);
   }
 
