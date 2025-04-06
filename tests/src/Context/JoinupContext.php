@@ -2947,6 +2947,14 @@ class JoinupContext extends RawDrupalContext {
   public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
     $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
+      if ($entity_type_id === 'menu_link_content') {
+        // Menu link content is handled by menu_link_content module and
+        // og_menu. Skip it here.
+        // @see \menu_link_content_entity_predelete
+        // @see \menu_link_content_menu_delete
+        // @see \og_menu_entity_delete
+        continue;
+      }
       if (isset($behat_cleanup_data[$entity_type_id])) {
         // Keep the original ID so that even broken tests get properly cleaned.
         continue;
