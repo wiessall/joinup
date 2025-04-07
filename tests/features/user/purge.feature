@@ -3,17 +3,17 @@ Feature: Automated approach for identifying and deleting inactive users
 
   Background:
     Given users:
-      | Username       | Roles           | E-mail                     | Login       | Created     | Access      | Status  |
-      | Cosmic Admin   | Administrator   | cosmic.admin@example.com   | -3 years    | -4 years    | -4 years    | active  |
-      | Pixel Panda    | Moderator       | pixel.panda@example.com    | -4 years    | -5 years    | -4 years    | active  |
-      | Licence Queen  | Licence manager | licence.queen@example.com  | -5 months   | -1 year     | -1 year     | active  |
-      | Dev Phoenix    | Developer       | dev.phoenix@example.com    | -6 months   | -2 years    | -2 years    | active  |
-      | Beta Bunny     |                 | beta.bunny@example.com     | -8 months   | -8 months   | -8 months   | blocked |
-      | Orion Void     |                 | orion.void@example.com     | -4 years    | -4 years    | -4 years    | blocked |
-      | Arion Truth    |                 | arion.truth@example.com    | -2 years    | -2 years    | -2 years    | active  |
-      | Mona Lista     |                 | mona.lista@example.com     | -5 years    | -5 years    | -4 years    | active  |
-      | Bunny Truth    |                 | bunny.truth@example.com    | 0           | -4 years    | 0           | blocked |
-      | Poney Flood    |                 | poney.flood@example.com    | 0           | -4 years    | 0           | active  |
+      | Username       | Roles           | E-mail                     | Login       | Created     | Status  |
+      | Cosmic Admin   | Administrator   | cosmic.admin@example.com   | 0           | -4 years    | active  |
+      | Pixel Panda    | Moderator       | pixel.panda@example.com    | 0           | -4 years    | active  |
+      | Licence Queen  | Licence manager | licence.queen@example.com  | 0           | -4 years    | active  |
+      | Dev Phoenix    | Developer       | dev.phoenix@example.com    | 0           | -4 years    | active  |
+      | Beta Bunny     |                 | beta.bunny@example.com     | -8 months   | -8 months   | blocked |
+      | Orion Void     |                 | orion.void@example.com     | -4 years    | -4 years    | blocked |
+      | Arion Truth    |                 | arion.truth@example.com    | -2 years    | -2 years    | active  |
+      | Mona Lista     |                 | mona.lista@example.com     | -5 years    | -5 years    | active  |
+      | Bunny Truth    |                 | bunny.truth@example.com    | 0           | -4 years    | blocked |
+      | Poney Flood    |                 | poney.flood@example.com    | 0           | -4 years    | active  |
 
   Scenario: Verify users to be notified.
     Given I set state "joinup_user_last_notify_run" to 0
