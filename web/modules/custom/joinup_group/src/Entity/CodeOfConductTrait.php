@@ -24,7 +24,7 @@ trait CodeOfConductTrait {
       ->accessCheck(FALSE)
       ->condition('entity_type', $this->getEntityTypeId())
       ->condition('entity_id', $this->id())
-      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+      ->condition('state', [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_PENDING], 'IN');
     if (!$skipAccepted && $membershipsWithAcceptedCoc = $this->getFullMembershipsWithAcceptedCoc()) {
       $query->condition('id', $membershipsWithAcceptedCoc, 'NOT IN');
     }
@@ -61,7 +61,7 @@ trait CodeOfConductTrait {
       ->accessCheck(FALSE)
       ->condition('entity_type', $this->getEntityTypeId())
       ->condition('entity_id', $this->id())
-      ->condition('state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('state', [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_PENDING], 'IN')
       ->condition('coc_document.target_id', $page->id())
       ->condition('coc_document.target_revision_id', $page->getRevisionId());
 
@@ -94,7 +94,7 @@ trait CodeOfConductTrait {
     $query->fields('ogmr', ['delta', 'roles_target_id']);
     $query->condition('ogm.entity_type', $this->getEntityTypeId());
     $query->condition('ogm.entity_id', $this->id());
-    $query->condition('ogm.state', OgMembershipInterface::STATE_ACTIVE);
+    $query->condition('state', [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_PENDING], 'IN');
 
     $data = $query->execute()->fetchAll();
     if (empty($data)) {
