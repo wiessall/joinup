@@ -57,8 +57,8 @@ bundle: news
 mode: default
 content:
   anonymous_comment_links:
-    settings: { }
-    third_party_settings: { }
+    settings: {  }
+    third_party_settings: {  }
     weight: 8
     region: content
   field_attachment:

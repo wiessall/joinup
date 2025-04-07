@@ -145,6 +145,25 @@ third_party_settings:
         next_button_text: Next
         required_fields: true
         step_help: ''
+    group_confirmation:
+      children: {  }
+      label: Confirmation
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: Next
+        required_fields: true
+        step_help: ''
 id: node.solution.default
 targetEntityType: node
 bundle: solution
