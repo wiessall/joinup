@@ -141,7 +141,9 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         ];
 
         if ($isCustomPage && $node->isGroupCodeOfConductPage()) {
-          $message['error'][] = [
+          // Use the UUID to index the message, so that we it is shown only
+          // once.
+          $message['error'][$node->uuid()] = [
             [
               '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
             ],
