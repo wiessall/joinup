@@ -318,3 +318,15 @@ Feature:
     And the workflow state of the "Knowledge Hive" content is changed to "archived"
     When I visit the "Knowledge Hive" collection
     Then I should not see the warning message "We updated our Code of Conduct"
+
+  Scenario: Code of conduct pages cannot be moved to another group.
+    Given I am logged in as a moderator
+    And I visit the "Knowledge Hive" collection
+    And I click "Manage content"
+    And I select the "Agreement of usage" row
+    And I select "Move to other group" from "Action"
+    And I press "Apply to selected items"
+    And I fill in "Select the destination collection or solution" with "The Portal"
+    And I press "Apply"
+    And I wait for the batch process to finish
+    Then I should see the error message "Custom page Agreement of usage was not moved because it is set as the code of conduct."
