@@ -14,6 +14,7 @@ use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -139,8 +140,16 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           ':group_url' => $group->toUrl()->toString(),
         ];
 
+        if ($isCustomPage && $node->isGroupCodeOfConductPage()) {
+          $message['error'][] = [
+            [
+              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
+            ],
+          ];
+          continue;
+        }
         // It might be a parent custom page.
-        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
+        elseif ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
           // Filter out child nodes that are already in the main set.
           $children = array_diff_key($children, array_flip($initialNids));
           array_walk($children, function (NodeInterface $child): void {
