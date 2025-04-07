@@ -14,7 +14,6 @@ use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\menu_link_content\MenuLinkContentInterface;
