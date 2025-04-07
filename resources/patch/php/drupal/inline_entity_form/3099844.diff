@@ -21,7 +21,7 @@ index 74a71424736eab114f8fae45c5baf1c19475166e..5315b065bd29ff930d45547ada451c31
    /**
     * {@inheritdoc}
 diff --git a/src/Form/EntityInlineForm.php b/src/Form/EntityInlineForm.php
-index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..1dff3034cf0ec915256052c98f816ffe52e40427 100644
+index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..c3cda098108dd54a6780c4dc4104d696b939d3f5 100644
 --- a/src/Form/EntityInlineForm.php
 +++ b/src/Form/EntityInlineForm.php
 @@ -16,6 +16,7 @@ use Drupal\Core\Render\Element;
@@ -32,43 +32,38 @@ index 9d193c95773ac170a06fe5ca2f710813b5db7ff0..1dff3034cf0ec915256052c98f816ffe
  use Drupal\rat\v1\RenderArray;
  use Symfony\Component\DependencyInjection\ContainerInterface;
  
-@@ -261,13 +262,32 @@ class EntityInlineForm implements InlineFormInterface {
+@@ -261,26 +262,58 @@ class EntityInlineForm implements InlineFormInterface {
     * {@inheritdoc}
     */
    public function entityFormValidate(array &$entity_form, FormStateInterface $form_state) {
+-    // Perform entity validation only if the inline form was submitted,
+-    // skipping other requests such as file uploads.
 +    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 +    $entity = $entity_form['#entity'];
 +    $this->buildEntity($entity_form, $entity, $form_state);
 +
-+    // Skip validation if the entity is empty.
-+    if ($this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
-+      // Make sure any previously set errors related to this entity are
-+      // removed (such as errors caused by the '#required' property on the
-+      // form element).
-+      // @see \Drupal\Core\Form\FormValidator::doValidateForm()
-+      $errors = $form_state->getErrors();
-+      $form_state->clearErrors();
-+      $key_prefix = implode('][', $entity_form['#parents']);
-+      foreach ($errors as $key => $message) {
-+        if (strpos($key, $key_prefix) !== 0) {
-+          $form_state->setErrorByName($key, $message);
-+        }
-+      }
-+
-+      return;
-+    }
-+
-     // Perform entity validation only if the inline form was submitted,
-     // skipping other requests such as file uploads.
      $triggering_element = $form_state->getTriggeringElement();
++
++    // Only validate if the IEF form was submitted.
      if (!empty($triggering_element['#ief_submit_trigger'])) {
 -      /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
 -      $entity = $entity_form['#entity'];
 -      $this->buildEntity($entity_form, $entity, $form_state);
++      if ($this->isEmptyEntity($entity, $entity_form['#form_mode'])) {
++        return;
++      }
++
++      // Otherwise, proceed with validation.
        $form_display = $this->getFormDisplay($entity, $entity_form['#form_mode']);
        $form_display->validateFormValues($entity, $entity_form, $form_state);
        $entity->setValidationRequired(FALSE);
-@@ -281,6 +301,35 @@ class EntityInlineForm implements InlineFormInterface {
+ 
+       foreach ($form_state->getErrors() as $message) {
+-        // $name may be unknown in $form_state and
+-        // $form_state->setErrorByName($name, $message) may suppress the error
+-        // message.
+         $form_state->setError($triggering_element, $message);
+       }
      }
    }
  
