@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
@@ -194,27 +193,6 @@ class ContactInformationContext extends RawDrupalContext {
       throw new \RuntimeException("No pending confirmation request found for $email");
     }
     return $confirmation;
-  }
-
-  /**
-   * Cleans up confirmation requests for example.com emails.
-   *
-   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
-   *   The after scenario scope.
-   *
-   * @AfterScenario
-   */
-  public function afterScenarioConfirmationCleanup(AfterScenarioScope $scope): void {
-    $ids = \Drupal::entityQuery('email_confirmer_confirmation')
-      ->accessCheck(FALSE)
-      ->condition('email', '%example.com', 'LIKE')
-      ->execute();
-
-    if (empty($ids)) {
-      return;
-    }
-    $storage = \Drupal::entityTypeManager()->getStorage('email_confirmer_confirmation');
-    $storage->delete($storage->loadMultiple($ids));
   }
 
   /**
