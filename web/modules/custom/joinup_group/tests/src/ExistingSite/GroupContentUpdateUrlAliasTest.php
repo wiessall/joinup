@@ -122,27 +122,27 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($this->node['solution']['1']->toUrl());
     $assert->addressEquals('/collection/big-collection/solution/abc123');
     // Releases.
-    $this->assertEquals($this->node['release']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/release/11');
+    $this->assertEquals('/collection/big-collection/solution/abc123/release/11', $this->node['release']['1.1']->toUrl()
+      ->toString());
     // Release 1.1 distributions.
-    $this->assertEquals($this->node['distribution']['1.1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-111');
-    $this->assertEquals($this->node['distribution']['1.1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-112');
+    $this->assertEquals('/collection/big-collection/solution/abc123/distribution/distribution-111', $this->node['distribution']['1.1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/big-collection/solution/abc123/distribution/distribution-112', $this->node['distribution']['1.1.2']->toUrl()
+      ->toString());
     // Solution distributions.
-    $this->assertEquals($this->node['distribution']['1.2']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/distribution/distribution-12');
+    $this->assertEquals('/collection/big-collection/solution/abc123/distribution/distribution-12', $this->node['distribution']['1.2']->toUrl()
+      ->toString());
     // Solution nodes.
-    $this->assertEquals($this->node['custom_page']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/custompage-11');
-    $this->assertEquals($this->node['discussion']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/discussion/discussion-11');
-    $this->assertEquals($this->node['document']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/document/document-11');
-    $this->assertEquals($this->node['event']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/event/event-11');
-    $this->assertEquals($this->node['news']['1.1']->toUrl()
-      ->toString(), '/collection/big-collection/solution/abc123/news/news-11');
+    $this->assertEquals('/collection/big-collection/solution/abc123/custompage-11', $this->node['custom_page']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/big-collection/solution/abc123/discussion/discussion-11', $this->node['discussion']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/big-collection/solution/abc123/document/document-11', $this->node['document']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/big-collection/solution/abc123/event/event-11', $this->node['event']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/big-collection/solution/abc123/news/news-11', $this->node['news']['1.1']->toUrl()
+      ->toString());
 
     // Edit the the collection.
     $edit = ['short_id[0][value]' => 'xyz789'];
@@ -154,49 +154,48 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Process both queues.
     $this->drush('queue:run', ['joinup_group:group_update']);
     $this->drush('queue:run', ['joinup_group:group_content_update']);
-
     \Drupal::service('path_alias.manager')->cacheClear();
 
-    $this->assertEquals($this->node['collection']['1']->toUrl()
-      ->toString(), '/collection/xyz789');
+    $this->assertEquals('/collection/xyz789', $this->node['collection']['1']->toUrl()
+      ->toString());
     // Solution.
-    $this->assertEquals($this->node['solution']['1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123');
+    $this->assertEquals('/collection/xyz789/solution/abc123', $this->node['solution']['1']->toUrl()
+      ->toString());
     // Releases.
-    $this->assertEquals($this->node['release']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/release/11');
+    $this->assertEquals('/collection/xyz789/solution/abc123/release/11', $this->node['release']['1.1']->toUrl()
+      ->toString());
     // Release 1.1 distributions.
-    $this->assertEquals($this->node['distribution']['1.1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-111');
-    $this->assertEquals($this->node['distribution']['1.1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-112');
+    $this->assertEquals('/collection/xyz789/solution/abc123/distribution/distribution-111', $this->node['distribution']['1.1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/solution/abc123/distribution/distribution-112', $this->node['distribution']['1.1.2']->toUrl()
+      ->toString());
     // Solution distributions.
-    $this->assertEquals($this->node['distribution']['1.2']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/distribution/distribution-12');
+    $this->assertEquals('/collection/xyz789/solution/abc123/distribution/distribution-12', $this->node['distribution']['1.2']->toUrl()
+      ->toString());
     // Solution nodes.
-    $this->assertEquals($this->node['custom_page']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/custompage-11');
-    $this->assertEquals($this->node['discussion']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/discussion/discussion-11');
-    $this->assertEquals($this->node['document']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/document/document-11',);
-    $this->assertEquals($this->node['event']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/event/event-11');
-    $this->assertEquals($this->node['news']['1.1']->toUrl()
-      ->toString(), '/collection/xyz789/solution/abc123/news/news-11');
+    $this->assertEquals('/collection/xyz789/solution/abc123/custompage-11', $this->node['custom_page']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/solution/abc123/discussion/discussion-11', $this->node['discussion']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/solution/abc123/document/document-11', $this->node['document']['1.1']->toUrl()
+      ->toString(),);
+    $this->assertEquals('/collection/xyz789/solution/abc123/event/event-11', $this->node['event']['1.1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/solution/abc123/news/news-11', $this->node['news']['1.1']->toUrl()
+      ->toString());
     // Collection's nodes.
-    $this->assertEquals($this->node['custom_page']['1']->toUrl()
-      ->toString(), '/collection/xyz789/custompage-1');
-    $this->assertEquals($this->node['discussion']['1']->toUrl()
-      ->toString(), '/collection/xyz789/discussion/discussion-1');
-    $this->assertEquals($this->node['document']['1']->toUrl()
-      ->toString(), '/collection/xyz789/document/document-1');
-    $this->assertEquals($this->node['event']['1']->toUrl()
-      ->toString(), '/collection/xyz789/event/event-1');
-    $this->assertEquals($this->node['glossary']['1']->toUrl()
-      ->toString(), '/collection/xyz789/glossary/term/glossary-1');
-    $this->assertEquals($this->node['news']['1']->toUrl()
-      ->toString(), '/collection/xyz789/news/news-1');
+    $this->assertEquals('/collection/xyz789/custompage-1', $this->node['custom_page']['1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/discussion/discussion-1', $this->node['discussion']['1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/document/document-1', $this->node['document']['1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/event/event-1', $this->node['event']['1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/glossary/term/glossary-1', $this->node['glossary']['1']->toUrl()
+      ->toString());
+    $this->assertEquals('/collection/xyz789/news/news-1', $this->node['news']['1']->toUrl()
+      ->toString());
     // Test the success message on short ID update.
     $edit = ['short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
