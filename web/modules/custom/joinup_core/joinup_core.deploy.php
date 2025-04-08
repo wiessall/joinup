@@ -33,10 +33,10 @@ function joinup_core_deploy_200400(array &$sandbox): string {
 
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
   $group_ids = array_splice($sandbox['group_ids'], 0, 50);
-
+  $code_of_conduct_handler = \Drupal::service('code_of_conduct.handler');
   /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
   foreach ($node_storage->loadMultiple($group_ids) as $group) {
-    $group->restoreFullMemberships();
+    $code_of_conduct_handler->restoreFullMemberships($group);
     $sandbox['progress']++;
   }
 
