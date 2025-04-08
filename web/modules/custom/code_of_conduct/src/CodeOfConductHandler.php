@@ -6,6 +6,7 @@ namespace Drupal\code_of_conduct;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -23,6 +24,7 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
   public function __construct(
     private readonly Connection $database,
     private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly MessengerInterface $messenger,
   ) {}
 
   /**
@@ -49,14 +51,14 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
       // is a closed group, or the previous published version was an open group
       // and the current version is a closed group.
       $this->revokeFullMemberships($group);
-      \Drupal::messenger()->addWarning($this->t('All full memberships have been revoked. You need to accept the Code of Conduct to become a full member again.'));
+      $this->messenger->addWarning($this->t('All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.'));
     }
     elseif ($originalWasClosed === NULL && !$group->isClosed() || ($originalWasClosed && !$group->isClosed())) {
       // Either there is no previous published version and the current version
       // is an open group, or the previous published version was a closed group
       // and the current version is an open group.
       $this->restoreFullMemberships($group);
-      \Drupal::messenger()->addWarning($this->t('All full memberships have been restored.'));
+      $this->messenger->addWarning($this->t('All full memberships have been restored.'));
     }
   }
 
