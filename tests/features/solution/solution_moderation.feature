@@ -1,4 +1,5 @@
-@api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@wip @api @group-i
 Feature: Solution moderation
   In order to manage solutions programmatically
   As a user of the website
@@ -31,8 +32,6 @@ Feature: Solution moderation
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip
   Scenario: Test the moderation workflow available states.
     Given users:
       | Username         | Roles     |

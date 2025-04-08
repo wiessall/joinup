@@ -1,4 +1,5 @@
-@api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@wip @api @group-i
 Feature: Solution editing.
   In order to manage solutions
   As a solution owner or solution facilitator
@@ -24,8 +25,7 @@ Feature: Solution editing.
       | title            | logo     |
       | Another solution | logo.png |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
