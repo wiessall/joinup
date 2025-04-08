@@ -146,7 +146,7 @@ class Collection extends Node implements CollectionInterface {
       // is a closed group, or the previous published version was an open group
       // and the current version is a closed group.
       $this->revokeFullMemberships();
-      \Drupal::messenger()->addWarning($this->t('All full memberships have been revoked. You need to accept the Code of Conduct to become a full member again.'));
+      \Drupal::messenger()->addWarning($this->t('All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.'));
     }
     elseif ($originalWasClosed === NULL && !$this->isClosed() || ($originalWasClosed && !$this->isClosed())) {
       // Either there is no previous published version and the current version
