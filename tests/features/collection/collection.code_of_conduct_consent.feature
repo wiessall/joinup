@@ -117,6 +117,7 @@ Feature:
       | Add event      |
       | Add news       |
       | Add solution   |
+    And no email has been sent to "Cedric Hawthorne"
     And I should not see the warning message "We updated our Code of Conduct"
     And I visit the "Think Tank" solution
     And I should not see the warning message "We updated our Code of Conduct"
