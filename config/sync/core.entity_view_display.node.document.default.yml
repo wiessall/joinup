@@ -75,6 +75,11 @@ targetEntityType: node
 bundle: document
 mode: default
 content:
+  anonymous_comment_links:
+    settings: { }
+    third_party_settings: { }
+    weight: 7
+    region: content
   field_comments:
     type: comment_default
     label: above
@@ -130,7 +135,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 7
+    weight: 8
     region: content
   field_short_title:
     type: string
