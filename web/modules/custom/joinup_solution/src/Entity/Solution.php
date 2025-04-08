@@ -19,7 +19,6 @@ use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
-use Drupal\joinup_group\Entity\CodeOfConductTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupTrait;
@@ -42,7 +41,6 @@ class Solution extends Node implements SolutionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
-  use CodeOfConductTrait;
   use ContactInformationTrait;
   use DescriptionTrait;
   use DistributionParentTrait;
