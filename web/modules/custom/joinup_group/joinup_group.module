@@ -876,7 +876,10 @@ function joinup_group_entity_update(EntityInterface $group): void {
   if ($group instanceof GroupInterface) {
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group_original_entity */
     $group_original_entity = $group->original;
-    if ($group_original_entity->getShortId() !== $group->getShortId()) {
+    if (
+      $group_original_entity->getShortId() !== $group->getShortId() ||
+      (empty($group->getShortId()) && $group_original_entity->label() !== $group->label())
+    ) {
       \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
       $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
       $arguments = [
