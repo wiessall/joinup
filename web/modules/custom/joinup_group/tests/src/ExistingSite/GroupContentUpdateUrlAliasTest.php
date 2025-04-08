@@ -268,6 +268,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $edit = ['title[0][value]' => 'The Biggest Collection'];
     $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
+    $this->assertSession()
+      ->pageTextContains("You've changed the collection's title from The Big Collection to The Biggest Collection. It will take some time until the collection content URLs will be updated.");
 
     // Process both queues.
     $this->drush('queue:run', ['joinup_group:group_update']);
@@ -319,6 +321,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $edit = ['title[0][value]' => 'Solution one'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
+    $this->assertSession()
+      ->pageTextContains("You've changed the solution's title from solution 1 to Solution one. It will take some time until the solution content URLs will be updated.");
 
     // Process both queues.
     $this->drush('queue:run', ['joinup_group:group_update']);
