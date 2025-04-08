@@ -43,7 +43,7 @@ interface CodeOfConductHanlderInterface {
    * Revokes the full membership of all users in the group.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *    The group entity.
+   *   The group entity.
    * @param bool $skipAccepted
    *   (optional) If TRUE, skip the memberships that have accepted the CoC.
    */
@@ -53,7 +53,7 @@ interface CodeOfConductHanlderInterface {
    * Restores the full membership of all users in the group.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *    The group entity.
+   *   The group entity.
    */
   public function restoreFullMemberships(GroupInterface $group): void;
 
@@ -61,7 +61,7 @@ interface CodeOfConductHanlderInterface {
    * Returns the name of the role that represents a full member.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *    The group entity.
+   *   The group entity.
    *
    * @return string
    *   The role ID which is in the format of

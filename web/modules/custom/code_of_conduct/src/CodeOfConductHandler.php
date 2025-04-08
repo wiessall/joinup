@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\code_of_conduct;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -166,7 +166,7 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
       ->condition('entity_type', $group->getEntityTypeId())
       ->condition('entity_id', $group->id())
       ->condition('state', [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_PENDING], 'IN');
-    if (!$skipAccepted && $membershipsWithAcceptedCoc = $this->getFullMembershipsWithAcceptedCoc()) {
+    if (!$skipAccepted && $membershipsWithAcceptedCoc = $this->getFullMembershipsWithAcceptedCoc($group)) {
       $query->condition('id', $membershipsWithAcceptedCoc, 'NOT IN');
     }
 
@@ -187,12 +187,15 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
   /**
    * Returns the membership IDs of full memberships with accepted CoC.
    *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
+   *
    * @return array
    *   The membership IDs of full memberships with accepted CoC.
    */
-  protected function getFullMembershipsWithAcceptedCoc(): array {
-    assert($this instanceof CollectionInterface);
-    $page = $this->getCodeOfConduct();
+  protected function getFullMembershipsWithAcceptedCoc(GroupInterface $group): array {
+    assert($group instanceof CollectionInterface);
+    $page = $group->getCodeOfConduct();
     if ($page === NULL) {
       return [];
     }
@@ -201,8 +204,8 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
       ->getStorage('og_membership')
       ->getQuery()
       ->accessCheck(FALSE)
-      ->condition('entity_type', $this->getEntityTypeId())
-      ->condition('entity_id', $this->id())
+      ->condition('entity_type', $group->getEntityTypeId())
+      ->condition('entity_id', $group->id())
       ->condition('state', [OgMembershipInterface::STATE_ACTIVE, OgMembershipInterface::STATE_PENDING], 'IN')
       ->condition('coc_document.target_id', $page->id())
       ->condition('coc_document.target_revision_id', $page->getRevisionId());
