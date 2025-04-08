@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -50,8 +50,8 @@ trait ShareableContentTrait {
       'entity' => $group,
       'timestamp' => $timestamp,
     ]);
-    $sharedInMeta->save();
     $this->invalidateCacheAfterShareOperation($group);
+    $sharedInMeta->save();
   }
 
   /**
@@ -83,13 +83,18 @@ trait ShareableContentTrait {
       return;
     }
 
-    foreach ($keys as $key) {
+    // ItemList::removeItem() also re-keys the field items, so we should remove
+    // the items in reversed delta order.
+    foreach (array_reverse($keys) as $key) {
       $fieldItemList->removeItem($key);
     }
-    $sharedInMeta->save();
     foreach ($groups as $group) {
       $this->invalidateCacheAfterShareOperation($group);
     }
+
+    // Now that we reset the tags of the target groups, we can save the meta
+    // entity.
+    $sharedInMeta->save();
   }
 
   /**
@@ -102,15 +107,14 @@ trait ShareableContentTrait {
     // Tags of the meta entity target are invalidated on save, but the share
     // target group's tags are invalidated here.
     Cache::invalidateTags($group->getCacheTagsToInvalidate());
+    // Reset static storage cache of the target group.
+    $storage = \Drupal::entityTypeManager()->getStorage($group->getEntityTypeId());
+    assert($storage instanceof EntityStorageInterface);
+    $storage->resetCache([$group->id()]);
 
     $contentTrackingManager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
     if ($contentTrackingManager instanceof ContentEntityTrackingManager) {
       $contentTrackingManager->trackEntityChange($group);
-    }
-
-    $postRequestIndexing = \Drupal::getContainer()->get('search_api.post_request_indexing', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-    if ($postRequestIndexing instanceof DestructableInterface) {
-      $postRequestIndexing->destruct();
     }
   }
 
