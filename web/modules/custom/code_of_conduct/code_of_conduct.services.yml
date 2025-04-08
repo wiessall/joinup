@@ -1,0 +1,4 @@
+services:
+  code_of_conduct.handler:
+    class: Drupal\code_of_conduct\CodeOfConductHandler
+    arguments: ['@database', '@entity_type.manager']

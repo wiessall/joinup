@@ -25,7 +25,6 @@ use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Entity\GroupMembership;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
@@ -323,83 +322,6 @@ function collection_node_delete(NodeInterface $node): void {
     $group->skip_notification = TRUE;
     $group->setChangedTime(\Drupal::time()->getRequestTime())->save();
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function collection_meta_entity_insert(EntityInterface $entity): void {
-  _collection_meta_entity_handle_coc($entity, TRUE);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function collection_meta_entity_update(EntityInterface $entity): void {
-  _collection_meta_entity_handle_coc($entity);
-}
-
-/**
- * Handles the invalidation of the CoC memberships in a collection.
- *
- * This function is a group of hooks that affect memberships according to
- * specific requirements/changes.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The meta entity that was inserted or updated.
- * @param bool $insert
- *   Whether the entity was inserted or updated. Defaults to FALSE.
- *
- * @see \Drupal\custom_page\Entity\CustomPage::postSave
- * @see \collection_meta_entity_delete
- */
-function _collection_meta_entity_handle_coc(MetaEntityInterface $entity, bool $insert = FALSE): void {
-  if ($entity->bundle() !== 'collection_settings') {
-    return;
-  }
-
-  /** @var \Drupal\collection\Entity\CollectionInterface $group */
-  $group = $entity->getTargetEntity();
-
-  // Open collections are not restricted by CoC.
-  if (!$group->isClosed()) {
-    return;
-  }
-
-  $codeOfConduct = $entity->get('code_of_conduct');
-  if ($insert && !$codeOfConduct->isEmpty()) {
-    $group->revokeFullMemberships();
-  }
-  else {
-    $original = $entity?->original;
-    if ($original && !$original->get('code_of_conduct')->equals($codeOfConduct)) {
-      $codeOfConduct->isEmpty() ? $group->restoreFullMemberships() : $group->revokeFullMemberships();
-    }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- *
- * This function is a group of hooks that affect memberships according to
- * specific requirements/changes.
- *
- * @see \Drupal\custom_page\Entity\CustomPage::postSave
- * @see _collection_meta_entity_handle_coc
- */
-function collection_meta_entity_delete(EntityInterface $entity): void {
-  if ($entity->bundle() !== 'collection_settings') {
-    return;
-  }
-
-  /** @var \Drupal\collection\Entity\CollectionInterface $group */
-  $group = $entity->getTargetEntity();
-  if (empty($group)) {
-    // This can happen when the deletion of the meta entity is the result of
-    // the deletion of the parent entity.
-    return;
-  }
-  $group->restoreFullMemberships();
 }
 
 /**
