@@ -1,0 +1,51 @@
+uuid: b59953b6-0fd7-4af2-89c5-e78ef9b92a07
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.function
+field_name: function
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: defense
+      label: Defense
+    -
+      value: economic_affairs
+      label: 'Economic affairs'
+    -
+      value: education
+      label: Education
+    -
+      value: environmental_protection
+      label: 'Environmental Protection'
+    -
+      value: general_public_services
+      label: 'General public services'
+    -
+      value: health
+      label: Health
+    -
+      value: housing_and_community_amenities
+      label: 'Housing and Community Amenities'
+    -
+      value: public_order_and_safety
+      label: 'Public Order and Safety'
+    -
+      value: recreation_culture_and_religion
+      label: 'Recreation, Culture, and Religion'
+    -
+      value: social_protection
+      label: 'Social Protection'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
