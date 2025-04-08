@@ -218,6 +218,8 @@ final class CodeOfConductHandler implements CodeOfConductHanlderInterface {
   /**
    * Revokes full memberships for a batch of membership IDs.
    *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
    * @param int[] $ids
    *   The membership IDs to revoke.
    */
