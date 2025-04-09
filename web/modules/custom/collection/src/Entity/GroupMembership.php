@@ -111,7 +111,7 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   protected function addFullMemberRole(): self {
     $group = $this->getGroup();
     \assert($group instanceof GroupInterface);
-    $fullMemberRoleId = \Drupal::service('code_of_conduct.handler')
+    $fullMemberRoleId = \Drupal::service('code_of_conduct.membership_handler')
       ->getFullMemberRoleId($group);
     $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
     $this->addRole($fullMemberRole);
