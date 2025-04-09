@@ -31,4 +31,3 @@ Feature: Send email to contact information
       | Type of support: Other                            |
       | Message: test                                     |
     And the email sent to "some.resend@example.com" with subject "test message" contains "logo.png" attachment
-
