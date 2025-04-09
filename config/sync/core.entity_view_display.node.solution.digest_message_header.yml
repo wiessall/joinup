@@ -8,14 +8,12 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.country
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_shared_in
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.function
     - field.field.node.solution.group_moderation
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
@@ -47,7 +45,6 @@ hidden:
   collections: true
   contact: true
   content_creation: true
-  country: true
   description: true
   distributions: true
   documentation: true
@@ -60,7 +57,6 @@ hidden:
   field_topic: true
   flag_interoperability: true
   flag_like: true
-  function: true
   group_moderation: true
   landing_page: true
   langcode: true

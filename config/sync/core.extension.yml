@@ -24,7 +24,6 @@ module:
   contact_form: 0
   contact_information: 0
   contextual: 0
-  country: 0
   csv_serialization: 0
   ctools: 0
   curated_content_listing: 0
