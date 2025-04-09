@@ -8,14 +8,12 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.country
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_shared_in
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.function
     - field.field.node.solution.group_moderation
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
@@ -33,22 +31,14 @@ dependencies:
     - field.field.node.solution.solution_type
     - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
-    - image.style.thumbnail
-    - media.type.solution_logo
     - node.type.solution
   module:
-    - country
     - field_group
-    - file_url
-    - image_library_widget
     - inline_entity_form
-    - joinup_workflow
-    - link
-    - search_api_field
     - text
 third_party_settings:
   field_group:
-    group_about_the_solution:
+    group_solution_information:
       children:
         - title
         - abstract
@@ -57,7 +47,7 @@ third_party_settings:
         - function
         - language
         - content_creation
-      label: 'About the solution'
+      label: 'Solution information'
       region: content
       parent_name: ''
       weight: 0
@@ -69,17 +59,16 @@ third_party_settings:
         label_as_html: false
         show_step_title: true
         step_description: ''
-        back_button_show: true
-        back_button_text: Back
+        back_button_show: false
+        back_button_text: ''
         next_button_text: Next
-        required_fields: true
         step_help: ''
-    group_contact_information:
+    group_contact_details:
       children:
         - owner
         - country
         - contact
-      label: 'Contact information'
+      label: 'Contact details'
       region: content
       parent_name: ''
       weight: 1
@@ -150,8 +139,7 @@ third_party_settings:
         step_description: ''
         back_button_show: true
         back_button_text: Back
-        next_button_text: Next
-        required_fields: true
+        next_button_text: ''
         step_help: ''
 id: node.solution.default
 targetEntityType: node
@@ -190,12 +178,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  country:
-    type: country_default
-    weight: 12
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   description:
     type: text_textarea
     weight: 3
@@ -211,12 +193,6 @@ content:
     settings:
       rows: 5
       placeholder: ''
-    third_party_settings: {  }
-  function:
-    type: options_select
-    weight: 5
-    region: content
-    settings: {  }
     third_party_settings: {  }
   language:
     type: options_select

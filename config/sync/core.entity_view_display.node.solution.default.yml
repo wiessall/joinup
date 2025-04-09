@@ -7,14 +7,12 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.country
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_shared_in
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.function
     - field.field.node.solution.group_moderation
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
@@ -35,7 +33,6 @@ dependencies:
     - node.type.solution
     - og_menu.ogmenu.quick_links
   module:
-    - country
     - custom_markup_block
     - joinup_group
     - joinup_layout
@@ -43,7 +40,6 @@ dependencies:
     - layout_discovery
     - link
     - og
-    - options
     - text
     - user
 third_party_settings:
@@ -849,36 +845,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 48
             additional: {  }
-          cc55767f-621c-42da-ad42-4d710f5fdc1d:
-            uuid: cc55767f-621c-42da-ad42-4d710f5fdc1d
-            region: main
-            configuration:
-              id: 'field_block:node:solution:function'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: list_default
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-          a0715b9c-7cb4-4802-ab05-42bcecbdf919:
-            uuid: a0715b9c-7cb4-4802-ab05-42bcecbdf919
-            region: main
-            configuration:
-              id: 'field_block:node:solution:country'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: country_default
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 2
-            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -1523,13 +1489,6 @@ content:
     third_party_settings: {  }
     weight: 101
     region: content
-  country:
-    type: country_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 103
-    region: main
   distributions:
     type: entity_reference_entity_view
     label: hidden
@@ -1549,13 +1508,6 @@ content:
     third_party_settings: {  }
     weight: 10
     region: content
-  function:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 102
-    region: main
   links:
     settings: {  }
     third_party_settings: {  }
