@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63d5190316feeab478f7972c974270a6",
+    "content-hash": "de1e34947ed4f153604d7c4672879abf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6734,30 +6734,31 @@
         },
         {
             "name": "drupal/og",
-            "version": "1.0.0-alpha10",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
-                "reference": "8.x-1.0-alpha10"
+                "reference": "2.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha10.zip",
-                "reference": "8.x-1.0-alpha10",
-                "shasum": "8f474c912e569e5d1dbe780556adcaa339291519"
+                "url": "https://ftp.drupal.org/files/projects/og-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "8716eaad445b1a909047afe6ff98cc1c1494237f"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
                 "drupal/coder": "^8.3.16",
-                "phpunit/phpunit": "^7 || ^8 || ^9"
+                "drush/drush": "^12.5 || ^13.3",
+                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10.5"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha10",
-                    "datestamp": "1669023300",
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1744224067",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6831,36 +6832,36 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og",
                 "issues": "https://drupal.org/project/issues/og",
-                "irc": "irc://irc.freenode.org/drupal-og",
                 "slack": "https://drupal.slack.com/messages/CELR48EA0"
             }
         },
         {
             "name": "drupal/og_menu",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og_menu.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og_menu-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "fcdd61d1b7f8a42eb445267a6a45c4d0cb38469e"
+                "url": "https://ftp.drupal.org/files/projects/og_menu-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "64756c9c8cd20d37231ce02bdd8a55720dd03cdc"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
-                "drupal/og": "^1.0"
+                "drupal/og": "^1.0 || ^2.0"
             },
             "require-dev": {
-                "drupal/drupal-extension": "^5.1"
+                "drupal/drupal-extension": "^5.1",
+                "drush/drush": "^12.5 || ^13.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1740997877",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1744224942",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6887,6 +6888,10 @@
                 {
                     "name": "jide",
                     "homepage": "https://www.drupal.org/user/146088"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "leonk",
