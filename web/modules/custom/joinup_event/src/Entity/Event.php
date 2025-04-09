@@ -88,7 +88,7 @@ class Event extends CommunityContentBase implements EventInterface {
    */
   public function getSharingNotification(): ?TranslatableMarkup {
     return $this->t(
-      'Please note: You must be subscribed to the target space to share your content. Your event will be shared on that space for six months. After that, it will be considered obsolete and will be automatically removed from that space.'
+      'Please note: You must be subscribed to the target space to share your content.<br>Your event will be shared on that space for six months. After that,<br>it will be considered obsolete and will be automatically removed from that space.'
     );
   }
 

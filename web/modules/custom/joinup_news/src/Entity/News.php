@@ -49,7 +49,7 @@ class News extends CommunityContentBase implements NewsInterface {
    */
   public function getSharingNotification(): ?TranslatableMarkup {
     return $this->t(
-      'Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space.'
+      'Please note: You must be subscribed to the target space to share your content.<br>Your news item will be shared on that space for one month. After that,<br>it will be considered obsolete and will be automatically removed from that space.'
     );
   }
 
