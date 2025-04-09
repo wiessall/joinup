@@ -13,5 +13,9 @@ parameters:
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
+        - tests/src/*
+        - web/modules/custom/joinup_core/tests/modules/joinup_test_time/src/Datetime/TestTime.php
+        - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
+        - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php
