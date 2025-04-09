@@ -152,7 +152,10 @@ function joinup_rdf_node_delete(EntityInterface $entity): void {
   if (!$entity instanceof RdfSyncEntityInterface) {
     return;
   }
-
+  $uri = $entity->getUri();
+  if (empty($uri)) {
+    return;
+  }
   // Delete entries where the entity is the object from the default graph.
   $graph_uri = \Drupal::config('rdf_sync.settings')->get('graph_uri');
   $query = <<<QUERY
@@ -162,10 +165,8 @@ DELETE {
 }
 WHERE {
   ?s ?p ?o .
-  FILTER (?o = <{$entity->getUri()}>) .
+  FILTER (?o = <{$uri}>) .
 }
 QUERY;
-  if (!empty($entity->getUri())) {
-    \Drupal::service('rdf_sync.connection')->query($query);
-  }
+  \Drupal::service('rdf_sync.connection')->query($query);
 }
