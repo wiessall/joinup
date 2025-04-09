@@ -134,12 +134,12 @@ class ShareForm extends ShareFormBase {
     $group_labels = [];
     // We can safely loop through these ids, as invalid options are handled
     // already by Drupal.
-    foreach ($groups as $id => $value) {
-      $group = $this->entityTypeManager->getStorage('node')->load($id);
-      assert($group instanceof GroupInterface);
-      $this->shareOnGroup($group);
-      $group_labels[] = $group->label();
+    foreach (array_keys($groups) as $id) {
+      $groups[$id] = $this->entityTypeManager->getStorage('node')->load($id);
+      assert($groups[$id] instanceof GroupInterface);
+      $group_labels[] = $groups[$id]->label();
     }
+    $this->shareOnGroups($groups);
 
     // Show a message if the content was shared on at least one group.
     if (!empty($groups)) {
@@ -195,19 +195,12 @@ class ShareForm extends ShareFormBase {
   /**
    * Shares the current entity inside a group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group where to share the entity on.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the current entity cannot be retrieved from the database.
-   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
-   *   Thrown when the entity storage is read only.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups where the entity must be shared additionally.
    */
-  protected function shareOnGroup(GroupInterface $group): void {
+  protected function shareOnGroups(array $groups): void {
     assert($this->entity instanceof ShareableContentInterface);
-    $this->entity->shareWith($group);
-
-    $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
+    $this->entity->shareWith($groups);
   }
 
 }

@@ -153,12 +153,6 @@ class UnshareForm extends ShareFormBase {
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
    *   The groups to remove the node from.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the unshared entity cannot be saved after the group is
-   *   removed from it.
-   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
-   *   Thrown when the entity storage is read only.
    */
   protected function removeFromGroups(array $groups): void {
     assert($this->entity instanceof ShareableContentInterface);

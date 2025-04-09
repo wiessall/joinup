@@ -322,7 +322,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       );
 
       $expireTime = $groupSharingExpireTime[$delta] ?? NULL;
-      $content->shareWith($group, $expireTime);
+      $content->shareWith([$group], $expireTime);
     }
   }
 
