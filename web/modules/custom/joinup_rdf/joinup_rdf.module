@@ -165,5 +165,7 @@ WHERE {
   FILTER (?o = <{$entity->getUri()}>) .
 }
 QUERY;
-  \Drupal::service('rdf_sync.connection')->query($query);
+  if (!empty($entity->getUri())) {
+    \Drupal::service('rdf_sync.connection')->query($query);
+  }
 }
