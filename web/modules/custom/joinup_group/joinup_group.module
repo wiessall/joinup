@@ -34,6 +34,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Entity\ShareableContentInterface;
+use Drupal\joinup_group\Entity\Sharing;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
@@ -101,6 +102,10 @@ function joinup_group_theme($existing, $type, $theme, $path): array {
 function joinup_group_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['message']['announcement'])) {
     $bundles['message']['announcement']['class'] = Announcement::class;
+  }
+
+  if (!empty($bundles['meta_entity']['shared_in'])) {
+    $bundles['meta_entity']['shared_in']['class'] = Sharing::class;
   }
 }
 

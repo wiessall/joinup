@@ -4,16 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
-use Drupal\search_api\Utility\PostRequestIndexingInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Trait of content items which can be shared between groups.
@@ -30,8 +23,10 @@ trait ShareableContentTrait {
   /**
    * {@inheritdoc}
    */
-  public function getSharingMetaEntity(): MetaEntityInterface {
-    return MetaEntity::loadOrCreate('shared_in', $this);
+  public function getSharingMetaEntity(): SharingInterface {
+    $metaEntity = MetaEntity::loadOrCreate('shared_in', $this);
+    assert($metaEntity instanceof SharingInterface);
+    return $metaEntity;
   }
 
   /**
@@ -47,15 +42,9 @@ trait ShareableContentTrait {
    * {@inheritdoc}
    */
   public function shareWith(array $groups, ?int $timestamp = NULL): void {
-    $expires = $this->getShareExpireTimestamp($timestamp);
+    $expireTimestamp = $this->getShareExpireTimestamp($timestamp);
     $sharedInMeta = $this->getSharingMetaEntity();
-    foreach ($groups as $group) {
-      $sharedInMeta->get('field_shared_in')->appendItem([
-        'entity' => $group,
-        'timestamp' => $expires,
-      ]);
-    }
-    $this->invalidateCacheAfterShareOperation($sharedInMeta, $groups);
+    $sharedInMeta->addSharings($groups, $expireTimestamp);
     $sharedInMeta->save();
   }
 
@@ -77,87 +66,8 @@ trait ShareableContentTrait {
    */
   public function unShareFrom(array $groups): void {
     $sharedInMeta = $this->getSharingMetaEntity();
-    if ($sharedInMeta->isNew()) {
-      return;
-    }
-
-    $groupIds = array_map(
-      fn (GroupInterface $group): string|int => $group->id(),
-      $groups,
-    );
-
-    // Find the delta of the item.
-    $fieldItemList = $sharedInMeta->get('field_shared_in');
-    $rawValue = $fieldItemList->getValue();
-    $keys = array_keys(
-      array_filter(
-        $rawValue,
-        function (array $itemValue) use ($groupIds): bool {
-          return in_array($itemValue['target_id'], $groupIds);
-        }
-      )
-    );
-    if (empty($keys)) {
-      return;
-    }
-
-    // ItemList::removeItem() also re-keys the field items, so we should remove
-    // the items in reversed delta order.
-    foreach (array_reverse($keys) as $key) {
-      $fieldItemList->removeItem($key);
-    }
-    $this->invalidateCacheAfterShareOperation($sharedInMeta, $groups);
-
-    // Now that we reset the tags of the target groups, we can save the meta
-    // entity.
+    $sharedInMeta->removeSharings($groups);
     $sharedInMeta->save();
-  }
-
-  /**
-   * Invalidates the share target's cache and marks it to be re-indexed.
-   *
-   * @param \Drupal\meta_entity\Entity\MetaEntityInterface $metaEntity
-   *   The sharing meta entity.
-   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
-   *   The share target groups.
-   */
-  protected function invalidateCacheAfterShareOperation(MetaEntityInterface $metaEntity, array $groups): void {
-    // Tags of the meta entity target are invalidated on save, but the share
-    // target group's tags are invalidated here.
-    $host = $metaEntity->getTargetEntity();
-    $entities = array_filter(array_merge([$host], $groups));
-    $tagsToInvalidate = array_reduce(
-      $entities,
-      fn (array $carry, EntityInterface $entity): array => array_merge($carry, $entity->getCacheTagsToInvalidate()),
-      [],
-    );
-    Cache::invalidateTags($tagsToInvalidate);
-    // Reset static storage cache of the target group.
-    $idsPerEntityType = array_reduce(
-      $entities,
-      function (array $carry, EntityInterface $entity): array {
-        $carry[$entity->getEntityTypeId()][] = $entity->id();
-        return $carry;
-      },
-      [],
-    );
-    foreach ($idsPerEntityType as $type => $ids) {
-      $storage = \Drupal::entityTypeManager()->getStorage($type);
-      assert($storage instanceof EntityStorageInterface);
-      $storage->resetCache($ids);
-    }
-
-    $contentTrackingManager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-    if ($contentTrackingManager instanceof ContentEntityTrackingManager) {
-      foreach ($entities as $entity) {
-        $contentTrackingManager->trackEntityChange($entity);
-      }
-
-      $postRequestIndexer = \Drupal::getContainer()->get('search_api.post_request_indexing');
-      if ($postRequestIndexer instanceof PostRequestIndexingInterface) {
-        $postRequestIndexer->destruct();
-      }
-    }
   }
 
   /**
