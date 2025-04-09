@@ -1,4 +1,8 @@
 services:
-  code_of_conduct.handler:
-    class: Drupal\code_of_conduct\CodeOfConductHandler
+  code_of_conduct.crud_handler:
+    class: Drupal\code_of_conduct\CocEntityCrudHandler
+    arguments: ['@database', '@code_of_conduct.membership_handler', '@messenger']
+
+  code_of_conduct.membership_handler:
+    class: Drupal\code_of_conduct\CocMembershipHandler
     arguments: ['@database', '@entity_type.manager', '@messenger']
