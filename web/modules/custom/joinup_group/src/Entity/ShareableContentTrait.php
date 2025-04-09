@@ -96,21 +96,7 @@ trait ShareableContentTrait {
 
     $timestamp ??= \Drupal::time()->getCurrentTime();
     $dateTime = new \DateTime("@$timestamp");
-
-    $year = (int) $dateTime->format('Y');
-    $month = (int) $dateTime->format('n');
-    $dayInMonth = (int) $dateTime->format('j');
-
-    $laterMonth = ($monthsToAdd + $month - 1) % 12 + 1;
-    $laterYear = (int) ($year + floor(($monthsToAdd + $month - 1) / 12));
-    $daysInLaterMonth = cal_days_in_month(CAL_GREGORIAN, $laterMonth, $laterYear);
-    $laterDay = $dayInMonth > $daysInLaterMonth ? $daysInLaterMonth : $dayInMonth;
-
-    $laterDateTime = new \DateTime(
-      "$laterYear-$laterMonth-$laterDay",
-      new \DateTimeZone('UTC')
-    );
-    return $laterDateTime->getTimestamp();
+    return $dateTime->modify("+$monthsToAdd month")->getTimestamp();
   }
 
 }
