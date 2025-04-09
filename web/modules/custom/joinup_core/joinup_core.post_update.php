@@ -48,7 +48,7 @@ function joinup_core_post_update_200401(array &$sandbox): string {
       ->fetchAllKeyed(0, 0);
     $sandbox['total'] = count($sandbox['nids_to_process']);
     $sandbox['processed'] = 0;
-    $sandbox['migrated'] = 0;
+    $sandbox['sharingCount'] = 0;
   }
 
   $nidsToProcess = array_splice($sandbox['nids_to_process'], 0, 50);
@@ -104,6 +104,7 @@ function joinup_core_post_update_200401(array &$sandbox): string {
       }
       $share->save();
       $sandbox['migrated']++;
+      $sandbox['sharingCount'] += count($shares);
     }
     finally {
       $accountSwitcher->switchBack();
@@ -113,10 +114,9 @@ function joinup_core_post_update_200401(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return sprintf(
-    "Processed %s of %s shared content. Migrated %s items, skipped %s shared content (because their sharing already expired).",
+    "Processed %s of %s shared content. Migrated %s sharing so far.",
     $sandbox['processed'],
     $sandbox['total'],
-    $sandbox['migrated'],
-    $sandbox['processed'] - $sandbox['migrated'],
+    $sandbox['sharingCount'],
   );
 }
