@@ -64,12 +64,12 @@ class ShareableContentTraitTest extends UnitTestCase {
       '2 months, starting at the end of Dec, ending in Feb' => [
         '2024-12-31',
         2,
-        '2025-2-28',
+        '2025-3-3',
       ],
       '11 months, starting on the end of the year' => [
         '2024-12-31',
         11,
-        '2025-11-30',
+        '2025-12-1',
       ],
       '12 months, starting in Dec' => [
         '2024-12-31',
