@@ -126,6 +126,7 @@ Feature: Sharing content between collections
     # Unshare the content.
     When I check "Classic Rock"
     And I press "Submit" in the "Modal buttons" region
+    And the modal should be closed
 
     # I should still be on the same page, but the group content should be
     # changed. The "Interesting content" should no longer be visible.
