@@ -53,13 +53,13 @@ interface ShareableContentInterface {
   /**
    * Shares the entity to the given group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group to share the entity to.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups to share the entity to.
    * @param int|null $timestamp
    *   The timestamp of the share action. Use NULL if the share happened just
-   *   now. Defaults to NULL.
+   *   now. Defaults to NULL. Necessary only for testing purposes.
    */
-  public function shareWith(GroupInterface $group, ?int $timestamp = NULL): void;
+  public function shareWith(array $groups, ?int $timestamp = NULL): void;
 
   /**
    * Removes the current node from being shared inside a group.
