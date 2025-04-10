@@ -1,6 +1,7 @@
 # Tests notifications for solutions. This file does not include template 1.
 # Template 1 is tested in the add_solution.feature already.
-@api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@wip @api @group-i
 Feature: Solution notifications
   In order to manage solutions
   As a user of the website

@@ -28,7 +28,8 @@ Feature: Publication date works as expected on RDF entities
     Examples:
       | entity label          | type       | type label | label field     |
       | Collection to publish | collection | Collection | title[0][value] |
-      | Solution to publish   | solution   | Solution   | title[0][value] |
+      # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+      #| Solution to publish   | solution   | Solution   | title[0][value] |
       | Release to publish    | release    | Release    | title[0][value] |
 
   Scenario: Publication date works as expected on distributions

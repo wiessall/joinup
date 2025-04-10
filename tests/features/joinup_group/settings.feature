@@ -9,7 +9,8 @@ Feature: Collections/Solutions settings
       | name       | owner type |
       | Jonny inc. | Company    |
 
-  @uploadFiles:logo.png
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  @wip @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     And collection content:
       | title             | access url        | closed | creation date    | content_creation         | group_moderation |

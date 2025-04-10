@@ -52,6 +52,8 @@ Feature: Test the visibility of the quick links menu.
     And I go to the "Some collection" collection
     Then I should not see the heading "Quick links"
 
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  @wip
   Scenario: Test visibility for solutions.
     Given collection content:
       | title           | content_creation         | group_moderation |

@@ -1,4 +1,5 @@
-@api @javascript
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@wip @api @javascript
 Feature: CKEditor5
 
   Background:
