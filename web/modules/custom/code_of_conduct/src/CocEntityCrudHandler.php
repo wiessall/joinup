@@ -14,14 +14,14 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 /**
  * Handler service for Code of Conduct.
  */
-final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
+final readonly class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    private readonly Connection $database,
-    private readonly CocMembershipHandlerInterface $membershipHandler,
-    private readonly MessengerInterface $messenger,
+    private Connection $database,
+    private CocMembershipHandlerInterface $membershipHandler,
+    private MessengerInterface $messenger,
   ) {}
 
   /**
@@ -36,24 +36,24 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
     // version is not a published one, we don't need to do anything. If the
     // collection is updated and the current version is published, we need to
     // compare with the last published version to decide if we need to revoke
-    // or grant full memberships. If there is no previous published version, we
-    // only act if the current version is a closed group.
+    // or grant full memberships. If there is no previously published version,
+    // we only act if the current version is a closed group.
     /** @var \Drupal\collection\Entity\CollectionInterface $group */
     if (!$group->isPublished() || !$group->hasPublishedCodeOfConduct()) {
       return;
     }
     $originalWasClosed = $this->wasLastPublishedRevisionClosed($group);
     if ($originalWasClosed === NULL && $group->isClosed() || ($originalWasClosed === FALSE && $group->isClosed())) {
-      // Either there is no previous published version and the current version
-      // is a closed group, or the previous published version was an open group
-      // and the current version is a closed group.
+      // Either there is no previously published version and the current
+      // version is a closed group, or the previously published version was an
+      // open group and the current version is a closed group.
       $this->membershipHandler->revokeFullMemberships($group);
       $this->messenger->addWarning($this->t('All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.'));
     }
     elseif ($originalWasClosed === NULL && !$group->isClosed() || ($originalWasClosed && !$group->isClosed())) {
-      // Either there is no previous published version and the current version
-      // is an open group, or the previous published version was a closed group
-      // and the current version is an open group.
+      // Either there is no previously published version and the current
+      // version is an open group, or the previously published version was a
+      // closed group and the current version is an open group.
       $this->membershipHandler->restoreFullMemberships($group);
       $this->messenger->addWarning($this->t('All full memberships have been restored.'));
     }
@@ -137,7 +137,7 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
    *
    * @return bool|null
    *   TRUE if the last revision was closed, FALSE if it was not closed, or
-   *   NULL if there is no previous published revision.
+   *   NULL if there is no previously published revision.
    */
   protected function wasLastPublishedRevisionClosed(GroupInterface $group): ?bool {
     $query = $this->database->select('node_field_revision', 'nr');
