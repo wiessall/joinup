@@ -6,22 +6,24 @@ namespace Drupal\code_of_conduct;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Handler service for Code of Conduct.
  */
 final readonly class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
 
-  use StringTranslationTrait;
-
   public function __construct(
     private Connection $database,
+    #[Autowire(service: 'code_of_conduct.membership_handler')]
     private CocMembershipHandlerInterface $membershipHandler,
     private MessengerInterface $messenger,
+    private TranslationInterface $stringTranslation,
   ) {}
 
   /**
@@ -48,14 +50,26 @@ final readonly class CocEntityCrudHandler implements CocEntityCrudHandlerInterfa
       // version is a closed group, or the previously published version was an
       // open group and the current version is a closed group.
       $this->membershipHandler->revokeFullMemberships($group);
-      $this->messenger->addWarning($this->t('All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.'));
+      // We cannot use the StringTranslationTrait because the class is
+      // readonly. Mimic StringTranslationTrait.
+      $this->messenger->addWarning(
+        new TranslatableMarkup(
+          'All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.',
+          string_translation: $this->stringTranslation,
+        ));
     }
     elseif ($originalWasClosed === NULL && !$group->isClosed() || ($originalWasClosed && !$group->isClosed())) {
       // Either there is no previously published version and the current
       // version is an open group, or the previously published version was a
       // closed group and the current version is an open group.
       $this->membershipHandler->restoreFullMemberships($group);
-      $this->messenger->addWarning($this->t('All full memberships have been restored.'));
+      // We cannot use the StringTranslationTrait because the class is
+      // readonly. Mimic StringTranslationTrait.
+      $this->messenger->addWarning(
+        new TranslatableMarkup(
+          'All full memberships have been restored.',
+          string_translation: $this->stringTranslation,
+        ));
     }
   }
 
