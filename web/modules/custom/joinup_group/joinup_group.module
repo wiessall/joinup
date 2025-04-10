@@ -874,6 +874,10 @@ function joinup_group_user_update(UserInterface $user): void {
  */
 function joinup_group_entity_update(EntityInterface $group): void {
   if ($group instanceof GroupInterface) {
+    if (!$group->isDefaultRevision()) {
+      return;
+    }
+
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group_original_entity */
     $group_original_entity = $group->original;
     if ($group_original_entity->getShortId() !== $group->getShortId()) {
