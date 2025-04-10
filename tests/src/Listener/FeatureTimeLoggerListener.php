@@ -10,7 +10,7 @@ use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
-use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Joinup\EnvironmentDetector;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,8 +26,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Then ensure all groups are balanced and have similar execution times.
  */
 class FeatureTimeLoggerListener implements EventSubscriberInterface {
-
-  use DigitQaPipelineAwareTrait;
 
   /**
    * Whether this listener should run.
@@ -67,7 +65,7 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
    */
   public function beforeExercise(): void {
     $dry_run = $this->input->getOption('dry-run');
-    $this->enabled = !$dry_run && (self::isDigitQaPipeline() || getenv('JOINUP_BEHAT_STATS'));
+    $this->enabled = !$dry_run && (EnvironmentDetector::isGitlabPipeline() || getenv('JOINUP_BEHAT_STATS'));
   }
 
   /**
