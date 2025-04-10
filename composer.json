@@ -440,7 +440,8 @@
             },
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
-                "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff"
+                "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff",
+                "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
