@@ -376,26 +376,4 @@ interface GroupInterface extends
    */
   public function getActiveMemberCount(): int;
 
-  /**
-   * Revokes the full membership of all users in the group.
-   *
-   * @param bool $skipAccepted
-   *   (optional) If TRUE, skip the memberships that have accepted the CoC.
-   */
-  public function revokeFullMemberships(bool $skipAccepted = FALSE): void;
-
-  /**
-   * Restores the full membership of all users in the group.
-   */
-  public function restoreFullMemberships(): void;
-
-  /**
-   * Returns the name of the role that represents a full member.
-   *
-   * @return string
-   *   The role ID which is in the format of
-   *   <entity_type>-<bundle>-<role_name>.
-   */
-  public function getFullMemberRoleId(): string;
-
 }

@@ -7,7 +7,6 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -18,7 +17,6 @@ use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
-use Drupal\joinup_group\Entity\CodeOfConductTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
@@ -37,7 +35,6 @@ class Collection extends Node implements CollectionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
-  use CodeOfConductTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
@@ -124,67 +121,8 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
-    parent::postSave($storage, $update);
-
-    // Calculate if we need to revoke or grant full memberships. When the
-    // collection is updated and is changed from open to closed, AND there is a
-    // Code of Conduct page, we need to revoke all full memberships. If the
-    // collection is updated and is changed from closed to open, we need to
-    // restore all full memberships. 2 special cases here: If the current saved
-    // version is not a published one, we don't need to do anything. If the
-    // collection is updated and the current version is published, we need to
-    // compare with the last published version to decide if we need to revoke
-    // or grant full memberships. If there is no previous published version, we
-    // only act if the current version is a closed group.
-    if (!$update || !$this->isPublished() || !$this->hasPublishedCodeOfConduct()) {
-      return;
-    }
-    $originalWasClosed = $this->wasLastPublishedRevisionClosed();
-    if ($originalWasClosed === NULL && $this->isClosed() || ($originalWasClosed === FALSE && $this->isClosed())) {
-      // Either there is no previous published version and the current version
-      // is a closed group, or the previous published version was an open group
-      // and the current version is a closed group.
-      $this->revokeFullMemberships();
-      \Drupal::messenger()->addWarning($this->t('All full memberships have been revoked. Members need to accept the Code of Conduct to become a full member again.'));
-    }
-    elseif ($originalWasClosed === NULL && !$this->isClosed() || ($originalWasClosed && !$this->isClosed())) {
-      // Either there is no previous published version and the current version
-      // is an open group, or the previous published version was a closed group
-      // and the current version is an open group.
-      $this->restoreFullMemberships();
-      \Drupal::messenger()->addWarning($this->t('All full memberships have been restored.'));
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isClosed(): bool {
     return (bool) $this->getMainPropertyValue('closed_group');
-  }
-
-  /**
-   * Checks if the last revision was closed.
-   *
-   * @return bool|null
-   *   TRUE if the last revision was closed, FALSE if it was not closed, or
-   *   NULL if there is no previous published revision.
-   */
-  protected function wasLastPublishedRevisionClosed(): bool|null {
-    $database = \Drupal::database();
-    $query = $database->select('node_field_revision', 'nr');
-    $query->join('node_revision__closed_group', 'nrcg', 'nr.vid = nrcg.revision_id');
-    $query->fields('nrcg', ['closed_group_value'])
-      ->condition('nr.nid', $this->id())
-      ->condition('nr.status', 1);
-    if ($currentVid = $this->getRevisionId()) {
-      $query->condition('nr.vid', $currentVid, '<');
-    }
-    $query->orderBy('nr.vid', 'DESC')
-      ->range(0, 1);
-    $result = $query->execute()->fetchField();
-    return is_numeric($result) ? (bool) $result : NULL;
   }
 
   /**
@@ -203,12 +141,9 @@ class Collection extends Node implements CollectionInterface {
   }
 
   /**
-   * Returns whether the collection has a published Code of Conduct.
-   *
-   * @return bool
-   *   TRUE if the collection has a published Code of Conduct, FALSE otherwise.
+   * {@inheritdoc}
    */
-  protected function hasPublishedCodeOfConduct(): bool {
+  public function hasPublishedCodeOfConduct(): bool {
     $codeOfConduct = $this->getCodeOfConduct();
     return $codeOfConduct &&
       (
