@@ -13,3 +13,36 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Fix wrongly referenced solution_data references.
+ */
+function joinup_core_deploy_200400(array &$sandbox): string {
+  if (empty($sandbox['release_ids'])) {
+    $query = \Drupal::database()->select('node_field_data', 'nfd');
+    $query->join('node__og_audience', 'og', 'nfd.nid = og.entity_id');
+    $query->join('node__solution_data', 'sd', 'nfd.nid = sd.entity_id');
+    $query->fields('nfd', ['nid']);
+    $query->condition('nfd.type', 'release');
+    $query->where('og.og_audience_target_id <> sd.solution_data_target_id');
+    $sandbox['release_ids'] = $query->execute()->fetchCol();
+    if (empty($sandbox['release_ids'])) {
+      return 'No releases to update.';
+    }
+
+    $sandbox['max'] = count($sandbox['release_ids']);
+    $sandbox['current'] = 0;
+  }
+
+  $release_ids = array_splice($sandbox['release_ids'], 0, 50);
+  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($release_ids) as $release) {
+    $release->set('solution_data', $release->get('og_audience')->referencedEntities());
+    $release->skip_notification = 1;
+    $release->save();
+  }
+
+  $sandbox['current'] += count($release_ids);
+  $sandbox['progress'] = $sandbox['current'] / $sandbox['max'];
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['max'];
+  return sprintf('Updated %d of %d releases.', $sandbox['current'], $sandbox['max']);
+}
