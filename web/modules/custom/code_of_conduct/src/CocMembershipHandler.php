@@ -13,11 +13,11 @@ use Drupal\og\OgMembershipInterface;
 /**
  * Membership handler for Code of Conduct.
  */
-final class CocMembershipHandler implements CocMembershipHandlerInterface {
+final readonly class CocMembershipHandler implements CocMembershipHandlerInterface {
 
   public function __construct(
-    private readonly Connection $database,
-    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private Connection $database,
+    private EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
