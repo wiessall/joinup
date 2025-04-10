@@ -155,9 +155,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Entity ID' => $group->id(),
       'Label' => $group->label(),
       'Bundle' => ucfirst($group->bundle()),
-      'Last update date' => \Drupal::getContainer()
-        ->get('date.formatter')
-        ->format($group->getChangedTime(), 'c'),
+      'Last update date' => $this->dateFormatter->format($group->getChangedTime(), 'c'),
       'Custom pages' => $group_content['custom_page']['published'],
       'Discussions' => $group_content['discussion']['published'],
       'Documents' => $group_content['document']['published'],
