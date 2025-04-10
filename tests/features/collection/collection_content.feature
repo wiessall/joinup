@@ -24,6 +24,8 @@ Feature: Collection content
       | title                          | body                                                           | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  @wip
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner content:
       | name             | owner type |

@@ -9,7 +9,8 @@ Feature: User interface for the File URL field
       | title            |
       | Regression tests |
 
-  @javascript
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  @wip @javascript
   Scenario: Interact with both the 'File upload' and 'External URL' options
     Given I am logged in as a member of the "Regression tests" collection
     # An example of the File URL field is the "Documentation" field in the

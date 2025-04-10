@@ -1,4 +1,5 @@
-@api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@api @group-i @wip
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:

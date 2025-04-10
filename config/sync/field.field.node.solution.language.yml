@@ -8,7 +8,10 @@ dependencies:
     - taxonomy.vocabulary.language
   module:
     - rdf_sync
+    - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/language'
@@ -17,8 +20,8 @@ id: node.solution.language
 field_name: language
 entity_type: node
 bundle: solution
-label: Languages
-description: ''
+label: 'Language Availabilty'
+description: 'The linguistic accessibility of the solution to facilitate cross-border adoption.'
 required: false
 translatable: true
 default_value: {  }
@@ -30,6 +33,7 @@ settings:
       language: language
     sort:
       field: _none
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

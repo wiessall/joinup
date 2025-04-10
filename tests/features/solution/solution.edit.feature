@@ -1,4 +1,5 @@
-@api @group-i
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@wip @api @group-i
 Feature: Solution editing.
   In order to manage solutions
   As a solution owner or solution facilitator

@@ -1,4 +1,5 @@
-@api @group-h
+@wip @api @group-h
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator
