@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\AbstractTrait;
@@ -35,43 +34,6 @@ class CustomPage extends Node implements CustomPageInterface {
   use NodeCollectionContentTrait;
   use TopicReferencingEntityTrait;
   use PermalinkTrait;
-
-  /**
-   * {@inheritdoc}
-   *
-   * This function is a group of hooks that affect memberships according to
-   * specific requirements/changes.
-   *
-   * @see \_collection_meta_entity_handle_coc
-   * @see \collection_meta_entity_delete
-   */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
-    parent::postSave($storage, $update);
-
-    if (!$update || !$this->isGroupCodeOfConductPage()) {
-      return;
-    }
-
-    // The following cases have effects:
-    // 1. The page was published and is becoming unpublished. Memberships are
-    //    restored because CoC is no longer in effect.
-    // 2. The page was unpublished and is becoming published. Memberships are
-    //    revoked because CoC is now in effect.
-    // 3. The page was updated from published to published. Memberships are
-    //    revoked because they have to accept the new CoC.
-    $original = $this->original;
-    if (empty($original)) {
-      return;
-    }
-
-    $group = $this->getGroup();
-    if (($this->isPublished() && !$original->isPublished()) || ($this->isPublished() && $original->isPublished())) {
-      $group->revokeFullMemberships();
-    }
-    elseif (!$this->isPublished() && $original->isPublished()) {
-      $group->restoreFullMemberships();
-    }
-  }
 
   /**
    * {@inheritdoc}
