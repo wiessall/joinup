@@ -39,4 +39,12 @@ interface CocEntityCrudHandlerInterface {
    */
   public function onGroupSettingsInsertOrUpdate(MetaEntityInterface $metaEntity, bool $insert = FALSE): void;
 
+  /**
+   * Handles the meta entity when deleted.
+   *
+   * @param \Drupal\meta_entity\Entity\MetaEntityInterface $metaEntity
+   *   The group settings meta entity.
+   */
+  public function onGroupSettingsDelete(MetaEntityInterface $metaEntity): void;
+
 }
