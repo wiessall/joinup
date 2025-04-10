@@ -7,23 +7,16 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\joinup_test\Utils\TestUtils;
+use Joinup\EnvironmentDetector;
 
 /**
  * Implements hook_page_attachments().
  */
 function joinup_test_page_attachments(array &$attachments): void {
-  // Behat mode: cache metadata.
-  $settings = \Drupal::config('joinup_test.settings');
-  CacheableMetadata::createFromRenderArray($attachments)
-    ->addCacheableDependency($settings)
-    ->applyTo($attachments);
-
-  if (TestUtils::isTestMode()) {
+  if (EnvironmentDetector::isBehatRunning()) {
     // Attach JS errors collector and disable CSS animations.
     $attachments['#attached']['library'][] = 'joinup_test/testing.js_errors_log';
     $attachments['#attached']['library'][] = 'joinup_test/testing.css_disable_transitions';
@@ -86,5 +79,5 @@ function joinup_test_autologout_prevent(): bool {
   // Joinup test is only enabled on local environments. Prevent autologout from
   // logging out users on local environments by blocking the JS refresh from
   // being attached.
-  return isset($_SERVER['IS_DDEV_PROJECT']) && $_SERVER['IS_DDEV_PROJECT'] === 'true';
+  return EnvironmentDetector::isLocal();
 }
