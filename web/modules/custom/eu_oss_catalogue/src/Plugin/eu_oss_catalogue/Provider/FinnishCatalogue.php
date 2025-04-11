@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
+use GuzzleHttp\Client;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Avoinkoodi catalogue provider.
@@ -29,10 +36,137 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**
+   * Catalogue endpoints.
+   *
+   * @var string[]
+   */
+  protected const array ENDPOINTS = [
+    'http://avoinkoodi.fi/projects.json',
+    'http://avoinkoodi.fi/municipalityprojects.json',
+    'http://avoinkoodi.fi/eduprojects.json',
+  ];
+
+  /**
+   * List of projects fetched from Dutch catalogue API.
+   *
+   * @var array[][]
+   *   A list of fetched projects keyed by the coding platform base URL. The
+   *   values are associative arrays keyed by namespace and having a list of
+   *   project IDs as values.
+   */
+  protected array $fetched;
+
+  /**
+   * Fetched URLs collector.
+   */
+  protected array $fetchedUrls = [];
+
+  /**
+   * Processed URLs collector.
+   */
+  protected array $processedUrls = [];
+
+  /**
+   * Number of solutions provided by API.
+   *
+   * @var int
+   */
+  protected int $numberOfProvidedSolutions = 0;
+
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
+    protected Client $httpClient,
+    protected ApiGuesserInterface $apiGuesser,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $parserManager, $logger);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('http_client'),
+      $container->get('eu_oss_catalogue.git_remote.api_guesser'),
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    return [];
+    if (!isset($this->fetched)) {
+      $this->requestData();
+    }
+
+    foreach ([] as $result) {
+      yield $result;
+    }
+  }
+
+  /**
+   * Requests data.
+   *
+   * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function requestData(): void {
+    $this->fetched = [];
+
+    foreach (self::ENDPOINTS as $endpointUrl) {
+      try {
+        $response = $this->httpClient->get($endpointUrl);
+        $responseData = Json::decode($response->getBody()->getContents());
+        $responseData = reset($responseData);
+      }
+      catch (\Exception $exception) {
+        throw new ProviderFetchException(
+          $exception->getMessage()
+        );
+      }
+
+      $this->processResponseData($responseData);
+    }
+  }
+
+  /**
+   * Processes response data.
+   *
+   * @param array $responseData
+   *   Response data.
+   */
+  protected function processResponseData(array $responseData): void {
+    foreach ($responseData as $row) {
+      if (empty($row['code_url'])) {
+        $this->logger->error('Lacks the mandatory code_url value in @row', [
+          '@row' => print_r($row, TRUE),
+        ]);
+        continue;
+      }
+
+      $parts = explode('/', parse_url($row['code_url'], PHP_URL_PATH));
+      if (count($parts) != 3 || !$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
+        continue;
+      }
+      
+      if (in_array($row['code_url'], $this->fetchedUrls)) {
+        continue;
+      }
+
+      $this->fetched[$api->baseUrl]['api'] = $api;
+      $this->fetched[$api->baseUrl]['projects'][$parts[1]][] = $parts[2];
+      $this->fetchedUrls[] = $row['code_url'];
+      $this->numberOfProvidedSolutions++;
+    }
   }
 
 }
