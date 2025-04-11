@@ -170,6 +170,9 @@ readonly class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
     return array_reduce($recipients_metadata, function (bool $success, array $recipient_metadata) use ($message): bool {
       if ($message instanceof AnnouncementInterface) {
         $account = user_load_by_mail($recipient_metadata['options']['mail']);
+        if (!$account) {
+          return FALSE;
+        }
         $message->setArguments($message->getArguments() + static::getAnnouncementTokenMappings());
         $message->setOwner($account);
       }
