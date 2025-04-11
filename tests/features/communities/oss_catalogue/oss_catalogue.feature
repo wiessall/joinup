@@ -1,6 +1,6 @@
-@api @group-clone @eu-oss-catalogue
+@api @eu-oss-catalogue
 # Feature will be re-enabled in ISAICP-9622
-@wip
+
 Feature:
   In order to present the details about EU OSS catalogue
   I want to view a dedicated collection and landing page
