@@ -46,7 +46,7 @@ final readonly class ExceptionEventSubscriber implements EventSubscriberInterfac
     // @see \Drupal\Core\EventSubscriber\RenderArrayNonHtmlSubscriber::onRespond()
     if (is_array($result) && $request->getRequestFormat() !== 'html') {
       $format = $request->getRequestFormat();
-      \Drupal::logger('joinup_core')->notice('Not acceptable format: ' . $format);
+      $this->logger->notice('Not acceptable format: ' . $format);
 
       // If the format is not in the list of formats, use the plain/text format.
       $mimeType = $request->getMimeType($request->getRequestFormat()) ?? 'text/plain; charset=UTF-8';

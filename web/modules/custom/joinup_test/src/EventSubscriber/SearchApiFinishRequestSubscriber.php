@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test\EventSubscriber;
 
-use Drupal\joinup_test\Utils\TestUtils;
 use Drupal\search_api\Utility\PostRequestIndexing;
+use Joinup\EnvironmentDetector;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -32,7 +32,7 @@ class SearchApiFinishRequestSubscriber implements EventSubscriberInterface {
    * Indexes items on FINISH_REQUEST, if specified.
    */
   public function onKernelFinishRequest(): void {
-    if (TestUtils::isTestMode()) {
+    if (EnvironmentDetector::isBehatRunning()) {
       $this->postRequestIndexing->destruct();
     }
   }
