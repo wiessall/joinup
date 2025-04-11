@@ -157,7 +157,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       if (count($parts) != 3 || !$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
         continue;
       }
-      
+
       if (in_array($row['code_url'], $this->fetchedUrls)) {
         continue;
       }
