@@ -8,6 +8,8 @@ dependencies:
     - l10n_client_ui
     - locale
     - toolbar
+    - joinup_i18n
+    - system
 id: translator
 label: Translator
 weight: -3
@@ -15,6 +17,7 @@ is_admin: null
 permissions:
   - 'access dashboard'
   - 'access toolbar'
+  - 'bypass enforced english'
   - 'translate configuration'
   - 'translate interface'
   - 'use localization client ui'
