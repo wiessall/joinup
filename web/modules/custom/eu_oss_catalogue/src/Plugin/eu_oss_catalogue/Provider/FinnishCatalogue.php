@@ -12,6 +12,7 @@ use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -81,6 +82,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
     protected LoggerChannelInterface $logger,
     protected Client $httpClient,
     protected ApiGuesserInterface $apiGuesser,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $parserManager, $logger);
   }
@@ -97,6 +99,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
       $container->get('eu_oss_catalogue.git_remote.api_guesser'),
+      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
     );
   }
 
@@ -108,8 +111,28 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       $this->requestData();
     }
 
-    foreach ([] as $result) {
-      yield $result;
+    foreach ($this->fetched as $baseUrl => $namespaces) {
+      unset($this->fetched[$baseUrl]);
+
+      $platformConfig = [
+        'baseUrl' => $baseUrl,
+        'projects' => $namespaces['projects'],
+      ];
+      /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
+      $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
+
+      /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
+      try {
+        foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+          $this->processedUrls[] = $project->url;
+
+          if (isset($project->files['publiccodeYml'])) {
+            yield $project;
+          }
+        }
+      }
+      catch (HostingPlatformFetchException $exception) {
+      }
     }
   }
 
