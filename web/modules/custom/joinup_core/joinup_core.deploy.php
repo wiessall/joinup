@@ -13,3 +13,33 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Grant full membership to all users in all groups.
+ */
+function joinup_core_deploy_200400(array &$sandbox): string {
+  if (empty($sandbox['group_ids'])) {
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', ['collection', 'solution'], 'IN')
+      ->accessCheck(FALSE);
+    $sandbox['group_ids'] = $query->execute();
+    if (empty($sandbox['group_ids'])) {
+      return 'No groups found.';
+    }
+
+    $sandbox['total'] = count($sandbox['group_ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $group_ids = array_splice($sandbox['group_ids'], 0, 50);
+  $coc_membership_handler = \Drupal::service('code_of_conduct.membership_handler');
+  /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+  foreach ($node_storage->loadMultiple($group_ids) as $group) {
+    $coc_membership_handler->restoreFullMemberships($group);
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} of groups.";
+}

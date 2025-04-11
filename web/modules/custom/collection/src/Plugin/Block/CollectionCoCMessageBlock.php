@@ -57,7 +57,7 @@ class CollectionCoCMessageBlock extends BlockBase {
 
     // Add collection cacheability and ensure the collection is closed.
     CacheableMetadata::createFromObject($collection)->applyTo($build);
-    if (!$collection->isClosed()) {
+    if (!$collection->isClosed() || $collection->isArchived()) {
       return $build;
     }
 
@@ -75,7 +75,7 @@ class CollectionCoCMessageBlock extends BlockBase {
   public function getCacheContexts(): array {
     // Ignore cache contexts from context_definition, we need to vary per
     // og_group_context, and user.permissions (part of required_cache_contexts).
-    return ['og_group_context', 'user.permissions'];
+    return ['og_group_context', 'og_role', 'user.permissions'];
   }
 
   /**
@@ -104,9 +104,16 @@ class CollectionCoCMessageBlock extends BlockBase {
       return $build;
     }
 
+    $currentUser = \Drupal::currentUser();
+
     // Get the active membership for the current user, if any.
     $membership = $collection->getMembership();
     if (!$membership instanceof CodeOfConductMembershipInterface || $membership->isLastDocumentRevisionAccepted()) {
+      return $build;
+    }
+
+    // If the membership has a bypass for the CoC, do not show the message.
+    if ($currentUser->hasPermission('bypass code of conduct') || $membership->bypassesCodeOfConduct()) {
       return $build;
     }
 

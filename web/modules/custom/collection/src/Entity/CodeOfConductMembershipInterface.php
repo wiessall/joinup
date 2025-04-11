@@ -26,7 +26,8 @@ interface CodeOfConductMembershipInterface {
    * Marks the given Code of Conduct document as accepted.
    *
    * This records the user's acceptance of a specific Code of Conduct
-   * document, which can later be referenced to verify compliance.
+   * document, which can later be referenced to verify compliance. Also grants
+   * the user the `full_member` role.
    *
    * @param \Drupal\node\NodeInterface $codeOfConduct
    *   The Code of Conduct document node.
@@ -34,6 +35,18 @@ interface CodeOfConductMembershipInterface {
    * @return self
    *   The current membership instance, for method chaining.
    */
-  public function setAcceptedDocument(NodeInterface $codeOfConduct): self;
+  public function grantFullMembershipWithCocAcceptance(NodeInterface $codeOfConduct): self;
+
+  /**
+   * Returns true if the membership has the permission to bypass CoC.
+   *
+   * Note, that this does not give any extra permissions by itself. Permissions
+   * should be granted to the role having the `bypass code of conduct`
+   * permission explicitly for each action that the user should be able to do.
+   *
+   * @return bool
+   *   TRUE if the membership has the permission to bypass the code of conduct.
+   */
+  public function bypassesCodeOfConduct(): bool;
 
 }
