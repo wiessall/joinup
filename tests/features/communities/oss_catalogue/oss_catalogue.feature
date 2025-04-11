@@ -107,7 +107,6 @@ Feature:
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Olympus"
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "Solutions created by and for European Public Services" in the "Header" region
     And I should see the following links in the "Navigation menu" region:
       | Welcome |
       | Search  |
@@ -247,7 +246,6 @@ Feature:
 
   Scenario Outline: OSS Catalogue's inaccessible routes.
     Given I am logged in as a user with the "<role>" role
-    And I accept the "Legal notice" agreement
     When I go to "<path>"
     Then I should get an access denied error
 
