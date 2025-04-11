@@ -86,15 +86,15 @@ class CodeOfConductConsentForm extends FormBase {
     $collection = $this->getRouteMatch()->getParameter('node');
     assert($collection instanceof CollectionInterface);
 
-    $membership = $collection->getMembership((int) $this->currentUser()->id());
-    assert($membership instanceof CodeOfConductMembershipInterface);
-
     $codeOfConduct = $collection->getCodeOfConduct();
     assert($codeOfConduct instanceof NodeInterface);
 
-    $membership->setAcceptedDocument($codeOfConduct);
-    $membership->save();
+    $membership = $collection->getMembership($this->currentUser()->id());
+    assert($membership instanceof CodeOfConductMembershipInterface);
 
+    $membership->grantFullMembershipWithCocAcceptance($codeOfConduct);
+    $membership->skip_notification = TRUE;
+    $membership->save();
     $this->messenger()
       ->addStatus($this->t('Thank you for confirming your agreement to the Code of Conduct.'));
     $form_state->setRedirect('entity.node.canonical', ['node' => $collection->id()]);
@@ -112,7 +112,7 @@ class CodeOfConductConsentForm extends FormBase {
    *   The access result.
    */
   public function access(CollectionInterface $node, AccountInterface $account): AccessResultInterface {
-    $membership = $node->getMembership((int) $account->id());
+    $membership = $node->getMembership($account->id());
 
     $access = AccessResult::allowedIf(
       $node->hasCodeOfConductToAccept() &&

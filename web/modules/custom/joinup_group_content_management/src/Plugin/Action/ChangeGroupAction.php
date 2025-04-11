@@ -139,8 +139,18 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           ':group_url' => $group->toUrl()->toString(),
         ];
 
+        if ($isCustomPage && $node->isGroupCodeOfConductPage()) {
+          // Use the UUID to index the message, so that we it is shown only
+          // once.
+          $message['error'][$node->uuid()] = [
+            [
+              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
+            ],
+          ];
+          continue;
+        }
         // It might be a parent custom page.
-        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
+        elseif ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
           // Filter out child nodes that are already in the main set.
           $children = array_diff_key($children, array_flip($initialNids));
           array_walk($children, function (NodeInterface $child): void {

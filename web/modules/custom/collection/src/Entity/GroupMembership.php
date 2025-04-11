@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgMembership;
 
@@ -60,8 +62,9 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
   /**
    * {@inheritdoc}
    */
-  public function setAcceptedDocument(NodeInterface $codeOfConduct): self {
+  public function grantFullMembershipWithCocAcceptance(NodeInterface $codeOfConduct): self {
     return $this
+      ->addFullMemberRole()
       ->set(self::COC_DATE, \Drupal::time()->getCurrentTime())
       ->set(self::COC_DOCUMENT_FIELD,
         [
@@ -69,6 +72,50 @@ class GroupMembership extends OgMembership implements CodeOfConductMembershipInt
           'target_revision_id' => $codeOfConduct->getRevisionId(),
         ],
       );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function bypassesCodeOfConduct(): bool {
+    return $this->hasPermission('bypass code of conduct');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    if ($this->isNew()) {
+      // In every case a membership is created, the code of conduct either has
+      // to be accepted prior to the membership creation, or is not valid for
+      // the group. In either case, the full membership is always granted on
+      // creation. This is also a safe add for any case in the API and tests as
+      // it avoids handling it explicitly everywhere. The only other scenarios
+      // we have, is either the drop of the full membership, which happens with
+      // a direct query and only for collections, or the re-granting of the
+      // full membership, which is an update, and thus, will not be affected by
+      // this.
+      // @see \Drupal\collection\Entity\Collection::resetFullMemberships
+      // @see \Drupal\collection\Entity\Collection::grantFullMembership
+      $this->addFullMemberRole();
+    }
+    parent::preSave($storage);
+  }
+
+  /**
+   * Adds the full member role to the membership.
+   *
+   * @return self
+   *   The membership object itself for chaining.
+   */
+  protected function addFullMemberRole(): self {
+    $group = $this->getGroup();
+    \assert($group instanceof GroupInterface);
+    $fullMemberRoleId = \Drupal::service('code_of_conduct.membership_handler')
+      ->getFullMemberRoleId($group);
+    $fullMemberRole = $this->entityTypeManager()->getStorage('og_role')->load($fullMemberRoleId);
+    $this->addRole($fullMemberRole);
+    return $this;
   }
 
 }

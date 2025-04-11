@@ -275,29 +275,29 @@ class SubscribeGroupForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
+    $group = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
     $subscribe = (bool) $form_state->getValue('subscribe');
-    if ($node instanceof CollectionInterface) {
+    if ($group instanceof CollectionInterface) {
       if (!$this->isAjax()) {
         $redirectValue = $form_state->getValue('redirect');
         $redirect = $redirectValue
           ? $this->pathValidator->getUrlIfValid($redirectValue)
           : NULL;
-        $form_state->setRedirectUrl($redirect ?: $node->toUrl());
+        $form_state->setRedirectUrl($redirect ?: $group->toUrl());
       }
       $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
       if ($operation === 'cancel') {
         return;
       }
-      $parameters = ['%collection' => $node->label()];
+      $parameters = ['%collection' => $group->label()];
       $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
 
-      $membership = $this->getUserNonBlockedMembership($node);
+      $membership = $this->getUserNonBlockedMembership($group);
       $noInitialMembership = empty($membership);
       if ($noInitialMembership && $codeOfConductHasBeenApproved) {
-        $state = $node->isClosed() ? OgMembershipInterface::STATE_PENDING
+        $state = $group->isClosed() ? OgMembershipInterface::STATE_PENDING
           : OgMembershipInterface::STATE_ACTIVE;
-        $membership = $this->createSaveNewMembership($state, $this->getUser(), $node);
+        $membership = $this->createSaveNewMembership($state, $this->getUser(), $group);
       }
 
       if ($noInitialMembership && $membership) {
@@ -308,9 +308,10 @@ class SubscribeGroupForm extends FormBase {
       }
 
       if ($membership instanceof CodeOfConductMembershipInterface &&
-        $codeOfConduct = $node->getCodeOfConduct()) {
-        $membership->setAcceptedDocument($codeOfConduct);
-        $membership->save();
+        $codeOfConduct = $group->getCodeOfConduct()) {
+        $membership
+          ->grantFullMembershipWithCocAcceptance($codeOfConduct)
+          ->save();
       }
 
       if ($subscribe) {
@@ -329,9 +330,9 @@ class SubscribeGroupForm extends FormBase {
       }
 
       if ($subscribe) {
-        $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $node);
+        $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $group);
         $membership = $this->subscribe($membership);
-        $this->messenger->addStatus($node->getNewMembershipSuccessMessage($membership));
+        $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
       }
     }
   }
