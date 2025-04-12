@@ -14,29 +14,44 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: bug
-      label: 'Technical problem / bug report'
+      value: academy
+      label: 'Interoperable Europe – Academy'
     -
-      value: usage
-      label: 'Question on usage'
+      value: architecture
+      label: 'Interoperable Europe – Architecture'
     -
-      value: feature
-      label: 'Feature request'
+      value: assessments
+      label: 'Interoperable Europe – Assessments'
+    -
+      value: community
+      label: 'Interoperable Europe – Community'
+    -
+      value: eu_oss_catalogue
+      label: 'Interoperable Europe – EU OSS Catalogue'
+    -
+      value: governance
+      label: 'Interoperable Europe – Governance'
+    -
+      value: govtech
+      label: 'Interoperable Europe – GovTech and Sandboxes'
+    -
+      value: monitoring
+      label: 'Interoperable Europe – Monitoring'
+    -
+      value: open_source
+      label: 'Interoperable Europe – Open Source'
+    -
+      value: semantics
+      label: 'Interoperable Europe – Semantics'
     -
       value: legal
-      label: 'Legal issue'
+      label: 'Legal / Licence / GDPR question'
+    -
+      value: question_feature
+      label: 'Question on usage / Feature request'
     -
       value: report
-      label: 'Inappropriate content'
-    -
-      value: eu_login
-      label: 'EU Login question'
-    -
-      value: interoperable_europe
-      label: 'Interoperable Europe question'
-    -
-      value: other
-      label: Other
+      label: 'Technical problem / Bug report / Inappropriate content'
   allowed_values_function: ''
 module: options
 locked: false
