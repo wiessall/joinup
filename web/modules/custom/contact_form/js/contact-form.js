@@ -24,7 +24,7 @@
           "select[name='field_contact_category']",
         );
         categorySelect.addEventListener("change", ({ target }) => {
-          if (!["bug", "report"].includes(target.value)) {
+          if (target.value !== "report") {
             urlInput.value = "";
           }
         });
