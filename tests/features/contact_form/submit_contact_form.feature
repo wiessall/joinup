@@ -32,7 +32,7 @@ Feature: Submit the contact form
       | Last name      | Wolves                      |
       | Organisation   | The Deaf-Mute Wolves        |
       | E-mail address | oswine@example.pt           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
@@ -46,7 +46,7 @@ Feature: Submit the contact form
       | Last name      | Wulfric                     |
       | Organisation   | The Deaf-Mute Society       |
       | E-mail address | oswine@example.za           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
@@ -54,12 +54,12 @@ Feature: Submit the contact form
 
     # Both moderators should have received the notification e-mail.
     Then the following email should have been sent:
-      | template           | Contact form submission                       |
-      | from               | digit-joinup@ec.europa.eu                     |
-      | recipient_mail     | DIGIT-JOINUP-SUPPORT-EXT-FORWARD@ec.europa.eu |
-      | subject            | Interoperable Europe Portal - Contact form submission              |
-      | body               | Dear sir, madam, ...                          |
-      | signature_required | no                                            |
+      | template           | Contact form submission                               |
+      | from               | digit-joinup@ec.europa.eu                             |
+      | recipient_mail     | DIGIT-JOINUP-SUPPORT-EXT-FORWARD@ec.europa.eu         |
+      | subject            | Interoperable Europe Portal - Contact form submission |
+      | body               | Dear sir, madam, ...                                  |
+      | signature_required | no                                                    |
     And I should see the following success messages:
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
