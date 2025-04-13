@@ -1,14 +1,14 @@
 @api @group-h
 Feature:
   - As a visitor, in order to register to Interoperable Europe Portal, I have to accept the site's
-    'Legal notice', otherwise I cannot register.
+    'Legal notice', Question on usage / Feature requestwise I cannot register.
   - As registered user, in order to login when a new version of 'Legal notice'
-  has been released, I have to accept the new version, otherwise I cannot
+  has been released, I have to accept the new version, Question on usage / Feature requestwise I cannot
   login.
   - As a moderator, I want to be able to release new versions of 'Legal notice'
   or to edit the existing ones.
   - As a visitor, in order to send a support request on the `/contact` page, I
-  have to accept the site's 'Legal notice', otherwise I cannot submit.
+  have to accept the site's 'Legal notice', Question on usage / Feature requestwise I cannot submit.
 
   Background:
     Given the following legal document version:
@@ -153,7 +153,7 @@ Feature:
     And I fill in "Last name" with "Rigby"
     And I fill in "Organisation" with "Lonely People"
     And I fill in "E-mail address" with "depression@example.com"
-    And I select "Legal issue" from "Category"
+    And I select "Legal / Licence / GDPR question" from "Category"
     And I fill in "Subject" with "All the lonely people where do they all come from?"
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
 
