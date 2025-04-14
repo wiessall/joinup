@@ -66,7 +66,19 @@ class ContactFormController extends ControllerBase {
       'template' => 'contact_form_submission',
     ]);
     $entity_form = $this->entityFormBuilder()->getForm($contact_message);
-    return array_key_exists($category, $entity_form['field_contact_category']['widget']['#options']);
+    $flattened = [];
+    foreach ($entity_form['field_contact_category']['widget']['#options'] as $key => $value) {
+      if (is_array($value)) {
+        foreach ($value as $sub_key => $sub_value) {
+          $flattened[$sub_key] = $sub_value;
+        }
+      }
+      else {
+        $flattened[$key] = $value;
+      }
+    }
+
+    return array_key_exists($category, $flattened);
   }
 
   /**
