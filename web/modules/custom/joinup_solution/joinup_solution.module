@@ -257,6 +257,12 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Amount of members of the solution'),
       'visible' => FALSE,
     ];
+    $form = &$fields['node'][$solution->id()]['form'];
+    $form['node_preview'] = [
+      'label' => t('Node preview'),
+      'description' => t('Displays a preview of the solution.'),
+      'visible' => TRUE,
+    ];
   }
 
   return $fields;
@@ -627,6 +633,12 @@ function joinup_solution_module_implements_alter(array &$implementations, string
     unset($implementations['joinup_solution']);
     $implementations = ['joinup_solution' => $solution] + $implementations;
   }
+  if ($hook === 'form_alter') {
+    // Make sure the solution form alter hook runs after simple_multistep.
+    $solution = $implementations['joinup_solution'];
+    unset($implementations['joinup_solution']);
+    $implementations = $implementations + ['joinup_solution' => $solution];
+  }
 }
 
 /**
@@ -703,4 +715,23 @@ function joinup_solution_theme_suggestions_flag_interoperable_text(array $variab
  */
 function _joinup_solution_status_default_value(): int {
   return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_solution_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if (!in_array($form_id, ['node_solution_form', 'node_solution_edit_form'])) {
+    return;
+  }
+
+  $node = $form_state->getFormObject()->getEntity();
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $render_array = $view_builder->view($node, 'confirmation');
+  $form['node_preview'] = [
+    '#type' => 'container',
+    '#title' => t('Preview'),
+    '#weight' => 100,
+    'content' => $render_array,
+  ];
 }
