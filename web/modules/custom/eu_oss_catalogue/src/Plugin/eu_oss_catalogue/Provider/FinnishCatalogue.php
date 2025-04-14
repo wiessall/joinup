@@ -177,7 +177,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       }
 
       // Limit log noise.
-      if (in_array($row['code_url'], $this->ignoredURLs())) {
+      if (in_array($row['code_url'], $this->ignoredResources())) {
         continue;
       }
 
@@ -198,12 +198,12 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
   }
 
   /**
-   * Ignored URLs
+   * Ignored resources.
    *
    * @return string[]
    *   Ignored URLs.
    */
-  protected function ignoredURLs(): array {
+  protected function ignoredResources(): array {
     return [
       'https://docs.moodle.org/dev/Main_Page',
     ];
