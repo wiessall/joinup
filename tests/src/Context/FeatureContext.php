@@ -37,7 +37,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
-use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -48,7 +47,6 @@ use Symfony\Component\Process\Process;
  */
 class FeatureContext extends RawDrupalContext {
 
-  use DigitQaPipelineAwareTrait;
   use AntispamTrait;
   use ContextualLinksTrait;
   use EntityTrait;
@@ -69,34 +67,6 @@ class FeatureContext extends RawDrupalContext {
    * @var string|bool
    */
   protected $version;
-
-  /**
-   * The latest file ID.
-   *
-   * @var int
-   */
-  protected static $lastFileId;
-
-  /**
-   * Keeps track of created testing entities.
-   *
-   * @var \Drupal\Core\Entity\EntityInterface[][]
-   */
-  protected $entities = [];
-
-  /**
-   * The mail system storage settings.
-   *
-   * @var \Drupal\Core\Config\StorableConfigBase
-   */
-  protected static $mailConfig;
-
-  /**
-   * Holds the default settings for the mail server so a revert is possible.
-   *
-   * @var array
-   */
-  protected static $savedMailDefaults;
 
   /**
    * Checks that a 200 OK response occurred.
@@ -1697,25 +1667,8 @@ class FeatureContext extends RawDrupalContext {
           'image_library_widget_image' => ImageItem::generateSampleValue($definition['image_library_widget_image']),
         ]);
         $media->save();
-
-        $this->entities['media'][$media->id()] = $media;
       }
     }
-  }
-
-  /**
-   * Clears testing media items.
-   *
-   * @AfterScenario @generateMedia
-   */
-  public function clearMedia(): void {
-    if (!empty($this->entities['media'])) {
-      /** @var \Drupal\media\MediaStorage $media_storage */
-      $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-      $media_storage->delete($this->entities['media']);
-      unset($this->entities['media']);
-    }
-    \Drupal::state()->delete('image_library_widget.clicks');
   }
 
   /**
@@ -1795,92 +1748,6 @@ class FeatureContext extends RawDrupalContext {
     // doesn't employ a cache context. In order to make the version show up on
     // previously cached pages we need to invalidate the render cache manually.
     Cache::invalidateTags(['rendered']);
-  }
-
-  /**
-   * Stores the ID of the latest file entity created before the scenario.
-   *
-   * @BeforeScenario @api
-   */
-  public static function storeLastFileId(): void {
-    static::$lastFileId = \Drupal::database()->query("SELECT MAX(fid) FROM {file_managed}")->fetchField() ?: 0;
-  }
-
-  /**
-   * Removes files created during test scenarios.
-   *
-   * Since Drupal 8.4.0, files that have no remaining usages are no longer
-   * deleted by default, see https://www.drupal.org/node/2891902. Even the host
-   * entities are deleted after test, the files attached via UI are not cleared
-   * at the end of the test scenario. This might cause some scenarios, creating
-   * the same file, to fail because the file will get a different, incremental,
-   * file base name. Note that files created via API are handled in
-   * FileTrait::cleanFiles().
-   *
-   * @see https://www.drupal.org/node/2891902
-   * @see \Drupal\joinup\Traits\FileTrait::cleanFiles()
-   *
-   * @AfterScenario @api
-   */
-  public static function staleFilesCleanup(): void {
-    $fids = \Drupal::database()->query("SELECT fid FROM {file_managed} WHERE fid > :fid", [':fid' => static::$lastFileId])->fetchCol();
-    if ($fids) {
-      /** @var \Drupal\file\FileStorageInterface $storage */
-      $storage = \Drupal::entityTypeManager()->getStorage('file');
-      $storage->delete($storage->loadMultiple($fids));
-    }
-
-    // Due to the nature of behat running everything in a single request, the
-    // cache is not cleared between scenarios. This means that the cache tags
-    // are not invalidated and the cache is not cleared. This causes the default
-    // icons of paragraphs to be cached when the files are deleted above which
-    // breaks tests trying to access paragraphs.
-    \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
-  }
-
-  /**
-   * Clears file entities created via UI.
-   *
-   * Starting with Drupal 8.4.0 files that have no remaining usages are no
-   * longer deleted by default. Some scenarios are creating files by uploading
-   * them to entities, in UI. Such files are not cleared after test run even the
-   * host entity is explicitly deleted. A scenario trying to upload a file used
-   * previously by other scenario will result in a changed file name, making it
-   * very hard to perform assertions on the file name. Scenarios that are
-   * uploading files should be tagged with:
-   * @code
-   * @uploadFiles:<filename1.ext>,<filename2.ext>,...
-   * @endcode
-   * For instance, a scenario tagged with @uploadFiles:logo.png will
-   * clear the 2 file entities (together with the files from files system) after
-   * the scenario completes.
-   *
-   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $event
-   *   The "after scenario" scope event.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   Thrown if the entity type doesn't exist.
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown when an entity with a non-existing storage is passed.
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown if the bundle does not exist or was needed but not specified.
-   *
-   * @see https://www.drupal.org/node/2891902
-   *
-   * @AfterScenario
-   */
-  public function clearFiles(AfterScenarioScope $event): void {
-    $files = $this->getTagValues($event, 'uploadFiles');
-    if ($files) {
-      $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-      $fids = $file_storage->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('filename', $files, 'IN')
-        ->execute();
-      if ($fids) {
-        $file_storage->delete($file_storage->loadMultiple($fids));
-      }
-    }
   }
 
   /**

@@ -12,11 +12,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 class JoinupOSSSolutionContext extends RawDrupalContext {
 
   /**
-   * OSS welcome page path.
-   */
-  protected const WELCOME_PATH = 'eu-oss-catalogue';
-
-  /**
    * OSS search page path.
    */
   protected const SEARCH_PATH = 'eu-oss-catalogue/solutions';
@@ -28,15 +23,6 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
    */
   public function visitSearchPage(): void {
     $this->visitPath(self::SEARCH_PATH);
-  }
-
-  /**
-   * Navigates to the OSS welcome page.
-   *
-   * @When I visit the OSS welcome page
-   */
-  public function visitWelcomePage(): void {
-    $this->visitPath(self::WELCOME_PATH);
   }
 
   /**
