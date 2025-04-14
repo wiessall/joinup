@@ -25,15 +25,15 @@ class IopFooterBlock extends BlockBase {
   public function build(): array {
     $icons = [
       'linkedin' => [
-        'title' => $this->t('LinkedIn'),
+        'title' => $this->t('LinkedIn', [], ['context' => 'Logo']),
         'url' => 'https://www.linkedin.com/groups/12907049/',
       ],
-      'twitter' => [
-        'title' => $this->t('X'),
-        'url' => 'https://twitter.com/InteroperableEU',
+      'x' => [
+        'title' => $this->t('X', [], ['context' => 'Logo']),
+        'url' => 'https://x.com/InteroperableEU',
       ],
       'youtube' => [
-        'title' => $this->t('Youtube'),
+        'title' => $this->t('Youtube', [], ['context' => 'Logo']),
         'url' => 'https://www.youtube.com/c/interoperableeurope',
       ],
     ];
