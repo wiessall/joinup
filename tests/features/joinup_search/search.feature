@@ -364,7 +364,6 @@ Feature: Global search
     Then I should toggle search bar in navbar
     And I should see search bar in navbar
 
-  @wip
   # This tests shows a regression to be fixed in ISAICP-6917.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
   Scenario: Collections and solutions are shown first in search results with the same relevance.
@@ -396,9 +395,9 @@ Feature: Global search
     # The bird is the word... to search.
     When I enter "Bird" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Chickens are small birds          |
       | Ornithology: the study of birds   |
       | Bird outposts in the wild         |
+      | Chickens are small birds          |
       | Disturbed birds                   |
       | Bird spotting                     |
       | Best place to find an exotic bird |
