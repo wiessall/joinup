@@ -176,6 +176,11 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
         continue;
       }
 
+      // Limit log noise.
+      if (in_array($row['code_url'], $this->ignoredURLs())) {
+        continue;
+      }
+
       $parts = explode('/', parse_url($row['code_url'], PHP_URL_PATH));
       if (count($parts) != 3 || !$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
         continue;
@@ -190,6 +195,18 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       $this->fetchedUrls[] = $row['code_url'];
       $this->numberOfProvidedSolutions++;
     }
+  }
+
+  /**
+   * Ignored URLs
+   *
+   * @return string[]
+   *   Ignored URLs.
+   */
+  protected function ignoredURLs(): array {
+    return [
+      'https://docs.moodle.org/dev/Main_Page',
+    ];
   }
 
 }
