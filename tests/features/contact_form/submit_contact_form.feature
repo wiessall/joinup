@@ -16,18 +16,20 @@ Feature: Submit the contact form
     When I visit "/?destination=collections"
     And I click "Contact Portal Support" in the "Footer" region
     And I should see the heading "Contact"
+    # Note that below, we are asserting the selectable options. Groups are not
+    # included.
     And the "Category" select should contain the following options:
       | - Select a value -                                     |
-      | Interoperable Europe - Academy                         |
-      | Interoperable Europe - Architecture                    |
-      | Interoperable Europe - Assessments                     |
-      | Interoperable Europe - Community                       |
-      | Interoperable Europe - EU OSS Catalogue                |
-      | Interoperable Europe - Governance                      |
-      | Interoperable Europe - GovTech and Sandboxes           |
-      | Interoperable Europe - Monitoring                      |
-      | Interoperable Europe - Open Source                     |
-      | Interoperable Europe - Semantics                       |
+      | Academy                                                |
+      | Architecture                                           |
+      | Assessments                                            |
+      | Community                                              |
+      | EU OSS Catalogue                                       |
+      | Governance                                             |
+      | GovTech and Sandboxes                                  |
+      | Monitoring                                             |
+      | Open Source                                            |
+      | Semantics                                              |
       | Legal / Licence / GDPR question                        |
       | Question on usage / Feature request                    |
       | Technical problem / Bug report / Inappropriate content |
