@@ -7,13 +7,15 @@ parameters:
                 class: Drupal\og\Entity\OgMembership
                 storage: Drupal\Core\Entity\Sql\SqlContentEntityStorage
     ignoreErrors:
-        # We're not prepared yet for this.
-        - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
-        # As an exception, we allow extending these classes.
+       # As an exception, we allow extending these classes.
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
+        - tests/src/*
+        - web/modules/custom/joinup_core/tests/modules/joinup_test_time/src/Datetime/TestTime.php
+        - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
+        - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php

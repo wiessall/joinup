@@ -7,15 +7,13 @@ namespace Drupal\joinup\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
-use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Joinup\EnvironmentDetector;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Context to run within DIGIT QA GitLab pipeline.
  */
 class DigitQaPipelineContext extends RawMinkContext {
-
-  use DigitQaPipelineAwareTrait;
 
   /**
    * Initializes the environment before running the tests.
@@ -26,7 +24,7 @@ class DigitQaPipelineContext extends RawMinkContext {
    * @BeforeSuite
    */
   public static function init(BeforeSuiteScope $event): void {
-    if (static::isDigitQaPipeline()) {
+    if (EnvironmentDetector::isGitlabPipeline()) {
       $fileSystem = new Filesystem();
       $artifactsPath = static::getArtifactsPath($event->getSuite()->getName());
       if (!$fileSystem->exists($artifactsPath)) {
@@ -46,7 +44,8 @@ class DigitQaPipelineContext extends RawMinkContext {
    * @AfterSuite
    */
   public static function saveLogsAsArtifacts(AfterSuiteScope $event): void {
-    if (static::isDigitQaPipeline() && !$event->getTestResult()->isPassed()) {
+    if (EnvironmentDetector::isGitlabPipeline() &&
+      !$event->getTestResult()->isPassed()) {
       $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
       $artifactsPath = static::getArtifactsPath($event->getSuite()->getName());
       exec("{$projectPath}/vendor/bin/drush sql:dump --tables-list=watchdog --extra-dump='--no-tablespaces' --gzip --result-file={$artifactsPath}/watchdog.sql --root={$projectPath}");

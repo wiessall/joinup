@@ -80,27 +80,28 @@
   ]
 %}
 <article{{ attributes.addClass(classes) }}>
-  {% if header %}
-    <header>
-      <h3>{{ header }}</h3>
+  <div class="row g-3">
+    <header class="col-9 order-1">
+      {% if header %}
+        <h3 class="h2">{{ header }}</h3>
+      {% endif %}
+
+      {{ title_prefix }}
+      {% if label and not page %}
+        <h2{{ title_attributes.addClass('h2') }}>{{ label }}</h2>
+      {% endif %}
+      {{ title_suffix }}
     </header>
-  {% endif %}
-
-  {{ title_prefix }}
-  {% if label and not page %}
-    <h2{{ title_attributes }}>{{ label }}</h2>
-  {% endif %}
-  {{ title_suffix }}
-
-  <div{{ content_attributes }}>
-    {{ content }}
+    <div class="col-3 order-0">
+      <div class="event--highlighted-date">
+        {{ content }}
+      </div>
+    </div>
+    <footer class="order-2">
+      <a href="{{ url }}" rel="bookmark" class="btn btn-outline-secondary rounded-0">
+        {{ 'Read more'|t }}
+        <span class="visually-hidden"> {{ 'about'|t }} ~ ' ' ~ {{ label }}</span>
+      </a>
+    </footer>
   </div>
-
-  <footer>
-    <a href="{{ url }}" rel="bookmark" class="btn btn-secondary">
-      {{ 'Read more'|t }}
-      <span class="visually-hidden"> {{ 'about'|t }} ~ ' ' ~ {{ label }}</span>
-    </a>
-  </footer>
-
 </article>

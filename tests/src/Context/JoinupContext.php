@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
@@ -39,7 +40,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
@@ -1982,61 +1982,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Forces a cleanup to run for og queue worker.
-   *
-   * Og enqueues items to be deleted instead of deleting them directly in order
-   * to counter cases like when an entity has a big amount of memberships. This
-   * causes behat to bubble all memberships to the end of the suite and attempt
-   * to delete them all together which causes memory issues. Thus, the following
-   * method processes the queue manually after every scenario. This turns every
-   * scenario to a pseudo request when it comes to og.
-   *
-   * @AfterScenario
-   */
-  public function ogCleanup(AfterScenarioScope $event): void {
-    /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')
-      ->createInstance('og_orphaned_group_content_cron');
-    $queue = \Drupal::queue('og_orphaned_group_content');
-
-    while ($item = $queue->claimItem()) {
-      try {
-        $worker->processItem($item->data);
-        $queue->deleteItem($item);
-      }
-      catch (\Exception $e) {
-        Error::logException(\Drupal::logger('cron'), $e);
-      }
-    }
-  }
-
-  /**
-   * Cleans up orphaned content in non clone group.
-   *
-   * @AfterScenario ~@group-clone
-   *
-   * @todo Remove this in ISAICP-9358
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9358
-   */
-  public function cleanLeftoverContent(AfterScenarioScope $event): void {
-    // Delete data that are not created through the behat API.
-    $query = \Drupal::database()->select('node_field_data', 'n');
-    $query->leftJoin('users_field_data', 'u', 'n.uid = u.uid');
-    $query->fields('n', ['nid']);
-    $query->isNull('u.uid');
-    // Avoid deleting default content that belong to the anonymous user or user
-    // 1 in tests.
-    $query->condition('n.uid', 1, '>');
-    $nids = $query->execute()->fetchCol();
-
-    if (!empty($nids)) {
-      $storage = \Drupal::entityTypeManager()->getStorage('node');
-      $nodes = $storage->loadMultiple($nids);
-      $storage->delete($nodes);
-    }
-  }
-
-  /**
    * Assert that a given attribute is not set for a given element in a region.
    *
    * @Then I( should) not see the :tag element with the :attribute attribute set to :value in the :region( region)
@@ -2948,7 +2893,8 @@ class JoinupContext extends RawDrupalContext {
    * Cleans up the environment after a curated homepage topics scenarios.
    *
    * These scenarios are altering the topic term meta entities. We need to reset
-   * them after each run.
+   * them after each run. Because we have a mechanism to delete new content, we
+   * are simply resetting the values instead.
    *
    * @afterScenario @topic&&@api
    */
@@ -2960,25 +2906,18 @@ class JoinupContext extends RawDrupalContext {
       ->save();
 
     $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+    $ids = $meta_entity_storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('type', 'topic')
-      ->condition('published', TRUE)
       ->execute();
-
-    // Recreate topic terms corresponding meta entities.
     if ($ids) {
-      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
-      $meta_entities = $meta_entity_storage->loadMultiple($ids);
-      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
-      $meta_entity_storage->delete($meta_entities);
-      foreach ($tids as $tid) {
-        $meta_entity_storage->create([
-          'type' => 'topic',
-          'target' => [
-            'target_type' => 'taxonomy_term',
-            'target_id' => $tid,
-          ],
-        ])->save();
+      foreach ($meta_entity_storage->loadMultiple($ids) as $meta_entity) {
+        $meta_entity
+          ->set('topics_paragraph', NULL)
+          ->set('published', FALSE)
+          ->set('image', NULL)
+          ->set('description', NULL)
+          ->save();
       }
     }
   }
@@ -2995,6 +2934,91 @@ class JoinupContext extends RawDrupalContext {
    */
   public function insulateScenario(): void {
     $this->getMink()->stopSessions();
+  }
+
+  /**
+   * Stores most recent IDs of entity types that should be cleaned up.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
+   *   The scenario scope.
+   *
+   * @BeforeScenario
+   */
+  public function beforeScenarioPrepareEntityCleanup(BeforeScenarioScope $scope): void {
+    $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
+    foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type_id => $entity_type) {
+      if ($entity_type_id === 'ogmenu_instance') {
+        // Skip the ogmenu_instance as it is already handled in og_menu.
+        // @see \og_menu_entity_delete
+        continue;
+      }
+      if (isset($behat_cleanup_data[$entity_type_id])) {
+        // Keep the original ID so that even broken tests get properly cleaned.
+        continue;
+      }
+      if (!$entity_type->entityClassImplements(FieldableEntityInterface::class)) {
+        continue;
+      }
+      $field_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($entity_type_id);
+      $id_key = $entity_type->getKey('id');
+      if ($field_definitions[$id_key]->getType() !== 'integer') {
+        continue;
+      }
+
+      // Get the latest ID of the entity type in the database.
+      $ids = \Drupal::entityQuery($entity_type->id())
+        ->accessCheck(FALSE)
+        ->sort($id_key, 'DESC')
+        ->range(0, 1)
+        ->execute();
+
+      $behat_cleanup_data[$entity_type_id] = reset($ids) ?: 0;
+    }
+
+    // Process menu links last.
+    $menu_link_data = $behat_cleanup_data['menu_link_content'] ?? 0;
+    unset($behat_cleanup_data['menu_link_content']);
+    $behat_cleanup_data['menu_link_content'] = $menu_link_data;
+    \Drupal::state()->set('behat_cleanup_data', $behat_cleanup_data);
+  }
+
+  /**
+   * Cleans up entities created during the scenario.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The scenario scope.
+   *
+   * @AfterScenario
+   */
+  public function afterScenarioCleanupEntities(AfterScenarioScope $scope): void {
+    $behat_cleanup_data = \Drupal::state()->get('behat_cleanup_data', []);
+    foreach ($behat_cleanup_data as $entity_type => $id) {
+      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type);
+
+      $id_key = $entity_type->getKey('id');
+      // Delete all entities created during the scenario.
+      $query = \Drupal::entityQuery($entity_type->id())
+        ->accessCheck(FALSE)
+        ->condition($id_key, $id, '>');
+
+      $ids = $query->execute();
+      if ($ids) {
+        $storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
+        $storage->resetCache($ids);
+        $entities = $storage->loadMultiple($ids);
+        @$storage->delete($entities);
+      }
+    }
+
+    // Due to the nature of behat running everything in a single request, the
+    // cache is not cleared between scenarios. This means that the cache tags
+    // are not invalidated and the cache is not cleared. This causes the default
+    // icons of paragraphs to be cached when the files are deleted above which
+    // breaks tests trying to access paragraphs.
+    \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
+
+    // Also, clean the media click counter.
+    \Drupal::state()->delete('image_library_widget.clicks');
   }
 
 }
