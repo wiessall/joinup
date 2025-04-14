@@ -67,6 +67,28 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
     $form['field_contact_email']['widget'][0]['value']['#default_value'] = $user->getEmail();
   }
 
+  // Update the category options to be grouped by anything that comes before
+  // the '-' character. If the category does not contain a '-', it will be
+  // grouped under 'Other'.
+  $options = [];
+  foreach ($form['field_contact_category']['widget']['#options'] as $key => $value) {
+    if ($key === '_none') {
+      continue;
+    }
+    elseif (str_contains($value, '-')) {
+      $values = explode('-', $value);
+      assert(count($values) === 2);
+      $group = trim($values[0]);
+      $value = trim($values[1]);
+      $options[$group][$key] = $value;
+    }
+    else {
+      $options['Other'][$key] = $value;
+    }
+  }
+
+  $form['field_contact_category']['widget']['#options'] = $options;
+
   // Only show the 'Page URL' field when the 'bug' or 'report' category is
   // chosen.
   $form['field_contact_url']['#states'] = [
