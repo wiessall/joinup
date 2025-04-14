@@ -48,7 +48,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
   ];
 
   /**
-   * List of projects fetched from Dutch catalogue API.
+   * List of projects fetched from API.
    *
    * @var array[][]
    *   A list of fetched projects keyed by the coding platform base URL. The

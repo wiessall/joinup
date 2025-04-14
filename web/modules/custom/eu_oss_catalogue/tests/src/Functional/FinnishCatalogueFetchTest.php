@@ -12,7 +12,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 class FinnishCatalogueFetchTest extends FetchTestBase {
 
   /**
-   * @covers
+   * Tests fetching from Finnish catalogue.
    */
   public function testImport(): void {
     $this->fetchSolutions('avoinkoodi_fi', 1);

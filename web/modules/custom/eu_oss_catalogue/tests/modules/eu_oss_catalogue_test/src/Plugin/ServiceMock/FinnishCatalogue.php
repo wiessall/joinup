@@ -16,7 +16,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Intercepts any HTTP requests made to Dutch catalogue API.
+ * Intercepts any HTTP requests made to Finnish catalogue API.
  */
 #[ServiceMock(
   id: "avoinkoodi_fi",
