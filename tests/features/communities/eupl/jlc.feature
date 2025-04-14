@@ -470,6 +470,7 @@ Feature:
       | uri                             | title     | ID        |
       | http://joinup.eu/spdx/EUPL-1.2a | EUPL-1.2a | EUPL-1.2a |
       | http://joinup.eu/spdx/LGPL-2.1b | LGPL-2.1b | LGPL-2.1b |
+    And there are no preexisting log records on the site
 
     When I go to "licence/compatibility-check/LGPL-2.1b/EUPL-1.2a"
     And there should be 1 log record

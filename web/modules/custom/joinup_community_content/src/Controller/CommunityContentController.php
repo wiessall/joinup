@@ -52,7 +52,7 @@ class CommunityContentController extends GroupNodeController {
       assert($node instanceof GroupInterface);
 
       $membership = $node->getMembership($account->id());
-      return \Drupal::entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
+      return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
         'group' => $node,
         'membership' => $membership?->id(),
       ], TRUE);

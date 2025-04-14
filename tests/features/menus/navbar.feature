@@ -36,11 +36,3 @@ Feature:
     And I should see the link "Navbar test 3 external" in the "Navigation bar" region
     But I should not see the link "Navbar test 2 disabled" in the "Navigation bar" region
     But I should not see the link "Navbar test 1 child" in the "Navigation bar" region
-
-    # Delete menu links. Remove this in ISAICP-9486.
-    # Note that if any failure happens above, these links aren't removed; that's
-    # why we use descriptive menu link titles.
-    And I delete the "Navbar test 1 child" "menu link"
-    And I delete the "Navbar test 1" "menu link"
-    And I delete the "Navbar test 2 disabled" "menu link"
-    And I delete the "Navbar test 3 external" "menu link"
