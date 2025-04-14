@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and functions for the Joinup I18n module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_i18n_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'requirements' && isset($implementations['locale'])) {
+    // Remove the locale module from the requirements list.
+    unset($implementations['locale']);
+  }
+}
