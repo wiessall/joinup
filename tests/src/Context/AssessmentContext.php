@@ -23,11 +23,6 @@ class AssessmentContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Latest submission ID before scenario.
-   */
-  protected int $latestSubmissionId;
-
-  /**
    * Navigates to the latest assessment webform submission.
    *
    * @When I go to the latest assessment submission
@@ -118,22 +113,6 @@ class AssessmentContext extends RawDrupalContext {
       'field_paragraphs_body:target_id' => $paragraph->id(),
       'field_paragraphs_body:target_revision_id' => $paragraph->getRevisionId(),
     ]);
-
-    $this->latestSubmissionId = $this->getLatestSubmissionId() ?? 0;
-  }
-
-  /**
-   * Cleans up after the assessment test.
-   *
-   * @AfterScenario @demoAssessment
-   */
-  public function cleanSubmissions(): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
-    $submissionIds = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
-      ->condition('sid', $this->latestSubmissionId, '>')
-      ->execute();
-    $storage->delete($storage->loadMultiple($submissionIds));
   }
 
   /**
