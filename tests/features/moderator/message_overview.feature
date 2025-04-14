@@ -15,7 +15,7 @@ Feature: Solutions message overview
       | Last name      | Papastamatakis                          |
       | Organisation   | Eko oil industries                      |
       | E-mail address | l.papastamatak@example.com              |
-      | Category       | question_feature     |
+      | Category       | question_feature                        |
       | Subject        | Ran out of gas                          |
       | Message        | Do you have 1 euro to buy a cheese pie? |
     And I press "Submit"
