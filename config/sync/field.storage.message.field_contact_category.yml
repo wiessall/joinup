@@ -50,8 +50,11 @@ settings:
       value: question_feature
       label: 'Question on usage / Feature request'
     -
+      value: bug
+      label: 'Technical problem / Bug report'
+    -
       value: report
-      label: 'Technical problem / Bug report / Inappropriate content'
+      label: 'Inappropriate content'
   allowed_values_function: ''
 module: options
 locked: false
