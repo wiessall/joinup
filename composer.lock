@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7163348f88aadb93f7488a8fac404e91",
+    "content-hash": "54fea4ad8ef9991518fc39d6ca22eae5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2102,6 +2102,80 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/autologout",
                 "issues": "https://www.drupal.org/project/issues/autologout"
+            }
+        },
+        {
+            "name": "drupal/better_exposed_filters",
+            "version": "7.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/better_exposed_filters.git",
+                "reference": "7.0.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-7.0.5.zip",
+                "reference": "7.0.5",
+                "shasum": "a215444c39a6ae384710a6c707caf593f6dd1e2d"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/nouislider_js": "^15.8"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.0.5",
+                    "datestamp": "1738353781",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Mike Keran",
+                    "homepage": "https://www.drupal.org/u/mikeker"
+                },
+                {
+                    "name": "Martin Keereman",
+                    "homepage": "https://www.drupal.org/u/etroid"
+                },
+                {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/u/neslee-canil-pinto"
+                },
+                {
+                    "name": "mikeker",
+                    "homepage": "https://www.drupal.org/user/192273"
+                },
+                {
+                    "name": "neslee canil pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
+                },
+                {
+                    "name": "podarok",
+                    "homepage": "https://www.drupal.org/user/116002"
+                },
+                {
+                    "name": "rlhawk",
+                    "homepage": "https://www.drupal.org/user/352283"
+                },
+                {
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
+                }
+            ],
+            "description": "Replaces the Views default single- or multi-select boxes with more advanced options.",
+            "homepage": "https://www.drupal.org/project/better_exposed_filters",
+            "support": {
+                "source": "https://git.drupalcode.org/project/better_exposed_filters",
+                "issues": "https://www.drupal.org/project/issues/better_exposed_filters"
             }
         },
         {
@@ -6733,31 +6807,61 @@
             }
         },
         {
-            "name": "drupal/og",
-            "version": "1.0.0-alpha10",
+            "name": "drupal/nouislider_js",
+            "version": "15.8.1",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/og.git",
-                "reference": "8.x-1.0-alpha10"
+                "url": "https://git.drupalcode.org/project/nouislider_js.git",
+                "reference": "b5610d5842784581e4c766cd1c3852ca0b355ed5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha10.zip",
-                "reference": "8.x-1.0-alpha10",
-                "shasum": "8f474c912e569e5d1dbe780556adcaa339291519"
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fnouislider_js/repository/archive.zip?sha=b5610d5842784581e4c766cd1c3852ca0b355ed5",
+                "reference": "b5610d5842784581e4c766cd1c3852ca0b355ed5",
+                "shasum": ""
+            },
+            "type": "drupal-library",
+            "extra": {
+                "installer-name": "nouislider"
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "description": "Mirror of the noUiSlider javascript library tagged as a Drupal library.",
+            "homepage": "https://github.com/leongersen/noUiSlider",
+            "support": {
+                "source": "https://git.drupalcode.org/project/nouislider_js/-/tree/15.8.0"
+            },
+            "time": "2025-01-03T10:53:20+00:00"
+        },
+        {
+            "name": "drupal/og",
+            "version": "2.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/og.git",
+                "reference": "2.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/og-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "8716eaad445b1a909047afe6ff98cc1c1494237f"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
                 "drupal/coder": "^8.3.16",
-                "phpunit/phpunit": "^7 || ^8 || ^9"
+                "drush/drush": "^12.5 || ^13.3",
+                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10.5"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha10",
-                    "datestamp": "1669023300",
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1744224067",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6831,36 +6935,36 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og",
                 "issues": "https://drupal.org/project/issues/og",
-                "irc": "irc://irc.freenode.org/drupal-og",
                 "slack": "https://drupal.slack.com/messages/CELR48EA0"
             }
         },
         {
             "name": "drupal/og_menu",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og_menu.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og_menu-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "fcdd61d1b7f8a42eb445267a6a45c4d0cb38469e"
+                "url": "https://ftp.drupal.org/files/projects/og_menu-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "64756c9c8cd20d37231ce02bdd8a55720dd03cdc"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
-                "drupal/og": "^1.0"
+                "drupal/og": "^1.0 || ^2.0"
             },
             "require-dev": {
-                "drupal/drupal-extension": "^5.1"
+                "drupal/drupal-extension": "^5.1",
+                "drush/drush": "^12.5 || ^13.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1740997877",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1744224942",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6887,6 +6991,10 @@
                 {
                     "name": "jide",
                     "homepage": "https://www.drupal.org/user/146088"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "leonk",
