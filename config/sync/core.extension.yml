@@ -6,6 +6,7 @@ module:
   allowed_formats: 0
   antibot: 0
   autologout: 0
+  better_exposed_filters: 0
   blazy: 0
   block: 0
   block_field: 0
@@ -262,7 +263,6 @@ module:
   user: 0
   ventuno_helper: 0
   view_unpublished: 0
-  views_autosubmit: 0
   views_block_area: 0
   views_bulk_operations: 0
   views_data_export: 0

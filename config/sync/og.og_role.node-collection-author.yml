@@ -13,6 +13,9 @@ group_bundle: collection
 is_admin: null
 permissions:
   - 'access glossary data export'
+  - 'create content for any_user option'
+  - 'create content for facilitators_and_authors option'
+  - 'create content for only_members option'
   - 'delete own comments'
   - 'delete own custom_page content'
   - 'delete own discussion content'
@@ -25,10 +28,7 @@ permissions:
   - 'edit own document content'
   - 'edit own event content'
   - 'edit own news content'
-  - 'post comments'
-  - 'create content for any_user option'
-  - 'create content for only_members option'
-  - 'create content for facilitators_and_authors option'
-  - 'perform node:pre_moderated workflow reject_deletion transition on own entity'
   - 'perform node:pre_moderated workflow publish transition on own entity'
+  - 'perform node:pre_moderated workflow reject_deletion transition on own entity'
+  - 'post comments'
 role_type: required

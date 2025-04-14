@@ -12,6 +12,6 @@ group_type: node
 group_bundle: collection
 is_admin: null
 permissions:
-  - 'update group'
   - 'perform collection_workflow workflow request_archival transition on any entity'
+  - 'update group'
 role_type: null
