@@ -32,7 +32,7 @@ class FinnishCatalogue extends PluginBase implements ServiceMockPluginInterface 
    */
   public function applies(RequestInterface $request, array $options): bool {
     return !$this->isIntegrationTest() && ($request->getUri()
-          ->getHost() === 'avoinkoodi.fi');
+      ->getHost() === 'avoinkoodi.fi');
   }
 
   /**
