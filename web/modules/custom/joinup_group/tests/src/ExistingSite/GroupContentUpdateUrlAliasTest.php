@@ -375,7 +375,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->submitForm($edit, 'Propose');
     $this->assertSession()
       ->pageTextNotContains("You've changed the collection's title from The Biggest Collection to An Unchanged Collection. It will take some time until the collection content URLs will be updated.");
-
   }
 
   /**
