@@ -62,18 +62,6 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
    */
   protected array $fetchedUrls = [];
 
-  /**
-   * Processed URLs collector.
-   */
-  protected array $processedUrls = [];
-
-  /**
-   * Number of solutions provided by API.
-   *
-   * @var int
-   */
-  protected int $numberOfProvidedSolutions = 0;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -124,8 +112,6 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
       try {
         foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
-          $this->processedUrls[] = $project->url;
-
           if (isset($project->files['publiccodeYml'])) {
             yield $project;
           }
@@ -193,7 +179,6 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       $this->fetched[$api->baseUrl]['api'] = $api;
       $this->fetched[$api->baseUrl]['projects'][$parts[1]][] = $parts[2];
       $this->fetchedUrls[] = $row['code_url'];
-      $this->numberOfProvidedSolutions++;
     }
   }
 
