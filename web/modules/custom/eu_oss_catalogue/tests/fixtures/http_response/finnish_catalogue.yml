@@ -1,0 +1,29 @@
+projects:
+  - project: HealthConnect
+    owner: MediTech Solutions
+    code_url: https://github.com/avoinkoodi/healthconnect
+    service_url: https://www.healthconnect.app/
+    homepage_url: https://www.healthconnect.app/
+    demo_url: "-"
+    description: Easily access healthcare services and manage appointments anytime, anywhere.
+  - project: dummy-name-1
+    owner: dummy-namespace-1
+    code_url: https://github.com/dummy-namespace-1/dummy-name-1
+    service_url: https://www.dummy-namespace-1.org/hub
+    homepage_url: https://www.dummy-namespace-1.org/
+    demo_url: https://www.dummy-namespace-1.org/govlink-demo
+    description: Secure and standardized platform for government digital service interoperability.
+  - project: LearnSphere LMS
+    owner: LearnSphere Community
+    code_url: https://github.com/avoinkoodi
+    service_url: https://www.learnsphere.org/
+    homepage_url: https://www.learnsphere.org/
+    demo_url: "-"
+    description: A powerful and flexible online learning management system.
+  - project: StudentTrack Information System
+    owner: EduTech Academy
+    code_url: https://docs.moodle.org/dev/Main_Page
+    service_url: "-"
+    homepage_url: "-"
+    demo_url: "-"
+    description: Comprehensive student information and administration system.
