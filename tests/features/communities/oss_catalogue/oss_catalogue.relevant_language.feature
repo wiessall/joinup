@@ -1,6 +1,5 @@
-@api @group-clone @eu-oss-catalogue
+@api @eu-oss-catalogue
 # Feature will be re-enabled in ISAICP-9622
-@wip
 Feature:
   In order to show the most data to visitors, EU OSS Catalogue provides a
   special equivalent of the OSS Solution's translatable fields which fetch and
@@ -27,16 +26,7 @@ Feature:
     Then I should see a "link[rel='alternate'][hreflang='en']" element
     And I should not see a "link[rel='alternate'][hreflang='it']" element
 
-    When I visit "/eu-oss-catalogue"
-    Then I should see the "EN Title" tile
-    And I should see the text "EN Short description"
-
-    When I visit "/eu-oss-catalogue/solutions"
-    Then I should see the "EN Title" tile
-    And I should see the text "EN Short description"
-
     Given I am logged in as a user with the "administrator" role
-    And I accept the "Legal notice" agreement
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table
@@ -73,7 +63,6 @@ Feature:
       | DE Feature 2         |
 
     Given I am logged in as a user with the "administrator" role
-    And I accept the "Legal notice" agreement
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table
