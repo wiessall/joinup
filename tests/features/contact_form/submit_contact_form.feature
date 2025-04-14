@@ -19,20 +19,21 @@ Feature: Submit the contact form
     # Note that below, we are asserting the selectable options. Groups are not
     # included.
     And the "Category" select should contain the following options:
-      | - Select a value -                                     |
-      | Academy                                                |
-      | Architecture                                           |
-      | Assessments                                            |
-      | Community                                              |
-      | EU OSS Catalogue                                       |
-      | Governance                                             |
-      | GovTech and Sandboxes                                  |
-      | Monitoring                                             |
-      | Open Source                                            |
-      | Semantics                                              |
-      | Legal / Licence / GDPR question                        |
-      | Question on usage / Feature request                    |
-      | Technical problem / Bug report / Inappropriate content |
+      | - Select a value -                  |
+      | Academy                             |
+      | Architecture                        |
+      | Assessments                         |
+      | Community                           |
+      | EU OSS Catalogue                    |
+      | Governance                          |
+      | GovTech and Sandboxes               |
+      | Monitoring                          |
+      | Open Source                         |
+      | Semantics                           |
+      | Legal / Licence / GDPR question     |
+      | Question on usage / Feature request |
+      | Technical problem / Bug report      |
+      | Inappropriate content               |
     And I should see the text "Submissions of this form are processed by a contractor of the European Commission."
     And I fill in the following:
       | First name     | Wolverine                   |
@@ -117,7 +118,7 @@ Feature: Submit the contact form
     And I fill in "Last name" with "Chaves"
     And I fill in "Organisation" with "Lucotores State"
     And I fill in "E-mail address" with "doana.chaves@free.pe"
-    And I select "Technical problem / Bug report / Inappropriate content" from "Category"
+    And I select "Technical problem / Bug report" from "Category"
     And I fill in "Page URL" with "https://joinup.test:8080"
     And I select "Question on usage" from "Category"
     And I fill in "Subject" with "Reminder me please"

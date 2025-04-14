@@ -21,7 +21,7 @@ declare(strict_types=1);
 function joinup_core_post_update_200400(array &$sandbox): string {
   $table = 'message__field_contact_category';
   $mapping = [
-    'bug' => 'report',
+    'bug' => 'bug',
     'usage' => 'question_feature',
     'feature' => 'question_feature',
     'legal' => 'legal',

@@ -13,7 +13,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I fill in "Last name" with "Amaru"
     And I fill in "Organisation" with "Vilcabamba State"
     And I fill in "E-mail address" with "tupac.amaru@free.pe"
-    And I select "Technical problem / Bug report / Inappropriate content" from "Category"
+    And I select "Technical problem / Bug report" from "Category"
     And I fill in "Page URL" with "/collection/portal"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
@@ -27,7 +27,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I fill in "Last name" with "Camaru"
     And I fill in "Organisation" with "Kiolin State"
     And I fill in "E-mail address" with "josie.camaru@free.pe"
-    And I select "Technical problem / Bug report / Inappropriate content" from "Category"
+    And I select "Technical problem / Bug report" from "Category"
     And I fill "Page URL" with the absolute URL "/collection/portal"
     And I fill in "Subject" with "Mistery reminder"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
