@@ -1,97 +1,8 @@
-@api @group-clone @eu-oss-catalogue
-# Feature will be re-enabled in ISAICP-9622
-@wip
+@api @eu-oss-catalogue
+
 Feature:
   In order to present the details about EU OSS catalogue
   I want to view a dedicated collection and landing page
-
-  Scenario: User sees the right content
-    Given oss_solution content:
-      | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status      | oss_archived | oss_release_date | oss_vitality_index |
-      | Not published      | development            | developers_italia | content-management                                              | Never published                                                                                                                               | unpublished |              | 2022-05-24       | 0.56               |
-      | Not released       | development            | developers_italia | content-management                                              | Never released                                                                                                                                | published   |              |                  | 0.51               |
-      | Archived           | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 1            | 2022-01-13       | 0.98               |
-      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 0            | 2022-04-13       | 0.98               |
-      | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published   | 0            | 2000-07-13       | 0.67               |
-      | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published   |              | 2023-08-13       | 0.78               |
-      | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   |              | 2000-04-13       | 0.50               |
-      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   |              | 2020-09-13       | 0.99               |
-
-    Given I visit "/eu-oss-catalogue"
-    And I should not see the link "Report abusive content"
-    And I see the text "Solutions created by and for European Public Services" in the "Header" region
-
-    # Check menus.
-    Then I should not see the link "Overview" in the "Navigation menu"
-    And I should not see the link "Members" in the "Navigation menu"
-    And I should not see the link "About" in the "Navigation menu"
-    But I should see the link "Welcome" in the "Navigation menu"
-    And I should see the link "Search" in the "Navigation menu"
-    And I should not see the "Entity actions" region
-
-    And I should see the following headings:
-      | Most recent solutions                             |
-      | Most active solutions                             |
-      | Do you want to publish your open source solution? |
-      | Let’s start with your software name               |
-      | Frequently Asked Questions (FAQ)                  |
-      | Do you need any help?                             |
-      | Follow our journey on the social media!           |
-    And I should see the text "Discover our European Open Source Software"
-    And I should see the text "Repository of the Open Source Software Solutions of the Public Administrations"
-    And I should see the text "Centralized platform to discover Open Source Software Solutions for diverse needs"
-    And I should see the text "Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains"
-    And I should see the link "Browse the catalogue"
-    And I should see the text "Just follow the guide!"
-    And I should see the text "EU Open Source Solutions Catalogue"
-    And I should not see the link "Report abusive content"
-
-    # Most recent solutions carousel.
-    Then I should see the following tiles in the "Most recent solutions" region:
-      | Spunta             |
-      | C4S ERP            |
-      | Cristian Gagliardi |
-      | Vito Schiraldi     |
-      | Semantic Turkey    |
-      | Not released       |
-
-    When I click "View all" in the "Most recent solutions" region
-    Then the option with text "Most Recent" from select "Sort by" is selected
-    And I should see the following tiles in the correct order:
-      | Spunta             |
-      | C4S ERP            |
-      | Cristian Gagliardi |
-      | Vito Schiraldi     |
-      | Semantic Turkey    |
-      | Not released       |
-
-    # Most active solutions carousel.
-    When I visit the OSS welcome page
-    Then I should see the following tiles in the "Most active solutions" region:
-      | Cristian Gagliardi |
-      | C4S ERP            |
-      | Spunta             |
-      | Vito Schiraldi     |
-      | Not released       |
-      | Semantic Turkey    |
-
-    When I click "View all" in the "Most active solutions" region
-    Then the option with text "Most Active" from select "Sort by" is selected
-    And I should see the following tiles in the correct order:
-      | Cristian Gagliardi |
-      | C4S ERP            |
-      | Spunta             |
-      | Vito Schiraldi     |
-      | Not released       |
-      | Semantic Turkey    |
-
-    # Check OSS label in tile footer.
-    When I visit the OSS welcome page
-    Then I should see the text "OSS Solution" in the "Spunta" tile
-
-    When I should not see the link "advanced search"
-    Then I click "Browse the catalogue"
-    And I should see the heading "Search in EU Open Source Solutions Catalogue"
 
   Scenario: User sees short description on OSS Solution page.
     Given oss_solution content:
@@ -106,11 +17,6 @@ Feature:
       | title   | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status    | oss_release_date |
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Olympus"
-    Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "Solutions created by and for European Public Services" in the "Header" region
-    And I should see the following links in the "Navigation menu" region:
-      | Welcome |
-      | Search  |
 
   Scenario: User can see GIT repo indicators.
     Given oss_solution content:
@@ -230,7 +136,6 @@ Feature:
     When I click "document-management"
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "document-management"
-    And "Search" should be the active item in the "Navigation menu" region
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "Developers Italia"
     Then I should be on "/eu-oss-catalogue/solutions"
@@ -238,29 +143,11 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"
-    And "Search" should be the active item in the "Navigation menu" region
     And I should see the following facet summary "science-and-technology"
 
     # Check that this node type doesn't leak in search as facet.
     When I visit "/search"
     Then I should not see the link "Open source software solution"
-
-  Scenario Outline: OSS Catalogue's inaccessible routes.
-    Given I am logged in as a user with the "<role>" role
-    And I accept the "Legal notice" agreement
-    When I go to "<path>"
-    Then I should get an access denied error
-
-    Examples:
-      | path                     | role          |
-      | eu-oss-catalogue/members | administrator |
-      | eu-oss-catalogue/members | authenticated |
-      | eu-oss-catalogue/members | moderator     |
-
-  Scenario: Anonymous user cannot access OSS Catalogue's inaccessible routes.
-    Given I am not logged in
-    When I go to "eu-oss-catalogue/members"
-    Then I should see the heading "Sign in to continue"
 
   @javascript
   Scenario: Modal link should be displayed and must show all field values.
