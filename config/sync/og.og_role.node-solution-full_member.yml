@@ -12,6 +12,8 @@ group_type: node
 group_bundle: solution
 is_admin: null
 permissions:
+  - 'create content for any_user option'
+  - 'create content for only_members option'
   - 'create discussion content'
   - 'create document content'
   - 'create event content'
