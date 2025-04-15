@@ -144,7 +144,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->assertEquals('/collection/big-collection/solution/abc123/news/news-11', $this->node['news']['1.1']->toUrl()
       ->toString());
 
-    // Edit the the collection.
+    // Test updating the short ID of the collection.
     $edit = ['short_id[0][value]' => 'xyz789'];
     $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
@@ -354,6 +354,27 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       ->toString());
     $this->assertEquals('/collection/biggest-collection/solution/solution-one/news/news-11', $this->node['news']['1.1']->toUrl()
       ->toString());
+
+    // Test updating the short ID  of the collection without publishing.
+    $edit = ['short_id[0][value]' => 'xyz789'];
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Propose');
+    $this->assertSession()
+      ->pageTextNotContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Save as draft');
+    $this->assertSession()
+      ->pageTextNotContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
+    // Test updating the title of the collection without publishing.
+    $edit = ['title[0][value]' => 'An Unchanged Collection'];
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Save as draft');
+    $this->assertSession()
+      ->pageTextNotContains("You've changed the collection's title from The Biggest Collection to An Unchanged Collection. It will take some time until the collection content URLs will be updated.");
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Propose');
+    $this->assertSession()
+      ->pageTextNotContains("You've changed the collection's title from The Biggest Collection to An Unchanged Collection. It will take some time until the collection content URLs will be updated.");
   }
 
   /**
