@@ -37,6 +37,7 @@ function joinup_core_deploy_200400(array &$sandbox): string {
   foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($solution_ids) as $solution) {
     $solution->set('group_moderation', 1);
     $solution->skip_notification = 1;
+    $solution->search_api_skip_tracking = 1;
     $solution->save();
   }
 
