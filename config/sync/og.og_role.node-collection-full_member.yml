@@ -12,6 +12,8 @@ group_type: node
 group_bundle: collection
 is_admin: null
 permissions:
+  - 'create content for any_user option'
+  - 'create content for only_members option'
   - 'create discussion content'
   - 'create document content'
   - 'create event content'
@@ -29,8 +31,6 @@ permissions:
   - 'edit own event content'
   - 'edit own news content'
   - 'post comments'
-  - 'perform solution_workflow workflow draft transition on any entity'
-  - 'perform solution_workflow workflow propose transition on any entity'
   - 'create content for any_user option'
   - 'perform node:post_moderated workflow propose_from_reported transition on own entity'
   - 'perform node:post_moderated workflow publish transition on own entity'
@@ -42,5 +42,7 @@ permissions:
   - 'perform node:pre_moderated workflow request_deletion transition on own entity'
   - 'perform node:pre_moderated workflow save_as_draft transition on own entity'
   - 'perform node:pre_moderated workflow save_new_draft transition on own entity'
+  - 'perform solution_workflow workflow draft transition on any entity'
+  - 'perform solution_workflow workflow propose transition on any entity'
   - 'create content for only_members option'
 role_type: required
