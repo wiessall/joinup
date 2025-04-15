@@ -103,7 +103,6 @@ function joinup_core_post_update_200401(array &$sandbox): string {
         ));
       }
       $share->save();
-      $sandbox['migrated']++;
       $sandbox['sharingCount'] += count($shares);
     }
     finally {
