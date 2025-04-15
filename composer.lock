@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54fea4ad8ef9991518fc39d6ca22eae5",
+    "content-hash": "266aa03e193266029eb4020c15b94da7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4156,29 +4156,29 @@
         },
         {
             "name": "drupal/error_page",
-            "version": "2.0.3",
+            "version": "2.1.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/error_page.git",
-                "reference": "2.0.3"
+                "reference": "2.1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/error_page-2.0.3.zip",
-                "reference": "2.0.3",
-                "shasum": "98da29b52092acd624cd091ce357320384fdb8ef"
+                "url": "https://ftp.drupal.org/files/projects/error_page-2.1.0-beta1.zip",
+                "reference": "2.1.0-beta1",
+                "shasum": "666e78750eee860121a6698441339bbe787d2b7e"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.3",
-                    "datestamp": "1669243138",
+                    "version": "2.1.0-beta1",
+                    "datestamp": "1742644666",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -25977,6 +25977,7 @@
     "stability-flags": {
         "drupal/block_field": 5,
         "drupal/dropsolid_purge": 10,
+        "drupal/error_page": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
         "drupal/flag": 10,
