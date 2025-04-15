@@ -30,8 +30,6 @@ permissions:
   - 'edit own document content'
   - 'edit own event content'
   - 'edit own news content'
-  - 'post comments'
-  - 'create content for any_user option'
   - 'perform node:post_moderated workflow propose_from_reported transition on own entity'
   - 'perform node:post_moderated workflow publish transition on own entity'
   - 'perform node:post_moderated workflow save_as_draft transition on own entity'
@@ -44,5 +42,5 @@ permissions:
   - 'perform node:pre_moderated workflow save_new_draft transition on own entity'
   - 'perform solution_workflow workflow draft transition on any entity'
   - 'perform solution_workflow workflow propose transition on any entity'
-  - 'create content for only_members option'
+  - 'post comments'
 role_type: required
