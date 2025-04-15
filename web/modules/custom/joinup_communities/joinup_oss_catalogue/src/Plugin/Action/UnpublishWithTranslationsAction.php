@@ -40,8 +40,9 @@ class UnpublishWithTranslationsAction extends EntityActionBase {
    * {@inheritdoc}
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResult|bool {
-    /** @var \Drupal\Core\Entity\EntityInterface $object */
-    $result = $object->access('update', $account, TRUE);
+    $result = AccessResult::allowedIfHasPermissions($account, [
+      'administer nodes',
+    ]);
 
     return $return_as_object ? $result : $result->isAllowed();
   }
