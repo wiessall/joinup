@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\joinup_oss_catalogue\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
