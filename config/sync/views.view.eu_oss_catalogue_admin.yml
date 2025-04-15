@@ -728,14 +728,18 @@ display:
           clear_on_exposed: true
           force_selection_info: false
           selected_actions:
-            14:
-              action_id: 'entity:unpublish_action:node'
+            -
+              action_id: joinup_oss_catalogue_unpublish_with_translations
               preconfiguration:
                 add_confirmation: false
-            15:
-              action_id: 'entity:publish_action:node'
+                confirm_help_text: ''
+                message_override: ''
+            -
+              action_id: joinup_oss_catalogue_publish_with_translations
               preconfiguration:
                 add_confirmation: false
+                confirm_help_text: ''
+                message_override: ''
         title:
           id: title
           table: node_field_data
