@@ -7,7 +7,7 @@ namespace Joinup\TaskRunner\Commands;
 use Consolidation\AnnotatedCommand\Attributes as CLI;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
-use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Joinup\EnvironmentDetector;
 use Robo\Result;
 
 /**
@@ -15,15 +15,13 @@ use Robo\Result;
  */
 class ToolCommands extends AbstractCommands {
 
-  use DigitQaPipelineAwareTrait;
-
   /**
    * Extra tasks to run after toolkit:opts-review.
    */
   #[CLI\Hook(type: HookManager::POST_COMMAND_HOOK, target: 'toolkit:opts-review')]
   public function postOptsReview($result): Result|int|null {
     // If we are on Gitlab, run some extra commands...
-    if (self::isDigitQaPipeline()) {
+    if (EnvironmentDetector::isGitlabPipeline()) {
       $result = $this->taskExec($this->getBin('run'))->arg('toolkit:post-qa-code-review')->run();
       if (!$result->wasSuccessful()) {
         return $result;
