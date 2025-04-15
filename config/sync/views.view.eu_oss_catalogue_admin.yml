@@ -1372,7 +1372,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'administer eu oss catalogue'
+          perm: 'administer nodes'
       filters:
         type:
           id: type
