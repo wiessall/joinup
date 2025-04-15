@@ -15,12 +15,9 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\joinup_core\SharedInUpdateHelper;
-use Drupal\user\Entity\User;
 
 /**
  * Create shares entity meta entities.
@@ -29,9 +26,6 @@ function joinup_core_post_update_200401(array &$sandbox): string {
   $db = \Drupal::database();
   $sourceTable = 'node__field_shared_in';
   $shareStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-  $accountSwitcher = \Drupal::service('account_switcher');
-  assert($accountSwitcher instanceof AccountSwitcherInterface);
-  $serviceAccount = User::load(1);
 
   if (!$db->schema()->tableExists($sourceTable)) {
     throw new UpdateException(sprintf(
@@ -84,7 +78,6 @@ function joinup_core_post_update_200401(array &$sandbox): string {
     );
 
     try {
-      $accountSwitcher->switchTo($serviceAccount);
       $share = $shareStorage->create([
         'type' => 'shared_in',
         'target' => [
@@ -94,19 +87,15 @@ function joinup_core_post_update_200401(array &$sandbox): string {
         'field_shared_in' => $shares,
       ]);
       assert($share instanceof ContentEntityInterface);
-
-      $violations = $share->validate();
-      if ($violations->count()) {
-        throw new UpdateException(sprintf(
-          "The sharing entity we are about to create does not validate.\n%s",
-          Variable::export($share->toArray()),
-        ));
-      }
       $share->save();
       $sandbox['sharingCount'] += count($shares);
     }
-    finally {
-      $accountSwitcher->switchBack();
+    catch (\Exception $e) {
+      throw new UpdateException(sprintf(
+        "Saving the sharing entity of node %s has failed.\n%s",
+        $nid,
+        $e->getMessage(),
+      ));
     }
   }
   $sandbox['processed'] += count($nidsToProcess);
