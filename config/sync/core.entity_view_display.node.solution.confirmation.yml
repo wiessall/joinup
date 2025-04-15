@@ -33,10 +33,11 @@ dependencies:
     - field.field.node.solution.translation
     - node.type.solution
   module:
-    - collection
     - field_group
     - layout_builder
     - options
+    - template_suggestion
+    - text
     - user
 third_party_settings:
   layout_builder:
@@ -132,17 +133,18 @@ content:
     weight: 8
     region: content
   description:
-    type: collection_plain_glossary
+    type: text_default
     label: above
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 5
     region: content
   language:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: ''
       link: false
     third_party_settings: {  }
     weight: 7
@@ -162,10 +164,9 @@ content:
     weight: 6
     region: content
   solution_type:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: ''
       link: false
     third_party_settings: {  }
     weight: 6

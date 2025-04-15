@@ -731,7 +731,6 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
   $form['node_preview'] = [
     '#type' => 'container',
     '#title' => t('Preview'),
-    '#weight' => 100,
     'content' => $render_array,
   ];
 }
