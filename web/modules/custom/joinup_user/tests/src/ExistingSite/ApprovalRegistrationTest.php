@@ -34,6 +34,7 @@ class ApprovalRegistrationTest extends JoinupExistingSiteTestBase {
 
     $assert->statusMessageContains('Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message has been sent to your email address.');
     $assert->statusMessageContains('We would like to inform you that our system automatically places accounts registered with certain generic email domains under review.');
+    $assert->statusMessageContains('If your account has not been validated in the following 1 business day, please contact us through our contact form');
   }
 
   /**
