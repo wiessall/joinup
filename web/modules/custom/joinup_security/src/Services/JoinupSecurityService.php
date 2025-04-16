@@ -10,7 +10,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 
 /**
- *
+ * Joinup security service.
  */
 class JoinupSecurityService {
 
@@ -33,7 +33,7 @@ class JoinupSecurityService {
     $timestamp24HoursAgo = \Drupal::time()->getRequestTime() - 86400;
     $uid = $this->currentUser->id();
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
-    $query->condition('type', CommunityContentHelper::BUNDLES,'IN')
+    $query->condition('type', CommunityContentHelper::BUNDLES, 'IN')
       ->condition('uid', $uid)
       ->condition('created', $timestamp24HoursAgo, '>=')
       ->accessCheck(TRUE)
