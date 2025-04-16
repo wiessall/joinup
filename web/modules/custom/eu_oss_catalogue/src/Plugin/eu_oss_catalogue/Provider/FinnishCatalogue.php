@@ -161,37 +161,23 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
         ]);
         continue;
       }
-
-      // Limit log noise.
-      if (in_array($row['code_url'], $this->ignoredResources())) {
+      
+      if (!$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
         continue;
       }
 
-      $parts = explode('/', parse_url($row['code_url'], PHP_URL_PATH));
-      if (count($parts) != 3 || !$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
-        continue;
-      }
+      $url = preg_replace('/^(.*)\.git$/', '$1', $row['code_url']);
+      $pathParts = explode('/', trim(substr($url, strlen($api->baseUrl)), '/'));
+      $name = array_pop($pathParts);
+      $namespace = implode('/', $pathParts);
 
-      if (in_array($row['code_url'], $this->fetchedUrls)) {
+      if (in_array($url, $this->fetchedUrls)) {
         continue;
       }
 
       $this->fetched[$api->baseUrl]['api'] = $api;
-      $this->fetched[$api->baseUrl]['projects'][$parts[1]][] = $parts[2];
-      $this->fetchedUrls[] = $row['code_url'];
+      $this->fetched[$api->baseUrl]['projects'][$namespace][] = $name;
+      $this->fetchedUrls[] = $url;
     }
   }
-
-  /**
-   * Ignored resources.
-   *
-   * @return string[]
-   *   Ignored URLs.
-   */
-  protected function ignoredResources(): array {
-    return [
-      'https://docs.moodle.org/dev/Main_Page',
-    ];
-  }
-
 }
