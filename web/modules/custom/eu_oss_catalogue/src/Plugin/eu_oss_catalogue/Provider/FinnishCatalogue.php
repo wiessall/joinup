@@ -161,7 +161,7 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
         ]);
         continue;
       }
-      
+
       if (!$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
         continue;
       }
@@ -180,4 +180,5 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
       $this->fetchedUrls[] = $url;
     }
   }
+
 }
