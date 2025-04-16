@@ -50,7 +50,7 @@ button.button--primary {
   }
 }
 
-.dialog-cancel {
+.dialog-cancel:not(.btn-primary) {
   @extend .btn;
   @extend .btn-secondary;
 }
