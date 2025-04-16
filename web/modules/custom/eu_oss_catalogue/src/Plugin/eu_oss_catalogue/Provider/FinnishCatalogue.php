@@ -36,8 +36,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
 
-  use UrlParserTrait;
-
   /**
    * Catalogue endpoints.
    *
@@ -164,7 +162,13 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
         continue;
       }
 
-      if (!$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
+      // Limit log noise.
+      if (in_array($row['code_url'], $this->ignoredResources())) {
+        continue;
+      }
+
+      $parts = explode('/', parse_url($row['code_url'], PHP_URL_PATH));
+      if (count($parts) != 3 || !$api = $this->apiGuesser->getHostingPlatformApi($row['code_url'])) {
         continue;
       }
 
@@ -172,12 +176,22 @@ class FinnishCatalogue extends EuOssCatalogueProviderPluginBase {
         continue;
       }
 
-      $urlSegments = $this->splitUrlIntoNamespaceAndName($row['code_url'], $api);
-
       $this->fetched[$api->baseUrl]['api'] = $api;
-      $this->fetched[$api->baseUrl]['projects'][$urlSegments['namespace']][] = $urlSegments['name'];
+      $this->fetched[$api->baseUrl]['projects'][$parts[1]][] = $parts[2];
       $this->fetchedUrls[] = $row['code_url'];
     }
+  }
+
+  /**
+   * Ignored resources.
+   *
+   * @return string[]
+   *   Ignored URLs.
+   */
+  protected function ignoredResources(): array {
+    return [
+      'https://docs.moodle.org/dev/Main_Page',
+    ];
   }
 
 }
