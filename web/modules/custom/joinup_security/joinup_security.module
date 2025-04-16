@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * @file
+ */
+
+declare(strict_types=1);
+
+/**
+ * @file
+ */
+
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\joinup_community_content\Entity\CommunityContentBase;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 
 /**
@@ -10,7 +19,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 function joinup_security_form_node_form_alter(array &$form, FormStateInterface $form_state): void {
   $node = $form_state->getFormObject()->getEntity();
 
-  if(!$node instanceOf CommunityContentInterface){
+  if (!$node instanceof CommunityContentInterface) {
     return;
   }
 
@@ -21,9 +30,9 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
   if (!$securityService->currentUserHasNodeCreationLimit() && isset($form['actions']) && is_array($form['actions'])) {
     foreach ($form['actions'] as $key => &$action) {
       if (is_array($action) && isset($action['#type']) && in_array($action['#type'], [
-          'submit',
-          'button'
-        ])) {
+        'submit',
+        'button',
+      ])) {
         $action['#disabled'] = TRUE;
       }
     }
@@ -32,7 +41,11 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
   \Drupal::messenger()->addWarning(t('You are not allowed to create content today. Please, try tomorrow'));
 }
 
-function joinup_security_node_form_validate(array &$form, FormStateInterface $form_state) {
+/**
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function joinup_security_node_form_validate(array &$form, FormStateInterface $form_state): mixed {
   $securityService = \Drupal::service('Drupal\joinup_security\Services\JoinupSecurityService');
   return $securityService->currentUserHasNodeCreationLimit();
 }
