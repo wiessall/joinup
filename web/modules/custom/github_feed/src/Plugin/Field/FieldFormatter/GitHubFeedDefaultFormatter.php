@@ -58,6 +58,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $cacheMaxAge = (int) $this->getFieldSetting('cache_max_age');
+    $cacheMaxAge = 60;
     $elements = [];
     foreach ($items as $delta => $item) {
       $elements[$delta] = [
