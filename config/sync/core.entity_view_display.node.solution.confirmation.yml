@@ -149,11 +149,6 @@ content:
     third_party_settings: {  }
     weight: 7
     region: content
-  node_preview:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
-    region: content
   owner:
     type: entity_reference_entity_view
     label: above

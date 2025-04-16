@@ -261,7 +261,7 @@ function joinup_solution_entity_extra_field_info(): array {
     $form['node_preview'] = [
       'label' => t('Node preview'),
       'description' => t('Displays a preview of the solution.'),
-      'visible' => TRUE,
+      'visible' => FALSE,
     ];
   }
 

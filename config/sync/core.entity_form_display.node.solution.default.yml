@@ -209,6 +209,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   node_preview:
+    type: container
     weight: 14
     region: content
     settings: {  }
