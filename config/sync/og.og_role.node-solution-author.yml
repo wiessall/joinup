@@ -12,6 +12,7 @@ group_type: node
 group_bundle: solution
 is_admin: null
 permissions:
+  - 'bypass node creation limit'
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'

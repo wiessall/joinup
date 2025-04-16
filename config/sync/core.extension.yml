@@ -126,6 +126,7 @@ module:
   joinup_reports: 0
   joinup_rss: 0
   joinup_search: 0
+  joinup_security: 0
   joinup_seo: 0
   joinup_sitewide_alert: 0
   joinup_slick: 0
