@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\github_feed;
 
+use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Security\Attribute\TrustedCallback;
@@ -18,7 +19,7 @@ class GitHubFeedLazyBuilder {
   use StringTranslationTrait;
 
   public function __construct(
-    #[Autowire(service: 'cache.render')],
+    #[Autowire(service: 'cache.render')]
     protected readonly CacheBackendInterface $renderCache,
     protected readonly GitHubFeedInterface $gitHubFeed,
     protected readonly RendererInterface $renderer,
@@ -80,6 +81,9 @@ class GitHubFeedLazyBuilder {
       $element['#items'][] = $this->getRenderableItem($feedType, $fetchedItem);
     }
 
+    $now = new DateTimePlus('now', new \DateTimeZone('UTC'));
+    $element['#attached']['http_header'][] = ['Expires', $now->modify("+$cacheMaxAge second")->format(\DATE_RFC2822)];
+
     return $element;
   }
 
@@ -99,6 +103,11 @@ class GitHubFeedLazyBuilder {
       '#type' => 'container',
       '#attributes' => [
         'class' => ['github-feed-item'],
+      ],
+      'Time' => [
+        '#type' => 'html_tag',
+        '#tag' => 'h2',
+        '#value' => (new \DateTime())->format('r'),
       ],
     ];
 
@@ -132,6 +141,43 @@ class GitHubFeedLazyBuilder {
       ];
     }
     return $container;
+  }
+
+
+  /**
+   * Generates a cache ID for the given parameters.
+   *
+   * @param string $owner
+   *   The owner of the project.
+   * @param string $project
+   *   The project name.
+   * @param string $type
+   *   The type of the feed. One of the items defined in
+   *   \Drupal\github_feed\Plugin\Field\FieldType\GitHubFeedItem::allowedTypeValues.
+   * @param int $numberOfResults
+   *   The number of results to return.
+   * @param bool $includeComments
+   *   Whether to include comments or not.
+   * @param int $numberOfComments
+   *   The number of comments to return.
+   *
+   * @return string
+   *   The cache ID.
+   */
+  public static function generateCacheId(
+    string $repositoryUrl,
+    string $feedType,
+    int $numberOfResults,
+    int $numberOfComments,
+  ): string {
+    return implode(':', [
+      'github_feed',
+      'view',
+      preg_replace('/\W/', '', $repositoryUrl),
+      $feedType,
+      $numberOfResults,
+      $numberOfComments,
+    ]);
   }
 
 }
