@@ -10,6 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\github_feed\GitHubFeedInterface;
+use Drupal\github_feed\GitHubFeedLazyBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -73,6 +74,13 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
           ],
         ],
         '#create_placeholder' => TRUE,
+        // This portion is cacheable.
+        // @see \Drupal\github_feed\GitHubFeedLazyBuilder
+        '#cache' => [
+          'keys' => GitHubFeedLazyBuilder::getCacheKeys($item->repository, $item->type, (int) $item->item_num, (int) $item->comment_num),
+          'max-age' => $cacheMaxAge,
+          'bin' => 'render',
+        ],
       ];
     }
 

@@ -81,8 +81,15 @@ class GitHubFeedLazyBuilder {
       $element['#items'][] = $this->getRenderableItem($feedType, $fetchedItem);
     }
 
+    // Needed to tweak (internal) page cache.
     $now = new DateTimePlus('now', new \DateTimeZone('UTC'));
     $element['#attached']['http_header'][] = ['Expires', $now->modify("+$cacheMaxAge second")->format(\DATE_RFC2822)];
+
+    // We're making this portion cacheable - we only deal with cache max age,
+    // otherwise this is safe to be cached - we just don't want the entire page
+    // to be re-rendered.
+    $element['#cache']['keys'] = static::getCacheKeys($repositoryUrl, $feedType, $numberOfResults, $numberOfComments);
+    $element['#cache']['bin'] = 'render';
 
     return $element;
   }
@@ -104,7 +111,7 @@ class GitHubFeedLazyBuilder {
       '#attributes' => [
         'class' => ['github-feed-item'],
       ],
-      'Time' => [
+      'time' => [
         '#type' => 'html_tag',
         '#tag' => 'h2',
         '#value' => (new \DateTime())->format('r'),
@@ -164,20 +171,20 @@ class GitHubFeedLazyBuilder {
    * @return string
    *   The cache ID.
    */
-  public static function generateCacheId(
+  public static function getCacheKeys(
     string $repositoryUrl,
     string $feedType,
     int $numberOfResults,
     int $numberOfComments,
-  ): string {
-    return implode(':', [
+  ): array {
+    return [
       'github_feed',
       'view',
       preg_replace('/\W/', '', $repositoryUrl),
       $feedType,
       $numberOfResults,
       $numberOfComments,
-    ]);
+    ];
   }
 
 }
