@@ -17,5 +17,6 @@ parameters:
         - web/modules/custom/joinup_core/tests/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
+        - web/modules/custom/joinup_security/src/Services/JoinupSecurityService.php
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php

@@ -24,7 +24,7 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
     return;
   }
   $securityService = \Drupal::service('Drupal\joinup_security\Services\JoinupSecurityService');
-  if (!$securityService->currentUserHasNodeCreationLimit() && isset($form['actions']) && is_array($form['actions'])) {
+  if (!$securityService->currentUserHasNodeCreationLimit($node->getCollection()) && isset($form['actions']) && is_array($form['actions'])) {
     foreach ($form['actions'] as &$action) {
       if (is_array($action) && isset($action['#type']) && in_array($action['#type'], [
         'submit',
@@ -33,9 +33,9 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
         $action['#disabled'] = TRUE;
       }
     }
+    \Drupal::messenger()->addWarning(t('You are not allowed to create content today. Please, try tomorrow'));
   }
   $form['#validate'][] = 'joinup_security_node_form_validate';
-  \Drupal::messenger()->addWarning(t('You are not allowed to create content today. Please, try tomorrow'));
 }
 
 /**
@@ -47,6 +47,7 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
  *   Form state param.
  */
 function joinup_security_node_form_validate(array &$form, FormStateInterface $form_state): mixed {
+  $node = $form_state->getFormObject()->getEntity();
   $securityService = \Drupal::service('Drupal\joinup_security\Services\JoinupSecurityService');
-  return $securityService->currentUserHasNodeCreationLimit();
+  return $securityService->currentUserHasNodeCreationLimit($node->getCollection());
 }
