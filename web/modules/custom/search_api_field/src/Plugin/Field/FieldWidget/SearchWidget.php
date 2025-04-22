@@ -205,6 +205,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#min' => 1,
     ];
 
+    $element['wrapper']['fields']['#tree'] = TRUE;
     return $element;
   }
 
@@ -239,7 +240,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The region name this row belongs to.
    */
   public static function getRowRegion(array $row): ?string {
-    return $row['plugin']['type']['#value'];
+    // Check if we have plugin type (standard field_ui pattern)
+    if (isset($row['plugin']['type']['#value'])) {
+      return $row['plugin']['type']['#value'];
+    }
+
+    // Default to hidden if no region is found
+    return 'hidden';
   }
 
   /**
@@ -289,39 +296,73 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   Render array of the row.
    */
   protected function buildFacetRow(Facet $facet, SearchItem $item): array {
+    // Get the stored values for this facet
     $value = $item->get('value')->getValue();
-    $areas = !empty($value['fields']) ? $value['fields'] : [];
-    $facet_config = NULL;
-    if ($areas) {
-      foreach ($areas as $facet_name => $facet_data) {
-        if ($facet_name == $facet->id()) {
-          $facet_config = $facet_data;
-        }
+    $stored_facets = !empty($value['fields']) ? $value['fields'] : [];
+    $facet_id = $facet->id();
+
+    // Get the saved configuration for this facet
+    $weight = $facet->getWeight();
+    $region = 'hidden';
+    $parent = '';
+
+    // If we have stored values, use them
+    if (isset($stored_facets[$facet_id])) {
+      // Get stored weight
+      if (isset($stored_facets[$facet_id]['weight'])) {
+        $weight = (int) $stored_facets[$facet_id]['weight'];
+      }
+
+      // Get stored region
+      if (isset($stored_facets[$facet_id]['region'])) {
+        $region = $stored_facets[$facet_id]['region'];
+      }
+
+      // Get stored parent
+      if (isset($stored_facets[$facet_id]['parent'])) {
+        $parent = $stored_facets[$facet_id]['parent'];
       }
     }
-    $regions = array_keys($this->getRegions());
-    $extra_field_row = [
-      '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
-      '#row_type' => 'extra_field',
+
+    // Get region options
+    $region_options = [];
+    $regions = $this->getRegions();
+    foreach ($regions as $region_name => $region_info) {
+      $region_options[$region_name] = $region_info['title'];
+    }
+
+    // Build the row
+    $row = [
+      '#attributes' => [
+        'class' => ['draggable', 'tabledrag-leaf'],
+        'id' => Html::getUniqueId('facet-row-' . $facet_id),
+      ],
+      // Add row type and region handling for tabledrag
+      '#row_type' => 'facet',
       '#region_callback' => [$this, 'getRowRegion'],
-      '#js_settings' => ['rowHandler' => 'field'],
+
+      // The facet name column
       'human_name' => [
         '#markup' => $facet->getName(),
       ],
+
+      // Weight column with numeric value and proper class for tabledrag
       'weight' => [
-        '#type' => 'textfield',
+        '#type' => 'weight',
         '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
         '#title_display' => 'invisible',
-        '#default_value' => $facet->getWeight(),
-        '#size' => 3,
+        '#default_value' => $weight,
         '#attributes' => ['class' => ['field-weight']],
       ],
+
+      // Parent selection
       'parent_wrapper' => [
         'parent' => [
           '#type' => 'select',
-          '#title' => $this->t('Parents for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Parent for @title', ['@title' => $facet->getName()]),
           '#title_display' => 'invisible',
-          '#options' => array_combine($regions, $regions),
+          '#options' => $region_options,
+          '#default_value' => $parent,
           '#empty_value' => '',
           '#attributes' => [
             'class' => [
@@ -332,25 +373,31 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         ],
         'hidden_name' => [
           '#type' => 'hidden',
-          '#default_value' => $facet->id(),
+          '#default_value' => $facet_id,
           '#attributes' => ['class' => ['field-name']],
         ],
       ],
+
+      // Region selection with class for tabledrag
       'plugin' => [
         'type' => [
           '#type' => 'select',
-          '#title' => $this->t('Visibility for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Region for @title', ['@title' => $facet->getName()]),
           '#title_display' => 'invisible',
-          '#options' => array_combine($regions, $regions),
-          '#default_value' => !empty($facet_config) ? $facet_config['region'] : 'hidden',
+          '#options' => $region_options,
+          '#default_value' => $region,
           '#attributes' => ['class' => ['field-plugin-type']],
         ],
       ],
-      'settings_summary' => [],
-      'settings_edit' => [],
+
+      // Hidden field to store facet ID
+      'facet_id' => [
+        '#type' => 'hidden',
+        '#default_value' => $facet_id,
+      ],
     ];
 
-    return $extra_field_row;
+    return $row;
   }
 
   /**
@@ -650,12 +697,118 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // under a 'value' array element which will be serialized.
     $cleaned_values = [];
     foreach ($values as $delta => $value) {
+      // Initialize the fields array
+      $cleaned_values[$delta]['value']['fields'] = [];
+
+      // Process field values
       if (!empty($value['wrapper']['fields'])) {
         foreach ($value['wrapper']['fields'] as $fn => $field) {
-          $cleaned_values[$delta]['value']['fields'][$fn] = [
-            'weight' => $field['weight'],
-            'region' => $field['plugin']['type'],
+          // Skip region title rows and region message rows
+          if (strpos($fn, 'region-') === 0) {
+            continue;
+          }
+
+          // Skip non-facet rows and region marker rows
+          if (strpos($fn, 'region-') === 0 || !is_array($field)) {
+            continue;
+          }
+
+          // Check if this is a draggable facet row by verifying key elements
+          $is_facet = FALSE;
+
+          // Method 1: Check for facet_id field
+          if (isset($field['facet_id'])) {
+            $is_facet = TRUE;
+          }
+
+          // Method 2: Check for human_name and weight fields (our custom rows)
+          if (isset($field['human_name']) && isset($field['weight'])) {
+            $is_facet = TRUE;
+          }
+
+          // Method 3: Fall back to checking for plugin (original form structure)
+          if (isset($field['plugin']) && isset($field['plugin']['type'])) {
+            $is_facet = TRUE;
+          }
+
+          // Skip if not a facet row
+          if (!$is_facet) {
+            continue;
+          }
+
+          // Get the facet ID - this is the key we need to use
+          $facet_id = $fn;
+          if (!empty($field['facet_id'])) {
+            if (is_array($field['facet_id'])) {
+              if (!empty($field['facet_id']['#value'])) {
+                $facet_id = $field['facet_id']['#value'];
+              } elseif (!empty($field['facet_id']['#default_value'])) {
+                $facet_id = $field['facet_id']['#default_value'];
+              }
+            } else {
+              $facet_id = $field['facet_id'];
+            }
+          }
+
+          // Add debug information
+          \Drupal::logger('search_api_field')->notice('Processing field @id with data: @data', [
+            '@id' => $facet_id,
+            '@data' => print_r($field, TRUE),
+          ]);
+
+          // Extract weight - the weight field in our form is a form element
+          $weight = 0;
+
+          // Debug weight field structure
+          \Drupal::logger('search_api_field')->notice('Weight field structure for @id: @data', [
+            '@id' => $facet_id,
+            '@data' => isset($field['weight']) ? print_r($field['weight'], TRUE) : 'Not found',
+          ]);
+
+          // Try multiple ways to get the weight value
+          if (isset($field['weight']) && !is_array($field['weight'])) {
+            // Direct value
+            $weight = (int) $field['weight'];
+          } elseif (isset($field['weight']) && is_array($field['weight'])) {
+            // From form element
+            if (isset($field['weight']['#value'])) {
+              $weight = (int) $field['weight']['#value'];
+            } elseif (isset($field['weight']['#default_value'])) {
+              $weight = (int) $field['weight']['#default_value'];
+            }
+          }
+
+          // Extract region - in our form the region is a direct field or in a select
+          $region = 'hidden';
+          if (isset($field['region']) && !is_array($field['region'])) {
+            $region = $field['region'];
+          } elseif (isset($field['region']) && is_array($field['region']) && isset($field['region']['#value'])) {
+            $region = $field['region']['#value'];
+          } elseif (isset($field['plugin']) && isset($field['plugin']['type'])) {
+            // Fallback to old field structure if present
+            $region = $field['plugin']['type'];
+          }
+
+          // Store field values
+          $cleaned_values[$delta]['value']['fields'][$facet_id] = [
+            'weight' => $weight,
+            'region' => $region,
           ];
+
+          // Add parent if it exists
+          if (isset($field['parent']) && !empty($field['parent'])) {
+            if (is_array($field['parent']) && isset($field['parent']['#value'])) {
+              $cleaned_values[$delta]['value']['fields'][$facet_id]['parent'] = $field['parent']['#value'];
+            } else {
+              $cleaned_values[$delta]['value']['fields'][$facet_id]['parent'] = $field['parent'];
+            }
+          } elseif (isset($field['parent_wrapper']) && isset($field['parent_wrapper']['parent'])) {
+            if (is_array($field['parent_wrapper']['parent']) && isset($field['parent_wrapper']['parent']['#value'])) {
+              $cleaned_values[$delta]['value']['fields'][$facet_id]['parent'] = $field['parent_wrapper']['parent']['#value'];
+            } else {
+              $cleaned_values[$delta]['value']['fields'][$facet_id]['parent'] = $field['parent_wrapper']['parent'];
+            }
+          }
         }
       }
 
