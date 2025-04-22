@@ -16,6 +16,7 @@ use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_release\Entity\Release;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
@@ -187,7 +188,12 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           // Prevent notification dispatching.
           // @see joinup_notification_dispatch_notification()
           $node->skip_notification = TRUE;
-          $node->set('og_audience', $groupId)->save();
+          $node->set('og_audience', $groupId);
+          if ($node instanceof ReleaseInterface) {
+            $node->set('solution_data', $group);
+          }
+          $node->save();
+
           if (empty($node->isChild)) {
             $message['status'][] = [
               [
