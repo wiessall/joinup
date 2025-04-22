@@ -39,18 +39,8 @@ Feature: Notification test for the document transitions on a pre moderated paren
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add document" in the plus button menu
-    And I fill in "Title" with "CC notify create propose"
-    And I fill in "Abstract" with "Abstract"
-    And I append "text" to "field_paragraphs_body" layout paragraphs field
-      | field_body:value  | Sample body.   |
-      | field_body:format | content_editor |
-    And I select "Document" from "Type"
-    And I select "Statistics and Analysis" from "Topic"
-    And I press "Propose"
-    Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                    |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                      |
-      | body      | CC Member has submitted a new document - "CC notify create propose" for publication in the collection: "CC pre collection". |
+    Then all submit buttons inside the "#edit-actions" element should be "disabled"
+    And I should see the message 'You are not allowed to create content today. Please, try tomorrow'
 
     When I am logged in as "CC facilitator"
     And I go to the "CC pre collection" collection

@@ -95,6 +95,6 @@ Feature: Notification test for the document transitions on a post moderated pare
       | body      | Facilitator CC Facilitator has deleted the document - "CC notify post delete" in the collection: "CC collection". |
 
     Examples:
-      | moderation | roles  |
-      | no         |        |
-      | yes        | author |
+      | moderation | roles       |
+      | no         | facilitator |
+      | yes        | author      |

@@ -93,6 +93,6 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | body      | Facilitator CC Facilitator has deleted the news - "CCN post delete" in the collection: "CC post collection". |
 
     Examples:
-      | moderation | roles  |
-      | no         |        |
-      | yes        | author |
+      | moderation | roles       |
+      | no         | facilitator |
+      | yes        | author      |

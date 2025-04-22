@@ -37,7 +37,7 @@ Feature: News moderation.
       | collection     | user          | roles       |
       | Justice League | Superman      | owner       |
       | Justice League | Hawkgirl      | facilitator |
-      | Justice League | Eagle         | member      |
+      | Justice League | Eagle         | author      |
       | Justice League | Question      | member      |
       | Legion of Doom | Vandal Savage | owner       |
       | Legion of Doom | Metallo       | facilitator |
