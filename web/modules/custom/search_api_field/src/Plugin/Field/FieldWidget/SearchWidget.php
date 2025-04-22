@@ -138,9 +138,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
     if (!empty($facets)) {
       $table = [
-        '#type' => 'table',
+        '#type' => 'field_ui_table',
         '#header' => $this->getTableHeader(),
-        '#empty' => $this->t('No facets available.'),
+        '#regions' => $this->getRegions(),
         '#attributes' => [
           'class' => ['field-ui-overview', 'facet-draggable-table'],
           'id' => 'facet-display-overview',
@@ -168,45 +168,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       uasort($facets, function (FacetInterface $a, FacetInterface $b) {
         return $a->getWeight() <=> $b->getWeight();
       });
-
-      // Get all regions for this display.
-      $regions = $this->getRegions();
-
-      // Add region rows.
-      foreach ($regions as $region_name => $region_info) {
-        $region_name_class = Html::getClass($region_name);
-
-        // Add the region row.
-        $table['region-' . $region_name] = [
-          '#attributes' => [
-            'class' => ['region-title', 'region-title-' . $region_name_class],
-            'no-striping' => TRUE,
-          ],
-        ];
-
-        // Add the message for empty regions.
-        $table['region-' . $region_name . '-message'] = [
-          '#attributes' => [
-            'class' => [
-              'region-message',
-              'region-' . $region_name_class . '-message',
-              'empty-fields',
-            ],
-            'colspan' => count($this->getTableHeader()),
-          ],
-        ];
-
-        // Add a region row header.
-        $table['region-' . $region_name]['title'] = [
-          '#markup' => $region_info['title'],
-          '#wrapper_attributes' => ['colspan' => 7],
-        ];
-
-        // Add a message for empty regions.
-        $table['region-' . $region_name . '-message']['message'] = [
-          '#markup' => $region_info['message'],
-        ];
-      }
 
       // Populate facet rows for each region.
       foreach ($facets as $facet_id => $facet) {
@@ -250,7 +211,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#min' => 1,
     ];
 
-    $element['wrapper']['fields']['#tree'] = TRUE;
     return $element;
   }
 
