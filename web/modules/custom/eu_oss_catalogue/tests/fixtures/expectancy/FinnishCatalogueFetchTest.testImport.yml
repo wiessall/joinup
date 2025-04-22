@@ -13,9 +13,9 @@ GitHub solution 1:
     oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
     oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
-    oss_git_forks: 103
-    oss_git_stars: 123
-    oss_git_open_issues: 143
+    oss_git_forks: 101
+    oss_git_stars: 121
+    oss_git_open_issues: 141
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -26,25 +26,24 @@ GitHub solution 1:
     oss_platforms:
       - web
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2017-05-01'
+    oss_release_date: '2023-04-19'
     oss_software_type: standalone/web
-    oss_software_version: '1.4'
+    oss_software_version: '2.3.0'
     oss_source:
       - avoinkoodi_fi
-    oss_source_hash: _RnRGlJcP5QA_tiadP_JTMJyyOypigHzRYjIY-LlQMM
-    oss_long_description: |
-      [EN] Solution 1: Long description
-      **Some bold text**
-      * Some list item
-      * Another list item
+    oss_source_hash: 40AqQR340Hluhn7UlAJ0KeJH0lcOXt74tFJJxSDmzV0
 
-      _Some italic text_
-    oss_short_description: '[EN] Solution 1: **Short description**'
-    oss_features:
-      - '[EN] Solution 1: Feature 1'
-      - '[EN] Solution 1: Feature 2'
-      - '[EN] Solution 1: Feature 3'
-    oss_screenshots:
-      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot1.jpg
-      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2.jpg
-    oss_git_open_pull_requests: 3
+GitHub solution 2:
+  en:
+    oss_git_url: https://github.com/subdirectory/dummy-namespace-2/dummy-name-2
+    oss_git_description: Description of GitHub solution 2
+    oss_default_branch: default-branch-of-GitHub-solution-2
+    oss_software_version: 'v2.4'
+    oss_release_date: '2016-02-09'
+    oss_platform_reference: GitHub-solution-2-internal-ID
+    oss_logo: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
+    oss_git_forks: 102
+    oss_git_stars: 122
+    oss_git_open_issues: 142
+    oss_publiccode_yml_version: '0.4'
+    oss_git_open_pull_requests: 0
