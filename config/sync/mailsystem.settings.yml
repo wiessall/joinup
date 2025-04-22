@@ -13,3 +13,7 @@ modules:
     none:
       sender: mime_mail
       formatter: mime_mail
+  email_contact:
+    none:
+      sender: mime_mail
+      formatter: mime_mail
