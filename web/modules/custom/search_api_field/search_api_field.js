@@ -17,7 +17,7 @@
   Drupal.behaviors.fieldUIDisplayOverview = {
     attach(context, settings) {
       $(
-        once("field-display-overview", "table#field-display-overview", context),
+        once("field-display-overview", "table#facet-display-overview", context),
       ).each(() => {
         Drupal.fieldUIOverview.attach(
           this,
