@@ -23,6 +23,10 @@ readonly class JoinupGroupPermissionManager implements JoinupGroupPermissionMana
    */
   public function userHasOgCollectionPermission(int|string $uid, EntityInterface $group, string $permission): bool {
     $membership = $this->membershipManager->getMembership($group, $uid);
+    if (empty($membership)) {
+      return FALSE;
+    }
+
     foreach ($membership->getRoles() as $role) {
       if ($role->hasPermission($permission)) {
         return TRUE;

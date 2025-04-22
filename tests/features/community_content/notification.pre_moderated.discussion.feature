@@ -39,14 +39,8 @@ Feature: Notification test for the discussion transitions on a pre moderated par
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add discussion" in the plus button menu
-    And I fill in "Title" with "CC notify create propose"
-    And I fill in "Content" with "CC notify create propose"
-    And I select "Statistics and Analysis" from "Topic"
-    And I press "Propose"
-    Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                      |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                        |
-      | body      | CC Member has submitted a new discussion - "CC notify create propose" for publication in the collection: "CC pre collection". |
+    Then all submit buttons inside the "#edit-actions" element should be "disabled"
+    And I should see the message 'You are not allowed to create content today. Please, try tomorrow'
 
     When I am logged in as "CC facilitator"
     And I go to the "CC pre collection" collection

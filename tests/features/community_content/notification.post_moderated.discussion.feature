@@ -99,9 +99,9 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | body      | for your information, the discussion "CC notify post delete" was deleted from the "CC post collection" collection.   |
 
     Examples:
-      | moderation | roles  |
-      | no         |        |
-      | yes        | author |
+      | moderation | roles       |
+      | no         | facilitator |
+      | yes        | author      |
 
   Scenario: No notifications should be sent when a discussion is orphaned
     Given collection content:

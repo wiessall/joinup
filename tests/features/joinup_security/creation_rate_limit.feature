@@ -13,16 +13,16 @@ Feature: Content creation rate limit
       | Author      |           |
       | User        |           |
     And news content:
-      | title            | collection | author      | created |
-      | Moderator news   | Test       | Moderator   | now     |
-      | Facilitator news | Test       | Facilitator | now     |
-      | Author news      | Test       | Author      | now     |
-      | User news        | Test       | User        | now     |
+      | title            | collection | author      |
+      | Moderator news   | Test       | Moderator   |
+      | Facilitator news | Test       | Facilitator |
+      | Author news      | Test       | Author      |
+      | User news        | Test       | User        |
     And event content:
-      | title             | collection | author      | created |
-      | Moderator event   | Test       | Moderator   | now     |
-      | Facilitator event | Test       | Facilitator | now     |
-      | Author event      | Test       | Author      | now     |
+      | title             | collection | author      |
+      | Moderator event   | Test       | Moderator   |
+      | Facilitator event | Test       | Facilitator |
+      | Author event      | Test       | Author      |
     And discussion content:
       | title                  | collection | author      | created    |
       | Moderator discussion   | Test       | Moderator   | now -2 day |

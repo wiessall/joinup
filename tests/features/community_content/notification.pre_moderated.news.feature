@@ -13,12 +13,12 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
       | title             | content_creation | group_moderation |
-      | CC pre collection | members          | yes        |
+      | CC pre collection | members          | yes              |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
-      | CC pre collection | CC member      |             |
+      | CC pre collection | CC member      | author      |
     And news content:
       | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      |
       # The next one belongs to a facilitator because there is no published version for that and thus,
@@ -106,13 +106,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
       | CC Member has requested to delete the news - "CCN pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                          |
-
-    When I go to the "edit-form" content page of the type "news" with the title "CCN published to revise"
-    And I press "Propose changes"
-    Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                          |
-      | subject   | Interoperable Europe Portal: Content has been proposed                                                                            |
-      | body      | CC Member has submitted an update of the news - "CCN published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "edit-form" content page of the type "news" with the title "CCN pre publish"
