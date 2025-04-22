@@ -26,6 +26,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_default' widget.
+ *
+ * Provides a field widget for configuring Search API-based content listings.
+ * Allows administrators to configure facets, filters, and display options
+ * for a dynamic search results block.
  */
 #[FieldWidget(
   id: 'search_api_field_default',
@@ -278,38 +282,32 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The row element.
    *
    * @return string|null
-   *   The region name this row belongs to.
+   *   The region name this row belongs to, or 'hidden' if none is found.
    */
   public static function getRowRegion(array $row): ?string {
-    // First check plugin type which is our primary region indicator.
+    // Check plugin type fields first.
     if (isset($row['plugin']['type']['#value'])) {
       return $row['plugin']['type']['#value'];
     }
 
-    // Fallback to plugin type if it's a direct value.
     if (isset($row['plugin']['type']) && !is_array($row['plugin']['type'])) {
       return $row['plugin']['type'];
     }
 
-    // Secondary check for explicit region field.
+    // Check region fields next.
     if (isset($row['region']['#value'])) {
       return $row['region']['#value'];
     }
 
-    // Check for direct region value.
     if (isset($row['region']) && !is_array($row['region'])) {
       return $row['region'];
     }
 
-    // If we get here, try to extract the region from CSS classes.
-    if (!empty($row['#attributes']['class'])) {
-      $classes = $row['#attributes']['class'];
-      if (is_array($classes)) {
-        foreach ($classes as $class) {
-          if (strpos($class, 'region-') === 0) {
-            // Extract region name from "region-{name}".
-            return substr($class, 7);
-          }
+    // Finally, try to extract from CSS classes.
+    if (!empty($row['#attributes']['class']) && is_array($row['#attributes']['class'])) {
+      foreach ($row['#attributes']['class'] as $class) {
+        if (strpos($class, 'region-') === 0) {
+          return substr($class, 7);
         }
       }
     }
@@ -320,6 +318,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
   /**
    * Returns the headers for the facet table.
+   *
+   * @return array
+   *   An array of column header definitions for the facet table.
    */
   protected function getTableHeader(): array {
     return [
@@ -728,6 +729,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $list = array_map('trim', $list);
     $list = array_filter($list, 'strlen');
     $available_fields = $this->getSearchApiIndex()->getFields(TRUE);
+    $allowed_operators = ['=', '<>', 'IN', 'NOT IN', '<', '>'];
 
     foreach ($list as $line) {
       $matches = [];
@@ -746,10 +748,12 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       }
 
       $operator = isset($matches[3]) ? trim($matches[3]) : '=';
-      if (!in_array($operator, ['=', '<>', 'IN', 'NOT IN', '<', '>'])) {
+      if (!in_array($operator, $allowed_operators, TRUE)) {
         $form_state->setError($element, $this->t('Invalid operator specified: %operator. Allowed operators are @operators.', [
           '%operator' => $operator,
-          '@operators' => "'=', '<>', 'IN', 'NOT IN', '<', '>'",
+          '@operators' => implode(', ', array_map(function ($op) {
+            return "'$op'";
+          }, $allowed_operators)),
         ]));
       }
     }
@@ -788,22 +792,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
           }
 
           // Check if this is a draggable facet row by verifying key elements.
-          $is_facet = FALSE;
-
-          // Check for facet_id field.
-          if (isset($field['facet_id'])) {
-            $is_facet = TRUE;
-          }
-
-          // Check for human_name and weight fields (our custom rows)
-          if (isset($field['human_name']) && isset($field['weight'])) {
-            $is_facet = TRUE;
-          }
-
-          // Check for plugin (original form structure)
-          if (isset($field['plugin']) && isset($field['plugin']['type'])) {
-            $is_facet = TRUE;
-          }
+          $is_facet = isset($field['facet_id']) ||
+            (isset($field['human_name']) && isset($field['weight'])) ||
+            (isset($field['plugin']) && isset($field['plugin']['type']));
 
           // Skip if not a facet row.
           if (!$is_facet) {
@@ -925,6 +916,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
   /**
    * Gets the default query presets description.
+   *
+   * @return array
+   *   A render array containing the description.
    */
   protected function getQueryPresetsDescription(): array {
     if (!$index = $this->getSearchApiIndex()) {
