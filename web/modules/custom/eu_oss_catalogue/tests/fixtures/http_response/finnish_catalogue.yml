@@ -20,10 +20,10 @@ projects:
     homepage_url: https://www.learnsphere.org/
     demo_url: "-"
     description: A powerful and flexible online learning management system.
-  - project: StudentTrack Information System
-    owner: EduTech Academy
-    code_url: https://docs.moodle.org/dev/Main_Page
+  - project: dummy-name-2
+    owner: subdirectory/dummy-namespace-2
+    code_url: https://github.com/subdirectory/dummy-namespace-2/dummy-name-2
     service_url: "-"
     homepage_url: "-"
     demo_url: "-"
-    description: Comprehensive student information and administration system.
+    description: Description of GitHub solution 2.

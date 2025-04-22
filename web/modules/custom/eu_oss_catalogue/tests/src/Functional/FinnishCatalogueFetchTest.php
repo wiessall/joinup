@@ -15,8 +15,9 @@ class FinnishCatalogueFetchTest extends FetchTestBase {
    * Tests fetching from Finnish catalogue.
    */
   public function testImport(): void {
-    $this->fetchSolutions('avoinkoodi_fi', 1);
+    $this->fetchSolutions('avoinkoodi_fi', 2);
     $this->assertOssSolution('GitHub solution 1', 'en');
+    $this->assertOssSolution('GitHub solution 2', 'it');
   }
 
 }
