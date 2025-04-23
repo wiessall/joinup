@@ -103,4 +103,4 @@ Feature: Contact form for solution
       | Type of support: Technical                                         |
       | Message: This is reclamation test.                                 |
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains "logo.png" attachment
-    And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html"
+    And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html; charset=UTF-8; format=flowed"
