@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.user.field_user_family_name
+    - field.storage.user.field_user_first_name
     - node.type.collection
     - node.type.solution
     - system.menu.admin
@@ -1324,6 +1326,258 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        field_user_first_name:
+          id: field_user_first_name
+          table: user__field_user_first_name
+          field: field_user_first_name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'First name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_first_name_1:
+          id: field_user_first_name_1
+          table: user__field_user_first_name
+          field: field_user_first_name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'First name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_family_name:
+          id: field_user_family_name
+          table: user__field_user_family_name
+          field: field_user_family_name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Family name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_family_name_1:
+          id: field_user_family_name_1
+          table: user__field_user_family_name
+          field: field_user_family_name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Family name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       access:
         type: perm
         options:
@@ -1397,7 +1651,7 @@ display:
             min: ''
             max: ''
             value: ''
-            type: date
+            type: offset
           group: 1
           exposed: true
           expose:
@@ -1416,6 +1670,7 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
@@ -1479,29 +1734,27 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        uid:
-          id: uid
-          table: users_field_data
-          field: uid
-          relationship: uid
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: user
-          entity_field: uid
-          plugin_id: user_name
-          operator: in
-          value: {  }
+          plugin_id: combine
+          operator: allwords
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: uid_op
+            operator_id: combine_op
             label: User
             description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
-            operator: uid_op
+            operator: combine_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: uid
+            identifier: combine
             required: false
             remember: false
             multiple: false
@@ -1509,9 +1762,11 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -1524,29 +1779,31 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        uid_1:
-          id: uid_1
-          table: users_field_data
-          field: uid
-          relationship: actor
+          fields:
+            name: name
+            field_user_first_name: field_user_first_name
+            field_user_family_name: field_user_family_name
+        combine_1:
+          id: combine_1
+          table: views
+          field: combine
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: user
-          entity_field: uid
-          plugin_id: user_name
-          operator: in
-          value: {  }
+          plugin_id: combine
+          operator: allwords
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: uid_1_op
+            operator_id: combine_1_op
             label: Actor
             description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
-            operator: uid_1_op
+            operator: combine_1_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: actor
+            identifier: combine_1
             required: false
             remember: false
             multiple: false
@@ -1554,9 +1811,11 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -1569,6 +1828,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          fields:
+            name_1: name_1
+            field_user_first_name_1: field_user_first_name_1
+            field_user_family_name_1: field_user_family_name_1
         group:
           id: group
           table: joinup_log
@@ -1679,7 +1942,9 @@ display:
         - request_format
         - url
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.user.field_user_family_name'
+        - 'config:field.storage.user.field_user_first_name'
   logs:
     id: logs
     display_title: Page
@@ -2117,6 +2382,268 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        field_user_family_name:
+          id: field_user_family_name
+          table: user__field_user_family_name
+          field: field_user_family_name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Family name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_first_name:
+          id: field_user_first_name
+          table: user__field_user_first_name
+          field: field_user_first_name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'First name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_first_name_1:
+          id: field_user_first_name_1
+          table: user__field_user_first_name
+          field: field_user_first_name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'First name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_user_family_name_1:
+          id: field_user_family_name_1
+          table: user__field_user_family_name
+          field: field_user_family_name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 'Family name'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
       access:
         type: perm
         options:
@@ -2190,7 +2717,7 @@ display:
             min: ''
             max: ''
             value: ''
-            type: date
+            type: offset
           group: 1
           exposed: true
           expose:
@@ -2209,6 +2736,7 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
@@ -2272,29 +2800,27 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        uid:
-          id: uid
-          table: users_field_data
-          field: uid
-          relationship: uid
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: user
-          entity_field: uid
-          plugin_id: user_name
-          operator: in
-          value: {  }
+          plugin_id: combine
+          operator: allwords
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: uid_op
+            operator_id: combine_op
             label: User
             description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
-            operator: uid_op
+            operator: combine_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: uid
+            identifier: combine
             required: false
             remember: false
             multiple: false
@@ -2302,9 +2828,11 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2317,29 +2845,31 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        uid_1:
-          id: uid_1
-          table: users_field_data
-          field: uid
-          relationship: actor
+          fields:
+            name: name
+            field_user_family_name: field_user_family_name
+            field_user_first_name: field_user_first_name
+        combine_1:
+          id: combine_1
+          table: views
+          field: combine
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: user
-          entity_field: uid
-          plugin_id: user_name
-          operator: in
-          value: {  }
+          plugin_id: combine
+          operator: allwords
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: uid_1_op
+            operator_id: combine_1_op
             label: Actor
             description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
-            operator: uid_1_op
+            operator: combine_1_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: actor
+            identifier: combine_1
             required: false
             remember: false
             multiple: false
@@ -2347,9 +2877,11 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
               developer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -2362,6 +2894,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          fields:
+            name_1: name_1
+            field_user_first_name_1: field_user_first_name_1
+            field_user_family_name_1: field_user_family_name_1
         group:
           id: group
           table: joinup_log
@@ -2428,10 +2964,46 @@ display:
       defaults:
         access: false
         title: false
+        exposed_form: false
+        relationships: false
         fields: false
         arguments: false
         filters: false
         filter_groups: false
+      relationships:
+        uid:
+          id: uid
+          table: joinup_log
+          field: uid
+          relationship: none
+          group_type: group
+          admin_label: User
+          entity_type: joinup_log
+          entity_field: uid
+          plugin_id: standard
+          required: false
+        actor:
+          id: actor
+          table: joinup_log
+          field: actor
+          relationship: none
+          group_type: group
+          admin_label: Actor
+          entity_type: joinup_log
+          entity_field: actor
+          plugin_id: standard
+          required: false
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: Content
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: standard
+          required: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
@@ -2455,4 +3027,6 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.user.field_user_family_name'
+        - 'config:field.storage.user.field_user_first_name'
