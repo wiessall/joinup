@@ -10,9 +10,9 @@ declare(strict_types=1);
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\joinup_notification\Event\NotificationEvent;
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -125,7 +125,7 @@ function joinup_notification_mail_alter(array &$message): void {
     // Convert new lines to paragraphs and line breaks. Also transform the body
     // to markup.
     // @see symfony_mailer_lite_mail()
-    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
     $message['body'] = array_map(function ($text) {
       return Markup::create(_filter_autop($text));
     }, $message['body']);
@@ -133,7 +133,7 @@ function joinup_notification_mail_alter(array &$message): void {
 
   // Mails sent by the message_notify module are already HTML ready.
   if ($message['module'] === 'message_notify') {
-    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
     // Some notifications such as the 'contact_form_submission' are not being
     // sent to users of the platform, but to an automated helpdesk service. In
     // this case the message will be read by cold, soulless machines so we can
