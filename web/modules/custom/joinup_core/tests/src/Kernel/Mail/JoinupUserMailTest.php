@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
+use Drupal\joinup_notification\MailContentTypeHeader;
+
 /**
  * Tests user password reset email.
  *
@@ -47,7 +49,7 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
           'body' => static::HTML_VERSION,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
-            'content-type' => 'text/html',
+            'content-type' => MailContentTypeHeader::TextHtml->value,
             'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'reply-to' => 'joinup@example.com',
