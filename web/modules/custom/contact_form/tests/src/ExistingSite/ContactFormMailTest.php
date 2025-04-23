@@ -6,6 +6,7 @@ namespace Drupal\Tests\contact_form\Functional;
 
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup_notification\MailContentTypeHeader;
 
 /**
  * Tests emails sent on contact form submission including message digest email.
@@ -65,7 +66,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
           'body' => self::NOTIFICATION_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
-            'content-type' => 'text/html',
+            'content-type' => MailContentTypeHeader::TextHtml->value,
             'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
             'sender' => 'admin@example.com',
@@ -87,7 +88,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
           'body' => $with_copy ? self::COPY_HTML : self::WITHOUT_COPY_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
-            'content-type' => 'text/html',
+            'content-type' => MailContentTypeHeader::TextHtml->value,
             'from' => 'Interoperable Europe Portal <admin@example.com>',
             'mime-version' => '1.0',
             'sender' => 'admin@example.com',
