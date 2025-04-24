@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\GroupArchivableEntityInterface;
-use Drupal\joinup_group_content_management\Attribute\VboAction;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a VBO action that unarchive content.
  */
-#[VboAction(
+#[Action(
   id: "joinup_unarchive",
   label: new TranslatableMarkup("Unarchive content"),
   type: "node",
-  requirements: [
-    "_permission"  => "vbo joinup unarchive action",
-  ]
 )]
 class UnarchiveAction extends StateActionBase {
 
@@ -145,6 +144,24 @@ class UnarchiveAction extends StateActionBase {
       $node,
       $this->workflowStateChangeRevisionLogMessage($node, 'published', $this->t('VBO action'))
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function customAccess(AccountInterface $account, ViewExecutable $view): bool {
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = \Drupal::service('og.context')->getGroup();
+
+    /** @var \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager */
+    $groupManager = \Drupal::service('joinup_group.group_manager');
+    if (!$group) {
+      return FALSE;
+    }
+
+    $permission = 'vbo joinup unarchive action';
+    return $groupManager->access($group, $permission, $permission, $account)
+      ->isAllowed();
   }
 
 }
