@@ -16,23 +16,31 @@ Feature: Submit the contact form
     When I visit "/?destination=collections"
     And I click "Contact Portal Support" in the "Footer" region
     And I should see the heading "Contact"
+    # Note that below, we are asserting the selectable options. Groups are not
+    # included.
     And the "Category" select should contain the following options:
-      | - Select a value -             |
-      | Technical problem / bug report |
-      | Question on usage              |
-      | Feature request                |
-      | Legal issue                    |
-      | Inappropriate content          |
-      | EU Login question              |
-      | Interoperable Europe question  |
-      | Other                          |
+      | - Select a value -                  |
+      | Academy                             |
+      | Architecture                        |
+      | Assessments                         |
+      | Community                           |
+      | EU OSS Catalogue                    |
+      | Governance                          |
+      | GovTech and Sandboxes               |
+      | Monitoring                          |
+      | Open Source                         |
+      | Semantics                           |
+      | Legal / Licence / GDPR question     |
+      | Question on usage / Feature request |
+      | Technical problem / Bug report      |
+      | Inappropriate content               |
     And I should see the text "Submissions of this form are processed by a contractor of the European Commission."
     And I fill in the following:
       | First name     | Wolverine                   |
       | Last name      | Wolves                      |
       | Organisation   | The Deaf-Mute Wolves        |
       | E-mail address | oswine@example.pt           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
@@ -46,7 +54,7 @@ Feature: Submit the contact form
       | Last name      | Wulfric                     |
       | Organisation   | The Deaf-Mute Society       |
       | E-mail address | oswine@example.za           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
@@ -54,12 +62,12 @@ Feature: Submit the contact form
 
     # Both moderators should have received the notification e-mail.
     Then the following email should have been sent:
-      | template           | Contact form submission                       |
-      | from               | digit-joinup@ec.europa.eu                     |
-      | recipient_mail     | DIGIT-JOINUP-SUPPORT-EXT-FORWARD@ec.europa.eu |
-      | subject            | Interoperable Europe Portal - Contact form submission              |
-      | body               | Dear sir, madam, ...                          |
-      | signature_required | no                                            |
+      | template           | Contact form submission                               |
+      | from               | digit-joinup@ec.europa.eu                             |
+      | recipient_mail     | DIGIT-JOINUP-SUPPORT-EXT-FORWARD@ec.europa.eu         |
+      | subject            | Interoperable Europe Portal - Contact form submission |
+      | body               | Dear sir, madam, ...                                  |
+      | signature_required | no                                                    |
     And I should see the following success messages:
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
@@ -110,7 +118,7 @@ Feature: Submit the contact form
     And I fill in "Last name" with "Chaves"
     And I fill in "Organisation" with "Lucotores State"
     And I fill in "E-mail address" with "doana.chaves@free.pe"
-    And I select "Technical problem / bug report" from "Category"
+    And I select "Technical problem / Bug report" from "Category"
     And I fill in "Page URL" with "https://joinup.test:8080"
     And I select "Question on usage" from "Category"
     And I fill in "Subject" with "Reminder me please"

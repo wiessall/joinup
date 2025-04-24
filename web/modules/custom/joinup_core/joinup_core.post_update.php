@@ -14,3 +14,30 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Update message__field_contact_category values.
+ */
+function joinup_core_post_update_200400(array &$sandbox): string {
+  $table = 'message__field_contact_category';
+  $mapping = [
+    'bug' => 'bug',
+    'usage' => 'question_feature',
+    'feature' => 'question_feature',
+    'legal' => 'legal',
+    'report' => 'report',
+    'eu_login' => 'question_feature',
+    'interoperable_europe' => 'community',
+    'other' => 'question_feature',
+  ];
+  $database = \Drupal::database();
+
+  foreach ($mapping as $old_value => $new_value) {
+    $query = $database->update($table)
+      ->fields(['field_contact_category_value' => $new_value])
+      ->condition('field_contact_category_value', $old_value);
+    $query->execute();
+  }
+
+  return 'Updated message__field_contact_category values.';
+}
