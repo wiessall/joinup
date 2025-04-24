@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides functionality for the Joinup search module.
+ * Provides functionality for the Joinup security module.
  */
 
 declare(strict_types=1);
@@ -15,16 +15,12 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
  */
 function joinup_security_form_node_form_alter(array &$form, FormStateInterface $form_state): void {
   $node = $form_state->getFormObject()->getEntity();
-
-  if (!$node instanceof CommunityContentInterface) {
+  if (!$node instanceof CommunityContentInterface || !$node->isNew()) {
     return;
   }
 
-  if (!$node->isNew()) {
-    return;
-  }
   $securityService = \Drupal::service('Drupal\joinup_security\Services\JoinupSecurityService');
-  if (!$securityService->currentUserHasNodeCreationLimit($node->getCollection()) && isset($form['actions']) && is_array($form['actions'])) {
+  if (!$securityService->applyNodeCreationLimit($node->getCollection()) && isset($form['actions']) && is_array($form['actions'])) {
     foreach ($form['actions'] as &$action) {
       if (is_array($action) && isset($action['#type']) && in_array($action['#type'], [
         'submit',
@@ -49,5 +45,5 @@ function joinup_security_form_node_form_alter(array &$form, FormStateInterface $
 function joinup_security_node_form_validate(array &$form, FormStateInterface $form_state): mixed {
   $node = $form_state->getFormObject()->getEntity();
   $securityService = \Drupal::service('Drupal\joinup_security\Services\JoinupSecurityService');
-  return $securityService->currentUserHasNodeCreationLimit($node->getCollection());
+  return $securityService->applyNodeCreationLimit($node->getCollection());
 }

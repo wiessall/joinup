@@ -20,27 +20,37 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And event content:
-      | title                               | author         | abstract | field_paragraphs_body | location                             | collection        | field_state      |
+      | title                               | author         | abstract | field_paragraphs_body | location                             | collection        | field_state      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | abstract | body                  | Half Moon Street, London             | CC pre collection | draft            |
-      | CC notify pre propose               | CC member      | abstract | body                  | Quai d'Orleans, Paris                | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | abstract | body                  | Rue du Mont Thabor, Paris            | CC pre collection | published        |
-      | CC notify pre report                | CC member      | abstract | body                  | Cort Adelers Gate, Oslo              | CC pre collection | published        |
-      | CC notify pre request deletion      | CC member      | abstract | body                  | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        |
-      | CC notify pre propose from reported | CC member      | abstract | body                  | Lychener Strasse, Berlin             | CC pre collection | needs_update     |
-      | CC notify pre approve proposed      | CC member      | abstract | body                  | Capel Street, Dublin                 | CC pre collection | proposed         |
-      | CC notify pre reject deletion       | CC member      | abstract | body                  | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request |
-      | CC notify pre delete                | CC member      | abstract | body                  | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request |
-      | CC notify published to delete       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
-      | CC notify published to revise       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
+      | CC notify pre publish               | CC facilitator | abstract | body                  | Half Moon Street, London             | CC pre collection | draft            | now -2 day |
+      | CC notify pre propose               | CC member      | abstract | body                  | Quai d'Orleans, Paris                | CC pre collection | draft            | now -2 day |
+      | CC notify pre request changes       | CC member      | abstract | body                  | Rue du Mont Thabor, Paris            | CC pre collection | published        | now -2 day |
+      | CC notify pre report                | CC member      | abstract | body                  | Cort Adelers Gate, Oslo              | CC pre collection | published        | now -2 day |
+      | CC notify pre request deletion      | CC member      | abstract | body                  | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        | now -2 day |
+      | CC notify pre propose from reported | CC member      | abstract | body                  | Lychener Strasse, Berlin             | CC pre collection | needs_update     | now -2 day |
+      | CC notify pre approve proposed      | CC member      | abstract | body                  | Capel Street, Dublin                 | CC pre collection | proposed         | now -2 day |
+      | CC notify pre reject deletion       | CC member      | abstract | body                  | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request | now -2 day |
+      | CC notify pre delete                | CC member      | abstract | body                  | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request | now -2 day |
+      | CC notify published to delete       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        | now -2 day |
+      | CC notify published to revise       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add event" in the plus button menu
-    Then all submit buttons inside the "#edit-actions" element should be "disabled"
-    And I should see the message 'You are not allowed to create content today. Please, try tomorrow'
+    And I fill in "Title" with "CC notify create propose"
+    And I fill in "Abstract" with "This is a test event."
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CC notify create propose. |
+      | field_body:format | content_editor            |
+    And I fill in "Physical location" with "South King Street, Honolulu"
+    And I select "Statistics and Analysis" from "Topic"
+    And I press "Propose"
+    Then the following email should have been sent:
+      | recipient | CC owner                                                                                                                 |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                   |
+      | body      | CC Member has submitted a new event - "CC notify create propose" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "CC pre collection" collection
