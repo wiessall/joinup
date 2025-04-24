@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_security\Services;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\JoinupGroupPermissionManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -32,10 +32,10 @@ class JoinupSecurityService {
    * Checks if the current user should be limited when trying to create a node.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $collection
-   *    Parent collection.
+   *   Parent collection.
    *
    * @return bool
-   *    TRUE if the user can bypass the limit
+   *   TRUE if the user can bypass the limit
    *    or has less than 2 community content items created within the last 24 h,
    *    FALSE otherwise.
    */
