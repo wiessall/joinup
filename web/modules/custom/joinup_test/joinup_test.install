@@ -87,7 +87,7 @@ function joinup_test_install($is_syncing): void {
       'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
       'title' => 'The Portal',
       'field_state' => 'published',
-      'field_topic' => $mapper->getEntityByUri('http://joinup.eu/ontology/topic#demography'),
+      'field_topic' => \Drupal::getContainer()->get('topic')->getTopicByName('demography'),
       'created' => strtotime('2015-01-01 08:00'),
       'changed' => strtotime('2015-01-01 08:00'),
       'published_at' => strtotime('2015-01-01 08:00'),
