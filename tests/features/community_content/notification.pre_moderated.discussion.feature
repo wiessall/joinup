@@ -20,27 +20,33 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And discussion content:
-      | title                               | author         | body | collection        | field_state      |
+      | title                               | author         | body | collection        | field_state      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | body | CC pre collection | draft            |
-      | CC notify pre propose               | CC member      | body | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | body | CC pre collection | published        |
-      | CC notify pre report                | CC member      | body | CC pre collection | published        |
-      | CC notify pre request deletion      | CC member      | body | CC pre collection | published        |
-      | CC notify pre propose from reported | CC member      | body | CC pre collection | needs_update     |
-      | CC notify pre approve proposed      | CC member      | body | CC pre collection | proposed         |
-      | CC notify pre reject deletion       | CC member      | body | CC pre collection | deletion_request |
-      | CC notify pre delete                | CC member      | body | CC pre collection | deletion_request |
-      | CC notify published to delete       | CC member      | body | CC pre collection | published        |
-      | CC notify published to revise       | CC member      | body | CC pre collection | published        |
+      | CC notify pre publish               | CC facilitator | body | CC pre collection | draft            | now -2 day |
+      | CC notify pre propose               | CC member      | body | CC pre collection | draft            | now -2 day |
+      | CC notify pre request changes       | CC member      | body | CC pre collection | published        | now -2 day |
+      | CC notify pre report                | CC member      | body | CC pre collection | published        | now -2 day |
+      | CC notify pre request deletion      | CC member      | body | CC pre collection | published        | now -2 day |
+      | CC notify pre propose from reported | CC member      | body | CC pre collection | needs_update     | now -2 day |
+      | CC notify pre approve proposed      | CC member      | body | CC pre collection | proposed         | now -2 day |
+      | CC notify pre reject deletion       | CC member      | body | CC pre collection | deletion_request | now -2 day |
+      | CC notify pre delete                | CC member      | body | CC pre collection | deletion_request | now -2 day |
+      | CC notify published to delete       | CC member      | body | CC pre collection | published        | now -2 day |
+      | CC notify published to revise       | CC member      | body | CC pre collection | published        | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add discussion" in the plus button menu
-    Then all submit buttons inside the "#edit-actions" element should be "disabled"
-    And I should see the message 'You are not allowed to create content today. Please, try tomorrow'
+    And I fill in "Title" with "CC notify create propose"
+    And I fill in "Content" with "CC notify create propose"
+    And I select "Statistics and Analysis" from "Topic"
+    And I press "Propose"
+    Then the following email should have been sent:
+      | recipient | CC owner                                                                                                                      |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                        |
+      | body      | CC Member has submitted a new discussion - "CC notify create propose" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "CC pre collection" collection

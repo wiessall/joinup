@@ -7,54 +7,54 @@ Feature: Content creation rate limit
       | title |
       | Test  |
     And users:
-      | Username    | Roles     |
-      | Moderator   | moderator |
-      | Facilitator |           |
-      | Author      |           |
-      | User        |           |
+      | Username         | Roles     |
+      | John Moderator   | moderator |
+      | John Facilitator |           |
+      | John Author      |           |
+      | John User        |           |
     And news content:
-      | title            | collection | author      |
-      | Moderator news   | Test       | Moderator   |
-      | Facilitator news | Test       | Facilitator |
-      | Author news      | Test       | Author      |
-      | User news        | Test       | User        |
+      | title            | collection | author           |
+      | Moderator news   | Test       | John Moderator   |
+      | Facilitator news | Test       | John Facilitator |
+      | Author news      | Test       | John Author      |
+      | User news        | Test       | John User        |
     And event content:
-      | title             | collection | author      |
-      | Moderator event   | Test       | Moderator   |
-      | Facilitator event | Test       | Facilitator |
-      | Author event      | Test       | Author      |
+      | title             | collection | author           |
+      | Moderator event   | Test       | John Moderator   |
+      | Facilitator event | Test       | John Facilitator |
+      | Author event      | Test       | John Author      |
     And discussion content:
-      | title                  | collection | author      | created    |
-      | Moderator discussion   | Test       | Moderator   | now -2 day |
-      | Facilitator discussion | Test       | Facilitator | now -2 day |
-      | Author discussion      | Test       | Author      | now -2 day |
-      | User discussion        | Test       | User        | now -2 day |
+      | title                  | collection | author           | created    |
+      | Moderator discussion   | Test       | John Moderator   | now -2 day |
+      | Facilitator discussion | Test       | John Facilitator | now -2 day |
+      | Author discussion      | Test       | John Author      | now -2 day |
+      | User discussion        | Test       | John User        | now -2 day |
     And the following collection user memberships:
-      | collection | user        | roles       |
-      | Test       | Facilitator | facilitator |
-      | Test       | Author      | author      |
-      | Test       | User        | member      |
+      | collection | user             | roles       |
+      | Test       | John Facilitator | facilitator |
+      | Test       | John Author      | author      |
+      | Test       | John User        | member      |
 
   Scenario Outline: Anonymous user can find items
-    Given I am logged in as <user>
+    Given I am logged in as "<user>"
     When I go to the homepage of the "Test" collection
     And I click "Add news" in the plus button menu
     Then all submit buttons inside the "#edit-actions" element should be "enabled"
     And I should not see the message 'You are not allowed to create content today. Please, try tomorrow'
 
     Examples:
-      | user        |
-      | Moderator   |
-      | Facilitator |
-      | Author      |
-      | User        |
+      | user             |
+      | John Moderator   |
+      | John Facilitator |
+      | John Author      |
+      | John User        |
 
   Scenario: Anonymous user can find items
     Given event content:
-      | title      | collection | author | created |
-      | User event | Test       | User   | now     |
+      | title      | collection | author    | created |
+      | User event | Test       | John User | now     |
 
-    Given I am logged in as User
+    Given I am logged in as "John User"
     When I go to the homepage of the "Test" collection
     And I click "Add news" in the plus button menu
     Then all submit buttons inside the "#edit-actions" element should be "disabled"

@@ -50,7 +50,7 @@ class SolutionOgSubscriber implements EventSubscriberInterface {
       ]),
       new GroupPermission([
         'name' => 'bypass node creation limit',
-        'title' => $this->t('bypass node creation limit'),
+        'title' => $this->t('Bypass node creation limit'),
       ]),
     ]);
   }

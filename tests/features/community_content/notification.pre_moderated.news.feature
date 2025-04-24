@@ -18,22 +18,22 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
-      | CC pre collection | CC member      | author      |
+      | CC pre collection | CC member      |             |
     And news content:
-      | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      |
+      | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CCN pre publish               | CC facilitator | body                  | CCN pre publish               | CC pre collection | draft            | Some abstract |
-      | CCN pre propose               | CC member      | body                  | CCN pre propose               | CC pre collection | draft            | Some abstract |
-      | CCN pre request changes       | CC member      | body                  | CCN pre request changes       | CC pre collection | published        | Some abstract |
-      | CCN pre report                | CC member      | body                  | CCN pre report                | CC pre collection | published        | Some abstract |
-      | CCN pre request deletion      | CC member      | body                  | CCN pre request deletion      | CC pre collection | published        | Some abstract |
-      | CCN pre propose from reported | CC member      | body                  | CCN pre propose from reported | CC pre collection | needs_update     | Some abstract |
-      | CCN pre approve proposed      | CC member      | body                  | CCN pre approve proposed      | CC pre collection | proposed         | Some abstract |
-      | CCN pre reject deletion       | CC member      | body                  | CCN pre reject deletion       | CC pre collection | deletion_request | Some abstract |
-      | CCN pre delete                | CC member      | body                  | CCN pre delete                | CC pre collection | deletion_request | Some abstract |
-      | CCN published to delete       | CC member      | body                  | CCN pre delete                | CC pre collection | published        | Some abstract |
-      | CCN published to revise       | CC member      | body                  | CCN pre revise                | CC pre collection | published        | Some abstract |
+      | CCN pre publish               | CC facilitator | body                  | CCN pre publish               | CC pre collection | draft            | Some abstract | now -2 day |
+      | CCN pre propose               | CC member      | body                  | CCN pre propose               | CC pre collection | draft            | Some abstract | now -2 day |
+      | CCN pre request changes       | CC member      | body                  | CCN pre request changes       | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre report                | CC member      | body                  | CCN pre report                | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre request deletion      | CC member      | body                  | CCN pre request deletion      | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre propose from reported | CC member      | body                  | CCN pre propose from reported | CC pre collection | needs_update     | Some abstract | now -2 day |
+      | CCN pre approve proposed      | CC member      | body                  | CCN pre approve proposed      | CC pre collection | proposed         | Some abstract | now -2 day |
+      | CCN pre reject deletion       | CC member      | body                  | CCN pre reject deletion       | CC pre collection | deletion_request | Some abstract | now -2 day |
+      | CCN pre delete                | CC member      | body                  | CCN pre delete                | CC pre collection | deletion_request | Some abstract | now -2 day |
+      | CCN published to delete       | CC member      | body                  | CCN pre delete                | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN published to revise       | CC member      | body                  | CCN pre revise                | CC pre collection | published        | Some abstract | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -106,6 +106,13 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
       | CC Member has requested to delete the news - "CCN pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                          |
+
+    When I go to the "edit-form" content page of the type "news" with the title "CCN published to revise"
+    And I press "Propose changes"
+    Then the following email should have been sent:
+      | recipient | CC owner                                                                                                                          |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                            |
+      | body      | CC Member has submitted an update of the news - "CCN published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "edit-form" content page of the type "news" with the title "CCN pre publish"
