@@ -6,6 +6,7 @@ namespace Drupal\joinup_solution\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
@@ -13,7 +14,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\joinup_group_content_management\Attribute\VboAction;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -25,14 +25,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Action to archive solutions.
  */
-#[VboAction(
+#[Action(
   id: "change_state:node:solution",
   label: new TranslatableMarkup("Change solution state action"),
   type: "node",
   confirm_form_route_name: "joinup_solution.change_state.multiple",
-  requirements: [
-    "_permission" => "manage solutions",
-  ]
 )]
 class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements PluginFormInterface, ContainerFactoryPluginInterface {
 
@@ -109,7 +106,7 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResultInterface|bool {
     // On the confirm form, we want to tell our users what we change and what we
     // don't change. To be able to do so, we need to return 'allowed' here.
-    $access = AccessResult::allowed();
+    $access = $account->hasPermission('manage solutions') ? AccessResult::allowed() : AccessResult::forbidden();
     return $return_as_object ? $access : $access->isAllowed();
   }
 
