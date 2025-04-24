@@ -46,9 +46,9 @@ dependencies:
     - joinup_legal
     - joinup_licence
     - joinup_log
-    - joinup_news
     - joinup_newsletter
     - joinup_oss_catalogue
+    - joinup_reports
     - joinup_search
     - joinup_solution
     - joinup_subscription
