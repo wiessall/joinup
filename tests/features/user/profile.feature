@@ -312,8 +312,7 @@ Feature: User profile
 
     When I press "Show row weights"
     And I should see the button "Hide row weights"
-    When I change the "weight" of "Status" to "5" in table "facet-display-overview"
-    And I change the "region" of "Type" to "Disabled" in table "facet-display-overview"
+    Then I drag the "Status" table row down
     And I press "Save"
 
     And I open the header local tasks menu
@@ -322,5 +321,5 @@ Feature: User profile
     And I should see the button "Hide row weights"
     Then the search api widget table should be:
       | title  | type                   | weight |
-      | Status | Collection content top | 5      |
-      | Type   | Disabled               | -9     |
+      | Type   | Collection content top | -10    |
+      | Status | Collection content top | -9     |
