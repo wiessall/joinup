@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Renders github feeds.
+ * Lazy builder rendering GitHub feeds.
  */
 class GitHubFeedLazyBuilder {
 
@@ -26,18 +26,18 @@ class GitHubFeedLazyBuilder {
   ) {}
 
   /**
-   * Renders the given github feed.
+   * Renders the given GitHub feed.
    *
    * @param string $repositoryUrl
-   *    The URL of the repository.
+   *   The URL of the repository.
    * @param string $feedType
-   *    The type of the feed. Either 'issue' or 'pull_request'.
+   *   The type of the feed. Either 'issue' or 'pull_request'.
    * @param int $numberOfResults
-   *    The number of results to fetch.
+   *   The number of results to fetch.
    * @param int $numberOfComments
-   *    The number of comments to fetch.
+   *   The number of comments to fetch.
    * @param int $cacheMaxAge
-   *    The max age of the rendered output, in seconds.
+   *   The max age of the rendered output, in seconds.
    *
    * @return array
    *   The renderable array of the GitHub feed.
@@ -56,12 +56,12 @@ class GitHubFeedLazyBuilder {
 
     $fetchedItems = $this->gitHubFeed->fetchItems($repositoryUrl, $feedType, $numberOfResults, $numberOfComments);
     if ($fetchedItems === NULL) {
-      // Render generic failure message.
+      // Render generic failure message, and skip caching.
       return [
         '#type' => 'container',
         '#attributes' => [
           'class' => [
-            'github-feed-error'
+            'github-feed-error',
           ],
         ],
         'message' => [
@@ -83,12 +83,20 @@ class GitHubFeedLazyBuilder {
 
     // Needed to tweak (internal) page cache.
     $now = new DateTimePlus('now', new \DateTimeZone('UTC'));
-    $element['#attached']['http_header'][] = ['Expires', $now->modify("+$cacheMaxAge second")->format(\DATE_RFC2822)];
+    $element['#attached']['http_header'][] = [
+      'Expires',
+      $now->modify("+$cacheMaxAge second")->format(\DATE_RFC2822),
+    ];
 
     // We're making this portion cacheable - we only deal with cache max age,
     // otherwise this is safe to be cached - we just don't want the entire page
     // to be re-rendered.
-    $element['#cache']['keys'] = static::getCacheKeys($repositoryUrl, $feedType, $numberOfResults, $numberOfComments);
+    $element['#cache']['keys'] = static::getCacheKeys(
+      $repositoryUrl,
+      $feedType,
+      $numberOfResults,
+      $numberOfComments,
+    );
     $element['#cache']['bin'] = 'render';
 
     return $element;
@@ -110,11 +118,6 @@ class GitHubFeedLazyBuilder {
       '#type' => 'container',
       '#attributes' => [
         'class' => ['github-feed-item'],
-      ],
-      'time' => [
-        '#type' => 'html_tag',
-        '#tag' => 'h2',
-        '#value' => (new \DateTime())->format('r'),
       ],
     ];
 
@@ -150,26 +153,21 @@ class GitHubFeedLazyBuilder {
     return $container;
   }
 
-
   /**
    * Generates a cache ID for the given parameters.
    *
-   * @param string $owner
-   *   The owner of the project.
-   * @param string $project
-   *   The project name.
-   * @param string $type
+   * @param string $repositoryUrl
+   *   The URL of the repository.
+   * @param string $feedType
    *   The type of the feed. One of the items defined in
    *   \Drupal\github_feed\Plugin\Field\FieldType\GitHubFeedItem::allowedTypeValues.
    * @param int $numberOfResults
    *   The number of results to return.
-   * @param bool $includeComments
-   *   Whether to include comments or not.
    * @param int $numberOfComments
    *   The number of comments to return.
    *
-   * @return string
-   *   The cache ID.
+   * @return array<string|int>
+   *   The cache ID components.
    */
   public static function getCacheKeys(
     string $repositoryUrl,

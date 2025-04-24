@@ -41,10 +41,10 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): GitHubFeedDefaultFormatter {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['label'],
@@ -59,7 +59,6 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $cacheMaxAge = (int) $this->getFieldSetting('cache_max_age');
-    $cacheMaxAge = 60;
     $elements = [];
     foreach ($items as $delta => $item) {
       $elements[$delta] = [
@@ -77,7 +76,12 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
         // This portion is cacheable.
         // @see \Drupal\github_feed\GitHubFeedLazyBuilder
         '#cache' => [
-          'keys' => GitHubFeedLazyBuilder::getCacheKeys($item->repository, $item->type, (int) $item->item_num, (int) $item->comment_num),
+          'keys' => GitHubFeedLazyBuilder::getCacheKeys(
+            $item->repository,
+            $item->type,
+            (int) $item->item_num,
+            (int) $item->comment_num,
+          ),
           'max-age' => $cacheMaxAge,
           'bin' => 'render',
         ],
