@@ -15,3 +15,7 @@ services:
   Drupal\topic\Routing\TopicRouteSubscriber: { }
 
   Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber: { }
+
+  topic:
+    class: Drupal\topic\Service\TopicService
+    Drupal\topic\Service\TopicServiceInterface: '@topic'
