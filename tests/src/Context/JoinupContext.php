@@ -2521,55 +2521,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Updates the region or weight of a field in a draggable table.
-   *
-   * Example:
-   *
-   * @When I change the "region" of "Status" to "Disabled" in table "facet-display-overview"
-   * @When I change the "weight" of "Status" to "-5" in table "facet-display-overview"
-   *
-   * @When I change the :property of :field_title to :value in table :table_id
-   */
-  public function iChangeThePropertyOfFieldToInTable(string $property, string $field_title, string $value, string $table_id): void {
-    $this->assertJavaScriptEnabledBrowser();
-
-    $table_selector = sprintf('#%s tbody tr.draggable', $table_id);
-    $rows = $this->getSession()->getPage()->findAll('css', $table_selector);
-
-    // Map the property name to a CSS class.
-    $property_map = [
-      'region' => 'select.field-region',
-      'weight' => 'select.field-weight',
-    ];
-
-    if (!isset($property_map[$property])) {
-      throw new \InvalidArgumentException("Unsupported property '$property'. Only 'region' or 'weight' are allowed.");
-    }
-
-    foreach ($rows as $row) {
-      $title_element = $row->find('css', '.tabledrag-cell-content__item');
-      if ($title_element && trim($title_element->getText()) === $field_title) {
-        $select = $row->find('css', $property_map[$property]);
-        Assert::assertNotNull($select, "Could not find $property selector for '$field_title' in table '$table_id'.");
-
-        // If it's a select with option labels (like region), select by text.
-        if ($property === 'region') {
-          $option = $select->find('named', ['option', $value]);
-          Assert::assertNotNull($option, "Option '$value' not found for property '$property'.");
-          $select->selectOption($option->getValue(), FALSE);
-        }
-        else {
-          // Directly select by value for weight.
-          $select->selectOption($value, FALSE);
-        }
-        return;
-      }
-    }
-
-    throw new \Exception("Field with title '$field_title' not found in table '$table_id'.");
-  }
-
-  /**
    * Drags a table row, specified by title, one position towards a direction.
    *
    * Instead of using the mouse, it uses the keyboard keys so that precise
