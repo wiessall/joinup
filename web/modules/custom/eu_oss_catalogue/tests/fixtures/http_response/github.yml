@@ -136,7 +136,7 @@ default:
           # This will be used as logo from publiccode.yml doesn't exist.
           openGraphImageUrl: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
           owner:
-            login: dummy-namespace-2
+            login: subdirectory/dummy-namespace-2
           defaultBranchRef:
             name: default-branch-of-GitHub-solution-2
           pullRequests:
