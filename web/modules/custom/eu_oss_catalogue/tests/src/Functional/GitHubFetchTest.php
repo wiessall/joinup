@@ -37,7 +37,7 @@ class GitHubFetchTest extends FetchTestBase {
     // Check that 'logo not found' exception has been logged.
     $notFoundLogEntries = $this->getLogEntries(
       '%type: @message in %function (line %line of %file).',
-      'a:6:{s:5:"%type";s:36:"GuzzleHttp\Exception\ClientException";s:8:"@message";s:153:"Client error: `HEAD https://raw.githubusercontent.com/dummy-namespace-2/dummy-name-2/HEAD/path/to/images/logo.jpg` resulted in a `404 Not Found` response";',
+      'a:6:{s:5:"%type";s:36:"GuzzleHttp\Exception\ClientException";s:8:"@message";s:166:"Client error: `HEAD https://raw.githubusercontent.com/subdirectory/dummy-namespace-2/dummy-name-2/HEAD/path/to/images/logo.jpg` resulted in a `404 Not Found` response";',
     );
     $this->assertCount(1, $notFoundLogEntries);
   }
