@@ -40,6 +40,7 @@ class GitHub extends PluginBase implements ServiceMockPluginInterface {
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
     $query = $request->getBody()->getContents();
     $responseId = match(TRUE) {
+      str_contains($query, 'repo:avoinkoodi') => 'default',
       !str_contains($query, 'owner:dummy-namespace-2') => 'developers_italia',
       default => 'default',
     };
