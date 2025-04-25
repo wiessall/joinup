@@ -153,7 +153,7 @@ Feature:
     And I fill in "Last name" with "Rigby"
     And I fill in "Organisation" with "Lonely People"
     And I fill in "E-mail address" with "depression@example.com"
-    And I select "Legal issue" from "Category"
+    And I select "Legal / Licence / GDPR question" from "Category"
     And I fill in "Subject" with "All the lonely people where do they all come from?"
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
 

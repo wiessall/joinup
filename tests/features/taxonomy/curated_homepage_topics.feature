@@ -375,13 +375,13 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                                                                         |
-      | region          | content                                                                                   |
-      | Heading         | type: text - value: E-justice heading                                                     |
-      | Action link     | type: text - value: http://example.com                                                    |
-      | Link text       | type: text - value: E-justice link text                                                   |
-      | List style      | type: select - value: List                                                                |
-      | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice |
+      | layout position | 1                                                         |
+      | region          | content                                                   |
+      | Heading         | type: text - value: E-justice heading                     |
+      | Action link     | type: text - value: http://example.com                    |
+      | Link text       | type: text - value: E-justice link text                   |
+      | List style      | type: select - value: List                                |
+      | Query presets   | type: text - value: entity_bundle\|news\ntopic\|e-justice |
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | News 3 |

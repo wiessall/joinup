@@ -61,12 +61,17 @@ class ContactFormController extends ControllerBase {
    * @return bool
    *   TRUE if the category is valid.
    */
-  protected function isValidCategory($category): bool {
+  protected function isValidCategory(string $category): bool {
     $contact_message = $this->entityTypeManager()->getStorage('message')->create([
       'template' => 'contact_form_submission',
     ]);
     $entity_form = $this->entityFormBuilder()->getForm($contact_message);
-    return array_key_exists($category, $entity_form['field_contact_category']['widget']['#options']);
+    $flattened = [];
+    array_walk_recursive($entity_form['field_contact_category']['widget']['#options'],
+      function ($value, $key) use (&$flattened): void {
+        $flattened[$key] = $value;
+      });
+    return array_key_exists($category, $flattened);
   }
 
   /**
