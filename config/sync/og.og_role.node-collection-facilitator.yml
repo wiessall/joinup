@@ -18,6 +18,7 @@ permissions:
   - 'add user'
   - 'administer comments'
   - 'approve and deny subscription'
+  - 'bypass code of conduct'
   - 'create contact_information content'
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'

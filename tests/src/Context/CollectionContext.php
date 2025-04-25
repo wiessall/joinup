@@ -12,6 +12,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
@@ -69,6 +70,61 @@ class CollectionContext extends RawDrupalContext {
     /** @var \Drupal\node\NodeInterface $entity */
     $entity = $this->getEntityByLabel('node', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Navigates to the Code of Conduct consent page of a collection.
+   *
+   * @param string $collection
+   *   The title of the collection.
+   *
+   * @When I visit the :collection Code of Conduct consent page
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function visitCodeOfConductConsentPage(string $collection): void {
+    $entity = $this->getEntityByLabel('node', $collection, 'collection');
+
+    $url = Url::fromRoute('collection.code_of_conduct_consent', [
+      'node' => $entity->id(),
+    ]);
+    $this->visitPath($url->toString());
+  }
+
+  /**
+   * Updates the Code of Conduct for a collection (creates a new revision).
+   *
+   * @param string $title
+   *   The title of the collection.
+   * @param string $operation
+   *   The operation to perform (updated, published, unpublished).
+   *
+   * @Given the Code of Conduct for :title collection is :operation
+   */
+  public function updateCodeOfConductPage(string $title, string $operation): void {
+    if (!in_array($operation, ['updated', 'published', 'unpublished'], TRUE)) {
+      throw new \InvalidArgumentException();
+    }
+
+    $entity = self::getEntityByLabel('node', $title, 'collection');
+    \assert($entity instanceof CollectionInterface);
+
+    $coc = $entity->getCodeOfConduct();
+    \assert($coc instanceof CustomPageInterface);
+    switch ($operation) {
+      case 'published':
+      case 'updated':
+        $coc->setNewRevision();
+        $coc->setWorkflowState('published');
+        $coc->save();
+        break;
+
+      case 'unpublished':
+        $coc->setNewRevision();
+        $coc->setWorkflowState('unpublished');
+        $coc->save();
+        break;
+    }
   }
 
   /**
@@ -422,7 +478,7 @@ class CollectionContext extends RawDrupalContext {
     foreach ($this->explodeCommaSeparatedStepArgument($labels) as $label) {
       /** @var \Drupal\collection\Entity\CollectionInterface $collection */
       $collection = $this->getEntityByLabel('node', $label, 'collection');
-      if (!$collection->getMembership((int) $account->id(), [])) {
+      if (!$collection->getMembership($account->id(), [])) {
         $failures[] = $label;
       }
     }

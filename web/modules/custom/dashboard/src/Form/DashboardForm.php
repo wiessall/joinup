@@ -198,6 +198,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Private messages reports'),
         '#url' => Url::fromRoute('view.private_message_report.all'),
       ],
+      [
+        '#title' => $this->t('Open Source Software Solutions'),
+        '#url' => Url::fromRoute('view.eu_oss_catalogue_admin.admin'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {

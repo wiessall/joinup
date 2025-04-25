@@ -260,7 +260,7 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
     // Anonymous users do not have access to content of non published groups.
     return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id());
   }
-  $membership = $parent->getMembership((int) $account->id());
+  $membership = $parent->getMembership($account->id());
   if (empty($membership)) {
     return AccessResult::neutral();
   }
