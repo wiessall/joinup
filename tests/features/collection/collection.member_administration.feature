@@ -191,7 +191,7 @@ Feature: Collection membership administration
     Given custom_page content:
       | title                 | collection        | state     |
       | Medical diagnosis CoC | Medical diagnosis | published |
-    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
     Given I am logged in as "Lisa Cuddy"
     When I am on the members page of "Medical diagnosis"
     And I check the box "Update the member Ben Dover"
@@ -207,7 +207,7 @@ Feature: Collection membership administration
     Then I should not see the plus button menu
 
     # Without CoC, no email should be sent.
-    And the "code of conduct" setting of the "Medical diagnosis" collection is unset
+    And the "Code of Conduct" setting of the "Medical diagnosis" collection is unset
     Given I am logged in as "Lisa Cuddy"
     When I am on the members page of "Medical diagnosis"
     And I check the box "Update the member Justin Times"
@@ -436,11 +436,11 @@ Feature: Collection membership administration
     # Being able to view the link below mean that the membership is active and the user is a facilitator.
     Then I should see the link "Invite members"
 
-  Scenario: User needs to accept code of conduct on the confirmation form.
+  Scenario: User needs to accept Code of Conduct on the confirmation form.
     Given custom_page content:
       | title                 | collection        |
       | Medical diagnosis CoC | Medical diagnosis |
-    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
 
     When I am logged in as "Lisa Cuddy"
     And I go to the members page of "Medical diagnosis"
@@ -455,8 +455,8 @@ Feature: Collection membership administration
     And I visit the accept invitation form for the "Medical diagnosis" collection group
     Then I should see the link "Medical diagnosis" in the Header region
     When I press "Accept"
-    Then I should see the error message "You must agree to the Code of conduct."
-    When I check the box "I have read and agree to the Code of conduct."
+    Then I should see the error message "You must agree to the Code of Conduct."
+    When I check the box "I have read and agree to the Code of Conduct."
     And I press "Accept"
     Then I should see the text "You have been promoted to member."
 

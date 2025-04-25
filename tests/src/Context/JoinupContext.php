@@ -255,7 +255,7 @@ class JoinupContext extends RawDrupalContext {
     }
     $current_user = $this->getUserManager()->getCurrentUser();
     $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($current_user->uid);
-    $membership = $group->getMembership((int) $user->id());
+    $membership = $group->getMembership($user->id());
     if (empty($membership)) {
       return FALSE;
     }
