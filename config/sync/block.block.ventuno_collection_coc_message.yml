@@ -1,0 +1,23 @@
+uuid: 88720a14-9ef1-4216-807e-795872c33591
+langcode: en
+status: true
+dependencies:
+  module:
+    - collection
+  theme:
+    - ventuno
+id: ventuno_collection_coc_message
+theme: ventuno
+region: messages
+weight: -22
+provider: null
+plugin: collection_coc_message
+settings:
+  id: collection_coc_message
+  label: 'Collection CoC message'
+  label_display: '0'
+  provider: collection
+  context_mapping:
+    og: '@og.context:og'
+    user: '@user.current_user_context:current_user'
+visibility: {  }

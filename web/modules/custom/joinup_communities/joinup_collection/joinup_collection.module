@@ -31,7 +31,7 @@ function joinup_collection_user_insert(UserInterface $account): void {
   }
 
   // Add the membership only it doesn't exist yet.
-  $membership = $joinupCollection->getMembership((int) $account->id(), []);
+  $membership = $joinupCollection->getMembership($account->id(), []);
   if (!$membership) {
     OgMembership::create()
       ->setGroup($joinupCollection)

@@ -1,0 +1,22 @@
+uuid: 81373754-bf53-486b-b0cd-31129e58bbdc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_solution
+id: node.oss_solution.status
+field_name: status
+entity_type: node
+bundle: oss_solution
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

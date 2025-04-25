@@ -52,7 +52,7 @@ Feature:
       | Last name      | Modric                      |
       | Organisation   | The Deaf-Mute Society       |
       | E-mail address | oswine@example.ca           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Mobile reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I press "Submit"
@@ -67,7 +67,7 @@ Feature:
       | Last name      | Wulfric                     |
       | Organisation   | The Deaf-Mute Society       |
       | E-mail address | oswine@example.za           |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I press "Submit"
@@ -82,7 +82,7 @@ Feature:
       | Last name      | Vulvric                     |
       | Organisation   | The Deaf-Mute Society       |
       | E-mail address | roswine@example.za          |
-      | Category       | other                       |
+      | Category       | question_feature            |
       | Subject        | Screen reader disponibility |
       | Message        | Dear sir, madam, ...        |
     And I press "Submit"
