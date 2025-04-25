@@ -376,6 +376,6 @@ You can access the Mailpit UI at https://[your-project-name].ddev.local:8026.
 
 ### Additional information
 
-* [Code of conduct](docs/code_of_conduct.md)
+* [Code of Conduct](docs/code_of_conduct.md)
 * [Deployment workflow](docs/release_workflow.md)
 * [Contributors guide](docs/contributing.md).

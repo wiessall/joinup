@@ -300,7 +300,7 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $membership = $entity->getMembership((int) $account->id());
+  $membership = $entity->getMembership($account->id());
   return AccessResult::allowedIf(
     $membership
     && !$entity->isPublished()
@@ -526,6 +526,12 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
 
   // Bail out if we are executing the views queries that get the result counts.
   if (!empty($view->do_not_recurse)) {
+    return;
+  }
+
+  // Escape early if we are on an admin preview but do not skip if a view
+  // argument has been passed there.
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.view.preview_form' && empty($view->args)) {
     return;
   }
 

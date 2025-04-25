@@ -62,6 +62,10 @@ class CollectionEventSubscriber implements EventSubscriberInterface {
           'name' => 'highlight collections',
           'title' => $this->t('Highlight collections'),
         ]),
+        new GroupPermission([
+          'name' => 'bypass code of conduct',
+          'title' => $this->t('Bypass the code of conduct'),
+        ]),
       ]);
     }
   }
