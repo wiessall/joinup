@@ -1,5 +1,4 @@
 @api @eu-oss-catalogue
-# Feature will be re-enabled in ISAICP-9622
 Feature:
   In order to show the most data to visitors, EU OSS Catalogue provides a
   special equivalent of the OSS Solution's translatable fields which fetch and
@@ -26,7 +25,7 @@ Feature:
     Then I should see a "link[rel='alternate'][hreflang='en']" element
     And I should not see a "link[rel='alternate'][hreflang='it']" element
 
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the "moderator" role
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table
@@ -62,7 +61,7 @@ Feature:
       | DE Feature 1         |
       | DE Feature 2         |
 
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the "moderator" role
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
     And I should see the "EU OSS Catalogue administration" table
