@@ -73,4 +73,12 @@ interface CollectionInterface extends GroupInterface {
    */
   public function getCodeOfConduct(): ?ContentEntityInterface;
 
+  /**
+   * Returns whether the collection has a published Code of Conduct.
+   *
+   * @return bool
+   *   TRUE if the collection has a published Code of Conduct, FALSE otherwise.
+   */
+  public function hasPublishedCodeOfConduct(): bool;
+
 }
