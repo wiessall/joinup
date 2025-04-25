@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
@@ -15,7 +16,6 @@ use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\node\NodeInterface;
-use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -149,19 +149,9 @@ class UnarchiveAction extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public static function customAccess(AccountInterface $account, ViewExecutable $view): bool {
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = \Drupal::service('og.context')->getGroup();
-
-    /** @var \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager */
-    $groupManager = \Drupal::service('joinup_group.group_manager');
-    if (!$group) {
-      return FALSE;
-    }
-
-    $permission = 'vbo joinup unarchive action';
-    return $groupManager->access($group, $permission, $permission, $account)
-      ->isAllowed();
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
+    $access = $account->hasPermission('vbo joinup unarchive action') ? AccessResult::allowed() : AccessResult::forbidden();
+    return $return_as_object ? $access : $access->isAllowed();
   }
 
 }
