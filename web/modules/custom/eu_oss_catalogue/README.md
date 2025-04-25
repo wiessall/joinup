@@ -246,16 +246,21 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-Fetch solutions from Developer overheid
+[Developer Overheid](https://developer.overheid.nl)
 ```bash
 ./vendor/bin/drush eu-oss:fetch developer_overheid
 ```
 
 Run the following, to fetch from
-Fetch solutions from French catalogue
+[Awesome CodeGouvFr](https://code.gouv.fr/sources/#/awesome)
 ```bash
 ./vendor/bin/drush eu-oss:fetch awesome_code_gouv_fr
 ```
+
+Run the following, to fetch from
+[Avoinkoodi.fi](http://avoinkoodi.fi)
+```bash
+./vendor/bin/drush eu-oss:fetch avoinkoodi_fi
 
 This command queries the Developers Italia provider endpoint, fetches the data
 and populates the queue. Later, the cronjob is triggering the queue worker which

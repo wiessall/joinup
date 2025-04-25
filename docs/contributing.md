@@ -11,7 +11,7 @@ Use the Github issue queue to get in touch! We'd like to hear about your plans.
 
 ## Legal
 By submitting a pull request to the Interoperable Europe Portal repository, you implicitly accept the conditions in the
- [Interoperable Europe Portal Individual Contributor Assignment Agreement](agreement.md) as well as the  [code of conduct](code_of_conduct.md).
+ [Interoperable Europe Portal Individual Contributor Assignment Agreement](agreement.md) as well as the  [Code of Conduct](code_of_conduct.md).
 
 The Interoperable Europe Portal codebase is released under the [European Union Public Licence (EUPL)](https://interoperable-europe.ec.europa.eu/community/eupl/og_page/eupl).
 

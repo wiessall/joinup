@@ -99,8 +99,8 @@ class InvitationAcceptanceForm extends FormBase {
 
       $form['code_of_conduct'] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
-        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
+        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of Conduct</a>.', $args),
+        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank">Code of Conduct</a>.', $args),
         '#return_value' => $codeOfConduct->getRevisionId(),
         '#required' => TRUE,
       ];
