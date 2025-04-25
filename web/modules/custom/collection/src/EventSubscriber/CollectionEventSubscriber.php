@@ -66,6 +66,10 @@ class CollectionEventSubscriber implements EventSubscriberInterface {
           'name' => 'bypass node creation limit',
           'title' => $this->t('Bypass node creation limit'),
         ]),
+        new GroupPermission([
+          'name' => 'bypass code of conduct',
+          'title' => $this->t('Bypass the code of conduct'),
+        ]),
       ]);
     }
   }

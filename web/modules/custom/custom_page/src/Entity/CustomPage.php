@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Entity;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
@@ -70,6 +71,20 @@ class CustomPage extends Node implements CustomPageInterface {
       $group = $this->getGroup();
       $landing_page = $group->getSetting('landing_page')->entity;
       return $landing_page && ($landing_page->id() === $this->id());
+    }
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isGroupCodeOfConductPage(): bool {
+    if ($this->hasGroup() && $this->getGroup() instanceof CollectionInterface) {
+      $group = $this->getGroup();
+      // Add the nullsafe operator to ensure that this does not break for
+      // solutions that do not have the code of conduct functionality.
+      $cocPage = $group->getSetting('code_of_conduct')?->entity;
+      return $cocPage && ($cocPage->id() === $this->id());
     }
     return FALSE;
   }

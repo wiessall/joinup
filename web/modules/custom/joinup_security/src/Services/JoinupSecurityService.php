@@ -40,6 +40,14 @@ class JoinupSecurityService {
    *    FALSE otherwise.
    */
   public function applyNodeCreationLimit(CollectionInterface $collection): bool {
+    $uid = $this->currentUser->id();
+    if (
+      $this->currentUser->hasPermission('bypass node creation limit') ||
+      $this->joinupGroupManagerPermissions->userHasOgCollectionPermission($uid, $collection, 'bypass node creation limit')
+    ) {
+      return TRUE;
+    }
+
     $timestamp24HoursAgo = $this->time->getRequestTime() - 86400;
     $uid = $this->currentUser->id();
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
@@ -50,8 +58,7 @@ class JoinupSecurityService {
       ->count();
 
     $count = $query->execute();
-    return $this->currentUser->hasPermission('bypass node creation limit') ||
-      $this->joinupGroupManagerPermissions->userHasOgCollectionPermission($uid, $collection, 'bypass node creation limit') || $count < 2;
+    return $count <= 1;
   }
 
 }

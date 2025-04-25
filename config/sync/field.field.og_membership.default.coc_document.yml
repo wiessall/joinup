@@ -1,0 +1,35 @@
+uuid: d7fe015e-fb34-4a3b-b449-36c4db0b2364
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.og_membership.coc_document
+    - node.type.custom_page
+    - og.og_membership_type.default
+  module:
+    - entity_reference_revisions
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: og_membership.default.coc_document
+field_name: coc_document
+entity_type: og_membership
+bundle: default
+label: 'Code of Conduct document'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      custom_page: custom_page
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference_revisions

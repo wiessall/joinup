@@ -7,11 +7,11 @@ Feature: Content creation rate limit
       | title |
       | Test  |
     And users:
-      | Username         | Roles     |
-      | John Moderator   | moderator |
-      | John Facilitator |           |
-      | John Author      |           |
-      | John User        |           |
+      | Username         | Roles     | E-mail         |
+      | John Moderator   | moderator |                |
+      | John Facilitator |           |                |
+      | John Author      |           |                |
+      | John User        |           | user@gmail.com |
     And news content:
       | title            | collection | author           |
       | Moderator news   | Test       | John Moderator   |
