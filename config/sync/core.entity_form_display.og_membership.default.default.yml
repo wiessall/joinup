@@ -3,8 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.og_membership.default.coc_date
+    - field.field.og_membership.default.coc_document
     - field.field.og_membership.default.og_membership_request
     - og.og_membership_type.default
+  module:
+    - og
 _core:
   default_config_hash: onA1tCU5efWDAi4W6mUaVNSRUBIDmg0jWK8inU7qeUI
 id: og_membership.default.default
@@ -42,4 +46,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  coc_date: true
+  coc_document: true
