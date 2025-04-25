@@ -266,6 +266,18 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Resets the timestamp to 0 for purge_users_notifications in the database.
+   *
+   * @Given I reset the purge users notifications timestamp
+   */
+  public function setPurgeUsersNotificationsTimestamp(): void {
+    $connection = \Drupal::database();
+    $connection->update('purge_users_notifications')
+      ->fields(['timestamp' => 0])
+      ->execute();
+  }
+
+  /**
    * Generates a unique URL for a user to log in and reset their password.
    *
    * @param \Drupal\user\UserInterface $account

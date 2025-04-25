@@ -440,7 +440,8 @@
             },
             "drupal/purge_users": {
                 "doMail(): Argument #1 ($to) must be of type string, null given @see https://www.drupal.org/i/3512695": "resources/patch/php/drupal/purge_users/3512695.diff",
-                "Calculate the notification time by subtracting the notification period from each rule's value @see https://www.drupal.org/i/3517192": "resources/patch/php/drupal/purge_users/3517192.diff"
+                "Calculate the notification time by subtracting the notification period from each rule's value @see https://www.drupal.org/i/3517192": "resources/patch/php/drupal/purge_users/3517192.diff",
+                "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff"
             },
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",

@@ -16,19 +16,17 @@ Feature: Automated approach for identifying and deleting inactive users
       | Poney Flood    |                 | poney.flood@example.com    | 0           | -4 years    | active  |
 
   Scenario: Verify users to be notified.
-    Given I set state "joinup_user_last_notify_run" to 0
-    And I mark all emails as read
+    Given I mark all emails as read
     Then I run cron
     And the "purge_users" queue is empty
     When I run the "notification_users" queue worker
-    Then 1 e-mails should have been sent
+    Then 4 e-mails should have been sent
     And the email sent to "Poney Flood" with subject "Important Notice - Action Required to Retain Your Interoperable Europe Portal Account" contains the following lines of text:
       | As part of our regular maintenance on the Interoperable Europe Portal and in order to ensure the highest level of security on the platform |
       | Should you wish to maintain your account, please click here in order to log in to your account before the described deletion date.         |
       | Should you have any questions or need assistance, please feel free to contact our support team by clicking on the Contact Support form.    |
     # Use custom configuration for purge_users in cron job.
-    Given I set state "joinup_user_scheduled_purge_date" to 5
-    And I set state "joinup_user_last_purge_run" to 0
+    Given I reset the purge users notifications timestamp
     And I mark all emails as read
     And I run cron
     And the "Cosmic Admin" user exist
@@ -37,7 +35,7 @@ Feature: Automated approach for identifying and deleting inactive users
     And the "Dev Phoenix" user exist
     And the "Beta Bunny" user exist
     And the "Arion Truth" user exist
-    And the "Mona Lista" user exist
+    And the "Mona Lista" user doesn't exist
     And the "Orion Void" user doesn't exist
     And the "Bunny Truth" user doesn't exist
     And the "Poney Flood" user doesn't exist
