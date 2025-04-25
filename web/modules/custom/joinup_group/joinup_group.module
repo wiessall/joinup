@@ -1204,6 +1204,11 @@ function joinup_group_field_formatter_info_alter(array &$info): void {
  * Implements hook_cron().
  */
 function joinup_group_cron(): void {
+  $queue = \Drupal::queue('joinup_group_expired_sharing');
+  $queue->createQueue();
+  if ($queue->numberOfItems()) {
+    return;
+  }
   $sharedMetaStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
   assert($sharedMetaStorage instanceof SqlEntityStorageInterface);
   $tableMapping = $sharedMetaStorage->getTableMapping();
@@ -1218,8 +1223,6 @@ function joinup_group_cron(): void {
     ->execute()
     ->fetchCol();
 
-  $queue = \Drupal::queue('joinup_group_expired_sharing');
-  $queue->createQueue();
   foreach ($affectedMetaIds as $metaId) {
     $queue->createItem($metaId);
   }
