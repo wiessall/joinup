@@ -6,4 +6,4 @@ Feature: Tests for ISAICP-9589
     Given I go to "/collection/european-interoperability-reference-architecture-eira/solution/egovera/release/601-0"
     And I click "Switch to the latest release"
     Then I should be on "/collection/european-interoperability-reference-architecture-eira/solution/egovera-taxation/release/610"
-    And I should see the heading "eGovERA for Taxation"
+    And I should see the heading "eGovERA for Taxes"
