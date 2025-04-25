@@ -72,7 +72,7 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
       $user = $event->getUser();
       /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
       $group = $event->getGroup();
-      $membership = $group->getMembership((int) $user->id(), OgMembershipInterface::ALL_STATES);
+      $membership = $group->getMembership($user->id(), OgMembershipInterface::ALL_STATES);
       if ($membership && $membership->isBlocked()) {
         $event->denyAccess();
       }
