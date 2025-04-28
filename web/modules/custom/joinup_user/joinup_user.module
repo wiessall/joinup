@@ -564,7 +564,7 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
   return [
     'type' => BaseFieldDefinition::create('string')
       ->setLabel(t('Bundle'))
-      ->setDescription(t('User bundle (<code>user<code>) to be used by SAPI / facets'))
+      ->setDescription(t('User bundle (<code>user</code>) to be used by SAPI / facets'))
       ->setComputed(TRUE)
       ->setName('type')
       ->setClass(UserBundle::class),
