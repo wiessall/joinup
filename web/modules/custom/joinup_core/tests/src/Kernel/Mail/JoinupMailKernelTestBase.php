@@ -8,7 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_core\Traits\ConfigInstallTestTrait;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_core\Traits\ModuleSetupTestTrait;
-use Drupal\joinup_test_time\Datetime\TestTime;
+use Drupal\joinup_test\Datetime\TestTime;
 use Drupal\user\Entity\User;
 
 /**
@@ -33,7 +33,7 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
   protected static $modules = [
     'filter',
     'joinup_core',
-    'joinup_test_time',
+    'joinup_test',
     'rdf_sync',
     'serialization',
     'system',

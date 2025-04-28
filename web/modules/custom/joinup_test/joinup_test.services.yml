@@ -5,3 +5,7 @@ services:
     autowire: true
 
   Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber: { }
+
+  Drupal\joinup_test\Datetime\TestTime:
+    decorates: datetime.time
+    public: false
