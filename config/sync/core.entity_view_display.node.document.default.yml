@@ -75,8 +75,8 @@ bundle: document
 mode: default
 content:
   anonymous_comment_links:
-    settings: { }
-    third_party_settings: { }
+    settings: {  }
+    third_party_settings: {  }
     weight: 7
     region: content
   field_comments:

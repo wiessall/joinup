@@ -51,7 +51,7 @@ class CommunityContentController extends GroupNodeController {
     if (in_array($node_type->id(), CommunityContentHelper::BUNDLES, TRUE)) {
       assert($node instanceof GroupInterface);
 
-      $membership = $node->getMembership((int) $account->id());
+      $membership = $node->getMembership($account->id());
       return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
         'group' => $node,
         'membership' => $membership?->id(),
