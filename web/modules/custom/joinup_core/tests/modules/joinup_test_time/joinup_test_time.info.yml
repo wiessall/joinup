@@ -1,5 +1,0 @@
-name: 'Joinup request time mock'
-type: module
-description: 'Support module for testing with mocked request time.'
-package: Testing
-core_version_requirement: "*"
