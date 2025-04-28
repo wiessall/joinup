@@ -78,16 +78,8 @@ class Collection extends Node implements CollectionInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Get rid of the $onlyPublished parameter as it is only used once.
-   * @todo Probably get rid of the method as we will have a computed field.
-   * @todo Make sure that access is enforced in the computed field.
-   * @todo The ::getSolutions might end up as this method.
    */
   public function getSolutionIds(bool $onlyPublished = FALSE): array {
-    // @todo Fix this after the computed field is created.
-    // @todo The computed field should be in the solution module as should the
-    //   subscriber that exports the data to the collection.
     $idsQuery = $this->entityTypeManager()->getStorage('node')
       ->getQuery()
       ->accessCheck(FALSE)
@@ -145,9 +137,13 @@ class Collection extends Node implements CollectionInterface {
    */
   public function hasCodeOfConductToAccept(): bool {
     // Open collections are not forcing users to accept their Code of Conduct.
-    if (!$this->isClosed()) {
-      return FALSE;
-    }
+    return $this->isClosed() && $this->hasPublishedCodeOfConduct();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasPublishedCodeOfConduct(): bool {
     $codeOfConduct = $this->getCodeOfConduct();
     return $codeOfConduct &&
       (
