@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.meta_entity.field_shared_in
     - field.storage.node.body
     - field.storage.node.description
     - field.storage.node.field_event_agenda
@@ -12,7 +13,6 @@ dependencies:
     - field.storage.node.field_organisation
     - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
-    - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
     - field.storage.node.spatial_coverage
     - field.storage.paragraph.field_body
@@ -196,11 +196,14 @@ field_settings:
   field_shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
-    property_path: field_shared_in
+    property_path: 'shared_in:entity:field_shared_in:entity:nid'
     type: string
     dependencies:
       config:
-        - field.storage.node.field_shared_in
+        - field.storage.meta_entity.field_shared_in
+      module:
+        - meta_entity
+        - node
   field_short_title:
     label: 'Short title'
     datasource_id: 'entity:node'

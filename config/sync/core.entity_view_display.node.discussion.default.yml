@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
-    - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
@@ -89,7 +88,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 9
+    weight: 8
     region: content
   field_state:
     type: list_default
@@ -162,4 +161,5 @@ hidden:
   published_at: true
   read_more: true
   search_api_excerpt: true
+  shared_in: true
   visit_count: true

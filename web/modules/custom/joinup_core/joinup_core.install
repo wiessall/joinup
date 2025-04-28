@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_core\SharedInUpdateHelper;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -27,6 +28,19 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function joinup_core_update_dependencies(): array {
+  $dependencies['joinup_core'][200403] = [
+    'joinup_core' => 200402,
+  ];
+  $dependencies['joinup_core'][200404] = [
+    'joinup_core' => 200403,
+  ];
+  return $dependencies;
 }
 
 /**
@@ -104,4 +118,31 @@ function joinup_core_update_200401(): string {
       return sprintf('Deletion of RDF storage for \"topic\" vocabulary completed. %d records removed.', $sandbox['total']);
     }
   }
+}
+
+/**
+ * Install the meta entity type which stores shares.
+ */
+function joinup_core_update_200402(): void {
+  SharedInUpdateHelper::installFromConfigSync(
+    'meta_entity.type.shared_in.yml',
+  );
+}
+
+/**
+ * Install the meta entity field storage where shares are stored.
+ */
+function joinup_core_update_200403(): void {
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.storage.meta_entity.field_shared_in.yml',
+  );
+}
+
+/**
+ * Install the sharing meta entity's field_shared_in field instance.
+ */
+function joinup_core_update_200404(): void {
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.field.meta_entity.shared_in.field_shared_in.yml',
+  );
 }
