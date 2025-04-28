@@ -41,7 +41,7 @@ class ContactFormMailTest extends JoinupExistingSiteTestBase {
         'field_contact_first_name[0][value]' => 'Jane',
         'field_contact_last_name[0][value]' => 'Doe',
         'field_contact_email[0][value]' => 'jane.doe@example.com',
-        'field_contact_category' => 'usage',
+        'field_contact_category' => 'question_feature',
         'field_contact_subject[0][value]' => 'Question subject',
         'field_contact_message[0][value]' => 'Question about Interoperable Europe Portal',
         'field_contact_copy[value]' => $with_copy,
@@ -145,7 +145,7 @@ table tr td {
 <div class="field--name-field-contact-category contact-form-submission__field-contact-category">
 <div class="field__label fw-bold">
       Category    </div>
-<div class="field__item">Question on usage</div>
+<div class="field__item">Question on usage / Feature request</div>
 </div>
 <div class="field--name-field-contact-subject contact-form-submission__field-contact-subject">
 <div class="field__label fw-bold">
@@ -172,7 +172,7 @@ EOS;
 First name \nJane \n
  Last name \nDoe \n
  E-mail address \njane.doe@example.com \n
- Category \nQuestion on usage \n
+ Category \nQuestion on usage / Feature request \n
  Subject \nQuestion subject \n
  Message \nQuestion about Interoperable Europe Portal
 EOS;

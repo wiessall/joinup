@@ -25,9 +25,9 @@ Feature: Joining and leaving collections through the web interface
       | collection      | user              | roles |
       | Open collection | Collection author | owner |
       | Open collection | Stewe Griffin     |       |
-    And the "code of conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
-    And the "code of conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
-    And the "code of conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
+    And the "Code of Conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
+    And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
+    And the "Code of Conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
 
   @javascript
   Scenario Outline: As a user I can join collections without published Code of Conduct, and are also able to leave it
@@ -83,12 +83,12 @@ Feature: Joining and leaving collections through the web interface
     # There is a Code of Conduct document, what the user must accept before
     # requesting for membership, so the button text must not change.
     Then I should see the button "Join this collection" in the Header region
-    And I should see the text "To validate your membership and send it for approval, please tick the box agreeing with the Code of conduct. This helps us maintain a safe and respectful environment for all members of Closed collection with public CoC"
+    And I should see the text "To validate your membership and send it for approval, please tick the box agreeing with the Code of Conduct. This helps us maintain a safe and respectful environment for all members of Closed collection with public CoC"
     And I should not see the following lines of text:
       | You're now an active member of this space and ready to participate fully!   |
       | When your membership is approved you will be able to publish content in it. |
     And I should see the link "Public CoC of Closed collection"
-    Then I check "I have read and agree to the Code of conduct of Closed collection with public CoC."
+    Then I check "I have read and agree to the Code of Conduct of Closed collection with public CoC."
     And I <checkbox action> "Notify me when content is published in Closed collection with public CoC."
     And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
@@ -108,7 +108,7 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
-    Given I <checkbox action> "I have read and agree to the Code of conduct of Closed collection with public CoC."
+    Given I <checkbox action> "I have read and agree to the Code of Conduct of Closed collection with public CoC."
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
