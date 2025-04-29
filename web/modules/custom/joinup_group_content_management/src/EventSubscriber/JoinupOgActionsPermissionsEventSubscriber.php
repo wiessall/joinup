@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group_content_management\EventSubscriber;
 
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\ContextProvider\OgContext;
 use Drupal\views_bulk_operations\ActionAlterDefinitionsEvent;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
@@ -51,7 +52,7 @@ final class JoinupOgActionsPermissionsEventSubscriber implements EventSubscriber
   /**
    * Alter the actions' definitions.
    *
-   * @var \Drupal\Component\EventDispatcher\Event $event
+   * @param \Drupal\views_bulk_operations\ActionAlterDefinitionsEvent $event
    *   The event to respond to.
    */
   public function alterActions(ActionAlterDefinitionsEvent $event): void {
@@ -59,7 +60,8 @@ final class JoinupOgActionsPermissionsEventSubscriber implements EventSubscriber
     foreach ($event->definitions as $action_id => $definition) {
       if (array_key_exists($definition['id'], self::PERMISSIONS) && !empty($group)) {
         $permission_id = self::PERMISSIONS[$definition['id']];
-        if (!$this->currentUser->hasPermission($permission_id) && !$group->hasGroupPermission($this->currentUser->id(), $permission_id)) {
+        if (!$this->currentUser->hasPermission($permission_id) &&
+          (!$group instanceof GroupInterface || !$group->hasGroupPermission($this->currentUser->id(), $permission_id))) {
           unset($event->definitions[$action_id]);
         }
       }
