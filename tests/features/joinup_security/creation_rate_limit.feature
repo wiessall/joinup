@@ -35,7 +35,7 @@ Feature: Content creation rate limit
       | Test       | John Author      | author      |
       | Test       | John User        | member      |
 
-  Scenario Outline: Anonymous user can find items
+  Scenario Outline: Users with "bypass node creation limit" or with max 1 community content in last 24 hours can add new content.
     Given I am logged in as "<user>"
     When I go to the homepage of the "Test" collection
     And I click "Add news" in the plus button menu
@@ -49,7 +49,7 @@ Feature: Content creation rate limit
       | John Author      |
       | John User        |
 
-  Scenario: Anonymous user can find items
+  Scenario: Users without "bypass node creation limit" with over 1 community content in last 24 hours can not add new content.
     Given event content:
       | title      | collection | author    | created |
       | User event | Test       | John User | now     |

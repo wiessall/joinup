@@ -35,9 +35,9 @@ class JoinupSecurityService {
    *   Parent collection.
    *
    * @return bool
-   *   TRUE if the user can bypass the limit
+   *   FALSE if the user can bypass the limit
    *    or has less than 2 community content items created within the last 24 h,
-   *    FALSE otherwise.
+   *    TRUE otherwise.
    */
   public function applyNodeCreationLimit(CollectionInterface $collection): bool {
     $uid = $this->currentUser->id();
@@ -45,20 +45,21 @@ class JoinupSecurityService {
       $this->currentUser->hasPermission('bypass node creation limit') ||
       $this->joinupGroupManagerPermissions->userHasOgCollectionPermission($uid, $collection, 'bypass node creation limit')
     ) {
-      return TRUE;
+      return FALSE;
     }
 
     $timestamp24HoursAgo = $this->time->getRequestTime() - 86400;
     $uid = $this->currentUser->id();
-    $query = $this->entityTypeManager->getStorage('node')->getQuery();
+    $query = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->accessCheck(TRUE);
     $query->condition('type', CommunityContentHelper::BUNDLES, 'IN')
       ->condition('uid', $uid)
       ->condition('created', $timestamp24HoursAgo, '>=')
-      ->accessCheck(TRUE)
       ->count();
 
     $count = $query->execute();
-    return $count <= 1;
+    return $count >= 2;
   }
 
 }
