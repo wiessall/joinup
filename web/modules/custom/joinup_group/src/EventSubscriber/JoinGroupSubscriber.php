@@ -56,8 +56,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
       // membership and redirect them to the group page.
-      $uid = (int) $event->getAccount()->id();
-      if ($membership = $group->getMembership($uid, OgMembershipInterface::ALL_STATES)) {
+      if ($membership = $group->getMembership($event->getAccount()->id(), OgMembershipInterface::ALL_STATES)) {
         // The user is already subscribed. Delete the cookie and show an
         // appropriate message, and redirect the user to the group canonical
         // page.

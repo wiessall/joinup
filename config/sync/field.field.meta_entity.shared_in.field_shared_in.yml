@@ -1,19 +1,23 @@
-uuid: f5230de1-fdf5-45d1-a021-6c4a9cd84c47
+uuid: fdea3fdf-6223-470d-835e-61da4e04286b
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_shared_in
+    - field.storage.meta_entity.field_shared_in
+    - meta_entity.type.shared_in
     - node.type.collection
-    - node.type.document
     - node.type.solution
-_core:
-  default_config_hash: t_Sz8EiyggA-yxazPx_GPQO-95JbYRLRu_kHa3Uc4wQ
-id: node.document.field_shared_in
+  module:
+    - joinup_group
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.shared_in.field_shared_in
 field_name: field_shared_in
-entity_type: node
-bundle: document
-label: 'Shared on'
+entity_type: meta_entity
+bundle: shared_in
+label: 'Shared in'
 description: ''
 required: false
 translatable: false
@@ -30,4 +34,4 @@ settings:
       direction: ASC
     auto_create: false
     auto_create_bundle: collection
-field_type: entity_reference
+field_type: joinup_group_reference_with_timestamp

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -15,6 +18,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
@@ -26,16 +30,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 abstract class ShareFormBase extends FormBase {
 
   use AutowireTrait;
-
-  const array SHAREABLE_BUNDLES = [
-    'discussion',
-    'document',
-    'event',
-    'news',
-    'solution',
-  ];
-
-  const string FIELD_NAME_SHARED_IN = 'field_shared_in';
 
   /**
    * The entity being shared.
@@ -62,11 +56,11 @@ abstract class ShareFormBase extends FormBase {
    *   A list of group ids where the current entity is already shared on.
    */
   protected function getAlreadySharedGroupIds(): array {
-    if (!in_array($this->entity->bundle(), self::SHAREABLE_BUNDLES) || !$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
+    if (!$this->entity instanceof ShareableContentInterface) {
       return [];
     }
 
-    return array_column($this->entity->get(self::FIELD_NAME_SHARED_IN)->getValue(), 'target_id');
+    return array_column($this->entity->getSharedInField()->getValue(), 'target_id');
   }
 
   /**
@@ -89,16 +83,6 @@ abstract class ShareFormBase extends FormBase {
   }
 
   /**
-   * Returns the name of the field that the entity uses for being shared.
-   *
-   * @return string|null
-   *   The field name or null if not configured.
-   */
-  protected function getSharedOnFieldName(): ?string {
-    return in_array($this->entity->bundle(), self::SHAREABLE_BUNDLES) ? self::FIELD_NAME_SHARED_IN : NULL;
-  }
-
-  /**
    * Returns the name of the permission needed for the given action.
    *
    * @param string $action
@@ -117,9 +101,6 @@ abstract class ShareFormBase extends FormBase {
 
   /**
    * Returns a list of groups that the entity cannot be shared on.
-   *
-   * For nodes, this is the parent group. For rdf entities, it is the affiliated
-   * collection of the solution.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface|null
    *   The affiliated or parent group, if one exists.
@@ -152,6 +133,27 @@ abstract class ShareFormBase extends FormBase {
    */
   protected function isAjaxForm(): bool {
     return $this->getRequest()->query->has(FormBuilderInterface::AJAX_FORM_REQUEST);
+  }
+
+  /**
+   * Ajax callback to close the modal.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An ajax response that will close the modal.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   *   Thrown when there is no destination and the canonical URL cannot be
+   *   generated for the shared entity.
+   */
+  public function ajaxSubmit(): AjaxResponse {
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseModalDialogCommand());
+    $destination = (string) $this->getRequest()->query->get('destination');
+    $response->addCommand(new RedirectCommand(
+      $destination ?: (string) $this->entity->toUrl()->toString()
+    ));
+
+    return $response;
   }
 
 }

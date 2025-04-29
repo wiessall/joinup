@@ -7,6 +7,7 @@ namespace Drupal\joinup_document\Entity;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
@@ -14,9 +15,10 @@ use Drupal\joinup_workflow\ArchivableEntityTrait;
  */
 class Document extends CommunityContentBase implements DocumentInterface {
 
-  use LogoTrait;
   use AbstractTrait;
   use ArchivableEntityTrait;
+  use LogoTrait;
+  use ShareableContentTrait;
 
   /**
    * {@inheritdoc}

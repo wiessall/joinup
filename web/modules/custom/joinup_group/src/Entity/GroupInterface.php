@@ -53,7 +53,7 @@ interface GroupInterface extends
   /**
    * Returns the given user's membership for this group entity.
    *
-   * @param int|null $uid
+   * @param int|string|null $uid
    *   The ID of the user for which to return the membership. If omitted the
    *   membership of the current user will be returned.
    * @param array $states
@@ -70,7 +70,7 @@ interface GroupInterface extends
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the OG module is not enabled.
    */
-  public function getMembership(?int $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface;
+  public function getMembership(int|string|null $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface;
 
   /**
    * Creates a membership for the given user in the current group.
