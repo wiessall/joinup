@@ -6,12 +6,14 @@ namespace Drupal\joinup_group_content_management\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
@@ -35,23 +37,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5969
  *
- * @Action(
- *     id = "joinup_change_group",
- *     label = @Translation("Move to other group"),
- *     type = "node",
- *     confirm = FALSE,
- *     pass_context = TRUE,
- *     pass_view = FALSE,
- *     requirements = {
- *        "_permission" = "vbo joinup change group action",
- *     },
- *   )
  * @todo Implement an event subscriber inside `ChangeGroupAction` that allows to
  *   alter the list of actions. This will allow us to move all the custom logic
  *   into a listener in the `custom_page` module and solve the circular
  *   dependency. The action can then be moved inside `joinup_group` and this
  *   module is no longer needed.
  */
+#[Action(
+  id: "joinup_change_group",
+  label: new TranslatableMarkup("Move to other group"),
+  type: "node",
+)]
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
 
   /**

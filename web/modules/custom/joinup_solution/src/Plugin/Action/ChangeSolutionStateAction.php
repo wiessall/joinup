@@ -28,8 +28,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 #[Action(
   id: "change_state:node:solution",
   label: new TranslatableMarkup("Change solution state action"),
-  type: "node",
   confirm_form_route_name: "joinup_solution.change_state.multiple",
+  type: "node",
 )]
 class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements PluginFormInterface, ContainerFactoryPluginInterface {
 

@@ -68,8 +68,3 @@ services:
       - { name: access_check, applies_to: _og_permission }
 
   Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber: { }
-
-  Drupal\joinup_group\JoinupGroupPermissionManagerInterface:
-    class: Drupal\joinup_group\JoinupGroupPermissionManager
-
-  Drupal\joinup_group\EventSubscriber\JoinupOgActionsPermissionsEventSubscriber: { }
