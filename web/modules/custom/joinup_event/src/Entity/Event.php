@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_event\Entity;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
@@ -20,6 +23,8 @@ class Event extends CommunityContentBase implements EventInterface {
   use LogoTrait;
   use ArchivableEntityTrait;
   use AbstractTrait;
+  use ShareableContentTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -76,6 +81,22 @@ class Event extends CommunityContentBase implements EventInterface {
   public function getDateRange(): array {
     $dateRange = $this->get('field_event_date')->getValue();
     return (!empty($dateRange)) ? array_shift($dateRange) : [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSharingNotification(): ?TranslatableMarkup {
+    return $this->t(
+      'Please note: You must be subscribed to the target space to share your content.<br>Your event will be shared on that space for six months. After that,<br>it will be considered obsolete and will be automatically removed from that space.'
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getShareExpireTimestamp(?int $currentTimestamp): ?int {
+    return static::someMonthsLater(6, $currentTimestamp);
   }
 
 }

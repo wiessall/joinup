@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_paragraphs_body
-    - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
@@ -164,7 +163,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 10
+    weight: 9
     region: content
   report:
     type: link
@@ -201,5 +200,6 @@ hidden:
   published_at: true
   read_more: true
   search_api_excerpt: true
+  shared_in: true
   spatial_coverage: true
   visit_count: true
