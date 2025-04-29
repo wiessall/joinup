@@ -14,10 +14,13 @@ use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -264,6 +267,62 @@ class JoinupCommunityContentContext extends RawDrupalContext {
           }
         }
       }
+    }
+  }
+
+  /**
+   * Shares the content in the specified groups.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The Behat hook scope object containing the metadata of the node that was
+   *   created.
+   *
+   * @AfterNodeCreate
+   */
+  public function afterNodeCreateShare(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+
+    if (!isset($node->field_shared_in) || empty($node->field_shared_in)) {
+      return;
+    }
+
+    $content = Node::load($node->nid);
+    Assert::assertInstanceOf(NodeInterface::class, $content);
+    $groupLabels = array_map(
+      fn (string $groupLabel): string => trim($groupLabel),
+      explode(',', $node->field_shared_in),
+    );
+    $sharedInAtString = $node->field_shared_in__at ?? '';
+    $groupSharingExpireTime = array_map(
+      function (string $relativeSharingTime): ?int {
+        $relativeSharingTime = trim($relativeSharingTime) ?: NULL;
+        if ($relativeSharingTime) {
+          $relativeSharingTime = strtotime($relativeSharingTime);
+        }
+        return $relativeSharingTime;
+      },
+      explode(',', $sharedInAtString),
+    );
+    if ($groupLabels) {
+      Assert::assertInstanceOf(ShareableContentInterface::class, $content);
+    }
+
+    foreach ($groupLabels as $delta => $groupLabel) {
+      // Right now content can be shared only between groups.
+      $group = $this->getEntityByLabel('node', $groupLabel);
+
+      Assert::assertInstanceOf(
+        GroupInterface::class,
+        $group,
+        sprintf(
+          "Cannot share content '%s' to '%s' since latter is not a group.",
+          $content->label(),
+          trim($groupLabel),
+        )
+      );
+
+      $expireTime = $groupSharingExpireTime[$delta] ?? NULL;
+      $content->shareWith([$group], $expireTime);
     }
   }
 
