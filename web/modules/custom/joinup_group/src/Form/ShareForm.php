@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\node\NodeInterface;
 
@@ -68,6 +67,16 @@ class ShareForm extends ShareFormBase {
     ];
 
     $groups = $this->getShareableGroups();
+    $notification = $entity instanceof ShareableContentInterface
+      ? $this->entity->getSharingNotification()
+      : NULL;
+    if ($groups && $notification) {
+      $form['notification'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $notification,
+      ];
+    }
     foreach ($groups as $id => $group) {
       $bundle = $group->bundle();
       $form['groups'][$bundle][$id] = [
@@ -125,12 +134,12 @@ class ShareForm extends ShareFormBase {
     $group_labels = [];
     // We can safely loop through these ids, as invalid options are handled
     // already by Drupal.
-    foreach ($groups as $id => $value) {
-      $group = $this->entityTypeManager->getStorage('node')->load($id);
-      assert($group instanceof GroupInterface);
-      $this->shareOnGroup($group);
-      $group_labels[] = $group->label();
+    foreach (array_keys($groups) as $id) {
+      $groups[$id] = $this->entityTypeManager->getStorage('node')->load($id);
+      assert($groups[$id] instanceof GroupInterface);
+      $group_labels[] = $groups[$id]->label();
     }
+    $this->shareOnGroups($groups);
 
     // Show a message if the content was shared on at least one group.
     if (!empty($groups)) {
@@ -138,27 +147,6 @@ class ShareForm extends ShareFormBase {
     }
 
     $form_state->setRedirectUrl($this->entity->toUrl());
-  }
-
-  /**
-   * Ajax callback to close the modal.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An ajax response that will close the modal.
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   *   Thrown when the canonical URL cannot be generated for the shared entity.
-   */
-  public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
-    $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand((string) $this->entity->toUrl()->toString()));
-
-    return $response;
   }
 
   /**
@@ -188,7 +176,7 @@ class ShareForm extends ShareFormBase {
   protected function getShareableGroups(): array {
     // Being part also for the access check, do not allow the user to access
     // this page for entities without a field to store groups it is shared in.
-    if (!$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
+    if (!$this->entity instanceof ShareableContentInterface) {
       return [];
     }
 
@@ -207,26 +195,12 @@ class ShareForm extends ShareFormBase {
   /**
    * Shares the current entity inside a group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group where to share the entity on.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the current entity cannot be retrieved from the database.
-   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
-   *   Thrown when the entity storage is read only.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups where the entity must be shared additionally.
    */
-  protected function shareOnGroup(GroupInterface $group): void {
-    $current_ids = $this->getAlreadySharedGroupIds();
-    $current_ids[] = $group->id();
-
-    // Entity references do not ensure uniqueness.
-    $current_ids = array_unique($current_ids);
-
-    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue($current_ids);
-    $this->entity->skip_notification = TRUE;
-    $this->entity->save();
-
-    $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
+  protected function shareOnGroups(array $groups): void {
+    assert($this->entity instanceof ShareableContentInterface);
+    $this->entity->shareWith($groups);
   }
 
 }

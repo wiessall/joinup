@@ -6,7 +6,6 @@ namespace Drupal\joinup_solution\Entity;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
@@ -23,6 +22,7 @@ use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
+use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
@@ -57,6 +57,7 @@ class Solution extends Node implements SolutionInterface {
   use ShortIdTrait;
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
+  use ShareableContentTrait;
 
   /**
    * {@inheritdoc}
@@ -207,13 +208,6 @@ class Solution extends Node implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSharedInField(): ?EntityReferenceFieldItemList {
-    return $this->get('field_shared_in');
   }
 
   /**

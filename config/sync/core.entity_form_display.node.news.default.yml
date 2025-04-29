@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_paragraphs_body
-    - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
@@ -184,7 +183,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_shared_in: true
   field_site_featured: true
   og_audience: true
   path: true

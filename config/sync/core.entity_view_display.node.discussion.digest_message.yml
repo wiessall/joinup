@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
-    - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
@@ -86,4 +85,5 @@ hidden:
   report: true
   search_api_excerpt: true
   share_link: true
+  shared_in: true
   visit_count: true
