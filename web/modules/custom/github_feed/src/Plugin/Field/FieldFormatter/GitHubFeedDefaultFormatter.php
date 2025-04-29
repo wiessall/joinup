@@ -61,30 +61,22 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
     $cacheMaxAge = (int) $this->getFieldSetting('cache_max_age');
     $elements = [];
     foreach ($items as $delta => $item) {
+      $lazyBuilderArgs = [
+        $item->repository,
+        $item->type,
+        (int) $item->item_num,
+        (int) $item->comment_num,
+        $cacheMaxAge,
+      ];
+
       $elements[$delta] = [
         '#lazy_builder' => [
-          'github_feed.lazy_builder:renderFeed',
-          [
-            $item->repository,
-            $item->type,
-            (int) $item->item_num,
-            (int) $item->comment_num,
-            $cacheMaxAge,
-          ],
+          'github_feed.lazy_builder:buildFeed',
+          $lazyBuilderArgs,
         ],
         '#create_placeholder' => TRUE,
-        // This portion is cacheable.
-        // @see \Drupal\github_feed\GitHubFeedLazyBuilder
-        '#cache' => [
-          'keys' => GitHubFeedLazyBuilder::getCacheKeys(
-            $item->repository,
-            $item->type,
-            (int) $item->item_num,
-            (int) $item->comment_num,
-          ),
-          'max-age' => $cacheMaxAge,
-          'bin' => 'render',
-        ],
+        // This portion is render-cached.
+        '#cache' => GitHubFeedLazyBuilder::getCacheMetadata(...$lazyBuilderArgs),
       ];
     }
 
