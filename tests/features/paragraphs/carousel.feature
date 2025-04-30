@@ -91,6 +91,6 @@ Feature:
       | title       | headline    | collection | body          | state     |
       | News page 4 | Some page 1 | Sparta     | Some content. | published |
       | News page 5 | Some page 2 | Sparta     | Some content. | published |
-    And I go to the "Carousel controls" custom page
+    And I reload the page
     When the "Previous item" button in the Content region should be visible
     And the "Next item" button in the Content region should be visible
