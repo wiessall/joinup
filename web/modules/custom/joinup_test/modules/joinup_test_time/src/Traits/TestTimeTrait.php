@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_test\Traits;
+namespace Drupal\joinup_test_time\Traits;
 
-use Drupal\joinup_test\Datetime\TestTime;
+use Drupal\joinup_test_time\Datetime\TestTime;
 
 /**
  * Trait for manipulating time during functional tests.

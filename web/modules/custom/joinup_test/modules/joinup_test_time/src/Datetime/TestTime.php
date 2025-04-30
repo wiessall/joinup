@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_test\Datetime;
+namespace Drupal\joinup_test_time\Datetime;
 
 use Drupal\Component\Datetime\Time;
 
@@ -16,7 +16,7 @@ final class TestTime extends Time {
   /**
    * State key of the mocked timestamp, if any.
    */
-  public const string MOCK_TIMESTAMP_STATE_KEY = 'joinup_test.timestamp';
+  public const string MOCK_TIMESTAMP_STATE_KEY = 'joinup_test_time.timestamp';
 
   /**
    * {@inheritdoc}

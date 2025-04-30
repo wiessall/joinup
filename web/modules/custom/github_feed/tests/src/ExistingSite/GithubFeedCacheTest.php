@@ -7,11 +7,11 @@ namespace Drupal\Tests\github_feed\ExistingSite;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\joinup_test\Plugin\ServiceMock\GitHubCom;
 use Drupal\joinup_test\Traits\GitHubApiMockTrait;
-use Drupal\joinup_test\Traits\TestTimeTrait;
-use Drupal\node\NodeInterface;
+use Drupal\joinup_test_time\Traits\TestTimeTrait;
 
 /**
  * Tests caching of rendered GitHub feeds.
@@ -34,7 +34,9 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->ensureGitHubApiRequestMock();
+
+    \Drupal::state()->set(GitHubCom::MOCK_STATUS_STATES_KEY, TRUE);
+    \Drupal::service('module_installer')->install(['joinup_test_time']);
   }
 
   /**
@@ -75,7 +77,7 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($nodeWithGitHubFeed->toUrl());
     $this->assertSame('HIT', $this->getSession()->getResponseHeader('x-drupal-cache'));
 
-    $expire = $this->getNodeCanonicalExpiry($nodeWithGitHubFeed);
+    $expire = $this->getEntityCanonicalExpiry($nodeWithGitHubFeed);
     // Expiry timestamp must be greater than the initial render timestamp
     // exactly by the max age setting of the
     // "field.field.paragraph.github_feed.feed" field.
@@ -90,7 +92,7 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
     $this->setMockedTime($expire + 1);
     $this->drupalGet($nodeWithGitHubFeed->toUrl());
     $this->assertSame('MISS', $this->getSession()->getResponseHeader('x-drupal-cache'));
-    $newExpiry = $this->getNodeCanonicalExpiry($nodeWithGitHubFeed);
+    $newExpiry = $this->getEntityCanonicalExpiry($nodeWithGitHubFeed);
     $this->assertGreaterThan($expire, $newExpiry);
   }
 
@@ -113,16 +115,16 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Gets the expiration of the cached object of the given node's canonical URL.
+   * Gets the expiration of the cached object of the entity's canonical URL.
    *
-   * @param \Drupal\node\NodeInterface $node
-   *   The node.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity.
    *
    * @return int|null
    *   The expiration timestamp of the cached object.
    */
-  protected function getNodeCanonicalExpiry(NodeInterface $node): ?int {
-    $cid = $this->getNodeCanonicalPageCacheCid($node);
+  protected function getEntityCanonicalExpiry(ContentEntityInterface $entity): ?int {
+    $cid = $this->getEntityCanonicalPageCacheCid($entity);
     $pageCache = \Drupal::cache('page');
     $cachedData = $pageCache->get($cid);
     return isset($cachedData->expire) ? (int) $cachedData->expire : NULL;
@@ -137,7 +139,7 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
    * @return string
    *   The cache ID of the canonical page of the node.
    */
-  protected function getNodeCanonicalPageCacheCid(ContentEntityInterface $entity): string {
+  protected function getEntityCanonicalPageCacheCid(ContentEntityInterface $entity): string {
     // Once a cache ID is determined for the request, reuse it for the duration
     // of the request. This ensures that when the cache is written, it is only
     // keyed on request data that was available when it was read. For example,
@@ -153,6 +155,7 @@ class GithubFeedCacheTest extends JoinupExistingSiteTestBase {
   public function tearDown(): void {
     $this->restoreGitHubApiRequestMock();
     $this->restoreOriginalTime();
+    \Drupal::service('module_installer')->uninstall(['joinup_test_time']);
 
     // Invalidate the github_feed tag too. This makes this test re-runnable.
     Cache::invalidateTags(['github_feed']);
