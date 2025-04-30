@@ -113,7 +113,7 @@ Feature:
     Then I should see the heading "Edit term"
     And the following fields should be disabled "Name"
 
-  @javascript
+  @javascript @restart-session
   Scenario: Test the licence comparer trigger.
     Given SPDX licences:
       | uri                              | title      | ID         |
@@ -402,7 +402,7 @@ Feature:
       | OSI approved      |          |            |  |  |  |
       | FSF Free/Libre    |          |            |  |  |  |
 
-  @javascript
+  @javascript @restart-session
   Scenario: The reset button should change everything to the default state.
     Given SPDX licences:
       | uri                              | title      | ID         |
