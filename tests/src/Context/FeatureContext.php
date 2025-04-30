@@ -1496,6 +1496,8 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Restart sessions.
    *
+   * @Given I have a new browser session
+   *
    * @BeforeScenario @restart-session
    */
   public function restartSessions(): void {

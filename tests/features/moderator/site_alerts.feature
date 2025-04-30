@@ -35,6 +35,7 @@ Feature: Site alerts
 
     # The alert should no longer be shown.
     Given I am not logged in
+    And I have a new browser session
     And I am on the homepage
     Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
 
@@ -46,6 +47,7 @@ Feature: Site alerts
     And I press "Save"
 
     Given I am not logged in
+    And I have a new browser session
     And I am on the homepage
     And I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     And I go to "/interoperable-europe"
@@ -64,6 +66,7 @@ Feature: Site alerts
     Then I should see the message "The Sitewide Alert Site maintenance 18:00-20:00 has been deleted."
 
     Given I am not logged in
+    And I have a new browser session
     And I am on the homepage
     Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     And I go to "/interoperable-europe"
