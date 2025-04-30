@@ -191,6 +191,7 @@ trait NameMappingsTrait {
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
         'shared on' => 'field_shared_in',
+        'shared at' => 'field_shared_in__at',
         'solution' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
         'topic' => 'field_topic',
         'visits' => 'visit_count',

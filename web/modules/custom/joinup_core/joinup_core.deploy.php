@@ -18,34 +18,21 @@ declare(strict_types=1);
  * Set the group moderation to moderated for solutions.
  */
 function joinup_core_deploy_200400(array &$sandbox): string {
-  if (empty($sandbox['solution_ids'])) {
-    $query = \Drupal::database()->select('node__group_moderation', 'gm');
-    $query->addField('gm', 'entity_id');
-    $query->condition('gm.group_moderation_value', 0);
-    $query->condition('gm.bundle', 'solution');
-    $query->condition('gm.deleted', 0);
-    $solution_ids = $query->execute()->fetchCol();
-    if (empty($solution_ids)) {
-      return 'No solutions to update.';
-    }
-    $sandbox['solution_ids'] = $solution_ids;
-    $sandbox['max'] = count($solution_ids);
-    $sandbox['count'] = 0;
-  }
+  $database = \Drupal::database();
+  $database->update('node__group_moderation')
+    ->fields(['group_moderation_value' => 1])
+    ->condition('bundle', 'solution')
+    ->condition('deleted', 0)
+    ->execute();
 
-  $solution_ids = array_splice($sandbox['solution_ids'], 0, 50);
-  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($solution_ids) as $solution) {
-    $solution->set('group_moderation', 1);
-    $solution->skip_notification = 1;
-    $solution->search_api_skip_tracking = 1;
-    $solution->save();
-  }
+  // Repeat for revisions.
+  $database->update('node_revision__group_moderation')
+    ->fields(['group_moderation_value' => 1])
+    ->condition('bundle', 'solution')
+    ->condition('deleted', 0)
+    ->execute();
 
-  $sandbox['count'] += count($solution_ids);
-  $sandbox['#finished'] = empty($sandbox['solution_ids']) ? 1 : 0;
-  $sandbox['#message'] = t('Updated @count solutions.', ['@count' => count($solution_ids)]);
-  $sandbox['#progress'] = $sandbox['count'] / $sandbox['max'];
-  return sprintf('Updated %d out of %d solutions.', $sandbox['count'], $sandbox['max']);
+  return 'Updated group moderation for solutions.';
 }
 
 /**
