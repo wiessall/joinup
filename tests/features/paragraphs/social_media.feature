@@ -31,7 +31,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
-  @javascript
+  @javascript @restart-session
   Scenario Outline: A paragraph of social media links is available.
     Given custom_page content:
       | title        | collection            |
