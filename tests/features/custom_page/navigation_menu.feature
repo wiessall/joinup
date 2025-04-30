@@ -137,7 +137,7 @@ Feature: Navigation menu for custom pages
       | title           | body                   | collection    | topic |
       | Vintage molds   | This is a sample body. | Plaster molds | HR    |
       | Plaster casting | This is a sample body. | Plaster molds | HR    |
-    When I go to the "Plaster molds" collection
+    When I reload the page
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
     And I should not see the text "Vintage molds" in the "Navigation menu"
