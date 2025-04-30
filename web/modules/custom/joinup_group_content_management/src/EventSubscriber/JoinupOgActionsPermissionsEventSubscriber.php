@@ -58,10 +58,9 @@ final class JoinupOgActionsPermissionsEventSubscriber implements EventSubscriber
   public function alterActions(ActionAlterDefinitionsEvent $event): void {
     $group = $this->ogContext->getGroup();
     foreach ($event->definitions as $action_id => $definition) {
-      if (array_key_exists($definition['id'], self::PERMISSIONS) && !empty($group)) {
+      if (array_key_exists($definition['id'], self::PERMISSIONS) && $group instanceof GroupInterface) {
         $permission_id = self::PERMISSIONS[$definition['id']];
-        if (!$this->currentUser->hasPermission($permission_id) &&
-          (!$group instanceof GroupInterface || !$group->hasGroupPermission($this->currentUser->id(), $permission_id))) {
+        if (!$this->currentUser->hasPermission($permission_id) && !$group->hasGroupPermission($this->currentUser->id(), $permission_id)) {
           unset($event->definitions[$action_id]);
         }
       }
