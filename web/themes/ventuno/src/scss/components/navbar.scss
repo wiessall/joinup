@@ -64,9 +64,6 @@
   .nav-link {
     color: $white;
     font-weight: $font-weight-medium;
-    &:focus-visible {
-      outline: 1px auto blue; // Override bcl-bootstrap 'outline: 0' to browser standard.
-    }
     &--underline {
       vertical-align: baseline;
       &.is-active,
