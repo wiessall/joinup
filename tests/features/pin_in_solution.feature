@@ -99,7 +99,7 @@ Feature: Pinning content entities inside solutions
       | document     | Document |
       | news         | News     |
 
-  @javascript
+  @javascript @restart-session
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
       | title       | headline    | solution    | pinned |
