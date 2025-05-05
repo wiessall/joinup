@@ -26,13 +26,11 @@ use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
-use Drupal\joinup_core\Plugin\views\JoinupVboBulkForm;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
-use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
  * Implements hook_theme().
