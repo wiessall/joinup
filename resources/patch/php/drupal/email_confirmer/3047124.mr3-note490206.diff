@@ -1,25 +1,30 @@
 diff --git a/email_confirmer.install b/email_confirmer.install
-new file mode 100644
-index 0000000000000000000000000000000000000000..95b08c91b11a6d76cb2a2a738ab345bf647893c4
---- /dev/null
+index b652846c523b00416efa53a4d615af815090754f..33e65ad6ba9141f4afcc99bdea59f7637a3fbcd6 100644
+--- a/email_confirmer.install
 +++ b/email_confirmer.install
-@@ -0,0 +1,156 @@
-+<?php
-+
-+use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
-+/**
-+ * @file
-+ * Email confirmation install file.
-+ */
-+
+@@ -5,11 +5,159 @@
+  * Email Confirmer install file.
+  */
+ 
 +use Drupal\Core\Entity\ContentEntityType;
++use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
 +use Drupal\Core\Field\BaseFieldDefinition;
 +use Drupal\Core\StringTranslation\TranslatableMarkup;
 +
+ /**
+- * Implements hook_update_N().
+- *
+- * Clears the "email_confirmer_requests" queue of old requests.
++ * Clear the "email_confirmer_requests" queue of old requests.
+  */
+ function email_confirmer_update_9101(&$sandbox) {
+   \Drupal::queue('email_confirmer_requests')->deleteQueue();
+ }
++
 +/**
-+ * update the existing confirmation entity and add the new message entity
++ * Update the existing confirmation entity and add the new message entity.
 + */
-+function email_confirmer_update_8101() {
++function email_confirmer_update_9102() {
 +  $update_manager = Drupal::entityDefinitionUpdateManager();
 +  /** @var EntityLastInstalledSchemaRepositoryInterface $last_installed_schema_repository */
 +  $last_installed_schema_repository = Drupal::service(
@@ -1315,7 +1320,7 @@ index 0000000000000000000000000000000000000000..dc46df5a47086edfa5c58351c25ad3d0
 +
 +}
 diff --git a/src/Plugin/QueueWorker/DelayedRequestDispatcher.php b/src/Plugin/QueueWorker/DelayedRequestDispatcher.php
-index a6bc4da22230d13920ccb5e0ba61b9badbef881e..912b26fad26a57520aff5b9df06ac70b459043c5 100644
+index f4ed1e4815bea537ee410eb7437338b5f1d007de..fe0d4a4ad8b8cf83561786cc2fc2bbb22813c9c6 100644
 --- a/src/Plugin/QueueWorker/DelayedRequestDispatcher.php
 +++ b/src/Plugin/QueueWorker/DelayedRequestDispatcher.php
 @@ -72,7 +72,7 @@ class DelayedRequestDispatcher extends QueueWorkerBase implements ContainerFacto
