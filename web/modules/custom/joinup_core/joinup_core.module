@@ -512,18 +512,3 @@ function joinup_core_mail_alter(&$message): void {
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
 }
-
-/**
- * Implements hook_views_plugins_field_alter().
- *
- * Restores crucial, but removed features between VBO 4.2.7 and 4.3.2.
- */
-function joinup_core_views_plugins_field_alter(array &$plugins): void {
-  if (
-    !isset($plugins['views_bulk_operations_bulk_form']) ||
-    $plugins['views_bulk_operations_bulk_form']['class'] !== ViewsBulkOperationsBulkForm::class
-  ) {
-    return;
-  }
-  $plugins['views_bulk_operations_bulk_form']['class'] = JoinupVboBulkForm::class;
-}
