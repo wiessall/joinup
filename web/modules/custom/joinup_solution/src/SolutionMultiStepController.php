@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\joinup_solution;
+
+use Drupal\simple_multistep\MultiStepController;
+
+/**
+ * Override the visibility of Multistep form buttons by step.
+ */
+class SolutionMultiStepController extends MultiStepController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function rebuildForm(array &$form): void {
+    parent::rebuildForm($form);
+    if ($this->stepSettings->group_name !== 'group_confirmation') {
+      if (isset($form['actions']['delete'])) {
+        $form['actions']['delete']['#access'] = FALSE;
+      }
+      $form['field_state']['widget']['#options'] = array_intersect_key(
+        $form['field_state']['widget']['#options'],
+        ['draft' => TRUE]
+      );
+    }
+  }
+
+}
