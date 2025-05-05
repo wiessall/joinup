@@ -25,6 +25,7 @@ use Drupal\joinup_solution\CollectionSolutionsFieldItemList;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
+use Drupal\joinup_solution\SolutionMultiStepController;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
@@ -733,4 +734,11 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
     '#title' => t('Preview'),
     'content' => $render_array,
   ];
+}
+
+/**
+ * Implements hook_simple_multistep_controller_alter().
+ */
+function joinup_solution_simple_multistep_controller_alter(array &$form): void {
+  $form['#multistep_controller'] = SolutionMultiStepController::class;
 }
