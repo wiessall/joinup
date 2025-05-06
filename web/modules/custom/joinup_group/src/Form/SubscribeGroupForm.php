@@ -23,6 +23,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\CodeOfConductMembershipInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
@@ -201,7 +202,7 @@ class SubscribeGroupForm extends FormBase {
   }
 
   /**
-   * Adds the necessary code of conduct form elements to the form.
+   * Adds the necessary Code of Conduct form elements to the form.
    *
    * @param \Drupal\node\NodeInterface|null $collection
    *   The collection.
@@ -227,17 +228,17 @@ class SubscribeGroupForm extends FormBase {
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To validate your membership and send it for approval, please tick the box agreeing with the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label.',
+        'To validate your membership and send it for approval, please tick the box agreeing with the <a href=":code-of-conduct-url" target="_blank">Code of Conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label.',
         $codeOfConductArgs,
       ),
       '#weight' => -5,
     ];
     $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a> of @group-label.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=":code-of-conduct-url" target="_blank">Code of Conduct</a> of @group-label.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
-      '#required_error' => $this->t('You must agree to the <a href=":code-of-conduct-url">Code of conduct</a> before asking for membership.', $codeOfConductArgs),
+      '#required_error' => $this->t('You must agree to the <a href=":code-of-conduct-url">Code of Conduct</a> before asking for membership.', $codeOfConductArgs),
       '#weight' => -3,
     ];
 
@@ -274,29 +275,29 @@ class SubscribeGroupForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $node = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
+    $group = $this->entityTypeManager->getStorage('node')->load($form_state->getValue('entity_id'));
     $subscribe = (bool) $form_state->getValue('subscribe');
-    if ($node instanceof CollectionInterface) {
+    if ($group instanceof CollectionInterface) {
       if (!$this->isAjax()) {
         $redirectValue = $form_state->getValue('redirect');
         $redirect = $redirectValue
           ? $this->pathValidator->getUrlIfValid($redirectValue)
           : NULL;
-        $form_state->setRedirectUrl($redirect ?: $node->toUrl());
+        $form_state->setRedirectUrl($redirect ?: $group->toUrl());
       }
       $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
       if ($operation === 'cancel') {
         return;
       }
-      $parameters = ['%collection' => $node->label()];
+      $parameters = ['%collection' => $group->label()];
       $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
 
-      $membership = $this->getUserNonBlockedMembership($node);
+      $membership = $this->getUserNonBlockedMembership($group);
       $noInitialMembership = empty($membership);
       if ($noInitialMembership && $codeOfConductHasBeenApproved) {
-        $state = $node->isClosed() ? OgMembershipInterface::STATE_PENDING
+        $state = $group->isClosed() ? OgMembershipInterface::STATE_PENDING
           : OgMembershipInterface::STATE_ACTIVE;
-        $membership = $this->createSaveNewMembership($state, $this->getUser(), $node);
+        $membership = $this->createSaveNewMembership($state, $this->getUser(), $group);
       }
 
       if ($noInitialMembership && $membership) {
@@ -304,6 +305,13 @@ class SubscribeGroupForm extends FormBase {
           ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
           : $this->t('You have been joined to %collection.', $parameters);
         $this->messenger()->addStatus($message);
+      }
+
+      if ($membership instanceof CodeOfConductMembershipInterface &&
+        $codeOfConduct = $group->getCodeOfConduct()) {
+        $membership
+          ->grantFullMembershipWithCocAcceptance($codeOfConduct)
+          ->save();
       }
 
       if ($subscribe) {
@@ -321,11 +329,11 @@ class SubscribeGroupForm extends FormBase {
         return;
       }
 
-      $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $node);
+      $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->getUser(), $group);
       if ($subscribe) {
         $membership = $this->subscribe($membership);
       }
-      $this->messenger->addStatus($node->getNewMembershipSuccessMessage($membership));
+      $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
     }
   }
 

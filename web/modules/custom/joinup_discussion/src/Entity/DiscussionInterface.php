@@ -6,12 +6,13 @@ namespace Drupal\joinup_discussion\Entity;
 
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Interface for discussion entities in Joinup.
  */
-interface DiscussionInterface extends CommunityContentInterface, ArchivableEntityInterface, LogoInterface {
+interface DiscussionInterface extends CommunityContentInterface, ArchivableEntityInterface, LogoInterface, ShareableContentInterface {
 
   /**
    * Gets the discussion latest update time timestamp.

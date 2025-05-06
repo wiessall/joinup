@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Field\EntityReferenceFieldItemList;
 
 /**
  * Interface for entities that are group content.
@@ -56,13 +55,5 @@ interface GroupContentInterface extends ContentEntityInterface {
    *   Thrown when the parent group is missing.
    */
   public function getGroupId(): string;
-
-  /**
-   * Returns the "shared in" field item list.
-   *
-   * @return \Drupal\Core\Field\EntityReferenceFieldItemList|null
-   *   The "shared in" field item list or NULL if it doesn't exist.
-   */
-  public function getSharedInField(): ?EntityReferenceFieldItemList;
 
 }

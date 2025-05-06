@@ -1,0 +1,21 @@
+uuid: e2b8375e-6c60-44cc-8922-617a9595901f
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+    - meta_entity
+    - node
+id: meta_entity.field_shared_in
+field_name: field_shared_in
+entity_type: meta_entity
+type: joinup_group_reference_with_timestamp
+settings:
+  target_type: node
+module: joinup_group
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

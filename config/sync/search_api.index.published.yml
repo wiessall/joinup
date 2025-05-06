@@ -6,6 +6,7 @@ dependencies:
     - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
     - field.storage.node.body
     - field.storage.node.contact
@@ -622,12 +623,15 @@ field_settings:
     type: solr_text_spellcheck
   shared_in:
     label: 'Shared on'
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: 'shared_in:entity:field_shared_in:entity:nid'
     type: string
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/field_shared_in'
+    dependencies:
+      config:
+        - field.storage.meta_entity.field_shared_in
+      module:
+        - meta_entity
+        - node
   site_featured:
     label: Featured
     datasource_id: 'entity:node'

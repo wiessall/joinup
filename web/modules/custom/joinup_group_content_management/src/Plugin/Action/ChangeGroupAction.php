@@ -6,16 +6,19 @@ namespace Drupal\joinup_group_content_management\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_release\Entity\Release;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
@@ -34,24 +37,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5969
  *
- *  @Action(
- *    id = "joinup_change_group",
- *    label = @Translation("Move to other group"),
- *    type = "node",
- *    confirm = FALSE,
- *    pass_context = TRUE,
- *    pass_view = FALSE,
- *    requirements = {
- *       "_permission" = "vbo joinup change group action",
- *    },
- *  )
- *
  * @todo Implement an event subscriber inside `ChangeGroupAction` that allows to
  *   alter the list of actions. This will allow us to move all the custom logic
  *   into a listener in the `custom_page` module and solve the circular
  *   dependency. The action can then be moved inside `joinup_group` and this
  *   module is no longer needed.
  */
+#[Action(
+  id: "joinup_change_group",
+  label: new TranslatableMarkup("Move to other group"),
+  type: "node",
+)]
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
 
   /**
@@ -139,8 +135,18 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           ':group_url' => $group->toUrl()->toString(),
         ];
 
+        if ($isCustomPage && $node->isGroupCodeOfConductPage()) {
+          // Use the UUID to index the message, so that we it is shown only
+          // once.
+          $message['error'][$node->uuid()] = [
+            [
+              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved because it is set as the code of conduct.', $args),
+            ],
+          ];
+          continue;
+        }
         // It might be a parent custom page.
-        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
+        elseif ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
           // Filter out child nodes that are already in the main set.
           $children = array_diff_key($children, array_flip($initialNids));
           array_walk($children, function (NodeInterface $child): void {
@@ -187,7 +193,12 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           // Prevent notification dispatching.
           // @see joinup_notification_dispatch_notification()
           $node->skip_notification = TRUE;
-          $node->set('og_audience', $groupId)->save();
+          $node->set('og_audience', $groupId);
+          if ($node instanceof ReleaseInterface) {
+            $node->set('solution_data', $group);
+          }
+          $node->save();
+
           if (empty($node->isChild)) {
             $message['status'][] = [
               [

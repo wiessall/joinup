@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\collection\Entity;
+
+use Drupal\node\NodeInterface;
+
+/**
+ * Interface for memberships that store and retrieve Code of Conduct data.
+ */
+interface CodeOfConductMembershipInterface {
+
+  /**
+   * Checks if the latest revision of the Code of Conduct has been accepted.
+   *
+   * This verifies whether the user has explicitly accepted the most
+   * recent revision of the Code of Conduct.
+   *
+   * @return bool
+   *   TRUE if the latest document revision is accepted, FALSE otherwise.
+   */
+  public function isLastDocumentRevisionAccepted(): bool;
+
+  /**
+   * Marks the given Code of Conduct document as accepted.
+   *
+   * This records the user's acceptance of a specific Code of Conduct
+   * document, which can later be referenced to verify compliance. Also grants
+   * the user the `full_member` role.
+   *
+   * @param \Drupal\node\NodeInterface $codeOfConduct
+   *   The Code of Conduct document node.
+   *
+   * @return self
+   *   The current membership instance, for method chaining.
+   */
+  public function grantFullMembershipWithCocAcceptance(NodeInterface $codeOfConduct): self;
+
+  /**
+   * Returns true if the membership has the permission to bypass CoC.
+   *
+   * Note, that this does not give any extra permissions by itself. Permissions
+   * should be granted to the role having the `bypass code of conduct`
+   * permission explicitly for each action that the user should be able to do.
+   *
+   * @return bool
+   *   TRUE if the membership has the permission to bypass the code of conduct.
+   */
+  public function bypassesCodeOfConduct(): bool;
+
+}

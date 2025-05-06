@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
-    - field.field.node.document.field_shared_in
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
@@ -172,7 +171,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_shared_in: true
   field_site_featured: true
   langcode: true
   og_audience: true

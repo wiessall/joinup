@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
-use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -58,13 +57,6 @@ trait GroupContentTrait {
       throw new MissingGroupException();
     }
     return array_shift($ids['node']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSharedInField(): ?EntityReferenceFieldItemList {
-    return NULL;
   }
 
   /**

@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
-    - field.field.node.solution.field_shared_in
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.group_moderation
@@ -1571,6 +1570,7 @@ hidden:
   releases_overview: true
   search_api_excerpt: true
   share_link: true
+  shared_in: true
   short_id: true
   site_featured: true
   solution_subscribe: true
