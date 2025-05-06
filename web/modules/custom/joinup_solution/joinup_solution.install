@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Joinup core module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Migrates fields from solution to solution_settings meta entity.
+ */
+function joinup_solution_update_200500(): void {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $node_storage = $entity_type_manager->getStorage('node');
+  $nids = $node_storage->getQuery()
+    ->condition('type', 'solution')
+    ->accessCheck(TRUE)
+    ->execute();
+  $migrated_count = 0;
+
+  foreach ($nids as $nid) {
+    $solution = $node_storage->load($nid);
+    $meta_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    if (!empty($meta_entity = $meta_storage->loadByProperties([
+      'type' => 'solution_settings',
+      'target' => ['target_id' => $solution->id()],
+    ]))) {
+      $meta_entity = reset($meta_entity);
+      $meta_entity->set('group_moderation', $solution->get('group_moderation')->value);
+    }
+    else {
+      $meta_entity = $meta_storage->create([
+        'type' => 'solution_settings',
+        'label' => $solution->label(),
+        'target' => $solution,
+        'group_moderation' => $solution->get('group_moderation')->value,
+      ]);
+    }
+    $meta_entity->save();
+    $migrated_count++;
+  }
+
+  \Drupal::messenger()
+    ->addMessage(t('Migrated @count meta entities.', ['@count' => $migrated_count]));
+
+  try {
+    $field_config = FieldConfig::load('node.solution.group_moderation');
+    if ($field_config) {
+      $field_config->delete();
+    }
+
+    \Drupal::messenger()
+      ->addMessage(t('Field "group_moderation" removed from node type.'));
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('joinup_solution')
+      ->error('Failed to delete group_moderation field: @msg', ['@msg' => $e->getMessage()]);
+  }
+}
