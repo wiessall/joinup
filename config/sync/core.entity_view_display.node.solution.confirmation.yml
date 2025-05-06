@@ -175,6 +175,7 @@ hidden:
   featured: true
   field_is_description: true
   field_keywords: true
+  field_shared_in: true
   field_state: true
   field_topic: true
   flag_interoperability: true
@@ -204,6 +205,7 @@ hidden:
   report: true
   search_api_excerpt: true
   share_link: true
+  shared_in: true
   short_id: true
   site_featured: true
   solution_subscribe: true
