@@ -265,7 +265,6 @@ display:
     display_options:
       arguments: {  }
       defaults:
-        cache: true
         arguments: false
       display_extenders:
         metatag_display_extender:
@@ -322,7 +321,6 @@ display:
           break_phrase: false
           not: false
       defaults:
-        cache: true
         arguments: false
       display_extenders:
         metatag_display_extender:
