@@ -2,6 +2,8 @@ uuid: 03630974-be24-462f-9ab9-d376aee6147f
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.authenticated
   module:
     - private_message
     - user
@@ -89,8 +91,10 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            authenticated: authenticated
       cache:
         type: tag
         options: {  }
@@ -150,6 +154,7 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - user.roles
       tags: {  }
   block_blocked_users:
     id: block_blocked_users
@@ -439,4 +444,5 @@ display:
         - 'languages:language_interface'
         - url
         - user
+        - user.roles
       tags: {  }
