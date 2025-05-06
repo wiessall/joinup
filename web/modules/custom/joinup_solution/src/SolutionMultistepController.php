@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution;
 
-use Drupal\simple_multistep\MultiStepController;
+use Drupal\simple_multistep\MultistepController;
 
 /**
  * Override the visibility of Multistep form buttons by step.
  */
-class SolutionMultiStepController extends MultiStepController {
+class SolutionMultistepController extends MultistepController {
 
   /**
    * {@inheritdoc}
