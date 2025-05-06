@@ -24,8 +24,8 @@ use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
-use Drupal\topic\Entity\Topic;
 use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Service\TopicServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -55,6 +55,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     protected readonly FilterPluginManagerInterface $filterPluginManager,
     protected readonly LoggerChannelInterface $logger,
     protected readonly PagerManagerInterface $pagerManager,
+    protected readonly TopicServiceInterface $topicService,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
@@ -76,7 +77,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $container->get('plugin.manager.search_api.parse_mode'),
       $container->get('plugin.manager.search_api_field.filter'),
       $container->get('logger.channel.search_api'),
-      $container->get('pager.manager')
+      $container->get('pager.manager'),
+      $container->get('topic')
     );
   }
 
@@ -394,9 +396,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
-      // Try to convert the topic URI to term ID, fallback to NULL.
-      $entity = Topic::loadByUri($value);
-      $value = $entity instanceof TopicInterface ? $entity->id() : NULL;
+      $entity = $this->topicService->getTopicByName($value);
+      $value = ($entity instanceof TopicInterface) ? $entity->id() : NULL;
     }
 
     return $value;

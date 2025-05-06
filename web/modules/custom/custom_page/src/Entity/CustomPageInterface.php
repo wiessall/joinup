@@ -26,8 +26,16 @@ interface CustomPageInterface extends NodeInterface, GroupContentInterface, Coll
    * Checks if this custom page is set as a landing page of the group.
    *
    * @return bool
-   *   Return true if landing page is set as a landing page of the group.
+   *   Return true if the entity is set as a landing page of the group.
    */
   public function isGroupLandingPage(): bool;
+
+  /**
+   * Checks if this custom page is set as a code of conduct page for the group.
+   *
+   * @return bool
+   *   Return true if the entity is set as a code of conduct page.
+   */
+  public function isGroupCodeOfConductPage(): bool;
 
 }

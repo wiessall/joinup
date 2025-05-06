@@ -6,12 +6,12 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -38,7 +38,18 @@ class UnshareForm extends ShareFormBase {
   public function access(NodeInterface $node): AccessResultInterface {
     $this->entity = $node;
 
-    return AccessResult::allowedIf(!empty($this->getGroups()));
+    $accessResult = AccessResult::allowedIf(
+      $node instanceof ShareableContentInterface &&
+      !empty($this->getGroups())
+    );
+
+    if ($node instanceof ShareableContentInterface) {
+      $sharingMeta = $node->getSharingMetaEntity();
+      if (!$sharingMeta->isNew()) {
+        $accessResult->addCacheableDependency($sharingMeta);
+      }
+    }
+    return $accessResult;
   }
 
   /**
@@ -102,43 +113,20 @@ class UnshareForm extends ShareFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $groups = [];
-    // We can safely loop through these ids, as invalid options are handled
-    // already by Drupal.
-    foreach ($form_state->getValue('groups') as $id => $checked) {
-      if ($checked) {
-        $group = $this->entityTypeManager->getStorage('node')->load($id);
-        assert($group instanceof GroupInterface);
-        $this->removeFromGroup($group);
-        $groups[] = $group->label();
-      }
+    $groupIds = array_keys(array_filter($form_state->getValue('groups')));
+    if (empty($groupIds)) {
+      return;
     }
-
-    if (!empty($groups)) {
-      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
+    $groups = $this->entityTypeManager->getStorage('node')->loadMultiple($groupIds);
+    $groupLabels = array_map(
+      fn (GroupInterface $group): TranslatableMarkup|string => $group->label(),
+      $groups,
+    );
+    $this->removeFromGroups($groups);
+    if (!empty($groupLabels)) {
+      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groupLabels) . '.');
     }
     $form_state->setRedirectUrl($this->entity->toUrl());
-  }
-
-  /**
-   * Ajax callback to close the modal.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An ajax response that will close the modal.
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   *   Thrown when the canonical URL cannot be generated for the shared entity.
-   */
-  public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
-    $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand((string) $this->getRequest()->query->get('destination')));
-
-    return $response;
   }
 
   /**
@@ -163,23 +151,12 @@ class UnshareForm extends ShareFormBase {
   /**
    * Removes the current node from being shared inside a group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group where to remove the node.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the unshared entity cannot be saved after the group is
-   *   removed from it.
-   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
-   *   Thrown when the entity storage is read only.
+   * @param \Drupal\joinup_group\Entity\GroupInterface[] $groups
+   *   The groups to remove the node from.
    */
-  protected function removeFromGroup(GroupInterface $group): void {
-    // Flipping is needed to easily unset the value.
-    $current_ids = array_flip($this->getAlreadySharedGroupIds());
-    unset($current_ids[$group->id()]);
-    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue(array_flip($current_ids));
-    $this->entity->skip_notification = TRUE;
-    $this->entity->save();
-    $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
+  protected function removeFromGroups(array $groups): void {
+    assert($this->entity instanceof ShareableContentInterface);
+    $this->entity->unShareFrom($groups);
   }
 
 }

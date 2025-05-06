@@ -4,7 +4,7 @@ Feature: Sharing content on social networks
   I want to share content in my social networks
   So that useful information has more visibility
 
-  Scenario Outline: Sharing content on Facebook, Twitter and Linkedin.
+  Scenario Outline: Sharing content on Facebook, X and Linkedin.
     Given collection content:
       | title           |
       | Social networks |
@@ -18,8 +18,8 @@ Feature: Sharing content on social networks
     Then I should see the heading "Share Important information on"
     And I should see the link "Facebook"
     And the share link "Facebook" should point to the "Important information" content
-    And I should see the link "Twitter"
-    And the share link "Twitter" should point to the "Important information" content
+    And I should see the link "X"
+    And the share link "X" should point to the "Important information" content
     And I should see the link "Linkedin"
     And the share link "Linkedin" should point to the "Important information" content
 
@@ -45,7 +45,7 @@ Feature: Sharing content on social networks
 
     And I should see the link "Facebook"
     And the share link "Facebook" should point to the "Important solution" content entity
-    And I should see the link "Twitter"
-    And the share link "Twitter" should point to the "Important solution" content entity
+    And I should see the link "X"
+    And the share link "X" should point to the "Important solution" content entity
     And I should see the link "Linkedin"
     And the share link "Linkedin" should point to the "Important solution" content entity

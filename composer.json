@@ -45,7 +45,7 @@
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
-        "drupal/error_page": "2.0.3",
+        "drupal/error_page": "^2.1@beta",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
@@ -82,7 +82,7 @@
         "drupal/monolog": "^3.0",
         "drupal/multivalue_form_element": "^1.0",
         "drupal/node_revision_delete": "^2.0",
-        "drupal/og": "1.0.0-alpha10",
+        "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
         "drupal/page_manager": "*",
@@ -109,7 +109,7 @@
         "drupal/simple_block": "^1.3",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^2.1",
-        "drupal/slick": "^2",
+        "drupal/slick": "^3.0",
         "drupal/smart_trim": "^2.1",
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
@@ -169,15 +169,13 @@
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
-        "enlightn/security-checker": "^1",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "palantirnet/drupal-rector": "^0.20.1",
-        "pear/http_request2": "~2.4",
-        "phpro/grumphp-shim": "v2.10.0",
+        "phpro/grumphp-shim": "^2.12",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.6",
@@ -367,7 +365,7 @@
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
             },
             "drupal/email_confirmer": {
-                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
+                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
@@ -429,9 +427,6 @@
             },
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
-            },
-            "drupal/og": {
-                "[Drupal 10.2] Using a translatable string as a category for field type is deprecated @see https://github.com/Gizra/og/pull/764": "resources/patch/php/drupal/og/pr764.diff"
             },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
