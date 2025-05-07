@@ -56,13 +56,15 @@ class ModerationBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $solutionSettings = $this->entityTypeManager->getStorage('meta_entity')
         ->loadByProperties(['target__target_id' => $node->id()]);
       $solutionSettings = array_shift($solutionSettings);
-      $groupModeration = $solutionSettings->get('group_moderation');
-      $groupModerationValue = $groupModeration->value;
-      $allowedValues = $groupModeration->getSettings();
-      $label = $groupModerationValue ? $allowedValues['on_label'] : $allowedValues['off_label'];
-      $build['group_moderation'] = [
-        '#markup' => $this->t('@value', ['@value' => $label]),
-      ];
+      if (!empty($solutionSettings)) {
+        $groupModeration = $solutionSettings->get('group_moderation');
+        $groupModerationValue = $groupModeration->value;
+        $allowedValues = $groupModeration->getSettings();
+        $label = $groupModerationValue ? $allowedValues['on_label'] : $allowedValues['off_label'];
+        $build['group_moderation'] = [
+          '#markup' => $this->t('@value', ['@value' => $label]),
+        ];
+      }
     }
 
     return $build;
