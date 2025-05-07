@@ -11,8 +11,11 @@ Feature: Solution membership administration
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
     And solution content:
-      | title            | moderation |
-      | The Missing Sons | no         |
+      | title            |
+      | The Missing Sons |
+    And create solution meta entities:
+      | entity_title     | group_moderation |
+      | The Missing Sons | no               |
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |

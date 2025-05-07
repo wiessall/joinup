@@ -61,8 +61,11 @@ Feature: "Event page" editing.
       | Username       |
       | Krista Garrett |
     Given solution content:
-      | title                | description        | moderation |
-      | Dreamer in the Snake | Sample description | no         |
+      | title                | description        |
+      | Dreamer in the Snake | Sample description |
+    And create solution meta entities:
+      | entity_title         | group_moderation |
+      | Dreamer in the Snake | yes              |
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |

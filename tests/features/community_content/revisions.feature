@@ -6,8 +6,11 @@ Feature:
 
   Scenario Outline: Community content revisions
     Given <group type> content:
-      | title        | description                               | group_moderation |
-      | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
+      | title        | description                               |
+      | Hellow world | Because I do not know how to spell Hello. |
+    And create <group type> meta entities:
+      | entity_title | group_moderation |
+      | Hellow world | <moderation>     |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -199,8 +202,11 @@ Feature:
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
-      | title        | description                               | group_moderation   |
-      | Hellow world | Because I do not know how to spell Hello. | <moderation> |
+      | title        | description                               |
+      | Hellow world | Because I do not know how to spell Hello. |
+    And create <group type> meta entities:
+      | entity_title | group_moderation |
+      | Hellow world | <moderation>     |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
