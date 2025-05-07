@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -159,7 +160,10 @@ trait GroupTrait {
   public function isModerated(): bool {
     if ($this instanceof Solution) {
       $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
-      return (bool) $meta_entity->get('group_moderation')->value;
+      if($meta_entity instanceof MetaEntityInterface) {
+        return (bool) $meta_entity->get('group_moderation')->value;
+      }
+      return TRUE;
     }
     return (int) $this->getMainPropertyValue($this->getGroupModerationFieldName()) === GroupInterface::PRE_MODERATION;
   }
