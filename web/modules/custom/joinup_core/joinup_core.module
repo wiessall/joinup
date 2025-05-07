@@ -181,7 +181,7 @@ function joinup_core_file_delete(EntityInterface $entity): void {
   $current_time = \Drupal::time()->getRequestTime();
   $group = \Drupal::service('og.context')->getGroup();
   $path = 'base:/' . \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/' . StreamWrapperManager::getTarget($uri);
-  \Drupal::service('logger.channel.group_membership')->info('The file @filepath has been deleted on @deleted_time by @user in @group.', [
+  \Drupal::service('logger.channel.group_membership')->info('The file @filepath has been deleted.', [
     '@type' => $entity->bundle(),
     '@title' => $entity->label(),
     '@group' => $group ? $group->label() : NULL,
