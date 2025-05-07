@@ -2,5 +2,8 @@ services:
 
   _defaults:
     autoconfigure: true
+    autowire: true
 
   Drupal\joinup_group_content_management\EventSubscriber\AlterGroupContentManagementRoute: { }
+
+  Drupal\joinup_group_content_management\EventSubscriber\JoinupOgActionsPermissionsEventSubscriber: { }

@@ -4,6 +4,30 @@ Feature: Sharing content between collections
   I want to share content between collections
   So that useful information has more visibility
 
+  Scenario Outline: Sharing of specific content types expires by time
+    Given collection content:
+      | title        |
+      | Host group   |
+      | Target group |
+    And "<content type>" content:
+      | title          | collection | shared on    | shared at   |
+      | Shared content | Host group | Target group | <shared at> |
+
+    Given I go to the <page to visit>
+    Then I should see the "Shared content" tile
+    Given I run the "joinup_group" cron
+    And I run the "joinup_group_expired_sharing" queue worker
+    And I go to the <page to visit>
+    Then I <can or cant see> the "Shared content" tile
+
+    Examples:
+      | content type | page to visit                      | shared at | can or cant see |
+      | discussion   | discussions page of "Target group" | -10 years | should see      |
+      | document     | "Target group" collection          | -10 years | should see      |
+      | event        | "Target group" collection          | -7 months | should not see  |
+      | news         | "Target group" collection          | -32 days  | should not see  |
+      | solution     | "Target group" collection          | -10 years | should see      |
+
   @javascript
   Scenario Outline: Users can share content in the groups they are member of.
     Given users:
@@ -126,6 +150,7 @@ Feature: Sharing content between collections
     # Unshare the content.
     When I check "Classic Rock"
     And I press "Submit" in the "Modal buttons" region
+    And the modal should be closed
 
     # I should still be on the same page, but the group content should be
     # changed. The "Interesting content" should no longer be visible.
@@ -192,6 +217,7 @@ Feature: Sharing content between collections
     When I click the contextual link "Share" in the "Iron throne" tile
     Then a modal should open
     And the following fields should be present "Essos city"
+    And I should see "<notification>"
     When I check "Essos city"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
@@ -219,15 +245,15 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     Examples:
-      | content type | group type |
-      | event        | collection |
-      | event        | solution   |
-      | document     | collection |
-      | document     | solution   |
-      | discussion   | collection |
-      | discussion   | solution   |
-      | news         | collection |
-      | news         | solution   |
+      | content type | group type | notification                                                                                                                                                                                                                            |
+      | event        | collection | Please note: You must be subscribed to the target space to share your content. Your event will be shared on that space for six months. After that, it will be considered obsolete and will be automatically removed from that space.    |
+      | event        | solution   | Please note: You must be subscribed to the target space to share your content. Your event will be shared on that space for six months. After that, it will be considered obsolete and will be automatically removed from that space.    |
+      | document     | collection |                                                                                                                                                                                                                                         |
+      | document     | solution   |                                                                                                                                                                                                                                         |
+      | discussion   | collection |                                                                                                                                                                                                                                         |
+      | discussion   | solution   |                                                                                                                                                                                                                                         |
+      | news         | collection | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
+      | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
   @javascript
   Scenario Outline: Shared content should show visual cues in the groups they are shared into.
@@ -331,8 +357,8 @@ Feature: Sharing content between collections
       | Secrets |
       | Gossip  |
     And <content type> content:
-      | title                 | collection |
-      | An unshareable secret | Secrets    |
+      | title                 | collection | changed   |
+      | An unshareable secret | Secrets    | <changed> |
     And users:
       | Username        | E-mail                |
       | Sanjica Sauvage | sanjisauv@example.com |
@@ -364,11 +390,12 @@ Feature: Sharing content between collections
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Gossip."
     And I should see the heading "Shared on"
+    And I should see "Last update: <last update>"
     And I should see the "Gossip" tile
 
     Examples:
-      | content type |
-      | event        |
-      | document     |
-      | discussion   |
-      | news         |
+      | content type | changed    | last update |
+      | event        | 2017-06-04 | 04/06/2017  |
+      | document     | 2018-06-04 | 04/06/2018  |
+      | discussion   | 2019-06-04 | 04/06/2019  |
+      | news         | 2020-06-04 | 04/06/2020  |
