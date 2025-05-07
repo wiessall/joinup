@@ -31,8 +31,6 @@ use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
-use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
  * Implements hook_theme().
