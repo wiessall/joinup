@@ -1,5 +1,6 @@
 @api @group-c
-Feature: Fill Page URL field in Technical problem / bug report on contact form
+Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
+  content on contact form.
   As anonymous user
   In order to avoid the Page URL value containing the domain
   I want the domain to be removed from the input if I enter it
@@ -12,8 +13,8 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Last name" with "Amaru"
     And I fill in "Organisation" with "Vilcabamba State"
     And I fill in "E-mail address" with "tupac.amaru@free.pe"
-    And I select "Technical problem / bug report" from "Category"
-    And I fill in "Page URL" with "/interoperable-europe/interoperable-europe"
+    And I select "Technical problem / Bug report" from "Category"
+    And I fill in "Page URL" with "/collection/portal"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
     Then I press "Submit"
@@ -26,8 +27,8 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Last name" with "Camaru"
     And I fill in "Organisation" with "Kiolin State"
     And I fill in "E-mail address" with "josie.camaru@free.pe"
-    And I select "Technical problem / bug report" from "Category"
-    And I fill "Page URL" with the absolute URL "/interoperable-europe/interoperable-europe"
+    And I select "Technical problem / Bug report" from "Category"
+    And I fill "Page URL" with the absolute URL "/collection/portal"
     And I fill in "Subject" with "Mistery reminder"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
     Then I press "Submit"

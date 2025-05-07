@@ -68,7 +68,9 @@ Feature:
       | Layer         | Interoperability Layer 1: Interoperability governance       |
       | Model         | Basic Component 4: Open data                                |
 
-    When I visit the "Online Assistant" custom page
+    # In ISAICP-9742, check if this step is needed or if it can be changed back
+    # to a page visit step.
+    Given I reload the page
     And I should see the text "The EIF Solutions page counts with an online assistant that helps users to find operational solutions covering the alignment and implementation of the European Interoperability Framework and filter them by attributes."
     And I should see the text "Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements"
     And I should see the text "Step 2 - Explore operational solutions that help align to the European Interoperability Framework"
@@ -229,4 +231,6 @@ Feature:
     # as well.
     Given I delete the EIF perspective of the "Jordan 1" solution
     When I visit the "Online Assistant" custom page
-    And I should not see the heading "Jordan 1"
+    # Validate the need for this step in ISAICP-9742.
+    And I reload the page
+    Then I should not see the heading "Jordan 1"

@@ -19,8 +19,9 @@
       {{ form.share }}
     </div>
     <div>
+      {{ form.notification }}
       <h3 class="fs-6">{{ 'Other groups on Interoperable Europe Portal'|t }}</h3>
-      {{ form|without('share') }}
+      {{ form|without('share', 'notification') }}
     </div>
   </div>
 {% else %}

@@ -26,12 +26,12 @@ use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
-use Drupal\joinup_core\Plugin\views\JoinupVboBulkForm;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
@@ -183,7 +183,7 @@ function joinup_core_file_delete(EntityInterface $entity): void {
   $current_time = \Drupal::time()->getRequestTime();
   $group = \Drupal::service('og.context')->getGroup();
   $path = 'base:/' . \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/' . StreamWrapperManager::getTarget($uri);
-  \Drupal::service('logger.channel.group_membership')->info('The file @filepath has been deleted on @deleted_time by @user in @group.', [
+  \Drupal::service('logger.channel.group_membership')->info('The file @filepath has been deleted.', [
     '@type' => $entity->bundle(),
     '@title' => $entity->label(),
     '@group' => $group ? $group->label() : NULL,
@@ -511,19 +511,4 @@ function joinup_core_mail_alter(&$message): void {
   // in HTML mails.
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
-}
-
-/**
- * Implements hook_views_plugins_field_alter().
- *
- * Restores crucial, but removed features between VBO 4.2.7 and 4.3.2.
- */
-function joinup_core_views_plugins_field_alter(array &$plugins): void {
-  if (
-    !isset($plugins['views_bulk_operations_bulk_form']) ||
-    $plugins['views_bulk_operations_bulk_form']['class'] !== ViewsBulkOperationsBulkForm::class
-  ) {
-    return;
-  }
-  $plugins['views_bulk_operations_bulk_form']['class'] = JoinupVboBulkForm::class;
 }

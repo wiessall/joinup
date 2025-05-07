@@ -18,7 +18,9 @@ use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_discussion\Event\DiscussionDeleteEvent;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
+use Drupal\joinup_discussion\JoinupDiscussionGroupInspectorInterface;
 use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -164,22 +166,14 @@ function joinup_discussion_preprocess_block(array &$variables): void {
     return;
   }
   $routeEntity = \Drupal::routeMatch()->getParameter('node');
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
-  $queryStorage = $storage->getQuery();
 
-  $orCondition = $queryStorage->orConditionGroup();
-  $orCondition->condition('og_audience', $routeEntity->id());
-  $orCondition->condition('field_shared_in', [$routeEntity->id()], 'IN');
+  if (!$routeEntity instanceof GroupInterface) {
+    return;
+  }
 
-  $count = $queryStorage
-    ->accessCheck(FALSE)
-    ->condition('type', 'discussion')
-    ->condition($orCondition)
-    ->condition('field_state', 'archived')
-    ->condition('status', TRUE)
-    ->count()
-    ->execute();
-  if (!$count) {
-    unset($variables["content"]);
+  $groupInspector = \Drupal::service('joinup_discussion.group_inspector');
+  assert($groupInspector instanceof JoinupDiscussionGroupInspectorInterface);
+  if (!$groupInspector->groupHasDiscussions($routeEntity)) {
+    unset($variables['content']);
   }
 }
