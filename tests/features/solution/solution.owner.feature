@@ -9,9 +9,11 @@ Feature:
       | title             |
       | Author collection |
     And solution content:
-      | title           | group_moderation | content_creation   | collection        |
-      | Author solution | <moderation>     | <content creation> | Author collection |
-
+      | title           | content_creation   | collection        |
+      | Author solution | <content creation> | Author collection |
+    And create "solution" meta entities:
+      | entity_title    | group_moderation |
+      | Author solution | <moderation>     |
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
     Then I should see the following links:
