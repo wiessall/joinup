@@ -38,7 +38,7 @@ function joinup_solution_update_200502(): void {
   $meta_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
   $nids = $node_storage->getQuery()
     ->condition('type', 'solution')
-    ->accessCheck(TRUE)
+    ->accessCheck(FALSE)
     ->execute();
   $migrated_count = 0;
 
