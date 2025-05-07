@@ -110,11 +110,12 @@ class MetaEntityContext extends RawDrupalContext {
     foreach ($table->getHash() as $nodeHash) {
       $meta_entity_object = (object) $nodeHash;
       $entity = $this->getEntityByLabel('node', $meta_entity_object->entity_title);
+      $moderation = ['yes' => 1, 'no' => 0];
       $meta_entity = MetaEntity::create([
         'type' => $type . '_settings',
         'label' => $entity->label(),
         'target' => $entity,
-        'group_moderation' => (int) $meta_entity_object->group_moderation,
+        'group_moderation' => $moderation[$meta_entity_object->group_moderation],
       ]);
       $meta_entity->save();
     }
