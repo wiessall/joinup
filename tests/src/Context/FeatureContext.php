@@ -1494,6 +1494,17 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Restart sessions.
+   *
+   * @Given I have a new browser session
+   *
+   * @BeforeScenario @restart-session
+   */
+  public function restartSessions(): void {
+    $this->getMink()->restartSessions();
+  }
+
+  /**
    * Performs the RDF synchronization after each behat step.
    *
    * When a request terminates, all services implementing DestructableInterface
@@ -2137,6 +2148,19 @@ class FeatureContext extends RawDrupalContext {
     }
 
     sleep(1);
+  }
+
+  /**
+   * Runs a specific cron hook implementation.
+   *
+   * @param string $module
+   *   The implementer module of the cron hook.
+   *
+   * @When I run the :module cron
+   */
+  public function iRunSpecificCron(string $module): void {
+    Assert::assertTrue(function_exists($cronFunction = "{$module}_cron"));
+    call_user_func($cronFunction);
   }
 
   /**

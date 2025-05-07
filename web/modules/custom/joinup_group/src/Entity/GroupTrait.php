@@ -27,7 +27,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getMembership(?int $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface {
+  public function getMembership(int|string|null $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface {
     assert(is_subclass_of($this, GroupInterface::class), __TRAIT__ . ' is intended to be used in bundle classes for group entities.');
 
     // Default to the current user.

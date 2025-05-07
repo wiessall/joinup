@@ -19,6 +19,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -31,11 +33,14 @@ use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_group\Entity\ShareableContentInterface;
+use Drupal\joinup_group\Entity\Sharing;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\MailContentTypeHeader;
+use Drupal\joinup_group\Plugin\Field\SharedInFieldItemList;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -51,6 +56,22 @@ use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function joinup_group_entity_view_alter(array &$build, EntityInterface $entity): void {
+  $entityTypeId = $entity->getEntityTypeId();
+  if (
+    !$entity instanceof ShareableContentInterface ||
+    empty($build['#contextual_links'][$entityTypeId])
+  ) {
+    return;
+  }
+  // Force contextual links list to be re-rendered whenever sharing status
+  // changes, to make "Unshare" link appear and disappear as needed.
+  $build['#contextual_links'][$entityTypeId]['metadata']['shared'] = !$entity->getSharedInField()->isEmpty();
+}
 
 /**
  * Implements hook_theme().
@@ -82,19 +103,42 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['message']['announcement'])) {
     $bundles['message']['announcement']['class'] = Announcement::class;
   }
+
+  if (!empty($bundles['meta_entity']['shared_in'])) {
+    $bundles['meta_entity']['shared_in']['class'] = Sharing::class;
+  }
 }
 
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() === 'node' && in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES)) {
-    if (!empty($fields['short_id'])) {
+  if ($entity_type->id() === 'node') {
+    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES) && !empty($fields['short_id'])) {
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
       $fields['short_id']->addPropertyConstraints('value', [
         'Regex' => ['pattern' => '/^[a-z0-9-]{4,26}$/'],
       ]);
       $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
+    }
+
+    if (in_array($bundle, ShareableContentInterface::NODE_BUNDLES, TRUE)) {
+      $fields['field_shared_in'] = BaseFieldDefinition::create('joinup_group_reference_with_timestamp')
+        ->setLabel(t('Shared on'))
+        ->setName('field_shared_in')
+        ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+        ->setComputed(TRUE)
+        ->setSetting('target_type', 'node')
+        ->setSetting('handler', 'default')
+        ->setSetting('handler_settings', [
+          'target_bundles' => [
+            'collection' => 'collection',
+            'solution' => 'solution',
+          ],
+        ])
+        ->setTargetEntityTypeId('node')
+        ->setDisplayConfigurable('view', TRUE)
+        ->setClass(SharedInFieldItemList::class);
     }
   }
 }
@@ -164,7 +208,7 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
     // And belongs to a group.
     && ($parent = $group_content->getGroup())
     // And is shared.
-    && ($group_content->getSharedInField() && !$group_content->getSharedInField()->isEmpty())
+    && $group_content instanceof ShareableContentInterface
   ) {
     $variables['#attached']['library'][] = 'joinup_group/shared_entity';
     $variables['attributes']['data-joinup-parent-id'] = $parent->id();
@@ -300,7 +344,7 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $membership = $entity->getMembership((int) $account->id());
+  $membership = $entity->getMembership($account->id());
   return AccessResult::allowedIf(
     $membership
     && !$entity->isPublished()
@@ -526,6 +570,12 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
 
   // Bail out if we are executing the views queries that get the result counts.
   if (!empty($view->do_not_recurse)) {
+    return;
+  }
+
+  // Escape early if we are on an admin preview but do not skip if a view
+  // argument has been passed there.
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.view.preview_form' && empty($view->args)) {
     return;
   }
 
@@ -880,28 +930,42 @@ function joinup_group_user_update(UserInterface $user): void {
  * Implements hook_entity_update().
  */
 function joinup_group_entity_update(EntityInterface $group): void {
-  if ($group instanceof GroupInterface) {
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group_original_entity */
-    $group_original_entity = $group->original;
-    if ($group_original_entity->getShortId() !== $group->getShortId()) {
-      \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
-      $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
-      $arguments = [
-        '@bundle' => $bundle_info['label_singular'],
-        '%original' => $group_original_entity->getShortId() ?? '',
-        '%actual' => $group->getShortId() ?? '',
-      ];
-      if (empty($group->skip_notification)) {
-        if ($group_original_entity->getShortId() && $group->getShortId()) {
-          \Drupal::messenger()->addStatus(t("You've changed the @bundle's short ID from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
-        }
-        elseif (!$group_original_entity->getShortId()) {
-          \Drupal::messenger()->addStatus(t("You've added a @bundle short ID: %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
-        }
-        elseif (!$group->getShortId()) {
-          \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
-        }
+  if (!$group instanceof GroupInterface || !$group->isDefaultRevision()) {
+    return;
+  }
+
+  /** @var \Drupal\joinup_group\Entity\GroupInterface $group_original_entity */
+  $group_original_entity = $group->original;
+  if ($group_original_entity->getShortId() !== $group->getShortId()) {
+    \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
+    $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
+    $arguments = [
+      '@bundle' => $bundle_info['label_singular'],
+      '%original' => $group_original_entity->getShortId() ?? '',
+      '%actual' => $group->getShortId() ?? '',
+    ];
+    if (empty($group->skip_notification)) {
+      if ($group_original_entity->getShortId() && $group->getShortId()) {
+        \Drupal::messenger()->addStatus(t("You've changed the @bundle's short ID from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
       }
+      elseif (!$group_original_entity->getShortId()) {
+        \Drupal::messenger()->addStatus(t("You've added a @bundle short ID: %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
+      }
+      elseif (!$group->getShortId()) {
+        \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
+      }
+    }
+  }
+  elseif (empty($group->getShortId()) && $group_original_entity->label() !== $group->label()) {
+    \Drupal::getContainer()->get('joinup_group.url_alias_updater')->queueGroupContent($group);
+    $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
+    $arguments = [
+      '@bundle' => $bundle_info['label_singular'],
+      '%original' => $group_original_entity->label() ?? '',
+      '%actual' => $group->label() ?? '',
+    ];
+    if (empty($group->skip_notification)) {
+      \Drupal::messenger()->addStatus(t("You've changed the @bundle's title from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
     }
   }
 }
@@ -1131,4 +1195,41 @@ function joinup_group_content_creation_allowed_values(FieldStorageDefinitionInte
 
   unset($values['only_members']);
   return $values;
+}
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function joinup_group_field_formatter_info_alter(array &$info): void {
+  // Make "entity_reference_entity_view" formatter available to
+  // "joinup_group_reference_with_timestamp" fields.
+  $info['entity_reference_entity_view']['field_types'][] = 'joinup_group_reference_with_timestamp';
+}
+
+/**
+ * Implements hook_cron().
+ */
+function joinup_group_cron(): void {
+  $queue = \Drupal::queue('joinup_group_expired_sharing');
+  $queue->createQueue();
+  if ($queue->numberOfItems()) {
+    return;
+  }
+  $sharedMetaStorage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  assert($sharedMetaStorage instanceof SqlEntityStorageInterface);
+  $tableMapping = $sharedMetaStorage->getTableMapping();
+  $sharedInTable = $tableMapping->getFieldTableName('field_shared_in');
+  $currentTimestamp = \Drupal::time()->getCurrentTime();
+  $affectedMetaIds = \Drupal::database()->select($sharedInTable, 'f')
+    ->distinct()
+    ->fields('f', ['entity_id'])
+    ->condition('f.bundle', 'shared_in')
+    ->isNotNull('f.field_shared_in_timestamp')
+    ->condition('f.field_shared_in_timestamp', $currentTimestamp, '<')
+    ->execute()
+    ->fetchCol();
+
+  foreach ($affectedMetaIds as $metaId) {
+    $queue->createItem($metaId);
+  }
 }

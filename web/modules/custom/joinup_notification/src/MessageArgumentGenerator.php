@@ -136,8 +136,8 @@ class MessageArgumentGenerator {
 
     $roles = [];
     foreach ($membership->getRoles() as $role) {
-      // Skip the required role 'member', this is implied.
-      if ($role->isRequired()) {
+      // Skip the required roles 'member' and 'full_member', this is implied.
+      if ($role->getRoleType() === OgRoleInterface::ROLE_TYPE_REQUIRED) {
         continue;
       }
 
