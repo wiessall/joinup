@@ -54,7 +54,7 @@ class ModerationBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $node = $this->routeMatch->getParameter('node');
     if ($node instanceof NodeInterface && $node->bundle() === 'solution') {
       $solutionSettings = $this->entityTypeManager->getStorage('meta_entity')
-        ->loadByProperties(['target__target_id' => $node->id(),'type'=>'solution_settings']);
+        ->loadByProperties(['target__target_id' => $node->id(), 'type' => 'solution_settings']);
       $solutionSettings = array_shift($solutionSettings);
       if (!empty($solutionSettings)) {
         $groupModeration = $solutionSettings->get('group_moderation');
