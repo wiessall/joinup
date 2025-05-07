@@ -22,6 +22,11 @@ function joinup_log_form_alter(array &$form, FormStateInterface $form_state, str
   if (str_starts_with($form_id, 'views_form_og_members_overview_default_')) {
     $form['#submit'][] = 'joinup_log_members_views_exposed_form_submit';
   }
+  if ($form['#id'] == 'views-exposed-form-actions-log-site-wide') {
+    $options = $form['type']['#options'];
+    asort($options);
+    $form['type']['#options'] = $options;
+  }
 }
 
 /**
