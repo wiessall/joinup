@@ -24,6 +24,7 @@ use Drupal\joinup_community_content\JoinupCommunityContentCommentAccessControlHa
 use Drupal\joinup_community_content\Plugin\views\filter\JoinupContentState;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
 
@@ -187,7 +188,14 @@ function joinup_community_content_workflow_selector(EntityInterface $entity): ?s
     return NULL;
   }
 
-  if (!$parent_entity->isModerated()) {
+  if ($parent_entity instanceof Solution) {
+    $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent_entity, 'solution_settings');
+    if (!$meta_entity->get('group_moderation')->value) {
+      return 'node:post_moderated';
+    }
+  }
+
+  elseif (!$parent_entity->isModerated()) {
     return 'node:post_moderated';
   }
 
