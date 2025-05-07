@@ -27,10 +27,10 @@ use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_theme().
@@ -500,7 +500,7 @@ function joinup_core_field_widget_info_alter(array &$info): void {
 function joinup_core_mail_alter(&$message): void {
   if (
     empty($message['headers']['Content-Type']) ||
-    $message['headers']['Content-Type'] !== SymfonyMailer::FORMAT_HTML
+    $message['headers']['Content-Type'] !== MailContentTypeHeader::TextHtml->value
   ) {
     return;
   }
