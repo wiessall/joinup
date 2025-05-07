@@ -160,7 +160,7 @@ trait GroupTrait {
   public function isModerated(): bool {
     if ($this instanceof Solution) {
       $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
-      if($meta_entity instanceof MetaEntityInterface) {
+      if ($meta_entity instanceof MetaEntityInterface) {
         return (bool) $meta_entity->get('group_moderation')->value;
       }
       return TRUE;
