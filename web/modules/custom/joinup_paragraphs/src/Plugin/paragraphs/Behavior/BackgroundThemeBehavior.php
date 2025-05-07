@@ -40,6 +40,7 @@ class BackgroundThemeBehavior extends ParagraphsBehaviorBase {
         '' => $this->t('None'),
         'light' => $this->t('Light grey'),
         'secondary' => $this->t('Light blue'),
+        'dark-blue' => $this->t('Dark blue'),
       ],
       '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'background_theme'),
     ];
