@@ -191,21 +191,22 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
    */
   public static function allowedTypes(): array {
     return [
-      'joinup:add_member' => new TranslatableMarkup('Add member'),
-      'joinup:invite_member' => new TranslatableMarkup('Invite Member'),
       'joinup:add_announcement' => new TranslatableMarkup('Add announcement'),
       'joinup:add_content' => new TranslatableMarkup('Add content'),
+      'joinup:add_member' => new TranslatableMarkup('Add member'),
+      'joinup:add_role' => new TranslatableMarkup('Add role'),
       'joinup:approve_the_pending_membership' => new TranslatableMarkup('Approve the pending membership'),
       'joinup:block_membership' => new TranslatableMarkup('Block membership'),
-      'joinup:unblock_membership' => new TranslatableMarkup('Unblock membership'),
       'joinup:deleted_membership' => new TranslatableMarkup('Deleted membership'),
-      'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
-      'joinup:add_role' => new TranslatableMarkup('Add role'),
-      'joinup:remove_role' => new TranslatableMarkup('Remove role'),
-      'joinup:undefined' => new TranslatableMarkup('Undefined'),
-      'joinup:flag_interoperable' => new TranslatableMarkup('Flag interoperable'),
-      'joinup:unflag_interoperable' => new TranslatableMarkup('Unflag interoperable'),
       'joinup:delete_file' => new TranslatableMarkup('File delete'),
+      'joinup:flag_interoperable' => new TranslatableMarkup('Flag interoperable'),
+      'joinup:invite_member' => new TranslatableMarkup('Invite Member'),
+      'joinup:remove_role' => new TranslatableMarkup('Remove role'),
+      'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
+      'joinup:unblock_membership' => new TranslatableMarkup('Unblock membership'),
+      'joinup:undefined' => new TranslatableMarkup('Undefined'),
+      'joinup:unflag_interoperable' => new TranslatableMarkup('Unflag interoperable'),
+
     ];
   }
 
