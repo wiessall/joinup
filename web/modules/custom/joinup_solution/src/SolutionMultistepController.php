@@ -16,6 +16,9 @@ class SolutionMultistepController extends MultistepController {
    */
   public function rebuildForm(array &$form): void {
     parent::rebuildForm($form);
+    if (isset($form['actions']['back_button'])) {
+      $form['actions']['back_button']['#weight'] = -15;
+    }
     if ($this->stepSettings->group_name !== 'group_confirmation') {
       if (isset($form['actions']['delete'])) {
         $form['actions']['delete']['#access'] = FALSE;
