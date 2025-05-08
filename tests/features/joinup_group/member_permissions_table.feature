@@ -55,7 +55,6 @@ Feature: Group member permissions table
 
     # Collection. Content creation: authors and facilitators. Moderated.
     And I am on the members page of "Applied astrology"
-    Then break
     When I click "Member permissions"
     Then the "member permissions" table should be:
       | Permission                                  | Member | Author | Facilitator | Owner |

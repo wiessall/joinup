@@ -11,6 +11,7 @@ Feature: Solution homepage
       | title                        | abstract                              | description                           | logo     | status | related by type | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png |        | yes             | Business      | E-inclusion |
       | Security audit tools         | Automated test of security            | Automated test of security            | logo.png |        | yes             | Business      | E-inclusion |
+    And the "list_related_entities" setting of the "Information sharing protocol" solution is set to "1"
     And release content:
       | title                | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
       | IS protocol paper    | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
