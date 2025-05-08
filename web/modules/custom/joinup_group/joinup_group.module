@@ -40,6 +40,7 @@ use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_group\Plugin\Field\SharedInFieldItemList;
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -50,7 +51,6 @@ use Drupal\og\OgAccess;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
@@ -1095,7 +1095,7 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     ];
 
     // Send as HTML.
-    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
   }
 }
 
