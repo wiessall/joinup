@@ -13,27 +13,27 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
       | title             | content_creation | group_moderation |
-      | CC pre collection | members          | yes        |
+      | CC pre collection | members          | yes              |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And document content:
-      | title                               | author         | field_paragraphs_body | document type | collection        | field_state      | abstract |
+      | title                               | author         | field_paragraphs_body | document type | collection        | field_state      | abstract | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | body                  | Document      | CC pre collection | draft            | abstract |
-      | CC notify pre propose               | CC member      | body                  | Document      | CC pre collection | draft            | abstract |
-      | CC notify pre request changes       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
-      | CC notify pre report                | CC member      | body                  | Document      | CC pre collection | published        | abstract |
-      | CC notify pre request deletion      | CC member      | body                  | Document      | CC pre collection | published        | abstract |
-      | CC notify pre propose from reported | CC member      | body                  | Document      | CC pre collection | needs_update     | abstract |
-      | CC notify pre approve proposed      | CC member      | body                  | Document      | CC pre collection | proposed         | abstract |
-      | CC notify pre reject deletion       | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract |
-      | CC notify pre delete                | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract |
-      | CC notify published to delete       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
-      | CC notify published to revise       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
+      | CC notify pre publish               | CC facilitator | body                  | Document      | CC pre collection | draft            | abstract | now -2 day |
+      | CC notify pre propose               | CC member      | body                  | Document      | CC pre collection | draft            | abstract | now -2 day |
+      | CC notify pre request changes       | CC member      | body                  | Document      | CC pre collection | published        | abstract | now -2 day |
+      | CC notify pre report                | CC member      | body                  | Document      | CC pre collection | published        | abstract | now -2 day |
+      | CC notify pre request deletion      | CC member      | body                  | Document      | CC pre collection | published        | abstract | now -2 day |
+      | CC notify pre propose from reported | CC member      | body                  | Document      | CC pre collection | needs_update     | abstract | now -2 day |
+      | CC notify pre approve proposed      | CC member      | body                  | Document      | CC pre collection | proposed         | abstract | now -2 day |
+      | CC notify pre reject deletion       | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract | now -2 day |
+      | CC notify pre delete                | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract | now -2 day |
+      | CC notify published to delete       | CC member      | body                  | Document      | CC pre collection | published        | abstract | now -2 day |
+      | CC notify published to revise       | CC member      | body                  | Document      | CC pre collection | published        | abstract | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"

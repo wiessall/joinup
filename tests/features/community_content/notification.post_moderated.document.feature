@@ -20,13 +20,13 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC collection | CC facilitator | facilitator |
       | CC collection | CC member      | <roles>     |
     And document content:
-      | title                                | author    | abstract | field_paragraphs_body | document type | collection    | field_state  |
-      | CC notify post publish               | CC member | abstract | body                  | Document      | CC collection | draft        |
-      | CC notify post request changes       | CC member | abstract | body                  | Document      | CC collection | published    |
-      | CC notify post report                | CC member | abstract | body                  | Document      | CC collection | published    |
-      | CC notify post propose from reported | CC member | abstract | body                  | Document      | CC collection | needs_update |
-      | CC notify post approve proposed      | CC member | abstract | body                  | Document      | CC collection | proposed     |
-      | CC notify post delete                | CC member | abstract | body                  | Document      | CC collection | published    |
+      | title                                | author    | abstract | field_paragraphs_body | document type | collection    | field_state  | created    |
+      | CC notify post publish               | CC member | abstract | body                  | Document      | CC collection | draft        | now -2 day |
+      | CC notify post request changes       | CC member | abstract | body                  | Document      | CC collection | published    | now -2 day |
+      | CC notify post report                | CC member | abstract | body                  | Document      | CC collection | published    | now -2 day |
+      | CC notify post propose from reported | CC member | abstract | body                  | Document      | CC collection | needs_update | now -2 day |
+      | CC notify post approve proposed      | CC member | abstract | body                  | Document      | CC collection | proposed     | now -2 day |
+      | CC notify post delete                | CC member | abstract | body                  | Document      | CC collection | published    | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
