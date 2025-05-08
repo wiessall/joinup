@@ -191,7 +191,7 @@ Feature: Collection membership administration
     Given custom_page content:
       | title                 | collection        | state     |
       | Medical diagnosis CoC | Medical diagnosis | published |
-    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" for entity type "custom page"
     Given I am logged in as "Lisa Cuddy"
     When I am on the members page of "Medical diagnosis"
     And I check the box "Update the member Ben Dover"
@@ -440,7 +440,7 @@ Feature: Collection membership administration
     Given custom_page content:
       | title                 | collection        |
       | Medical diagnosis CoC | Medical diagnosis |
-    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+    And the "Code of Conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" for entity type "custom page"
 
     When I am logged in as "Lisa Cuddy"
     And I go to the members page of "Medical diagnosis"

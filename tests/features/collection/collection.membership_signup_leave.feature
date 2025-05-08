@@ -25,9 +25,9 @@ Feature: Joining and leaving collections through the web interface
       | collection      | user              | roles |
       | Open collection | Collection author | owner |
       | Open collection | Stewe Griffin     |       |
-    And the "Code of Conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
-    And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
-    And the "Code of Conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
+    And the "Code of Conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" for entity type "custom page"
+    And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" for entity type "custom page"
+    And the "Code of Conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" for entity type "custom page"
 
   @javascript
   Scenario Outline: As a user I can join collections without published Code of Conduct, and are also able to leave it

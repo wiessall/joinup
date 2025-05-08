@@ -25,7 +25,7 @@ Feature: Joining a collection as an anonymous user
     And custom_page content:
       | title                 | collection     |
       | CoC of CoC collection | CoC collection |
-    And the "Code of Conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
+    And the "Code of Conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" for entity type "custom page"
 
   Scenario: Joining collections without JavaScript
     Given the following legal document version:
