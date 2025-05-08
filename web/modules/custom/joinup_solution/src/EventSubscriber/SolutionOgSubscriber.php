@@ -7,6 +7,7 @@ namespace Drupal\joinup_solution\EventSubscriber;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
+use Drupal\og\GroupPermission;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -46,6 +47,10 @@ class SolutionOgSubscriber implements EventSubscriberInterface {
         'operation' => 'share',
         'entity type' => 'node',
         'bundle' => 'solution',
+      ]),
+      new GroupPermission([
+        'name' => 'bypass node creation limit',
+        'title' => $this->t('Bypass node creation limit'),
       ]),
     ]);
   }
