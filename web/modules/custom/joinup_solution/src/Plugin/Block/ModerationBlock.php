@@ -62,7 +62,7 @@ class ModerationBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $allowedValues = $groupModeration->getSettings();
         $label = $groupModerationValue ? $allowedValues['on_label'] : $allowedValues['off_label'];
         $build['group_moderation'] = [
-          '#markup' => $this->t('@value', ['@value' => $label]),
+          '#markup' => $this->t('<b>Only facilitators and authors can create content. </b><br> @value', ['@value' => $label]),
         ];
       }
     }
