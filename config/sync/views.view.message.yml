@@ -416,7 +416,7 @@ display:
         options:
           perm: 'overview messages'
       cache:
-        type: none
+        type: tag
         options: {  }
       empty:
         area:
@@ -555,7 +555,10 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: 0
       contexts:

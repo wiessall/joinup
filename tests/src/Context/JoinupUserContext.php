@@ -166,6 +166,27 @@ class JoinupUserContext extends RawDrupalContext {
       'blocked' => 0,
       'active' => 1,
     ]);
+
+    $date_fields = [
+      'login',
+      'created',
+      'access',
+    ];
+    foreach ($date_fields as $field) {
+      if (property_exists($user, $field) && !empty($user->{$field})) {
+        // If the entry is not numeric, then it means that the scenario is
+        // using a human readable version of the timestamp.
+        // Example: Sun, 01 Dec 2019 13:00:00 +0100.
+        // This will allow dynamic tests as well. `strtotime` will also be
+        // able to receive entries like "1 day ago" or "+1 month".
+        if (!is_numeric($user->{$field})) {
+          // The strtotime() PHP function is using the default timezone when
+          // doing the conversion. But we want to stick to UTC in order
+          // to avoid timezone and DST issue.
+          $user->{$field} = date('U', strtotime($user->{$field}));
+        }
+      }
+    }
   }
 
   /**
@@ -215,6 +236,20 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the user with the given name exist.
+   *
+   * @param string $name
+   *   The user name.
+   *
+   * @Then the :name user exist
+   */
+  public function userExists(string $name): void {
+    if (!\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
+      throw new ExpectationFailedException("The user $name exists but it should not.");
+    }
+  }
+
+  /**
    * Fills uid of user with the provided name in the selected field.
    *
    * @param string $username
@@ -228,6 +263,18 @@ class JoinupUserContext extends RawDrupalContext {
     $user = $this->getUserByName($username);
 
     $this->getSession()->getPage()->fillField($field, $user->id());
+  }
+
+  /**
+   * Resets the timestamp to 0 for purge_users_notifications in the database.
+   *
+   * @Given I reset the purge users notifications timestamp
+   */
+  public function setPurgeUsersNotificationsTimestamp(): void {
+    $connection = \Drupal::database();
+    $connection->update('purge_users_notifications')
+      ->fields(['timestamp' => 0])
+      ->execute();
   }
 
   /**
