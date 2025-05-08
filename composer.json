@@ -428,6 +428,9 @@
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
+            "drupal/paragraphs": {
+                "Patch paragraphs to duplicate correctly nested paragraphs (remove when using Drupal 11.2). @see https://www.drupal.org/i/3510842": "resources/patch/php/drupal/paragraphs/3510842.patch"
+            },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
