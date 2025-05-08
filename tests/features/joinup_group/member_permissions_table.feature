@@ -23,13 +23,15 @@ Feature: Group member permissions table
       | Creative uncertainty                        | registered users         | yes              |
       | Woolly thinking                             | registered users         | no               |
     Given solution content:
-      | title                         | content_creation         |
-      | Applied anthropics            | facilitators and authors |
-      | Extreme horticulture          | facilitators and authors |
-      | Prehumous morbid bibliomancy  | registered users         |
-      | Posthumous morbid bibliomancy | registered users         |
+      | title                         |
+      | Applied anthropics            |
+      | Extreme horticulture          |
+      | Prehumous morbid bibliomancy  |
+      | Posthumous morbid bibliomancy |
     And the "group_moderation" setting of the "Extreme horticulture" solution is set to "no"
     And the "group_moderation" setting of the "Posthumous morbid bibliomancy" solution is set to "no"
+    And the "content_creation" setting of the "Prehumous morbid bibliomancy" solution is set to "registered users"
+    And the "content_creation" setting of the "Posthumous morbid bibliomancy" solution is set to "registered users"
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |
@@ -53,6 +55,7 @@ Feature: Group member permissions table
 
     # Collection. Content creation: authors and facilitators. Moderated.
     And I am on the members page of "Applied astrology"
+    Then break
     When I click "Member permissions"
     Then the "member permissions" table should be:
       | Permission                                  | Member | Author | Facilitator | Owner |

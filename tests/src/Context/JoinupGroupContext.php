@@ -12,6 +12,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
+use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -418,7 +419,7 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @Given the :config setting of the :collectionLabel :group is unset
    * @Given the :config setting of the :collectionLabel :group is set to :value
-   * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
+   * @Given the :config setting of the :collectionLabel :group is set to :value for entity type :entityTypeId
    */
   public function givenCollectionSetting(
     string $config,
@@ -433,6 +434,10 @@ class JoinupGroupContext extends RawDrupalContext {
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
     $fieldMapping = [
       'group_moderation' => ['yes' => 1, 'no' => 0],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
     ];
 
     try {
