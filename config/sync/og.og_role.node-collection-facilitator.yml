@@ -19,6 +19,7 @@ permissions:
   - 'administer comments'
   - 'approve and deny subscription'
   - 'bypass code of conduct'
+  - 'bypass node creation limit'
   - 'create contact_information content'
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
