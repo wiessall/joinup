@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.body
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
@@ -1381,26 +1380,6 @@ third_party_settings:
                 format: content_editor
             weight: 0
             additional: {  }
-          d62e710e-0fee-4640-9ab3-0c01f58fa8a1:
-            uuid: d62e710e-0fee-4640-9ab3-0c01f58fa8a1
-            region: content
-            configuration:
-              id: 'field_block:node:solution:content_creation'
-              label: 'Content creation'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: list_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 1
-            additional: {  }
           55d7dc8d-0e2c-4c28-9d60-64ed2753acb7:
             uuid: 55d7dc8d-0e2c-4c28-9d60-64ed2753acb7
             region: content
@@ -1522,7 +1501,6 @@ hidden:
   abstract: true
   collections: true
   contact: true
-  content_creation: true
   description: true
   documentation: true
   download_total: true

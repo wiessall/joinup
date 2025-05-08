@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.body
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
@@ -32,7 +31,6 @@ dependencies:
   module:
     - field_group
     - layout_builder
-    - options
     - template_suggestion
     - text
     - user
@@ -121,13 +119,6 @@ content:
       link: false
     third_party_settings: {  }
     weight: 7
-    region: content
-  content_creation:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 8
     region: content
   description:
     type: text_default
