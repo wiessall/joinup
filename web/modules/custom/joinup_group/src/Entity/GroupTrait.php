@@ -182,7 +182,12 @@ trait GroupTrait {
       }
       return ContentCreationOptions::FACILITATORS_AND_AUTHORS;
     }
-    return ContentCreationOptions::MEMBERS;
+    $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
+    if (is_null($contentCreators)) {
+      $loggerFactory = \Drupal::service('logger.factory');
+      $loggerFactory->get('joinup_group')->warning('Invalid content creators');
+    }
+    return $contentCreators;
   }
 
   /**
