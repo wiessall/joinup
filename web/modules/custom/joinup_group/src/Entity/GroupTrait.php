@@ -173,13 +173,10 @@ trait GroupTrait {
    */
   public function getContentCreators(): ?string {
     $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
-    $contentCreators = $meta_entity->get('group_moderation')->value;
-    if (is_null($contentCreators)) {
-      $loggerFactory = \Drupal::service('logger.factory');
-      $loggerFactory->get('joinup_group')->warning('Invalid content creators');
+    if ($meta_entity instanceof MetaEntityInterface) {
+      return $meta_entity->get('group_moderation')->value;
     }
-
-    return $contentCreators;
+    return "facilitators and authors";
   }
 
   /**
