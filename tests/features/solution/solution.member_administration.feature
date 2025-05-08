@@ -13,9 +13,7 @@ Feature: Solution membership administration
     And solution content:
       | title            |
       | The Missing Sons |
-    And create solution meta entities:
-      | entity_title     | group_moderation |
-      | The Missing Sons | no               |
+    And the "group_moderation" setting of the "The Missing Sons" solution is set to "no"
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |

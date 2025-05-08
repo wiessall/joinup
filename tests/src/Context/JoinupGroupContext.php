@@ -431,6 +431,9 @@ class JoinupGroupContext extends RawDrupalContext {
     $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
     Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
+    $fieldMapping = [
+      'group_moderation' => ['yes' => 1, 'no' => 0],
+    ];
 
     try {
       $groupEntity->getSetting($fieldName);
@@ -448,6 +451,10 @@ class JoinupGroupContext extends RawDrupalContext {
       $newValue = is_string($entityTypeId)
         ? static::getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $value)
         : $value;
+
+      if(isset($fieldMapping[$fieldName][$newValue])) {
+        $newValue = $fieldMapping[$fieldName][$newValue];
+      }
 
       MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
         ->set($fieldName, $newValue)

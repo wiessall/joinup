@@ -28,12 +28,8 @@ Feature: Group member permissions table
       | Extreme horticulture          | facilitators and authors |
       | Prehumous morbid bibliomancy  | registered users         |
       | Posthumous morbid bibliomancy | registered users         |
-    And create solution meta entities:
-      | entity_title                  | group_moderation |
-      | Applied anthropics            | yes              |
-      | Extreme horticulture          | no               |
-      | Prehumous morbid bibliomancy  | yes              |
-      | Posthumous morbid bibliomancy | no               |
+    And the "group_moderation" setting of the "Extreme horticulture" solution is set to "no"
+    And the "group_moderation" setting of the "Posthumous morbid bibliomancy" solution is set to "no"
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |
