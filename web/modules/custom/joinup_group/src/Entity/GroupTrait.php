@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
+use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -172,11 +173,16 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
-    $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
-    if ($meta_entity instanceof MetaEntityInterface) {
-      return $meta_entity->get('group_moderation')->value;
+    if ($this instanceof Solution) {
+      $meta_entity = \Drupal::getContainer()
+        ->get('meta_entity.repository')
+        ->getMetaEntityForEntity($this, 'solution_settings');
+      if ($meta_entity instanceof MetaEntityInterface) {
+        return $meta_entity->get('group_moderation')->value;
+      }
+      return ContentCreationOptions::FACILITATORS_AND_AUTHORS;
     }
-    return "facilitators and authors";
+    return ContentCreationOptions::MEMBERS;
   }
 
   /**
