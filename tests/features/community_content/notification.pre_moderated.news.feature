@@ -13,27 +13,27 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
       | title             | content_creation | group_moderation |
-      | CC pre collection | members          | yes        |
+      | CC pre collection | members          | yes              |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And news content:
-      | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      |
+      | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CCN pre publish               | CC facilitator | body                  | CCN pre publish               | CC pre collection | draft            | Some abstract |
-      | CCN pre propose               | CC member      | body                  | CCN pre propose               | CC pre collection | draft            | Some abstract |
-      | CCN pre request changes       | CC member      | body                  | CCN pre request changes       | CC pre collection | published        | Some abstract |
-      | CCN pre report                | CC member      | body                  | CCN pre report                | CC pre collection | published        | Some abstract |
-      | CCN pre request deletion      | CC member      | body                  | CCN pre request deletion      | CC pre collection | published        | Some abstract |
-      | CCN pre propose from reported | CC member      | body                  | CCN pre propose from reported | CC pre collection | needs_update     | Some abstract |
-      | CCN pre approve proposed      | CC member      | body                  | CCN pre approve proposed      | CC pre collection | proposed         | Some abstract |
-      | CCN pre reject deletion       | CC member      | body                  | CCN pre reject deletion       | CC pre collection | deletion_request | Some abstract |
-      | CCN pre delete                | CC member      | body                  | CCN pre delete                | CC pre collection | deletion_request | Some abstract |
-      | CCN published to delete       | CC member      | body                  | CCN pre delete                | CC pre collection | published        | Some abstract |
-      | CCN published to revise       | CC member      | body                  | CCN pre revise                | CC pre collection | published        | Some abstract |
+      | CCN pre publish               | CC facilitator | body                  | CCN pre publish               | CC pre collection | draft            | Some abstract | now -2 day |
+      | CCN pre propose               | CC member      | body                  | CCN pre propose               | CC pre collection | draft            | Some abstract | now -2 day |
+      | CCN pre request changes       | CC member      | body                  | CCN pre request changes       | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre report                | CC member      | body                  | CCN pre report                | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre request deletion      | CC member      | body                  | CCN pre request deletion      | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN pre propose from reported | CC member      | body                  | CCN pre propose from reported | CC pre collection | needs_update     | Some abstract | now -2 day |
+      | CCN pre approve proposed      | CC member      | body                  | CCN pre approve proposed      | CC pre collection | proposed         | Some abstract | now -2 day |
+      | CCN pre reject deletion       | CC member      | body                  | CCN pre reject deletion       | CC pre collection | deletion_request | Some abstract | now -2 day |
+      | CCN pre delete                | CC member      | body                  | CCN pre delete                | CC pre collection | deletion_request | Some abstract | now -2 day |
+      | CCN published to delete       | CC member      | body                  | CCN pre delete                | CC pre collection | published        | Some abstract | now -2 day |
+      | CCN published to revise       | CC member      | body                  | CCN pre revise                | CC pre collection | published        | Some abstract | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"

@@ -20,13 +20,13 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
     And event content:
-      | title                                | author    | abstract | field_paragraphs_body | location                       | collection         | field_state  |
-      | CC notify post publish               | CC member | abstract | body                  | Half Moon Street, London       | CC post collection | draft        |
-      | CC notify post request changes       | CC member | abstract | body                  | Quai d'Orleans, Paris          | CC post collection | published    |
-      | CC notify post report                | CC member | abstract | body                  | Rue du Mont Thabor, Paris      | CC post collection | published    |
-      | CC notify post propose from reported | CC member | abstract | body                  | Cort Adelers Gate, Oslo        | CC post collection | needs_update |
-      | CC notify post approve proposed      | CC member | abstract | body                  | Ferdinand Bolstraat, Amsterdam | CC post collection | proposed     |
-      | CC notify post delete                | CC member | abstract | body                  | Lychener Strasse, Berlin       | CC post collection | published    |
+      | title                                | author    | abstract | field_paragraphs_body | location                       | collection         | field_state  | created    |
+      | CC notify post publish               | CC member | abstract | body                  | Half Moon Street, London       | CC post collection | draft        | now -2 day |
+      | CC notify post request changes       | CC member | abstract | body                  | Quai d'Orleans, Paris          | CC post collection | published    | now -2 day |
+      | CC notify post report                | CC member | abstract | body                  | Rue du Mont Thabor, Paris      | CC post collection | published    | now -2 day |
+      | CC notify post propose from reported | CC member | abstract | body                  | Cort Adelers Gate, Oslo        | CC post collection | needs_update | now -2 day |
+      | CC notify post approve proposed      | CC member | abstract | body                  | Ferdinand Bolstraat, Amsterdam | CC post collection | proposed     | now -2 day |
+      | CC notify post delete                | CC member | abstract | body                  | Lychener Strasse, Berlin       | CC post collection | published    | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
