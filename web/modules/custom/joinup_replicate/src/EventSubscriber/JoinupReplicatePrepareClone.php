@@ -30,7 +30,6 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setToDraft', 3];
-    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptySharedInField', 2];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptyPublicationDate', 1];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setOwner'];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setRevisionLog'];
@@ -54,25 +53,6 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
       return;
     }
     $clone->setWorkflowState('draft');
-  }
-
-  /**
-   * Empties the shared in field if needed.
-   *
-   * @param \Drupal\replicate\Events\ReplicateAlterEvent $event
-   *   The event fired by Replicator.
-   */
-  public function emptySharedInField(ReplicateAlterEvent $event): void {
-    $original = $event->getOriginal();
-    if (
-      $original instanceof GroupContentInterface &&
-      $original->getSharedInField() &&
-      !$original->getSharedInField()->isEmpty()
-    ) {
-      $clone = $event->getEntity();
-      assert($clone instanceof GroupContentInterface);
-      $clone->getSharedInField()?->delete();
-    }
   }
 
   /**

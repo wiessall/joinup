@@ -306,7 +306,7 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: none
+        type: tag
         options: {  }
       empty: {  }
       sorts:
@@ -468,7 +468,10 @@ display:
       css_class: view-glossary
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:

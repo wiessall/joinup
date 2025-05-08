@@ -24,3 +24,7 @@ services:
   Drupal\joinup_discussion\EventSubscriber\DiscussionSearchApiStatusSubscriber: { }
 
   Drupal\joinup_discussion\EventSubscriber\SharedContentForDiscussionsSubscriber: { }
+
+  joinup_discussion.group_inspector:
+    class: Drupal\joinup_discussion\JoinupDiscussionGroupInspector
+  Drupal\joinup_discussion\JoinupDiscussionGroupInspectorInterface: '@joinup_discussion.group_inspector'

@@ -2770,6 +2770,39 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks all submission buttons for element.
+   *
+   * @Then all submit buttons inside the :selector element should be :state
+   */
+  public function allSubmitButtonsInsideSelectorShouldBeInState($selector, $state): void {
+    $page = $this->getSession()->getPage();
+    $container = $page->find('css', $selector);
+
+    if (!$container) {
+      throw new \Exception("No element found with selector: $selector");
+    }
+
+    $inputs = $container->findAll('css', 'input[type="submit"]');
+
+    if (empty($inputs)) {
+      throw new \Exception("No submit inputs found inside the element: $selector");
+    }
+
+    $shouldBeDisabled = ($state === 'disabled');
+
+    foreach ($inputs as $input) {
+      $isDisabled = $input->hasAttribute('disabled');
+      $label = $input->getAttribute('value') ?: '(no value)';
+      if ($shouldBeDisabled && !$isDisabled) {
+        throw new \Exception("Expected submit input '$label' to be disabled, but it was enabled.");
+      }
+      if (!$shouldBeDisabled && $isDisabled) {
+        throw new \Exception("Expected submit input '$label' to be enabled, but it was disabled.");
+      }
+    }
+  }
+
+  /**
    * Checks that there are exactly the given number of elements on the page.
    *
    * @param string $count
