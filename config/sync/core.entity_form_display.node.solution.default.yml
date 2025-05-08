@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.body
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
@@ -169,12 +168,6 @@ content:
       collapsed: false
       revision: false
       removed_reference: optional
-    third_party_settings: {  }
-  content_creation:
-    type: options_select
-    weight: 7
-    region: content
-    settings: {  }
     third_party_settings: {  }
   description:
     type: text_textarea

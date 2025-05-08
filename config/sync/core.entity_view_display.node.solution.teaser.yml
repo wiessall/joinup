@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.body
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
@@ -94,7 +93,6 @@ hidden:
   abstract: true
   collections: true
   contact: true
-  content_creation: true
   description: true
   documentation: true
   download_total: true
