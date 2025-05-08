@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use function PHPUnit\Framework\assertArrayHasKey;
 
@@ -94,31 +93,6 @@ class MetaEntityContext extends RawDrupalContext {
     $entity = $this->getEntityByLabel($related_entity_type, $related_entity);
 
     return \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, $bundle);
-  }
-
-  /**
-   * Creates meta entity for entity.
-   *
-   * @param string $type
-   *   Type of entity.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   Table with entity_title and group_moderation headers.
-   *
-   * @Given create :type meta entities:
-   */
-  public function createMetaEntities(string $type, TableNode $table): void {
-    foreach ($table->getHash() as $nodeHash) {
-      $meta_entity_object = (object) $nodeHash;
-      $entity = $this->getEntityByLabel('node', $meta_entity_object->entity_title);
-      $moderation = ['yes' => 1, 'no' => 0];
-      $meta_entity = MetaEntity::create([
-        'type' => $type . '_settings',
-        'label' => $entity->label(),
-        'target' => $entity,
-        'group_moderation' => $moderation[$meta_entity_object->group_moderation],
-      ]);
-      $meta_entity->save();
-    }
   }
 
   /**

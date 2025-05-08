@@ -91,9 +91,6 @@ Feature: Content archival.
       # request is not available in a post moderation workflow.
       | title      |
       | Some group |
-    And create <group type> meta entities:
-      | entity_title | group_moderation |
-      | Some group   | yes              |
     Given discussion content:
       | title           | <group type> | body | content | headline        |
       | Test discussion | Some group   | Test | Test    | Test discussion |
@@ -118,9 +115,6 @@ Feature: Content archival.
       # request is not available in a post moderation workflow.
       | title      |
       | Some group |
-    And create <group type> meta entities:
-      | entity_title | group_moderation |
-      | Some group   | yes              |
     Given <type> content:
       | title       | <group type> | abstract | content | headline    | field_paragraphs_body |
       | Test <type> | Some group   | Test     | Test    | Test <type> | Test paragraph        |

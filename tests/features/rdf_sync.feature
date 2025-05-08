@@ -40,9 +40,7 @@ Feature: RDF synchronization of contents.
     Given solution content:
       | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | documentation | content_creation | keywords         | landing page                    | language | metrics page                    | topic                    | related solutions | solution type                      | spatial coverage | status    | featured |
       | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | EU and European Policies |                   | Networking Infrastructure Enablers | Atlantis         | Completed | no       |
-    And create solution meta entities:
-      | entity_title     | group_moderation |
-      | Syncing solution | no               |
+    And the "group_moderation" setting of the "Syncing solution" solution is set to "no"
     And release content:
       | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
       | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | food     | Atlantic |

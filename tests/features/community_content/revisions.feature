@@ -8,9 +8,7 @@ Feature:
     Given <group type> content:
       | title        | description                               |
       | Hellow world | Because I do not know how to spell Hello. |
-    And create <group type> meta entities:
-      | entity_title | group_moderation |
-      | Hellow world | <moderation>     |
+    And the "group_moderation" setting of the "Hellow world" <group type> is set to <moderation>
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -204,9 +202,7 @@ Feature:
     Given <group type> content:
       | title        | description                               |
       | Hellow world | Because I do not know how to spell Hello. |
-    And create <group type> meta entities:
-      | entity_title | group_moderation |
-      | Hellow world | <moderation>     |
+    And the "group_moderation" setting of the "Hellow world" <group type> is set to <moderation>
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |

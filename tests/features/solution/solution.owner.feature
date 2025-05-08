@@ -11,9 +11,7 @@ Feature:
     And solution content:
       | title           | content_creation   | collection        |
       | Author solution | <content creation> | Author collection |
-    And create "solution" meta entities:
-      | entity_title    | group_moderation |
-      | Author solution | <moderation>     |
+    And the "group_moderation" setting of the "Author solution" solution is set to <moderation>
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
     Then I should see the following links:
