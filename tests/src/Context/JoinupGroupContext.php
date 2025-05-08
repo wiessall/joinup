@@ -452,7 +452,7 @@ class JoinupGroupContext extends RawDrupalContext {
         ? static::getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $value)
         : $value;
 
-      if(isset($fieldMapping[$fieldName][$newValue])) {
+      if (isset($fieldMapping[$fieldName][$newValue])) {
         $newValue = $fieldMapping[$fieldName][$newValue];
       }
 
