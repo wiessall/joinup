@@ -172,8 +172,8 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
-    $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
-
+    $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
+    $contentCreators = $meta_entity->get('group_moderation')->value;
     if (is_null($contentCreators)) {
       $loggerFactory = \Drupal::service('logger.factory');
       $loggerFactory->get('joinup_group')->warning('Invalid content creators');
