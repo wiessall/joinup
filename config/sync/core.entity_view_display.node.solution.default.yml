@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.solution.field_topic
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
@@ -1538,7 +1537,6 @@ hidden:
   landing_page: true
   langcode: true
   language: true
-  list_related_entities: true
   listing_content: true
   logo: true
   members: true
