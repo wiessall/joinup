@@ -8,6 +8,7 @@ dependencies:
     - better_exposed_filters
     - search_api
     - search_api_spellcheck
+    - user
     - views_block_area
 id: search_oss_catalogue
 label: 'Search oss catalogue'
@@ -149,8 +150,9 @@ display:
                   is_secondary: false
                   hide_label: false
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -487,7 +489,10 @@ display:
           search_api_spellcheck_hide_on_result: true
           search_api_spellcheck_collate: true
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -496,6 +501,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
         - 'config:views.view.search_oss_catalogue'
@@ -539,6 +545,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
         - 'search_api_list:oss_catalogue'
