@@ -58,11 +58,11 @@
     }
   }
   &--dark-blue {
+    color: $white;
+    background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
     &::before {
       background-color: $joinup-dark-blue;
     }
-    background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
-    color: $white;
     a {
       &:link,
       &:visited {
