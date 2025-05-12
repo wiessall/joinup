@@ -8,6 +8,7 @@ dependencies:
     - better_exposed_filters
     - search_api
     - search_api_spellcheck
+    - user
     - views_block_area
 _core:
   default_config_hash: IZ_1De9xX5-8975-JeHxZJ0f_58o9R3nM9pxnxboN_k
@@ -165,8 +166,9 @@ display:
                   is_secondary: false
                   hide_label: false
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_none
         options: {  }
@@ -502,6 +504,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
@@ -530,6 +533,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'search_api_list:published'

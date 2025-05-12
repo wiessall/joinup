@@ -8,6 +8,7 @@ dependencies:
   module:
     - joinup_tiles
     - search_api
+    - user
 id: collections
 label: Collections
 module: views
@@ -400,8 +401,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -511,6 +513,7 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'config:views.view.collections'
@@ -540,6 +543,7 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:facets.facet.collection_my_content'
         - 'config:search_api.index.published'
