@@ -5,7 +5,6 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - options
     - search_api
 id: solutions_meta_entity
 label: 'Solutions w/meta entity'
@@ -327,10 +326,10 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -513,3 +512,4 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'search_api_list:published'
