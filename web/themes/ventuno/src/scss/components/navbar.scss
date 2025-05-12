@@ -64,6 +64,7 @@
   .nav-link {
     color: $white;
     font-weight: $font-weight-medium;
+    &.dropdown-toggle,
     &--underline {
       vertical-align: baseline;
       &.is-active,
@@ -98,7 +99,6 @@
     background-color: transparent; // Dropdown resets
     box-shadow: none;
     &.show,
-    &:focus,
     &:hover,
     &.is-active,
     &:has(+ ul a.is-active) {
@@ -127,7 +127,7 @@
       }
     }
     @include media-breakpoint-up(lg) {
-      height: 78px;
+      height: 80px;
       padding-top: $spacer * 1.5; // 24px
       padding-bottom: $spacer * 1.5; // 24px
     }
