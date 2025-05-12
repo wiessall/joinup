@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - user.role.authenticated
     - webform.webform.assessment
   module:
     - node
+    - user
     - webform
     - webform_views
 id: assessment_user_submissions
@@ -606,8 +608,10 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            authenticated: authenticated
       cache:
         type: tag
         options: {  }
@@ -834,6 +838,7 @@ display:
         - url
         - url.query_args
         - user
+        - user.roles
       tags: {  }
   embed_1:
     id: embed_1
@@ -850,4 +855,5 @@ display:
         - url
         - url.query_args
         - user
+        - user.roles
       tags: {  }
