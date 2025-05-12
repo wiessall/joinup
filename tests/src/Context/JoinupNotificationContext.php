@@ -11,8 +11,8 @@ use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\message\Entity\MessageTemplate;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\DomCrawler\Crawler;
@@ -173,11 +173,12 @@ class JoinupNotificationContext extends RawDrupalContext {
     // If the previous assertion passed, the $mail variable contains the correct
     // mail.
     /** @var array $mail */
+    $expected = $html ? MailContentTypeHeader::TextHtml : MailContentTypeHeader::TextPlain;
     if ($html) {
-      Assert::assertStringContainsString(SymfonyMailer::FORMAT_HTML, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
+      Assert::assertStringContainsString($expected->value, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
     }
     else {
-      Assert::assertStringContainsString(SymfonyMailer::FORMAT_PLAIN, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
+      Assert::assertStringContainsString($expected->value, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
     }
   }
 

@@ -75,6 +75,8 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
       return;
     }
 
+    // Remove not supported nested values.
+    $value = $this->normalizeToTwoLevelArray($value);
     // Remove empty term names.
     $value = NestedArray::filter($value);
 
@@ -122,6 +124,35 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     }
 
     $value = $resolved;
+  }
+
+  /**
+   * Limits a deeply nested array to 2 levels: [key => [string, string...]].
+   *
+   * @param array $input
+   *   Array required cleaning.
+   *
+   * @return array
+   *   Normalised array.
+   */
+  private function normalizeToTwoLevelArray(array $input): array {
+    $output = [];
+    foreach ($input as $langcode => $items) {
+      if (!is_array($items)) {
+        continue;
+      }
+
+      $output[$langcode] = [];
+      foreach ($items as $item) {
+        if (!is_string($item) || empty($item)) {
+          continue;
+        }
+
+        $output[$langcode][] = $item;
+      }
+    }
+
+    return $output;
   }
 
 }

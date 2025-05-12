@@ -20,13 +20,13 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
     And discussion content:
-      | title                                | author    | body | collection         | field_state  |
-      | CC notify post publish               | CC member | body | CC post collection | draft        |
-      | CC notify post request changes       | CC member | body | CC post collection | published    |
-      | CC notify post report                | CC member | body | CC post collection | published    |
-      | CC notify post propose from reported | CC member | body | CC post collection | needs_update |
-      | CC notify post approve proposed      | CC member | body | CC post collection | proposed     |
-      | CC notify post delete                | CC member | body | CC post collection | published    |
+      | title                                | author    | body | collection         | field_state  | created    |
+      | CC notify post publish               | CC member | body | CC post collection | draft        | now -2 day |
+      | CC notify post request changes       | CC member | body | CC post collection | published    | now -2 day |
+      | CC notify post report                | CC member | body | CC post collection | published    | now -2 day |
+      | CC notify post propose from reported | CC member | body | CC post collection | needs_update | now -2 day |
+      | CC notify post approve proposed      | CC member | body | CC post collection | proposed     | now -2 day |
+      | CC notify post delete                | CC member | body | CC post collection | published    | now -2 day |
 
     # Test 'create' operation.
     And I am logged in as "CC member"

@@ -1463,6 +1463,10 @@ display:
     display_plugin: embed
     position: 1
     display_options:
+      access:
+        type: perm
+        options:
+          perm: 'access content'
       style:
         type: table
         options:
@@ -1526,13 +1530,17 @@ display:
           separator: ''
           hide_empty: false
       defaults:
+        access: false
         style: false
         row: false
         fields: true
         filters: true
         filter_groups: true
       display_description: 'Display submissions.'
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1541,6 +1549,7 @@ display:
         - url
         - url.query_args
         - user
+        - user.permissions
       tags: {  }
   embed_manage:
     id: embed_manage

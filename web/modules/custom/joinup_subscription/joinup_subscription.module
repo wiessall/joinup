@@ -10,11 +10,11 @@ declare(strict_types=1);
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\field\FieldStorageConfigInterface;
+use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessage;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
 use Drupal\message\MessageInterface;
 use Drupal\message_notify\Plugin\Notifier\MessageNotifierInterface;
-use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 
 /**
@@ -131,7 +131,7 @@ function joinup_subscription_message_digest_aggregate_alter(array &$context, Use
  */
 function joinup_subscription_mail_alter(array &$message): void {
   if ($message['key'] === 'digest') {
-    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+    $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
     $notifier = $message['params']['notifier'] ?? NULL;
     if ($notifier instanceof MessageNotifierInterface) {
       $interval = $notifier->getPluginDefinition()['title'];
