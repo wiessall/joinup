@@ -497,7 +497,7 @@ display:
         type: tmgmt_job
         options: {  }
       cache:
-        type: none
+        type: tag
         options: {  }
       empty:
         area:
@@ -636,7 +636,10 @@ display:
       header: {  }
       footer: {  }
       rendering_language: '***LANGUAGE_entity_default***'
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
