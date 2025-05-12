@@ -9,6 +9,7 @@
   &:first-of-type:not(
       .paragraph--layout--light,
       .paragraph--layout--secondary,
+      .paragraph--layout--dark-blue,
       .lpb-layout,
       .banner
     ) {
@@ -18,7 +19,8 @@
     }
   }
   &--light,
-  &--secondary {
+  &--secondary,
+  &--dark-blue {
     position: relative;
     &::before {
       position: absolute;
@@ -53,6 +55,19 @@
   &--secondary {
     &::before {
       background-color: $secondary;
+    }
+  }
+  &--dark-blue {
+    &::before {
+      background-color: $joinup-dark-blue;
+    }
+    background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
+    color: $white;
+    a {
+      &:link,
+      &:visited {
+        color: $secondary-darker;
+      }
     }
   }
   & > .layout > .layout__region > .paragraph + .paragraph {
