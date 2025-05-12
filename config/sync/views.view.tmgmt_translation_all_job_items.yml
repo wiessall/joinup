@@ -659,7 +659,7 @@ display:
         type: tmgmt_job
         options: {  }
       cache:
-        type: none
+        type: tag
         options: {  }
       empty:
         area_text_custom:
@@ -977,7 +977,10 @@ display:
           entity_type: tmgmt_job_item
           plugin_id: tmgmt_job_item_legend
           empty: true
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:

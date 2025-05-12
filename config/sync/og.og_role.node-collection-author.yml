@@ -13,6 +13,7 @@ group_bundle: collection
 is_admin: null
 permissions:
   - 'access glossary data export'
+  - 'bypass node creation limit'
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'

@@ -357,8 +357,8 @@ Feature: Sharing content between collections
       | Secrets |
       | Gossip  |
     And <content type> content:
-      | title                 | collection |
-      | An unshareable secret | Secrets    |
+      | title                 | collection | changed   |
+      | An unshareable secret | Secrets    | <changed> |
     And users:
       | Username        | E-mail                |
       | Sanjica Sauvage | sanjisauv@example.com |
@@ -390,11 +390,12 @@ Feature: Sharing content between collections
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Gossip."
     And I should see the heading "Shared on"
+    And I should see "Last update: <last update>"
     And I should see the "Gossip" tile
 
     Examples:
-      | content type |
-      | event        |
-      | document     |
-      | discussion   |
-      | news         |
+      | content type | changed    | last update |
+      | event        | 2017-06-04 | 04/06/2017  |
+      | document     | 2018-06-04 | 04/06/2018  |
+      | discussion   | 2019-06-04 | 04/06/2019  |
+      | news         | 2020-06-04 | 04/06/2020  |
