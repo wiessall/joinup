@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.published
   module:
     - search_api
+    - user
 id: solutions_meta_entity
 label: 'Solutions w/meta entity'
 module: views
@@ -319,8 +320,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -478,13 +480,17 @@ display:
           empty: false
           content: "<div class=\"eif-counter\">\r\n  <span class=\"eif-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    matching solutions found\r\n  </span>\r\n</div>"
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'config:views.view.solutions_meta_entity'
@@ -510,6 +516,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
