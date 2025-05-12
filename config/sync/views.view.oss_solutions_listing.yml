@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.oss_catalogue
   module:
     - search_api
+    - user
 id: oss_solutions_listing
 label: 'OSS Solutions listing'
 module: views
@@ -93,8 +94,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_none
         options: {  }
@@ -297,12 +299,16 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
         - 'search_api_list:oss_catalogue'
@@ -353,6 +359,7 @@ display:
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
         - 'search_api_list:oss_catalogue'
@@ -375,6 +382,7 @@ display:
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.oss_catalogue'
         - 'search_api_list:oss_catalogue'

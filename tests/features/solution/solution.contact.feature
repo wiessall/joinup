@@ -43,7 +43,9 @@ Feature: Contact form for solution
     And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     # Delete contact info.
-    Given I go to the homepage of the "Six exclusion advantages" solution
+    # In ISAICP-9742, check if this step is needed or if it can be changed back
+    # to a page visit step.
+    Given I reload the page
     Then I should see the link "John Deleted"
     Given the "contact information" of "Six exclusion advantages" solution is changed to "John Revoked"
     And I delete the "John Deleted" "contact information"
@@ -103,4 +105,4 @@ Feature: Contact form for solution
       | Type of support: Technical                                         |
       | Message: This is reclamation test.                                 |
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains "logo.png" attachment
-    And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html"
+    And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html; charset=UTF-8; format=flowed"

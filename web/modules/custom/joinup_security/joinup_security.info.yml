@@ -1,0 +1,7 @@
+name: Joinup security
+description: Spam protection
+type: module
+package: Joinup
+core_version_requirement: "^10.4 || ^11"
+dependencies:
+  - joinup:joinup_group

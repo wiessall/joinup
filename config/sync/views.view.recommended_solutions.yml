@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.published
   module:
     - search_api
+    - user
 id: recommended_solutions
 label: 'Recommended solutions'
 module: views
@@ -126,8 +127,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_none
         options: {  }
@@ -287,10 +289,10 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
@@ -308,10 +310,10 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
