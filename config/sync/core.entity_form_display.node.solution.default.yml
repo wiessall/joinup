@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.solution.field_topic
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -246,7 +245,6 @@ hidden:
   field_topic: true
   landing_page: true
   langcode: true
-  listing_content: true
   logo: true
   metrics_page: true
   og_audience: true
