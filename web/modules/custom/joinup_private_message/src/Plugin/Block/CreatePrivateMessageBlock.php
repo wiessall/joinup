@@ -55,8 +55,7 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIf($account->hasPermission('use private messaging system'))
-      ->cachePerPermissions();
+    return AccessResult::allowedIfHasPermission($account, 'use private messaging system');
   }
 
   /**
