@@ -19,6 +19,7 @@ source:
     - release
     - solution
 traversable:
+  comment: {  }
   media:
     - collection_logo
     - discussion_logo
