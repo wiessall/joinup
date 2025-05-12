@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.solution.field_topic
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -160,7 +159,6 @@ hidden:
   langcode: true
   language: true
   links: true
-  listing_content: true
   members: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true

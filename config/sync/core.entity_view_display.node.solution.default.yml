@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.solution.field_topic
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -930,26 +929,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 1
             additional: {  }
-          9ce2a0b7-b4f4-4a26-b50e-3c31ed63ae2c:
-            uuid: 9ce2a0b7-b4f4-4a26-b50e-3c31ed63ae2c
-            region: content
-            configuration:
-              id: 'field_block:node:solution:listing_content'
-              label: 'Solution content'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: search_api_field
-                label: above
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 2
-            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -1515,7 +1494,6 @@ hidden:
   landing_page: true
   langcode: true
   language: true
-  listing_content: true
   logo: true
   members: true
   metrics_page: true
