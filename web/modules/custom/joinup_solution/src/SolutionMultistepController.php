@@ -25,7 +25,7 @@ class SolutionMultistepController extends MultistepController {
       }
       $form['field_state']['widget']['#options'] = array_intersect_key(
         $form['field_state']['widget']['#options'],
-        ['draft' => TRUE]
+        ['draft' => TRUE, 'draft_after_published' => TRUE]
       );
     }
   }
