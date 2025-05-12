@@ -89,8 +89,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'use private messaging system'
       cache:
         type: tag
         options: {  }
@@ -150,6 +151,7 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - user.permissions
       tags: {  }
   block_blocked_users:
     id: block_blocked_users
@@ -439,4 +441,5 @@ display:
         - 'languages:language_interface'
         - url
         - user
+        - user.permissions
       tags: {  }
