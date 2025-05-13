@@ -899,35 +899,26 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
-          61904816-a582-4f13-a69f-56e1a3cfb3e7:
-            uuid: 61904816-a582-4f13-a69f-56e1a3cfb3e7
+          16740c7b-5aa2-4776-a101-f7f7853eda27:
+            uuid: 16740c7b-5aa2-4776-a101-f7f7853eda27
             region: content
             configuration:
-              id: 'extra_field_block:node:solution:node_solution_listing_content_top'
-              label: 'Facet region: Solution content top'
+              id: 'field_block:node:solution:related_solution'
+              label: 'Solution settings reference'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                settings: {  }
-                third_party_settings: {  }
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: listing_content
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
-            additional: {  }
-          0bb387b8-9608-4c90-be5c-da153ee539c4:
-            uuid: 0bb387b8-9608-4c90-be5c-da153ee539c4
-            region: content
-            configuration:
-              id: 'extra_field_block:node:solution:node_solution_listing_content_inline_facets'
-              label: 'Facet region: Inline facets'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
