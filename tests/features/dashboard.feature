@@ -39,4 +39,5 @@ Feature: Dashboard
     Examples:
       | group type | Group type |
       | collection | Collection |
-      | solution   | Solution   |
+      # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+      #| solution   | Solution   |
