@@ -26,7 +26,12 @@ mode: listing_content
 content:
   listing_content:
     type: search_api_field
-    label: above
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  meta_entity_solution_settings_listing_content_top:
     settings: {  }
     third_party_settings: {  }
     weight: 0
@@ -41,7 +46,6 @@ hidden:
   landing_page: true
   list_related_entities: true
   meta_entity_solution_settings_listing_content_inline_facets: true
-  meta_entity_solution_settings_listing_content_top: true
   metadata_banner_disabled: true
   search_api_excerpt: true
   target: true

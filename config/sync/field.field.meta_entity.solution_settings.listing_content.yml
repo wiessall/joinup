@@ -29,7 +29,9 @@ default_value:
 default_value_callback: ''
 settings:
   index: published
-  facet_regions: {  }
+  facet_regions:
+    top: 'Solution content top'
+    inline_facets: 'Inline facets'
   view_modes:
     'entity:node':
       assessment_report: default
