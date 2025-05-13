@@ -6,3 +6,6 @@ services:
   github_feed.github_feed:
     class: Drupal\github_feed\GitHubFeed
   Drupal\github_feed\GitHubFeedInterface: '@github_feed.github_feed'
+
+  github_feed.lazy_builder:
+    class: Drupal\github_feed\GitHubFeedLazyBuilder
