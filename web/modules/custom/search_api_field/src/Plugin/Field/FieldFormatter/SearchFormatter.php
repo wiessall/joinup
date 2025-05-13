@@ -17,6 +17,7 @@ use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\Error;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\search_api\Query\QueryInterface;
@@ -87,7 +88,11 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     // Avoid infinite recursion when a search node is shown as a result.
-    if ($items->getEntity()->search_api_field_do_not_recurse) {
+    $entity = $items->getEntity();
+    if($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
+    if ($entity->search_api_field_do_not_recurse) {
       return [];
     }
 
@@ -135,6 +140,9 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
     $entity = $items->getEntity();
+    if($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
     $render += [
       '#entity_type' => $entity->getEntityTypeId(),
       '#bundle' => $entity->bundle(),
@@ -166,11 +174,14 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function getSearchQuery(array $settings, SearchItemInterface $item, int $element): QueryInterface {
     $field_definition = $this->fieldDefinition;
-
+    $entity = $item->getEntity();
+    if($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
     $options = [
       'limit' => !empty($settings['limit']) ? $settings['limit'] : 10,
       'offset' => !is_null($this->request->get('page')) ? $this->pagerManager->findPage($element) * (int) $settings['limit'] : 0,
-      'search_api_field entity' => $item->getEntity(),
+      'search_api_field entity' => $entity,
       'search_api_field item' => $item,
     ];
     $query = $this->getSearchApiIndex()->query($options);
@@ -209,9 +220,12 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
     $field_definition = $this->fieldDefinition;
-
+    $entity = $item->getEntity();
+    if($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
     $options = [
-      'search_api_field entity' => $item->getEntity(),
+      'search_api_field entity' => $entity,
       'search_api_field item' => $item,
       'search_api_field archived' => TRUE,
     ];
