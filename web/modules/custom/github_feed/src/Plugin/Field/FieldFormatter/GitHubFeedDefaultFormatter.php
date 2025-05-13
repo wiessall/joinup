@@ -10,6 +10,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\github_feed\GitHubFeedInterface;
+use Drupal\github_feed\GitHubFeedLazyBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -40,10 +41,10 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): GitHubFeedDefaultFormatter {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['label'],
@@ -57,93 +58,29 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
-    $element = [];
+    $cacheMaxAge = (int) $this->getFieldSetting('cache_max_age');
+    $elements = [];
     foreach ($items as $delta => $item) {
-      if (!filter_var($item->repository, FILTER_VALIDATE_URL)) {
-        continue;
-      }
-
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (int) $item->comment_num);
-      if ($fetchedItems === NULL) {
-        // Just show a generic failure message.
-        $element[$delta] = [
-          '#type' => 'container',
-          '#attributes' => [
-            'class' => ['github-feed-error'],
-          ],
-          'message' => [
-            '#markup' => $this->t('The feed is temporarily unavailable.'),
-          ],
-        ];
-
-        continue;
-      }
-
-      $element[$delta] = [
-        '#theme' => 'github_feed',
-        '#url' => $item->repository,
-        '#feed_type' => $item->type,
-        '#cache' => [
-          'max-age' => $this->getFieldSetting('cache_max_age'),
-        ],
+      $lazyBuilderArgs = [
+        $item->repository,
+        $item->type,
+        (int) $item->item_num,
+        (int) $item->comment_num,
+        $cacheMaxAge,
       ];
 
-      foreach ($fetchedItems as $fetchedItem) {
-        $element[$delta]['#items'][] = $this->getRenderableItem($item->type, $fetchedItem);
-      }
-    }
-
-    return $element;
-  }
-
-  /**
-   * Returns the render array of a single item.
-   *
-   * @param string $type
-   *   The fetched item type.
-   * @param array $fetchedItem
-   *   The fetched item.
-   *
-   * @return array
-   *   The renderable container.
-   */
-  public function getRenderableItem(string $type, array $fetchedItem): array {
-    $container = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['github-feed-item'],
-      ],
-    ];
-
-    $container[$type] = [
-      '#theme' => 'github_feed_' . $type,
-      '#item' => $fetchedItem,
-    ];
-
-    if (!empty($fetchedItem['comments'])) {
-      $comment_items = [];
-      foreach ($fetchedItem['comments'] as $comment) {
-        $comment_items[] = [
-          '#theme' => 'github_feed_comment',
-          '#item' => $comment,
-        ];
-      }
-      $container['comments'] = [
-        '#theme' => 'github_feed_comments',
-        '#attributes' => [
-          'class' => ['github-feed-comments'],
+      $elements[$delta] = [
+        '#lazy_builder' => [
+          'github_feed.lazy_builder:buildFeed',
+          $lazyBuilderArgs,
         ],
-        '#title' => [
-          '#markup' => $this->t('Comments'),
-        ],
-        '#comments' => [
-          '#theme' => 'item_list',
-          '#list_type' => 'ol',
-          '#items' => $comment_items,
-        ],
+        '#create_placeholder' => TRUE,
+        // This portion is render-cached.
+        '#cache' => GitHubFeedLazyBuilder::getCacheMetadata(...$lazyBuilderArgs),
       ];
     }
-    return $container;
+
+    return $elements;
   }
 
 }
