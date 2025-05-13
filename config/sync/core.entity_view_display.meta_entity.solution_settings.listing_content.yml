@@ -1,0 +1,47 @@
+uuid: 95b7b8d7-9ec8-435e-9fd3-1bb06052d415
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.meta_entity.listing_content
+    - field.field.meta_entity.solution_settings.announcements_enabled
+    - field.field.meta_entity.solution_settings.content_creation
+    - field.field.meta_entity.solution_settings.group_moderation
+    - field.field.meta_entity.solution_settings.landing_page
+    - field.field.meta_entity.solution_settings.list_related_entities
+    - field.field.meta_entity.solution_settings.listing_content
+    - field.field.meta_entity.solution_settings.metadata_banner_disabled
+    - meta_entity.type.solution_settings
+  module:
+    - layout_builder
+    - search_api_field
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: meta_entity.solution_settings.listing_content
+targetEntityType: meta_entity
+bundle: solution_settings
+mode: listing_content
+content:
+  listing_content:
+    type: search_api_field
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  announcements_enabled: true
+  changed: true
+  content_creation: true
+  created: true
+  group_moderation: true
+  label: true
+  landing_page: true
+  list_related_entities: true
+  meta_entity_solution_settings_listing_content_inline_facets: true
+  meta_entity_solution_settings_listing_content_top: true
+  metadata_banner_disabled: true
+  search_api_excerpt: true
+  target: true
