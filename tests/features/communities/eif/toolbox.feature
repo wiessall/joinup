@@ -87,6 +87,11 @@ Feature:
       | Jordan 2 |
       | Jordan 4 |
       | Jordan 6 |
+    And I should see the following lines of text in the correct order:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
