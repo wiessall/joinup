@@ -9,12 +9,13 @@ Feature: Collections/Solutions settings
       | name       | owner type |
       | Jonny inc. | Company    |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip @uploadFiles:logo.png
-  Scenario: Edit settings in a collection
-    And collection content:
-      | title             | access url        | closed | creation date    | content_creation         | group_moderation |
-      | Jillian Land Eels | http://spice.com/ | yes    | 28-01-1995 12:05 | facilitators and authors | yes              |
+  Scenario: Edit settings in a collection and solution
+    Given collection content:
+      | title             |
+      | Jillian Land Eels |
+    And solution content:
+      | title         | collection        |
+      | Solution Beta | Jillian Land Eels |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -35,29 +36,8 @@ Feature: Collections/Solutions settings
     Then the "Highlight only the first term appearance" checkbox should be checked
     And the "Announcements enabled" checkbox should be unchecked
 
-    When I am logged in as a owner of the "Jillian Land Eels" collection
-    And I go to the homepage of the "Jillian Land Eels" collection
-    And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    Then I should see the heading "Add solution"
-
-    When I fill in the following:
-      | Title          | Solution Beta    |
-      | Abstract       | Short abstract   |
-      | Description    | Last letter      |
-      | Name           | Jony Burton      |
-      | E-mail address | jonb@example.com |
-    And I attach the file "logo.png" to "Logo"
-    And I select "Flemish" from "Language"
-    And I select "EU and European Policies" from "Topic"
-    And I select "Logging Service" from "Solution type"
-
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Jonny inc."
-    And I press "Add owner"
-    And I press "Propose"
-    Then I should see the heading "Solution Beta"
+    When I am logged in as a owner of the "Solution Beta" solution
+    And I go to the homepage of the "Solution Beta" solution
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
@@ -68,9 +48,6 @@ Feature: Collections/Solutions settings
     And I click "Settings" in the "Entity actions" region
     Then I should see the heading "Solution Beta solution settings"
     And the "Announcements enabled" checkbox should be checked
-
-    # Cleanup.
-    And I delete the "Solution Beta" solution
 
   Scenario: Testing group settings permissions
     Given collection content:
