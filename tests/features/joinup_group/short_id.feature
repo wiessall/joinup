@@ -66,7 +66,7 @@ Feature:
     Then I delete the "Structural Solar Traces" collection
     And I delete the "Contact person" "contact information"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9772
   @wip
   Scenario: Short IDs are unique in solutions.
     Given collection content:

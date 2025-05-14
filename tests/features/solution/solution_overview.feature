@@ -53,7 +53,7 @@ Feature: Solutions Overview
     But I should not see the link "Next page"
     And I should not see the link "Last page"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9771
   @wip @uploadFiles:logo.png
   Scenario: View solution overview as an anonymous user
     Given users:
