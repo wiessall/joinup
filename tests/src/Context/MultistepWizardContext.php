@@ -7,16 +7,14 @@ namespace Drupal\joinup\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
- * Behat step definitions for testing the multistep wizard.
+ * Defines Behat step definitions for testing the multistep wizard.
  */
 class MultistepWizardContext extends RawDrupalContext {
 
   /**
-   * Steps per node type.
-   *
-   * @var array
+   * Step labels per node type.
    */
-  const array STEPS = [
+  public const STEPS = [
     'solution' => [
       'Solution information',
       'Contact details',
@@ -27,57 +25,61 @@ class MultistepWizardContext extends RawDrupalContext {
   ];
 
   /**
-   * Navigates to the specific wizard step.
+   * Jumps to a specific step in the wizard for the given node type.
    *
    * @When I jump to the :step of :node wizard
    */
   public function jumpToTheStep(string $step, string $node): void {
-    $nodeSteps = self::STEPS[$node] ?? [];
-    if (empty($nodeSteps)) {
-      throw new \RuntimeException("$node node is not supported.");
+    $nodeSteps = self::STEPS[$node] ?? NULL;
+
+    if ($nodeSteps === NULL) {
+      throw new \InvalidArgumentException(sprintf("The node type '%s' is not supported.", $node));
     }
 
-    $initialActiveName = $this->getActiveStepName();
-    $actualIndex = array_search($initialActiveName, $nodeSteps, TRUE);
-    if ($actualIndex === FALSE) {
-      throw new \RuntimeException('Actual step was not found.');
+    $currentStep = $this->getActiveStepName();
+    $currentIndex = array_search($currentStep, $nodeSteps, TRUE);
+    if ($currentIndex === FALSE) {
+      throw new \RuntimeException(sprintf("Current step '%s' was not found in the step list for '%s'.", $currentStep, $node));
     }
 
-    $expectedIndex = array_search($step, $nodeSteps, TRUE);
-    if ($expectedIndex === FALSE) {
-      throw new \RuntimeException('Expected step does not exist in defined steps.');
+    $targetIndex = array_search($step, $nodeSteps, TRUE);
+    if ($targetIndex === FALSE) {
+      throw new \InvalidArgumentException(sprintf("The requested step '%s' does not exist for node type '%s'.", $step, $node));
     }
 
-    $buttonLabel = $actualIndex < $expectedIndex ? "Next" : "Previous";
-    $difference = abs($actualIndex - $expectedIndex);
+    $direction = $targetIndex > $currentIndex ? 'Next' : 'Previous';
+    $stepsToMove = abs($targetIndex - $currentIndex);
 
-    while ($difference > 0) {
-      $this->getSession()
-        ->getPage()->findButton($buttonLabel)?->click();
-      $difference--;
+    while ($stepsToMove-- > 0) {
+      $button = $this->getSession()->getPage()->findButton($direction);
+      if (!$button) {
+        throw new \RuntimeException(sprintf("The '%s' button was not found on the page.", $direction));
+      }
+      $button->click();
     }
 
-    $actualActiveName = $this->getActiveStepName();
-    if ($actualActiveName !== $step) {
-      throw new \RuntimeException("System was not able to jump to $step.");
+    $newStep = $this->getActiveStepName();
+    if ($newStep !== $step) {
+      throw new \RuntimeException(sprintf("Failed to navigate to the expected step '%s'. Currently on '%s'.", $step, $newStep));
     }
   }
 
   /**
-   * Gets active step name.
+   * Retrieves the currently active wizard step label.
    *
    * @return string
-   *   Active step name.
+   *   The name of the active step.
    */
   protected function getActiveStepName(): string {
-    $activeStep = $this->getSession()
+    $activeElement = $this->getSession()
       ->getPage()
       ->find('css', '.multi-steps-label .active');
-    if (!$activeStep) {
-      throw new \RuntimeException('Active wizard step was not found.');
+
+    if (!$activeElement) {
+      throw new \RuntimeException('Unable to locate the active wizard step.');
     }
 
-    return $activeStep->getText();
+    return trim($activeElement->getText());
   }
 
 }
