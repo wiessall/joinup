@@ -29,6 +29,11 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
+  meta_entity_solution_settings_listing_content_inline_facets:
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
     region: content
   meta_entity_solution_settings_listing_content_top:
@@ -45,7 +50,6 @@ hidden:
   label: true
   landing_page: true
   list_related_entities: true
-  meta_entity_solution_settings_listing_content_inline_facets: true
   metadata_banner_disabled: true
   search_api_excerpt: true
   target: true
