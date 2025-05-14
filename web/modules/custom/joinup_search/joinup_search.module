@@ -11,12 +11,14 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\ViewExecutable;
@@ -92,7 +94,8 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
  * @param string $field
  *   The field name.
  * @param mixed $value
- *   The requested value. Can be an array but will has to be passed identically.
+ *   The requested value. Can be an array but will has to be passed
+ *   identically.
  * @param string $operator
  *   The requested operator. Defaults to '='.
  *
@@ -176,7 +179,8 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
-            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
+            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')
+                ->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
         }
@@ -204,7 +208,7 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
               // Removes all errors from messenger.
               $messenger->deleteByType('error');
               // Filter some errors.
-              $filtered_errors = array_filter($errors_messages, function ($value) use ($error_value): bool {
+              $filtered_errors = array_filter($errors_messages, function($value) use ($error_value): bool {
                 return $value != $error_value;
               });
               // Add filtered errors again to flashBag.
@@ -222,39 +226,55 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
 /**
  * Implements hook_entity_prepare_view().
  */
-function joinup_search_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
-  if ($entity_type_id !== 'node') {
-    return;
-  }
-
+/**
+ * Implements hook_entity_prepare_view().
+ */
+function joinup_search_entity_prepare_view(string $entity_type_id, array $entities): void {
   $bundles = ['collection', 'solution'];
-  foreach ($entities as $entity) {
-    if (!in_array($entity->bundle(), $bundles)) {
+  foreach ($entities as $fieldHostEntity) {
+    $node = $fieldHostEntity;
+    if ($node instanceof \Drupal\meta_entity\Entity\MetaEntityInterface) {
+      // Our assumption is that this is a node. (collection or solution).
+      $node = $node->getTargetEntity();
+    }
+    if (!in_array($node->bundle(), $bundles)) {
+      continue;
+    }
+    if ($node->getEntityTypeId() !== 'node') {
       continue;
     }
 
     $field = 'listing_content';
     // @todo This throws a warning for null offset. This should go away when
     //   facets for fields are re-implemented.
-    $facet = $entity->bundle() . '_content_status';
-    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
+    // Facet IDs?
+    //'search_api_facet:node.solution_content_status'
+    //'search_api_facet:meta_entity.solution_content_status'
+    //'search_api_facet:meta_entity.solution_settings_content_status'
+    // "Facet" variable
+    // 'solution_content_status'
+    $facet = $node->bundle() . '_content_status'; // FACET ID.
+    if (!isset($fieldHostEntity->{$field}) || $fieldHostEntity->{$field}->value['enabled'] === 0 || !isset($fieldHostEntity->{$field}->value['fields'][$facet])) {
       continue;
     }
 
     // Always force the display of archived content.
-    if ($entity instanceof GroupInterface && $entity->isArchived()) {
-      $value = $entity->{$field}->getValue();
+    if (
+      $node instanceof GroupInterface &&
+      $node->isArchived()
+    ) {
+      $value = $fieldHostEntity->{$field}->getValue();
       $value[0]['value']['show_archived'] = 'archived';
-      $entity->{$field}->setValue($value);
+      $fieldHostEntity->{$field}->setValue($value);
     }
     // Because we are forcing the facet to show the values even when they are
     // not narrowing the results, and we are altering the query as well, we need
     // to also dynamically hide the facet when the 'show_archived' option is set
     // to anything else than 'all' - because it will not hide automatically.
-    elseif ($entity->{$field}->value['show_archived'] !== 'all') {
-      $value = $entity->{$field}->getValue();
+    elseif ($fieldHostEntity->{$field}->value['show_archived'] !== 'all') {
+      $value = $fieldHostEntity->{$field}->getValue();
       $value[0]['value']['fields'][$facet]['region'] = 'hidden';
-      $entity->{$field}->setValue($value);
+      $fieldHostEntity->{$field}->setValue($value);
     }
   }
 }

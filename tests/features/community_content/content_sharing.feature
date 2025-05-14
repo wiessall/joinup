@@ -267,7 +267,7 @@ Feature: Sharing content between collections
       | Earth content | Earth        | Mars        |
       | Mars content  | Mars         |             |
       | Venus content | Venus        | Earth, Mars |
-
+    Then break
     When I go to the homepage of the "Earth" <group type>
     Then I should see the "Earth content" tile
     And I should see the "Venus content" tile

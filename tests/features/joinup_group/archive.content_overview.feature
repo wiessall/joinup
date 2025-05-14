@@ -132,7 +132,6 @@ Feature: Global search with archive content
       | 4x4 cube | archived  | Rubik Cube | Speed cube |
     And the "Rubik Cube" collection is configured to show "All" community content
     And the "Speed cube" collection is configured to show "All" community content
-
     And I go to the homepage of the "Rubik Cube" collection
     Then I should see the following tiles in the correct order:
       | Megaminx |
