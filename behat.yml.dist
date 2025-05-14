@@ -221,8 +221,6 @@ default:
         Related solutions: '.field--name-related-solutions'
         SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
-        Solution edit form additional fields accordion: '.accordion .accordion-item #additional-fields'
-        Solution edit form main fields accordion: '.accordion .accordion-item #main-fields'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'

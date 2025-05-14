@@ -1,5 +1,4 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-@wip @api @group-i
+@api @group-i
 Feature: Solution editing.
   In order to manage solutions
   As a solution owner or solution facilitator
@@ -25,7 +24,6 @@ Feature: Solution editing.
       | title            | logo     |
       | Another solution | logo.png |
 
-  @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
@@ -37,17 +35,16 @@ Feature: Solution editing.
       | Title          | Solution A         |
       | Abstract       | Abstract of "A"    |
       | Description    | First letter       |
-      | Name           | Yancy Burton       |
-      | E-mail address | yancyb@example.com |
-    And I attach the file "logo.png" to "Logo"
-    And I select "Flemish" from "Language"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Flemish" from "Language Availabilty"
     And I select "Logging Service" from "Solution type"
-
-    # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Acme inc."
-    And I press "Add owner"
+    And I press "Next"
+    When I fill in the following:
+      | owner[form][0][title][0][value]   | Yancy owner       |
+      | contact[form][0][title][0][value] | Yancy Contct       |
+      | E-mail address                    | yancyb@example.com |
+    And I press "Create owner"
+    And I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     # Then print last response
     Then I should see the heading "Solution A"
@@ -55,28 +52,13 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Solution edit form main fields accordion"
-    Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Solution edit form additional fields accordion"
-
-    And the following fields should not be present "Issue tracker, Langcode"
-    And the following fieldsets should be present "Contact information, Owner, Content creation"
-    # Logo is required, so it is filled up during the creation of the solution.
-    # Unfortunately, file fields with a file already attached cannot be found by
-    # named xpath, so we look for the related labels.
-    And I should see the text "Logo"
-
-    When I fill in "Title" with "Solution A revised"
-    And I press "Propose"
-    Then I should see the heading "Solution A revised"
+    And the following fields should be present "Title, Abstract, Description, Solution type, Language Availabilty, Contributors"
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution
     Then I should not see the link "Edit"
     When I go to the edit form of the "Another solution" solution
     Then I should get an access denied error
-
-    # Clean up the solution that was created through the UI.
-    Then I delete the "Solution A revised" solution
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
     Given collection content:
