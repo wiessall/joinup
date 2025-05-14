@@ -9,6 +9,7 @@ dependencies:
   module:
     - entityqueue
     - meta_entity
+    - user
 id: homepage_topics
 label: 'Homepage topics'
 module: views
@@ -92,8 +93,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -198,18 +200,17 @@ display:
           limit_queue: homepage_topics
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - user.permissions
       tags:
-        - 'config:core.entity_view_display.meta_entity.collection_settings.default'
-        - 'config:core.entity_view_display.meta_entity.topic.default'
-        - 'config:core.entity_view_display.meta_entity.topic.teaser'
         - 'config:entityqueue.entity_queue.homepage_topics'
-        - entity_field_info
-        - views_data
   block_1:
     id: block_1
     display_title: Block
@@ -225,10 +226,6 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - user.permissions
       tags:
-        - 'config:core.entity_view_display.meta_entity.collection_settings.default'
-        - 'config:core.entity_view_display.meta_entity.topic.default'
-        - 'config:core.entity_view_display.meta_entity.topic.teaser'
         - 'config:entityqueue.entity_queue.homepage_topics'
-        - entity_field_info
-        - views_data
