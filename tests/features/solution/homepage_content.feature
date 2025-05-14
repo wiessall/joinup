@@ -49,7 +49,7 @@ Feature: Solution homepage
       | Protocol draft       |
       # The related solutions is shown in a block later in the page.
       | Security audit tools |
-
+    Then break
     # Distribution associated to a release should not be shown.
     But I should not see the "PDF version" tile
     And I should not see the "ZIP version" tile

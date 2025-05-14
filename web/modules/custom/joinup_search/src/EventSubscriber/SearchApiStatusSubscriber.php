@@ -13,6 +13,7 @@ use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
  * Alter a search query when status 'archived' is enabled.
@@ -189,7 +190,7 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
   protected function getEntityStatusFacets(QueryInterface $query): array {
     $entity = $query->getOption('search_api_field entity');
     $item = $query->getOption('search_api_field item');
-    $facetSourceId = 'search_api_field:' . $entity->getEntityTypeId() . '.' . $entity->bundle() . '.' . $item->getParent()->getName();
+    $facetSourceId = 'search_api_field:' . $item->getEntity()->getEntityTypeId() . '.' . $item->getEntity()->bundle() . '.' . $item->getParent()->getName();
 
     $facets = $this->facetManager->getFacetsByFacetSourceId($facetSourceId);
     return array_filter($facets, function (FacetInterface $facet) {

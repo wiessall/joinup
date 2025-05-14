@@ -139,10 +139,6 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
-    $entity = $items->getEntity();
-    if($entity instanceof MetaEntityInterface) {
-      $entity = $entity->getTargetEntity();
-    }
     $render += [
       '#entity_type' => $entity->getEntityTypeId(),
       '#bundle' => $entity->bundle(),
