@@ -29,7 +29,7 @@ interface GitHubFeedInterface {
    * @param string $url
    *   The URL of the repository.
    * @param string $type
-   *   The type of the feed. Either 'issue' or 'pull_request'.
+   *   The type of the feed. Either 'issue', 'pull_request' or 'events'.
    * @param int $numberOfResults
    *   The number of results to fetch.
    * @param int $numberOfComments
