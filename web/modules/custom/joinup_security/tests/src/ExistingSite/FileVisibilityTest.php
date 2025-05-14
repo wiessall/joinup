@@ -72,7 +72,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
     file_put_contents("temporary://$fileName", $this->randomString());
 
     $page->attachFileToField('files[field_attachment_0][]', "temporary://$fileName");
-    $page->findButton('field_attachment_0_upload_button')->press();
+    $page->findButton('Upload')->press();
 
     $storage = \Drupal::entityTypeManager()->getStorage('file');
     $files = $storage->loadByProperties(['filename' => $fileName]);
@@ -159,7 +159,10 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
       'name' => $this->randomString(),
       'subject' => $this->randomString(),
       'field_name' => 'field_replies',
-      'field_attachment' => ['target_id' => $file->id(), 'description' => $this->randomString()],
+      'field_attachment' => [
+        'target_id' => $file->id(),
+        'description' => $this->randomString(),
+      ],
       'status' => TRUE,
       'uid' => $this->account['author']->id(),
     ]);
