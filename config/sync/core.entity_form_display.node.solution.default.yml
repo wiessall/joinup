@@ -75,9 +75,8 @@ third_party_settings:
         show_step_title: true
         step_description: ''
         back_button_show: true
-        back_button_text: Back
+        back_button_text: Previous
         next_button_text: Next
-        required_fields: true
         step_help: ''
     group_additional_information:
       children: {  }
@@ -94,9 +93,8 @@ third_party_settings:
         show_step_title: true
         step_description: ''
         back_button_show: true
-        back_button_text: Back
+        back_button_text: Previous
         next_button_text: Next
-        required_fields: true
         step_help: ''
     group_interoperability_informati:
       children: {  }
@@ -113,9 +111,8 @@ third_party_settings:
         show_step_title: true
         step_description: ''
         back_button_show: true
-        back_button_text: Back
+        back_button_text: Previous
         next_button_text: Next
-        required_fields: true
         step_help: ''
     group_confirmation:
       children:
@@ -134,7 +131,7 @@ third_party_settings:
         show_step_title: true
         step_description: ''
         back_button_show: true
-        back_button_text: Back
+        back_button_text: Previous
         next_button_text: ''
         step_help: ''
 id: node.solution.default
