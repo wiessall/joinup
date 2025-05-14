@@ -40,3 +40,7 @@ button#eTransButton.wt-ecl-button {
     box-shadow: none !important;
   }
 }
+
+.nav-link:focus-visible {
+  outline: 1px auto blue; // #ISAICP-9733 Override bcl-bootstrap 'outline: 0' to browser standard.
+}
