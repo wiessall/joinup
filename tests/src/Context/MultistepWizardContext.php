@@ -14,7 +14,7 @@ class MultistepWizardContext extends RawDrupalContext {
   /**
    * Step labels per node type.
    */
-  public const STEPS = [
+  public const array STEPS = [
     'solution' => [
       'Solution information',
       'Contact details',
