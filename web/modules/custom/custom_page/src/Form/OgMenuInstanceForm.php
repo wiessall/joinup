@@ -336,7 +336,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         if (
           // The link is a canonical path of a node.
           $route_info['_route'] === 'entity.node.canonical'
-          && ($node ??= $route_info['node'])
+          && ($node = $route_info['node'] ?? FALSE)
           && $node instanceof NodeInterface
           // It should be a group or a custom page.
           && ($node instanceof GroupInterface || $node instanceof CustomPageInterface)
