@@ -9,6 +9,7 @@
          failOnWarning="true"
          printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
          verbose="true"
+         processIsolation="true"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <php>
     <!-- Set error reporting to E_ALL. -->
