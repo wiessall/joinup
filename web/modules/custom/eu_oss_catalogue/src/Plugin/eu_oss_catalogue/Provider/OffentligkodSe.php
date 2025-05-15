@@ -25,7 +25,7 @@ use Drupal\eu_oss_catalogue\Entity\CatalogueType;
   country: 'SE',
   description: new TranslatableMarkup('Offentlig Kod Swedish National Catalogue advocates open-source solutions for public sector IT, sharing reusable code and fostering collaboration & transparency in government projects.'),
 )]
-class OffentligkodSe extends UrlListProviderBase {
+class OffentligkodSe extends UrlListCatalogueProviderBase {
 
   /**
    * {@inheritdoc}
@@ -37,11 +37,10 @@ class OffentligkodSe extends UrlListProviderBase {
    */
   protected string|array $urlKeys = 'url';
 
-
   /**
    * {@inheritdoc}
    */
-  protected const array ENDPOINTS = [
+  protected array $endpoints = [
     'https://offentligkod.se/api/',
   ];
 

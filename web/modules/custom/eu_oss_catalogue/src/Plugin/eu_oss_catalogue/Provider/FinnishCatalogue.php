@@ -25,7 +25,7 @@ use Drupal\eu_oss_catalogue\Entity\CatalogueType;
   country: 'FI',
   description: new TranslatableMarkup('Avoinkoodi.fi catalogue lists together software used in Finnish government, education and the local government sector, whose source code has been published openly.'),
 )]
-class FinnishCatalogue extends UrlListProviderBase {
+class FinnishCatalogue extends UrlListCatalogueProviderBase {
 
   /**
    * {@inheritdoc}
@@ -37,11 +37,10 @@ class FinnishCatalogue extends UrlListProviderBase {
    */
   protected string|array $urlKeys = 'code_url';
 
-
   /**
    * {@inheritdoc}
    */
-  protected const array ENDPOINTS = [
+  protected array $endpoints = [
     'http://avoinkoodi.fi/projects.json',
     'http://avoinkoodi.fi/municipalityprojects.json',
     'http://avoinkoodi.fi/eduprojects.json',

@@ -21,8 +21,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base plugin class of providers returning a list with repo URIs.
+ *
+ * @see \Drupal\Tests\eu_oss_catalogue\Kernel\UrlListCatalogueProviderTest
  */
-abstract class UrlListProviderBase extends EuOssCatalogueProviderPluginBase {
+abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPluginBase {
 
   /**
    * Keys to the actual catalogue list.
@@ -43,7 +45,7 @@ abstract class UrlListProviderBase extends EuOssCatalogueProviderPluginBase {
    *
    * @var string[]
    */
-  protected const array ENDPOINTS = [];
+  protected array $endpoints;
 
   /**
    * List of projects fetched from API.
@@ -127,10 +129,10 @@ abstract class UrlListProviderBase extends EuOssCatalogueProviderPluginBase {
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  protected function requestData(): void {
+  private function requestData(): void {
     $this->fetched = [];
 
-    foreach (static::ENDPOINTS as $endpointUrl) {
+    foreach ($this->endpoints as $endpointUrl) {
       try {
         $response = $this->httpClient->get($endpointUrl);
         $decodedResponse = Json::decode($response->getBody()->getContents());
@@ -161,7 +163,7 @@ abstract class UrlListProviderBase extends EuOssCatalogueProviderPluginBase {
    * @param array $responseData
    *   Response data.
    */
-  protected function processResponseData(array $responseData): void {
+  private function processResponseData(array $responseData): void {
     foreach ($responseData as $row) {
       $rawUrl = NestedArray::getValue($row, (array) $this->urlKeys, $urlExists);
       if (!$urlExists || !is_string($rawUrl)) {
