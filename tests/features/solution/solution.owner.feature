@@ -27,7 +27,7 @@ Feature:
       | no         | registered users         |
       | no         | facilitators and authors |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8779
   @wip
   @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
