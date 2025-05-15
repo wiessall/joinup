@@ -11,7 +11,6 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -180,7 +179,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
             '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')
-                ->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
+              ->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
         }
@@ -208,7 +207,7 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
               // Removes all errors from messenger.
               $messenger->deleteByType('error');
               // Filter some errors.
-              $filtered_errors = array_filter($errors_messages, function($value) use ($error_value): bool {
+              $filtered_errors = array_filter($errors_messages, function ($value) use ($error_value): bool {
                 return $value != $error_value;
               });
               // Add filtered errors again to flashBag.
@@ -226,6 +225,7 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
 /**
  * Implements hook_entity_prepare_view().
  */
+
 /**
  * Implements hook_entity_prepare_view().
  */
@@ -233,7 +233,7 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
   $bundles = ['collection', 'solution'];
   foreach ($entities as $fieldHostEntity) {
     $node = $fieldHostEntity;
-    if ($node instanceof \Drupal\meta_entity\Entity\MetaEntityInterface) {
+    if ($node instanceof MetaEntityInterface) {
       // Our assumption is that this is a node. (collection or solution).
       $node = $node->getTargetEntity();
     }
@@ -248,12 +248,13 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     // @todo This throws a warning for null offset. This should go away when
     //   facets for fields are re-implemented.
     // Facet IDs?
-    //'search_api_facet:node.solution_content_status'
-    //'search_api_facet:meta_entity.solution_content_status'
-    //'search_api_facet:meta_entity.solution_settings_content_status'
+    // 'search_api_facet:node.solution_content_status'
+    // 'search_api_facet:meta_entity.solution_content_status'
+    // 'search_api_facet:meta_entity.solution_settings_content_status'
     // "Facet" variable
     // 'solution_content_status'
-    $facet = $node->bundle() . '_content_status'; // FACET ID.
+    // FACET ID.
+    $facet = $node->bundle() . '_content_status';
     if (!isset($fieldHostEntity->{$field}) || $fieldHostEntity->{$field}->value['enabled'] === 0 || !isset($fieldHostEntity->{$field}->value['fields'][$facet])) {
       continue;
     }
