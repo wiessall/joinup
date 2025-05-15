@@ -5,7 +5,9 @@ dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.code_of_conduct
+    - field.field.meta_entity.collection_settings.content_creation
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.group_moderation
     - field.field.meta_entity.collection_settings.label_join
     - field.field.meta_entity.collection_settings.label_leave
     - field.field.meta_entity.collection_settings.landing_page
@@ -47,9 +49,22 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  content_creation:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   glossary_link_only_first:
     type: boolean_checkbox
     weight: 1
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  group_moderation:
+    type: boolean_checkbox
+    weight: 6
     region: content
     settings:
       display_label: true

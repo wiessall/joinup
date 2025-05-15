@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.group_moderation
     - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
@@ -587,45 +586,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          2b9bb25a-cb37-441d-891c-89c23842eee3:
-            uuid: 2b9bb25a-cb37-441d-891c-89c23842eee3
-            region: content
-            configuration:
-              id: 'field_block:node:collection:group_moderation'
-              label: Moderation
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: boolean
-                label: hidden
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 3
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
         third_party_settings: {  }
 id: node.collection.default
 targetEntityType: node
@@ -667,7 +627,6 @@ hidden:
   field_keywords: true
   field_state: true
   field_topic: true
-  group_moderation: true
   join_collection: true
   langcode: true
   last_update: true

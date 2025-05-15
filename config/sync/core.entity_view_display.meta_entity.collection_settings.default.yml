@@ -5,12 +5,16 @@ dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.code_of_conduct
+    - field.field.meta_entity.collection_settings.content_creation
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.group_moderation
     - field.field.meta_entity.collection_settings.label_join
     - field.field.meta_entity.collection_settings.label_leave
     - field.field.meta_entity.collection_settings.landing_page
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
+  module:
+    - options
 id: meta_entity.collection_settings.default
 targetEntityType: meta_entity
 bundle: collection_settings
@@ -45,6 +49,13 @@ content:
     third_party_settings: {  }
     weight: 22
     region: content
+  content_creation:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 27
+    region: content
   created:
     type: timestamp
     label: inline
@@ -73,6 +84,16 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 23
+    region: content
+  group_moderation:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 26
     region: content
   label:
     type: string

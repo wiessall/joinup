@@ -7,8 +7,10 @@ namespace Drupal\joinup_group\Entity;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -156,6 +158,13 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function isModerated(): bool {
+    if ($this instanceof CollectionInterface) {
+      $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'collection_settings');
+      if ($meta_entity instanceof MetaEntityInterface) {
+        return (bool) $meta_entity->get('group_moderation')->value;
+      }
+      return TRUE;
+    }
     return (int) $this->getMainPropertyValue($this->getGroupModerationFieldName()) === GroupInterface::PRE_MODERATION;
   }
 
