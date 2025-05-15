@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_form_mode.node.inline
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -333,7 +332,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  body: true
   created: true
   langcode: true
   og_audience: true

@@ -1,0 +1,37 @@
+diff --git a/src/MemcacheBackend.php b/src/MemcacheBackend.php
+index 98aa9e4b7860829a52cb54254d79ab28d4f7a7c4..9cf440d108159b9ead3eecf3f91617d8b096dadf 100644
+--- a/src/MemcacheBackend.php
++++ b/src/MemcacheBackend.php
+@@ -74,6 +74,13 @@ class MemcacheBackend implements CacheBackendInterface {
+    */
+   protected $timestampInvalidator;
+ 
++  /**
++   * Cache for the request timestamp.
++   *
++   * @var int
++   */
++  protected static $requestTime;
++
+   /**
+    * Constructs a MemcacheBackend object.
+    *
+@@ -125,7 +132,17 @@ class MemcacheBackend implements CacheBackendInterface {
+    * @see Drupal\Component\Datetime\Time::getRequestTime()
+    */
+   public static function getRequestTime() {
+-    return (int) $_SERVER['REQUEST_TIME'] ?? time();
++    if (!isset(static::$requestTime)) {
++      try {
++        // @phpstan-ignore-next-line
++        static::$requestTime = \Drupal::time()->getRequestTime();
++      }
++      catch (ContainerNotInitializedException | ServiceNotFoundException) {
++        static::$requestTime = (int) $_SERVER['REQUEST_TIME'] ?? time();
++      }
++    }
++
++    return static::$requestTime;
+   }
+ 
+   /**

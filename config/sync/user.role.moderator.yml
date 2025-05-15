@@ -50,6 +50,7 @@ dependencies:
     - joinup_oss_catalogue
     - joinup_reports
     - joinup_search
+    - joinup_security
     - joinup_solution
     - joinup_subscription
     - joinup_webform
@@ -116,6 +117,7 @@ permissions:
   - 'assign translator role'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
+  - 'bypass node creation limit'
   - 'create collection content'
   - 'create collection_logo media'
   - 'create contact_information content'

@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -88,7 +87,6 @@ content:
     weight: 0
     region: content
 hidden:
-  body: true
   collections: true
   contact: true
   content_creation: true
