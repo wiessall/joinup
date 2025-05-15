@@ -190,7 +190,6 @@ trait GroupTrait {
     return $contentCreators;
   }
 
-
   /**
    * {@inheritdoc}
    */
