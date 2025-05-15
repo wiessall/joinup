@@ -16,9 +16,6 @@ function collection_update_200500(): void {
   SharedInUpdateHelper::installFromConfigSync(
     'field.storage.meta_entity.group_moderation.yml',
   );
-  SharedInUpdateHelper::installFromConfigSync(
-    'field.storage.meta_entity.list_related_entities.yml',
-  );
 }
 
 /**
@@ -27,8 +24,5 @@ function collection_update_200500(): void {
 function collection_update_200501(): void {
   SharedInUpdateHelper::installFromConfigSync(
     'field.field.meta_entity.collection_settings.group_moderation.yml',
-  );
-  SharedInUpdateHelper::installFromConfigSync(
-    'field.field.meta_entity.collection_settings.list_related_entities.yml',
   );
 }
