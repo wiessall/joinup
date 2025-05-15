@@ -9,6 +9,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
+use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
@@ -172,15 +173,23 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
+    if ($this instanceof CollectionInterface) {
+      $meta_entity = \Drupal::getContainer()
+        ->get('meta_entity.repository')
+        ->getMetaEntityForEntity($this, 'collection_settings');
+      if ($meta_entity instanceof MetaEntityInterface) {
+        return $meta_entity->get('content_creation')->value;
+      }
+      return ContentCreationOptions::FACILITATORS_AND_AUTHORS;
+    }
     $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
-
     if (is_null($contentCreators)) {
       $loggerFactory = \Drupal::service('logger.factory');
       $loggerFactory->get('joinup_group')->warning('Invalid content creators');
     }
-
     return $contentCreators;
   }
+
 
   /**
    * {@inheritdoc}
