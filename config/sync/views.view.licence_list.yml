@@ -7,6 +7,7 @@ dependencies:
     - taxonomy.vocabulary.spdx_licence
   module:
     - search_api
+    - user
 id: licence_list
 label: 'Licence list'
 module: views
@@ -93,8 +94,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -250,12 +252,16 @@ display:
           empty: false
           content: "<div class=\"licence-counter\">\r\n  <span class=\"licence-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    licences found\r\n  </span>\r\n</div>"
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'config:views.view.licence_list'
@@ -276,6 +282,7 @@ display:
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'config:views.view.licence_list'
@@ -328,6 +335,7 @@ display:
       contexts:
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
         - 'config:views.view.licence_list'

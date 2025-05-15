@@ -137,7 +137,9 @@ Feature: Navigation menu for custom pages
       | title           | body                   | collection    | topic |
       | Vintage molds   | This is a sample body. | Plaster molds | HR    |
       | Plaster casting | This is a sample body. | Plaster molds | HR    |
-    When I go to the "Plaster molds" collection
+    # In ISAICP-9742, check if this step is needed or if it can be changed back
+    # to a page visit step.
+    When I reload the page
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
     And I should not see the text "Vintage molds" in the "Navigation menu"
@@ -537,6 +539,32 @@ Feature: Navigation menu for custom pages
     When I press "Save"
     And I visit the "TOCO cached 1-1" custom page
     Then I should not see the link "Up" in the "Table of contents outline"
+
+    Examples:
+      | group      |
+      | collection |
+      | solution   |
+
+  @javascript
+  Scenario Outline: Facilitator sees and uses edit links for custom pages in group menu
+    Given <group> content:
+      | title         |
+      | Autumn Leaves |
+    And custom_page content:
+      | title            | <group>       |
+      | Dusty Typewriter | Autumn Leaves |
+
+    When I am logged in as a facilitator of the "Autumn Leaves" <group>
+    And I go to the "Autumn Leaves" <group>
+    And I click the contextual link "Edit menu" in the "Header" region
+    Then the "group menu edit table" table should contain the following columns:
+      | Page             | Operations  |
+      | Overview         | Edit        |
+      | Discussions      |             |
+      | Glossary         |             |
+      | Dusty Typewriter | Edit Delete |
+    When I click "Edit" in the "Dusty Typewriter" row
+    Then I should see the heading "Edit Custom page Dusty Typewriter"
 
     Examples:
       | group      |

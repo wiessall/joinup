@@ -20,20 +20,20 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And event content:
-      | title                               | author         | abstract | field_paragraphs_body | location                             | collection        | field_state      |
+      | title                               | author         | abstract | field_paragraphs_body | location                             | collection        | field_state      | created    |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | abstract | body                  | Half Moon Street, London             | CC pre collection | draft            |
-      | CC notify pre propose               | CC member      | abstract | body                  | Quai d'Orleans, Paris                | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | abstract | body                  | Rue du Mont Thabor, Paris            | CC pre collection | published        |
-      | CC notify pre report                | CC member      | abstract | body                  | Cort Adelers Gate, Oslo              | CC pre collection | published        |
-      | CC notify pre request deletion      | CC member      | abstract | body                  | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        |
-      | CC notify pre propose from reported | CC member      | abstract | body                  | Lychener Strasse, Berlin             | CC pre collection | needs_update     |
-      | CC notify pre approve proposed      | CC member      | abstract | body                  | Capel Street, Dublin                 | CC pre collection | proposed         |
-      | CC notify pre reject deletion       | CC member      | abstract | body                  | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request |
-      | CC notify pre delete                | CC member      | abstract | body                  | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request |
-      | CC notify published to delete       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
-      | CC notify published to revise       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
+      | CC notify pre publish               | CC facilitator | abstract | body                  | Half Moon Street, London             | CC pre collection | draft            | now -2 day |
+      | CC notify pre propose               | CC member      | abstract | body                  | Quai d'Orleans, Paris                | CC pre collection | draft            | now -2 day |
+      | CC notify pre request changes       | CC member      | abstract | body                  | Rue du Mont Thabor, Paris            | CC pre collection | published        | now -2 day |
+      | CC notify pre report                | CC member      | abstract | body                  | Cort Adelers Gate, Oslo              | CC pre collection | published        | now -2 day |
+      | CC notify pre request deletion      | CC member      | abstract | body                  | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        | now -2 day |
+      | CC notify pre propose from reported | CC member      | abstract | body                  | Lychener Strasse, Berlin             | CC pre collection | needs_update     | now -2 day |
+      | CC notify pre approve proposed      | CC member      | abstract | body                  | Capel Street, Dublin                 | CC pre collection | proposed         | now -2 day |
+      | CC notify pre reject deletion       | CC member      | abstract | body                  | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request | now -2 day |
+      | CC notify pre delete                | CC member      | abstract | body                  | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request | now -2 day |
+      | CC notify published to delete       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        | now -2 day |
+      | CC notify published to revise       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        | now -2 day |
 
     # Test 'create' operation.
     When I am logged in as "CC member"

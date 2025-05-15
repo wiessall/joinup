@@ -5,8 +5,8 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - options
     - search_api
+    - user
 id: solutions_meta_entity
 label: 'Solutions w/meta entity'
 module: views
@@ -320,17 +320,18 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -479,28 +480,6 @@ display:
           empty: false
           content: "<div class=\"eif-counter\">\r\n  <span class=\"eif-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    matching solutions found\r\n  </span>\r\n</div>"
       footer: {  }
-      display_extenders: {  }
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - 'user.node_grants:view'
-      tags:
-        - 'config:search_api.index.published'
-        - 'config:views.view.solutions_meta_entity'
-        - 'search_api_list:published'
-  solutions_meta_entity_block:
-    id: solutions_meta_entity_block
-    display_title: Block
-    display_plugin: block
-    position: 1
-    display_options:
-      cache:
-        type: search_api_none
-        options: {  }
-      defaults:
-        cache: false
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -511,5 +490,31 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - 'user.node_grants:view'
+        - user.permissions
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.solutions_meta_entity'
+        - 'search_api_list:published'
+  solutions_meta_entity_block:
+    id: solutions_meta_entity_block
+    display_title: Block
+    display_plugin: block
+    position: 1
+    display_options:
+      defaults:
+        cache: true
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:search_api.index.published'
+        - 'config:views.view.solutions_meta_entity'
+        - 'search_api_list:published'

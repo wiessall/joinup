@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fc89abe98b8988d7cc3e69201bac752",
+    "content-hash": "089a4b0af2eaf1fbbf2ad5556e793a0a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4761,6 +4761,67 @@
             }
         },
         {
+            "name": "drupal/file_link",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/file_link.git",
+                "reference": "2.2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/file_link-2.2.1.zip",
+                "reference": "2.2.1",
+                "shasum": "e26ca1b6f8e492a02150ed1611c280f4ff5a206b"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.2.1",
+                    "datestamp": "1742488543",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiu.cristea"
+                },
+                {
+                    "name": "bircher",
+                    "homepage": "https://www.drupal.org/user/1344166"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "pescetti",
+                    "homepage": "https://www.drupal.org/user/436244"
+                },
+                {
+                    "name": "sardara",
+                    "homepage": "https://www.drupal.org/user/2353864"
+                }
+            ],
+            "description": "Extends the core Link module by storing metadata about the target file.",
+            "homepage": "http://drupal.org/project/file_link",
+            "support": {
+                "source": "https://git.drupalcode.org/project/file_link",
+                "issues": "https://www.drupal.org/project/issues/file_link"
+            }
+        },
+        {
             "name": "drupal/file_url",
             "version": "2.0.0-alpha2",
             "source": {
@@ -7742,6 +7803,59 @@
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
                 "source": "https://git.drupalcode.org/project/purge"
+            }
+        },
+        {
+            "name": "drupal/purge_users",
+            "version": "4.0.0-rc2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/purge_users.git",
+                "reference": "4.0.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/purge_users-4.0.0-rc2.zip",
+                "reference": "4.0.0-rc2",
+                "shasum": "8649256fe7d06f4375b23e9dc71d343ef543cb4a"
+            },
+            "require": {
+                "drupal/core": "^9.5 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.0.0-rc2",
+                    "datestamp": "1741473393",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Er.Sajal",
+                    "homepage": "https://www.drupal.org/user/3418765"
+                },
+                {
+                    "name": "jim.applebee",
+                    "homepage": "https://www.drupal.org/user/2498674"
+                },
+                {
+                    "name": "mably",
+                    "homepage": "https://www.drupal.org/user/3375160"
+                }
+            ],
+            "description": "Purge inactive users after a set interval.",
+            "homepage": "https://drupal.org/project/purge_users",
+            "support": {
+                "source": "https://git.drupalcode.org/project/purge_users",
+                "issues": "https://drupal.org/project/issues/purge_users"
             }
         },
         {
@@ -13094,20 +13208,21 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.18.0",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "8df4c4347d7bd53e16bcb0798b1735b1dc52c7c3"
+                "reference": "4a2ca1c0ba367c3eae64ac87f4060a19f5f308d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/8df4c4347d7bd53e16bcb0798b1735b1dc52c7c3",
-                "reference": "8df4c4347d7bd53e16bcb0798b1735b1dc52c7c3",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/4a2ca1c0ba367c3eae64ac87f4060a19f5f308d9",
+                "reference": "4a2ca1c0ba367c3eae64ac87f4060a19f5f308d9",
                 "shasum": ""
             },
             "require": {
                 "drupal/core": "^10",
+                "drupal/file_link": "^2.1",
                 "drupal/ui_patterns": "^1.4",
                 "drupal/ui_patterns_settings": "^2.0",
                 "openeuropa/ecl-twig-loader": "^4.0",
@@ -13121,8 +13236,8 @@
                 "drush/drush": "^12",
                 "ext-dom": "*",
                 "nikic/php-parser": "^4",
-                "openeuropa/code-review": "^2.0.0-alpha6",
-                "openeuropa/task-runner-drupal-project-symlink": "^1.0-beta6",
+                "openeuropa/code-review-drupal": "^1.0.0-alpha",
+                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
                 "phpspec/prophecy-phpunit": "^2"
             },
             "type": "drupal-theme",
@@ -13164,9 +13279,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.18.0"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.21.0"
             },
-            "time": "2024-12-16T11:03:01+00:00"
+            "time": "2025-03-27T13:05:58+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
