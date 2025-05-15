@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.group_moderation
     - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
@@ -27,11 +26,12 @@ dependencies:
     - node.type.collection
   module:
     - field_group
-    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_core
     - joinup_workflow
+    - link
+    - oe_bootstrap_theme_helper
     - text
 third_party_settings:
   field_group:
@@ -164,13 +164,6 @@ content:
     weight: 5
     region: content
     settings: {  }
-    third_party_settings: {  }
-  group_moderation:
-    type: boolean_checkbox
-    weight: 7
-    region: content
-    settings:
-      display_label: false
     third_party_settings: {  }
   logo:
     type: image_library_widget

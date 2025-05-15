@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Joinup solution module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\joinup_core\SharedInUpdateHelper;
+
+/**
+ * Install the meta entity field storage of collection_settings.
+ */
+function collection_update_200500(): void {
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.storage.meta_entity.group_moderation.yml',
+  );
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.storage.meta_entity.list_related_entities.yml',
+  );
+}
+
+/**
+ * Install the collection_settings meta entity solution_settings field instance.
+ */
+function collection_update_200501(): void {
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.field.meta_entity.collection_settings.group_moderation.yml',
+  );
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.field.meta_entity.collection_settings.list_related_entities.yml',
+  );
+}

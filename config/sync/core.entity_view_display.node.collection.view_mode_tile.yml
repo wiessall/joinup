@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.group_moderation
     - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
@@ -98,7 +97,6 @@ hidden:
   field_keywords: true
   field_state: true
   field_topic: true
-  group_moderation: true
   join_collection: true
   langcode: true
   last_update: true
