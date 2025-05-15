@@ -39,6 +39,7 @@ function collection_post_update_200502(array &$sandbox): string {
       $meta_entity = MetaEntity::loadOrCreate('collection_settings', $collection);
       $moderation = (int) $collection->get('group_moderation')->value;
       $meta_entity->set('group_moderation', $moderation);
+      $meta_entity->set('content_creation', $collection->get('content_creation')->value);
       $meta_entity->save();
       $sandbox['solutionSettingsCount']++;
     }

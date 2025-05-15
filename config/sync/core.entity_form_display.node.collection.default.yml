@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
-    - field.field.node.collection.content_creation
     - field.field.node.collection.description
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
@@ -133,12 +132,6 @@ content:
       collapsed: false
       revision: false
       removed_reference: optional
-    third_party_settings: {  }
-  content_creation:
-    type: options_buttons
-    weight: 9
-    region: content
-    settings: {  }
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget

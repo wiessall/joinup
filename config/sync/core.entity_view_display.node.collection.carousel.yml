@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
-    - field.field.node.collection.content_creation
     - field.field.node.collection.description
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
@@ -66,7 +65,6 @@ hidden:
   closed_group: true
   collection_settings: true
   contact: true
-  content_creation: true
   description: true
   featured: true
   field_keywords: true
