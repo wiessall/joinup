@@ -89,7 +89,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     // Avoid infinite recursion when a search node is shown as a result.
     $entity = $items->getEntity();
-    if($entity instanceof MetaEntityInterface) {
+    if ($entity instanceof MetaEntityInterface) {
       $entity = $entity->getTargetEntity();
     }
     if ($entity->search_api_field_do_not_recurse) {
@@ -171,7 +171,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   protected function getSearchQuery(array $settings, SearchItemInterface $item, int $element): QueryInterface {
     $field_definition = $this->fieldDefinition;
     $entity = $item->getEntity();
-    if($entity instanceof MetaEntityInterface) {
+    if ($entity instanceof MetaEntityInterface) {
       $entity = $entity->getTargetEntity();
     }
     $options = [
@@ -217,7 +217,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
     $field_definition = $this->fieldDefinition;
     $entity = $item->getEntity();
-    if($entity instanceof MetaEntityInterface) {
+    if ($entity instanceof MetaEntityInterface) {
       $entity = $entity->getTargetEntity();
     }
     $options = [
