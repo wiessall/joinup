@@ -6,6 +6,11 @@ namespace Drupal\search_api_field\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\TabledragWarningCommand;
+use Drupal\Core\Entity\Display\EntityDisplayInterface;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -47,6 +52,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FilterPluginManagerInterface $filterPluginManager,
     protected EventDispatcherInterface $eventDispatcher,
+    protected EntityDisplayRepositoryInterface $entityDisplay,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
   }
@@ -63,7 +69,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.search_api_field.filter'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('entity_display.repository')
     );
   }
 
@@ -142,7 +149,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#header' => $this->getTableHeader(),
         '#regions' => $this->getRegions(),
         '#attributes' => [
-          'class' => ['field-ui-overview', 'facet-draggable-table'],
+          'class' => ['facet-ui-overview', 'facet-draggable-table'],
           'id' => 'facet-display-overview',
         ],
         '#tabledrag' => [
@@ -150,6 +157,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
             'action' => 'order',
             'relationship' => 'sibling',
             'group' => 'field-weight',
+          ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-parent',
+            'subgroup' => 'field-parent',
+            'source' => 'field-name',
           ],
           [
             'action' => 'match',
@@ -163,6 +177,27 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
 
+      $form['refresh_rows'] = ['#type' => 'hidden'];
+      $form['refresh'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Refresh'),
+        '#op' => 'refresh_table',
+        '#submit' => [[$this, 'multistepSubmit']],
+        '#ajax' => [
+          'callback' => [$this, 'multistepAjax'],
+          'wrapper' => 'field-display-overview-wrapper',
+          'effect' => 'fade',
+          // The button stays hidden, so we hide the Ajax spinner too. Ad-hoc
+          // spinners will be added manually by the client-side script.
+          'progress' => 'none',
+        ],
+        '#attributes' => [
+          'class' => ['visually-hidden'],
+          // Ensure the button is not focusable via keyboard navigation.
+          'tabindex' => '-1',
+        ],
+      ];
+
       // Order facets because ['#access'] = FALSE drops weight values,
       // does not update correctly.
       uasort($facets, function (FacetInterface $a, FacetInterface $b) {
@@ -171,7 +206,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       // Populate facet rows for each region.
       foreach ($facets as $facet_id => $facet) {
-        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+        $table[$facet_id] = $this->buildFacetRow($facet, $item, $form, $form_state);
       }
 
       $element['wrapper']['fields'] = $table;
@@ -259,21 +294,23 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       return $row['region']['#value'];
     }
 
-    if (isset($row['region']) && !is_array($row['region'])) {
-      return $row['region'];
-    }
-
-    // Finally, try to extract from CSS classes.
-    if (!empty($row['#attributes']['class']) && is_array($row['#attributes']['class'])) {
-      foreach ($row['#attributes']['class'] as $class) {
-        if (strpos($class, 'region-') === 0) {
-          return substr($class, 7);
-        }
-      }
-    }
-
-    // Default to hidden if no region is found.
     return 'hidden';
+  }
+
+  /**
+   * Get defined facet regions for static context.
+   *
+   * @return array
+   *   List of facet regions.
+   */
+  public static function getRegionsStatic(): array {
+    // In static context, we can only provide the default regions
+    return [
+      'hidden' => [
+        'title' => t('Disabled', [], ['context' => 'Plural']),
+        'message' => t('No field is hidden.'),
+      ],
+    ];
   }
 
   /**
@@ -298,7 +335,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   List of facet regions.
    */
-  protected function getRegions(): array {
+  public function getRegions(): array {
     $facet_regions = $this->fieldDefinition->getSetting('facet_regions');
     $regions = [];
     foreach ($facet_regions as $id => $label) {
@@ -307,11 +344,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         'message' => $this->t('No field is displayed.'),
       ];
     }
-    $regions['hidden'] = [
-      'title' => $this->t('Disabled', [], ['context' => 'Plural']),
-      'message' => $this->t('No field is hidden.'),
-    ];
-    return $regions;
+    return array_merge($regions, $this->getRegionsStatic());
   }
 
   /**
@@ -325,7 +358,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   Render array for the facet row.
    */
-  protected function buildFacetRow(Facet $facet, SearchItem $item): array {
+  protected function buildFacetRow(Facet $facet, SearchItem $item, array &$form, FormStateInterface $form_state): array {
     $facet_id = $facet->id();
     $stored_values = $item->get('value')->getValue();
     $stored_facets = $stored_values['fields'] ?? [];
@@ -335,8 +368,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $config = [
       'weight' => $facet_config['weight'] ?? $facet->getWeight(),
       'region' => $facet_config['region'] ?? 'hidden',
-      'parent' => $facet_config['parent'] ?? '',
     ];
+    $config['parent'] = $config['region'];
+    $config['type'] = $config['region'];
 
     // Get region options from available regions.
     $region_options = array_map(
@@ -347,41 +381,37 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // Create a unique row ID and CSS classes.
     $row_id = Html::getUniqueId('facet-row-' . $facet_id);
     $region_class = Html::getClass("region-{$config['region']}");
+    $label = $facet->getName();
+    $regions = array_keys($this->getRegions());
 
     return [
-      '#attributes' => [
-        'class' => ['draggable', 'tabledrag-leaf', $region_class],
-        'id' => $row_id,
-      ],
-      // Add row type and region handling for tabledrag.
+      '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
+      '#row_type' => 'field',
       '#region_callback' => [$this, 'getRowRegion'],
-
-      // Facet name column.
-      'human_name' => [
-        '#markup' => $facet->getName(),
+      '#js_settings' => [
+        'rowHandler' => 'field',
+        'defaultPlugin' => $facet_id,
       ],
-
-      // Weight column with numeric value and proper class for tabledrag.
+      'human_name' => [
+        '#plain_text' => $label,
+      ],
       'weight' => [
-        '#type' => 'weight',
-        '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
+        '#type' => 'textfield',
+        '#title' => $this->t('Weight for @title', ['@title' => $label]),
         '#title_display' => 'invisible',
-        '#default_value' => $config['weight'],
+        '#default_value' => $config ? $config['weight'] : '0',
+        '#size' => 3,
         '#attributes' => ['class' => ['field-weight']],
       ],
-
-      // Parent field (for hierarchical display)
       'parent_wrapper' => [
         'parent' => [
           '#type' => 'select',
-          '#title' => $this->t('Parent for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Label display for @title', ['@title' => $label]),
           '#title_display' => 'invisible',
           '#options' => $region_options,
-          '#default_value' => $config['parent'],
           '#empty_value' => '',
-          '#attributes' => [
-            'class' => ['js-field-parent', 'field-parent'],
-          ],
+          '#attributes' => ['class' => ['js-field-parent', 'field-parent']],
+          '#parents' => ['fields', $facet_id, 'parent'],
         ],
         'hidden_name' => [
           '#type' => 'hidden',
@@ -389,25 +419,45 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
           '#attributes' => ['class' => ['field-name']],
         ],
       ],
+      'region' => [
+        '#type' => 'select',
+        '#title' => $this->t('Region for @title', ['@title' => $label]),
+        '#title_display' => 'invisible',
+        '#options' => $region_options,
+        '#default_value' => $config ? $config['region'] : 'hidden',
+        '#attributes' => ['class' => ['field-region']],
+      ],
 
       // Region selection - key element for dragging between regions.
       'plugin' => [
         'type' => [
           '#type' => 'select',
-          '#title' => $this->t('Region for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Plugin for @title', ['@title' => $label]),
           '#title_display' => 'invisible',
           '#options' => $region_options,
-          '#default_value' => $config['region'],
-          '#attributes' => [
-            'class' => ['field-plugin-type', 'field-region'],
-          ],
+          '#default_value' => $config ? $config['type'] : 'hidden',
+          '#parents' => ['fields', $facet_id, 'type'],
+          '#attributes' => ['class' => ['field-plugin-type']],
         ],
+        'settings_edit_form' => [],
       ],
 
       // Hidden field to store facet ID.
       'facet_id' => [
         '#type' => 'hidden',
         '#default_value' => $facet_id,
+      ],
+      'settings_summary' => [],
+      'settings_edit' => [
+        [
+          '#submit' => [[$this, 'multistepSubmit']],
+          '#ajax' => [
+            'callback' => [$this, 'multistepAjax'],
+            'wrapper' => 'field-display-overview-wrapper',
+            'effect' => 'fade',
+          ],
+          '#field_name' => $facet_id,
+        ],
       ],
     ];
   }
@@ -750,18 +800,23 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       return $fields;
     }
 
+    $region_map = $this->getRegions(); // Get region machine names => info
     foreach ($value['wrapper']['fields'] as $fn => $field) {
       if (!$this->isFacetField($fn, $field)) {
         continue;
       }
 
       $facet_id = $this->extractFormValue($field, 'facet_id', $fn);
+      $region_key = $this->getFieldRegion($field);
+      $region_title = $region_map[$region_key]['title'] ?? $region_key;
 
       $fields[$facet_id] = [
         'weight' => $this->getFieldWeight($field),
-        'region' => $this->getFieldRegion($field),
+        'region' => $region_title,
       ];
 
+      // Optional: If you still want to keep the machine name, add it like this
+      // $fields[$facet_id]['region_key'] = $region_key;
       $parent = $this->getFieldParent($field);
       if ($parent !== NULL) {
         $fields[$facet_id]['parent'] = $parent;
@@ -972,6 +1027,56 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $event = new AlterQueryPresetsDescriptionEvent($description, $index);
     $this->eventDispatcher->dispatch($event);
     return $event->getDescription();
+  }
+
+  /**
+   * Form submission handler for multistep buttons.
+   */
+  public static function multistepSubmit(array $form, FormStateInterface $form_state): void {
+    $trigger = $form_state->getTriggeringElement();
+
+    if (isset($trigger) && $trigger['#op'] === 'refresh_table') {
+      $updated_rows = $form_state->getValue('refresh_rows') ? explode(' ', $form_state->getValue('refresh_rows')) : [];
+      $plugin_settings_edit = $form_state->get('plugin_settings_edit');
+      if ($plugin_settings_edit && in_array($plugin_settings_edit, $updated_rows)) {
+        $form_state->set('plugin_settings_edit', NULL);
+      }
+    }
+
+    $form_state->setRebuild();
+  }
+
+  /**
+   * Ajax handler for multistep buttons.
+   */
+  public static function multistepAjax($form, FormStateInterface $form_state): AjaxResponse {
+    $response = new AjaxResponse();
+    $trigger = $form_state->getTriggeringElement();
+    if ($trigger && $trigger['#op'] === 'refresh_table') {
+      // Pick the elements that need to receive the ajax-new-content effect.
+      $updated_rows = $form_state->getValue('refresh_rows') ? array_values(explode(' ', $form_state->getValue('refresh_rows'))) : [];
+      $updated_columns = ['settings_summary', 'settings_edit'];
+
+      foreach ($updated_rows as $name) {
+        foreach ($updated_columns as $key) {
+          $element = &$form['fields'][$name][$key];
+          $element['#prefix'] = '<div class="ajax-new-content">' . ($element['#prefix'] ?? '');
+          $element['#suffix'] = ($element['#suffix'] ?? '') . '</div>';
+        }
+      }
+
+      // Replace the whole table.
+      $response->addCommand(new ReplaceCommand('#field-display-overview-wrapper', $form['fields']));
+
+      // Add "row updated" warning after the table has been replaced.
+      foreach ($updated_rows as $name) {
+        // The ID of the rendered table row is `$name` processed by getClass().
+        // @see \Drupal\field_ui\Element\FieldUiTable::tablePreRender
+        $response->addCommand(new TabledragWarningCommand(Html::getClass($name), 'facet-display-overview'));
+      }
+    }
+
+    return $response;
   }
 
 }
