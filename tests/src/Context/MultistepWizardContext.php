@@ -59,8 +59,6 @@ class MultistepWizardContext extends RawDrupalContext {
         throw new \RuntimeException(sprintf("The '%s' button was not found on the page.", $direction));
       }
       $button->click();
-
-      $this->waitForElementVisible('css', '.multi-steps-label');
     }
 
     $newStep = $this->getActiveStepName();
