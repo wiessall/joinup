@@ -1,5 +1,4 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-@wip @api @group-i
+@api @group-i
 Feature: Solution moderation
   In order to manage solutions programmatically
   As a user of the website
@@ -13,21 +12,54 @@ Feature: Solution moderation
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
     When I am logged in as a user with the "moderator" role
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose, Publish"
     And the following buttons should not be present "Request changes, Blacklist"
     And I should not see the link "Delete"
 
     When I am logged in as a "facilitator" of the "Collection propose state test" collection
-    And I go to the homepage of the "Collection propose state test" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
+    And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
