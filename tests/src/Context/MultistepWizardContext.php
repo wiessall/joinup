@@ -80,6 +80,10 @@ class MultistepWizardContext extends RawDrupalContext {
    *   The name of the active step.
    */
   protected function getActiveStepName(): string {
+    if ($this->hasJavascriptSupport()) {
+      $this->waitForElementVisible('css', '.multi-steps-label .active');
+    }
+
     $activeElement = $this->getSession()
       ->getPage()
       ->find('css', '.multi-steps-label .active');
