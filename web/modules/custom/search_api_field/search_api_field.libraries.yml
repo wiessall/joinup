@@ -7,5 +7,3 @@ drupal.search_api_field:
     - core/drupal
     - core/drupalSettings
     - core/once
-    - core/drupal.ajax
-    - core/drupal.dialog

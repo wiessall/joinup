@@ -142,7 +142,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#header' => $this->getTableHeader(),
         '#regions' => $this->getRegions(),
         '#attributes' => [
-          'class' => ['field-ui-overview', 'facet-draggable-table'],
+          'class' => ['field-ui-overview', 'field-draggable-table'],
           'id' => 'facet-display-overview',
         ],
         '#tabledrag' => [
@@ -150,6 +150,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
             'action' => 'order',
             'relationship' => 'sibling',
             'group' => 'field-weight',
+          ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-parent',
+            'subgroup' => 'field-parent',
+            'source' => 'field-name',
           ],
           [
             'action' => 'match',
@@ -162,7 +169,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ];
 
       $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
-
+      $form['refresh_rows'] = [
+        '#type' => 'hidden',
+      ];
       // Order facets because ['#access'] = FALSE drops weight values,
       // does not update correctly.
       uasort($facets, function (FacetInterface $a, FacetInterface $b) {
@@ -171,7 +180,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       // Populate facet rows for each region.
       foreach ($facets as $facet_id => $facet) {
-        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+        $table[$facet_id] = $this->buildFacetRow($facet, $item, $delta);
       }
 
       $element['wrapper']['fields'] = $table;
@@ -236,6 +245,28 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   }
 
   /**
+   * Gets name of the search api field.
+   *
+   * @param int $delta
+   *   Delta.
+   * @param array $element
+   *   Element.
+   *
+   * @return string
+   *   Name of search api field
+   */
+  protected function getSearchApiField(int $delta, array $element): string {
+    $parents = array_merge($element['#field_parents'], [
+      $this->fieldDefinition->getName(),
+      $delta,
+      'wrapper',
+      'fields',
+    ]);
+
+    return array_shift($parents) . '[' . implode('][', $parents) . ']';
+  }
+
+  /**
    * Returns the region to which a row belongs.
    *
    * @param array $row
@@ -288,7 +319,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       $this->t('Weight'),
       $this->t('Parent'),
       $this->t('Region'),
-      ['data' => $this->t('Format'), 'colspan' => 3],
+      ['data' => $this->t('Widget'), 'colspan' => 3],
     ];
   }
 
@@ -321,12 +352,15 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The facet entity to build a row for.
    * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItem $item
    *   The search field item containing stored values.
+   * @param int $delta
+   *   The delta position in the field.
    *
    * @return array
    *   Render array for the facet row.
    */
-  protected function buildFacetRow(Facet $facet, SearchItem $item): array {
+  protected function buildFacetRow(Facet $facet, SearchItem $item, int $delta): array {
     $facet_id = $facet->id();
+    $label = $facet->label();
     $stored_values = $item->get('value')->getValue();
     $stored_facets = $stored_values['fields'] ?? [];
     $facet_config = $stored_facets[$facet_id] ?? [];
@@ -353,35 +387,32 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         'class' => ['draggable', 'tabledrag-leaf', $region_class],
         'id' => $row_id,
       ],
-      // Add row type and region handling for tabledrag.
+      '#row_type' => 'field',
       '#region_callback' => [$this, 'getRowRegion'],
-
-      // Facet name column.
-      'human_name' => [
-        '#markup' => $facet->getName(),
+      '#js_settings' => [
+        'rowHandler' => 'field',
+        'defaultPlugin' => $facet_id,
       ],
-
-      // Weight column with numeric value and proper class for tabledrag.
+      'human_name' => [
+        '#markup' => $label,
+      ],
       'weight' => [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
+        '#title' => $this->t('Weight for @title', ['@title' => $label]),
         '#title_display' => 'invisible',
         '#default_value' => $config['weight'],
         '#attributes' => ['class' => ['field-weight']],
       ],
-
-      // Parent field (for hierarchical display)
       'parent_wrapper' => [
         'parent' => [
           '#type' => 'select',
-          '#title' => $this->t('Parent for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Parent for @title', ['@title' => $label]),
           '#title_display' => 'invisible',
           '#options' => $region_options,
           '#default_value' => $config['parent'],
           '#empty_value' => '',
-          '#attributes' => [
-            'class' => ['js-field-parent', 'field-parent'],
-          ],
+          '#attributes' => ['class' => ['js-field-parent', 'field-parent']],
+          '#parents' => [$this->fieldDefinition->getName(), $delta, 'wrapper', 'fields', $facet_id, 'parent'],
         ],
         'hidden_name' => [
           '#type' => 'hidden',
@@ -389,22 +420,15 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
           '#attributes' => ['class' => ['field-name']],
         ],
       ],
-
-      // Region selection - key element for dragging between regions.
-      'plugin' => [
-        'type' => [
-          '#type' => 'select',
-          '#title' => $this->t('Region for @title', ['@title' => $facet->getName()]),
-          '#title_display' => 'invisible',
-          '#options' => $region_options,
-          '#default_value' => $config['region'],
-          '#attributes' => [
-            'class' => ['field-plugin-type', 'field-region'],
-          ],
-        ],
+      'region' => [
+        '#type' => 'select',
+        '#title' => $this->t('Region for @title', ['@title' => $label]),
+        '#title_display' => 'invisible',
+        '#options' => $region_options,
+        '#default_value' => $config['region'],
+        '#attributes' => ['class' => ['field-region']],
+        '#parents' => [$this->fieldDefinition->getName(), $delta, 'wrapper', 'fields', $facet_id, 'region'],
       ],
-
-      // Hidden field to store facet ID.
       'facet_id' => [
         '#type' => 'hidden',
         '#default_value' => $facet_id,
@@ -808,25 +832,19 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The extracted value or default if not found.
    */
   private function extractFormValue(array $field, string $key, $default = NULL): mixed {
-    // Return default if the key is not set or is empty.
-    if (empty($field[$key])) {
-      return $default;
-    }
+    if (array_key_exists($key, $field)) {
+      // Direct scalar value.
+      if (!is_array($field[$key])) {
+        return $field[$key];
+      }
 
-    $value = $field[$key];
-
-    // Return scalar or non-array value directly.
-    if (!is_array($value)) {
-      return $value;
-    }
-
-    // Check for '#value' or '#default_value' within the field array.
-    if (isset($value['#value'])) {
-      return $value['#value'];
-    }
-
-    if (isset($value['#default_value'])) {
-      return $value['#default_value'];
+      // Look for value in form API keys.
+      if (isset($field[$key]['#value'])) {
+        return $field[$key]['#value'];
+      }
+      if (isset($field[$key]['#default_value'])) {
+        return $field[$key]['#default_value'];
+      }
     }
 
     return $default;
@@ -842,8 +860,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The weight value, defaulting to 0 if not found.
    */
   private function getFieldWeight(array $field): int {
-    $weight = $this->extractFormValue($field, 'weight', 0);
-    return (int) $weight;
+    return (int) $this->extractFormValue($field, 'weight', 0);
   }
 
   /**
