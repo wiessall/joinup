@@ -12,8 +12,10 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collection content:
-      | title              | content_creation | group_moderation |
-      | CC post collection | members          | <moderation>     |
+      | title              |
+      | CC post collection |
+    And the "group_moderation" setting of the "CC post collection" collection is set to <moderation>
+    And the "content_creation" setting of the "CC post collection" collection is set to "members"
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |

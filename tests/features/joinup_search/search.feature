@@ -5,8 +5,9 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find items
     Given collection content:
-      | title                        | logo     | moderation | topic      | spatial coverage | state     |
-      | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
+      | title                        | logo     | topic      | spatial coverage | state     |
+      | Molecular cooking collection | logo.png | Demography | Belgium          | published |
+    And the "group_moderation" setting of the "Molecular cooking collection" collection is set to "no"
     Given solution content:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
@@ -615,8 +616,9 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given collection content:
-      | title                    | logo     | moderation | topic      | spatial coverage | state     |
-      | Radio cooking collection | logo.png | no         | Demography | Belgium          | published |
+      | title                    | logo     | topic      | spatial coverage | state     |
+      | Radio cooking collection | logo.png | Demography | Belgium          | published |
+    And the "group_moderation" setting of the "Radio cooking collection" collection is set to "no"
     Given solution content:
       | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
@@ -734,8 +736,9 @@ Feature: Global search
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given collection content:
-      | title                  | moderation | topic                                                                              | state     |
-      | Max 2 topic collection | no         | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis | published |
+      | title                  | topic                                                                              | state     |
+      | Max 2 topic collection | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis | published |
+    And the "group_moderation" setting of the "Max 2 topic collection" collection is set to "no"
     When I visit the search page
     Then there should be 2 topics in the "Max 2 topic collection" card
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
@@ -840,9 +843,9 @@ Feature: Global search
   @javascript @restart-session
   Scenario: Check topics filter for users.
     Given users:
-      | Username  | E-mail              | First name | Family name | Professional domain |
-      | lyleu      | lyle.u@example.com | Lyle       | Uname       | Demography          |
-      | kyleu      | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
+      | Username | E-mail             | First name | Family name | Professional domain |
+      | lyleu    | lyle.u@example.com | Lyle       | Uname       | Demography          |
+      | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the search page
     # The Portal collection is included
