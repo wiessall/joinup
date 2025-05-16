@@ -546,8 +546,29 @@ third_party_settings:
                   class: fw-bold
                   style: ''
                   data: ''
-          c6dec25c-d2fd-459b-b354-39faa44fb841:
-            uuid: c6dec25c-d2fd-459b-b354-39faa44fb841
+          40705ee6-bc27-470c-a72e-bef97483a670:
+            uuid: 40705ee6-bc27-470c-a72e-bef97483a670
+            region: content
+            configuration:
+              id: 'field_block:node:collection:collection_settings'
+              label: 'Only facilitators and authors can create content.'
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: group_moderation
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          086378ea-f73b-490f-9f8c-b4748e7aa36b:
+            uuid: 086378ea-f73b-490f-9f8c-b4748e7aa36b
             region: content
             configuration:
               id: 'field_block:node:collection:closed_group'
@@ -559,7 +580,7 @@ third_party_settings:
                 view_mode: view_mode
               formatter:
                 type: boolean
-                label: hidden
+                label: above
                 settings:
                   format: default
                   format_custom_false: ''
@@ -567,24 +588,8 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
+            weight: 2
+            additional: {  }
         third_party_settings: {  }
 id: node.collection.default
 targetEntityType: node
