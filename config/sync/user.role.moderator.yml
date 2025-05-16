@@ -25,6 +25,7 @@ dependencies:
     - node.type.solution
     - taxonomy.vocabulary.legal_type
   module:
+    - collection
     - comment
     - contact_form
     - custom_page

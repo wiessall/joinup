@@ -85,8 +85,9 @@ Feature: Collections Overview
 
   Scenario: Custom pages should not be visible on the overview page
     Given collection content:
-      | title | logo     | moderation |
-      | Jira  | logo.png | no         |
+      | title | logo     |
+      | Jira  | logo.png |
+    And the "group_moderation" setting of the "Jira" collection is set to "no"
     And news content:
       | title                             | body                             | collection |
       | Jira will be down for maintenance | As always, during business hours | Jira       |

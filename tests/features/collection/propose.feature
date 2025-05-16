@@ -21,6 +21,7 @@ Feature: Proposing a collection
       | E-mail address | clapman@ec.example.eu |
       | Password       | abc123!#$             |
     And I press "Log in"
+    Then break
     Then I should see the heading "Propose collection"
 
   Scenario: Propose a collection
