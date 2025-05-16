@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AwaitTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 
 /**
  * Defines Behat step definitions for testing the multistep wizard.
@@ -13,6 +14,7 @@ use Drupal\joinup\Traits\AwaitTrait;
 class MultistepWizardContext extends RawDrupalContext {
 
   use AwaitTrait;
+  use JavascriptTrait;
 
   /**
    * Step labels per node type.
@@ -59,6 +61,10 @@ class MultistepWizardContext extends RawDrupalContext {
         throw new \RuntimeException(sprintf("The '%s' button was not found on the page.", $direction));
       }
       $button->click();
+
+      if ($this->hasJavascriptSupport()) {
+        $this->waitForAjax();
+      }
     }
 
     $newStep = $this->getActiveStepName();
