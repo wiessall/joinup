@@ -1,0 +1,9 @@
+uuid: d9a5b7ad-fc4d-4e53-8a84-8aa1a9407e0f
+langcode: en
+status: true
+dependencies: {  }
+name: 'Solution classification'
+vid: solution_classification
+description: null
+weight: 0
+new_revision: false
