@@ -9,7 +9,7 @@ Feature: User interface for the File URL field
       | title            |
       | Regression tests |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9777
   @wip @javascript
   Scenario: Interact with both the 'File upload' and 'External URL' options
     Given I am logged in as a member of the "Regression tests" collection
@@ -40,8 +40,6 @@ Feature: User interface for the File URL field
     But the following field should not be visible "Choose a file"
     And I should not see the text "Allowed types: txt doc docx pdf."
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip
   Scenario: User should be able to remove entity even document's entities do not exist
     Given solution content:
       | title                      | documentation | collection       |
@@ -51,6 +49,7 @@ Feature: User interface for the File URL field
     Given I am logged in as a moderator
     When I go to the edit form of the "Solution without documents" solution
     Then the response status code should be 200
+    When I jump to the "Confirmation" of "solution" wizard
     When I click "Delete"
     And I press "Delete"
     Then the response status code should be 200
