@@ -36,6 +36,7 @@ Feature: Solution editing.
       | Abstract       | Abstract of "A"    |
       | Description    | First letter       |
     And I select "Flemish" from "Language Availabilty"
+    And I select "Complete Solution" from "Solution classification"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:
