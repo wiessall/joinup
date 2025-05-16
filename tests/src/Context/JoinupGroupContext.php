@@ -420,7 +420,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Given the :config setting of the :collectionLabel :group is unset
    * @Given the :config setting of the :collectionLabel :group is set to :value
    *  @Given the :config setting of the :collectionLabel :group is set to :value for entity type :entityTypeId
- */
+   */
   public function givenCollectionSetting(
     string $config,
     string $groupLabel,
