@@ -242,14 +242,6 @@ spdx_licence:
     see_also: 'https://opensource.org/licenses/GPL-2.0'
 solution_classification:
   - name: Complete Solution
-    description: Artifact (product, tool, or digital service) that refers to the software and/or hardware system that is designed to work seamlessly with other systems or technologies realizing a business capacity. In addition to digital aspects, according to EIF the complete solution encompasses legal, governance.
+    description: Artifact (product, tool, or digital service).
   - name: Solution Component
-    description: Self-contained reusable artifact (component or service) that refers to the software and/or hardware that fulfils a specific purpose within a Complete Solution.
-  - name: Specification
-    description: Document with normative guidelines or characteristics that can be used consistently to ensure that materials, products, processes and services con
-  - name: Standard
-    description: Specification that has reached a certain maturity and widespread adoption and potentially endorsed.
-  - name: Framework
-    description: Specification with a structured set of guidelines, principles, standards, and tools that provides a foundation for designing, developing, managing, and…
-  - name: Learning material
-    description: Solution component designed to support knowledge transfer.
+    description: Self-contained reusable artifact.
