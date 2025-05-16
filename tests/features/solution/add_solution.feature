@@ -16,16 +16,18 @@ Feature: "Add solution" visibility options.
 
     When I press "Next"
     Then I should see the following error messages:
-      | error messages                   |
-      | Title field is required.         |
-      | Abstract field is required.      |
-      | Description field is required.   |
-      | Solution type field is required. |
+      | error messages                             |
+      | Title field is required.                   |
+      | Abstract field is required.                |
+      | Description field is required.             |
+      | Solution classification field is required. |
+      | Solution type field is required.           |
 
     When I fill in the following:
       | Title       | Solution Beta  |
       | Abstract    | Short abstract |
       | Description | Last letter    |
+    And I select "Complete Solution" from "Solution classification"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     And I press "Next"
@@ -214,6 +216,7 @@ Feature: "Add solution" visibility options.
       | Title                 | Climate change tracker                  |
       | Abstract              | Tracks climate change                   |
       | Description           | Logs retreat of 40 glaciers in Belgium. |
+    And I select "Complete Solution" from "Solution classification"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:
