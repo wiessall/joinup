@@ -245,28 +245,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   }
 
   /**
-   * Gets name of the search api field.
-   *
-   * @param int $delta
-   *   Delta.
-   * @param array $element
-   *   Element.
-   *
-   * @return string
-   *   Name of search api field
-   */
-  protected function getSearchApiField(int $delta, array $element): string {
-    $parents = array_merge($element['#field_parents'], [
-      $this->fieldDefinition->getName(),
-      $delta,
-      'wrapper',
-      'fields',
-    ]);
-
-    return array_shift($parents) . '[' . implode('][', $parents) . ']';
-  }
-
-  /**
    * Returns the region to which a row belongs.
    *
    * @param array $row
