@@ -30,9 +30,13 @@ Feature: News moderation.
       | Mirror Master | mirrormirroronthewall@example.com |           |
       | Metallo       | kryptoniteEverywhere@example.com  |           |
     Given collection content:
-      | title          | group_moderation | state     | content_creation |
-      | Justice League | no               | published | members          |
-      | Legion of Doom | yes              | published | members          |
+      | title          | state     |
+      | Justice League | published |
+      | Legion of Doom | published |
+    And the "group_moderation" setting of the "Justice League" collection is set to "no"
+    And the "group_moderation" setting of the "Legion of Doom" collection is set to "yes"
+    And the "content_creation" setting of the "Justice League" collection is set to "members"
+    And the "content_creation" setting of the "Legion of Doom" collection is set to "members"
     And the following collection user memberships:
       | collection     | user          | roles       |
       | Justice League | Superman      | owner       |

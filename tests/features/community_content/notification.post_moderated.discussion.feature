@@ -12,8 +12,10 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator | immediate              |
       | CC member        |           | notify_member@test.com      | CC         | Member      | immediate              |
     And collection content:
-      | title              | content_creation | group_moderation |
-      | CC post collection | members          | <moderation>     |
+      | title              |
+      | CC post collection |
+    And the "group_moderation" setting of the "CC post collection" collection is set to <moderation>
+    And the "content_creation" setting of the "CC post collection" collection is set to "members"
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |

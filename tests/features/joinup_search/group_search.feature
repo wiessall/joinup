@@ -6,8 +6,9 @@ Feature: Search inside groups
 
   Background:
     Given collection content:
-      | title               | moderation |
-      | Chalet construction | no         |
+      | title               |
+      | Chalet construction |
+    And the "group_moderation" setting of the "Chalet construction" collection is set to "no"
     And solution content:
       | title                | collection          |
       | Inclined foundations | Chalet construction |
