@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.group_header
     - field.field.node.solution.abstract
     - field.field.node.solution.body
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -108,6 +109,7 @@ content:
 hidden:
   abstract: true
   body: true
+  classification: true
   contact: true
   content_creation: true
   description: true
