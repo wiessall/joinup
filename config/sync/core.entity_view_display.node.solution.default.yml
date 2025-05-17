@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.solution.abstract
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -1419,6 +1420,7 @@ content:
     region: content
 hidden:
   abstract: true
+  classification: true
   collections: true
   contact: true
   content_creation: true
