@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.explore_item
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
@@ -199,7 +198,6 @@ content:
     region: content
 hidden:
   abstract: true
-  body: true
   classification: true
   collections: true
   contact: true

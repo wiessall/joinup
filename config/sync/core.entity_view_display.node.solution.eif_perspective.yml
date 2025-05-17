@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.eif_perspective
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
@@ -146,7 +145,6 @@ content:
     weight: 2
     region: content
 hidden:
-  body: true
   classification: true
   collections: true
   contact: true
