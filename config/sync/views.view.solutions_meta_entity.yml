@@ -328,10 +328,10 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -501,11 +501,8 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      cache:
-        type: search_api_none
-        options: {  }
       defaults:
-        cache: false
+        cache: true
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -519,4 +516,5 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.solutions_meta_entity'
         - 'search_api_list:published'
