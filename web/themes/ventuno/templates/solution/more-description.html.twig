@@ -6,6 +6,7 @@
  * Available variables:
  * - description
  * - url
+ * - name
  */
 #}
 
@@ -14,7 +15,7 @@
     class: 'use-ajax',
     'data-dialog-type': 'modal',
     'data-dialog-options': {width: 800}|json_encode,
-    title: 'Get more info'|t,
+    title: 'More information about @name'|t({'@name': name}),
   }
 ) %}
 

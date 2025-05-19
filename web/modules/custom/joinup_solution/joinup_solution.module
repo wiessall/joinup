@@ -679,6 +679,7 @@ function joinup_solution_theme(array $existing, string $type, string $theme, str
       'variables' => [
         'description' => FALSE,
         'url' => FALSE,
+        'name' => FALSE,
       ],
     ],
     'flag_interoperable_text' => [
@@ -746,6 +747,7 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
       '#theme' => 'more_description',
       '#description' => $form['classification']['widget']['#description'],
       '#url' => URL::fromUserInput('/solution-classification'),
+      '#name' => $form['classification']['widget']['#title'],
     ];
   }
 }
