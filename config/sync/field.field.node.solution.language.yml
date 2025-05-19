@@ -20,7 +20,7 @@ id: node.solution.language
 field_name: language
 entity_type: node
 bundle: solution
-label: 'Language Availabilty'
+label: 'Language availability'
 description: 'The linguistic accessibility of the solution to facilitate cross-border adoption.'
 required: true
 translatable: true
