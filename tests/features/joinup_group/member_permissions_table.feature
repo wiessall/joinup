@@ -16,18 +16,18 @@ Feature: Group member permissions table
       | Mustrum Ridcully |
     Given collection content:
       | title                                       | content_creation         | group_moderation |
-      | Applied astrology                           | facilitators and authors | yes              |
-      | Illiberal studies                           | facilitators and authors | no               |
-      | Approximate accuracy                        | members                  | yes              |
-      | Dust, miscellaneous particles and filaments | members                  | no               |
-      | Creative uncertainty                        | registered users         | yes              |
-      | Woolly thinking                             | registered users         | no               |
+      | Applied astrology                           | facilitators and authors | yes        |
+      | Illiberal studies                           | facilitators and authors | no         |
+      | Approximate accuracy                        | members                  | yes        |
+      | Dust, miscellaneous particles and filaments | members                  | no         |
+      | Creative uncertainty                        | registered users         | yes        |
+      | Woolly thinking                             | registered users         | no         |
     Given solution content:
       | title                         | content_creation         | group_moderation |
-      | Applied anthropics            | facilitators and authors | yes              |
-      | Extreme horticulture          | facilitators and authors | no               |
-      | Prehumous morbid bibliomancy  | registered users         | yes              |
-      | Posthumous morbid bibliomancy | registered users         | no               |
+      | Applied anthropics            | facilitators and authors | yes        |
+      | Extreme horticulture          | facilitators and authors | no         |
+      | Prehumous morbid bibliomancy  | registered users         | yes        |
+      | Posthumous morbid bibliomancy | registered users         | no         |
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |

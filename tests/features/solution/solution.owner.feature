@@ -9,10 +9,9 @@ Feature:
       | title             |
       | Author collection |
     And solution content:
-      | title           | collection        |
-      | Author solution | Author collection |
-    And the "group_moderation" setting of the "Author solution" solution is set to <moderation>
-    And the "content_creation" setting of the "Author solution" solution is set to <content_creation>
+      | title           | group_moderation | content_creation   | collection        |
+      | Author solution | <moderation>     | <content creation> | Author collection |
+
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
     Then I should see the following links:
@@ -22,13 +21,13 @@ Feature:
       | Add event      |
 
     Examples:
-      | moderation | content_creation           |
-      | yes        | "registered users"         |
-      | yes        | "facilitators and authors" |
-      | no         | "registered users"         |
-      | no         | "facilitators and authors" |
+      | moderation | content creation         |
+      | yes        | registered users         |
+      | yes        | facilitators and authors |
+      | no         | registered users         |
+      | no         | facilitators and authors |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8779
   @wip
   @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
