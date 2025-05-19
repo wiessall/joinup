@@ -20,5 +20,5 @@ description: ''
 mapping:
   node:
     solution:
-      field_name: related_solution
+      field_name: solution_settings
       auto_create: true
