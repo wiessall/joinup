@@ -56,7 +56,7 @@ function joinup_solution_post_update_200502(array &$sandbox): string {
     }
   }
 
-  $sandbox['processed'] += count($nidsToProcess);
+  $sandbox['processed'] += count($nids_to_process);
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return sprintf(
