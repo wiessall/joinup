@@ -53,7 +53,7 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    And the following fields should be present "Title, Abstract, Description, Solution type, Language Availabilty, Contributors"
+    And the following fields should be present "Title, Abstract, Description, Solution type, Language Availabilty"
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution
