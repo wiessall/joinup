@@ -86,5 +86,5 @@ Feature: Solution editing.
     And I click "More information about Solution classification"
     Then a modal should open
     And I should see the text "Solution classification" in the "Modal title"
-    And I should see the text "Complete solution" in the "Modal content" region
-    And I should see the text "Artifact (product, tool, or digital service)" in the "Modal content" region
+    And I should see the text "Complete Solution" in the "Modal content" region
+    And I should see the text "Artifact (product, tool, or digital service)." in the "Modal content" region
