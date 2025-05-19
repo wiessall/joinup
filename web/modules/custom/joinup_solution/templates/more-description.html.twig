@@ -6,7 +6,10 @@
  * Available variables:
  * - description
  * - url
+ * - name
  */
 #}
-
-{{ description }} <a href="{{ url }}">{{ 'Get more info'|t }} </a>
+{{ description }}
+<a href="{{ url }}">
+  {{ 'More information about @name'|t({'@name': name}) }}
+</a>
