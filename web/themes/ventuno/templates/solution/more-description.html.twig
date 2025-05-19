@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * More description text template.
+ *
+ * Available variables:
+ * - description
+ * - url
+ */
+#}
+
+{% set attributes = create_attribute(
+  {
+    class: 'use-ajax',
+    'data-dialog-type': 'modal',
+    'data-dialog-options': {width: 800}|json_encode,
+    title: 'Get more info'|t,
+  }
+) %}
+
+{{ description }}  <a href="{{ url }}" {{ attributes }}>
+  {{ pattern('icon', {
+    name: 'info-circle-fill',
+    path: bcl_icon_path,
+    size: 'xs',
+  }) }}
+</a>
