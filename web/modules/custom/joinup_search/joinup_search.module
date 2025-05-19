@@ -18,6 +18,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\ViewExecutable;
@@ -93,8 +94,7 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
  * @param string $field
  *   The field name.
  * @param mixed $value
- *   The requested value. Can be an array but will has to be passed
- *   identically.
+ *   The requested value. Can be an array but will has to be passed identically.
  * @param string $operator
  *   The requested operator. Defaults to '='.
  *
@@ -178,8 +178,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
-            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')
-              ->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
+            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
         }
@@ -236,6 +235,9 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     if ($node instanceof MetaEntityInterface) {
       // Our assumption is that this is a node. (collection or solution).
       $node = $node->getTargetEntity();
+      if (!$node instanceof NodeInterface) {
+        continue;
+      }
     }
     if (!in_array($node->bundle(), $bundles)) {
       continue;
@@ -247,13 +249,6 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     $field = 'listing_content';
     // @todo This throws a warning for null offset. This should go away when
     //   facets for fields are re-implemented.
-    // Facet IDs?
-    // 'search_api_facet:node.solution_content_status'
-    // 'search_api_facet:meta_entity.solution_content_status'
-    // 'search_api_facet:meta_entity.solution_settings_content_status'
-    // "Facet" variable
-    // 'solution_content_status'
-    // FACET ID.
     $facet = $node->bundle() . '_content_status';
     if (!isset($fieldHostEntity->{$field}) || $fieldHostEntity->{$field}->value['enabled'] === 0 || !isset($fieldHostEntity->{$field}->value['fields'][$facet])) {
       continue;

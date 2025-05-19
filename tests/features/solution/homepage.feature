@@ -14,6 +14,7 @@ Feature: Solution homepage
     And release content:
       | title          | release notes    | documentation | release number | release notes   | is version of | creation date    | published at     |
       | Petri net v1.1 | A sample release | text.pdf      | 1.1            | Changed release | Petri net     | 2022-12-21T13:00 | 2022-12-21T13:00 |
+
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
     And I should see the following headings:
@@ -45,9 +46,8 @@ Feature: Solution homepage
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
-      | title           | landing page                   |
-      | Jira restarters | http://foo-example.com/landing |
-    And the "content_creation" setting of the "Jira restarters" solution is set to "registered users"
+      | title           | content_creation | landing page                   |
+      | Jira restarters | registered users | http://foo-example.com/landing |
     And news content:
       | title                             | solution        |
       | Jira will be down for maintenance | Jira restarters |

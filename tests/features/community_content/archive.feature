@@ -89,8 +89,8 @@ Feature: Content archival.
     Given <group type> content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title      |
-      | Some group |
+      | title      | moderation |
+      | Some group | yes        |
     Given discussion content:
       | title           | <group type> | body | content | headline        |
       | Test discussion | Some group   | Test | Test    | Test discussion |
@@ -113,8 +113,8 @@ Feature: Content archival.
     Given <group type> content:
       # Set the moderation to yes to be able to access all states. Deletion
       # request is not available in a post moderation workflow.
-      | title      |
-      | Some group |
+      | title      | moderation |
+      | Some group | yes        |
     Given <type> content:
       | title       | <group type> | abstract | content | headline    | field_paragraphs_body |
       | Test <type> | Some group   | Test     | Test    | Test <type> | Test paragraph        |

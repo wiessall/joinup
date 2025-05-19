@@ -26,12 +26,12 @@ function joinup_solution_post_update_200502(array &$sandbox): string {
     $sandbox['nids_to_process'] = $nids;
     $sandbox['total'] = count($sandbox['nids_to_process']);
     $sandbox['processed'] = 0;
-    $sandbox['solutionSettingsCount'] = 0;
+    $sandbox['solution_settings_count'] = 0;
   }
 
-  $nidsToProcess = array_splice($sandbox['nids_to_process'], 0, 50);
+  $nids_to_process = array_splice($sandbox['nids_to_process'], 0, 50);
 
-  foreach ($nidsToProcess as $nid) {
+  foreach ($nids_to_process as $nid) {
     $solution = $node_storage->load($nid);
 
     try {
@@ -45,11 +45,11 @@ function joinup_solution_post_update_200502(array &$sandbox): string {
       $meta_entity->set('listing_content', $solution->get('listing_content')
         ->getValue());
       $meta_entity->save();
-      $sandbox['solutionSettingsCount']++;
+      $sandbox['solution_settings_count']++;
     }
     catch (\Exception $e) {
       throw new UpdateException(sprintf(
-        "Saving the sharing entity of node %s has failed.\n%s",
+        "Saving the meta entity of node %s has failed.\n%s",
         $nid,
         $e->getMessage(),
       ));
@@ -63,6 +63,6 @@ function joinup_solution_post_update_200502(array &$sandbox): string {
     "Processed %s of %s solution content. Migrated %s solutions so far.",
     $sandbox['processed'],
     $sandbox['total'],
-    $sandbox['solutionSettingsCount'],
+    $sandbox['solution_settings_count'],
   );
 }

@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -419,7 +420,7 @@ class JoinupGroupContext extends RawDrupalContext {
    *
    * @Given the :config setting of the :collectionLabel :group is unset
    * @Given the :config setting of the :collectionLabel :group is set to :value
-   * @Given the :config setting of the :collectionLabel :group is set to :value for entity type :entityTypeId
+   * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
    */
   public function givenCollectionSetting(
     string $config,
@@ -474,6 +475,46 @@ class JoinupGroupContext extends RawDrupalContext {
         ]);
       $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
       $metaEntity?->delete();
+    }
+  }
+
+  /**
+   * Stores settings fields in meta_entity.
+   *
+   * @BeforeNodeCreate
+   */
+  public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type === 'solution') {
+      $meta_entity_type = $node->type . '_settings';
+      $meta_entity = MetaEntity::create([
+        'type' => $meta_entity_type,
+      ]);
+
+      $meta_fields = [
+        'group_moderation',
+        'content_creation',
+        'list_related_entities',
+        'listing_content',
+      ];
+
+      $fieldMapping = [
+        'group_moderation' => ['yes' => 1, 'no' => 0],
+        'list_related_entities' => ['yes' => 1, 'no' => 0],
+        'content_creation' => [
+          'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+          'registered users' => ContentCreationOptions::REGISTERED_USERS,
+          'members' => ContentCreationOptions::MEMBERS,
+        ],
+      ];
+
+      foreach ($meta_fields as $field) {
+        if (property_exists($node, $field)) {
+          $meta_entity->set($field, $fieldMapping[$field][$node->$field]);
+          unset($node->$field);
+        }
+      }
+      $node->$meta_entity_type = $meta_entity;
     }
   }
 

@@ -23,15 +23,11 @@ Feature: Group member permissions table
       | Creative uncertainty                        | registered users         | yes              |
       | Woolly thinking                             | registered users         | no               |
     Given solution content:
-      | title                         |
-      | Applied anthropics            |
-      | Extreme horticulture          |
-      | Prehumous morbid bibliomancy  |
-      | Posthumous morbid bibliomancy |
-    And the "group_moderation" setting of the "Extreme horticulture" solution is set to "no"
-    And the "group_moderation" setting of the "Posthumous morbid bibliomancy" solution is set to "no"
-    And the "content_creation" setting of the "Prehumous morbid bibliomancy" solution is set to "registered users"
-    And the "content_creation" setting of the "Posthumous morbid bibliomancy" solution is set to "registered users"
+      | title                         | content_creation         | group_moderation |
+      | Applied anthropics            | facilitators and authors | yes              |
+      | Extreme horticulture          | facilitators and authors | no               |
+      | Prehumous morbid bibliomancy  | registered users         | yes              |
+      | Posthumous morbid bibliomancy | registered users         | no               |
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |

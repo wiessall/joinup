@@ -29,7 +29,7 @@ Feature:
       | Knowledge Hive | Blocked member   | blocked |             |
     # Set the code of conduct _after_ the creation of memberships to ensure
     # that the memberships are affected by the CoC.
-    And the "Code of Conduct" setting of the "Knowledge Hive" collection is set to "Agreement of usage" for entity type "custom page"
+    And the "Code of Conduct" setting of the "Knowledge Hive" collection is set to "Agreement of usage" "custom page"
 
   Scenario: User can accept the latest version of Code of Conduct
     # Before all, check that a moderator bypasses the CoC.
