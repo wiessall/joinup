@@ -38,4 +38,12 @@ interface CustomPageInterface extends NodeInterface, GroupContentInterface, Coll
    */
   public function isGroupCodeOfConductPage(): bool;
 
+  /**
+   * Determines whether the title is hidden on this custom page.
+   *
+   * @return bool
+   *   Return true if the title hidden is enabled.
+   */
+  public function isHiddenTitleEnabled(): bool;
+
 }

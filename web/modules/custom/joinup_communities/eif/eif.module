@@ -222,7 +222,7 @@ function eif_views_pre_render(ViewExecutable $view): void {
     ->getCacheTags();
   $cache_tags[] = 'meta_entity_list:eif_perspective';
   $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
-  $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
+  $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'] ?? [], $cache_tags);
 }
 
 /**
