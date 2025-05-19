@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.digest_message
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.documentation
@@ -69,7 +69,7 @@ content:
     weight: 0
     region: content
 hidden:
-  body: true
+  classification: true
   collections: true
   contact: true
   description: true

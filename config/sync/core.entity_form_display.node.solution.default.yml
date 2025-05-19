@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_form_mode.node.inline
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.documentation
@@ -39,6 +39,7 @@ third_party_settings:
         - title
         - abstract
         - description
+        - classification
         - solution_type
         - language
         - content_creation
@@ -147,6 +148,12 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  classification:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
     weight: 13
@@ -195,7 +202,6 @@ content:
     settings: {  }
     third_party_settings: {  }
   node_preview:
-    type: container
     weight: 14
     region: content
     settings: {  }
@@ -220,7 +226,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 4
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -233,7 +239,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  body: true
   created: true
   current_workflow_state: true
   documentation: true

@@ -1,5 +1,4 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-@wip @api @group-i
+@api @group-i
 Feature: Solution moderation
   In order to manage solutions programmatically
   As a user of the website
@@ -13,21 +12,57 @@ Feature: Solution moderation
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Complete Solution" from "Solution classification"
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
     When I am logged in as a user with the "moderator" role
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Complete Solution" from "Solution classification"
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose, Publish"
     And the following buttons should not be present "Request changes, Blacklist"
     And I should not see the link "Delete"
 
     When I am logged in as a "facilitator" of the "Collection propose state test" collection
-    And I go to the homepage of the "Collection propose state test" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
+    And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Complete Solution" from "Solution classification"
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
@@ -79,7 +114,7 @@ Feature: Solution moderation
     # When I click the "Edit" link
     # Then the state field should have only the given states available.
     Then for the following solution, the corresponding user should have the corresponding available state buttons:
-      | solution                   | user             | buttons                                                              |
+      | solution                   | user             | Solution information buttons | Contact details buttons     | Additional information buttons | Interoperability information buttons | Confirmation buttons                                                     |
 
       # The following solutions are tested as an owner. In reality, the owner is
       # also a facilitator so the only ability that differentiates the owner
@@ -87,37 +122,28 @@ Feature: Solution moderation
       # solution when the solution is published. Note that the "Delete" option
       # is a link to a confirmation form which is styled to look as a button.
       # This is checked separately below.
-      | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                               |
-      | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                               |
-      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose, Archive                             |
-      | Time Bandit                | Franklin Walker  | Save as draft, Publish                                               |
-      | Fire Swords                | Franklin Walker  |                                                                      |
-      | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                               |
-      | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                               |
+      | Azure Ship                 | Franklin Walker  | Save as draft,Next           | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
+      | The Last Illusion          | Franklin Walker  | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Propose,Save as draft                                           |
+      | Rose of Doors              | Franklin Walker  | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Publish,Save as draft,Propose,Archive                           |
+      | Time Bandit                | Franklin Walker  | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Publish                                           |
+      | The Guardian of the Stream | Franklin Walker  | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
+      | Flames in the Swords       | Franklin Walker  | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
 
       # The following solutions do not follow the rule above and should be
       # tested as shown.
-      | Azure Ship                 | William Curtis   | Save as draft, Propose                                               |
-      | The Last Illusion          | William Curtis   | Propose, Save as draft                                               |
-      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose, Archive                             |
-      | Time Bandit                | William Curtis   | Save as draft, Publish                                               |
-      | Fire Swords                | William Curtis   |                                                                      |
-      | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                               |
-      | Flames in the Swords       | William Curtis   | Save as draft, Propose                                               |
-      | Azure Ship                 | Isabel Banks     |                                                                      |
-      | The Last Illusion          | Isabel Banks     |                                                                      |
-      | Rose of Doors              | Isabel Banks     |                                                                      |
-      | Time Bandit                | Isabel Banks     |                                                                      |
-      | Fire Swords                | Isabel Banks     |                                                                      |
-      | The Guardian of the Stream | Isabel Banks     |                                                                      |
-      | Flames in the Swords       | Isabel Banks     |                                                                      |
-      | Azure Ship                 | Tyrone Underwood | Save as draft, Propose, Publish                                      |
-      | The Last Illusion          | Tyrone Underwood | Propose, Save as draft, Publish, Request changes                     |
-      | Rose of Doors              | Tyrone Underwood | Publish, Save as draft, Propose, Request changes, Blacklist, Archive |
-      | Time Bandit                | Tyrone Underwood | Save as draft, Publish                                               |
-      | Fire Swords                | Tyrone Underwood | Unarchive                                                            |
-      | The Guardian of the Stream | Tyrone Underwood | Save as draft, Propose, Publish                                      |
-      | Flames in the Swords       | Tyrone Underwood | Save as draft, Propose, Publish                                      |
+      | Azure Ship                 | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
+      | The Last Illusion          | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Propose,Save as draft                                           |
+      | Rose of Doors              | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Publish,Save as draft,Propose,Archive                           |
+      | Time Bandit                | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Publish                                           |
+      | The Guardian of the Stream | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
+      | Flames in the Swords       | William Curtis   | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose                                           |
+      | Azure Ship                 | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose,Publish                                   |
+      | The Last Illusion          | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Propose,Save as draft,Publish,Request changes                   |
+      | Rose of Doors              | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Publish,Save as draft,Propose,Request changes,Blacklist,Archive |
+      | Time Bandit                | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Publish                                           |
+      | Fire Swords                | Tyrone Underwood | Save as draft, Next          | Previous,Next               | Previous,Next                  | Previous,Next                        | Previous,Unarchive                                                       |
+      | The Guardian of the Stream | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose,Publish                                   |
+      | Flames in the Swords       | Tyrone Underwood | Save as draft, Next          | Previous,Save as draft,Next | Previous,Save as draft,Next    | Previous,Save as draft,Next          | Previous,Save as draft,Propose,Publish                                   |
 
     # The 'Delete' action is not a button but a link leading to a confirmation
     # page that is styled as a button. It should only be available to the owner
@@ -149,34 +175,27 @@ Feature: Solution moderation
       | The Guardian of the Stream | Tyrone Underwood | yes         |
       | Flames in the Swords       | Tyrone Underwood | yes         |
 
-    # Authentication sample checks.
+    # Access denied checks.
     Given I am logged in as "William Curtis"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
 
-    # Expected access.
-    And I go to the "Azure Ship" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose"
-    And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    Given I am logged in as "Franklin Walker"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
 
-    # Expected access denied.
-    When I go to the "The Last Illusion" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose"
-    And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
-
-    # One check for the moderator.
-    Given I am logged in as "Tyrone Underwood"
-    # Expected access.
-    And I go to the "Azure Ship" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose, Publish"
-    And the following buttons should not be present "Request changes, Blacklist"
-    And I should see the link "Delete"
+    Given I am logged in as "Isabel Banks"
+    When I go to the edit form of the "Azure Ship" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "The Last Illusion" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Rose of Doors" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Time Bandit" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "The Guardian of the Stream" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Flames in the Swords" solution
+    Then I should see the heading "Access denied"

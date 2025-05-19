@@ -208,8 +208,7 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip @email
+  @email
   Scenario: Email validator after submit a Collection/Solution.
     Given owner content:
       | name               | owner type |
@@ -245,15 +244,17 @@ Feature: Proposing a collection
     Then I fill in "Title" with "Rolly email validation"
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "HR" from "Topic"
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Organisation valid"
-    And I press "Add owner"
-    And I fill in the following:
-      | Name   | Contact Rapazoglou             |
-      | E-mail | contact_Rapazoglou@example.com |
-    And I press "Create contact information"
+    And I select "Complete Solution" from "Solution classification"
     And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I fill in "Name" with "Organisation valid"
+    And I check "Company"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    And I fill in "Website URL" with "http://example.com/john-doe"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
 
     # Email confirmation occurs only for published groups.
@@ -276,6 +277,7 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
     When I go to the edit form of the "Rolly email validation" solution
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
@@ -288,12 +290,6 @@ Feature: Proposing a collection
     # because contact info emails are not published.
     When I go to "/collection/some-email-validation/contact"
     Then I should get an access denied error
-
-    # As some entities were created via UI, we should explicitly delete them.
-    And I delete the "Contact person" "contact information"
-    And I delete the "Contact Rapazoglou" "contact information"
-    And I delete the "Some email validation" collection
-    And I delete the "Rolly email validation" solution
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.

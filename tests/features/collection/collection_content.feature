@@ -24,58 +24,34 @@ Feature: Collection content
       | title                          | body                                                           | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-  @wip
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner content:
       | name             | owner type |
       | Particle sweeper | Company    |
 
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436
     Given I am logged in as a moderator
     And I go to the homepage of the "Turin Egyptian Collection" collection
 
-    # The solution counters do not include the unpublished solutions.
     Then I should see the link "1 Solution" in the "Content" region
     And I see the text "1 Solution" in the "Header" region
 
-    When I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    And I fill in the following:
-      | Title                 | Solution from draft to published                                    |
-      | Abstract              | The abstract of the solution.                                       |
-      | Description           | Testing that publishing a solution, updates the collection content. |
-      | Geographical coverage | Belgium                                                             |
-      | Name                  | Costas Papazoglou                                                   |
-      | E-mail address        | CostasPapazoglou@example.com                                        |
-    And I select "Data gathering and processing" from "Topic"
-    And I select "Logging Service" from "Solution type"
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Particle sweeper"
-    And I press "Add owner"
-    And I press "Publish"
-    Then I should see the heading "Solution from draft to published"
-
-    When I go to the homepage of the "Turin Egyptian Collection" collection
-    # Since there are 2 solutions, the link moved in first since it is the type of content with most items.
-    # When the facet tab is displayed, the text is "@count Solutions", while if it is in the "More" dropdown, it shows
-    # as "Solutions (@count)".
+    When solution content:
+      | title                            | collection                | status |
+      | Solution from draft to published | Turin Egyptian Collection | published |
+    And I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solutions" in the "Header" region
     And I should see the link "2 Solutions"
 
     # Create a draft version of the solution to verify that counters are not affected.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution from draft to published"
     And I fill in "Title" with "Solution from draft to published but draft"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Save as draft"
     Then I should see the heading "Solution from draft to published"
 
     When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
-    Then I delete the "Solution from draft to published" solution
-    And I delete the "Costas Papazoglou" "contact information"
 
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile

@@ -175,6 +175,7 @@ trait NameMappingsTrait {
         'topic' => 'field_topic',
         'related by type' => 'list_related_entities',
         'related solutions' => 'related_solutions',
+        'solution classification' => 'classification',
         'solution type' => 'solution_type',
         'spatial coverage' => 'spatial_coverage',
         'status' => 'field_status',
