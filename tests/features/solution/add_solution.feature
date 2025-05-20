@@ -225,12 +225,15 @@ Feature: "Add solution" visibility options.
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
-    When I fill in the following:
-      | owner[form][0][title][0][value]   | University of Basel       |
-      | contact[form][0][title][0][value] | Angela Crespi       |
-      | E-mail address                    | angela_crespi@glacmon.basel-uni.ch  |
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "University of Basel"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
+    And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I jump to the "Confirmation" of "solution" wizard
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
