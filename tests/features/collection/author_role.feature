@@ -6,10 +6,9 @@ Feature:
 
   Scenario Outline: Authors can add content regardless of group settings.
     Given collection content:
-      | title             |
-      | Author collection |
-    And the "content_creation" setting of the "Author collection" collection is set to <content_creation>
-    And the "group_moderation" setting of the "Author collection" collection is set to <moderation>
+      | title             | group_moderation | content_creation   |
+      | Author collection | <moderation>     | <content creation> |
+
     When I am logged in as an "author" of the "Author collection" collection
     And I go to the "Author collection" collection
     Then I should see the following links:
@@ -20,10 +19,10 @@ Feature:
       | Add event      |
 
     Examples:
-      | moderation | content_creation           |
-      | yes        | "registered users"         |
-      | yes        | "members"                  |
-      | yes        | "facilitators and authors" |
-      | no         | "registered users"         |
-      | no         | "members"                  |
-      | no         | "facilitators and authors" |
+      | moderation | content creation         |
+      | yes        | registered users         |
+      | yes        | members                  |
+      | yes        | facilitators and authors |
+      | no         | registered users         |
+      | no         | members                  |
+      | no         | facilitators and authors |

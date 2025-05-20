@@ -8,8 +8,8 @@ Feature: Content Overview
       | welshbuzzard | Titus      | Nicotera    | nicotito@example.org |
       | hatchingegg  | Korinna    | Morin       | korimor@example.com  |
     And collection content:
-      | title             | description        |
-      | Rumble collection | Sample description |
+      | title             | description        | moderation |
+      | Rumble collection | Sample description | yes        |
     And "event" content:
       | title                | collection        | created           |
       | Seventh Windows      | Rumble collection | 2018-10-03 4:21am |

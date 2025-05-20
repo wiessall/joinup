@@ -6,8 +6,9 @@ Feature: Editing collections
 
   Scenario: Edit a collection
     Given collection content:
-      | title                 | access url                             | closed | creation date    | state |
-      | Überwaldean Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | draft |
+      | title                 | access url                             | closed | creation date    | content_creation         | group_moderation | state |
+      | Überwaldean Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
+
     When I am logged in as a facilitator of the "Überwaldean Land Eels" collection
     And I go to the "edit-form" content page of the type "collection" with the title "Überwaldean Land Eels"
     Then I should see the heading "Edit Collection Überwaldean Land Eels"
@@ -30,8 +31,8 @@ Feature: Editing collections
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given collection content:
-      | title           | access url                             | closed | creation date    | state |
-      | Rhyme Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | draft |
+      | title           | access url                             | closed | creation date    | content_creation         | group_moderation | state |
+      | Rhyme Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
 
     And I go to the "edit-form" content page of the type "collection" with the title "Rhyme Land Eels"
@@ -52,8 +53,8 @@ Feature: Editing collections
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
     Given collection content:
-      | title                   | access url                             | closed | creation date    | state |
-      | Rhyme Land wysiwyg Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | draft |
+      | title                   | access url                             | closed | creation date    | content_creation         | group_moderation | state |
+      | Rhyme Land wysiwyg Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
 
     And I go to the "edit-form" content page of the type "collection" with the title "Rhyme Land wysiwyg Eels"
