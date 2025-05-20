@@ -34,3 +34,13 @@ Feature: Solution TCA agreement
     Then a modal should open
     And I should see the text "Terms of agreement" in the "Modal title"
     And I should see the text "The eligibility criteria of Interoperable Europe Portal's interoperability solutions have been redefined." in the "Modal content" region
+
+  Scenario: Users do not see TCA agreement during editing.
+    Given solution content:
+      | title      |
+      | Solution B |
+
+    When I am logged in as a facilitator of the "Solution B" solution
+    And I go to the edit form of the "Solution B" solution
+    And I jump to the "Confirmation" of "solution" wizard
+    And I should not see "I have read and agreed"
