@@ -106,7 +106,9 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResultInterface|bool {
     // On the confirm form, we want to tell our users what we change and what we
     // don't change. To be able to do so, we need to return 'allowed' here.
+    $account = $account ?: $this->currentUser;
     $access = $account->hasPermission('manage solutions') ? AccessResult::allowed() : AccessResult::forbidden();
+    $access->cachePerPermissions();
     return $return_as_object ? $access : $access->isAllowed();
   }
 

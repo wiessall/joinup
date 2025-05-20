@@ -261,6 +261,7 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
   if ($entity->bundle() !== 'contact_form_submission') {
     return AccessResult::neutral();
   }
+
   // Allow users to access the contact form messages and its attachments.
-  return AccessResult::allowedIf($account->hasPermission('access contact form messages'));
+  return AccessResult::allowedIfHasPermission($account, 'access contact form messages');
 }
