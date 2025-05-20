@@ -25,7 +25,7 @@ trait TabledragTrait {
    *   The row element.
    */
   protected function findDraggableTableRowByTitle(string $title): NodeElement {
-    $xpath = '//tr[@class and contains(concat(" ", normalize-space(@class), " "), " draggable ")][.//a[text()="' . $title . '"]]';
+    $xpath = '//tr[contains(concat(" ", normalize-space(@class), " "), " draggable ")][.//a[normalize-space(text())="' . $title . '"]] | //tr[contains(concat(" ", normalize-space(@class), " "), " draggable ")][.//div[contains(@class, "tabledrag-cell-content__item") and normalize-space(text())="' . $title . '"]]';
     $row = $this->getSession()->getPage()->find('xpath', $xpath);
 
     if (!$row) {
