@@ -251,35 +251,26 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
-          0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e:
-            uuid: 0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e
+          4602a181-011a-4626-9f18-7e34e81b1c07:
+            uuid: 4602a181-011a-4626-9f18-7e34e81b1c07
             region: content
             configuration:
-              id: 'extra_field_block:node:collection:node_collection_listing_content_top'
-              label: 'Facet region: Collection content top'
+              id: 'field_block:node:collection:collection_settings'
+              label: 'Collection settings reference'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                settings: {  }
-                third_party_settings: {  }
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: listing_content
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
-            additional: {  }
-          0d98251b-e552-45fe-8fab-90a270086d0d:
-            uuid: 0d98251b-e552-45fe-8fab-90a270086d0d
-            region: content
-            configuration:
-              id: 'extra_field_block:node:collection:node_collection_listing_content_inline_facets'
-              label: 'Facet region: Inline facets'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
