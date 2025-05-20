@@ -13,9 +13,9 @@ Feature: Collection homepage
       | Bilbo       | blocked |
       | Some goblin | active  |
     And collection content:
-      | title                                   | closed |
-      | Under the mountain                      | no     |
-      | Exactly the same collection, but closed | yes    |
+      | title                                   | moderation | closed |
+      | Under the mountain                      | yes        | no     |
+      | Exactly the same collection, but closed | yes        | yes    |
     And the following collection user memberships:
       | collection                              | user   | roles       |
       | Under the mountain                      | Thorin | facilitator |

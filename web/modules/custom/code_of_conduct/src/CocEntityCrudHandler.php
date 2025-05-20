@@ -101,7 +101,7 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
     $group = $metaEntity->getTargetEntity();
 
     // Open collections are not restricted by CoC.
-    if (!$group->isClosed()) {
+    if (empty($group) || !$group->isClosed()) {
       return;
     }
 
