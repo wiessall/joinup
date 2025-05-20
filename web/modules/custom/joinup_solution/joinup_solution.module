@@ -757,6 +757,7 @@ function joinup_solution_form_node_solution_form_alter(&$form, FormStateInterfac
             ->toString(),
           '@json' => Json::encode(['width' => 800]),
         ]),
+        '#required_error' => t('You must accept the Terms of Agreement.'),
       ],
       '#weight' => 99,
     ];

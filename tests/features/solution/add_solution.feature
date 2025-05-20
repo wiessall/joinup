@@ -42,7 +42,7 @@ Feature: "Add solution" visibility options.
     And I press "Propose"
     Then I should see the following error messages:
       | error messages                                                      |
-      | I have read and agreed to the Terms of Agreement field is required. |
+      | You must accept the Terms of Agreement. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
