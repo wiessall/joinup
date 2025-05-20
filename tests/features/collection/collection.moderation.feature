@@ -210,7 +210,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Any user can create content."
 
     # Regression test for a bug that caused the content creation setting to be
     # lost when adding an item to a multivalue field. Ref. ISAICP-3200.
@@ -218,7 +217,6 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     When I press "Add another item" at the "Geographical coverage" field
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Submit the form and approve it as a moderator. This should not cause the
     # content creation option to change.
@@ -227,14 +225,12 @@ Feature: Collection moderation
     When I am logged in as a user with the "moderator" role
     And I go to the "edit-form" content page of the type "collection" with the title "Spectres in fog"
     And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
     # should remain unchanged.
     When I press "Publish"
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
     Then I delete the "Spectres in fog" collection
@@ -263,7 +259,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Any user can create content."
 
     # Save the collection.
     When I press "Propose"
@@ -272,7 +267,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
@@ -301,7 +295,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
     When I press "Propose"
@@ -310,7 +303,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
@@ -341,7 +333,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     When I press "Add another item" at the "Geographical coverage" field
-    And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
     When I press "Propose"
@@ -350,7 +341,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
@@ -379,7 +369,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
 
     When I press "Add another item" at the "Geographical coverage" field
 
@@ -390,7 +379,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
