@@ -76,7 +76,7 @@ class EifPerspectiveController extends ControllerBase {
    *   The access result.
    */
   public function editAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIfHasPermissions($account, ['update eif_perspective meta-entity']);
+    return AccessResult::allowedIfHasPermission($account, 'update eif_perspective meta-entity');
   }
 
   /**

@@ -22,7 +22,7 @@ trait GroupHeaderAccessTrait {
     $cond = (!$node instanceof GroupInterface) ||
       $this->routeMatch->getRouteName() !== "entity.{$node->getEntityTypeId()}.edit_form";
 
-    return AccessResult::allowedIf($cond);
+    return AccessResult::allowedIf($cond)->addCacheContexts(['route']);
   }
 
 }
