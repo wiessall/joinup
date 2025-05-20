@@ -33,6 +33,16 @@ Feature: "Add solution" visibility options.
       | error messages                    |
       | Name field is required.           |
       | E-mail address field is required. |
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
+    And I press "Propose"
+    Then I should see the following error messages:
+      | error messages                                                      |
+      | I have read and agreed to the Terms of Agreement field is required. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
