@@ -7,7 +7,6 @@ Feature: Multilingual search
     And collection content:
       | title                        | logo     | moderation | topic      | spatial coverage |
       | Molecular cooking collection | logo.png | no         | Demography | Belgium          |
-    And the "group_moderation" setting of the "Molecular cooking collection" collection is set to "no"
     And the multilingual "El celler de Can Roca" solution of "Molecular cooking collection" collection
     When I go to the "Molecular cooking collection" collection
     Then I should see 1 tile
