@@ -112,6 +112,9 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       'rootKeys' => [],
       'urlKeys' => [],
       'endpoints' => [],
+      'filesToFetch' => [
+        'publiccodeYml' => 'publiccode.yml',
+      ],
     ];
   }
 
@@ -124,6 +127,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     }
 
     $collectedExceptions = [];
+    ['filesToFetch' => $filesToFetch] = $this->getConfiguration();
     foreach ($this->fetched as $baseUrl => $namespaces) {
       unset($this->fetched[$baseUrl]);
 
@@ -135,11 +139,12 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       assert($hostingPlatform instanceof EuOssCatalogueHostingPlatformInterface);
 
       try {
-        foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+        foreach ($hostingPlatform->getProjects($filesToFetch) as $project) {
           assert($project instanceof Project);
           $this->processedUrls[] = $project->url;
-          if (isset($project->files['publiccodeYml'])) {
-            yield $project;
+          $projectPreprocessed = $this->preprocessProject($project);
+          if ($projectPreprocessed) {
+            yield $projectPreprocessed;
           }
         }
       }
@@ -155,6 +160,23 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     if (!empty($collectedExceptions)) {
       throw new ProviderFetchException(implode(PHP_EOL, $collectedExceptions));
     }
+  }
+
+  /**
+   * Processes the given projects.
+   *
+   * This method allows subclasses to align the projects right before they're
+   * returned in the iterator of ::fetch().
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The pro
+   *
+   * @return \Drupal\eu_oss_catalogue\Model\Project|null
+   */
+  protected function preprocessProject(Project $project): ?Project {
+    return isset($project->files['publiccodeYml'])
+      ? $project
+      : NULL;
   }
 
   /**
@@ -177,7 +199,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         if (!is_array($decodedResponse)) {
           throw new \Exception('API returned response is not a valid JSON response.');
         }
-        $value = NestedArray::getValue($decodedResponse, (array) $rootKeys, $keyExists);
+        $value = NestedArray::getValue($decodedResponse, $rootKeys, $keyExists);
         if (!$keyExists) {
           throw new \Exception("The configured root keys don't exist on the decoded API response.");
         }
@@ -251,7 +273,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Logs statistics about fetched and processed OSS Solutions.
    */
-  protected function logResults(): void {
+  private function logResults(): void {
     $catalogueLabel = (string) $this->pluginDefinition['label'];
     $notProcessable = array_diff($this->fetchedUrls, $this->processedUrls);
     $context = [

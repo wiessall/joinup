@@ -39,7 +39,7 @@ class FinnishCatalogue extends UrlListCatalogueProviderBase {
         'http://avoinkoodi.fi/municipalityprojects.json',
         'http://avoinkoodi.fi/eduprojects.json',
       ],
-    ];
+    ] + parent::defaultConfiguration();
   }
 
 }
