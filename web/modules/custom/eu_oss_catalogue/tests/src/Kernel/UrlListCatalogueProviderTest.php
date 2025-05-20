@@ -39,7 +39,7 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'eu_oss_catalogue',
     // Make sure that we don't send any request to external services.
     'eu_oss_catalogue_test_not_allowed_mock',
