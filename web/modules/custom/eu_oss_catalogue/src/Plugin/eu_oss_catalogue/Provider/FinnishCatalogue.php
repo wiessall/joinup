@@ -30,20 +30,16 @@ class FinnishCatalogue extends UrlListCatalogueProviderBase {
   /**
    * {@inheritdoc}
    */
-  protected string|array $rootKeys = 'projects';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected string|array $urlKeys = 'code_url';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected array $endpoints = [
-    'http://avoinkoodi.fi/projects.json',
-    'http://avoinkoodi.fi/municipalityprojects.json',
-    'http://avoinkoodi.fi/eduprojects.json',
-  ];
+  public function defaultConfiguration(): array {
+    return [
+      'rootKeys' => ['projects'],
+      'urlKeys' => ['code_url'],
+      'endpoints' => [
+        'http://avoinkoodi.fi/projects.json',
+        'http://avoinkoodi.fi/municipalityprojects.json',
+        'http://avoinkoodi.fi/eduprojects.json',
+      ],
+    ];
+  }
 
 }

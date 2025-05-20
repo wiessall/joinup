@@ -4,34 +4,44 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase;
-use Drupal\KernelTests\KernelTestBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
 
+/**
+ * Tests the URL list provider base class.
+ *
+ * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase
+ */
 class UrlListCatalogueProviderTest extends KernelTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static $modules = [
     'eu_oss_catalogue',
     'eu_oss_catalogue_test_not_allowed_mock',
     'http_request_mock',
   ];
 
-  public function setUp(): void {
-    parent::setUp();
-  }
-
   /**
+   * Tests the plugin's fetch() method.
+   *
    * @param string|null $apiResponse
+   *   The API response to mock.
    * @param array $rootKeys
+   *   Keys to get the solution list with the URLs.
    * @param array $urlKeys
+   *   Keys to the solution url in the data list.
    * @param array $expectedResults
+   *   The expected results.
    *
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
    *
@@ -53,8 +63,6 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
     ]);
     $handlerStack = HandlerStack::create($mock);
     $httpClient = new Client(['handler' => $handlerStack]);
-
-    $this->container->set('http_client', $httpClient);
 
     $hostingPlatformMock = $this->prophesize(EuOssCatalogueHostingPlatformInterface::class);
     $hostingPlatformMock
@@ -85,8 +93,6 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         ),
       ]);
 
-
-
     $hostingPlatformManagerMock = $this->prophesize(EuOssCataloguePluginManagerInterface::class);
     $hostingPlatformManagerMock
       ->getDefinitions()
@@ -98,7 +104,11 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
     $this->container->set('plugin.manager.eu_oss_catalogue.hosting_platform', $hostingPlatformManagerMock->reveal());
 
     $plugin = new TestUrlListProvider(
-      [],
+      [
+        'rootKeys' => $rootKeys,
+        'urlKeys' => $urlKeys,
+        'endpoints' => ['https://example.com/foo/bar-baz.json'],
+      ],
       'test',
       [],
       $this->container->get('plugin.manager.eu_oss_catalogue.parser'),
@@ -108,15 +118,13 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
       $this->container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
     );
 
-    $pluginReflection = new \ReflectionClass($plugin);
-    $pluginReflection->getProperty('rootKeys')->setValue($plugin, ['data']);
-    $pluginReflection->getProperty('urlKeys')->setValue($plugin, ['url']);
-
     $resultAsArray = iterator_to_array($plugin->fetch());
     $this->assertEquals($expectedResults, $resultAsArray);
   }
 
   /**
+   * Test data provider for ::testFetch().
+   *
    * @return array{'apiResponse': string|null, 'rootKeys': string[], 'urlKeys': string[], 'expectedResults': array}
    *   The test cases.
    */
@@ -127,25 +135,30 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
           'data' => [
             [
               'url' => 'https://bitbucket.org/foo/bar.git',
-            ]
+            ],
           ],
         ]),
         'rootKeys' => ['data'],
         'urlKeys' => ['url'],
         'expectedResults' => [],
-      ]
+      ],
+
+      'French catalogue' => [
+        'apiResponse' => json_encode([
+          [
+            'url' => 'https://bitbucket.org/foo/bar.git',
+          ],
+        ]),
+        'rootKeys' => [],
+        'urlKeys' => ['url'],
+        'expectedResults' => [],
+      ],
     ];
   }
 
 }
 
-class TestUrlListProvider extends UrlListCatalogueProviderBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected array $endpoints = [
-    'https://example.com/foo/bar-baz.json',
-  ];
-
-}
+/**
+ * The OSS solution provider plugin class to test.
+ */
+class TestUrlListProvider extends UrlListCatalogueProviderBase {}
