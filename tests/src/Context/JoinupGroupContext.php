@@ -467,14 +467,9 @@ class JoinupGroupContext extends RawDrupalContext {
         ->save();
     }
     else {
-      $metaEntities = \Drupal::entityTypeManager()->getStorage('meta_entity')
-        ->loadByProperties([
-          'type' => "{$group}_settings",
-          'target.target_type' => $groupEntity->getEntityTypeId(),
-          'target.target_id' => $groupEntity->id(),
-        ]);
-      $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
-      $metaEntity?->delete();
+      MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+        ->set($fieldName, NULL)
+        ->save();
     }
   }
 

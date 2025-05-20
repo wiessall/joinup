@@ -59,8 +59,6 @@ Feature: Proposing a collection
       | Search keywords       | Some keyword                                                                                         |
     Then I should see the text "Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content."
     When I select "HR" from "Topic"
-    And I select the radio button "Only members can create content."
-    And I check "Moderated"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
@@ -109,18 +107,6 @@ Feature: Proposing a collection
     And I press "Save as draft"
     Then I should see the error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
 
-  @javascript
-  # This is a regression test for a bug in which the label texts of the options
-  # vanished after performing an AJAX request in a different element on the
-  # page.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2589
-  Scenario: Content creation options should not vanish after AJAX request.
-    Given I am logged in as a user with the "authenticated" role
-    When I go to the propose collection form
-    And I expand the "Additional fields" accordion section
-    And I should see the text "Only members can create content."
-    And I should see the text "Any user can create content."
-
   @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given owner content:
@@ -131,7 +117,7 @@ Feature: Proposing a collection
     When I go to the propose collection form
     Then the following fields should be visible "Title, Abstract, Description, Topic"
     And the following field widgets should be visible "Owner"
-    And the following fields should not be visible "Moderated, Content creation, Geographical coverage"
+    And the following fields should not be visible "Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should be visible "Contact information"
 
@@ -153,7 +139,7 @@ Feature: Proposing a collection
     And I collapse the "Main fields" accordion section
     Then the following fields should not be visible "Title, Abstract, Description, Topic"
     And the following field widgets should not be visible "Owner"
-    And the following fields should be visible "Content creation, Moderated, Geographical coverage"
+    And the following fields should be visible "Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should not be visible "Contact information"
 
@@ -318,7 +304,6 @@ Feature: Proposing a collection
     Then I should see the error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
     Then I should not see the error message "Invalid or unsafe SVG file."
-    And I check "Moderated"
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection
