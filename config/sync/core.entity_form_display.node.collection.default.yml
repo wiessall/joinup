@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -31,7 +30,6 @@ dependencies:
     - link
     - oe_bootstrap_theme_helper
     - oe_newsroom_newsletter
-    - search_api_field
     - text
 third_party_settings:
   field_group:
@@ -170,13 +168,6 @@ content:
     weight: 5
     region: content
     settings: {  }
-    third_party_settings: {  }
-  listing_content:
-    type: search_api_field_default
-    weight: 11
-    region: content
-    settings:
-      query_builder: false
     third_party_settings: {  }
   logo:
     type: image_library_widget

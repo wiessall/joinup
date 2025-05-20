@@ -100,5 +100,6 @@ content:
     third_party_settings: {  }
 hidden:
   label: true
+  listing_content: true
   path: true
   target: true
