@@ -253,6 +253,7 @@ Feature: Proposing a collection
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
     # Email confirmation occurs only for published groups.
