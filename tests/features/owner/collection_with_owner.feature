@@ -29,6 +29,8 @@ Feature: Creation of owners through UI
     Then the following fields should not be present "Current workflow state, Langcode, Translation"
     When I check the box "Company"
     And I fill in "Name" with "Acme"
+    And I check "Company"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     Then I should see "Acme"
     And I should see the link "Company"
@@ -52,6 +54,8 @@ Feature: Creation of owners through UI
     And I press "Add new" at the "Owner" field
     And I check the box "Company"
     And I fill in "Name" with "John Doe"
+    And I check "Company"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     Then I should see "John Doe"
     And I should see the link "Company"
