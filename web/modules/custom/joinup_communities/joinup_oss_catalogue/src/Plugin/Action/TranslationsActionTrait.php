@@ -16,10 +16,8 @@ trait TranslationsActionTrait {
    * {@inheritdoc}
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResult|bool {
-    $result = AccessResult::allowedIfHasPermissions($account, [
-      'administer nodes',
-    ]);
-
+    $account = $account ?: \Drupal::currentUser();
+    $result = AccessResult::allowedIfHasPermission($account, 'administer nodes');
     return $return_as_object ? $result : $result->isAllowed();
   }
 
