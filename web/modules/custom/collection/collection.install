@@ -19,6 +19,9 @@ function collection_update_200500(): void {
   SharedInUpdateHelper::installFromConfigSync(
     'field.storage.meta_entity.content_creation.yml',
   );
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.storage.meta_entity.listing_content.yml',
+  );
 }
 
 /**
@@ -30,5 +33,8 @@ function collection_update_200501(): void {
   );
   SharedInUpdateHelper::installFromConfigSync(
     'field.field.meta_entity.collection_settings.content_creation.yml',
+  );
+  SharedInUpdateHelper::installFromConfigSync(
+    'field.field.meta_entity.collection_settings.listing_content.yml',
   );
 }

@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -234,7 +233,6 @@ hidden:
   created: true
   current_workflow_state: true
   langcode: true
-  listing_content: true
   newsletter: true
   path: true
   promote: true

@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -281,26 +280,6 @@ third_party_settings:
                 settings: {  }
                 third_party_settings: {  }
             weight: 1
-            additional: {  }
-          f9b3f9a3-e794-45ed-8c02-c8af9144f444:
-            uuid: f9b3f9a3-e794-45ed-8c02-c8af9144f444
-            region: content
-            configuration:
-              id: 'field_block:node:collection:listing_content'
-              label: 'Collection content'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: search_api_field
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 2
             additional: {  }
         third_party_settings: {  }
       -
@@ -633,7 +612,6 @@ hidden:
   join_collection: true
   langcode: true
   last_update: true
-  listing_content: true
   logo: true
   members: true
   newsletter: true
