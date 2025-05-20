@@ -82,8 +82,6 @@ Feature:
     When I am logged in as a facilitator of the "Scientific Studies" collection
     And I go to the homepage of the "Scientific Studies" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
 
     # Assert the Short ID description.
     Then I should see the following lines of text:

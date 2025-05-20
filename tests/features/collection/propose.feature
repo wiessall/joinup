@@ -239,8 +239,6 @@ Feature: Proposing a collection
       | html               | yes                                                                                                                                   |
 
     When I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I fill in "Title" with "Rolly email validation"
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor

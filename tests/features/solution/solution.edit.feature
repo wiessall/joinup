@@ -28,8 +28,6 @@ Feature: Solution editing.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I should see the heading "Add solution"
     When I fill in the following:
       | Title          | Solution A         |
