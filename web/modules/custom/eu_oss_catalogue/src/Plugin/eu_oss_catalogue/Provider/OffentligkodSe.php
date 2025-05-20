@@ -30,18 +30,12 @@ class OffentligkodSe extends UrlListCatalogueProviderBase {
   /**
    * {@inheritdoc}
    */
-  protected string|array $rootKeys = 'katalog';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected string|array $urlKeys = 'url';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected array $endpoints = [
-    'https://offentligkod.se/api/',
-  ];
+  public function defaultConfiguration(): array {
+    return [
+      'rootKeys' => ['katalog'],
+      'urlKeys' => ['url'],
+      'endpoints' => ['https://offentligkod.se/api/'],
+    ];
+  }
 
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Plugin\Exception\PluginException;
+use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -24,28 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @see \Drupal\Tests\eu_oss_catalogue\Kernel\UrlListCatalogueProviderTest
  */
-abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPluginBase {
-
-  /**
-   * Keys to the actual catalogue list.
-   *
-   * @var string|array
-   */
-  protected string|array $rootKeys;
-
-  /**
-   * Keys to the repository URL inside a catalogue's own row.
-   *
-   * @var string|array
-   */
-  protected string|array $urlKeys;
-
-  /**
-   * Catalogue endpoints.
-   *
-   * @var string[]
-   */
-  protected array $endpoints;
+abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   /**
    * List of projects fetched from API.
@@ -63,6 +42,20 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    */
   protected array $fetchedUrls = [];
 
+  /**
+   * The processed URLs.
+   *
+   * @var string[]
+   */
+  protected array $processedUrls = [];
+
+  /**
+   * Number of items in the list of the provider URLs.
+   *
+   * @var int
+   */
+  protected int $numberOfItems = 0;
+
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -79,7 +72,12 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+  ): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -95,11 +93,37 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * {@inheritdoc}
    */
+  public function getConfiguration(): array {
+    return $this->configuration + $this->defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConfiguration(array $configuration): void {
+    $this->configuration = $configuration;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration(): array {
+    return [
+      'rootKeys' => [],
+      'urlKeys' => [],
+      'endpoints' => [],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function fetch(): iterable {
     if (!isset($this->fetched)) {
       $this->requestData();
     }
 
+    $collectedExceptions = [];
     foreach ($this->fetched as $baseUrl => $namespaces) {
       unset($this->fetched[$baseUrl]);
 
@@ -107,19 +131,29 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         'baseUrl' => $baseUrl,
         'projects' => $namespaces['projects'],
       ];
+      $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
+      assert($hostingPlatform instanceof EuOssCatalogueHostingPlatformInterface);
 
       try {
-        $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
-        assert($hostingPlatform instanceof EuOssCatalogueHostingPlatformInterface);
         foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
           assert($project instanceof Project);
+          $this->processedUrls[] = $project->url;
           if (isset($project->files['publiccodeYml'])) {
             yield $project;
           }
         }
       }
-      catch (PluginException | HostingPlatformFetchException) {
+      catch (HostingPlatformFetchException $exception) {
+        // Collect provider fetch exceptions, and throw them at the end of the
+        // fetch operation.
+        $collectedExceptions[] = $exception->getMessage();
       }
+    }
+
+    $this->logResults();
+
+    if (!empty($collectedExceptions)) {
+      throw new ProviderFetchException(implode(PHP_EOL, $collectedExceptions));
     }
   }
 
@@ -130,23 +164,24 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function requestData(): void {
+    [
+      'rootKeys' => $rootKeys,
+      'endpoints' => $endpoints,
+    ] = $this->getConfiguration();
     $this->fetched = [];
 
-    foreach ($this->endpoints as $endpointUrl) {
+    foreach ($endpoints as $endpointUrl) {
       try {
         $response = $this->httpClient->get($endpointUrl);
         $decodedResponse = Json::decode($response->getBody()->getContents());
         if (!is_array($decodedResponse)) {
-          throw new ProviderFetchException(
-            'API returned response is not a valid JSON response.',
-          );
+          throw new \Exception('API returned response is not a valid JSON response.');
         }
-        $value = NestedArray::getValue($decodedResponse, (array) $this->rootKeys, $keyExists);
+        $value = NestedArray::getValue($decodedResponse, (array) $rootKeys, $keyExists);
         if (!$keyExists) {
-          throw new ProviderFetchException(
-            "The configured root keys don't exist on the decoded API response."
-          );
+          throw new \Exception("The configured root keys don't exist on the decoded API response.");
         }
+        $this->numberOfItems += count($value);
         $this->processResponseData($value);
       }
       catch (\Exception $exception) {
@@ -164,22 +199,46 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *   Response data.
    */
   private function processResponseData(array $responseData): void {
+    $catalogueLabel = (string) $this->pluginDefinition['label'];
+    ['urlKeys' => $urlKeys] = $this->getConfiguration();
+
     foreach ($responseData as $row) {
-      $rawUrl = NestedArray::getValue($row, (array) $this->urlKeys, $urlExists);
-      if (!$urlExists || !is_string($rawUrl)) {
-        $this->logger->warning('Wrong data type');
+      $rawUrl = NestedArray::getValue($row, $urlKeys, $urlExists);
+      $logContext = [
+        '@catalogue-label' => $catalogueLabel,
+        '@solution-repo-url' => $rawUrl,
+        '@url-export' => var_export($rawUrl, TRUE),
+      ];
+      if (!$urlExists) {
+        $this->logger->warning(
+          'No URL property found at an item in @catalogue-label catalogue provider.',
+          $logContext,
+        );
+        continue;
+      }
+
+      if (!is_string($rawUrl)) {
+        $this->logger->warning(
+          'Wrong data type at the URL property of an item in @catalogue-label catalogue provider: @url-export',
+          $logContext,
+        );
         continue;
       }
 
       $apiGuess = $this->apiGuesser->getHostingPlatformApi($rawUrl);
       if (!$apiGuess) {
+        $this->logger->warning(
+          'Cannot determine hosting platform for the repository with @solution-repo-url provided by the @catalogue-label catalogue.',
+          $logContext,
+        );
         continue;
       }
 
       $gitUri = GitUri::fromUriString($rawUrl);
       $name = $gitUri->name;
       $namespace = $gitUri->namespace;
-      if (in_array($gitUri->getUri(), $this->fetchedUrls)) {
+      if (in_array($gitUri->getUri(), $this->fetchedUrls, TRUE)) {
+        // This URI was already fetched from this catalogue.
         continue;
       }
 
@@ -187,6 +246,34 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       $this->fetched[$apiGuess->baseUrl]['projects'][$namespace][] = $name;
       $this->fetchedUrls[] = $gitUri->getUri();
     }
+  }
+
+  /**
+   * Logs statistics about fetched and processed OSS Solutions.
+   */
+  protected function logResults(): void {
+    $catalogueLabel = (string) $this->pluginDefinition['label'];
+    $notProcessable = array_diff($this->fetchedUrls, $this->processedUrls);
+    $context = [
+      '@processed-count' => count($this->processedUrls),
+      '@fetched-count' => $this->numberOfItems,
+      '@catalogue-label' => $catalogueLabel,
+      '@unprocessed-count' => count($notProcessable),
+      '@unprocessed-list' => implode(', ', $notProcessable),
+    ];
+
+    if (empty($notProcessable)) {
+      $this->logger->info(
+        'Processed @processed-count solutions out of @fetched-count items fetched from @catalogue-label catalogue provider.',
+        $context,
+      );
+      return;
+    }
+
+    $this->logger->warning(
+      'Processed @processed-count solutions out of @fetched-count items fetched from @catalogue-label catalogue provider. The following @unprocessed-count solutions failed: @unprocessed-list',
+      $context,
+    );
   }
 
 }
