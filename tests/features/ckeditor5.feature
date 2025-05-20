@@ -1,5 +1,4 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-@wip @api @javascript
+@api @javascript
 Feature: CKEditor5
 
   Background:
@@ -271,7 +270,8 @@ Feature: CKEditor5
 
     When I go to the "edit-form" content page of the type "solution" with the title "One exclusion advantages"
     And I press the button "Contact us" in the "Description" wysiwyg editor
-    Then I press "Publish"
+    When I jump to the "Confirmation" of "solution" wizard
+    And I press "Publish"
     And I should see the heading "One exclusion advantages"
     When I click "Contact us"
     Then I should see the heading "Contact us"

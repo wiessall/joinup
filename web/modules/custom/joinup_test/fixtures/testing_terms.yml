@@ -240,3 +240,8 @@ spdx_licence:
     spdx_id: 'GPL-2.0-or-later'
     description: '<div class="optional-license-text"> <p> GNU GENERAL PUBLIC LICENSE<br /> Version 2, June 1991 </p> </div> <p> Copyright (C) 1989, 1991 Free Software Foundation, Inc.<var class="replaceable-license-text"> </var><br /> <var class="replaceable-license-text"> 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA</var> </p> <p> Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>'
     see_also: 'https://opensource.org/licenses/GPL-2.0'
+solution_classification:
+  - name: Complete Solution
+    description: Artifact (product, tool, or digital service).
+  - name: Solution Component
+    description: Self-contained reusable artifact.

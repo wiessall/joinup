@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.digest_message_header
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -40,7 +40,7 @@ mode: digest_message_header
 content: {  }
 hidden:
   abstract: true
-  body: true
+  classification: true
   collections: true
   contact: true
   content_creation: true

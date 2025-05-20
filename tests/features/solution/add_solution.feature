@@ -1,5 +1,4 @@
-@wip @api @group-h
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
+@api @group-h
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator
@@ -15,18 +14,27 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
 
-    # Submit the incomplete form, so error messages about missing fields will
-    # be shown.
-    When I press "Propose"
+    When I press "Next"
+    Then I should see the following error messages:
+      | error messages                             |
+      | Title field is required.                   |
+      | Abstract field is required.                |
+      | Description field is required.             |
+      | Solution classification field is required. |
+      | Solution type field is required.           |
+
+    When I fill in the following:
+      | Title       | Solution Beta  |
+      | Abstract    | Short abstract |
+      | Description | Last letter    |
+    And I select "Complete Solution" from "Solution classification"
+    And I select "Logging Service" from "Solution type"
+    And I press "Next"
+    And I press "Next"
     Then I should see the following error messages:
       | error messages                    |
-      | Title field is required.          |
-      | Description field is required.    |
       | Name field is required.           |
       | E-mail address field is required. |
-      | Topic field is required.          |
-      | Owner field is required.          |
-      | Solution type field is required.  |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
@@ -52,7 +60,8 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @uploadFiles:logo.png
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9780.
+  @wip @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given collection content:
       | title             | logo     |
@@ -173,45 +182,6 @@ Feature: "Add solution" visibility options.
     Then I delete the "V60 filter coffee solution" solution
     Then I delete the "Espresso is the solution" solution
 
-  Scenario: Correct transition buttons are shown after a partial filled form is submitted.
-    # This is a regression test for a bug that was causing the owner state
-    # buttons to leak into the solution create form, causing critical errors
-    # when an invalid state button was pressed.
-    # @see issue ISAICP-3209
-    Given collection content:
-      | title            |
-      | Language parsers |
-    When I am logged in as a facilitator of the "Language parsers" collection
-    And I go to the homepage of the "Language parsers" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    And I fill in the following:
-      | Title       | PHP comments parser                             |
-      | Description | A simple parser that goes through PHP comments. |
-    And I select "Data gathering and processing" from "Topic"
-    And I select "Data Owner" from "Solution type"
-
-    # Submit the incomplete form, so error messages about missing fields will
-    # be shown.
-    When I press "Propose"
-    Then I should see the following error message:
-      | error messages                    |
-      | Name field is required.           |
-      | E-mail address field is required. |
-
-    # Fill the owner inline form, but don't submit it.
-    When I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Azure Tennison"
-
-    # Buttons should be shown for the allowed solution transitions.
-    When I press "Propose"
-    Then I should see the button "Save as draft"
-    And I should see the button "Propose"
-    # The owner entity state buttons should not be shown.
-    But I should not see the link "Delete"
-    And I should not see the button "Update"
-
   Scenario: Create a solution with a name that already exists
     Given collection content:
       | title              |
@@ -231,7 +201,7 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I fill in "Title" with "Climate change tracker"
-    And I press "Propose"
+    And I press "Next"
     Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
@@ -246,14 +216,16 @@ Feature: "Add solution" visibility options.
       | Title                 | Climate change tracker                  |
       | Abstract              | Tracks climate change                   |
       | Description           | Logs retreat of 40 glaciers in Belgium. |
-      | Geographical coverage | Belgium                                 |
-      | Name                  | Angela Crespi                           |
-      | E-mail address        | angela_crespi@glacmon.basel-uni.ch      |
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Complete Solution" from "Solution classification"
     And I select "Logging Service" from "Solution type"
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "University of Basel"
-    And I press "Add owner"
+    And I press "Next"
+    When I fill in the following:
+      | owner[form][0][title][0][value]   | University of Basel       |
+      | contact[form][0][title][0][value] | Angela Crespi       |
+      | E-mail address                    | angela_crespi@glacmon.basel-uni.ch  |
+    And I press "Create owner"
+    And I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
     # Check that the warning intended for moderators is not shown to regular
@@ -267,14 +239,8 @@ Feature: "Add solution" visibility options.
     And I click "Edit" in the "Entity actions" region
     Then I should see the warning message "A solution with the same name exists in a different collection."
 
-    # Clean up the entities that were created through the UI. We have no control
-    # over which of the two identically named solutions is deleted first, so
-    # let's just get rid of both.
-    Then I delete the "Climate change tracker" solution
-    And I delete the "Climate change tracker" solution
-    And I delete the "Angela Crespi" "contact information"
-
-  @javascript @generateMedia @generateMediaTypes:solution_logo
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9771.
+  @wip @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given collection content:
       | title         |

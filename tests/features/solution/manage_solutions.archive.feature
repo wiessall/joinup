@@ -1,5 +1,4 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-@api @group-i @wip
+@api @group-i
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
@@ -69,6 +68,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given I am logged in as "John Moderator"
     And the "solution_archive_related_content" queue is empty
     When I go to the edit form of the "Solution" solution
+    And I jump to the "Confirmation" of "solution" wizard
     Then I should see the button "Archive"
     When I press "Archive"
     Then I should see the following success messages:
@@ -166,6 +166,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     # Now, check the unarchive operation.
     Given I mark all emails as read
     When I go to the edit form of the "Solution" solution
+    And I jump to the "Confirmation" of "solution" wizard
     Then I should see the button "Unarchive"
     When I press "Unarchive"
     Then I should see the following success messages:
@@ -245,8 +246,8 @@ Feature: When a solution is archived then its sub-content also should be archive
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
     When I go to the edit form of the "Solution" solution
+    And I jump to the "Confirmation" of "solution" wizard
     Then I should see the button "Archive"
-    And I select "Data Owner" from "Solution type"
     And I press "Archive"
     Then I should see the text "Archived" in the "Header"
 

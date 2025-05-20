@@ -104,4 +104,11 @@ class CustomPage extends Node implements CustomPageInterface {
     return $fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isHiddenTitleEnabled(): bool {
+    return (bool) $this->get('field_hide_title')->getString();
+  }
+
 }

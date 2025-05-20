@@ -28,9 +28,17 @@ Feature: Publication date works as expected on RDF entities
     Examples:
       | entity label          | type       | type label | label field     |
       | Collection to publish | collection | Collection | title[0][value] |
-      # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9633
-      #| Solution to publish   | solution   | Solution   | title[0][value] |
       | Release to publish    | release    | Release    | title[0][value] |
+
+  Scenario: Publication date works as expected on solution
+    Given I am logged in as a moderator
+    When I go to the edit form of the "Solution to publish" solution
+    Then I should see the heading "Edit Solution Solution to publish"
+    When I fill in "Title" with "Published at test for solution"
+    And I jump to the "Confirmation" of "solution" wizard
+    And I press "Publish"
+    And I go to the homepage of the "Published at test for solution" solution
+    Then the published_at field in "Published at test for solution" solution should not be empty
 
   Scenario: Publication date works as expected on distributions
     Given licence content:
