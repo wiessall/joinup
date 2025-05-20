@@ -218,7 +218,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *   a key "publiccodeYml".
    */
   protected function getFilesToFetch(): array {
-    return $this->getConfiguration()['urlKeys'];
+    return $this->getConfiguration()['filesToFetch'];
   }
 
   /**
