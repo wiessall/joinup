@@ -17,10 +17,14 @@ use Drupal\taxonomy\TermInterface;
  * Implements hook_ENTITY_TYPE_access().
  */
 function joinup_taxonomy_taxonomy_term_access(TermInterface $term, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation === 'view') {
+    return AccessResult::neutral();
+  }
+
   /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
   $vocabulary = $term->get('vid')->entity;
-  $locked = ($operation !== 'view') && $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
-  return AccessResult::forbiddenIf($locked);
+  $locked = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
+  return AccessResult::forbiddenIf($locked)->addCacheTags($vocabulary->getCacheTagsToInvalidate());
 }
 
 /**
@@ -30,7 +34,7 @@ function joinup_taxonomy_taxonomy_term_create_access(AccountInterface $account, 
   /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
   $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($entity_bundle);
   $locked = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
-  return AccessResult::forbiddenIf($locked);
+  return AccessResult::forbiddenIf($locked)->addCacheTags($vocabulary->getCacheTagsToInvalidate());
 }
 
 /**

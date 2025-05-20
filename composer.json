@@ -428,6 +428,9 @@
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
+            "drupal/og": {
+                "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
+            },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },

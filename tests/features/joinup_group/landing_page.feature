@@ -96,6 +96,13 @@ Feature: Tests the group landing page customization.
       | Custom Page 2 |
       | Custom Page 3 |
 
+    # Regression test for ticket ISAICP-9253.
+    When I click "Edit landing page"
+    When I check the box "Hide title"
+    And I press "Update"
+    Then I should see the heading "<group> group"
+    And I should not see the heading "Custom Page 3"
+
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
     And I press "Save"
