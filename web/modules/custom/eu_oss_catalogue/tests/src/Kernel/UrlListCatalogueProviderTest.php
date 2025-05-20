@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
+use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase;
 use GuzzleHttp\Client;
@@ -14,6 +17,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ProphecyInterface;
 
 /**
  * Tests the URL list provider base class.
@@ -23,13 +27,54 @@ use Prophecy\Argument;
 class UrlListCatalogueProviderTest extends KernelTestBase {
 
   /**
+   * The mocked hosting platform manager.
+   */
+  protected ProphecyInterface|EuOssCataloguePluginManagerInterface $hostingPlatformManagerMock;
+
+  /**
+   * API guesser.
+   */
+  protected ProphecyInterface|ApiGuesserInterface $apiGuesserMock;
+
+  /**
    * {@inheritdoc}
    */
   public static $modules = [
     'eu_oss_catalogue',
+    // Make sure that we don't send any request to external services.
     'eu_oss_catalogue_test_not_allowed_mock',
     'http_request_mock',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    parent::setUp();
+
+    $hostingPlatformMock = $this->buildHostingPlatformMock();
+
+    $this->hostingPlatformManagerMock = $this->prophesize(EuOssCataloguePluginManagerInterface::class);
+    $this->hostingPlatformManagerMock
+      ->getDefinitions()
+      ->willReturn(['testPlatform' => ['id' => 'testPlatform']]);
+    $this->hostingPlatformManagerMock
+      ->createInstance(Argument::any(), Argument::cetera())
+      ->will(
+        function ($args) use ($hostingPlatformMock): EuOssCatalogueHostingPlatformInterface {
+          $hostingPlatform = $hostingPlatformMock->reveal();
+          $hostingPlatform->setConfiguration($args[1]);
+          return $hostingPlatform;
+        }
+      );
+
+    $this->apiGuesserMock = $this->prophesize(ApiGuesserInterface::class);
+    $this->apiGuesserMock
+      ->getHostingPlatformApi(Argument::type('string'))
+      ->will(function ($args): ?ApiGuess {
+        return new ApiGuess('testPlatform', $args[0]);
+      });
+  }
 
   /**
    * Tests the plugin's fetch() method.
@@ -64,6 +109,95 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
     $handlerStack = HandlerStack::create($mock);
     $httpClient = new Client(['handler' => $handlerStack]);
 
+    $plugin = new TestUrlListProvider(
+      [
+        'rootKeys' => $rootKeys,
+        'urlKeys' => $urlKeys,
+        'endpoints' => ['https://example.com/foo/bar-baz.json'],
+      ],
+      'test',
+      [
+        'label' => new TranslatableMarkup('Test provider'),
+      ],
+      $this->container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $this->container->get('logger.channel.eu_oss_catalogue'),
+      $httpClient,
+      $this->apiGuesserMock->reveal(),
+      $this->hostingPlatformManagerMock->reveal(),
+    );
+
+    $projectsArray = iterator_to_array($plugin->fetch());
+    $resultAsArray = array_map(
+      fn (Project $project) => array_filter($project->toArray()),
+      $projectsArray,
+    );
+    $this->assertEquals($expectedResults, $resultAsArray);
+  }
+
+  /**
+   * Test data provider for ::testFetch().
+   *
+   * @return array{'apiResponse': string|null, 'rootKeys': string[], 'urlKeys':
+   *   string[], 'expectedResults': array[]}
+   *   The test cases.
+   */
+  public static function providerFetchTest(): array {
+    return [
+      'Data root, URL key' => [
+        'apiResponse' => json_encode([
+          'data' => [
+            [
+              'url' => 'https://example.com/foo/bar.git',
+            ],
+            [
+              'url' => 'https://example.com/foo/bar',
+            ],
+          ],
+        ]),
+        'rootKeys' => ['data'],
+        'urlKeys' => ['url'],
+        'expectedResults' => [
+          [
+            'namespace' => 'foo',
+            'name' => 'bar',
+            'url' => 'https://example.com/foo/bar.git',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'foo/bar'\n"],
+          ],
+        ],
+      ],
+
+      'Direct root, nested URL' => [
+        'apiResponse' => json_encode([
+          ['nested' => ['url' => 'https://example.com/bar/baz']],
+        ]),
+        'rootKeys' => [],
+        'urlKeys' => ['nested', 'url'],
+        'expectedResults' => [
+          [
+            'namespace' => 'bar',
+            'name' => 'baz',
+            'url' => 'https://example.com/bar/baz',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'bar/baz'\n"],
+          ],
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Builds a hosting platform mock.
+   *
+   * @return \Prophecy\Prophecy\ProphecyInterface|\Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface
+   *   A hosting platform object phropecy which can be used for testing provider
+   *   plugins.
+   */
+  private function buildHostingPlatformMock(): ProphecyInterface|EuOssCatalogueHostingPlatformInterface {
+    $platformConfig = (object) [];
+
     $hostingPlatformMock = $this->prophesize(EuOssCatalogueHostingPlatformInterface::class);
     $hostingPlatformMock
       ->isHostingPlatformForUrl(Argument::type('string'))
@@ -77,83 +211,32 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         ]);
       });
     $hostingPlatformMock
+      ->setConfiguration(Argument::type('array'))
+      ->will(function ($args) use ($platformConfig): void {
+        foreach ($args[0] as $key => $val) {
+          $platformConfig->$key = $val;
+        }
+      });
+    $hostingPlatformMock
       ->getProjects(['publiccodeYml' => 'publiccode.yml'])
-      ->willReturn([
-        new Project(
-          namespace: 'foo',
-          name: 'bar',
-          url: 'https://example.com',
-          platform: 'testPlatform',
-          defaultBranch: 'main',
-          files: [
-            'publiccodeYml' => [
-              'faasfs' => 'sdivsdoifvj',
-            ],
-          ],
-        ),
-      ]);
+      ->will(function () use ($platformConfig): iterable {
+        foreach ($platformConfig->projects as $ns => $names) {
+          foreach ($names as $name) {
+            yield new Project(
+              namespace: $ns,
+              name: $name,
+              url: $platformConfig->baseUrl,
+              platform: 'testPlatform',
+              defaultBranch: 'main',
+              files: [
+                'publiccodeYml' => "name: '$ns/$name'\n",
+              ],
+            );
+          }
+        }
+      });
 
-    $hostingPlatformManagerMock = $this->prophesize(EuOssCataloguePluginManagerInterface::class);
-    $hostingPlatformManagerMock
-      ->getDefinitions()
-      ->willReturn(['testPlatform' => ['id' => 'testPlatform']]);
-    $hostingPlatformManagerMock
-      ->createInstance(Argument::any(), Argument::cetera())
-      ->willReturn($hostingPlatformMock->reveal());
-
-    $this->container->set('plugin.manager.eu_oss_catalogue.hosting_platform', $hostingPlatformManagerMock->reveal());
-
-    $plugin = new TestUrlListProvider(
-      [
-        'rootKeys' => $rootKeys,
-        'urlKeys' => $urlKeys,
-        'endpoints' => ['https://example.com/foo/bar-baz.json'],
-      ],
-      'test',
-      [],
-      $this->container->get('plugin.manager.eu_oss_catalogue.parser'),
-      $this->container->get('logger.channel.eu_oss_catalogue'),
-      $httpClient,
-      $this->container->get('eu_oss_catalogue.git_remote.api_guesser'),
-      $this->container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
-    );
-
-    $resultAsArray = iterator_to_array($plugin->fetch());
-    $this->assertEquals($expectedResults, $resultAsArray);
-  }
-
-  /**
-   * Test data provider for ::testFetch().
-   *
-   * @return array{'apiResponse': string|null, 'rootKeys': string[], 'urlKeys': string[], 'expectedResults': array}
-   *   The test cases.
-   */
-  public static function providerFetchTest(): array {
-    return [
-      'sdfvsd' => [
-        'apiResponse' => json_encode([
-          'data' => [
-            [
-              'url' => 'https://bitbucket.org/foo/bar.git',
-            ],
-          ],
-        ]),
-        'rootKeys' => ['data'],
-        'urlKeys' => ['url'],
-        'expectedResults' => [],
-      ],
-
-      'French catalogue' => [
-        'apiResponse' => json_encode([
-          [
-            'url' => 'https://bitbucket.org/foo/bar.git',
-          ],
-        ]),
-        'rootKeys' => [],
-        'urlKeys' => ['url'],
-        'expectedResults' => [],
-      ],
-    ];
+    return $hostingPlatformMock;
   }
 
 }
