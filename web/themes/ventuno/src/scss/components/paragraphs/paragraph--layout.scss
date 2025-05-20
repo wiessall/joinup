@@ -58,45 +58,48 @@
     }
   }
   &--dark-blue {
-    color: $white;
-    background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
     &::before {
       background-color: $joinup-dark-blue;
     }
-    a:not(.btn) {
-      &:link,
-      &:visited {
-        color: $secondary-darker;
-      }
-    }
-    .paragraph--accordion {
+    &:not(.lpb-layout) {
+      color: $white;
+      background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
+
       a:not(.btn) {
         &:link,
         &:visited {
-          color: $link-color;
+          color: $secondary-darker;
         }
       }
-    }
-    h2,
-    h3,
-    h4,
-    h5,
-    label,
-    .text-label,
-    .text-primary {
-      &:not([class*="tile"]) {
-        color: $secondary-darker !important;
+      .paragraph--accordion {
+        a:not(.btn) {
+          &:link,
+          &:visited {
+            color: $link-color;
+          }
+        }
       }
-    }
-    .text-dark,
-    .glide__slide--active .slide__body .paragraph,
-    .paragraph--testimony .testimony__figcaption {
-      color: $white !important;
-    }
-    .tile,
-    .accordion {
-      .text-dark {
-        color: $gray-900 !important;
+      h2,
+      h3,
+      h4,
+      h5,
+      label,
+      .text-label,
+      .text-primary {
+        &:not([class*="tile"]) {
+          color: $secondary-darker !important;
+        }
+      }
+      .text-dark,
+      .glide__slide--active .slide__body .paragraph,
+      .paragraph--testimony .testimony__figcaption {
+        color: $white !important;
+      }
+      .tile,
+      .accordion {
+        .text-dark {
+          color: $gray-900 !important;
+        }
       }
     }
   }
