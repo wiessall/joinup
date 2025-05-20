@@ -127,7 +127,6 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     }
 
     $collectedExceptions = [];
-    ['filesToFetch' => $filesToFetch] = $this->getConfiguration();
     foreach ($this->fetched as $baseUrl => $namespaces) {
       unset($this->fetched[$baseUrl]);
 
@@ -139,7 +138,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       assert($hostingPlatform instanceof EuOssCatalogueHostingPlatformInterface);
 
       try {
-        foreach ($hostingPlatform->getProjects($filesToFetch) as $project) {
+        foreach ($hostingPlatform->getProjects($this->getFilesToFetch()) as $project) {
           assert($project instanceof Project);
           $this->processedUrls[] = $project->url;
           $projectPreprocessed = $this->preprocessProject($project);
@@ -169,14 +168,57 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * returned in the iterator of ::fetch().
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
-   *   The pro
+   *   The project to preprocess.
    *
    * @return \Drupal\eu_oss_catalogue\Model\Project|null
+   *   A preprocessed project object, or NULL if the given item must be skipped.
    */
   protected function preprocessProject(Project $project): ?Project {
     return isset($project->files['publiccodeYml'])
       ? $project
       : NULL;
+  }
+
+  /**
+   * Returns the API endpoints.
+   *
+   * @return string[]
+   *   Returns the API endpoints of the configured catalogue.
+   */
+  protected function getEndpoints(): array {
+    return $this->getConfiguration()['endpoints'];
+  }
+
+  /**
+   * Returns keys to the common ancestor list containing the solution URLs.
+   *
+   * @return string[]
+   *   Returns the keys to the common ancestor list containing the solution
+   *   URLs.
+   */
+  protected function getRootKeys(): array {
+    return $this->getConfiguration()['rootKeys'];
+  }
+
+  /**
+   * Returns keys to the solution URL in each list item.
+   *
+   * @return string[]
+   *   Keys to the solution URL.
+   */
+  protected function getUrlKeys(): array {
+    return $this->getConfiguration()['urlKeys'];
+  }
+
+  /**
+   * Returns which files should be fetched from the posting platform.
+   *
+   * @return array<string, string>
+   *   Keyed list of the files to fetch from the hosting platform. Must contain
+   *   a key "publiccodeYml".
+   */
+  protected function getFilesToFetch(): array {
+    return $this->getConfiguration()['urlKeys'];
   }
 
   /**
@@ -186,20 +228,16 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function requestData(): void {
-    [
-      'rootKeys' => $rootKeys,
-      'endpoints' => $endpoints,
-    ] = $this->getConfiguration();
     $this->fetched = [];
 
-    foreach ($endpoints as $endpointUrl) {
+    foreach ($this->getEndpoints() as $endpointUrl) {
       try {
         $response = $this->httpClient->get($endpointUrl);
         $decodedResponse = Json::decode($response->getBody()->getContents());
         if (!is_array($decodedResponse)) {
           throw new \Exception('API returned response is not a valid JSON response.');
         }
-        $value = NestedArray::getValue($decodedResponse, $rootKeys, $keyExists);
+        $value = NestedArray::getValue($decodedResponse, $this->getRootKeys(), $keyExists);
         if (!$keyExists) {
           throw new \Exception("The configured root keys don't exist on the decoded API response.");
         }
@@ -222,10 +260,9 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    */
   private function processResponseData(array $responseData): void {
     $catalogueLabel = (string) $this->pluginDefinition['label'];
-    ['urlKeys' => $urlKeys] = $this->getConfiguration();
 
     foreach ($responseData as $row) {
-      $rawUrl = NestedArray::getValue($row, $urlKeys, $urlExists);
+      $rawUrl = NestedArray::getValue($row, $this->getUrlKeys(), $urlExists);
       $logContext = [
         '@catalogue-label' => $catalogueLabel,
         '@solution-repo-url' => $rawUrl,
