@@ -831,6 +831,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
       $node->solution_type = $this->getRandomTerm('solution_type')->label();
     }
+    if (!empty($field_definitions['classification']) && empty($node->classification)) {
+      $node->classification = $this->getRandomTerm('solution_classification')->label();
+    }
 
     // Handle file URL fields.
     if (!empty($node->documentation)) {
@@ -2137,42 +2140,6 @@ class JoinupContext extends RawDrupalContext {
 
     $attribute = trim($element->getAttribute('href'), '/');
     Assert::assertEquals($href, $attribute, "The link '$link' in the region '$region' doesn't point to the expected path '$href'.");
-  }
-
-  /**
-   * Assert that fields are present in the given region in the given order.
-   *
-   * @param string $fields
-   *   Fields.
-   * @param string $region
-   *   Region.
-   *
-   * @throws \Exception
-   *   Thrown when an expected field is not present.
-   *
-   * @Then the fields :fields should be correctly ordered in the region :region
-   */
-  public function assertFieldsPresentInOrder(string $fields, string $region): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
-    /** @var \Behat\Mink\Element\Element $regionObj */
-    $regionObj = $this->getRegion($region);
-    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//h4[contains(concat(' ', normalize-space(@class), ' '), ' label ')] | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//fieldset//legend[contains(concat(' ', normalize-space(@class), ' '), ' col-form-label ')]");
-    $labels_on_page = [];
-    /** @var \Behat\Mink\Element\NodeElement $label */
-    foreach ($labels as $label) {
-      $labels_on_page[] = $label->getText();
-    }
-    $previous = -1;
-    foreach ($fields as $field) {
-      $key = array_search($field, $labels_on_page);
-      if ($key === FALSE) {
-        throw new \Exception("Could not find expected field $field in the page");
-      }
-      if (!($key > $previous)) {
-        throw new \Exception("Field out of order: $field");
-      }
-      $previous = $key;
-    }
   }
 
   /**

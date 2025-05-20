@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.solution.abstract
-    - field.field.node.solution.body
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
@@ -39,7 +39,6 @@ dependencies:
     - layout_discovery
     - link
     - og
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -247,21 +246,6 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 5
             additional: {  }
-          6a24a03c-77d5-4bb3-8d12-c1a17c4c1328:
-            uuid: 6a24a03c-77d5-4bb3-8d12-c1a17c4c1328
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 6
-            additional: {  }
           14a4d72e-529d-4229-bd23-c3a0d7e43e99:
             uuid: 14a4d72e-529d-4229-bd23-c3a0d7e43e99
             region: content
@@ -343,21 +327,6 @@ third_party_settings:
               context_mapping:
                 entity: layout_builder.entity
             weight: 12
-            additional: {  }
-          12cbfa01-3b56-4813-90c7-a7e9e484f202:
-            uuid: 12cbfa01-3b56-4813-90c7-a7e9e484f202
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 13
             additional: {  }
           834bd3b8-603d-40e6-948c-2b01da4f009a:
             uuid: 834bd3b8-603d-40e6-948c-2b01da4f009a
@@ -441,21 +410,6 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 19
             additional: {  }
-          23ac6adf-4e6d-44e3-b199-261e6339c449:
-            uuid: 23ac6adf-4e6d-44e3-b199-261e6339c449
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 20
-            additional: {  }
           d6055141-de81-4e91-99ad-0a35a89881ca:
             uuid: d6055141-de81-4e91-99ad-0a35a89881ca
             region: content
@@ -537,21 +491,6 @@ third_party_settings:
               context_mapping:
                 entity: layout_builder.entity
             weight: 26
-            additional: {  }
-          7f4bf789-cde9-4f6e-a9e9-4054cd843f68:
-            uuid: 7f4bf789-cde9-4f6e-a9e9-4054cd843f68
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 27
             additional: {  }
           c8909e14-697f-445f-8f0c-22d3669ad822:
             uuid: c8909e14-697f-445f-8f0c-22d3669ad822
@@ -635,21 +574,6 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 33
             additional: {  }
-          cf9048b9-8f1c-40a6-952b-0820d7fb24c1:
-            uuid: cf9048b9-8f1c-40a6-952b-0820d7fb24c1
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 34
-            additional: {  }
           df1a66dd-c335-42d0-82c7-a16ca7bc5add:
             uuid: df1a66dd-c335-42d0-82c7-a16ca7bc5add
             region: content
@@ -732,21 +656,6 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 40
             additional: {  }
-          b080faf6-9415-4cc3-9f1d-7f3613b8d9f6:
-            uuid: b080faf6-9415-4cc3-9f1d-7f3613b8d9f6
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 41
-            additional: {  }
           0d0e26dc-6faf-4acb-8dab-409c853e40c7:
             uuid: 0d0e26dc-6faf-4acb-8dab-409c853e40c7
             region: content
@@ -828,21 +737,6 @@ third_party_settings:
               context_mapping:
                 entity: layout_builder.entity
             weight: 47
-            additional: {  }
-          926a410e-66ff-4350-8cb5-a0dbcec4d16e:
-            uuid: 926a410e-66ff-4350-8cb5-a0dbcec4d16e
-            region: content
-            configuration:
-              id: 'field_block:node:solution:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 48
             additional: {  }
         third_party_settings: {  }
       -
@@ -1481,13 +1375,6 @@ targetEntityType: node
 bundle: solution
 mode: default
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 101
-    region: content
   distributions:
     type: entity_reference_entity_view
     label: hidden
@@ -1533,6 +1420,7 @@ content:
     region: content
 hidden:
   abstract: true
+  classification: true
   collections: true
   contact: true
   content_creation: true
