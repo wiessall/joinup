@@ -44,6 +44,7 @@ Feature: Solution editing.
     And I press "Create owner"
     And I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     # Then print last response
     Then I should see the heading "Solution A"
