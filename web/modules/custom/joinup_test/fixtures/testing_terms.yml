@@ -245,3 +245,6 @@ solution_classification:
     description: Artifact (product, tool, or digital service).
   - name: Solution Component
     description: Self-contained reusable artifact.
+domain:
+  - name: Defense
+  - name: Economic affairs

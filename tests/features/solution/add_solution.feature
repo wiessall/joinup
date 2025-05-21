@@ -21,6 +21,7 @@ Feature: "Add solution" visibility options.
       | Abstract field is required.                |
       | Description field is required.             |
       | Solution classification field is required. |
+      | Domain field is required.                  |
       | Solution type field is required.           |
 
     When I fill in the following:
@@ -28,6 +29,7 @@ Feature: "Add solution" visibility options.
       | Abstract    | Short abstract |
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
+    And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     And I press "Next"
@@ -217,6 +219,7 @@ Feature: "Add solution" visibility options.
       | Abstract              | Tracks climate change                   |
       | Description           | Logs retreat of 40 glaciers in Belgium. |
     And I select "Complete Solution" from "Solution classification"
+    And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:
