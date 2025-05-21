@@ -47,7 +47,7 @@ function joinup_core_deploy_200500(array &$sandbox): string {
     // return the term id.
     $term = Term::create([
       'name' => $term_name,
-      'vid' => 'keywords',
+      'vid' => 'tags',
       'status' => 1,
       'created' => $time,
     ]);
