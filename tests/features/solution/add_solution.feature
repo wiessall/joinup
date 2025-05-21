@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-h @teste
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator
@@ -100,7 +100,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Flemish" from "Language"
+    And I additionally select "Bulgarian" from "Language"
     And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -139,7 +139,7 @@ Feature: "Add solution" visibility options.
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
     And I should not see the link "Belgium"
-    And I should not see the link "Flemish"
+    And I should not see the link "Bulgarian"
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
@@ -159,7 +159,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                    |
       | Name                  | Ajit Tamboli               |
       | E-mail address        | tambotamboli@gocloud.in    |
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
