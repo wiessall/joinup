@@ -1,6 +1,7 @@
 @import "../../partials/core";
 
 .paragraph--layout {
+  clear: both;
   padding-top: $spacer * 1.125; // 18px
   padding-bottom: $spacer * 1.125; // 18px
   &.lpb-layout {
@@ -9,6 +10,7 @@
   &:first-of-type:not(
       .paragraph--layout--light,
       .paragraph--layout--secondary,
+      .paragraph--layout--dark-blue,
       .lpb-layout,
       .banner
     ) {
@@ -18,7 +20,8 @@
     }
   }
   &--light,
-  &--secondary {
+  &--secondary,
+  &--dark-blue {
     position: relative;
     &::before {
       position: absolute;
@@ -53,6 +56,52 @@
   &--secondary {
     &::before {
       background-color: $secondary;
+    }
+  }
+  &--dark-blue {
+    &::before {
+      background-color: $joinup-dark-blue;
+    }
+    &:not(.lpb-layout) {
+      color: $white;
+      background-color: $joinup-dark-blue; // For accessibility compliant, background also needs the color set.
+
+      a:not(.btn) {
+        &:link,
+        &:visited {
+          color: $secondary-darker;
+        }
+      }
+      .paragraph--accordion {
+        a:not(.btn) {
+          &:link,
+          &:visited {
+            color: $link-color;
+          }
+        }
+      }
+      h2,
+      h3,
+      h4,
+      h5,
+      label,
+      .text-label,
+      .text-primary {
+        &:not([class*="tile"]) {
+          color: $secondary-darker !important;
+        }
+      }
+      .text-dark,
+      .glide__slide--active .slide__body .paragraph,
+      .paragraph--testimony .testimony__figcaption {
+        color: $white !important;
+      }
+      .tile,
+      .accordion {
+        .text-dark {
+          color: $gray-900 !important;
+        }
+      }
     }
   }
   & > .layout > .layout__region > .paragraph + .paragraph {
