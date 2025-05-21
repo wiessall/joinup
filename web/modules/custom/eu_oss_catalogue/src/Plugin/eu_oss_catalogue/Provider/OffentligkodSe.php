@@ -32,9 +32,13 @@ class OffentligkodSe extends UrlListCatalogueProviderBase {
    */
   public function defaultConfiguration(): array {
     return [
-      'rootKeys' => ['katalog'],
-      'urlKeys' => ['url'],
-      'endpoints' => ['https://offentligkod.se/api/'],
+      'endpoints' => [
+        [
+          'apiUrl' => 'https://offentligkod.se/api/',
+          'rootKeys' => ['katalog'],
+          'urlKeys' => ['url'],
+        ],
+      ],
     ] + parent::defaultConfiguration();
   }
 

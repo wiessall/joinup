@@ -79,42 +79,41 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
   /**
    * Tests the plugin's fetch() method.
    *
-   * @param string|null $apiResponse
-   *   The API response to mock.
-   * @param array $rootKeys
-   *   Keys to get the solution list with the URLs.
-   * @param array $urlKeys
-   *   Keys to the solution url in the data list.
+   * @param array $apiResponses
+   *   The API responses to mock. Should follow the same order as the endpoints'
+   *   order in the plugin configuration.
+   * @param array $pluginConfiguration
+   *   The configuration of the plugin.
    * @param array $expectedResults
-   *   The expected results.
+   *   The expected results (projects) as array.
    *
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
    *
    * @dataProvider providerFetchTest
    */
   public function testPlugin(
-    string|null $apiResponse,
-    array $rootKeys,
-    array $urlKeys,
+    array $apiResponses,
+    array $pluginConfiguration,
     array $expectedResults,
   ): void {
-    $mock = new MockHandler([
-      new Response(200, ['Content-Type' => 'application/json'], $apiResponse),
-      new Response(200, ['Content-Type' => 'application/json'], json_encode([
-        'values' => [
-          'foo' => 'bar',
-        ],
-      ])),
-    ]);
-    $handlerStack = HandlerStack::create($mock);
+    $mockHandler = new MockHandler();
+    array_map(
+      function (string $responseData) use ($mockHandler): void {
+        $mockHandler->append(
+          new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            $responseData,
+          )
+        );
+      },
+      $apiResponses,
+    );
+    $handlerStack = HandlerStack::create($mockHandler);
     $httpClient = new Client(['handler' => $handlerStack]);
 
     $plugin = new TestUrlListProvider(
-      [
-        'rootKeys' => $rootKeys,
-        'urlKeys' => $urlKeys,
-        'endpoints' => ['https://example.com/foo/bar-baz.json'],
-      ],
+      $pluginConfiguration,
       'test',
       [
         'label' => new TranslatableMarkup('Test provider'),
@@ -144,18 +143,20 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
   public static function providerFetchTest(): array {
     return [
       'Data root, URL key' => [
-        'apiResponse' => json_encode([
-          'data' => [
-            [
-              'url' => 'https://example.com/foo/bar.git',
+        'apiResponses' => [
+          json_encode([
+            'data' => [
+              [
+                'url' => 'https://example.com/foo/bar.git',
+              ],
+              [
+                'url' => 'https://example.com/foo/bar',
+              ],
             ],
-            [
-              'url' => 'https://example.com/foo/bar',
-            ],
-          ],
-        ]),
-        'rootKeys' => ['data'],
-        'urlKeys' => ['url'],
+          ]),
+        ],
+        'pluginConfiguration' => [
+        ],
         'expectedResults' => [
           [
             'namespace' => 'foo',
@@ -169,11 +170,60 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
       ],
 
       'Direct root, nested URL' => [
-        'apiResponse' => json_encode([
-          ['nested' => ['url' => 'https://example.com/bar/baz']],
-        ]),
-        'rootKeys' => [],
-        'urlKeys' => ['nested', 'url'],
+        'apiResponses' => [
+          json_encode([
+            ['nested' => ['url' => 'https://example.com/bar/baz']],
+          ]),
+        ],
+        'pluginConfiguration' => [
+          'endpoints' => [
+            [
+              'url' => 'https://example.com/foo/bar/baz',
+              'rootKeys' => [],
+              'urlKeys' => ['nested', 'url'],
+            ],
+          ],
+        ],
+        'expectedResults' => [
+          [
+            'namespace' => 'bar',
+            'name' => 'baz',
+            'url' => 'https://example.com/bar/baz',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'bar/baz'\n"],
+          ],
+        ],
+      ],
+
+      'Multiple endpoinst with different structure' => [
+        'apiResponses' => [
+          'foo' => json_encode([
+            'fooRoot' => [['fooUrl' => 'https://example.com/fooNS/fooProject']],
+          ]),
+          'bar' => json_encode([
+            'barRoot' => [['barUrl' => 'https://example.com/barNs/barProject']],
+          ]),
+        ],
+        'pluginConfiguration' => [
+          'endpoints' => [
+            'foo' => [
+              'apiUrl' => 'https://example.com/foo.json',
+              'rootKeys' => ['fooRoot'],
+              'urlKeys' => ['fooUrl'],
+              'filesToFetch' => [
+                'publiccodeYml' => 'publiccode.yml',
+                'publiccodeYaml' => 'publiccode.yaml',
+              ],
+            ],
+            'bar' => [
+              'apiUrl' => 'https://example.com/bar.json',
+              'rootKeys' => ['barRoot'],
+              'urlKeys' => ['barUrl'],
+              'filesToFetch' => ['publiccodeYml' => 'publiccode.yml'],
+            ],
+          ],
+        ],
         'expectedResults' => [
           [
             'namespace' => 'bar',
@@ -218,7 +268,7 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         }
       });
     $hostingPlatformMock
-      ->getProjects(['publiccodeYml' => 'publiccode.yml'])
+      ->getProjects(Argument::type('array'))
       ->will(function () use ($platformConfig): iterable {
         foreach ($platformConfig->projects as $ns => $names) {
           foreach ($names as $name) {

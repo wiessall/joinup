@@ -106,11 +106,14 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
 
   /**
    * {@inheritdoc}
+   *
+   * Each endpoint item must have config at the following keys:
+   * -
+   *
+   * @return array<'filesToFetch': array<string, string>, 'endpoints': array{'apiUrl': string, 'rootKeys': string[], 'urlKeys': string[]}>
    */
   public function defaultConfiguration(): array {
     return [
-      'rootKeys' => [],
-      'urlKeys' => [],
       'endpoints' => [],
       'filesToFetch' => [
         'publiccodeYml' => 'publiccode.yml',
@@ -182,32 +185,11 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Returns the API endpoints.
    *
-   * @return string[]
+   * @return array{'apiUrl': string, 'rootKeys': string[], 'urlKeys': string[], 'filesToFetch': array<string, string>}
    *   Returns the API endpoints of the configured catalogue.
    */
   protected function getEndpoints(): array {
     return $this->getConfiguration()['endpoints'];
-  }
-
-  /**
-   * Returns keys to the common ancestor list containing the solution URLs.
-   *
-   * @return string[]
-   *   Returns the keys to the common ancestor list containing the solution
-   *   URLs.
-   */
-  protected function getRootKeys(): array {
-    return $this->getConfiguration()['rootKeys'];
-  }
-
-  /**
-   * Returns keys to the solution URL in each list item.
-   *
-   * @return string[]
-   *   Keys to the solution URL.
-   */
-  protected function getUrlKeys(): array {
-    return $this->getConfiguration()['urlKeys'];
   }
 
   /**
@@ -230,19 +212,20 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   private function requestData(): void {
     $this->fetched = [];
 
-    foreach ($this->getEndpoints() as $endpointUrl) {
+    foreach ($this->getEndpoints() as $endpointConfig) {
+      ['rootKeys' => $rootKeys, 'apiUrl' => $endpointUrl] = $endpointConfig;
       try {
         $response = $this->httpClient->get($endpointUrl);
         $decodedResponse = Json::decode($response->getBody()->getContents());
         if (!is_array($decodedResponse)) {
           throw new \Exception('API returned response is not a valid JSON response.');
         }
-        $value = NestedArray::getValue($decodedResponse, $this->getRootKeys(), $keyExists);
+        $value = NestedArray::getValue($decodedResponse, $rootKeys, $keyExists);
         if (!$keyExists) {
           throw new \Exception("The configured root keys don't exist on the decoded API response.");
         }
         $this->numberOfItems += count($value);
-        $this->processResponseData($value);
+        $this->processResponseData($value, $endpointConfig);
       }
       catch (\Exception $exception) {
         throw new ProviderFetchException(
@@ -258,11 +241,14 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * @param array $responseData
    *   Response data.
    */
-  private function processResponseData(array $responseData): void {
+  private function processResponseData(array $responseData, array $endpointConfig): void {
     $catalogueLabel = (string) $this->pluginDefinition['label'];
 
     foreach ($responseData as $row) {
-      $rawUrl = NestedArray::getValue($row, $this->getUrlKeys(), $urlExists);
+      if (!is_array($row)) {
+        $this->logger->warning('Solution item in API response got from @endpoint-url is not an object or list.');
+      }
+      $rawUrl = NestedArray::getValue($row, $endpointConfig['urlKeys'], $urlExists);
       $logContext = [
         '@catalogue-label' => $catalogueLabel,
         '@solution-repo-url' => $rawUrl,
