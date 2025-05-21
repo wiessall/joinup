@@ -31,6 +31,7 @@ Feature: "Add solution" visibility options.
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I press "Next"
     Then I should see the following error messages:
@@ -100,6 +101,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
+    And I additionally select "Bulgarian" from "Language"
     And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
