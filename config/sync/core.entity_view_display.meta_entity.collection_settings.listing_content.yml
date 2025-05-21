@@ -32,17 +32,17 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 2
     region: content
   meta_entity_collection_settings_listing_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   meta_entity_collection_settings_listing_content_top:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   announcements_enabled: true

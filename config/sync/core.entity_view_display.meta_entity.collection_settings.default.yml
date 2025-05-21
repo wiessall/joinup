@@ -11,10 +11,12 @@ dependencies:
     - field.field.meta_entity.collection_settings.label_join
     - field.field.meta_entity.collection_settings.label_leave
     - field.field.meta_entity.collection_settings.landing_page
+    - field.field.meta_entity.collection_settings.listing_content
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
   module:
     - options
+    - search_api_field
 id: meta_entity.collection_settings.default
 targetEntityType: meta_entity
 bundle: collection_settings
@@ -28,7 +30,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 24
+    weight: 4
     region: content
   changed:
     type: timestamp
@@ -47,14 +49,14 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 22
+    weight: 2
     region: content
   content_creation:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 27
+    weight: 7
     region: content
   created:
     type: timestamp
@@ -73,7 +75,7 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 20
+    weight: 1
     region: content
   glossary_link_only_first:
     type: boolean
@@ -83,7 +85,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 23
+    weight: 3
     region: content
   group_moderation:
     type: boolean
@@ -93,7 +95,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 26
+    weight: 6
     region: content
   label:
     type: string
@@ -101,7 +103,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: -5
+    weight: 0
+    region: content
+  listing_content:
+    type: search_api_field
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
     region: content
   metadata_banner_disabled:
     type: boolean
@@ -111,14 +120,13 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 25
+    weight: 5
     region: content
 hidden:
   code_of_conduct: true
   label_join: true
   label_leave: true
   landing_page: true
-  listing_content: true
   meta_entity_collection_settings_listing_content_inline_facets: true
   meta_entity_collection_settings_listing_content_top: true
   search_api_excerpt: true
