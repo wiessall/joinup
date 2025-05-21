@@ -21,6 +21,7 @@ dependencies:
     - field.storage.node.field_short_title
     - field.storage.node.field_state
     - field.storage.node.field_type
+    - field.storage.node.keywords
     - field.storage.node.organization
     - field.storage.node.owner
     - field.storage.node.solution_type
@@ -465,20 +466,24 @@ field_settings:
     type: boolean
   keywords:
     label: Keywords
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: 'keywords:entity:name'
     type: text
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/keywords'
+    dependencies:
+      config:
+        - field.storage.node.keywords
+      module:
+        - taxonomy
   keywords_spellcheck:
     label: 'Keywords - Spellcheck'
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: 'keywords:entity:name'
     type: solr_text_spellcheck
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/keywords'
+    dependencies:
+      config:
+        - field.storage.node.keywords
+      module:
+        - taxonomy
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'
