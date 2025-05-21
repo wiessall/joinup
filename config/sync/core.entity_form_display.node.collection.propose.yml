@@ -10,10 +10,10 @@ dependencies:
     - field.field.node.collection.contact
     - field.field.node.collection.content_creation
     - field.field.node.collection.description
-    - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.group_moderation
+    - field.field.node.collection.keywords
     - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
@@ -27,11 +27,11 @@ dependencies:
     - node.type.collection
   module:
     - field_group
-    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_core
     - joinup_workflow
+    - link
     - text
 third_party_settings:
   field_group:
@@ -75,6 +75,7 @@ third_party_settings:
         - website_url
         - logo
         - field_keywords
+        - keywords
         - spatial_coverage
         - group_moderation
         - closed_group
@@ -105,7 +106,7 @@ content:
     third_party_settings: {  }
   closed_group:
     type: boolean_checkbox
-    weight: 8
+    weight: 9
     region: content
     settings:
       display_label: false
@@ -132,7 +133,7 @@ content:
     third_party_settings: {  }
   content_creation:
     type: options_buttons
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -142,14 +143,6 @@ content:
     region: content
     settings:
       rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-  field_keywords:
-    type: string_textfield
-    weight: 5
-    region: content
-    settings:
-      size: 60
       placeholder: ''
     third_party_settings: {  }
   field_state:
@@ -167,7 +160,7 @@ content:
     third_party_settings: {  }
   group_moderation:
     type: boolean_checkbox
-    weight: 7
+    weight: 8
     region: content
     settings:
       display_label: false
@@ -215,7 +208,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 6
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS
@@ -247,6 +240,7 @@ content:
 hidden:
   created: true
   current_workflow_state: true
+  keywords: true
   langcode: true
   listing_content: true
   newsletter: true

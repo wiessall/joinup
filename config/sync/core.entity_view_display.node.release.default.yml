@@ -5,8 +5,8 @@ dependencies:
   config:
     - field.field.node.release.description
     - field.field.node.release.documentation
-    - field.field.node.release.field_keywords
     - field.field.node.release.field_state
+    - field.field.node.release.keywords
     - field.field.node.release.language
     - field.field.node.release.og_audience
     - field.field.node.release.process_status
@@ -15,7 +15,7 @@ dependencies:
     - field.field.node.release.spatial_coverage
     - node.type.release
   module:
-    - joinup_collection
+    - collection
     - field_delimiter
     - field_formatter_range
     - file_url
@@ -72,6 +72,14 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  keywords:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: main
   solution_logo:
     type: image
     label: hidden
@@ -88,7 +96,6 @@ content:
     weight: 1
     region: content
 hidden:
-  field_keywords: true
   langcode: true
   language: true
   links: true

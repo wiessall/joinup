@@ -7,10 +7,10 @@ dependencies:
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_hide_title
-    - field.field.node.custom_page.field_keywords
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
+    - field.field.node.custom_page.keywords
     - field.field.node.custom_page.og_audience
     - image.style.thumbnail
     - node.type.custom_page
@@ -58,14 +58,6 @@ content:
     third_party_settings:
       oe_bootstrap_theme_helper:
         switch: true
-  field_keywords:
-    type: string_textfield
-    weight: 6
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
     weight: 4
@@ -90,6 +82,16 @@ content:
     weight: 5
     region: content
     settings: {  }
+    third_party_settings: {  }
+  keywords:
+    type: entity_reference_autocomplete_tags
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

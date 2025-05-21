@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.news.abstract
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
-    - field.field.node.news.field_keywords
     - field.field.node.news.field_news_headline
     - field.field.node.news.field_news_logo
     - field.field.node.news.field_news_referenced_solution
@@ -16,6 +15,7 @@ dependencies:
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
+    - field.field.node.news.keywords
     - field.field.node.news.og_audience
     - field.field.node.news.spatial_coverage
     - image.style.logo
@@ -165,6 +165,14 @@ content:
         template_suggestion: entity_reference__listing_tile
     weight: 9
     region: content
+  keywords:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: main
   report:
     type: link
     label: hidden
@@ -187,7 +195,6 @@ content:
 hidden:
   abstract: true
   featured: true
-  field_keywords: true
   field_site_featured: true
   field_state: true
   field_topic: true
