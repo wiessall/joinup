@@ -16,7 +16,7 @@ field_name: domain
 entity_type: node
 bundle: solution
 label: Domain
-description: ''
+description: 'You can use the "ctrl" key to select multiple classifications that describe the functions of government your solution relates to.'
 required: true
 translatable: false
 default_value: {  }
