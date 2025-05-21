@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
+    - field.field.node.solution.domain
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -170,6 +171,7 @@ hidden:
   collections: true
   distributions: true
   documentation: true
+  domain: true
   download_total: true
   eif_perspective: true
   featured: true

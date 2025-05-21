@@ -231,6 +231,7 @@ Feature: Proposing a collection
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
+    And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
