@@ -28,8 +28,6 @@ Feature: Solution editing.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I should see the heading "Add solution"
     When I fill in the following:
       | Title          | Solution A         |
@@ -38,6 +36,7 @@ Feature: Solution editing.
     And I select "Flemish" from "Language Availabilty"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:
@@ -47,6 +46,7 @@ Feature: Solution editing.
     And I press "Create owner"
     And I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     # Then print last response
     Then I should see the heading "Solution A"
