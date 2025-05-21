@@ -768,12 +768,13 @@ function joinup_solution_form_node_solution_form_alter(&$form, FormStateInterfac
       'tca' => [
         '#type' => 'checkbox',
         '#required' => TRUE,
-        '#title' => t('I have read and agreed to the <a href=":tca" class="use-ajax" data-dialog-type="modal" data-dialog-options = "@json">Terms of Agreement</a>', [
+        '#title' => t('I have read and agreed to the <a href=":tca" class="use-ajax" data-dialog-type="modal" data-dialog-options = "@json" target="_blank">Terms of Agreement</a>', [
           ':tca' => Url::fromRoute('joinup_solution.collection_solution.tca')
             ->toString(),
           '@json' => Json::encode(['width' => 800]),
         ]),
         '#required_error' => t('You must accept the Terms of Agreement.'),
+        '#attached' => ['library' => ['core/drupal.dialog.ajax']],
       ],
       '#weight' => 99,
     ];
