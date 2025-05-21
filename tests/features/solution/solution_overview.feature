@@ -53,8 +53,7 @@ Feature: Solutions Overview
     But I should not see the link "Next page"
     And I should not see the link "Last page"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9771
-  @wip @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: View solution overview as an anonymous user
     Given users:
       | Username      | E-mail                            |
@@ -125,18 +124,26 @@ Feature: Solutions Overview
       | Title                 | Colonies in Earth                   |
       | Abstract              | Some abstract                       |
       | Description           | Some space mumbo jumbo description. |
-      | Geographical coverage | Belgium                             |
       | Name                  | Ambrosio Morison                    |
       | E-mail address        | ambrosio.morison@example.com        |
-    And I select "Data Owner" from "Solution type"
-    And I select "Flemish" from "Language"
     And I select "Demography" from "Topic"
-    And I attach the file "logo.png" to "Logo"
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
-    # Click the button to select an existing owner.
+    And I select "Data Owner" from "Solution type"
+    And I select "Complete Solution" from "Solution classification"
+    And I select "Defense" from "Domain"
+    And I select "Flemish" from "Language"
+    And I press "Next"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "NonProfit example"
     And I press "Add owner"
+    And I press "Next"
+    And I attach the file "logo.png" to "Logo"
+    And I fill in "Geographical coverage" with "Belgium"
+    # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9777.
+    # And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    # Click the button to select an existing owner.
+    And I press "Next"
+    And I press "Next"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Publish"
     And I visit the "Colonies in Earth" solution
     And I should see the text "Colonies in Earth"
