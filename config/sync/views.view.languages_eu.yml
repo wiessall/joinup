@@ -156,8 +156,8 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: string
-          operator: word
-          value: 'Bulgarian, Czech, Danish, German, Greek, English, Spanish, Estonian, Finnish, French, Irish, Croatian, Hungarian, Italian, Lithuanian, Latvian, Maltese, Dutch, Polish, Portuguese, Romanian, Slovak, Slovenian, Swedish'
+          operator: regular_expression
+          value: '^(Bulgarian|Czech|Danish|German|Greek|English|Spanish|Estonian|Finnish|French|Irish|Croatian|Hungarian|Italian|Lithuanian|Latvian|Maltese|Dutch|Polish|Portuguese|Romanian|Slovak|Slovenian|Swedish)$'
           group: 1
           exposed: false
           expose:
