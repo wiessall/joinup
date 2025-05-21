@@ -834,6 +834,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($field_definitions['classification']) && empty($node->classification)) {
       $node->classification = $this->getRandomTerm('solution_classification')->label();
     }
+    if (!empty($field_definitions['domain']) && empty($node->domain)) {
+      $node->domain = $this->getRandomTerm('domain')->label();
+    }
 
     // Handle file URL fields.
     if (!empty($node->documentation)) {

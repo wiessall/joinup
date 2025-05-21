@@ -166,6 +166,7 @@ trait NameMappingsTrait {
         'creation date' => 'created',
         'description' => 'description',
         'documentation' => 'documentation',
+        'domain' => 'domain',
         'keywords' => 'field_keywords',
         'landing page' => 'landing_page',
         'language' => 'language',
