@@ -5,12 +5,16 @@ dependencies:
   config:
     - field.storage.node.keywords
     - node.type.collection
-    - taxonomy.vocabulary.keyword
+    - taxonomy.vocabulary.tags
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/dcat#keyword'
+      type: null
 id: node.collection.keywords
 field_name: keywords
 entity_type: node
@@ -25,7 +29,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      keyword: keyword
+      tags: tags
     sort:
       field: name
       direction: asc

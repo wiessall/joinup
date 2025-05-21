@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - taxonomy.vocabulary.keyword
+    - taxonomy.vocabulary.tags
 id: taxonomy_term.keyword
 target_entity_type_id: taxonomy_term
 target_bundle: keyword

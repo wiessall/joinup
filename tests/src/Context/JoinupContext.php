@@ -832,7 +832,7 @@ class JoinupContext extends RawDrupalContext {
       $node->solution_type = $this->getRandomTerm('solution_type')->label();
     }
     if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
-      $node->keywords = $this->getRandomTerm('keywords')->label();
+      $node->keywords = $this->getRandomTerm('tags')->label();
     }
     if (!empty($field_definitions['classification']) && empty($node->classification)) {
       $node->classification = $this->getRandomTerm('solution_classification')->label();

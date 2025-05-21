@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.node.keywords
     - node.type.news
-    - taxonomy.vocabulary.keyword
+    - taxonomy.vocabulary.tags
   module:
     - tmgmt_content
 third_party_settings:
@@ -25,7 +25,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      keyword: keyword
+      tags: tags
     sort:
       field: name
       direction: asc

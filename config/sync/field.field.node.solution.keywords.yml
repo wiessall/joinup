@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.node.keywords
     - node.type.solution
-    - taxonomy.vocabulary.keyword
+    - taxonomy.vocabulary.tags
   module:
     - rdf_sync
     - tmgmt_content
@@ -30,7 +30,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      keyword: keyword
+      tags: tags
     sort:
       field: name
       direction: asc
