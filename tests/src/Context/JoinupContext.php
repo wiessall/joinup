@@ -834,6 +834,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($field_definitions['classification']) && empty($node->classification)) {
       $node->classification = $this->getRandomTerm('solution_classification')->label();
     }
+    if (!empty($field_definitions['domain']) && empty($node->domain)) {
+      $node->domain = $this->getRandomTerm('domain')->label();
+    }
 
     // Handle file URL fields.
     if (!empty($node->documentation)) {
@@ -2432,6 +2435,58 @@ class JoinupContext extends RawDrupalContext {
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }
+    }
+  }
+
+  /**
+   * Checks the order, region, and weight of rows in a draggable table.
+   *
+   * Example table:
+   *   | title  | type                  | weight |
+   *   | Type   | Collection content top| 0      |
+   *   | Status | Collection content top| 1      |
+   *
+   * @Then the search api widget table should be:
+   */
+  public function assertFacetDraggableTable(TableNode $table): void {
+    $this->assertJavaScriptEnabledBrowser();
+
+    $rows = $this->getSession()->getPage()->findAll('css', '#facet-display-overview tbody tr.draggable');
+    $expected = $table->getColumnsHash();
+
+    Assert::assertSameSize($expected, $rows, 'Number of table rows does not match.');
+
+    foreach ($expected as $index => $expected_row) {
+      $row = $rows[$index];
+
+      // Check title.
+      $title_element = $row->find('css', 'td .tabledrag-cell-content__item');
+      Assert::assertNotNull($title_element, "Missing title in row $index.");
+      Assert::assertEquals($expected_row['title'], trim($title_element->getText()), "Title mismatch in row $index.");
+
+      // Check type (region).
+      $type_select = $row->find('css', 'select.field-region');
+      Assert::assertNotNull($type_select, "Missing region (type) select in row $index for '{$expected_row['title']}'.");
+
+      $selected_value = $type_select->getValue();
+      $selected_option = $type_select->find('css', 'option[value="' . $selected_value . '"]');
+      Assert::assertNotNull($selected_option, 'Selected option not found by value.');
+      $option_value = $selected_option->getHtml();
+      Assert::assertEquals(
+        $expected_row['type'],
+        $option_value,
+        "Region mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['type']}', got '$option_value'."
+      );
+
+      // Check weight.
+      $weight_select = $row->find('css', 'select.field-weight');
+      Assert::assertNotNull($weight_select, "Missing weight select in row $index.");
+      $weight_value = $weight_select->getValue();
+      Assert::assertEquals(
+        $expected_row['weight'],
+        $weight_value,
+        "Weight mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['weight']}', got '$weight_value'."
+      );
     }
   }
 
