@@ -93,6 +93,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  listing_content:
+    type: search_api_field_custom_page
+    weight: 9
+    region: content
+    settings:
+      query_builder: false
+    third_party_settings: {  }
   metadata_banner_disabled:
     type: boolean_checkbox
     weight: 2
@@ -104,4 +111,3 @@ hidden:
   label: true
   path: true
   target: true
-  listing_content: true
