@@ -129,7 +129,7 @@ Feature: Solutions Overview
       | Name                  | Ambrosio Morison                    |
       | E-mail address        | ambrosio.morison@example.com        |
     And I select "Data Owner" from "Solution type"
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     And I select "Demography" from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
