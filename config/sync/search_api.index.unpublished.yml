@@ -219,7 +219,7 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/field_keywords'
+        - 'entity:node/keywords'
   nid:
     label: ID
     datasource_id: 'entity:node'

@@ -470,7 +470,7 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/field_keywords'
+        - 'entity:node/keywords'
   keywords_spellcheck:
     label: 'Keywords - Spellcheck'
     property_path: aggregated_field
@@ -478,7 +478,7 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/field_keywords'
+        - 'entity:node/keywords'
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'

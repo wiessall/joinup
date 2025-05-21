@@ -248,3 +248,7 @@ solution_classification:
 domain:
   - name: Defense
   - name: Economic affairs
+keywords:
+  - name: 'government'
+  - name: 'public service'
+  - name: 'public sector'
