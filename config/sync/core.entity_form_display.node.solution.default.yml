@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
+    - field.field.node.solution.domain
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -44,6 +45,7 @@ third_party_settings:
         - abstract
         - description
         - classification
+        - domain
         - solution_type
         - language
         - content_creation
@@ -190,6 +192,12 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  domain:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_is_description:
     type: text_textarea
     weight: 3
@@ -207,7 +215,7 @@ content:
     third_party_settings: {  }
   language:
     type: options_select
-    weight: 6
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -236,7 +244,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 5
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
