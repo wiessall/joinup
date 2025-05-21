@@ -123,3 +123,24 @@ Feature:
       | second | text    |
       | third  | heading |
     And I press "Publish"
+
+  Scenario: Test duplication of unsaved layout paragraph with nested paragraphs.
+    Given I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
+    Then a modal should open
+
+    When I click "Accordion"
+    And I fill in the 1st "Item label" with "Super" in the "Accordion item" field
+    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
+    And I press "Save" in the "Modal buttons" region
+    And I "duplicate" from the "Custom page body" form field the layout paragraph in position 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 2 layout
+    And I fill in the 1st "Item label" with "Duper" in the "Accordion item" field
+    And I press "Save" in the "Modal buttons" region
+    And I press "Publish"
+
+    Then I should see "Super"
+    And I should see "Duper"
