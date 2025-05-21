@@ -193,6 +193,51 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 2
             additional: {  }
+          bb73e3ce-0f4b-4e84-9356-f2d2541a9ead:
+            uuid: bb73e3ce-0f4b-4e84-9356-f2d2541a9ead
+            region: main
+            configuration:
+              id: 'field_block:node:collection:og_group'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: og_group_subscribe
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          0d02d3fe-1cdb-43f8-a48d-2ca3834f2fde:
+            uuid: 0d02d3fe-1cdb-43f8-a48d-2ca3834f2fde
+            region: main
+            configuration:
+              id: 'field_block:node:collection:report'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          a5906bd8-23a0-4a77-9c80-15ee68551aaa:
+            uuid: a5906bd8-23a0-4a77-9c80-15ee68551aaa
+            region: main
+            configuration:
+              id: 'extra_field_block:node:collection:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
