@@ -35,7 +35,7 @@ Feature: Solution editing.
       | Title          | Solution A         |
       | Abstract       | Abstract of "A"    |
       | Description    | First letter       |
-    And I select "Bulgarian" from "Language Availabilty"
+    And I select "Bulgarian" from "Language availability"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
@@ -54,7 +54,7 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    And the following fields should be present "Title, Abstract, Description, Solution type, Language Availabilty, Contributors"
+    And the following fields should be present "Title, Abstract, Description, Solution type, Language availability, Contributors"
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution

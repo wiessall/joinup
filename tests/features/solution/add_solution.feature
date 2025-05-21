@@ -1,4 +1,4 @@
-@api @group-h @teste
+@api @group-h
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator
@@ -100,7 +100,6 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Bulgarian" from "Language"
     And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -221,6 +220,7 @@ Feature: "Add solution" visibility options.
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     When I fill in the following:
       | owner[form][0][title][0][value]   | University of Basel       |
