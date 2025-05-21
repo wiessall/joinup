@@ -263,3 +263,36 @@ Feature: "Add solution" visibility options.
     When I select image #2 as solution logo
     And I press "Publish"
     And the "Cleaning solution" solution logo is image #2
+
+  @group-clone
+  Scenario: Moderator can add a solution with the right language availabilities.
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Interoperable Europe" collection
+    And I click "Add solution" in the plus button menu
+    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
+    And I press "Yes"
+    Then the "Language availability" select should contain the following options:
+      | Bulgarian   |
+      | Croatian    |
+      | Czech       |
+      | Danish      |
+      | Dutch       |
+      | English     |
+      | Estonian    |
+      | Finnish     |
+      | French      |
+      | German      |
+      | Greek       |
+      | Hungarian   |
+      | Irish       |
+      | Italian     |
+      | Latvian     |
+      | Lithuanian  |
+      | Maltese     |
+      | Polish      |
+      | Portuguese  |
+      | Romanian    |
+      | Slovak      |
+      | Slovenian   |
+      | Spanish     |
+      | Swedish     |
