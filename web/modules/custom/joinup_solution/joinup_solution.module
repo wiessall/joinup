@@ -37,7 +37,6 @@ use Drupal\og\Og;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\simple_multistep\MultistepControllerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
 
