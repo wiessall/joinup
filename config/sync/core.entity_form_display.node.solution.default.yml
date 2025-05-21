@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.domain
-    - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.group_moderation
@@ -272,7 +271,6 @@ hidden:
   created: true
   current_workflow_state: true
   documentation: true
-  field_keywords: true
   field_shared_in: true
   field_topic: true
   group_moderation: true

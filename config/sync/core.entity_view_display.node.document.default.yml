@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_file
-    - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -16,6 +15,7 @@ dependencies:
     - field.field.node.document.field_state
     - field.field.node.document.field_topic
     - field.field.node.document.field_type
+    - field.field.node.document.keywords
     - field.field.node.document.og_audience
     - field.field.node.document.spatial_coverage
     - node.type.document
@@ -155,6 +155,14 @@ content:
         template_suggestion: fieldset
     weight: 10
     region: content
+  keywords:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: main
   report:
     type: link
     label: hidden
@@ -178,7 +186,6 @@ hidden:
   abstract: true
   featured: true
   field_document_logo: true
-  field_keywords: true
   field_site_featured: true
   field_state: true
   field_topic: true
