@@ -20,6 +20,7 @@ Feature: "Add solution" visibility options.
       | Description field is required.             |
       | Solution classification field is required. |
       | Domain field is required.                  |
+      | Topic field is required.                   |
       | Solution type field is required.           |
 
     When I fill in the following:
@@ -28,6 +29,7 @@ Feature: "Add solution" visibility options.
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     And I press "Next"
@@ -220,6 +222,7 @@ Feature: "Add solution" visibility options.
       | Description           | Logs retreat of 40 glaciers in Belgium. |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:

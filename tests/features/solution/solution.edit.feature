@@ -36,6 +36,7 @@ Feature: Solution editing.
     And I select "Flemish" from "Language Availabilty"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     When I fill in the following:
