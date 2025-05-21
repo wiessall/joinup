@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Provide additional access checks for the collection feed view.
@@ -17,18 +18,15 @@ class GroupFeedController extends ControllerBase {
   /**
    * Access check for the group feed view route.
    *
-   * @param string $node
+   * @param \Drupal\node\NodeInterface $node
    *   The encoded ID of an RDF entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(string $node): AccessResultInterface {
-    $loaded_entity = $this->entityTypeManager()->getStorage('node')->load($node);
-    return AccessResult::allowedIf(
-      $loaded_entity instanceof GroupInterface &&
-      $loaded_entity->isPublished()
-    )->addCacheableDependency($loaded_entity);
+  public function access(NodeInterface $node): AccessResultInterface {
+    return AccessResult::allowedIf($node instanceof GroupInterface && $node->isPublished())
+      ->addCacheableDependency($node);
   }
 
 }

@@ -23,10 +23,17 @@ use Psr\Http\Message\ResponseInterface;
 class GitHubCom extends PluginBase implements ServiceMockPluginInterface {
 
   /**
+   * The States API key of the status of this mock.
+   *
+   * @const string
+   */
+  public const string MOCK_STATUS_STATES_KEY = 'joinup_test.github_mock.enabled';
+
+  /**
    * {@inheritdoc}
    */
   public function applies(RequestInterface $request, array $options): bool {
-    return \Drupal::state()->get('joinup_test.github_mock.enabled', FALSE) && ($request->getUri()->getHost() === 'api.github.com');
+    return \Drupal::state()->get(self::MOCK_STATUS_STATES_KEY, FALSE) && ($request->getUri()->getHost() === 'api.github.com');
   }
 
   /**

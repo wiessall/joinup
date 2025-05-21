@@ -70,7 +70,8 @@ function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $op
   if ($entity instanceof MappedTerm && $entity->bundle() === 'spdx_licence' && $operation === 'view') {
     // Only deny access to the canonical route.
     $route_match = \Drupal::routeMatch();
-    return AccessResult::forbiddenIf($route_match->getRouteName() === 'entity.taxonomy_term.canonical' && $route_match->getParameter('taxonomy_term')->bundle() === 'spdx_licence');
+    return AccessResult::forbiddenIf($route_match->getRouteName() === 'entity.taxonomy_term.canonical' && $route_match->getParameter('taxonomy_term')->bundle() === 'spdx_licence')
+      ->addCacheContexts(['route']);
   }
   return AccessResult::neutral();
 }

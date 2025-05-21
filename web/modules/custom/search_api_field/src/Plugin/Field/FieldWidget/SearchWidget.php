@@ -26,6 +26,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_default' widget.
+ *
+ * Provides a field widget for configuring Search API-based content listings.
+ * Allows administrators to configure facets, filters, and display options
+ * for a dynamic search results block.
  */
 #[FieldWidget(
   id: 'search_api_field_default',
@@ -138,8 +142,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#header' => $this->getTableHeader(),
         '#regions' => $this->getRegions(),
         '#attributes' => [
-          'class' => ['field-ui-overview'],
-          'id' => 'field-display-overview',
+          'class' => ['field-ui-overview', 'field-draggable-table'],
+          'id' => 'facet-display-overview',
         ],
         '#tabledrag' => [
           [
@@ -154,20 +158,31 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
             'subgroup' => 'field-parent',
             'source' => 'field-name',
           ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-region',
+            'subgroup' => 'field-region',
+            'source' => 'field-name',
+          ],
         ],
       ];
 
       $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
-
+      $form['refresh_rows'] = [
+        '#type' => 'hidden',
+      ];
       // Order facets because ['#access'] = FALSE drops weight values,
       // does not update correctly.
       uasort($facets, function (FacetInterface $a, FacetInterface $b) {
         return $a->getWeight() <=> $b->getWeight();
       });
 
+      // Populate facet rows for each region.
       foreach ($facets as $facet_id => $facet) {
-        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+        $table[$facet_id] = $this->buildFacetRow($facet, $item, $delta);
       }
+
       $element['wrapper']['fields'] = $table;
     }
 
@@ -236,22 +251,53 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The row element.
    *
    * @return string|null
-   *   The region name this row belongs to.
+   *   The region name this row belongs to, or 'hidden' if none is found.
    */
   public static function getRowRegion(array $row): ?string {
-    return $row['plugin']['type']['#value'];
+    // Check plugin type fields first.
+    if (isset($row['plugin']['type']['#value'])) {
+      return $row['plugin']['type']['#value'];
+    }
+
+    if (isset($row['plugin']['type']) && !is_array($row['plugin']['type'])) {
+      return $row['plugin']['type'];
+    }
+
+    // Check region fields next.
+    if (isset($row['region']['#value'])) {
+      return $row['region']['#value'];
+    }
+
+    if (isset($row['region']) && !is_array($row['region'])) {
+      return $row['region'];
+    }
+
+    // Finally, try to extract from CSS classes.
+    if (!empty($row['#attributes']['class']) && is_array($row['#attributes']['class'])) {
+      foreach ($row['#attributes']['class'] as $class) {
+        if (strpos($class, 'region-') === 0) {
+          return substr($class, 7);
+        }
+      }
+    }
+
+    // Default to hidden if no region is found.
+    return 'hidden';
   }
 
   /**
    * Returns the headers for the facet table.
+   *
+   * @return array
+   *   An array of column header definitions for the facet table.
    */
   protected function getTableHeader(): array {
     return [
       $this->t('Field'),
       $this->t('Weight'),
       $this->t('Parent'),
-      $this->t('Label'),
-      ['data' => $this->t('Format'), 'colspan' => 3],
+      $this->t('Region'),
+      ['data' => $this->t('Widget'), 'colspan' => 3],
     ];
   }
 
@@ -281,76 +327,91 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * Build draggable facet row.
    *
    * @param \Drupal\facets\Entity\Facet $facet
-   *   Facet.
+   *   The facet entity to build a row for.
    * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItem $item
-   *   The search field item.
+   *   The search field item containing stored values.
+   * @param int $delta
+   *   The delta position in the field.
    *
    * @return array
-   *   Render array of the row.
+   *   Render array for the facet row.
    */
-  protected function buildFacetRow(Facet $facet, SearchItem $item): array {
-    $value = $item->get('value')->getValue();
-    $areas = !empty($value['fields']) ? $value['fields'] : [];
-    $facet_config = NULL;
-    if ($areas) {
-      foreach ($areas as $facet_name => $facet_data) {
-        if ($facet_name == $facet->id()) {
-          $facet_config = $facet_data;
-        }
-      }
-    }
-    $regions = array_keys($this->getRegions());
-    $extra_field_row = [
-      '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
-      '#row_type' => 'extra_field',
+  protected function buildFacetRow(Facet $facet, SearchItem $item, int $delta): array {
+    $facet_id = $facet->id();
+    $label = $facet->label();
+    $stored_values = $item->get('value')->getValue();
+    $stored_facets = $stored_values['fields'] ?? [];
+    $facet_config = $stored_facets[$facet_id] ?? [];
+
+    // Extract facet configuration with defaults.
+    $config = [
+      'weight' => $facet_config['weight'] ?? $facet->getWeight(),
+      'region' => $facet_config['region'] ?? 'hidden',
+      'parent' => $facet_config['parent'] ?? '',
+    ];
+
+    // Get region options from available regions.
+    $region_options = array_map(
+      fn($region_info) => $region_info['title'],
+      $this->getRegions()
+    );
+
+    // Create a unique row ID and CSS classes.
+    $row_id = Html::getUniqueId('facet-row-' . $facet_id);
+    $region_class = Html::getClass("region-{$config['region']}");
+
+    return [
+      '#attributes' => [
+        'class' => ['draggable', 'tabledrag-leaf', $region_class],
+        'id' => $row_id,
+      ],
+      '#row_type' => 'field',
       '#region_callback' => [$this, 'getRowRegion'],
-      '#js_settings' => ['rowHandler' => 'field'],
+      '#js_settings' => [
+        'rowHandler' => 'field',
+        'defaultPlugin' => $facet_id,
+      ],
       'human_name' => [
-        '#markup' => $facet->getName(),
+        '#markup' => $label,
       ],
       'weight' => [
-        '#type' => 'textfield',
-        '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
+        '#type' => 'weight',
+        '#title' => $this->t('Weight for @title', ['@title' => $label]),
         '#title_display' => 'invisible',
-        '#default_value' => $facet->getWeight(),
-        '#size' => 3,
+        '#default_value' => $config['weight'],
         '#attributes' => ['class' => ['field-weight']],
       ],
       'parent_wrapper' => [
         'parent' => [
           '#type' => 'select',
-          '#title' => $this->t('Parents for @title', ['@title' => $facet->getName()]),
+          '#title' => $this->t('Parent for @title', ['@title' => $label]),
           '#title_display' => 'invisible',
-          '#options' => array_combine($regions, $regions),
+          '#options' => $region_options,
+          '#default_value' => $config['parent'],
           '#empty_value' => '',
-          '#attributes' => [
-            'class' => [
-              'js-field-parent',
-              'field-parent',
-            ],
-          ],
+          '#attributes' => ['class' => ['js-field-parent', 'field-parent']],
+          '#parents' => [$this->fieldDefinition->getName(), $delta, 'wrapper', 'fields', $facet_id, 'parent'],
         ],
         'hidden_name' => [
           '#type' => 'hidden',
-          '#default_value' => $facet->id(),
+          '#default_value' => $facet_id,
           '#attributes' => ['class' => ['field-name']],
         ],
       ],
-      'plugin' => [
-        'type' => [
-          '#type' => 'select',
-          '#title' => $this->t('Visibility for @title', ['@title' => $facet->getName()]),
-          '#title_display' => 'invisible',
-          '#options' => array_combine($regions, $regions),
-          '#default_value' => !empty($facet_config) ? $facet_config['region'] : 'hidden',
-          '#attributes' => ['class' => ['field-plugin-type']],
-        ],
+      'region' => [
+        '#type' => 'select',
+        '#title' => $this->t('Region for @title', ['@title' => $label]),
+        '#title_display' => 'invisible',
+        '#options' => $region_options,
+        '#default_value' => $config['region'],
+        '#attributes' => ['class' => ['field-region']],
+        '#parents' => [$this->fieldDefinition->getName(), $delta, 'wrapper', 'fields', $facet_id, 'region'],
       ],
-      'settings_summary' => [],
-      'settings_edit' => [],
+      'facet_id' => [
+        '#type' => 'hidden',
+        '#default_value' => $facet_id,
+      ],
     ];
-
-    return $extra_field_row;
   }
 
   /**
@@ -607,6 +668,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $list = array_map('trim', $list);
     $list = array_filter($list, 'strlen');
     $available_fields = $this->getSearchApiIndex()->getFields(TRUE);
+    $allowed_operators = ['=', '<>', 'IN', 'NOT IN', '<', '>'];
 
     foreach ($list as $line) {
       $matches = [];
@@ -625,10 +687,12 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       }
 
       $operator = isset($matches[3]) ? trim($matches[3]) : '=';
-      if (!in_array($operator, ['=', '<>', 'IN', 'NOT IN', '<', '>'])) {
+      if (!in_array($operator, $allowed_operators, TRUE)) {
         $form_state->setError($element, $this->t('Invalid operator specified: %operator. Allowed operators are @operators.', [
           '%operator' => $operator,
-          '@operators' => "'=', '<>', 'IN', 'NOT IN', '<', '>'",
+          '@operators' => implode(', ', array_map(function ($op) {
+            return "'$op'";
+          }, $allowed_operators)),
         ]));
       }
     }
@@ -646,52 +710,235 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $field_state = static::getWidgetState($form['#parents'], $field_name, $form_state);
     $widget = NestedArray::getValue($form_state->getCompleteForm(), $field_state['array_parents']);
 
-    // Clean the values, skipping submitted button values and placing everything
-    // under a 'value' array element which will be serialized.
     $cleaned_values = [];
     foreach ($values as $delta => $value) {
-      if (!empty($value['wrapper']['fields'])) {
-        foreach ($value['wrapper']['fields'] as $fn => $field) {
-          $cleaned_values[$delta]['value']['fields'][$fn] = [
-            'weight' => $field['weight'],
-            'region' => $field['plugin']['type'],
-          ];
-        }
-      }
+      $processed = [
+        'fields' => $this->processFacetFields($value),
+        'enabled' => $value['enabled'],
+        'query_presets' => $value['wrapper']['query_presets'],
+        'show_archived' => $value['wrapper']['show_archived'],
+        'limit' => $value['wrapper']['limit'],
+      ];
 
-      $cleaned_values[$delta]['value']['enabled'] = $values[$delta]['enabled'];
-      $cleaned_values[$delta]['value']['query_presets'] = $values[$delta]['wrapper']['query_presets'];
-      $cleaned_values[$delta]['value']['show_archived'] = $values[$delta]['wrapper']['show_archived'];
-      $cleaned_values[$delta]['value']['limit'] = $values[$delta]['wrapper']['limit'];
-
-      if (!empty($values[$delta]['wrapper']['query_builder']['filters'])) {
-        $filter_values = $values[$delta]['wrapper']['query_builder']['filters'];
-        // Re-order values in case JS is not used.
-        uasort(
-          $filter_values,
-          ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']
+      if (!empty($value['wrapper']['query_builder']['filters'])) {
+        $processed['query_builder']['filters'] = $this->processFilters(
+          $value['wrapper']['query_builder']['filters'],
+          $delta,
+          $field_state,
+          $widget,
+          $form_state
         );
-
-        foreach (array_keys($filter_values) as $plugin_delta) {
-          $plugin_config = $field_state['query_builder'][$delta]['filters'][$plugin_delta];
-          /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
-          $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
-
-          $subform = $widget[$delta]['wrapper']['query_builder']['filters'][$plugin_delta]['plugin'];
-          $subform_state = SubformState::createForSubform($subform, $form_state->getCompleteForm(), $form_state);
-          $plugin->submitConfigurationForm($subform, $subform_state);
-
-          // Don't specify a key, so that plugins are re-indexed.
-          $cleaned_values[$delta]['value']['query_builder']['filters'][] = $plugin->getConfiguration();
-        }
       }
+
+      $cleaned_values[$delta]['value'] = $processed;
     }
 
     return $cleaned_values;
   }
 
   /**
+   * Process facet fields from form values.
+   *
+   * @param array $value
+   *   The form values containing wrapper fields.
+   *
+   * @return array
+   *   Processed facet fields.
+   */
+  private function processFacetFields(array $value): array {
+    $fields = [];
+
+    if (empty($value['wrapper']['fields'])) {
+      return $fields;
+    }
+
+    foreach ($value['wrapper']['fields'] as $fn => $field) {
+      if (!$this->isFacetField($fn, $field)) {
+        continue;
+      }
+
+      $facet_id = $this->extractFormValue($field, 'facet_id', $fn);
+
+      $fields[$facet_id] = [
+        'weight' => $this->getFieldWeight($field),
+        'region' => $this->getFieldRegion($field),
+      ];
+
+      $parent = $this->getFieldParent($field);
+      if ($parent !== NULL) {
+        $fields[$facet_id]['parent'] = $parent;
+      }
+    }
+
+    return $fields;
+  }
+
+  /**
+   * Check if the given field is a facet field that should be processed.
+   *
+   * @param string $field_name
+   *   The field name being checked.
+   * @param mixed $field
+   *   The field data.
+   *
+   * @return bool
+   *   TRUE if this is a facet field that should be processed.
+   */
+  private function isFacetField(string $field_name, $field): bool {
+    // Skip non-array fields and region markers.
+    if (strpos($field_name, 'region-') === 0 || !is_array($field)) {
+      return FALSE;
+    }
+
+    // Check if this is a draggable facet row by verifying key elements.
+    return isset($field['facet_id']) ||
+      (isset($field['human_name']) && isset($field['weight'])) ||
+      (isset($field['plugin']) && isset($field['plugin']['type']));
+  }
+
+  /**
+   * Extract a form value from either direct value or nested form element.
+   *
+   * @param array $field
+   *   The field array containing form elements.
+   * @param string $key
+   *   The key to extract from the field.
+   * @param mixed $default
+   *   Default value to return if the key is not found.
+   *
+   * @return mixed
+   *   The extracted value or default if not found.
+   */
+  private function extractFormValue(array $field, string $key, $default = NULL): mixed {
+    if (array_key_exists($key, $field)) {
+      // Direct scalar value.
+      if (!is_array($field[$key])) {
+        return $field[$key];
+      }
+
+      // Look for value in form API keys.
+      if (isset($field[$key]['#value'])) {
+        return $field[$key]['#value'];
+      }
+      if (isset($field[$key]['#default_value'])) {
+        return $field[$key]['#default_value'];
+      }
+    }
+
+    return $default;
+  }
+
+  /**
+   * Get the weight value from a field.
+   *
+   * @param array $field
+   *   The field array.
+   *
+   * @return int
+   *   The weight value, defaulting to 0 if not found.
+   */
+  private function getFieldWeight(array $field): int {
+    return (int) $this->extractFormValue($field, 'weight', 0);
+  }
+
+  /**
+   * Get the region value from a field.
+   *
+   * @param array $field
+   *   The field array.
+   *
+   * @return string
+   *   The region value, defaulting to 'hidden' if not found.
+   */
+  private function getFieldRegion(array $field): string {
+    // Try plugin type first (Field UI pattern for dragging between regions)
+    if (isset($field['plugin']['type'])) {
+      $region = $this->extractFormValue($field['plugin'], 'type', NULL);
+      if ($region !== NULL) {
+        return $region;
+      }
+    }
+
+    // Then try direct region field.
+    $region = $this->extractFormValue($field, 'region', NULL);
+    if ($region !== NULL) {
+      return $region;
+    }
+
+    // Default to hidden.
+    return 'hidden';
+  }
+
+  /**
+   * Get the parent value from a field if it exists.
+   *
+   * @param array $field
+   *   The field array.
+   *
+   * @return string|null
+   *   The parent value, or NULL if not found.
+   */
+  private function getFieldParent(array $field): ?string {
+    // Check the direct parent field.
+    if (isset($field['parent'])) {
+      return $this->extractFormValue($field, 'parent');
+    }
+
+    // Check parent in parent_wrapper.
+    if (isset($field['parent_wrapper']['parent'])) {
+      return $this->extractFormValue($field['parent_wrapper'], 'parent');
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Process filter values from form submission.
+   *
+   * @param array $filter_values
+   *   The filter values from the form.
+   * @param int $delta
+   *   The delta position in the field.
+   * @param array $field_state
+   *   The field state containing widget information.
+   * @param array $widget
+   *   The form widget.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   Processed filter values.
+   */
+  private function processFilters(array $filter_values, int $delta, array $field_state, array $widget, FormStateInterface $form_state): array {
+    // Re-order values in case JS is not used.
+    uasort(
+      $filter_values,
+      ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']
+    );
+
+    $processed_filters = [];
+    foreach (array_keys($filter_values) as $plugin_delta) {
+      $plugin_config = $field_state['query_builder'][$delta]['filters'][$plugin_delta];
+
+      /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
+      $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
+
+      $subform = $widget[$delta]['wrapper']['query_builder']['filters'][$plugin_delta]['plugin'];
+      $subform_state = SubformState::createForSubform($subform, $form_state->getCompleteForm(), $form_state);
+      $plugin->submitConfigurationForm($subform, $subform_state);
+
+      // Don't specify a key, so that plugins are re-indexed.
+      $processed_filters[] = $plugin->getConfiguration();
+    }
+
+    return $processed_filters;
+  }
+
+  /**
    * Gets the default query presets description.
+   *
+   * @return array
+   *   A render array containing the description.
    */
   protected function getQueryPresetsDescription(): array {
     if (!$index = $this->getSearchApiIndex()) {
