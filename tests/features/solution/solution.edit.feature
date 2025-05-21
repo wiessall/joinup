@@ -77,3 +77,13 @@ Feature: Solution editing.
     Then I should not see the link "Edit"
     When I go to the edit form of the "Another solution" solution
     Then I should get an access denied error
+
+  @javascript
+  Scenario: User can get more info about Solution classification
+    When I am logged in as a facilitator of the "Another solution" solution
+    And I go to the edit form of the "Another solution" solution
+    And I click "More information about Solution classification"
+    Then a modal should open
+    And I should see the text "Solution classification" in the "Modal title"
+    And I should see the text "Complete Solution" in the "Modal content" region
+    And I should see the text "Artifact (product, tool, or digital service)." in the "Modal content" region
