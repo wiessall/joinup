@@ -37,7 +37,7 @@ class SolutionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    * {@inheritdoc}
    */
   protected function getRouteName(): string {
-    return 'joinup_solution.collection_solution.tca';
+    return 'joinup_group.add_content';
   }
 
   /**
@@ -45,7 +45,8 @@ class SolutionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'node' => $event->getGroup()->id(),
+      $event->getGroup()->getEntityTypeId() => $event->getGroup()->id(),
+      'node_type' => $bundleId,
     ];
   }
 
