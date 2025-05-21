@@ -149,17 +149,17 @@ Feature: Joining and leaving collections through the web interface
     And I go to the homepage of the "Open collection" collection
     And I open the header local tasks menu
     And I click "Settings" in the "Entity actions" region
-    And I fill in "Join label" with "Join this community"
-    And I fill in "Leave label" with "Leave this community"
+    And I fill in "Join label" with "Join this collection"
+    And I fill in "Leave label" with "Leave this collection"
     And I press "Save"
 
     When I am logged in as a user with the "authenticated" role
     And I go to the homepage of the "Open collection" collection
-    Then I should see the "Join this community" button
+    Then I should see the "Join this collection" button
 
-    When I press "Join this community"
+    When I press "Join this collection"
     And I press "Confirm"
-    Then I should see the link "Leave this community"
+    Then I should see the link "Leave this collection"
 
   @javascript
   Scenario: Close the modal dialogs with the cancel button.
