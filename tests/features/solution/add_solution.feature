@@ -23,6 +23,7 @@ Feature: "Add solution" visibility options.
       | Solution classification field is required. |
       | Domain field is required.                  |
       | Solution type field is required.           |
+      | Language availability field is required.   |
 
     When I fill in the following:
       | Title       | Solution Beta  |
