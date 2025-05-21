@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.group_moderation
+    - field.field.node.solution.keywords
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
     - field.field.node.solution.list_related_entities
@@ -77,6 +78,7 @@ hidden:
   flag_interoperability: true
   flag_like: true
   group_moderation: true
+  keywords: true
   landing_page: true
   langcode: true
   language: true

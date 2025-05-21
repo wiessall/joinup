@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.group_moderation
+    - field.field.node.solution.keywords
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
     - field.field.node.solution.list_related_entities
@@ -84,7 +85,8 @@ third_party_settings:
         next_button_text: Next
         step_help: ''
     group_additional_information:
-      children: {  }
+      children:
+        - keywords
       label: 'Additional information'
       region: content
       parent_name: ''
@@ -204,6 +206,16 @@ content:
     region: content
     settings:
       use_transition_label: 1
+    third_party_settings: {  }
+  keywords:
+    type: entity_reference_autocomplete_tags
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   language:
     type: options_select
