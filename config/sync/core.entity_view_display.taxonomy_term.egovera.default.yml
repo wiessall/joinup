@@ -20,9 +20,16 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_taxonomy_related_term:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   extra_properties: true
-  field_taxonomy_related_term: true
   langcode: true
   search_api_excerpt: true
   uri: true
