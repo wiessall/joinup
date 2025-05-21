@@ -11,8 +11,6 @@ Feature: "Add solution" visibility options.
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
 
     When I press "Next"
     Then I should see the following error messages:
@@ -37,6 +35,16 @@ Feature: "Add solution" visibility options.
       | error messages                    |
       | Name field is required.           |
       | E-mail address field is required. |
+    And I fill in "Name" with "Organisation valid"
+    And I press "Create owner"
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I jump to the "Confirmation" of "solution" wizard
+    And I press "Propose"
+    Then I should see the following error messages:
+      | error messages                                                      |
+      | You must accept the Terms of Agreement. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
@@ -82,8 +90,6 @@ Feature: "Add solution" visibility options.
     When I am logged in as "Wendell Silva"
     And I go to the homepage of the "Belgian barista's" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I should see the heading "Add solution"
     And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
@@ -150,8 +156,6 @@ Feature: "Add solution" visibility options.
     # Make sure that when another solution is added, both are affiliated.
     When I go to the homepage of the "Belgian barista's" collection
     And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     When I fill in the following:
       | Title                 | V60 filter coffee solution |
       | Abstract              | Abstract of filter coffee  |
@@ -200,8 +204,6 @@ Feature: "Add solution" visibility options.
     Given I am logged in as a member of the "Ocean studies" collection
     When I go to the homepage of the "Ocean studies" collection
     And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     And I fill in "Title" with "Climate change tracker"
     And I press "Next"
     Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
@@ -212,8 +214,6 @@ Feature: "Add solution" visibility options.
     Given I am logged in as a member of the "Glacier monitoring" collection
     When I go to the homepage of the "Glacier monitoring" collection
     And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     And I fill in the following:
       | Title                 | Climate change tracker                  |
       | Abstract              | Tracks climate change                   |
@@ -229,6 +229,7 @@ Feature: "Add solution" visibility options.
     And I press "Create owner"
     And I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
     # Check that the warning intended for moderators is not shown to regular
