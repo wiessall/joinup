@@ -15,8 +15,8 @@ dependencies:
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
   module:
-    - custom_page
     - field_group
+    - search_api_field
 third_party_settings:
   field_group:
     group_glossary_settings:
@@ -94,7 +94,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   listing_content:
-    type: search_api_field_custom_page
+    type: search_api_field_default
     weight: 9
     region: content
     settings:
