@@ -76,7 +76,6 @@ third_party_settings:
       children:
         - website_url
         - logo
-        - field_keywords
         - keywords
         - spatial_coverage
         - group_moderation
