@@ -81,8 +81,8 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 101
-    region: main
+    weight: 6
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -103,7 +103,7 @@ content:
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
 hidden:
   abstract: true
