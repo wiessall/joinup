@@ -616,9 +616,9 @@ Feature: RDF synchronization of contents.
       | http://example.com/release2 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1          |
       | http://example.com/release2 | http://www.w3.org/ns/adms#versionNotes          | New 3.1                               |
     When I update the entity having "http://example.com/release1" as RDF resource:
-      | title          | Omega the third      |
+      | title    | Omega the third      |
       | keywords | food,drinks          |
-      | changed        | 2024-07-31T15:20:00Z |
+      | changed  | 2024-07-31T15:20:00Z |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Omega the third                       |
