@@ -72,14 +72,6 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
-  keywords:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 101
-    region: main
   solution_logo:
     type: image
     label: hidden
@@ -96,6 +88,7 @@ content:
     weight: 1
     region: content
 hidden:
+  keywords: true
   langcode: true
   language: true
   links: true
