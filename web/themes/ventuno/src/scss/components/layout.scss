@@ -31,3 +31,7 @@
     z-index: $zindex-modal;
   }
 }
+
+div[data-drupal-messages] + .region-content-top {
+  margin-top: 0 !important;
+}

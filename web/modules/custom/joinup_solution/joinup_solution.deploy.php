@@ -65,3 +65,37 @@ function joinup_solution_deploy_200500(): string {
 
   return 'Created solution classification terms';
 }
+
+/**
+ * Add domain terms.
+ */
+function joinup_solution_deploy_200501(): string {
+  $data = [
+    'Defense',
+    'Economic affairs',
+    'Education',
+    'Environmental Protection',
+    'General public services',
+    'Health',
+    'Housing and Community Amenities',
+    'Public Order and Safety',
+    'Recreation, Culture, and Religion',
+    'Social Protection',
+  ];
+
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $termStorage = $entityTypeManager->getStorage('taxonomy_term');
+  $weight = 1;
+  foreach ($data as $name) {
+    $term = $termStorage->create(
+      [
+        'vid' => 'domain',
+        'name' => $name,
+        'weight' => $weight++,
+      ],
+    );
+    $term->save();
+  }
+
+  return 'Created domain terms';
+}
