@@ -31,9 +31,12 @@ dependencies:
     - field.field.node.solution.solution_type
     - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
+    - image.style.thumbnail
+    - media.type.solution_logo
     - node.type.solution
   module:
     - field_group
+    - image_library_widget
     - inline_entity_form
     - joinup_workflow
     - text
@@ -87,7 +90,9 @@ third_party_settings:
         next_button_text: Next
         step_help: ''
     group_additional_information:
-      children: {  }
+      children:
+        - logo
+        - spatial_coverage
       label: 'Additional information'
       region: content
       parent_name: ''
@@ -227,6 +232,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  logo:
+    type: image_library_widget
+    weight: 34
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+      media_type_id: solution_logo
+      library_label: ''
+    third_party_settings: {  }
   node_preview:
     weight: 14
     region: content
@@ -256,6 +271,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  spatial_coverage:
+    type: entity_reference_autocomplete
+    weight: 35
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   tca:
     weight: 16
     region: content
@@ -280,7 +305,6 @@ hidden:
   langcode: true
   list_related_entities: true
   listing_content: true
-  logo: true
   metrics_page: true
   og_audience: true
   path: true
@@ -292,7 +316,6 @@ hidden:
   short_id: true
   simple_sitemap: true
   site_featured: true
-  spatial_coverage: true
   status: true
   sticky: true
   transition_motivation: true

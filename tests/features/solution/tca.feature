@@ -18,6 +18,8 @@ Feature: Solution TCA agreement
       | Title    | Solution A      |
       | Abstract | Abstract of "A" |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
+    And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Flemish" from "Language Availabilty"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
@@ -26,7 +28,7 @@ Feature: Solution TCA agreement
     And I press "Next"
     When I fill in the following:
       | owner[form][0][title][0][value]   | Yancy owner        |
-      | contact[form][0][title][0][value] | Yancy Contct       |
+      | contact[form][0][title][0][value] | Yancy Contact       |
       | E-mail address                    | yancyb@example.com |
     And I press "Create owner"
     And I press "Create contact information"
