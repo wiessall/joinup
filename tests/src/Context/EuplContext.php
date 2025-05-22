@@ -107,7 +107,7 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts the legal type categories order in the licence assistant listing item.
+   * Asserts the legal type categories order in the licence assistant page.
    *
    * @param string $spdx
    *   The SPDX title ID.
@@ -123,7 +123,7 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that filter categories in the Licensing Assistant page are present and ordered.
+   * Ensures filter categories exist and are ordered on the Licensing Assistant.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of categories.
