@@ -9,7 +9,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_licence\LicenceComparerHelper;
 
 /**
- * Controller for the Joinup Licensing Assistant (JLA).
+ * Controller for the Joinup Licensing Assistant.
  */
 class LicenceComparerController extends ControllerBase {
 
