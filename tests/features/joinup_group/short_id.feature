@@ -1,4 +1,4 @@
-@api @group-f @teste
+@api @group-f
 Feature:
   As an owner of a group
   In order to make the URL of my group easier to read
@@ -76,7 +76,7 @@ Feature:
 
     When I am logged in as a facilitator of the "Scientific Studies" collection
     And I go to the homepage of the "Scientific Studies" collection
-    And I click "Add solution"
+    And I click "Add solution" in the plus button menu
     # Assert the Portal short ID description.
     Then I should see the following lines of text:
       | Used as the web address (URL). Example: a solution named 'European Standards for Internet Of Things' could use 'es-iot'. |
@@ -93,6 +93,8 @@ Feature:
     And I select "Defense" from "Domain"
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
+    And I check "Company"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
