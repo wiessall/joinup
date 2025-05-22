@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.owner.country
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - node.type.owner
@@ -17,6 +18,14 @@ targetEntityType: node
 bundle: owner
 mode: default
 content:
+  country:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
   owner_type:
     type: entity_reference_label
     label: above
