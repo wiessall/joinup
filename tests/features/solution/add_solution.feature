@@ -246,21 +246,22 @@ Feature: "Add solution" visibility options.
     And I click "Edit" in the "Entity actions" region
     Then I should see the warning message "A solution with the same name exists in a different collection."
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9771.
-  @wip @javascript @generateMedia @generateMediaTypes:solution_logo
+  @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given collection content:
       | title         |
       | Ocean studies |
-    Given solution content:
+    And solution content:
       | title             | collection    |
       | Cleaning solution | Ocean studies |
+    And I am logged in as a moderator
 
-    Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
-    When I expand the "Additional fields" accordion section
-    And I remove the first file from "Logo"
-
-    When I select image #2 as solution logo
+    And I press "Next"
+    And I press "Next"
+    Then I remove the first file from "Logo"
+    And I select image #2 as solution logo
+    And I press "Next"
+    And I press "Next"
     And I press "Publish"
-    And the "Cleaning solution" solution logo is image #2
+    Then the "Cleaning solution" solution logo is image #2
