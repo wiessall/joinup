@@ -16,7 +16,7 @@ field_name: keywords
 entity_type: node
 bundle: release
 label: 'Search keywords'
-description: ''
+description: 'A comma separated list of keywords. Start typing to see suggestions.'
 required: false
 translatable: false
 default_value: {  }
@@ -29,6 +29,6 @@ settings:
     sort:
       field: name
       direction: asc
-    auto_create: false
+    auto_create: true
     auto_create_bundle: ''
 field_type: entity_reference
