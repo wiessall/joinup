@@ -185,7 +185,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Returns the API endpoints.
    *
-   * @return array{'apiUrl': string, 'rootKeys': string[], 'urlKeys': string[], 'filesToFetch': array<string, string>}
+   * @return array{'apiUrl': string, 'rootKeys': array<string>, 'urlKeys': array<string>}
    *   Returns the API endpoints of the configured catalogue.
    */
   protected function getEndpoints(): array {
@@ -228,8 +228,14 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         $this->processResponseData($value, $endpointConfig);
       }
       catch (\Exception $exception) {
-        throw new ProviderFetchException(
-          $exception->getMessage()
+        // Log the exception as error, but let the loop continue.
+        $this->logger->error(
+          "Exception when fetching / processing API endpoint '@endpoint' of @catalogue-label: @message",
+          [
+            '@endpoint' => $endpointUrl,
+            '@catalogue-label' => (string) $this->getPluginLabel(),
+            '@message' => $exception->getMessage(),
+          ],
         );
       }
     }
@@ -240,17 +246,17 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *
    * @param array $responseData
    *   Response data.
+   * @param array{'apiUrl': string, 'rootKeys': array<string>, 'urlKeys': array<string>} $endpointConfig
+   *   The config of the current endpoint.
    */
   private function processResponseData(array $responseData, array $endpointConfig): void {
-    $catalogueLabel = (string) $this->pluginDefinition['label'];
-
     foreach ($responseData as $row) {
       if (!is_array($row)) {
         $this->logger->warning('Solution item in API response got from @endpoint-url is not an object or list.');
       }
       $rawUrl = NestedArray::getValue($row, $endpointConfig['urlKeys'], $urlExists);
       $logContext = [
-        '@catalogue-label' => $catalogueLabel,
+        '@catalogue-label' => (string) $this->getPluginLabel(),
         '@solution-repo-url' => $rawUrl,
         '@url-export' => var_export($rawUrl, TRUE),
       ];
@@ -319,6 +325,16 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       'Processed @processed-count solutions out of @fetched-count items fetched from @catalogue-label catalogue provider. The following @unprocessed-count solutions failed: @unprocessed-list',
       $context,
     );
+  }
+
+  /**
+   * Returns the current plugin label.
+   *
+   * @return \Stringable
+   *   The current plugin label.
+   */
+  private function getPluginLabel(): \Stringable {
+    return $this->pluginDefinition['label'];
   }
 
 }
