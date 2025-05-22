@@ -31,7 +31,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * List of projects fetched from API.
    *
-   * @var array{'api': \Drupal\eu_oss_catalogue\Model\ApiGuess, 'projects': array{string: string}}
+   * @var array{api: \Drupal\eu_oss_catalogue\Model\ApiGuess, projects: array{string: string}}
    *   A list of fetched projects keyed by the coding platform base URL. The
    *   values are associative array of project IDs keyed by their namespace.
    */
