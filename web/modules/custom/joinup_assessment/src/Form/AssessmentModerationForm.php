@@ -16,6 +16,7 @@ use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\file\FileRepositoryInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
@@ -263,18 +264,22 @@ class AssessmentModerationForm extends FormBase {
     $fileStorage = $this->entityTypeManager->getStorage('file');
 
     foreach (['binding_requirement_documents', 'upload_assessment_documents'] as $field) {
-      if ($fids = $submission->getData()[$field] ?? []) {
-        foreach ($fileStorage->loadMultiple($fids) as $file) {
-          $path = StreamWrapperManager::getTarget($file->getFileUri());
-          $destinationUri = "public://$path";
+      if (!$fids = $submission->getData()[$field] ?? []) {
+        continue;
+      }
 
-          $destinationDir = $this->fileSystem->dirname($destinationUri);
-          if (!$this->fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
-            throw new \RuntimeException("Directory $destinationDir cannot be created or it's not writable.");
-          }
+      foreach ($fileStorage->loadMultiple($fids) as $file) {
+        assert($file instanceof FileInterface);
 
-          $this->fileRepository->move($file, $destinationUri);
+        $path = StreamWrapperManager::getTarget($file->getFileUri());
+        $destinationUri = "public://$path";
+
+        $destinationDir = $this->fileSystem->dirname($destinationUri);
+        if (!$this->fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+          throw new \RuntimeException("Directory $destinationDir cannot be created or it's not writable.");
         }
+
+        $this->fileRepository->move($file, $destinationUri);
       }
     }
   }
