@@ -136,8 +136,7 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
   /**
    * Test data provider for ::testFetch().
    *
-   * @return array{'apiResponse': string|null, 'rootKeys': string[], 'urlKeys':
-   *   string[], 'expectedResults': array[]}
+   * @return array{apiResponse: string|null, rootKeys: string[], urlKeys: string[], expectedResults: array[]}
    *   The test cases.
    */
   public static function providerFetchTest(): array {
