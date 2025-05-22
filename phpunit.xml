@@ -66,8 +66,6 @@
     <testsuite name="existing-site">
       <directory>
         web/modules/custom/**/tests/src/ExistingSite
-        <!-- Remove this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9772 -->
-        <exclude>web/modules/custom/joinup_group/tests/src/ExistingSite/GroupContentUpdateUrlAliasTest.php</exclude>
       </directory>
       <directory>web/profiles/joinup/tests/src/ExistingSite</directory>
       <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
