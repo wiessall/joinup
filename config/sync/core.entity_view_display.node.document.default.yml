@@ -155,14 +155,6 @@ content:
         template_suggestion: fieldset
     weight: 10
     region: content
-  keywords:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 101
-    region: main
   report:
     type: link
     label: hidden
@@ -190,6 +182,7 @@ hidden:
   field_state: true
   field_topic: true
   flag_like: true
+  keywords: true
   langcode: true
   links: true
   og_audience: true
