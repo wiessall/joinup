@@ -20,7 +20,7 @@ Feature: Solution TCA agreement
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Bulgarian" from "Language Availabilty"
+    And I select "Bulgarian" from "Language availability"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
