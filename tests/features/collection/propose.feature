@@ -239,23 +239,24 @@ Feature: Proposing a collection
       | html               | yes                                                                                                                                   |
 
     When I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I fill in "Title" with "Rolly email validation"
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
     # Email confirmation occurs only for published groups.

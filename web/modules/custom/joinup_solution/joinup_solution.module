@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -262,6 +263,11 @@ function joinup_solution_entity_extra_field_info(): array {
     $form['node_preview'] = [
       'label' => t('Node preview'),
       'description' => t('Displays a preview of the solution.'),
+      'visible' => FALSE,
+    ];
+    $form['tca'] = [
+      'label' => t('Terms of Agreement'),
+      'description' => t('I have read and agreed checkbox.'),
       'visible' => FALSE,
     ];
   }
@@ -749,6 +755,24 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
       '#description' => $form['classification']['widget']['#description'],
       '#url' => URL::fromUserInput('/solution-classification'),
       '#name' => $form['classification']['widget']['#title'],
+    ];
+  }
+
+  if ($form_state->get('form_display')->getComponent('tca') && $node->isNew()) {
+    $form['tca'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['tca-container']],
+      'tca' => [
+        '#type' => 'checkbox',
+        '#required' => TRUE,
+        '#title' => t('I have read and agreed to the <a href=":tca" class="use-ajax" data-dialog-type="modal" data-dialog-options = "@json" target="_blank">Terms of Agreement</a>', [
+          ':tca' => Url::fromRoute('joinup_solution.collection_solution.tca')
+            ->toString(),
+          '@json' => Json::encode(['width' => 800]),
+        ]),
+        '#required_error' => t('You must accept the Terms of Agreement.'),
+        '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+      ],
     ];
   }
 }
