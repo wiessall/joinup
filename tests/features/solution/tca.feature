@@ -28,7 +28,7 @@ Feature: Solution TCA agreement
     And I press "Next"
     When I fill in the following:
       | owner[form][0][title][0][value]   | Yancy owner        |
-      | contact[form][0][title][0][value] | Yancy Contact       |
+      | contact[form][0][title][0][value] | Yancy Contact      |
       | E-mail address                    | yancyb@example.com |
     And I press "Create owner"
     And I press "Create contact information"
