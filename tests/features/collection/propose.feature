@@ -56,7 +56,7 @@ Feature: Proposing a collection
       # Contact information data.
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
-      | Search keywords       | Some keyword                                                                                         |
+      | Search keywords       | government                                                                                         |
     Then I should see the text "Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content."
     When I select "HR" from "Topic"
     And I select the radio button "Only members can create content."
