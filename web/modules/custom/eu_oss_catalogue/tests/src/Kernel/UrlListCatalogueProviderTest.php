@@ -156,6 +156,13 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
           ]),
         ],
         'pluginConfiguration' => [
+          'endpoints' => [
+            [
+              'apiUrl' => 'https://example.com/foo/bar.git',
+              'rootKeys' => ['data'],
+              'urlKeys' => ['url'],
+            ],
+          ],
         ],
         'expectedResults' => [
           [
@@ -178,7 +185,7 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         'pluginConfiguration' => [
           'endpoints' => [
             [
-              'url' => 'https://example.com/foo/bar/baz',
+              'apiUrl' => 'https://example.com/foo/bar/baz',
               'rootKeys' => [],
               'urlKeys' => ['nested', 'url'],
             ],
@@ -196,8 +203,11 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         ],
       ],
 
-      'Multiple endpoinst with different structure' => [
+      'Multiple endpoints with different structure' => [
         'apiResponses' => [
+          'wrong keys' => json_encode([
+            'root' => [['url' => 'https://example.com/wrongNS/wrongProject']],
+          ]),
           'foo' => json_encode([
             'fooRoot' => [['fooUrl' => 'https://example.com/fooNS/fooProject']],
           ]),
@@ -207,31 +217,39 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         ],
         'pluginConfiguration' => [
           'endpoints' => [
+            'wrong keys' => [
+              'apiUrl' => 'https://example.com/wrong.json',
+              'rootKeys' => ['wrongRoot'],
+              'urlKeys' => ['url'],
+            ],
             'foo' => [
               'apiUrl' => 'https://example.com/foo.json',
               'rootKeys' => ['fooRoot'],
               'urlKeys' => ['fooUrl'],
-              'filesToFetch' => [
-                'publiccodeYml' => 'publiccode.yml',
-                'publiccodeYaml' => 'publiccode.yaml',
-              ],
             ],
             'bar' => [
               'apiUrl' => 'https://example.com/bar.json',
               'rootKeys' => ['barRoot'],
               'urlKeys' => ['barUrl'],
-              'filesToFetch' => ['publiccodeYml' => 'publiccode.yml'],
             ],
           ],
         ],
         'expectedResults' => [
           [
-            'namespace' => 'bar',
-            'name' => 'baz',
-            'url' => 'https://example.com/bar/baz',
+            'namespace' => 'fooNS',
+            'name' => 'fooProject',
+            'url' => 'https://example.com/fooNS/fooProject',
             'platform' => 'testPlatform',
             'defaultBranch' => 'main',
-            'files' => ['publiccodeYml' => "name: 'bar/baz'\n"],
+            'files' => ['publiccodeYml' => "name: 'fooNS/fooProject'\n"],
+          ],
+          [
+            'namespace' => 'barNs',
+            'name' => 'barProject',
+            'url' => 'https://example.com/barNs/barProject',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'barNs/barProject'\n"],
           ],
         ],
       ],
