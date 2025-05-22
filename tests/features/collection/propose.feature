@@ -250,6 +250,7 @@ Feature: Proposing a collection
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
