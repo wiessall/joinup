@@ -18,6 +18,7 @@ Feature: Solution moderation
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
@@ -39,6 +40,7 @@ Feature: Solution moderation
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
@@ -60,6 +62,7 @@ Feature: Solution moderation
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"

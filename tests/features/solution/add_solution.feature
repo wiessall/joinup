@@ -20,6 +20,7 @@ Feature: Test adding solutions.
       | Description field is required.             |
       | Solution classification field is required. |
       | Domain field is required.                  |
+      | Topic field is required.                   |
       | Solution type field is required.           |
       | Language availability field is required.   |
 
@@ -29,6 +30,7 @@ Feature: Test adding solutions.
       | Description | Last letter    |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
@@ -222,6 +224,7 @@ Feature: Test adding solutions.
       | Description           | Logs retreat of 40 glaciers in Belgium. |
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
