@@ -43,7 +43,7 @@ class EuplContext extends RawDrupalContext {
       'nid' => 701805,
       'type' => 'custom_page',
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
-      'title' => 'JLA',
+      'title' => 'Portal Licensing Assistant',
       'solution' => $solution->title,
       'field_state' => 'published',
     ]);
@@ -107,7 +107,7 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts the legal type categories order in the JLA licence listing item.
+   * Asserts the legal type categories order in the licence assistant listing item.
    *
    * @param string $spdx
    *   The SPDX title ID.
@@ -123,7 +123,7 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that filter categories in the JLA page are present and ordered.
+   * Asserts that filter categories in the Licensing Assistant page are present and ordered.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The table of categories.
@@ -463,7 +463,7 @@ class EuplContext extends RawDrupalContext {
     foreach ($html_manipulator->filter('td.licence-comparer__cell-on') as $td) {
       // Insert an 'x' character the licence comparer table checked cells so
       // that the tests are able to identify them.
-      // @see tests/features/communities/eupl/jla.feature
+      // @see tests/features/communities/eupl/licensing_assistant.feature
       $td->textContent = 'x';
     }
     foreach ($html_manipulator->filter('td.licence-comparer__cell-off') as $td) {
