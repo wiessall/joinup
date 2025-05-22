@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\file\FileInterface;
+use Joinup\EnvironmentDetector;
 
 /**
  * Update file access for published assessment reports.
@@ -52,9 +53,23 @@ function joinup_assessment_deploy_200500(array &$sandbox): string {
       foreach ($fileStorage->loadMultiple($fids) as $file) {
         assert($file instanceof FileInterface);
 
-        $path = StreamWrapperManager::getTarget($file->getFileUri());
-        $destinationUri = "public://$path";
+        $sourceUri = $file->getFileUri();
+        $path = StreamWrapperManager::getTarget($sourceUri);
 
+        // Testing support.
+        if (!file_exists($sourceUri) && !EnvironmentDetector::isProduction()) {
+          // In non-production environments, create a fake file if the real file
+          // is missing from the file system, so that we're still able to test
+          // this deployment script. It happens in all environments that are
+          // running without files from production (local, testing, ACC, etc.)
+          $sourceDir = $fileSystem->dirname($sourceUri);
+          if (!$fileSystem->prepareDirectory($sourceDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+            throw new \RuntimeException("Directory $sourceDir cannot be created or it's not writable.");
+          }
+          file_put_contents($sourceUri, 'fake');
+        }
+
+        $destinationUri = "public://$path";
         $destinationDir = $fileSystem->dirname($destinationUri);
         if (!$fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
           throw new \RuntimeException("Directory $destinationDir cannot be created or it's not writable.");
