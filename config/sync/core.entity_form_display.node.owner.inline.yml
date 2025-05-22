@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
+    - field.field.node.owner.country
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - node.type.owner
@@ -12,6 +13,16 @@ targetEntityType: node
 bundle: owner
 mode: inline
 content:
+  country:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   owner_type:
     type: options_buttons
     weight: 1
