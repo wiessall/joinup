@@ -36,12 +36,17 @@ Feature: "Add solution" visibility options.
     Then I should see the following error messages:
       | error messages                    |
       | Name field is required.           |
+      | Type field is required.           |
       | E-mail address field is required. |
-    And I fill in "Name" with "Organisation valid"
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
-    And I fill in "Name" with "Contact Rapazoglou"
-    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
-    Then I press "Create contact information"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
+    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the following error messages:
