@@ -51,13 +51,8 @@ function joinup_core_deploy_200500(array &$sandbox): string {
       'status' => 1,
       'created' => $time,
     ]);
-    /** @var \Drupal\taxonomy\TermInterface $term */
     $term->save();
     $normalized[(int) $term->id()] = $term->label();
-
-    // @todo Remove the debug message.
-    print "Term $term_name created.\n";
-
     return (int) $term->id();
   };
 
@@ -96,4 +91,49 @@ function joinup_core_deploy_200500(array &$sandbox): string {
     \Drupal::state()->delete('joinup_core.keywords');
   }
   return sprintf('Processed %s of %s keywords.', $sandbox['current'], $sandbox['count']);
+}
+
+/**
+ * Update search api fields that use keywords.
+ */
+function joinup_core_deploy_200501(): string {
+  $data = \Drupal::database()->select('paragraph__content_listing', 'pl')
+    ->fields('pl')
+    ->condition('content_listing_value', '%keywords%', 'LIKE')
+    ->execute()
+    ->fetchAll();
+
+  $count = count($data);
+  foreach ($data as $row) {
+    $value = $row->content_listing_value;
+    $value = unserialize($value, ['allowed_classes' => FALSE]);
+    $query_presets = $value['query_presets'];
+    if (empty($query_presets)) {
+      continue;
+    }
+
+    $split_presets = explode("\r\n", $query_presets);
+    foreach ($split_presets as &$preset) {
+      if (!str_starts_with($preset, 'keywords|')) {
+        continue;
+      }
+
+      $preset = explode('|', $preset);
+      $keywords_value = $preset[1];
+      $keywords_value = strtolower($keywords_value);
+      $preset = 'keywords|' . $keywords_value;
+    }
+
+    $query_presets = implode("\r\n", $split_presets);
+    $value['query_presets'] = $query_presets;
+    $value = serialize($value);
+    \Drupal::database()->update('paragraph__content_listing')
+      ->fields(['content_listing_value' => $value])
+      ->condition('entity_id', $row->entity_id)
+      ->condition('revision_id', $row->revision_id)
+      ->condition('delta', $row->delta)
+      ->execute();
+  }
+
+  return sprintf('Updated %s keywords.', $count);
 }
