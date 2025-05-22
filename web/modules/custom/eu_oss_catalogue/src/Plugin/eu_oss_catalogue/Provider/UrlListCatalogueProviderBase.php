@@ -224,7 +224,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Returns the API endpoints.
    *
-   * @return array{'apiUrl': string, 'rootKeys': array<string>, 'urlKeys': array<string>}
+   * @return array{apiUrl: string, rootKeys: array<string>, urlKeys: array<string>}
    *   Returns the API endpoints of the configured catalogue.
    */
   protected function getEndpoints(): array {
@@ -285,7 +285,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *
    * @param array $responseData
    *   Response data.
-   * @param array{'apiUrl': string, 'rootKeys': array<string>, 'urlKeys': array<string>} $endpointConfig
+   * @param array{apiUrl: string, rootKeys: array<string>, urlKeys: array<string>} $endpointConfig
    *   The config of the current endpoint.
    */
   private function processResponseData(array $responseData, array $endpointConfig): void {
