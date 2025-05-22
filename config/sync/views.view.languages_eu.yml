@@ -71,24 +71,9 @@ display:
           field_api_classes: false
           convert_spaces: false
       pager:
-        type: mini
+        type: none
         options:
           offset: 0
-          pagination_heading_level: h4
-          items_per_page: 10
-          total_pages: null
-          id: 0
-          tags:
-            next: ››
-            previous: ‹‹
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
       exposed_form:
         type: basic
         options:
@@ -157,7 +142,7 @@ display:
           entity_field: name
           plugin_id: string
           operator: regular_expression
-          value: '^(Bulgarian|Czech|Danish|German|Greek|English|Spanish|Estonian|Finnish|French|Irish|Croatian|Hungarian|Italian|Lithuanian|Latvian|Maltese|Dutch|Polish|Portuguese|Romanian|Slovak|Slovenian|Swedish)$'
+          value: ^(Bulgarian|Czech|Danish|German|Greek|English|Spanish|Estonian|Finnish|French|Irish|Croatian|Hungarian|Italian|Lithuanian|Latvian|Maltese|Dutch|Polish|Portuguese|Romanian|Slovak|Slovenian|Swedish)$
           group: 1
           exposed: false
           expose:
@@ -217,17 +202,19 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url.query_args
         - user.permissions
       tags: {  }
-  entity_reference_1:
-    id: entity_reference_1
+  entity_reference_languages_eu:
+    id: entity_reference_languages_eu
     display_title: 'Entity Reference'
     display_plugin: entity_reference
     position: 1
