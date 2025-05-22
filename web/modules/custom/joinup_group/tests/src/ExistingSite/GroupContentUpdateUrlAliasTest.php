@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TopicTrait;
-use Drupal\joinup\Traits\VocabularyTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
@@ -20,8 +20,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;
   use LoginTrait;
+  use RandomGeneratorTrait;
   use TopicTrait;
-  use VocabularyTrait;
 
   /**
    * Testing entities.
