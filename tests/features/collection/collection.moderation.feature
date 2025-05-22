@@ -208,7 +208,6 @@ Feature: Collection moderation
     And I fill in "Name" with "Katsumoto"
     And I check "Company"
     And I fill in "Country" with "Belgium"
-    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
@@ -264,7 +263,6 @@ Feature: Collection moderation
     And I fill in "Name" with "Garnett Clifton"
     And I check "Company"
     And I fill in "Country" with "Belgium"
-    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I select the radio button "Any user can create content."
@@ -342,7 +340,7 @@ Feature: Collection moderation
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Terrance Nash"
-    And I check the box "Company"
+    And I check "Company"
     And I fill in "Country" with "Belgium"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
@@ -382,7 +380,7 @@ Feature: Collection moderation
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"
-    And I check the box "Company"
+    And I check "Company"
     And I fill in "Country" with "Belgium"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
