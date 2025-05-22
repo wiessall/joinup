@@ -4,6 +4,7 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.owner.country
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - node.type.owner
@@ -33,6 +34,7 @@ content:
     weight: 50
     region: content
 hidden:
+  country: true
   field_state: true
   langcode: true
   owner_type: true
