@@ -31,6 +31,7 @@ Feature: Owner moderation
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
     And I check the box "Industry consortium"
+    And I fill in "Country" with "Belgium"
     And I fill in "Name" with "EU healthy movement"
     When I press "Create owner"
     Then I should see "EU healthy movement"
@@ -74,7 +75,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check the box "Company"
+    When I check "Company"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

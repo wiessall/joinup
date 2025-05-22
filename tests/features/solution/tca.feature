@@ -26,11 +26,14 @@ Feature: Solution TCA agreement
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
-    When I fill in the following:
-      | owner[form][0][title][0][value]   | Yancy owner        |
-      | contact[form][0][title][0][value] | Yancy Contact      |
-      | E-mail address                    | yancyb@example.com |
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
+    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
+    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
     And I click "Terms of Agreement"

@@ -33,12 +33,17 @@ Feature: "Add solution" visibility options.
     Then I should see the following error messages:
       | error messages                    |
       | Name field is required.           |
+      | Type field is required.           |
       | E-mail address field is required. |
-    And I fill in "Name" with "Organisation valid"
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
-    And I fill in "Name" with "Contact Rapazoglou"
-    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
-    Then I press "Create contact information"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
+    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the following error messages:
@@ -222,12 +227,15 @@ Feature: "Add solution" visibility options.
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Next"
-    When I fill in the following:
-      | owner[form][0][title][0][value]   | University of Basel       |
-      | contact[form][0][title][0][value] | Angela Crespi       |
-      | E-mail address                    | angela_crespi@glacmon.basel-uni.ch  |
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "University of Basel"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
+    And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I jump to the "Confirmation" of "solution" wizard
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
