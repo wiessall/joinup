@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Component\Assertion\Inspector;
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -66,6 +68,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     protected ApiGuesserInterface $apiGuesser,
     protected EuOssCataloguePluginManagerInterface $platformManager,
   ) {
+    $this->validateConfiguration($configuration);
     parent::__construct($configuration, $plugin_id, $plugin_definition, $parserManager, $logger);
   }
 
@@ -101,16 +104,52 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * {@inheritdoc}
    */
   public function setConfiguration(array $configuration): void {
+    $this->validateConfiguration($configuration);
     $this->configuration = $configuration;
   }
 
   /**
+   * Validates the configuration.
+   *
+   * @param array $configuration
+   *   The configuration to validate.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   *   When the provided configuration is invalid.
+   */
+  protected function validateConfiguration(array $configuration): void {
+    if (array_key_exists('filesToFetch', $configuration)) {
+      if (!Inspector::assertAllStrings($configuration['filesToFetch'])) {
+        throw new PluginException("The 'filesToFetch' plugin config must be a list of string values.");
+      }
+    }
+
+    if (array_key_exists('endpoints', $configuration)) {
+      if (!is_array($configuration['endpoints']) || empty($configuration['endpoints'])) {
+        throw new PluginException("The 'endpoints' plugin config must be a non-empty array");
+      }
+
+      $invalidKeys = [];
+      foreach ($configuration['endpoints'] as $key => $endpointConfig) {
+        $missing = array_diff(['apiUrl', 'rootKeys', 'urlKeys'], array_keys($endpointConfig));
+        if (
+          !empty($missing) ||
+          !is_string($endpointConfig['apiUrl']) ||
+          !Inspector::assertAllStrings($endpointConfig['rootKeys']) ||
+          !Inspector::assertAllStrings($endpointConfig['urlKeys'])
+        ) {
+          $invalidKeys[] = $key;
+        }
+      }
+
+      if (!empty($invalidKeys)) {
+        throw new PluginException('The endpoint configurations with the following keys are invalid: ' . implode(', ', $invalidKeys));
+      }
+    }
+  }
+
+  /**
    * {@inheritdoc}
-   *
-   * Each endpoint item must have config at the following keys:
-   * -
-   *
-   * @return array<'filesToFetch': array<string, string>, 'endpoints': array{'apiUrl': string, 'rootKeys': string[], 'urlKeys': string[]}>
    */
   public function defaultConfiguration(): array {
     return [
