@@ -27,7 +27,6 @@ Feature: Creation of owners through UI
     # Since it is a 'propose' form, the field is not shown for the parent either.
     # It is safe to check that the field is not found in the entire form.
     Then the following fields should not be present "Current workflow state, Langcode, Translation"
-    When I check the box "Company"
     And I fill in "Name" with "Acme"
     And I check "Company"
     And I fill in "Country" with "Belgium"
@@ -37,9 +36,10 @@ Feature: Creation of owners through UI
 
     # Edit.
     When I press "Edit" at the "Owner" field
-    And I check the box "Industry consortium"
-    And I check the box "Company"
     And I fill in "Name" with "Acme Inc."
+    And I check "Industry consortium"
+    And I check "Company"
+    And I fill in "Country" with "Switzerland"
     Then I press "Update owner"
     Then I should see "Acme Inc."
     And I should see the link "Industry consortium"
@@ -52,7 +52,6 @@ Feature: Creation of owners through UI
 
     # Create a person owner as well.
     And I press "Add new" at the "Owner" field
-    And I check the box "Company"
     And I fill in "Name" with "John Doe"
     And I check "Company"
     And I fill in "Country" with "Belgium"
