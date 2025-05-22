@@ -8,8 +8,6 @@ Feature: Test adding solutions with clone data.
     Given I am logged in as a moderator
     When I go to the homepage of the "Interoperable Europe" collection
     And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then the "Language availability" select should contain the following options:
       | Bulgarian   |
       | Croatian    |
