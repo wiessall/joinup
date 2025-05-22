@@ -74,7 +74,6 @@ third_party_settings:
       children:
         - website_url
         - logo
-        - field_keywords
         - keywords
         - spatial_coverage
         - group_moderation
@@ -165,6 +164,16 @@ content:
     settings:
       display_label: false
     third_party_settings: {  }
+  keywords:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   logo:
     type: image_library_widget
     weight: 4
@@ -240,7 +249,6 @@ content:
 hidden:
   created: true
   current_workflow_state: true
-  keywords: true
   langcode: true
   listing_content: true
   newsletter: true

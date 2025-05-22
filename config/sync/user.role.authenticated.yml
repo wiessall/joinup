@@ -26,6 +26,7 @@ dependencies:
     - node.type.owner
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
+    - taxonomy.vocabulary.tags
   module:
     - collection
     - comment
@@ -49,6 +50,7 @@ dependencies:
     - sparql_endpoint
     - state_machine_permissions
     - system
+    - taxonomy
     - tour
 id: authenticated
 label: 'Authenticated user'
@@ -94,6 +96,7 @@ permissions:
   - 'create paragraph content video'
   - 'create polls'
   - 'create remote_video media'
+  - 'create terms in tags'
   - 'delete own comments'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
