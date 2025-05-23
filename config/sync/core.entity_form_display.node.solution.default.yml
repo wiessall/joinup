@@ -50,8 +50,8 @@ third_party_settings:
         - classification
         - domain
         - field_topic
-        - solution_type
         - content_creation
+        - solution_type
         - language
       label: 'Solution information'
       region: content
@@ -92,6 +92,7 @@ third_party_settings:
     group_additional_information:
       children:
         - logo
+        - short_id
         - spatial_coverage
         - keywords
       label: 'Additional information'
@@ -276,6 +277,14 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
+  short_id:
+    type: string_textfield
+    weight: 35
+    region: content
+    settings:
+      size: 60
+      placeholder: 'Minimum 4 characters required.'
+    third_party_settings: {  }
   solution_type:
     type: options_select
     weight: 7
@@ -284,7 +293,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 35
+    weight: 36
     region: content
     settings:
       match_operator: CONTAINS
@@ -323,7 +332,6 @@ hidden:
   published_at: true
   related_solutions: true
   release_number: true
-  short_id: true
   simple_sitemap: true
   site_featured: true
   status: true

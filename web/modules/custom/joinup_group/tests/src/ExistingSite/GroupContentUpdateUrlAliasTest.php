@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drush\TestTraits\DrushTestTrait;
@@ -19,6 +20,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;
   use LoginTrait;
+  use RandomGeneratorTrait;
   use TopicTrait;
 
   /**
@@ -111,6 +113,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Edit the solution and add a short ID.
     $edit = ['short_id[0][value]' => 'abc123'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
@@ -200,6 +206,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test the success message on short ID update.
     $edit = ['short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
@@ -211,6 +221,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test the short ID deletion.
     $edit = ['short_id[0][value]' => ''];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
@@ -321,6 +335,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test updating the title of the solution.
     $edit = ['title[0][value]' => 'Solution one'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
+    $this->getCurrentPage()->pressButton('Next');
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the solution's title from solution 1 to Solution one. It will take some time until the solution content URLs will be updated.");
@@ -422,10 +440,13 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'og_audience' => $this->node['collection']['1'],
       'abstract' => $this->randomString(),
       'description' => $this->randomString(),
+      'classification' => $this->getRandomTerm('solution_classification'),
+      'domain' => $this->getRandomTerm('domain'),
       'field_state' => 'published',
       'owner' => $owner->id(),
       'field_topic' => $this->getRandomTopic(),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/testing/PublicServiceProvider')->id(),
+      'language' => $this->getTermByName('language', 'English'),
       'contact' => $contact->id(),
     ]);
     // Releases.
