@@ -5,11 +5,8 @@ Feature: Test adding solutions.
   I need to be able to add "Solution" through UI.
 
   Scenario: Required fields should be filled in
-    Given collection content:
-      | title            |
-      | Language parsers |
-    And I am logged in as a facilitator of the "Language parsers" collection
-    And I go to the homepage of the "Language parsers" collection
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
     And I click "Add solution"
 
     When I press "Next"
@@ -268,11 +265,9 @@ Feature: Test adding solutions.
     And I am logged in as a moderator
 
     When I go to the edit form of the "Cleaning solution" solution
-    And I press "Next"
-    And I press "Next"
+    And I jump to the "Additional information" of "solution" wizard
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
-    And I press "Next"
-    And I press "Next"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
