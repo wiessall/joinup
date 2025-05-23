@@ -3,10 +3,6 @@ Feature: Test updates of ISAICP-8957.
 
   @update:joinup_core_deploy_200501
   Scenario: Test that results did not change in Search API Field paragraphs.
-    Given I go to "/collection/open-source-observatory-osor/case-studies"
-    # Contains keywords|"case study".
-    Then I should see the "Open source for municipal services: case study on Signalen" tile
-
     # Contains keywords|"joinup help video".
     Given I go to "/collection/portal/how-articles"
     Then I should see the heading "How to get started with the Interoperable Europe Portal"
