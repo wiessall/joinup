@@ -137,9 +137,6 @@ Feature: Solutions Overview
     And I press "Next"
     And I attach the file "logo.png" to "Logo"
     And I fill in "Geographical coverage" with "Belgium"
-    # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9777.
-    # And I upload the file "text.pdf" to "Upload a new file or enter a URL"
-    # Click the button to select an existing owner.
     And I press "Next"
     And I press "Next"
     And I check "I have read and agreed to the Terms of Agreement"
