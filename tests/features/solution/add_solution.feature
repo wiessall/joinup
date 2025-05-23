@@ -1,15 +1,12 @@
 @api @group-h
-Feature: "Add solution" visibility options.
+Feature: Test adding solutions.
   In order to manage solutions
   As a moderator
-  I need to be able to add "Solution" rdf entities through UI.
+  I need to be able to add "Solution" through UI.
 
   Scenario: Required fields should be filled in
-    Given collection content:
-      | title            |
-      | Language parsers |
-    And I am logged in as a facilitator of the "Language parsers" collection
-    And I go to the homepage of the "Language parsers" collection
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
     And I click "Add solution"
 
     When I press "Next"
@@ -22,6 +19,7 @@ Feature: "Add solution" visibility options.
       | Domain field is required.                  |
       | Topic field is required.                   |
       | Solution type field is required.           |
+      | Language availability field is required.   |
 
     When I fill in the following:
       | Title       | Solution Beta  |
@@ -31,17 +29,23 @@ Feature: "Add solution" visibility options.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I press "Next"
     Then I should see the following error messages:
       | error messages                    |
       | Name field is required.           |
+      | Type field is required.           |
       | E-mail address field is required. |
-    And I fill in "Name" with "Organisation valid"
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
-    And I fill in "Name" with "Contact Rapazoglou"
-    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
-    Then I press "Create contact information"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
+    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the following error messages:
@@ -108,7 +112,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Flemish" from "Language"
+    And I additionally select "Bulgarian" from "Language"
     And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -147,7 +151,7 @@ Feature: "Add solution" visibility options.
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
     And I should not see the link "Belgium"
-    And I should not see the link "Flemish"
+    And I should not see the link "Bulgarian"
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
@@ -165,7 +169,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                    |
       | Name                  | Ajit Tamboli               |
       | E-mail address        | tambotamboli@gocloud.in    |
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
@@ -224,13 +228,17 @@ Feature: "Add solution" visibility options.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
-    When I fill in the following:
-      | owner[form][0][title][0][value]   | University of Basel       |
-      | contact[form][0][title][0][value] | Angela Crespi       |
-      | E-mail address                    | angela_crespi@glacmon.basel-uni.ch  |
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "University of Basel"
+    And I check "Company"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
+    And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I jump to the "Confirmation" of "solution" wizard
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
@@ -257,11 +265,9 @@ Feature: "Add solution" visibility options.
     And I am logged in as a moderator
 
     When I go to the edit form of the "Cleaning solution" solution
-    And I press "Next"
-    And I press "Next"
+    And I jump to the "Additional information" of "solution" wizard
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
-    And I press "Next"
-    And I press "Next"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
