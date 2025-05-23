@@ -49,4 +49,29 @@ trait RandomGeneratorTrait {
     return $storage->load($tids[array_rand($tids)]);
   }
 
+  /**
+   * Returns term by name from selected vocabulary.
+   *
+   * @param string $vocabulary
+   *   Vocabulary id.
+   * @param string $name
+   *   Term name.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Term.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getTermByName(string $vocabulary, string $name): ?EntityInterface {
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadByProperties([
+        'name' => $name,
+        'vid' => $vocabulary,
+      ]);
+
+    return !empty($terms) ? reset($terms) : NULL;
+  }
+
 }
