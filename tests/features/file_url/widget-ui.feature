@@ -13,6 +13,7 @@ Feature: User interface for the File URL field
     When I am logged in as a facilitator of the "Nimbus logic" solution
     And I go to the edit form of the "Nimbus logic" solution
     And I jump to the "Additional information" of "solution" wizard
+    And the following fields should not be present "Weight for new file"
 
     # Initially, only the radio button selector should be visible, but no option
     # is selected.
