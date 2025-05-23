@@ -69,6 +69,11 @@ function joinup_assessment_deploy_200500(array &$sandbox): string {
           file_put_contents($sourceUri, 'fake');
         }
 
+        // Do another check.
+        if (!file_exists($sourceUri)) {
+          continue;
+        }
+
         $destinationUri = "public://$path";
         $destinationDir = $fileSystem->dirname($destinationUri);
         if (!$fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
