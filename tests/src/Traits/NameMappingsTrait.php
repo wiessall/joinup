@@ -117,6 +117,7 @@ trait NameMappingsTrait {
       'owner' => [
         'name' => 'title',
         'owner type' => 'owner_type',
+        'owner country' => 'country',
         'state' => 'field_state',
         'author' => 'uid',
       ],
