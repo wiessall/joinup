@@ -840,6 +840,9 @@ class JoinupContext extends RawDrupalContext {
     if (!empty($field_definitions['domain']) && empty($node->domain)) {
       $node->domain = $this->getRandomTerm('domain')->label();
     }
+    if (!empty($field_definitions['language']) && empty($node->language)) {
+      $node->language = 'Bulgarian';
+    }
 
     // Handle file URL fields.
     if (!empty($node->documentation)) {
