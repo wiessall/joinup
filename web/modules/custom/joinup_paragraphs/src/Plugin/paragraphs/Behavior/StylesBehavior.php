@@ -6,19 +6,20 @@ namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
  * Provides a behavior for paragraphs pill.
- *
- * @ParagraphsBehavior(
- *   id = "styles",
- *   label = @Translation("Styles"),
- *   description = @Translation("Provides a styles behavior."),
- * )
  */
+#[ParagraphsBehavior(
+  id: "styles",
+  label: new TranslatableMarkup("Styles"),
+  description: new TranslatableMarkup("Provides a styles behavior."),
+)]
 class StylesBehavior extends ParagraphsBehaviorBase {
 
   /**

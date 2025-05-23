@@ -7,7 +7,9 @@ namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
@@ -15,13 +17,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a behavior for paragraphs color.
- *
- * @ParagraphsBehavior(
- *   id = "color",
- *   label = @Translation("Content color"),
- *   description = @Translation("Provides a behavior for content color."),
- * )
  */
+#[ParagraphsBehavior(
+  id: "color",
+  label: new TranslatableMarkup("Content color"),
+  description: new TranslatableMarkup("Provides a behavior for content color."),
+)]
 class ColorBehavior extends ParagraphsBehaviorBase {
 
   /**
