@@ -82,9 +82,13 @@ function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $for
   }
 
   $form['transition_motivation'] = [
-    '#type' => 'textarea',
-    '#title' => t('Motivation'),
-    '#description' => t('Description of the reason of this operation.'),
+    '#type' => 'container',
+    '#attributes' => ['class' => ['transition-motivation-container']],
+    'transition_motivation' => [
+      '#type' => 'textarea',
+      '#title' => t('Motivation'),
+      '#description' => t('Description of the reason of this operation.'),
+    ],
   ];
   $form['#validate'][] = 'joinup_workflow_motivation_form_validate';
 }
