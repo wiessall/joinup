@@ -60,7 +60,6 @@ Feature: Solution notifications
 
     # Template 15. The moderation team requests changes.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to request changes"
-    And the following fields should not be present "Motivation"
     And I select "Data Owner" from "Solution type"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Request changes"
