@@ -1,8 +1,8 @@
 @api @group-h
-Feature: "Add solution" visibility options.
+Feature: Test adding solutions.
   In order to manage solutions
   As a moderator
-  I need to be able to add "Solution" rdf entities through UI.
+  I need to be able to add "Solution" through UI.
 
   Scenario: Required fields should be filled in
     Given I am logged in as a facilitator of the "The Portal" collection
@@ -19,6 +19,7 @@ Feature: "Add solution" visibility options.
       | Domain field is required.                  |
       | Topic field is required.                   |
       | Solution type field is required.           |
+      | Language availability field is required.   |
 
     When I fill in the following:
       | Title       | Solution Beta  |
@@ -28,6 +29,7 @@ Feature: "Add solution" visibility options.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I press "Next"
     Then I should see the following error messages:
@@ -110,7 +112,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Flemish" from "Language"
+    And I additionally select "Bulgarian" from "Language"
     And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -149,7 +151,7 @@ Feature: "Add solution" visibility options.
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
     And I should not see the link "Belgium"
-    And I should not see the link "Flemish"
+    And I should not see the link "Bulgarian"
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
@@ -167,7 +169,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                    |
       | Name                  | Ajit Tamboli               |
       | E-mail address        | tambotamboli@gocloud.in    |
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
@@ -226,6 +228,7 @@ Feature: "Add solution" visibility options.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     # Create owner.
     And I fill in "owner[form][0][title][0][value]" with "University of Basel"

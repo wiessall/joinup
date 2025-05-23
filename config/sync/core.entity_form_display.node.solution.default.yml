@@ -187,7 +187,7 @@ content:
     third_party_settings: {  }
   content_creation:
     type: options_select
-    weight: 7
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
