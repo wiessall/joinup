@@ -446,6 +446,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'owner' => $owner->id(),
       'field_topic' => $this->getRandomTopic(),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/testing/PublicServiceProvider')->id(),
+      'language' => $this->getTermByName('language', 'English'),
       'contact' => $contact->id(),
     ]);
     // Releases.
