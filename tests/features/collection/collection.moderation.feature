@@ -222,13 +222,14 @@ Feature: Collection moderation
     # Submit the form and approve it as a moderator. This should not cause the
     # content creation option to change.
     When I press "Propose"
+    And the "content_creation" setting of the "Spectres in fog" collection is set to "members"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
     And I go to the "edit-form" content page of the type "collection" with the title "Spectres in fog"
-    And I expand the "Additional fields" accordion section
     # Also when saving and reopening the edit form the content creation option
     # should remain unchanged.
     When I press "Publish"
+    And the "content_creation" setting of the "Spectres in fog" collection is set to "members"
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
@@ -264,12 +265,11 @@ Feature: Collection moderation
 
     # Save the collection.
     When I press "Propose"
+    And the "content_creation" setting of the "Domestic bovins" collection is set to "members"
     Then I should see the heading "Domestic bovins"
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I expand the "Additional fields" accordion section
-
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
     And I delete the "Domestic secretary" "contact information"

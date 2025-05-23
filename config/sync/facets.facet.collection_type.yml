@@ -1,16 +1,16 @@
-uuid: 8af3c194-9a16-4308-aca1-129c641c28a4
+uuid: c6c50839-c4af-4ebb-a93e-81ef9595a3e2
 langcode: en
 status: true
 dependencies: {  }
-id: collection_event_date
-name: 'Event date'
-weight: 0
+id: collection_type
+name: Type
+weight: -1
 min_count: 1
 missing: false
 missing_label: others
-url_alias: event_date
+url_alias: collection_type
 facet_source_id: 'search_api_field:meta_entity.collection_settings.listing_content'
-field_identifier: field_event_date
+field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
 exclude: false
@@ -22,14 +22,11 @@ hierarchy:
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true
 widget:
-  type: links_inline
+  type: type
   config:
     show_numbers: true
-    arbitrary_facet_plugin: events_arbitrary
-    all_text: 'All events'
-    prefix_text: ''
-    suffix_text: ''
-    cache_contexts: {  }
+    arbitrary_facet_plugin: _none
+    tabs: 0
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
@@ -41,33 +38,28 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: DESC
+      sort: ASC
+  aggregated_entity_bundle_label:
+    processor_id: aggregated_entity_bundle_label
+    weights:
+      build: -2
+    settings:
+      plural_count_label:
+        enabled: true
+        context: no_count_capitalize
+  count_limit:
+    processor_id: count_limit
+    weights:
+      build: -4
+    settings:
+      minimum_items: 1
+      maximum_items: null
   count_widget_order:
     processor_id: count_widget_order
     weights:
       sort: 30
     settings:
       sort: DESC
-  dependent_processor:
-    processor_id: dependent_processor
-    weights:
-      build: 5
-    settings:
-      collection_content_bundle:
-        enable: true
-        condition: values
-        values: event
-        negate: false
-      collection_content_status:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
-      collection_topic:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
@@ -77,11 +69,11 @@ processor_configs:
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: 10
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
       pre_query: 50
-      build: 15
+      build: -3
     settings: {  }
