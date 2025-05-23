@@ -94,6 +94,9 @@ third_party_settings:
         - logo
         - short_id
         - spatial_coverage
+        - related_solutions
+        - list_related_entities
+        - process_status
       label: 'Additional information'
       region: content
       parent_name: ''
@@ -233,6 +236,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  list_related_entities:
+    type: boolean_checkbox
+    weight: 37
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   logo:
     type: image_library_widget
     weight: 34
@@ -265,6 +275,22 @@ content:
       collapsed: false
       revision: false
       removed_reference: optional
+    third_party_settings: {  }
+  process_status:
+    type: options_select
+    weight: 38
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  related_solutions:
+    type: entity_reference_autocomplete
+    weight: 36
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   short_id:
     type: string_textfield
@@ -312,15 +338,12 @@ hidden:
   group_moderation: true
   landing_page: true
   langcode: true
-  list_related_entities: true
   listing_content: true
   metrics_page: true
   og_audience: true
   path: true
-  process_status: true
   promote: true
   published_at: true
-  related_solutions: true
   release_number: true
   simple_sitemap: true
   site_featured: true
