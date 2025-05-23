@@ -57,7 +57,7 @@ Feature:
     And I attach the file "logo.png" to "Logo"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Leechidna"
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     And I select "Statistics and Analysis" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add owner"

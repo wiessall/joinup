@@ -246,6 +246,7 @@ Feature: Proposing a collection
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
