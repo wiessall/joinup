@@ -59,6 +59,7 @@ status:
   - name: Completed
     uri: 'http://purl.org/adms/status/Completed'
 language:
+  - name: Bulgarian
   - name: Flemish
   - name: English
 spatial:
