@@ -393,7 +393,7 @@ trait NameMappingsTrait {
    */
   protected function getFacetIdFromAlias(string $alias): string {
     $mappings = [
-      'Collection event date' => 'collection_event_date',
+      'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
       'EIF recommendations' => 'category',
