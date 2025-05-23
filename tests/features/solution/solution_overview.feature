@@ -125,7 +125,7 @@ Feature: Solutions Overview
     And I select "Data Owner" from "Solution type"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
-    And I select "Flemish" from "Language"
+    And I select "Bulgarian" from "Language"
     And I press "Next"
     And I fill in "owner[form][0][title][0][value]" with "Organisation valid"
     And I check "Company"
