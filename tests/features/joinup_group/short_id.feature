@@ -91,6 +91,7 @@ Feature:
     And I select "Demography" from "Topic"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
+    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
