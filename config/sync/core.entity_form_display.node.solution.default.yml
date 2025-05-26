@@ -39,6 +39,7 @@ dependencies:
     - file_url
     - image_library_widget
     - inline_entity_form
+    - joinup_core
     - joinup_workflow
     - text
 third_party_settings:
@@ -50,8 +51,8 @@ third_party_settings:
         - description
         - classification
         - domain
-        - field_topic
         - content_creation
+        - field_topic
         - solution_type
         - language
       label: 'Solution information'
@@ -96,6 +97,7 @@ third_party_settings:
         - short_id
         - documentation
         - spatial_coverage
+        - landing_page
       label: 'Additional information'
       region: content
       parent_name: ''
@@ -237,6 +239,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  landing_page:
+    type: link_legacy_multicardinality
+    weight: 38
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   language:
     type: options_select
     weight: 9
@@ -319,7 +329,6 @@ hidden:
   field_keywords: true
   field_shared_in: true
   group_moderation: true
-  landing_page: true
   langcode: true
   list_related_entities: true
   listing_content: true
