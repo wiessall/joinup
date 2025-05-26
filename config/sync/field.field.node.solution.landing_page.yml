@@ -11,7 +11,7 @@ id: node.solution.landing_page
 field_name: landing_page
 entity_type: node
 bundle: solution
-label: 'Landing page'
+label: 'Relevant website'
 description: 'Homepage of the solution in an external platform'
 required: false
 translatable: true
