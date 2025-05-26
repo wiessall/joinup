@@ -8,7 +8,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\paragraphs\ParagraphInterface;
@@ -16,13 +18,12 @@ use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
  * Provides a paragraphs behavior plugin for ToC.
- *
- * @ParagraphsBehavior(
- *   id = "table_of_content",
- *   label = @Translation("Table of Content"),
- *   description = @Translation("Configurable table of content"),
- * )
  */
+#[ParagraphsBehavior(
+  id: "table_of_content",
+  label: new TranslatableMarkup("Table of Content"),
+  description: new TranslatableMarkup("Configurable table of content"),
+)]
 class TableOfContentsBehavior extends ParagraphsBehaviorBase {
 
   /**
