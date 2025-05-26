@@ -7,18 +7,14 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.classification
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.group_moderation
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -51,8 +47,9 @@ third_party_settings:
         - classification
         - domain
         - field_topic
-        - content_creation
         - solution_type
+        - language
+        - content_creation
         - language
       label: 'Solution information'
       region: content
@@ -188,12 +185,6 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
-  content_creation:
-    type: options_select
-    weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   description:
     type: text_textarea
     weight: 3
@@ -318,11 +309,10 @@ hidden:
   current_workflow_state: true
   field_keywords: true
   field_shared_in: true
-  group_moderation: true
+  field_topic: true
   landing_page: true
   langcode: true
-  list_related_entities: true
-  listing_content: true
+  logo: true
   metrics_page: true
   og_audience: true
   path: true

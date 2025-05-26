@@ -99,3 +99,35 @@ Feature: Collections/Solutions settings
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
+
+  Scenario Outline: Only moderators and owners have access to collection/solution meta entity canonical page
+    Given users:
+      | Username         | Roles     |
+      | John User        |           |
+      | John Moderator   | moderator |
+      | John Facilitator |           |
+      | John Author      |           |
+      | John Owner       |           |
+      | John Member      |           |
+    Given solution content:
+      | title           |
+      | Custom solution |
+    And the following solution user memberships:
+      | solution        | user             | roles       |
+      | Custom solution | John Owner       | owner       |
+      | Custom solution | John Facilitator | facilitator |
+      | Custom solution | John Author      | author      |
+      | Custom solution | John Member      | member      |
+
+    Given I am logged in as <user>
+    When I go to the canonical path of the "solution_settings" meta entity of the "Custom solution" solution_settings "content"
+    Then I should get a <code> HTTP response
+
+    Examples:
+      | user               | code |
+      | "John User"        | 403  |
+      | "John Moderator"   | 200  |
+      | "John Facilitator" | 200  |
+      | "John Author"      | 403  |
+      | "John Owner"       | 200  |
+      | "John Member"      | 403  |

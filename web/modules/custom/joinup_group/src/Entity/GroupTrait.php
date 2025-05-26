@@ -8,7 +8,10 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
+use Drupal\joinup_group\ContentCreationOptions;
+use Drupal\joinup_solution\Entity\Solution;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -156,6 +159,13 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function isModerated(): bool {
+    if ($this instanceof Solution) {
+      $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
+      if ($meta_entity instanceof MetaEntityInterface) {
+        return (bool) $meta_entity->get('group_moderation')->value;
+      }
+      return TRUE;
+    }
     return (int) $this->getMainPropertyValue($this->getGroupModerationFieldName()) === GroupInterface::PRE_MODERATION;
   }
 
@@ -163,13 +173,20 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
+    if ($this instanceof Solution) {
+      $meta_entity = \Drupal::getContainer()
+        ->get('meta_entity.repository')
+        ->getMetaEntityForEntity($this, 'solution_settings');
+      if ($meta_entity instanceof MetaEntityInterface) {
+        return $meta_entity->get('content_creation')->value;
+      }
+      return ContentCreationOptions::FACILITATORS_AND_AUTHORS;
+    }
     $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
-
     if (is_null($contentCreators)) {
       $loggerFactory = \Drupal::service('logger.factory');
       $loggerFactory->get('joinup_group')->warning('Invalid content creators');
     }
-
     return $contentCreators;
   }
 
