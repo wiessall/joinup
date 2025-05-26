@@ -1249,7 +1249,7 @@ third_party_settings:
             region: content
             configuration:
               id: 'field_block:node:solution:solution_settings'
-              label: 'Only facilitators and authors can create content. '
+              label: 'Moderation settings'
               label_display: '0'
               provider: layout_builder
               context_mapping:
