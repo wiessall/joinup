@@ -480,7 +480,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    if ($node->type === 'collection') {
+    if ($node->type === 'collection' ||$node->type === 'solution') {
       $meta_entity_type = $node->type . '_settings';
       $meta_entity = MetaEntity::create([
         'type' => $meta_entity_type,
@@ -489,11 +489,28 @@ class JoinupGroupContext extends RawDrupalContext {
       $meta_fields = [
         'group_moderation',
         'content_creation',
+        'list_related_entities',
+        'listing_content',
+      ];
+
+      $fieldMapping = [
+        'group_moderation' => ['yes' => 1, 'no' => 0],
+        'list_related_entities' => ['yes' => 1, 'no' => 0],
+        'content_creation' => [
+          'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+          'registered users' => ContentCreationOptions::REGISTERED_USERS,
+          'members' => ContentCreationOptions::MEMBERS,
+        ],
       ];
 
       foreach ($meta_fields as $field) {
         if (property_exists($node, $field)) {
-          $meta_entity->set($field, $node->$field);
+          if (isset($fieldMapping[$field])) {
+            $meta_entity->set($field, $fieldMapping[$field][$node->$field]);
+          }
+          else {
+            $meta_entity->set($field, $node->$field);
+          }
           unset($node->$field);
         }
       }

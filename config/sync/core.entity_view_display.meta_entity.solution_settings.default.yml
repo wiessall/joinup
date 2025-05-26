@@ -4,9 +4,16 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.solution_settings.announcements_enabled
+    - field.field.meta_entity.solution_settings.content_creation
+    - field.field.meta_entity.solution_settings.group_moderation
     - field.field.meta_entity.solution_settings.landing_page
+    - field.field.meta_entity.solution_settings.list_related_entities
+    - field.field.meta_entity.solution_settings.listing_content
     - field.field.meta_entity.solution_settings.metadata_banner_disabled
     - meta_entity.type.solution_settings
+  module:
+    - options
+    - search_api_field
 id: meta_entity.solution_settings.default
 targetEntityType: meta_entity
 bundle: solution_settings
@@ -31,6 +38,13 @@ content:
     third_party_settings: {  }
     weight: 22
     region: content
+  content_creation:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 25
+    region: content
   created:
     type: timestamp
     label: inline
@@ -50,6 +64,16 @@ content:
     third_party_settings: {  }
     weight: 20
     region: content
+  group_moderation:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 24
+    region: content
   label:
     type: string
     label: hidden
@@ -57,6 +81,23 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: -5
+    region: content
+  list_related_entities:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 27
+    region: content
+  listing_content:
+    type: search_api_field
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 26
     region: content
   metadata_banner_disabled:
     type: boolean
@@ -71,5 +112,7 @@ content:
 hidden:
   announcements_enabled: true
   landing_page: true
+  meta_entity_solution_settings_listing_content_inline_facets: true
+  meta_entity_solution_settings_listing_content_top: true
   search_api_excerpt: true
   target: true

@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -911,25 +910,15 @@ class JoinupSearchContext extends RawDrupalContext {
     $options = ['all', 'archived', 'unarchived'];
     Assert::assertTrue(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
     $entity = $this->getEntityByLabel('node', $label, $bundle);
-    if ($entity instanceof CollectionInterface) {
-      $meta_entity = \Drupal::getContainer()
-        ->get('meta_entity.repository')
-        ->getMetaEntityForEntity($entity, 'collection_settings');
-      if ($meta_entity instanceof MetaEntityInterface) {
-        $data = $meta_entity->get('listing_content')->getValue();
-        if (!empty($data)) {
-          $data[0]['value']['show_archived'] = 'all';
-          $meta_entity->set('listing_content', $data);
-          $meta_entity->save();
-        }
-      }
-    }
-    else {
-      $data = $entity->get('listing_content')->getValue();
+    $meta_entity = \Drupal::getContainer()
+      ->get('meta_entity.repository')
+      ->getMetaEntityForEntity($entity, $entity->bundle() . '_settings');
+    if ($meta_entity instanceof MetaEntityInterface) {
+      $data = $meta_entity->get('listing_content')->getValue();
       if (!empty($data)) {
         $data[0]['value']['show_archived'] = 'all';
-        $entity->set('listing_content', $data);
-        $entity->save();
+        $meta_entity->set('listing_content', $data);
+        $meta_entity->save();
       }
     }
   }
@@ -953,12 +942,10 @@ class JoinupSearchContext extends RawDrupalContext {
     $facet = $this->getFacetIdFromAlias($facet);
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $region = strtolower($region);
-    if ($entity instanceof CollectionInterface) {
-      $entity = \Drupal::getContainer()
-        ->get('meta_entity.repository')
-        ->getMetaEntityForEntity($entity, 'collection_settings');
-    }
-    if (!empty($entity)) {
+    $meta_entity = \Drupal::getContainer()
+      ->get('meta_entity.repository')
+      ->getMetaEntityForEntity($entity, $entity . '_settings');
+    if ($meta_entity instanceof MetaEntityInterface) {
       $data = $entity->get('listing_content')->getValue();
       if (!empty($data)) {
         $data[0]['value']['fields'][$facet] = [
