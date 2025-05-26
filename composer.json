@@ -143,7 +143,7 @@
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
-        "openeuropa/oe_webtools": "^1.32",
+        "openeuropa/oe_webtools": "1.38.0",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
@@ -371,8 +371,7 @@
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
             "drupal/entity_print": {
-                "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563-mr66-revf6d47588.diff",
-                "Missing schema for disable_log property. @see https://www.drupal.org/i/3014768": "resources/patch/php/drupal/entity_print/3014768.diff"
+                "Restrict the dynamic fields in bundles @see https://www.drupal.org/i/3468563": "resources/patch/php/drupal/entity_print/3468563.mr66-note523124.diff"
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
@@ -448,8 +447,6 @@
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
             },
             "drupal/purge_users": {
-                "doMail(): Argument #1 ($to) must be of type string, null given @see https://www.drupal.org/i/3512695": "resources/patch/php/drupal/purge_users/3512695.diff",
-                "Calculate the notification time by subtracting the notification period from each rule's value @see https://www.drupal.org/i/3517192": "resources/patch/php/drupal/purge_users/3517192.diff",
                 "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff"
             },
             "drupal/rdf_sync": {
@@ -474,10 +471,6 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
-            },
-            "drupal/tmgmt_ec_etranslation": {
-                "Remove requesterCallback parameter see https://www.drupal.org/i/3504767": "resources/patch/php/drupal/tmgmt_ec_etranslation/3504767.diff",
-                "Don't queue responses see https://www.drupal.org/i/3508220": "resources/patch/php/drupal/tmgmt_ec_etranslation/3508220.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
