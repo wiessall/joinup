@@ -7,19 +7,20 @@ namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
  * Provides a behavior for paragraphs to set custom classes.
- *
- * @ParagraphsBehavior(
- *   id = "extra_class",
- *   label = @Translation("Extra classes"),
- *   description = @Translation("Extra classes to be passed on the layout level."),
- * )
  */
+#[ParagraphsBehavior(
+  id: "extra_class",
+  label: new TranslatableMarkup("Extra classes"),
+  description: new TranslatableMarkup("Extra classes to be passed on the layout level."),
+)]
 class ExtraClassBehavior extends ParagraphsBehaviorBase {
 
   /**
