@@ -1250,7 +1250,7 @@ third_party_settings:
             configuration:
               id: 'field_block:node:solution:solution_settings'
               label: 'Only facilitators and authors can create content. '
-              label_display: visible
+              label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
@@ -1405,6 +1405,7 @@ hidden:
   shared_in: true
   short_id: true
   site_featured: true
+  solution_settings: true
   solution_subscribe: true
   solution_type: true
   spatial_coverage: true
