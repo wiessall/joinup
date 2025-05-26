@@ -52,8 +52,6 @@ Feature: Test the visibility of the quick links menu.
     And I go to the "Some collection" collection
     Then I should not see the heading "Quick links"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9781
-  @wip
   Scenario: Test visibility for solutions.
     Given collection content:
       | title           | content_creation         | group_moderation |
@@ -84,9 +82,11 @@ Feature: Test the visibility of the quick links menu.
       | title        | is version of |
       | Some release | Some solution |
     And I go to the edit form of the "Some solution" solution
+    And I jump to the "Additional information" of "solution" wizard
     And I fill in the following:
-      | Landing page | http://www.example.com |
+      | Relevant website | http://www.example.com |
     Then I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the text "Quick links"
     And I should see the following links:
