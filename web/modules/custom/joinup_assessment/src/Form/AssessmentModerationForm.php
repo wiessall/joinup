@@ -9,11 +9,15 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
+use Drupal\file\FileRepositoryInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
@@ -32,6 +36,8 @@ class AssessmentModerationForm extends FormBase {
     protected readonly EntityRepositoryInterface $entityRepository,
     protected readonly LayoutPluginManagerInterface $layoutPluginManager,
     protected readonly JoinupMessageDeliveryInterface $delivery,
+    protected readonly FileRepositoryInterface $fileRepository,
+    protected readonly FileSystemInterface $fileSystem,
   ) {}
 
   /**
@@ -132,7 +138,11 @@ class AssessmentModerationForm extends FormBase {
 
       case 'publish':
         $assessmentReport = $this->createAssessmentReport($submission);
-        // Normally, the submission is already locked but let's make sure.
+
+        // The report is public, its attachments should be publicly available.
+        $this->makeAttachmentsPublic($submission);
+
+        // Normally, the submission is already locked, but let's make sure.
         if (!$submission->isLocked()) {
           $submission->setLocked(TRUE)->save();
         }
@@ -242,6 +252,36 @@ class AssessmentModerationForm extends FormBase {
     assert($assessmentReport instanceof AssessmentReportInterface);
     $assessmentReport->save();
     return $assessmentReport;
+  }
+
+  /**
+   * Makes the attachments public as the assessment is made public.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submissions.
+   */
+  protected function makeAttachmentsPublic(WebformSubmissionInterface $submission): void {
+    $fileStorage = $this->entityTypeManager->getStorage('file');
+
+    foreach (['binding_requirement_documents', 'upload_assessment_documents'] as $field) {
+      if (!$fids = $submission->getData()[$field] ?? []) {
+        continue;
+      }
+
+      foreach ($fileStorage->loadMultiple($fids) as $file) {
+        assert($file instanceof FileInterface);
+
+        $path = StreamWrapperManager::getTarget($file->getFileUri());
+        $destinationUri = "public://$path";
+
+        $destinationDir = $this->fileSystem->dirname($destinationUri);
+        if (!$this->fileSystem->prepareDirectory($destinationDir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+          throw new \RuntimeException("Directory $destinationDir cannot be created or it's not writable.");
+        }
+
+        $this->fileRepository->move($file, $destinationUri);
+      }
+    }
   }
 
 }
