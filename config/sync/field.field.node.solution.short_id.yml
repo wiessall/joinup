@@ -5,14 +5,19 @@ dependencies:
   config:
     - field.storage.node.short_id
     - node.type.solution
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.solution.short_id
 field_name: short_id
 entity_type: node
 bundle: solution
-label: 'Short ID'
+label: 'Portal short ID'
 description: "Used as the web address (URL). Example: a solution named 'European Standards for Internet Of Things' could use 'es-iot'.\r\nCannot be changed once the solution is published.\r\nThe ID is between 4-26 characters and consists of lowercase letters, numbers and the dash symbol (-)."
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
