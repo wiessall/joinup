@@ -32,6 +32,7 @@ dependencies:
     - node.type.solution
   module:
     - field_group
+    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_workflow
@@ -90,6 +91,7 @@ third_party_settings:
       children:
         - logo
         - short_id
+        - documentation
         - spatial_coverage
       label: 'Additional information'
       region: content
@@ -191,6 +193,14 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  documentation:
+    type: file_url_generic
+    weight: 36
+    region: content
+    settings:
+      progress_indicator: throbber
+      add_new_label: 'Upload a new file or enter a URL'
+    third_party_settings: {  }
   domain:
     type: options_select
     weight: 5
@@ -273,7 +283,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 36
+    weight: 37
     region: content
     settings:
       match_operator: CONTAINS
@@ -297,7 +307,6 @@ content:
 hidden:
   created: true
   current_workflow_state: true
-  documentation: true
   field_keywords: true
   field_shared_in: true
   field_topic: true
