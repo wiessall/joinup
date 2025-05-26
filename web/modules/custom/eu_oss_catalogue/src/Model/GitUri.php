@@ -72,4 +72,18 @@ final class GitUri {
     return $this->scheme . '://' . $this->host;
   }
 
+  /**
+   * Returns the cleaned URL (without any ".git" suffix).
+   *
+   * @return string
+   *   The cleaned git URL.
+   */
+  public function getUri(): string {
+    return implode('/', array_filter([
+      $this->getSchemeAndHost(),
+      $this->namespace,
+      $this->name,
+    ]));
+  }
+
 }
