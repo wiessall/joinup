@@ -195,6 +195,7 @@ hidden:
   shared_in: true
   short_id: true
   site_featured: true
+  solution_settings: true
   solution_subscribe: true
   spatial_coverage: true
   translation: true
