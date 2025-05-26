@@ -21,6 +21,6 @@ interface JoinupGroupPermissionManagerInterface {
    * @param string $permission
    *   The group permission.
    */
-  public function userHasOgCollectionPermission(int $uid, EntityInterface $group, string $permission): bool;
+  public function userHasOgPermission(int $uid, EntityInterface $group, string $permission): bool;
 
 }
