@@ -6,6 +6,8 @@ namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\paragraphs\ParagraphInterface;
@@ -13,13 +15,12 @@ use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
  * Provides a paragraphs behaviour plugin for heading.
- *
- * @ParagraphsBehavior(
- *   id = "heading_behavior",
- *   label = @Translation("Heading"),
- *   description = @Translation("Configurable heading"),
- * )
  */
+#[ParagraphsBehavior(
+  id: "heading_behavior",
+  label: new TranslatableMarkup("Heading"),
+  description: new TranslatableMarkup("Configurable heading"),
+)]
 class HeadingBehavior extends ParagraphsBehaviorBase {
 
   /**

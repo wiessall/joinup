@@ -7,19 +7,19 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_core\SharedInUpdateHelper;
+use Drupal\joinup_core\MetaEntityUpdateHelper;
 
 /**
  * Install the meta entity field storage of collection_settings.
  */
 function collection_update_200500(): void {
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.storage.meta_entity.group_moderation.yml',
   );
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.storage.meta_entity.content_creation.yml',
   );
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.storage.meta_entity.listing_content.yml',
   );
 }
@@ -28,13 +28,13 @@ function collection_update_200500(): void {
  * Install the collection_settings meta entity solution_settings field instance.
  */
 function collection_update_200501(): void {
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.field.meta_entity.collection_settings.group_moderation.yml',
   );
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.field.meta_entity.collection_settings.content_creation.yml',
   );
-  SharedInUpdateHelper::installFromConfigSync(
+  MetaEntityUpdateHelper::installFromConfigSync(
     'field.field.meta_entity.collection_settings.listing_content.yml',
   );
 }

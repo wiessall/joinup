@@ -7,18 +7,14 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.classification
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.group_moderation
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -36,6 +32,7 @@ dependencies:
     - node.type.solution
   module:
     - field_group
+    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_workflow
@@ -51,6 +48,7 @@ third_party_settings:
         - domain
         - field_topic
         - solution_type
+        - language
         - content_creation
         - language
       label: 'Solution information'
@@ -92,6 +90,8 @@ third_party_settings:
     group_additional_information:
       children:
         - logo
+        - short_id
+        - documentation
         - spatial_coverage
       label: 'Additional information'
       region: content
@@ -185,12 +185,6 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
-  content_creation:
-    type: options_select
-    weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   description:
     type: text_textarea
     weight: 3
@@ -198,6 +192,14 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  documentation:
+    type: file_url_generic
+    weight: 36
+    region: content
+    settings:
+      progress_indicator: throbber
+      add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
   domain:
     type: options_select
@@ -265,6 +267,14 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
+  short_id:
+    type: string_textfield
+    weight: 35
+    region: content
+    settings:
+      size: 60
+      placeholder: 'Minimum 4 characters required.'
+    third_party_settings: {  }
   solution_type:
     type: options_select
     weight: 7
@@ -273,7 +283,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 35
+    weight: 37
     region: content
     settings:
       match_operator: CONTAINS
@@ -297,14 +307,12 @@ content:
 hidden:
   created: true
   current_workflow_state: true
-  documentation: true
   field_keywords: true
   field_shared_in: true
-  group_moderation: true
+  field_topic: true
   landing_page: true
   langcode: true
-  list_related_entities: true
-  listing_content: true
+  logo: true
   metrics_page: true
   og_audience: true
   path: true
@@ -313,7 +321,6 @@ hidden:
   published_at: true
   related_solutions: true
   release_number: true
-  short_id: true
   simple_sitemap: true
   site_featured: true
   status: true
