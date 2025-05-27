@@ -363,16 +363,21 @@ trait NameMappingsTrait {
    */
   protected function bundleAliases(): array {
     return [
+      'collection' => 'collection',
+      'contact information' => 'contact_information',
       'custom page' => 'custom_page',
       'discussion' => 'discussion',
       'distribution' => 'distribution',
       'document' => 'document',
       'event' => 'event',
       'glossary' => 'glossary',
+      'licence' => 'licence',
       'news' => 'news',
       'oss_solution' => 'oss_solution',
+      'owner' => 'owner',
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
+      'solution' => 'solution',
     ];
   }
 
