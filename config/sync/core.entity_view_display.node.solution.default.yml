@@ -1340,14 +1340,6 @@ content:
     third_party_settings: {  }
     weight: 10
     region: content
-  keywords:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 101
-    region: main
   links:
     settings: {  }
     third_party_settings: {  }
@@ -1388,6 +1380,7 @@ hidden:
   field_state: true
   field_topic: true
   group_moderation: true
+  keywords: true
   landing_page: true
   langcode: true
   language: true
