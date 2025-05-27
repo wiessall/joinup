@@ -944,16 +944,16 @@ class JoinupSearchContext extends RawDrupalContext {
     $region = strtolower($region);
     $meta_entity = \Drupal::getContainer()
       ->get('meta_entity.repository')
-      ->getMetaEntityForEntity($entity, $entity . '_settings');
+      ->getMetaEntityForEntity($entity, $bundle . '_settings');
     if ($meta_entity instanceof MetaEntityInterface) {
-      $data = $entity->get('listing_content')->getValue();
+      $data = $meta_entity->get('listing_content')->getValue();
       if (!empty($data)) {
         $data[0]['value']['fields'][$facet] = [
           'region' => $region,
           'weight' => 0,
         ];
-        $entity->set('listing_content', $data);
-        $entity->save();
+        $meta_entity->set('listing_content', $data);
+        $meta_entity->save();
       }
     }
   }
