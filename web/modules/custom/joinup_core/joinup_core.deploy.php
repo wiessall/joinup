@@ -38,8 +38,6 @@ function joinup_core_deploy_200500(array &$sandbox): string {
     $term_name = preg_replace('/s$/', '', $term_name);
 
     if (in_array($term_name, $normalized)) {
-      // @todo Remove the debug message.
-      print "Term $term_name found and reused.\n";
       return array_search($term_name, $normalized);
     }
 
