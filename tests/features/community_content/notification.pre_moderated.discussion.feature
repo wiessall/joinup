@@ -62,21 +62,21 @@ Feature: Notification test for the discussion transitions on a pre moderated par
 
     # Test 'update' operation.
     When I am logged in as "CC member"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre propose"
+    And I go to the edit form of the "CC notify pre propose" discussion
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                   |
       | subject   | Interoperable Europe Portal: Content has been proposed                                                                     |
       | body      | CC Member has submitted a new discussion - "CC notify pre propose" for publication in the collection: "CC pre collection". |
 
-    When I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre propose from reported"
+    When I go to the edit form of the "CC notify pre propose from reported" discussion
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                          |
       | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                             |
       | body      | CC Member has updated the content of the discussion - "CC notify pre propose from reported" as advised and requests again its publication in the collection: "CC pre collection". |
 
-    When I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre request deletion"
+    When I go to the edit form of the "CC notify pre request deletion" discussion
     And I press "Request deletion"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I just want to delete it."
@@ -86,7 +86,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                   |
       | body      | CC Member has requested to delete the discussion - "CC notify pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
 
-    When I go to the "edit-form" content page of the type "discussion" with the title "CC notify published to revise"
+    When I go to the edit form of the "CC notify published to revise" discussion
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                      |
@@ -94,7 +94,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | CC Member has submitted an update of the discussion - "CC notify published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre publish"
+    And I go to the edit form of the "CC notify pre publish" discussion
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                          |
@@ -102,7 +102,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | CC Facilitator has published the new discussion - "CC notify pre publish" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre request changes"
+    And I go to the edit form of the "CC notify pre request changes" discussion
     And I press "Request changes"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
@@ -117,7 +117,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | CC Facilitator has submitted an update of the discussion - "CC notify pre request changes" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre report"
+    And I go to the edit form of the "CC notify pre report" discussion
     And I press "Report"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
@@ -128,7 +128,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | the Facilitator, CC Facilitator has requested you to modify the discussion - "CC notify pre report" in the collection: "CC pre collection", with the following motivation: "Your content is reported". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre approve proposed"
+    And I go to the edit form of the "CC notify pre approve proposed" discussion
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                             |
@@ -136,7 +136,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the discussion - "CC notify pre approve proposed" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre reject deletion"
+    And I go to the edit form of the "CC notify pre reject deletion" discussion
     And I press "Reject deletion"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I still like it"
@@ -148,7 +148,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
 
     # Test 'delete' operation on an entity in 'deletion_request' state.
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre delete"
+    And I go to the edit form of the "CC notify pre delete" discussion
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -157,7 +157,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | body      | for your information, the discussion "CC notify pre delete" was deleted from the "CC pre collection" collection.   |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify pre request deletion"
+    And I go to the edit form of the "CC notify pre request deletion" discussion
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -167,7 +167,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
 
     # Test 'delete' operation on an entity in 'published' state.
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify published to delete"
+    And I go to the edit form of the "CC notify published to delete" discussion
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:

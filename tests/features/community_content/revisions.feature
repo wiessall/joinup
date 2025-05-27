@@ -156,7 +156,7 @@ Feature:
     # been proposed by a non-author. This part of the scenario only affects
     # moderated groups. For non-moderated groups this results in no change.
     Given I am logged in as "Fuzzy Moderator"
-    When I go to the "edit-form" content page of the type "discussion" with the title "Goodbi world"
+    When I go to the edit form of the "Goodbi world" discussion
     And I press "Update"
     Then I should see the heading "Goodbi world"
 
