@@ -19,7 +19,7 @@ Feature: Contact Information moderation
 
     # Add contact information to the collection as a facilitator.
     When I am logged in as "Sæwine Cynebald"
-    And I go to the "edit-form" content page of the type "collection" with the title "Games of the Anglo-Saxon age"
+    And I go to the edit form of the "Games of the Anglo-Saxon age" collection
     And I press "Add new contact information"
     And I fill in "Name" with "Mildþryð Mildgyð"
     And I fill in "E-mail address" with "mildred@anglo-saxon-museum.co.uk"

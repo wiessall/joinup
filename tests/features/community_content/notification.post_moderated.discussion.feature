@@ -127,7 +127,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
 
     When I mark all emails as read
     And I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "Event Horizon Telescope"
+    And I go to the edit form of the "Event Horizon Telescope" collection
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
