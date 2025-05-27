@@ -52,7 +52,9 @@ Feature: Assessments
     And I press "Next"
 
     # 4th page.
-    When I press "Submit"
+    When I attach the file "empty_pdf.pdf" to "Binding requirements supporting documents"
+    And I attach the file "empty_pdf1.pdf" to "General Assessment supporting documents"
+    And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
     # User cannot edit their submission while the submission is moderated.
@@ -122,8 +124,10 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                                              |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
       | 4. Supporting documents                                                                                                                 |
-      | Binding requirements supporting documents {Empty}                                                                                       |
-      | General Assessment supporting documents {Empty}                                                                                         |
+      | Binding requirements supporting documents                                                                                               |
+      | empty_pdf.pdf                                                                                                                           |
+      | General Assessment supporting documents                                                                                                 |
+      | empty_pdf1.pdf                                                                                                                          |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
     # Make sure assessment reports are not leaking into manage content list.
@@ -175,8 +179,10 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                                              |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
       | 4. Supporting documents                                                                                                                 |
-      | Binding requirements supporting documents {Empty}                                                                                       |
-      | General Assessment supporting documents {Empty}                                                                                         |
+      | Binding requirements supporting documents                                                                                               |
+      | empty_pdf.pdf                                                                                                                           |
+      | General Assessment supporting documents                                                                                                 |
+      | empty_pdf1.pdf                                                                                                                          |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
     When I move backward one page
@@ -288,9 +294,20 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                         |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                    |
       | 4. Supporting documents                                                                                            |
-      | Binding requirements supporting documents {Empty}                                                                  |
-      | General Assessment supporting documents {Empty}                                                                    |
+      | Binding requirements supporting documents                                                                                               |
+      | empty_pdf.pdf                                                                                                                           |
+      | General Assessment supporting documents                                                                                                 |
+      | empty_pdf1.pdf                                                                                                                          |
       | Please add any other comment you would like to share. {Empty}                                                      |
+
+    # Check that attachments are publicly available.
+    Given I am an anonymous user
+    When I go to the latest assessment report
+    And I click "empty_pdf.pdf"
+    Then the response status code should be 200
+    Given I move backward one page
+    And I click "empty_pdf1.pdf"
+    Then the response status code should be 200
 
   Scenario Outline: Check organization field value.
     Given I am logged in as an "authenticated user"

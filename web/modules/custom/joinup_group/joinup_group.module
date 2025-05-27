@@ -1189,7 +1189,11 @@ function joinup_group_preprocess_node(array &$variables): void {
  */
 function joinup_group_content_creation_allowed_values(FieldStorageDefinitionInterface $definition, ?FieldableEntityInterface $entity = NULL, &$cacheable = TRUE): array {
   $values = $definition->getSetting('allowed_values');
-  if (empty($entity) || !$entity instanceof SolutionInterface) {
+  if (empty($entity) || !$entity instanceof MetaEntityInterface) {
+    return $values;
+  }
+
+  if ($entity instanceof MetaEntityInterface && !$entity->getTargetEntity() instanceof SolutionInterface) {
     return $values;
   }
 

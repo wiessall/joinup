@@ -131,7 +131,16 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     foreach ($this->createAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $content_creation_data) {
         foreach ($content_creation_data as $content_creation => $allowed_roles) {
-          $parent = $this->createParent($parent_bundle, 'published', $moderation, $content_creation);
+          if ($parent_bundle == 'solution') {
+            $parent = $this->createParent($parent_bundle);
+            $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+            $meta_entity->set('group_moderation', $moderation);
+            $meta_entity->set('content_creation', $content_creation);
+            $meta_entity->save();
+          }
+          else {
+            $parent = $this->createParent($parent_bundle, 'published', $moderation, $content_creation);
+          }
           $content = Node::create([
             'title' => $this->randomMachineName(),
             'type' => $this->getEntityBundle(),
@@ -215,7 +224,15 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'update';
     foreach ($this->updateAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        $parent = $this->createParent($parent_bundle, 'published', $moderation);
+        if ($parent_bundle == 'solution') {
+          $parent = $this->createParent($parent_bundle);
+          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+          $meta_entity->set('group_moderation', $moderation);
+          $meta_entity->save();
+        }
+        else {
+          $parent = $this->createParent($parent_bundle, 'published', $moderation);
+        }
         foreach ($state_data as $content_state => $ownership_data) {
           $content = $this->createNode([
             'title' => $this->randomMachineName(),
@@ -266,7 +283,15 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'delete';
     foreach ($this->deleteAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        $parent = $this->createParent($parent_bundle, 'published', $moderation);
+        if ($parent_bundle == 'solution') {
+          $parent = $this->createParent($parent_bundle);
+          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+          $meta_entity->set('group_moderation', $moderation);
+          $meta_entity->save();
+        }
+        else {
+          $parent = $this->createParent($parent_bundle, 'published', $moderation);
+        }
         foreach ($state_data as $content_state => $ownership_data) {
           $content = $this->createNode([
             'title' => $this->randomMachineName(),

@@ -1,18 +1,23 @@
-uuid: 94a25301-6cb4-4178-a2df-103e7ba86768
+uuid: 684c7a03-ec69-4e97-ac92-fca34c85bc7d
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.list_related_entities
-    - node.type.solution
-id: node.solution.list_related_entities
+    - field.storage.meta_entity.list_related_entities
+    - meta_entity.type.solution_settings
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.solution_settings.list_related_entities
 field_name: list_related_entities
-entity_type: node
-bundle: solution
+entity_type: meta_entity
+bundle: solution_settings
 label: 'Show solutions related by EIRA terms'
 description: 'If checked, solutions related by EIRA terms ("Solution type" field) will be displayed in the <em>Related solutions</em> section'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
