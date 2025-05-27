@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - custom_page
-    - eu_oss_catalogue
     - role_delegation
     - system
     - toolbar

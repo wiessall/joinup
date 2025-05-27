@@ -1,0 +1,11 @@
+uuid: d13dc6a7-fca6-43e0-a1d8-8f7aa9c1467e
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: meta_entity.listing_content
+label: 'Listing content'
+description: ''
+targetEntityType: meta_entity
+cache: true

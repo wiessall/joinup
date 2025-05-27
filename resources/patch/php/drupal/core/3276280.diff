@@ -1,0 +1,15 @@
+diff --git a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
+index bf6ceb0612558d68e23ee9d1528b5c1be70dcd52..c25375b51a2180972db5ff5598e245c6495b15e2 100644
+--- a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
++++ b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
+@@ -119,6 +119,10 @@ protected function formMultipleElements(FieldItemListInterface $items, array &$f
+     $delta = 0;
+     // Add an element for every existing item.
+     foreach ($items as $item) {
++      if (!$item->getValue()) {
++        // Skip empty items. New empty rows are created.
++        continue;
++      }
+       $element = [
+         '#title' => $title,
+         '#description' => $description,
