@@ -83,7 +83,7 @@ Feature: Cloning of entities
     When I am logged in as a moderator
     And I go to the "Test <type> content" <type>
     Then I <link availability> the link "Clone content" in the "Entity actions" region
-    And I go to the replicate form of the "<type>" <type>
+    And I go to the replicate form of the "Test <type> content" <type>
     Then the response status code should be <status code>
 
     Examples:

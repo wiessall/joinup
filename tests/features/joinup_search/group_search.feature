@@ -48,7 +48,7 @@ Feature: Search inside groups
     Then the page should not contain any chips
     When I visit the solution overview page
     Then the page should not contain any chips
-    When I visit the contact form
+    When I visit the contact form page
     Then the page should not contain any chips
 
     # Check that the name of the collection is shown as a chip in the search

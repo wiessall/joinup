@@ -85,7 +85,7 @@ Feature: Submit the contact form
     Then the content type of the response should be 'image/png'
 
   Scenario: Check required fields
-    When I am on the contact form
+    When I am on the contact form page
     And I press "Submit"
     Then I should see the following error messages:
       | error messages                    |
@@ -103,7 +103,7 @@ Feature: Submit the contact form
       | Family name | Papamichael                 |
       | E-mail      | w.papamichael@schiffmann.de |
     Given I am logged in as "Wally Papamichael"
-    When I am on the contact form
+    When I am on the contact form page
     Then the "First name" field should contain "Wally"
     And the "Last name" field should contain "Papamichael"
     And the "E-mail address" field should contain "w.papamichael@schiffmann.de"
