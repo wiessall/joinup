@@ -182,12 +182,6 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $mapping = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
       'closed' => ['no' => 0, 'yes' => 1],
       'state' => [
         'draft' => 'draft',
