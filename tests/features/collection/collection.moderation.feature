@@ -225,7 +225,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
-    And I go to the "edit-form" content page of the type "collection" with the title "Spectres in fog"
+    And I go to the edit form of the "Spectres in fog" collection
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option

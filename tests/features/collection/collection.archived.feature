@@ -30,10 +30,10 @@ Feature: Creating content and commenting on archived collection
 
     # Archive the collection.
     When I am logged in as "Karl Fields"
-    And I go to the "edit-form" content page of the type "collection" with the title "The Willing Consort"
+    And I go to the edit form of the "The Willing Consort" collection
     And I press "Request archival"
     And I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "The Willing Consort"
+    And I go to the edit form of the "The Willing Consort" collection
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
     And I go to the content page of the type <content_type> with the title "Commented entity"
