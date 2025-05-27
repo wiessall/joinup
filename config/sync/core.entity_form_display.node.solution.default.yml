@@ -47,8 +47,8 @@ third_party_settings:
         - description
         - classification
         - domain
+        - content_creation
         - field_topic
-        - solution_type
         - language
       label: 'Solution information'
       region: content
@@ -95,6 +95,7 @@ third_party_settings:
         - related_solutions
         - process_status
         - landing_page
+        - solution_type
       label: 'Additional information'
       region: content
       parent_name: ''
@@ -133,6 +134,7 @@ third_party_settings:
       children:
         - node_preview
         - field_state
+        - transition_motivation
         - tca
       label: Confirmation
       region: content
@@ -303,7 +305,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 7
+    weight: 38
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -318,7 +320,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   tca:
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -329,6 +331,11 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  transition_motivation:
+    weight: 16
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
@@ -346,7 +353,6 @@ hidden:
   site_featured: true
   status: true
   sticky: true
-  transition_motivation: true
   translation: true
   uid: true
   uri: true
