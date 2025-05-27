@@ -24,7 +24,6 @@ Feature: Solution TCA agreement
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Logging Service" from "Solution type"
     And I press "Next"
     # Create owner.
     And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
@@ -35,6 +34,8 @@ Feature: Solution TCA agreement
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I press "Create contact information"
+    And I jump to the "Additional information" of "solution" wizard
+    And I select "Logging Service" from "Solution type"
     And I jump to the "Confirmation" of "solution" wizard
     And I click "Terms of Agreement"
 
