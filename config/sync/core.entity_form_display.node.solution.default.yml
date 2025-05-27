@@ -96,7 +96,6 @@ third_party_settings:
         - spatial_coverage
         - landing_page
         - related_solutions
-        - list_related_entities
         - process_status
       label: 'Additional information'
       region: content
@@ -246,13 +245,6 @@ content:
     weight: 9
     region: content
     settings: {  }
-    third_party_settings: {  }
-  list_related_entities:
-    type: boolean_checkbox
-    weight: 37
-    region: content
-    settings:
-      display_label: true
     third_party_settings: {  }
   logo:
     type: image_library_widget
