@@ -170,7 +170,12 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function getSearchQuery(array $settings, SearchItemInterface $item, int $element): QueryInterface {
     $field_definition = $this->fieldDefinition;
+    $entity = $item->getEntity();
+    if ($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
     $options = [
+      'search_api_field entity' => $entity,
       'limit' => !empty($settings['limit']) ? $settings['limit'] : 10,
       'offset' => !is_null($this->request->get('page')) ? $this->pagerManager->findPage($element) * (int) $settings['limit'] : 0,
       'search_api_field item' => $item,
@@ -211,7 +216,12 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    */
   protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
     $field_definition = $this->fieldDefinition;
+    $entity = $item->getEntity();
+    if ($entity instanceof MetaEntityInterface) {
+      $entity = $entity->getTargetEntity();
+    }
     $options = [
+      'search_api_field entity' => $entity,
       'search_api_field item' => $item,
       'search_api_field archived' => TRUE,
     ];
