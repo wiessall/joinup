@@ -25,7 +25,7 @@ Feature: Creating content and commenting on archived collection
       | title            | collection   | solution   |
       | Commented entity | <collection> | <solution> |
     When I am logged in as "Lee Reeves"
-    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I visit the "Commented entity" <content_type>
     And I should see a ".comment-form" element
 
     # Archive the collection.
@@ -36,15 +36,15 @@ Feature: Creating content and commenting on archived collection
     And I go to the edit form of the "The Willing Consort" collection
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
-    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I visit the "Commented entity" <content_type>
     And I should not see a ".comment-form" element
 
     When I am logged in as "Lee Reeves"
-    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I visit the "Commented entity" <content_type>
     And I should not see a ".comment-form" element
 
     When I am not logged in
-    And I go to the content page of the type <content_type> with the title "Commented entity"
+    And I visit the "Commented entity" <content_type>
     And I should not see a ".comment-form" element
 
     Examples:

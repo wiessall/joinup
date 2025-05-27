@@ -33,7 +33,7 @@ Feature: Site search
       | News total count       |
     And the response should contain "\"search\":{\"keyword\":\"total count\",\"count\":2}"
 
-    When I go to the "edit-form" content page of the type "news" with the title "News total count new"
+    When I go to the edit form of the "News total count new" news
     And I press "Publish"
     And I enter "total count" in the search bar and press enter
     Then I should see the following tiles in the correct order:
