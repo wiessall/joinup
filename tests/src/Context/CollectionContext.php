@@ -21,7 +21,6 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
-use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
