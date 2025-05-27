@@ -30,7 +30,6 @@ function joinup_core_deploy_200500(array &$sandbox): string {
   }
 
   $get_normalized_id = function (string $term_name, array &$normalized): int {
-    $time = \Drupal::time()->getRequestTime();
     $term_name = strtolower($term_name);
     $term_name = preg_replace('/\s+/', ' ', $term_name);
     $term_name = trim($term_name);
@@ -47,7 +46,6 @@ function joinup_core_deploy_200500(array &$sandbox): string {
       'name' => $term_name,
       'vid' => 'tags',
       'status' => 1,
-      'created' => $time,
     ]);
     $term->save();
     $normalized[(int) $term->id()] = $term->label();
