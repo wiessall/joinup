@@ -37,3 +37,5 @@ services:
     parent: logger.channel_base
     arguments:
       - 'solution'
+
+  Drupal\joinup_solution\Routing\RouteSubscriber: { }

@@ -7,18 +7,14 @@ dependencies:
     - field.field.node.solution.abstract
     - field.field.node.solution.classification
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.group_moderation
     - field.field.node.solution.keywords
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -35,7 +31,6 @@ dependencies:
   module:
     - field_group
     - layout_builder
-    - options
     - template_suggestion
     - text
     - user
@@ -125,13 +120,6 @@ content:
     third_party_settings: {  }
     weight: 7
     region: content
-  content_creation:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 8
-    region: content
   description:
     type: text_default
     label: above
@@ -181,13 +169,10 @@ hidden:
   field_topic: true
   flag_interoperability: true
   flag_like: true
-  group_moderation: true
   keywords: true
   landing_page: true
   langcode: true
   links: true
-  list_related_entities: true
-  listing_content: true
   logo: true
   members: true
   metrics_page: true
@@ -210,6 +195,7 @@ hidden:
   shared_in: true
   short_id: true
   site_featured: true
+  solution_settings: true
   solution_subscribe: true
   spatial_coverage: true
   translation: true
