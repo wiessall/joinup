@@ -25,7 +25,7 @@ Feature: Site sections
     Then the analytics report should not include a site section
     Given I visit the collection overview page
     Then the analytics report should not include a site section
-    Given I visit the contact form
+    Given I visit the contact form page
     Then the analytics report should not include a site section
 
     # Now do a sample check of a collection and solution overview page, as well
