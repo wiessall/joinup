@@ -23,7 +23,7 @@ Feature: Site sections
     # solution. These should not report any site sections.
     Given I am on the homepage
     Then the analytics report should not include a site section
-    Given I visit the collection overview
+    Given I visit the collection overview page
     Then the analytics report should not include a site section
     Given I visit the contact form
     Then the analytics report should not include a site section

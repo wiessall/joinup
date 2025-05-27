@@ -17,13 +17,13 @@ Feature: Collections Overview
       | Organisation example | Company    |
     # Check that visiting as an anonymous does not create cache for all users.
     When I am an anonymous user
-    And I visit the collection overview
+    And I visit the collection overview page
     And I should see the text "Collections are the main collaborative space"
     And the page should be cacheable
 
     # Check page for authenticated users.
     When I am logged in as "Madam Shirley"
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should see the following tiles in the correct order:
       # Created in 8:33am.
       | Open Data         |
@@ -35,7 +35,7 @@ Feature: Collections Overview
       | The Portal        |
 
     When I am an anonymous user
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should see the link "E-health"
     And I should not see the text "Supports health-related fields"
     And I should see the link "Open Data"
@@ -68,7 +68,7 @@ Feature: Collections Overview
     Then I visit the "Colonies in space" collection
     Then I should see the text "Colonies in space"
 
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "Colonies in space"
     And the page should be cacheable
 
@@ -76,7 +76,7 @@ Feature: Collections Overview
     # It will not be immediately available.
     # Check the new collection as an anonymous user.
     When I am an anonymous user
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should see the link "Colonies in space"
 
     # Clean up the collection that was created manually.
@@ -130,7 +130,7 @@ Feature: Collections Overview
       | Biologic meatballs | no       |
 
     When I am logged in as "Yiannis Parios"
-    And I visit the collection overview
+    And I visit the collection overview page
     Then the "My collections content" inline facet should allow selecting the following values:
       | My collections (3)       |
       | Featured collections (2) |
@@ -157,7 +157,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am logged in as "Carolina Mercedes"
-    And I visit the collection overview
+    And I visit the collection overview page
     Then the "My collections content" inline facet should allow selecting the following values:
       | Featured collections (2) |
       | My collections (1)       |
@@ -179,7 +179,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am an anonymous user
-    And I visit the collection overview
+    And I visit the collection overview page
     # The anonymous user has no access to the "My collections" facet entry.
     Then the "My collections content" inline facet should allow selecting the following values:
       | Featured collections (2) |
@@ -199,7 +199,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am logged in as "Carolina Mercedes"
-    And I visit the collection overview
+    And I visit the collection overview page
     And I click "Featured collections" in the "My collections content" inline facet
     Then I should see the following tiles in the correct order:
       | Enemies of the state |

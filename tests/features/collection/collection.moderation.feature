@@ -166,10 +166,10 @@ Feature: Collection moderation
     And collection content:
       | title          | logo     | topic             | state    |
       | Some berry pie | logo.png | Supplier exchange | proposed |
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should not see the text "Some berry pie"
 
     When I go to my dashboard
@@ -180,7 +180,7 @@ Feature: Collection moderation
     And I press "Publish"
     Then I should see the heading "No berry pie"
 
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
