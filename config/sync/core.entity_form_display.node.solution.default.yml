@@ -50,8 +50,6 @@ third_party_settings:
         - content_creation
         - field_topic
         - language
-        - content_creation
-        - language
       label: 'Solution information'
       region: content
       parent_name: ''
@@ -94,6 +92,8 @@ third_party_settings:
         - short_id
         - documentation
         - spatial_coverage
+        - related_solutions
+        - process_status
         - landing_page
         - solution_type
       label: 'Additional information'
@@ -234,7 +234,7 @@ content:
     third_party_settings: {  }
   landing_page:
     type: link_legacy_multicardinality
-    weight: 38
+    weight: 40
     region: content
     settings:
       placeholder_url: ''
@@ -279,6 +279,22 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
+  process_status:
+    type: options_select
+    weight: 39
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  related_solutions:
+    type: entity_reference_autocomplete
+    weight: 38
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   short_id:
     type: string_textfield
     weight: 35
@@ -289,7 +305,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 38
+    weight: 41
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -326,16 +342,12 @@ hidden:
   current_workflow_state: true
   field_keywords: true
   field_shared_in: true
-  field_topic: true
   langcode: true
-  logo: true
   metrics_page: true
   og_audience: true
   path: true
-  process_status: true
   promote: true
   published_at: true
-  related_solutions: true
   release_number: true
   simple_sitemap: true
   site_featured: true
