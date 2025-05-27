@@ -291,7 +291,7 @@ Feature: Navigation menu for custom pages
 
     # Verify that the menu only shows on the canonical route.
     When I am logged in as a moderator
-    And I go to the edit form of the "Page 1" custom_page
+    And I go to the edit form of the "Page 1" "custom page"
     Then I should not see the "Table of contents" region
 
     Examples:
@@ -497,7 +497,7 @@ Feature: Navigation menu for custom pages
 
     # Verify that the menu only shows on the canonical route.
     When I am logged in as a moderator
-    And I go to the edit form of the "TOCO 1" custom_page
+    And I go to the edit form of the "TOCO 1" "custom page"
     Then I should not see the "Table of contents outline" region
 
     When I disable "TOCO 1-1-2" in the navigation menu of the "Table of contents outline" <group>
