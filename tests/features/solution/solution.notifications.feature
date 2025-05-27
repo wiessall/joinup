@@ -1,7 +1,6 @@
 # Tests notifications for solutions. This file does not include template 1.
 # Template 1 is tested in the add_solution.feature already.
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9776
-@wip @api @group-i
+@api @group-i
 Feature: Solution notifications
   In order to manage solutions
   As a user of the website
@@ -30,6 +29,7 @@ Feature: Solution notifications
 
     # Template 7. The moderation team proposes changes.
     And I go to the "edit-form" content page of the type "solution" with the title "Solution notification to propose changes"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -42,6 +42,7 @@ Feature: Solution notifications
 
     # Template 13. The moderation team blacklists a solution.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to blacklist"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
@@ -50,6 +51,7 @@ Feature: Solution notifications
 
     # Template 14. The moderation team restores a solution from blacklisted.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to publish from blacklisted"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
@@ -59,6 +61,7 @@ Feature: Solution notifications
     # Template 15. The moderation team requests changes.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to request changes"
     And I select "Data Owner" from "Solution type"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Request changes"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -75,6 +78,7 @@ Feature: Solution notifications
 
     # Template 18. The moderation team deletes a solution without prior request.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to delete by moderator team"
+    And I jump to the "Confirmation" of "solution" wizard
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -86,6 +90,7 @@ Feature: Solution notifications
 
     # Template 18. The owner proposes changes.
     When I go to the "edit-form" content page of the type "solution" with the title "Solution notification to propose from request changes"
+    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
@@ -95,6 +100,7 @@ Feature: Solution notifications
     # since we do not send notifications to the actor.
     When I mark all emails as read
     And I go to the "edit-form" content page of the type "solution" with the title "Solution notification to delete by owner"
+    And I jump to the "Confirmation" of "solution" wizard
     And I click "Delete"
     And I press "Delete"
     Then 0 e-mails should have been sent

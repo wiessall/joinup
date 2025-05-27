@@ -18,7 +18,6 @@ Feature: Test adding solutions.
       | Solution classification field is required. |
       | Domain field is required.                  |
       | Topic field is required.                   |
-      | Solution type field is required.           |
       | Language availability field is required.   |
 
     When I fill in the following:
@@ -28,7 +27,6 @@ Feature: Test adding solutions.
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
     And I press "Next"
@@ -46,10 +44,12 @@ Feature: Test adding solutions.
     And I press "Create contact information"
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
+    And I press "Next"
+    And I select "Logging Service" from "Solution type"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the following error messages:
-      | error messages                                                      |
+      | error messages                          |
       | You must accept the Terms of Agreement. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
