@@ -19,7 +19,7 @@ Feature: Freeze comments on archived content
       | Comment with 'View Only' state | Let's all use it | Sons of anarchy | Test freeze of comments for <type> |
 
     When I am logged in as "Sons of anarchy"
-    And I go to the content page of the type "<type>" with the title "Test freeze of comments for <type>"
+    And I visit the "Test freeze of comments for <type>" "<type>"
 
     Then comment #1 should contain the markup "Let's all use it"
     And I should not see the button "Post comment" in the "Comment" region

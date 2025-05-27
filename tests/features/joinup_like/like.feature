@@ -89,7 +89,7 @@ Feature: Like/unlike feature.
       | Liked <content type> content | Very liked solution | <state> |
 
     When I am logged in as "Gregory Like"
-    And I go to the content page of the type "<content type>" with the title "Liked <content type> content"
+    And I visit the "Liked <content type> content" "<content type>"
     Then I should see the link "Like" in the "Like block"
 
     When I click "Like" in the "Like block" region

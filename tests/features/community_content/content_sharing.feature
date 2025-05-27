@@ -62,7 +62,7 @@ Feature: Sharing content between collections
 
     # Anonymous users can share only in social networks.
     When I am an anonymous user
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -70,7 +70,7 @@ Feature: Sharing content between collections
     # This "authenticated user" is not member of any collections or solution, so they can
     # share only in social networks.
     When I am logged in as an "authenticated user"
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -78,7 +78,7 @@ Feature: Sharing content between collections
     # A member of a single collection or solution which is the one where the content was
     # created can share on social networks only.
     When I am logged in as "Marjolein Rye"
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -95,7 +95,7 @@ Feature: Sharing content between collections
     But the following fields should not be present "Classic Rock, Power ballad"
 
     # Verify on another node the correctness of the share tool.
-    When I go to the content page of the type "<content type>" with the title "Interesting content"
+    When I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should be present "Classic Rock, Drum'n'Bass"
@@ -159,7 +159,7 @@ Feature: Sharing content between collections
     And the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking"
 
     # Verify that the content is again shareable.
-    When I go to the content page of the type "<content type>" with the title "Interesting content"
+    When I visit the "Interesting content" "<content type>"
     When I click "Share"
     Then a modal should open
     And the following fields should be present "Classic Rock"
@@ -367,7 +367,7 @@ Feature: Sharing content between collections
       | Secrets    | Sanjica Sauvage |
       | Gossip     | Sanjica Sauvage |
     And I am an anonymous user
-    When I go to the content page of the type "<content type>" with the title "An unshareable secret"
+    When I visit the "An unshareable secret" "<content type>"
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:
@@ -377,7 +377,7 @@ Feature: Sharing content between collections
 
     # Check that the collection the content is shared on is immediately shown in the "Shared on" tiles.
     Given I am logged in as "Sanjica Sauvage"
-    When I go to the content page of the type "<content type>" with the title "An unshareable secret"
+    When I visit the "An unshareable secret" "<content type>"
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:
