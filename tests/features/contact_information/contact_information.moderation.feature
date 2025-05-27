@@ -61,7 +61,7 @@ Feature: Contact Information moderation
     # Another authenticated user should not be allowed to edit the contact
     # information entity.
     When I am logged in as an "authenticated user"
-    And I go to the "Ceolwulf II of Mercia" contact information page
+    And I go to the "Ceolwulf II of Mercia" contact_information
     Then I should not see the link "Edit" in the "Entity actions" region
 
     # The original author is allowed to update the entity with the requested
@@ -116,13 +116,13 @@ Feature: Contact Information moderation
       | Saint Louis solutions | Saint Louis CEO | facilitator |
 
     When I am logged in as "Sown Carnberry"
-    And I go to the "Secreteriat" contact information page
+    And I go to the "Secreteriat" contact_information
     And I click "Edit" in the "Entity actions"
     And the following 2 button should be present "Update, Request deletion"
     And I should not see the link "Delete"
 
     When I am logged in as "Saint Louis CEO"
-    And I go to the "Secreteriat" contact information page
+    And I go to the "Secreteriat" contact_information
     And I click "Edit" in the "Entity actions"
     And the following 1 button should be present "Update"
     And I should see the link "Delete"
