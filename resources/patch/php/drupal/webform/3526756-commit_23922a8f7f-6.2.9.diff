@@ -1,0 +1,106 @@
+diff --git a/src/Element/WebformElementAttributes.php b/src/Element/WebformElementAttributes.php
+index 8fffae740..69185f180 100644
+--- a/src/Element/WebformElementAttributes.php
++++ b/src/Element/WebformElementAttributes.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\webform\Element;
+ 
++use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Render\Element\FormElement;
+ use Drupal\Core\Serialization\Yaml;
+@@ -177,7 +178,14 @@ class WebformElementAttributes extends FormElement {
+     }
+ 
+     if (!empty($values['attributes'])) {
+-      $attributes += Yaml::decode($values['attributes']);
++      // The YAML string might be invalid, but here it is enough to suppress the
++      // exception thrown by the YAML decoder because the "webform_codemirror"
++      // form element will perform the validation if it is configured so.
++      try {
++        $attributes += Yaml::decode($values['attributes']);
++      }
++      catch (InvalidDataTypeException) {
++      }
+     }
+ 
+     $form_state->setValueForElement($element['class'], NULL);
+diff --git a/tests/src/Functional/Element/WebformElementAttributesTest.php b/tests/src/Functional/Element/WebformElementAttributesTest.php
+index 07937719f..68425acde 100644
+--- a/tests/src/Functional/Element/WebformElementAttributesTest.php
++++ b/tests/src/Functional/Element/WebformElementAttributesTest.php
+@@ -2,6 +2,8 @@
+ 
+ namespace Drupal\Tests\webform\Functional\Element;
+ 
++use Drupal\Tests\user\Traits\UserCreationTrait;
++
+ /**
+  * Tests for webform element attributes.
+  *
+@@ -9,6 +11,8 @@ namespace Drupal\Tests\webform\Functional\Element;
+  */
+ class WebformElementAttributesTest extends WebformElementBrowserTestBase {
+ 
++  use UserCreationTrait;
++
+   /**
+    * Webforms to load.
+    *
+@@ -53,4 +57,55 @@ webform_element_attributes_no_classes:
+     - five");
+   }
+ 
++  /**
++   * Test error message if the attributes YAML string is invalid.
++   *
++   * @param string $main_property
++   *   Name of the main property which has a YAML attributes input.
++   * @param string $element_title
++   *   Human label of the main property.
++   *
++   * @dataProvider providerTestInvalidYaml
++   */
++  public function testInvalidElementAttributesValidation(
++    string $main_property,
++    string $element_title,
++  ): void {
++    $moduleInstaller = \Drupal::service('module_installer');
++    $moduleInstaller->install(['webform_ui']);
++    $adminAccount = $this->createUser(['administer webform']);
++    $this->drupalLogin($adminAccount);
++    $this->drupalGet('admin/structure/webform/manage/contact/element/message/edit');
++    $this->assertSession()->statusCodeEquals(200);
++
++    $this->assertSession()->pageTextContains("$element_title custom attributes (YAML)");
++
++    $this->submitForm(
++      [
++        "properties[$main_property][attributes]" => 'invalid: YAML: string',
++      ],
++      'Save',
++    );
++
++    // We shouldn't get any exception, but instead we should see the actual
++    // validation error message.
++    $this->assertSession()->statusCodeEquals(200);
++    $this->assertSession()->elementTextContains('css', '[role="alert"]', 'Error message');
++    /* @see \Drupal\webform\Element\WebformElementAttributes::processWebformElementAttributes() */
++    $this->assertSession()->pageTextContains("$element_title custom attributes (YAML) is not valid.");
++  }
++
++  /**
++   * Data provider for ::testInvalidElementAttributesValidation().
++   *
++   * @return array[]
++   *   The test cases.
++   */
++  public static function providerTestInvalidYaml(): array {
++    return [
++      'attributes' => ['attributes', 'Element'],
++      'wrapper_attributes' => ['wrapper_attributes', 'Wrapper'],
++    ];
++  }
++
+ }
