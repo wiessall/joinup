@@ -32,7 +32,6 @@ Feature: Related solution
     And I go to the "edit-form" content page of the type "solution" with the title "Java"
     And I jump to the "Additional information" of "solution" wizard
     And I fill in "Related solutions" with values "C, Python"
-    And I uncheck "Show solutions related by EIRA terms"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the heading "Java"
@@ -47,7 +46,6 @@ Feature: Related solution
     When I am logged in as a moderator
     And I go to the "edit-form" content page of the type "solution" with the title "Java"
     And I jump to the "Additional information" of "solution" wizard
-    And I check "Show solutions related by EIRA terms"
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the heading "Java"
