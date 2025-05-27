@@ -97,7 +97,7 @@ Feature: "Add document" visibility options.
       | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
-    And I go to the "edit-form" content page of the type "document" with the title "Laser types"
+    And I go to the edit form of the "Laser types" document
     And I press "Update"
     Then I should see the success message "Document Laser types has been updated"
 
@@ -113,7 +113,7 @@ Feature: "Add document" visibility options.
       | Red blaser types | document      | RL-Types    | Abstract | List of laser types.  | Creative Commons Zero | Red blaser |
 
     When I am logged in as a facilitator of the "Red blaser" collection
-    And I go to the "edit-form" content page of the type "document" with the title "Red blaser types"
+    And I go to the edit form of the "Red blaser types" document
     And the "Remote file URL" radio button should not be selected
     And I should see the text "Unlimited number of files can be uploaded to this field."
     And I should see the text "32 MB limit."
