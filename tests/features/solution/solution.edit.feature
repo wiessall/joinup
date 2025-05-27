@@ -38,7 +38,6 @@ Feature: Solution editing.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
-    And I select "Bulgarian" from "Language availability"
     And I press "Next"
     # Create owner.
     And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
@@ -58,7 +57,7 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    And the following fields should be present "Title, Abstract, Description, Solution type, Language availability, Contributors"
+    And the following fields should be present "Title, Abstract, Description, Solution type, Language availability"
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution
