@@ -43,7 +43,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
 
     # Test 'update' operation.
     When I am logged in as "CC member"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify post publish"
+    And I go to the edit form of the "CC notify post publish" discussion
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                       |
@@ -51,7 +51,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | body      | CC Member has published the new discussion - "CC notify post publish" in the collection: "CC post collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify post request changes"
+    And I go to the edit form of the "CC notify post request changes" discussion
     And I press "Request changes"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
@@ -62,7 +62,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | body      | the Facilitator, CC Facilitator has requested you to modify the discussion - "CC notify post request changes" in the collection: "CC post collection", with the following motivation: "Can you do some changes?". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify post report"
+    And I go to the edit form of the "CC notify post report" discussion
     And I press "Report"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
@@ -74,7 +74,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
 
     When I mark all emails as read
     And I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify post approve proposed"
+    And I go to the edit form of the "CC notify post approve proposed" discussion
     And I press "Publish"
     Then 1 e-mail should have been sent
     Then the following email should have been sent:
@@ -85,7 +85,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     # Test 'delete' operation.
     When I mark all emails as read
     And I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "discussion" with the title "CC notify post delete"
+    And I go to the edit form of the "CC notify post delete" discussion
     And I click "Delete"
     And I press "Delete"
     Then 1 e-mail should have been sent
