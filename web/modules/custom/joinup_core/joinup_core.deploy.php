@@ -30,11 +30,7 @@ function joinup_core_deploy_200500(array &$sandbox): string {
   }
 
   $get_normalized_id = function (string $term_name, array &$normalized): int {
-    $term_name = strtolower($term_name);
-    $term_name = preg_replace('/\s+/', ' ', $term_name);
-    $term_name = trim($term_name);
-    // Remove the trailing s to combine the singular and plural forms.
-    $term_name = preg_replace('/s$/', '', $term_name);
+    $term_name = _normalize_keyword_name($term_name);
 
     if (in_array($term_name, $normalized)) {
       return array_search($term_name, $normalized);
@@ -116,7 +112,7 @@ function joinup_core_deploy_200501(): string {
 
       $preset = explode('|', $preset);
       $keywords_value = $preset[1];
-      $keywords_value = strtolower($keywords_value);
+      $keywords_value = _normalize_keyword_name($keywords_value);
       $preset = 'keywords|' . $keywords_value;
     }
 
@@ -132,4 +128,21 @@ function joinup_core_deploy_200501(): string {
   }
 
   return sprintf('Updated %s keywords.', $count);
+}
+
+/**
+ * Normalizes a keyword name by performing basic transformations.
+ *
+ * @param string $name
+ *   The keyword name to normalize.
+ *
+ * @return string
+ *   The normalized keyword name.
+ */
+function _normalize_keyword_name(string $name): string {
+  $name = strtolower($name);
+  $name = preg_replace('/\s+/', ' ', $name);
+  $name = trim($name);
+  // Remove the trailing s to combine the singular and plural forms.
+  return preg_replace('/s$/', '', $name);
 }
