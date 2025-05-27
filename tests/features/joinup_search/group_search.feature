@@ -44,9 +44,9 @@ Feature: Search inside groups
     # the search field.
     When I am on the homepage
     Then the "Navigation bar" region should not contain any chips
-    When I visit the collection overview
+    When I visit the collection overview page
     Then the page should not contain any chips
-    When I visit the solution overview
+    When I visit the solution overview page
     Then the page should not contain any chips
     When I visit the contact form
     Then the page should not contain any chips
@@ -89,7 +89,7 @@ Feature: Search inside groups
     And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
-    When I go to the "Resources" custom page
+    When I go to the "Resources" custom_page
     And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
@@ -159,7 +159,7 @@ Feature: Search inside groups
     And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
-    When I go to the "Geography" custom page
+    When I go to the "Geography" custom_page
     And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
@@ -213,7 +213,7 @@ Feature: Search inside groups
 
   @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets
-    When I visit the search page
+    When I visit the advanced search page
     And I should see 12 tiles
     Then I should not see search bar icon in navbar
     # Search page doesn't have search bar in header.

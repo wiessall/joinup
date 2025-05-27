@@ -75,7 +75,7 @@ Feature: Featuring content site-wide
     # Content should be marked as featured only in "global" pages.
     But the "Ionizing radiation types" <content type> tile should not be marked as featured
 
-    When I visit the content overview
+    When I visit the content overview page
     Then the "Ionizing radiation types" tile should be marked as featured
 
     When I click the contextual link "Remove from featured" in the "Ionizing radiation types" tile

@@ -51,7 +51,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Very liked solution" tile
     Then I should see the statistics "2" in the "Very liked solution" tile
 
-    When I visit the search page
+    When I visit the advanced search page
     Then I should see the "Very liked solution" tile
     And I should see the statistics "2" in the "Very liked solution" tile
     When I click the "Remove like from this content" in the "Very liked solution" tile
@@ -123,7 +123,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "1" in the "Likeable <content type>" tile
 
     # View mode tile horizontal
-    When I visit the search page
+    When I visit the advanced search page
     Then I should see the "Likeable <content type>" tile
     And I should see the statistics "1" in the "Likeable <content type>" tile
     When I click the "Remove like from this content" in the "Likeable <content type>" tile
@@ -164,7 +164,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Likeable discussion" tile
     Then I should see the statistics "1" in the "Likeable discussion" tile
 
-    When I visit the search page
+    When I visit the advanced search page
     And I click "Lisa Like"
 
     # Custom page vertical tile (default)
@@ -173,7 +173,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Likeable custom page" tile
     Then I should see the statistics "1" in the "Likeable custom page" tile
 
-    Then I visit the search page
+    Then I visit the advanced search page
 
     # Solution horizontal tile
     And I should see the "Likeable solution" tile

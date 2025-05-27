@@ -205,12 +205,12 @@ Feature: Sharing content between collections
       | Essos city   | Arya Stark | facilitator |
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     And I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "John Snow"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
@@ -222,13 +222,13 @@ Feature: Sharing content between collections
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
 
-    When I visit the content overview
+    When I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Simple members can still not unshare content from any group.
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview
+    And I visit the content overview page
     # Link 'Unshare' vary by user og role since the 2 users up to now have the same permissions outside og.
     Then I should see the contextual links "Share, Unshare" in the "Iron throne" tile
     When I click the contextual link "Unshare" in the "Iron throne" tile
@@ -236,7 +236,7 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     When I am logged in as "Jamie Lanister"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Moderators should be able to unshare from every group the content is shared on.
     And I should see the contextual link "Unshare" in the "Iron throne" tile
@@ -286,7 +286,7 @@ Feature: Sharing content between collections
     Then I should see the "Venus content" tile
     And the "Venus content" tile should not be marked as shared
 
-    And I visit the content overview
+    And I visit the content overview page
     Then the "Earth content" tile should not be marked as shared
     And the "Mars content" tile should not be marked as shared
     And the "Venus content" tile should not be marked as shared

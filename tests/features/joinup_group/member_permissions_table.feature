@@ -80,7 +80,7 @@ Feature: Group member permissions table
     Given event content:
       | title             | state | collection        | author           |
       | The Poor Scholars | draft | Applied astrology | Mustrum Ridcully |
-    When I go to the content page of the type event with the title "The Poor Scholars"
+    When I visit the "The Poor Scholars" event
     Then I should get an access denied error
 
     # Collection. Content creation: authors and facilitators. Not moderated.
@@ -110,7 +110,7 @@ Feature: Group member permissions table
     Given event content:
       | title    | state | collection        | author           |
       | Rag Week | draft | Illiberal studies | Mustrum Ridcully |
-    When I go to the content page of the type event with the title "Rag Week"
+    When I visit the "Rag Week" event
     Then I should get an access denied error
 
     # Collection. Content creation: members. Moderated.
@@ -160,7 +160,7 @@ Feature: Group member permissions table
     And I should see the button "Propose changes"
     But I should not see the link "Delete"
     And I should not see the button "Update"
-    When I go to the content page of the type event with the title "The Wizards' Excuse Me"
+    When I visit the "The Wizards' Excuse Me" event
     Then I should get an access denied error
 
     # Collection. Content creation: members. Not moderated.
@@ -204,7 +204,7 @@ Feature: Group member permissions table
     And I should see the button "Update"
     But I should not see the button "Request deletion"
     And I should not see the button "Propose changes"
-    When I go to the content page of the type event with the title "Archchancellor Bowell's Remembrance's Bun and Penny"
+    When I visit the "Archchancellor Bowell's Remembrance's Bun and Penny" event
     Then I should get an access denied error
 
     # Collection. Content creation: any user. Moderated.
@@ -254,7 +254,7 @@ Feature: Group member permissions table
     And I should see the button "Propose changes"
     But I should not see the link "Delete"
     And I should not see the button "Update"
-    When I go to the content page of the type event with the title "The Hunting of the Megapode"
+    When I visit the "The Hunting of the Megapode" event
     Then I should get an access denied error
 
     # Collection. Content creation: any user. Not moderated.
@@ -298,7 +298,7 @@ Feature: Group member permissions table
     And I should see the button "Update"
     But I should not see the button "Request deletion"
     And I should not see the button "Propose changes"
-    When I go to the content page of the type event with the title "Archchancellor Preserved Bigger's Bequest"
+    When I visit the "Archchancellor Preserved Bigger's Bequest" event
     Then I should get an access denied error
 
     # Solution. Content creation: authors and facilitators. Moderated.
@@ -328,7 +328,7 @@ Feature: Group member permissions table
     Given event content:
       | title        | state | solution           | author           |
       | Scrawn Money | draft | Applied anthropics | Mustrum Ridcully |
-    When I go to the content page of the type event with the title "Scrawn Money"
+    When I visit the "Scrawn Money" event
     Then I should get an access denied error
 
     # Solution. Content creation: authors and facilitators. Non-moderated.
@@ -358,7 +358,7 @@ Feature: Group member permissions table
     Given event content:
       | title            | state | solution             | author           |
       | 'Sity and Guilds | draft | Extreme horticulture | Mustrum Ridcully |
-    When I go to the content page of the type event with the title "'Sity and Guilds"
+    When I visit the "'Sity and Guilds" event
     Then I should get an access denied error
 
     # Solution. Content creation: any user. Moderated.
@@ -408,7 +408,7 @@ Feature: Group member permissions table
     And I should see the button "Propose changes"
     But I should not see the link "Delete"
     And I should not see the button "Update"
-    When I go to the content page of the type event with the title "Poore Boys Funne"
+    When I visit the "Poore Boys Funne" event
     Then I should get an access denied error
 
     # Solution. Content creation: any user. Non-moderated.
@@ -452,7 +452,7 @@ Feature: Group member permissions table
     And I should see the button "Update"
     But I should not see the button "Request deletion"
     And I should not see the button "Propose changes"
-    When I go to the content page of the type event with the title "A veritable heyhoe-rumbledown"
+    When I visit the "A veritable heyhoe-rumbledown" event
     Then I should get an access denied error
 
   # The permissions table should not be accessible for non-public groups.

@@ -113,7 +113,7 @@ Feature: Submit the contact form
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7104
 
     Given I am not logged in
-    Then I go to the contact form
+    Then I go to the contact form page
     And I fill in "First name" with "Diana"
     And I fill in "Last name" with "Chaves"
     And I fill in "Organisation" with "Lucotores State"
