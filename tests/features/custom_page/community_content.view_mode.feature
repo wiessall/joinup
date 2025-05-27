@@ -36,7 +36,7 @@ Feature:
       | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:68:"entity_bundle\|distribution,release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the "Tile custom page" custom page
+    And I go to the "Tile custom page" custom_page
 
     Then I should see the "Tile release" tile
     And I should see the text "v0.1" in the "Tile release" tile
@@ -70,7 +70,7 @@ Feature:
       | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:47:"entity_bundle\|discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the "Tile custom page" custom page
+    And I go to the "Tile custom page" custom_page
 
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile

@@ -34,15 +34,15 @@ Feature: "Custom page" editing.
 
     # Group owner should see the button.
     When I am logged in as "Mickey Mouse"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should see the link "Edit"
     # A normal member cannot edit custom pages, so they don't see the button.
     When I am logged in as "Pluto"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Edit"
     # A moderator can edit all custom pages.
     When I am logged in as a user with the moderator role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should see the link "Edit"
     When I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
@@ -63,17 +63,17 @@ Feature: "Custom page" editing.
 
     # A normal logged in user should not be able to edit the custom page.
     When I am logged in as a user with the authenticated role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Edit"
 
     # An anonymous user cannot edit the custom page.
     When I am logged in as a user with the authenticated role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Edit"
 
     # Edit the page as a facilitator.
     When I am logged in as "Mickey Mouse"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     And I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
     And the following fields should be present "Title, Body, Topic"
