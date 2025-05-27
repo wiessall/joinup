@@ -115,16 +115,8 @@ content:
   invite_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
-  keywords:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 101
-    region: main
   links:
     settings: {  }
     third_party_settings: {  }
@@ -161,6 +153,7 @@ hidden:
   featured: true
   field_site_featured: true
   flag_like: true
+  keywords: true
   langcode: true
   latest_update_time: true
   pinned_in: true
