@@ -83,7 +83,7 @@ Feature:
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Carousel controls" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
-    Then I go to the "Carousel controls" custom page
+    Then I go to the "Carousel controls" custom_page
     When the "Previous item" button in the Content region should not be visible
     And the "Next item" button in the Content region should not be visible
 
