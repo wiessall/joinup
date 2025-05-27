@@ -68,7 +68,7 @@ function joinup_core_deploy_200500(array &$sandbox): string {
     }
   };
 
-  $entries = array_splice($sandbox['data'], 0, 10);
+  $entries = array_splice($sandbox['data'], 0, 100);
   foreach ($entries as $data) {
     foreach ($data as $entry) {
       // Check if the term already exists.
