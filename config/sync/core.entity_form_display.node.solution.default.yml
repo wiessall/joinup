@@ -92,6 +92,8 @@ third_party_settings:
         - documentation
         - keywords
         - spatial_coverage
+        - related_solutions
+        - process_status
         - landing_page
         - solution_type
       label: 'Additional information'
@@ -132,6 +134,7 @@ third_party_settings:
       children:
         - node_preview
         - field_state
+        - transition_motivation
         - tca
       label: Confirmation
       region: content
@@ -241,7 +244,7 @@ content:
     third_party_settings: {  }
   landing_page:
     type: link_legacy_multicardinality
-    weight: 39
+    weight: 40
     region: content
     settings:
       placeholder_url: ''
@@ -286,6 +289,22 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
+  process_status:
+    type: options_select
+    weight: 39
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  related_solutions:
+    type: entity_reference_autocomplete
+    weight: 38
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   short_id:
     type: string_textfield
     weight: 35
@@ -296,7 +315,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: options_select
-    weight: 40
+    weight: 41
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -311,7 +330,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   tca:
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -323,6 +342,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  transition_motivation:
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   current_workflow_state: true
@@ -331,16 +355,13 @@ hidden:
   metrics_page: true
   og_audience: true
   path: true
-  process_status: true
   promote: true
   published_at: true
-  related_solutions: true
   release_number: true
   simple_sitemap: true
   site_featured: true
   status: true
   sticky: true
-  transition_motivation: true
   translation: true
   uid: true
   uri: true
