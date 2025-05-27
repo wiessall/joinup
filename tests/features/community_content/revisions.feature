@@ -349,7 +349,7 @@ Feature:
     # been proposed by a non-author. This part of the scenario only affects
     # moderated groups. For non-moderated groups this results in no change.
     Given I am logged in as "Fuzzy Moderator"
-    When I go to the "edit-form" content page of the type "<content type>" with the title "<final title>"
+    When I go to the edit form of the "<final title>" "<content type>"
     And I press "<moderate action>"
     Then I should see the heading "Goodbi world"
 
