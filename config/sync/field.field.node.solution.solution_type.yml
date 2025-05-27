@@ -22,12 +22,12 @@ entity_type: node
 bundle: solution
 label: 'Solution type'
 description: 'Select the type that best describes your solution.'
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: grouped_taxonomy_term_selection
+  handler: taxonomy_container
   handler_settings:
     target_bundles:
       solution_type: solution_type
@@ -36,4 +36,5 @@ settings:
       direction: asc
     auto_create: false
     auto_create_bundle: ''
+    prefix: '-'
 field_type: entity_reference

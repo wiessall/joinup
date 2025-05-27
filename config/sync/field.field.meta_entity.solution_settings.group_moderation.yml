@@ -1,19 +1,19 @@
-uuid: 49a3b2c6-7c66-44dd-9de9-314a948fcc6b
+uuid: fdb91ebc-6a6b-4c1a-a504-98901b93d480
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.group_moderation
-    - node.type.solution
+    - field.storage.meta_entity.group_moderation
+    - meta_entity.type.solution_settings
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: node.solution.group_moderation
+id: meta_entity.solution_settings.group_moderation
 field_name: group_moderation
-entity_type: node
-bundle: solution
+entity_type: meta_entity
+bundle: solution_settings
 label: Moderation
 description: 'If checked, community content items (news, events, discussions and documents) are pre-moderated: they have to be validated by the moderators of the solution before they will be published.'
 required: false

@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\joinup_solution\Access;
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
+
+/**
+ * Custom access check for solution_settings canonical page.
+ */
+class SolutionSettingsViewAccessCheck {
+
+  /**
+   * Custom access check for solution_settings meta entity.
+   */
+  public static function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
+    $meta_entity = $route_match->getParameter('meta_entity');
+    $solution = $meta_entity->getTargetEntity();
+    $membershipManager = \Drupal::service('Drupal\joinup_group\JoinupGroupPermissionManagerInterface');
+
+    if ($meta_entity instanceof MetaEntityInterface && $meta_entity->bundle() === 'solution_settings') {
+      if ($meta_entity->access('update', $account, TRUE)->isAllowed() ||
+        $membershipManager->userHasOgPermission($account->id(), $solution, 'edit any solution content')) {
+        return AccessResult::allowed();
+      }
+      return AccessResult::forbidden();
+    }
+
+    return AccessResult::allowed();
+  }
+
+}
