@@ -18,23 +18,6 @@ class JoinupNewsContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
-   * Navigates to the canonical page display of a news page.
-   *
-   * @param string $title
-   *   The name of the news page.
-   *
-   * @When I go to the :title news
-   * @When I visit the :title news
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitNewsPage(string $title): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, 'news');
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Checks the contents of the latest news section.
    *
    * This also checks if the news articles are in the correct order and if the
