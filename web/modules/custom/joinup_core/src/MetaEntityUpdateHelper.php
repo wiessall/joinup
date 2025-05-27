@@ -9,20 +9,15 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\SynchronizableInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\UpdateException;
-use Drupal\joinup_group\Entity\ShareableContentTrait;
 
 /**
- * Helper for shared in meta entity related update.
+ * Helper for meta entity related to updated entity.
  *
  * Created to calculates the share expiration timestamp as done in
  * ShareableContentTrait. Can be removed with the corresponding post update
  * functions.
  */
-class SharedInUpdateHelper {
-
-  use ShareableContentTrait {
-    someMonthsLater as public;
-  }
+class MetaEntityUpdateHelper {
 
   /**
    * Installs config from the sync storage.

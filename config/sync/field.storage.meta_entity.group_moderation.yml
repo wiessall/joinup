@@ -1,12 +1,12 @@
-uuid: 56a4ee5d-4c73-47c5-bfde-cf0308b9841a
+uuid: 4891a6de-fc03-49c3-84bf-a4577e31d698
 langcode: en
 status: true
 dependencies:
   module:
-    - node
-id: node.list_related_entities
-field_name: list_related_entities
-entity_type: node
+    - meta_entity
+id: meta_entity.group_moderation
+field_name: group_moderation
+entity_type: meta_entity
 type: boolean
 settings: {  }
 module: core

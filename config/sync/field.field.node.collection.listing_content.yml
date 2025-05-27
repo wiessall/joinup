@@ -7,6 +7,10 @@ dependencies:
     - node.type.collection
   module:
     - search_api_field
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.collection.listing_content
 field_name: listing_content
 entity_type: node
@@ -14,7 +18,7 @@ bundle: collection
 label: 'Collection content'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value:
@@ -25,11 +29,11 @@ default_value:
         collection_content_status:
           weight: 1
           region: top
-        collection_event_type:
-          weight: 0
-          region: inline_facets
         collection_topic:
-          weight: 0
+          weight: 2
+          region: inline_facets
+        collection_event_type:
+          weight: 3
           region: inline_facets
       enabled: 1
       query_presets: ''
@@ -43,6 +47,7 @@ settings:
     inline_facets: 'Inline facets'
   view_modes:
     'entity:node':
+      assessment_report: default
       collection: view_mode_tile
       custom_page: view_mode_tile
       discussion: view_mode_tile
@@ -53,13 +58,12 @@ settings:
       news: view_mode_tile
       release: default
       solution: view_mode_tile
-      video: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
       eif_principle: default
       eif_recommendation: default
-      spdx_licence: default
+      oss_category: default
       topic: default
     'entity:user':
       user: default
