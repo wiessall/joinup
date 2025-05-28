@@ -26,23 +26,6 @@ class OwnerContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Navigates to the canonical page display of an owner.
-   *
-   * @param string $owner
-   *   The label of the owner.
-   *
-   * @When I go to (the homepage of )the :owner owner
-   * @When I visit (the homepage of )the :owner owner
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitOwner(string $owner): void {
-    /** @var \Drupal\node\Entity\Node $entity */
-    $entity = $this->getEntityByLabel('node', $owner, 'owner');
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Handles owner specific fields.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
