@@ -192,7 +192,7 @@ Feature: Add community content
     And <content type> content:
       | title                   | collection      |
       | The glorious revolution | The night watch |
-    When I go to the content page of the type "<content type>" with the title "The glorious revolution"
+    When I visit the "The glorious revolution" "<content type>"
     Then I should see the text <label> in the "Page title" region
 
     Examples:
@@ -209,7 +209,7 @@ Feature: Add community content
       | title                    | collection      | start date   | end date            |
       | Red glorious revolution  | The night batch | now +1 years | now +1 years +1 day |
       | Blue glorious revolution | The night batch | now -1 years | now -1 years +1 day |
-    When I go to the content page of the type "event" with the title "Red glorious revolution"
+    When I visit the "Red glorious revolution" "event"
     And I should see the button "Add to Calendar"
     And I should see the link "Google"
     And I should see the link "Yahoo!"
@@ -217,7 +217,7 @@ Feature: Add community content
     And I should see the link "Office.com"
     And I should see the link "iCal / MS Outlook"
 
-    When I go to the content page of the type "event" with the title "Blue glorious revolution"
+    When I visit the "Blue glorious revolution" "event"
     And I should not see the button "Add to Calendar"
     And I should not see the link "Google"
     And I should not see the link "Yahoo!"

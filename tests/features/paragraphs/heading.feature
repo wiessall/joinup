@@ -25,7 +25,7 @@ Feature:
       | paragraph_heading | H5 heading paragraph                                      |
       | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h5";}} |
 
-    When I go to the "Heading example page" custom page
+    When I go to the "Heading example page" custom_page
     Then I should see an "h2" element with the text "H2 heading paragraph" in the "Content" region
     And I should see an "h3" element with the text "H3 heading paragraph" in the "Content" region
     And I should see an "h4" element with the text "H4 heading paragraph" in the "Content" region

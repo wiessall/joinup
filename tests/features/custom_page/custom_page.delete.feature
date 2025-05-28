@@ -22,28 +22,28 @@ Feature: "Custom page" deleteing.
 
     # Group owner should see the button.
     When I am logged in as "Mickey Mouse"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should see the link "Delete"
     # A normal member cannot delete custom pages, so they don't see the button.
     When I am logged in as "Pluto"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Delete"
     # A moderator can delete all custom pages.
     When I am logged in as a user with the moderator role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should see the link "Delete"
     # A normal logged in user should not be able to delete the custom page.
     When I am logged in as a user with the authenticated role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Delete"
     # An anonymous user cannot delete the custom page.
     When I am logged in as a user with the authenticated role
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     Then I should not see the link "Delete"
 
     # Delete the custom page as a facilitator.
     When I am logged in as "Mickey Mouse"
-    And I go to the "Buena Vista Distribution Company" custom page
+    And I go to the "Buena Vista Distribution Company" custom_page
     And I click "Delete"
     Then I should see the heading "Are you sure you want to delete the content item Buena Vista Distribution Company?"
     And I press "Delete"

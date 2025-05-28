@@ -96,7 +96,7 @@ Feature: Curated content listings
     And I click the contextual link "Feature" in the "Licrogravity" tile
     Then the "Licrogravity" tile should be marked as featured
 
-    Then I visit the search page
+    Then I visit the advanced search page
     And the "Licrogravity" tile should be marked as featured
 
   @loggedErrors @javascript

@@ -22,7 +22,7 @@ Feature: Pool paragraph tests.
     And I append poll "What was the best series?" to "field_paragraphs_body" field in "node" entity with following "TV series" title
 
     Then I am an anonymous user
-    And I go to the "TV series" custom page
+    And I go to the "TV series" custom_page
     When I should see the link "Game of Thrones"
 
     Then I click "Game of Thrones"
@@ -49,7 +49,7 @@ Feature: Pool paragraph tests.
     And I append poll "What was the best series?" to "field_paragraphs_body" field in "node" entity with following "TV series" title
 
     Then I am logged in as a user with the "authenticated" role
-    And I go to the "TV series" custom page
+    And I go to the "TV series" custom_page
     When I should see the heading "What was the best series?"
     And I should see the button "View results"
     And the following fields should be present "Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men"
@@ -74,7 +74,7 @@ Feature: Pool paragraph tests.
     And I append poll "Whats the best pizza topping?" to "field_paragraphs_body" field in "node" entity with following "Pizza types" title
 
     Then I am logged in as a user with the "authenticated" role
-    And I go to the "Pizza types" custom page
+    And I go to the "Pizza types" custom_page
     When I should see the heading "Whats the best pizza topping?"
     And I should not see the button "View results"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"

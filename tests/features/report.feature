@@ -12,7 +12,7 @@ Feature: Report inappropriate content
       | title   | body   | collection       |
       | <title> | <body> | Deployment tools |
     Given I am not logged in
-    When I go to the content page of the type "<type>" with the title "<title>"
+    When I visit the "<title>" "<type>"
     And I click "Report"
     Then I should see the heading "Contact"
     And the "Category" field should contain "report"

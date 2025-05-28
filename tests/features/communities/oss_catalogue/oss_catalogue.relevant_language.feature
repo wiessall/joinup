@@ -10,7 +10,7 @@ Feature:
       | title    | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_long_description | oss_short_description | oss_screenshots | oss_git_url        | oss_publiccode_yml_content                                                                                                                 |
       | EN Title | published | 1690000000 | developers_italia | 2142-01-01       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description  |                 | https://github.com | !multiline!description:\n  en:\n    features:\n      0: EN Feature 1\n  it:\n    features:\n      0: IT Feature 1\n      1: IT Feature 2\n |
       |          |           | 1690000000 |                   |                  | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description  | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
-    When I go to the content page of the type "oss_solution" with the title "EN Title"
+    When I visit the "EN Title" "oss_solution"
     Then I should see the heading "EN Title"
     And I should see the following lines of text:
       | En Feature 1         |
@@ -35,7 +35,7 @@ Feature:
 
     # Ensures content translation edit forms can be accessed.
     Given I am logged in as a user with the "developer" role
-    When I go to the content page of the type "oss_solution" with the title "EN Title"
+    When I visit the "EN Title" "oss_solution"
     When I click "Translate" in the "Entity actions" region
     Then I should see the heading "Translations of EN Title"
     When I click "Edit" in the "English" row
@@ -52,7 +52,7 @@ Feature:
       | ABC Solution | published | 1700000000 | developers_italia | 2025-10-19       | en       | 1                   |                           |                       | !multiline!description:\n  de:\n    features:\n      0: DE Feature 1\n      1: DE Feature 2\n  el:\n    features:\n      0: EL Feature 1\n      1: EL Feature 2\n |
       |              | ~~~       | ~~~        | ~~~               | ~~~              | de       | 0                   | DE Feature 1,DE Feature 2 | ~~~                   | ~~~                                                                                                                                                               |
       |              | ~~~       | ~~~        | ~~~               | ~~~              | el       | 0                   | EL Feature 1,EL Feature 2 | EL Short description  | ~~~                                                                                                                                                               |
-    When I go to the content page of the type "oss_solution" with the title "ABC Solution"
+    When I visit the "ABC Solution" "oss_solution"
     Then I should see the heading "ABC Solution"
     And I should not see the following lines of text:
       | EL Short description |

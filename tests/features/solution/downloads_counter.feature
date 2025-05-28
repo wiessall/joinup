@@ -15,7 +15,7 @@ Feature:
       | Sample distribution   | Climate change tracker | 10        |
       | Sample distribution 2 | Climate change tracker | 0         |
     # Checks solutions tiles to we have the correct numbers.
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the "Climate change tracker" tile
     And I should see the statistics "10" in the "Climate change tracker" tile
     When I go to the homepage of the "Climate change tracker" solution
@@ -26,7 +26,7 @@ Feature:
     # Check it again after the first distribution is deleted and cache has been cleared.
     Then I should not see the text "Downloads: 10"
     # Go back to the solution tiles page and check downloads are disappeared.
-    When I visit the solution overview
+    When I visit the solution overview page
     Then the download icon should not be shown in the "Climate change tracker" tile
     Given distribution content:
       | title                 | solution               | downloads |

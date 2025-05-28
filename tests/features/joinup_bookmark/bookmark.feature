@@ -42,7 +42,7 @@ Feature: Bookmark/Unbookmark feature.
       | Bookmark content | Batman Begins |
 
     When I am logged in as "Gregory Bookmark"
-    And I go to the content page of the type "<content type>" with the title "Bookmark content"
+    And I visit the "Bookmark content" "<content type>"
     Then I should see the link "Bookmark" in the "Bookmark block"
 
     Examples:
@@ -89,10 +89,10 @@ Feature: Bookmark/Unbookmark feature.
     And I am on the homepage
     And I click "Bookmark" in the "Navigation bar"
     Then I should see the text "There are no bookmarked items."
-    And I go to the content page of the type "news" with the title "Bookmark news one"
+    And I visit the "Bookmark news one" "news"
     And I click "Bookmark" in the "Bookmark block" region
     And I wait for 1 second
-    Then I go to the content page of the type "news" with the title "Bookmark news two"
+    Then I visit the "Bookmark news two" "news"
     And I click "Bookmark" in the "Bookmark block" region
     And I wait for 1 second
     Then I go to the homepage of the "Batman Begins" solution
@@ -109,10 +109,10 @@ Feature: Bookmark/Unbookmark feature.
       | 1 Solution |
 
     When I am logged in as "Lisa Bookmark"
-    And I go to the content page of the type "news" with the title "Bookmark news three"
+    And I visit the "Bookmark news three" "news"
     And I click "Bookmark" in the "Bookmark block" region
     And I wait for 1 second
-    Then I go to the content page of the type "news" with the title "Ohter news"
+    Then I visit the "Ohter news" "news"
     And I click "Bookmark" in the "Bookmark block" region
     And I wait for 1 second
     Then I go to the homepage of the "Batman" collection

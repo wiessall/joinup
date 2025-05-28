@@ -166,10 +166,10 @@ Feature: Collection moderation
     And collection content:
       | title          | logo     | topic             | state    |
       | Some berry pie | logo.png | Supplier exchange | proposed |
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should not see the text "Some berry pie"
 
     When I go to my dashboard
@@ -180,7 +180,7 @@ Feature: Collection moderation
     And I press "Publish"
     Then I should see the heading "No berry pie"
 
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
@@ -226,7 +226,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
-    And I go to the "edit-form" content page of the type "collection" with the title "Spectres in fog"
+    And I go to the edit form of the "Spectres in fog" collection
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
