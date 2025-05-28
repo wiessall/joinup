@@ -134,7 +134,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "IOP published news" tile
     But I should not see the "IOP archived news" tile
 
-    When I go to the "edit-form" content page of the type "custom_page" with the title "IOP page"
+    When I go to the edit form of the "IOP page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
@@ -143,7 +143,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "IOP archived news" tile
     But I should not see the "IOP published news" tile
 
-    When I go to the "edit-form" content page of the type "custom_page" with the title "IOP page"
+    When I go to the edit form of the "IOP page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region

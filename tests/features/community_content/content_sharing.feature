@@ -62,7 +62,7 @@ Feature: Sharing content between collections
 
     # Anonymous users can share only in social networks.
     When I am an anonymous user
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -70,7 +70,7 @@ Feature: Sharing content between collections
     # This "authenticated user" is not member of any collections or solution, so they can
     # share only in social networks.
     When I am logged in as an "authenticated user"
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -78,7 +78,7 @@ Feature: Sharing content between collections
     # A member of a single collection or solution which is the one where the content was
     # created can share on social networks only.
     When I am logged in as "Marjolein Rye"
-    And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -95,7 +95,7 @@ Feature: Sharing content between collections
     But the following fields should not be present "Classic Rock, Power ballad"
 
     # Verify on another node the correctness of the share tool.
-    When I go to the content page of the type "<content type>" with the title "Interesting content"
+    When I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
     And the following fields should be present "Classic Rock, Drum'n'Bass"
@@ -159,7 +159,7 @@ Feature: Sharing content between collections
     And the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking"
 
     # Verify that the content is again shareable.
-    When I go to the content page of the type "<content type>" with the title "Interesting content"
+    When I visit the "Interesting content" "<content type>"
     When I click "Share"
     Then a modal should open
     And the following fields should be present "Classic Rock"
@@ -205,12 +205,12 @@ Feature: Sharing content between collections
       | Essos city   | Arya Stark | facilitator |
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     And I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "John Snow"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
@@ -222,13 +222,13 @@ Feature: Sharing content between collections
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
 
-    When I visit the content overview
+    When I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Simple members can still not unshare content from any group.
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview
+    And I visit the content overview page
     # Link 'Unshare' vary by user og role since the 2 users up to now have the same permissions outside og.
     Then I should see the contextual links "Share, Unshare" in the "Iron throne" tile
     When I click the contextual link "Unshare" in the "Iron throne" tile
@@ -236,7 +236,7 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     When I am logged in as "Jamie Lanister"
-    And I visit the content overview
+    And I visit the content overview page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Moderators should be able to unshare from every group the content is shared on.
     And I should see the contextual link "Unshare" in the "Iron throne" tile
@@ -286,7 +286,7 @@ Feature: Sharing content between collections
     Then I should see the "Venus content" tile
     And the "Venus content" tile should not be marked as shared
 
-    And I visit the content overview
+    And I visit the content overview page
     Then the "Earth content" tile should not be marked as shared
     And the "Mars content" tile should not be marked as shared
     And the "Venus content" tile should not be marked as shared
@@ -367,7 +367,7 @@ Feature: Sharing content between collections
       | Secrets    | Sanjica Sauvage |
       | Gossip     | Sanjica Sauvage |
     And I am an anonymous user
-    When I go to the content page of the type "<content type>" with the title "An unshareable secret"
+    When I visit the "An unshareable secret" "<content type>"
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:
@@ -377,7 +377,7 @@ Feature: Sharing content between collections
 
     # Check that the collection the content is shared on is immediately shown in the "Shared on" tiles.
     Given I am logged in as "Sanjica Sauvage"
-    When I go to the content page of the type "<content type>" with the title "An unshareable secret"
+    When I visit the "An unshareable secret" "<content type>"
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:

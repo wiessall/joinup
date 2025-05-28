@@ -32,7 +32,7 @@ Feature:
       | field_body:value  | <table><tbody><tr><td>single table cell</td></tr></tbody></table> |
       | field_body:format | text_html                                                         |
 
-    When I go to the "Table page example" custom page
+    When I go to the "Table page example" custom_page
     Then I should see an "td" element with the text "single table cell" in the "Content" region
 
   @javascript
@@ -61,5 +61,5 @@ Feature:
       | field_body:value  | <a id="anchorlinkid"></a> |
       | field_body:format | text_html                 |
 
-    When I go to the "Anchor link" custom page
+    When I go to the "Anchor link" custom_page
     Then the response should contain "<a id=\"anchorlinkid\"></a>"

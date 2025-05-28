@@ -139,7 +139,7 @@ Feature:
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Nintendo64"
 
-    When I go to the "Latest news" custom page
+    When I go to the "Latest news" custom_page
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "NEC VR4300 CPU" tile
     But I should not see the "20 year anniversary" tile
@@ -151,7 +151,7 @@ Feature:
     And I press "Submit" in the "Modal buttons" region
     Then I should see the success message "Item was unshared from the following groups: Nintendo64"
 
-    When I go to the "Latest news" custom page
+    When I go to the "Latest news" custom_page
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -249,7 +249,7 @@ Feature:
     And I check "Nintendo64"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Nintendo64"
-    When I go to the "Chosen content" custom page
+    When I go to the "Chosen content" custom_page
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -296,7 +296,7 @@ Feature:
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
+    And I go to the edit form of the "Chosen content" "custom page"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
@@ -307,13 +307,13 @@ Feature:
     # When a query preset is entered, the query builder should not be available
     # anymore to facilitators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
+    And I go to the edit form of the "Chosen content" "custom page"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "custom_page" with the title "Chosen content"
+    And I go to the edit form of the "Chosen content" "custom page"
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should be present "Available filters"
 
@@ -391,11 +391,11 @@ Feature:
     """
     And I am logged in as a moderator
 
-    When I go to the "Manuals" custom page
+    When I go to the "Manuals" custom_page
     Then I should see the "User's Guide" tile
     But I should not see the "Licence" tile
 
-    When I go to the "Licences" custom page
+    When I go to the "Licences" custom_page
     Then I should see the "Licence" tile
     But I should not see the "User's Guide" tile
 
@@ -456,7 +456,7 @@ Feature:
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
-    When I go to the "All content" custom page
+    When I go to the "All content" custom_page
     # All tiles are available.
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
@@ -481,7 +481,7 @@ Feature:
     And I press "Publish"
     Then I should see the text "Current wars"
 
-    When I go to the "All content" custom page
+    When I go to the "All content" custom_page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars                          |
@@ -496,7 +496,7 @@ Feature:
     And I press "Update"
     Then I should see the text "Current wars is over"
 
-    When I go to the "All content" custom page
+    When I go to the "All content" custom_page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars is over                  |
@@ -677,7 +677,7 @@ Feature:
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Pagination bug" title:
       | content_listing:value | a:7:{s:6:"fields";a:2:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}s:22:"content_listing_status";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:19:"entity_bundle\|event";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:1:"2";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
-    When I go to the "Pagination bug" custom page
+    When I go to the "Pagination bug" custom_page
     And I click "Go to page 2"
     Then I should see the tiles in the correct order:
       | News pagination 3   |
@@ -708,12 +708,12 @@ Feature:
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
-    And I go to the "Multi paragraph facets" custom page
+    And I go to the "Multi paragraph facets" custom_page
     Then I should see the heading "Multi paragraph facets"
     And I should see the following facet items "Discussion, Event, News" in this order
 
     Given I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
-    And I go to the "Multi paragraph facets" custom page
+    And I go to the "Multi paragraph facets" custom_page
     Then I should see the heading "Multi paragraph facets"
     And I should not see the following facet items "Discussion, Event, News"

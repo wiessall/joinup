@@ -23,21 +23,6 @@ class ReleaseContext extends RawDrupalContext {
   use SearchTrait;
 
   /**
-   * Navigates to the canonical page display of a release.
-   *
-   * @param string $release
-   *   The name of the release.
-   *
-   * @When I go to (the homepage of )the :release release
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitRelease(string $release): void {
-    $entity = $this->getEntityByLabel('node', $release);
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Handles release specific fields.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
