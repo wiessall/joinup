@@ -20,14 +20,14 @@ Feature: Global Interoperable search
     And the modal should be closed
 
     When I am an anonymous user
-    And I visit the search page
+    And I visit the advanced search page
     Then the "Interoperable" checkbox facet should allow selecting the following values "Show only Interoperable Solutions"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "Show only Interoperable Solutions" checkbox from the "Interoperable" facet
     Then the page should show the tiles "eGovernment"
 
-    When I visit the search page
+    When I visit the advanced search page
     # The Portal in installed by default.
     # @see joinup_test.install
     And I check the "Collections (2)" checkbox from the "Content types" facet

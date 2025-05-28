@@ -56,23 +56,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the canonical page display of a collection.
-   *
-   * @param string $collection
-   *   The title of the collection.
-   *
-   * @When I go to (the homepage of )the :collection collection
-   * @When I visit (the homepage of )the :collection collection
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitCollection(string $collection): void {
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $this->getEntityByLabel('node', $collection, 'collection');
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Navigates to the Code of Conduct consent page of a collection.
    *
    * @param string $collection
@@ -150,7 +133,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
    *
-   * @When I visit the collection overview( page)
+   * @Given I visit the collection overview page
    */
   public function visitCollectionOverviewPage(): void {
     $this->visitPath('/collections');

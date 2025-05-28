@@ -59,7 +59,7 @@ Feature: User interface for the File URL field
       | Document title | Abstract | Body                  | draft | document      |
 
     Given I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "document" with the title "Document title"
+    And I go to the edit form of the "Document title" document
     Then I should see the text "Upload a new file or enter a URL"
     And I select the radio button "Remote file URL"
     And I fill in "field_file[0][file_url_remote]" with "foo"

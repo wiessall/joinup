@@ -47,7 +47,7 @@ Feature: Notification test for the document transitions on a post moderated pare
 
     # Test 'update' operation.
     When I am logged in as "CC member"
-    And I go to the "edit-form" content page of the type "document" with the title "CC notify post publish"
+    And I go to the edit form of the "CC notify post publish" document
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                |
@@ -55,7 +55,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | body      | CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "document" with the title "CC notify post request changes"
+    And I go to the edit form of the "CC notify post request changes" document
     And I press "Request changes"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
@@ -66,7 +66,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | body      | the Facilitator, CC Facilitator has requested you to modify the document - "CC notify post request changes" in the collection: "CC collection", with the following motivation: "Can you do some changes?". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "document" with the title "CC notify post report"
+    And I go to the edit form of the "CC notify post report" document
     And I press "Report"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
@@ -77,7 +77,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | body      | the Facilitator, CC Facilitator has requested you to modify the document - "CC notify post report" in the collection: "CC collection", with the following motivation: "Your content is reported". |
 
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "document" with the title "CC notify post approve proposed"
+    And I go to the edit form of the "CC notify post approve proposed" document
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                        |
@@ -86,7 +86,7 @@ Feature: Notification test for the document transitions on a post moderated pare
 
     # Test 'delete' operation.
     When I am logged in as "CC facilitator"
-    And I go to the "edit-form" content page of the type "document" with the title "CC notify post delete"
+    And I go to the edit form of the "CC notify post delete" document
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
