@@ -79,10 +79,6 @@ Feature: Collections Overview
     And I visit the collection overview page
     Then I should see the link "Colonies in space"
 
-    # Clean up the collection that was created manually.
-    Then I delete the "Colonies in space" collection
-    And I delete the "Overviewer contact" "contact information"
-
   Scenario: Custom pages should not be visible on the overview page
     Given collection content:
       | title | logo     | moderation |

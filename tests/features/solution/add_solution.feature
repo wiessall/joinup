@@ -168,9 +168,6 @@ Feature: "Add solution" visibility options.
 
     When I visit "/user"
     Then I should see the link "V60 filter coffee solution"
-    # Clean up the solutions that were created through the UI.
-    Then I delete the "V60 filter coffee solution" solution
-    Then I delete the "Espresso is the solution" solution
 
   Scenario: Correct transition buttons are shown after a partial filled form is submitted.
     # This is a regression test for a bug that was causing the owner state
@@ -265,13 +262,6 @@ Feature: "Add solution" visibility options.
     And I click "Climate change tracker"
     And I click "Edit" in the "Entity actions" region
     Then I should see the warning message "A solution with the same name exists in a different collection."
-
-    # Clean up the entities that were created through the UI. We have no control
-    # over which of the two identically named solutions is deleted first, so
-    # let's just get rid of both.
-    Then I delete the "Climate change tracker" solution
-    And I delete the "Climate change tracker" solution
-    And I delete the "Angela Crespi" "contact information"
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.

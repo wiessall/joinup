@@ -68,9 +68,6 @@ Feature: Collections/Solutions settings
     Then I should see the heading "Solution Beta solution settings"
     And the "Announcements enabled" checkbox should be checked
 
-    # Cleanup.
-    And I delete the "Solution Beta" solution
-
   Scenario: Testing group settings permissions
     Given collection content:
       | title          |
