@@ -80,9 +80,6 @@ Feature: Subscribing to a solution
     And I should see the success message "You have been logged in."
     And I should see the success message "You are already subscribed to Some solution to subscribe."
 
-    # Clean up the user that was created manually during the scenario.
-    Then I delete the "Jonathan Teatime" user
-
   @javascript
   Scenario: Logged out users can subscribe to a solution after logging in
     Given users:
