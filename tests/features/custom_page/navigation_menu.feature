@@ -235,7 +235,7 @@ Feature: Navigation menu for custom pages
     Then I should not see the "Table of contents" region
 
     # Only the sub-page links of "Page 1" are rendered.
-    When I visit the "Page 1" custom page
+    When I visit the "Page 1" custom_page
     Then I should see the link "Subpage 1-1" in the "Table of contents"
     And I should see the link "Subpage 1-2" in the "Table of contents"
     But I should not see the link "Page 1" in the "Table of contents"
@@ -247,7 +247,7 @@ Feature: Navigation menu for custom pages
     And I should see the link "Subpage 1-2-2" in the "Table of contents"
 
     # Visit "Subpage 1-1" to verify that appropriate children are expanded.
-    When I visit the "Subpage 1-1" custom page
+    When I visit the "Subpage 1-1" custom_page
     Then I should see the link "Subpage 1-1" in the "Table of contents"
     And I should see the link "Subpage 1-1-1" in the "Table of contents"
     And I should see the link "Subpage 1-2" in the "Table of contents"
@@ -259,7 +259,7 @@ Feature: Navigation menu for custom pages
     And I should see the link "Subpage 1-2-2" in the "Table of contents"
 
     # Visit "Subpage 1-2" to verify that appropriate children are expanded.
-    When I visit the "Subpage 1-2" custom page
+    When I visit the "Subpage 1-2" custom_page
     Then I should see the link "Subpage 1-1" in the "Table of contents"
     And I should see the link "Subpage 1-2" in the "Table of contents"
     And I should see the link "Subpage 1-2-1" in the "Table of contents"
@@ -278,7 +278,7 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Members" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
-    When I visit the "Page 2" custom page
+    When I visit the "Page 2" custom_page
     Then I should see the link "Subpage 2-1" in the "Table of contents"
     But I should not see the link "Page 2" in the "Table of contents"
     And I should not see the link "Page 1" in the "Table of contents"
@@ -286,12 +286,12 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Subpage 1-2" in the "Table of contents"
 
     # On a custom page without sub-pages there's no table of contents.
-    When I visit the "Page 3" custom page
+    When I visit the "Page 3" custom_page
     Then I should not see the "Table of contents" region
 
     # Verify that the menu only shows on the canonical route.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "custom_page" with the title "Page 1"
+    And I go to the edit form of the "Page 1" "custom page"
     Then I should not see the "Table of contents" region
 
     Examples:
@@ -455,7 +455,7 @@ Feature: Navigation menu for custom pages
     And I go to the homepage of the "Table of contents outline" <group>
     Then I should not see the "Table of contents outline" region
 
-    When I visit the "TOCO 1" custom page
+    When I visit the "TOCO 1" custom_page
     Then I should not see the link "Up" in the "Table of contents outline"
     # This link does not exist because the outline does not contain connection to the default links just as TOC does.
     And I should not see the link "About" in the "Table of contents outline"
@@ -470,7 +470,7 @@ Feature: Navigation menu for custom pages
     And I click "TOCO 1-2" in the "Table of contents outline"
     And I should not see the link "TOCO 2" in the "Table of contents outline"
 
-    When I visit the "TOCO 2" custom page
+    When I visit the "TOCO 2" custom_page
     Then I click "TOCO 2-1" in the "Table of contents outline"
 
     And I click "TOCO 2-1-1" in the "Table of contents outline"
@@ -480,28 +480,28 @@ Feature: Navigation menu for custom pages
     And I click "TOCO 2" in the "Table of contents outline"
     And I should not see the link "TOCO 1-2" in the "Table of contents outline"
 
-    When I visit the "TOCO 1-2" custom page
+    When I visit the "TOCO 1-2" custom_page
     And I click "TOCO 1-1-2" in the "Table of contents outline"
     And I click "TOCO 1-1-1" in the "Table of contents outline"
     And I click "TOCO 1-1" in the "Table of contents outline"
     And I click "TOCO 1" in the "Table of contents outline"
     # Navigate through the "Up" link.
-    When I visit the "TOCO 2" custom page
+    When I visit the "TOCO 2" custom_page
     Then I should not see the link "Up" in the "Table of contents outline"
-    When I visit the "TOCO 1-2" custom page
+    When I visit the "TOCO 1-2" custom_page
     And I click "Up" in the "Table of contents outline"
     Then I should see the heading "TOCO 1"
-    When I visit the "TOCO 1-1-2" custom page
+    When I visit the "TOCO 1-1-2" custom_page
     And I click "Up" in the "Table of contents outline"
     Then I should see the heading "TOCO 1-1"
 
     # Verify that the menu only shows on the canonical route.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "custom_page" with the title "TOCO 1"
+    And I go to the edit form of the "TOCO 1" "custom page"
     Then I should not see the "Table of contents outline" region
 
     When I disable "TOCO 1-1-2" in the navigation menu of the "Table of contents outline" <group>
-    And I visit the "TOCO 1-1-1" custom page
+    And I visit the "TOCO 1-1-1" custom_page
     Then I should not see the link "TOCO 1-1-2" in the "Table of contents outline"
 
     Examples:
@@ -522,7 +522,7 @@ Feature: Navigation menu for custom pages
       | title           | parent        | weight |
       | TOCO cached 1   |               | 1      |
       | TOCO cached 1-1 | TOCO cached 1 | 1      |
-    When I visit the "TOCO cached 1-1" custom page
+    When I visit the "TOCO cached 1-1" custom_page
     Then I should see the link "Up" in the "Table of contents outline"
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
@@ -537,7 +537,7 @@ Feature: Navigation menu for custom pages
       | TOCO cached 1   |        |
       | TOCO cached 1-1 |        |
     When I press "Save"
-    And I visit the "TOCO cached 1-1" custom page
+    And I visit the "TOCO cached 1-1" custom_page
     Then I should not see the link "Up" in the "Table of contents outline"
 
     Examples:

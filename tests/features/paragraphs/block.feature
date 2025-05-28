@@ -26,7 +26,7 @@ Feature: Block paragraph tests.
     And the modal should be closed
 
     When I am an anonymous user
-    And I visit the "Recommended solutions" custom page
+    And I visit the "Recommended solutions" custom_page
     Then I should see the "Early Omega" tile
     But I should not see the "Snake Timely" tile
 

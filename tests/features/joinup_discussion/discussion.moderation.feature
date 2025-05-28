@@ -31,7 +31,7 @@ Feature: Discussion moderation
 
     # Mark the discussion as "Needs update" after a report.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "discussion" with the title "Best method to cut logs"
+    And I go to the edit form of the "Best method to cut logs" discussion
     Then I should see the heading "Edit Discussion Best method to cut logs"
     And the following fields should be present "Motivation"
     And the current workflow state should be "Published"
@@ -42,7 +42,7 @@ Feature: Discussion moderation
 
     # The owner can propose changes.
     When I am logged in as "Gabe Rogers"
-    And I go to the "edit-form" content page of the type "discussion" with the title "Best method to cut logs"
+    And I go to the edit form of the "Best method to cut logs" discussion
     Then the current workflow state should be "Needs update"
     When I fill in "Title" with "Best method to cut wood logs"
     And I press "Propose"
@@ -59,7 +59,7 @@ Feature: Discussion moderation
 
     # Approve changes as a moderator.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "discussion" with the title "Best method to cut logs"
+    And I go to the edit form of the "Best method to cut logs" discussion
     Then I should see the heading "Edit Discussion Best method to cut Eucalyptus wood logs"
     And I press "Publish"
     # The published is updated.
@@ -67,7 +67,7 @@ Feature: Discussion moderation
 
     # Disable the discussion as facilitator.
     When I am logged in as "Brigham Salvage"
-    And I go to the "edit-form" content page of the type "discussion" with the title "Best method to cut Eucalyptus wood logs"
+    And I go to the edit form of the "Best method to cut Eucalyptus wood logs" discussion
     Then the current workflow state should be "Published"
     When I press "Archive"
     # The discussion is kept published.
@@ -109,7 +109,7 @@ Feature: Discussion moderation
 
     # Disable the discussion with the facilitator.
     When I am logged in as "Lance Rustici"
-    And I go to the "edit-form" content page of the type "discussion" with the title "What's the best escape gift?"
+    And I go to the edit form of the "What's the best escape gift?" discussion
     And I press "Archive"
     Then I should see the message "Discussion What's the best escape gift? has been updated"
 
