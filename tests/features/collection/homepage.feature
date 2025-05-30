@@ -204,7 +204,6 @@ Feature: Collection homepage
     And I click "Settings" in the "Entity actions" region
     Then the following fields should be present "Landing page"
     When I select "Custom Landing Page" from "Landing page"
-    And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save"
     Then I should see the heading "Middle earth daily"
     And I should see the heading "Custom Landing Page"

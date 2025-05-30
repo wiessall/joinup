@@ -505,12 +505,7 @@ class JoinupGroupContext extends RawDrupalContext {
 
       foreach ($meta_fields as $field) {
         if (property_exists($node, $field)) {
-          if (isset($fieldMapping[$field])) {
-            $meta_entity->set($field, $fieldMapping[$field][$node->$field]);
-          }
-          else {
-            $meta_entity->set($field, $node->$field);
-          }
+          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
           unset($node->$field);
         }
       }

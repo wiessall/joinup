@@ -189,6 +189,7 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
   protected function getEntityStatusFacets(QueryInterface $query): array {
     $item = $query->getOption('search_api_field item');
     $facetSourceId = 'search_api_field:' . $item->getEntity()->getEntityTypeId() . '.' . $item->getEntity()->bundle() . '.' . $item->getParent()->getName();
+
     $facets = $this->facetManager->getFacetsByFacetSourceId($facetSourceId);
     return array_filter($facets, function (FacetInterface $facet) {
       return $facet->getFieldIdentifier() === 'entity_status';
