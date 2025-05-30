@@ -131,7 +131,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     foreach ($this->createAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $content_creation_data) {
         foreach ($content_creation_data as $content_creation => $allowed_roles) {
-          if ($parent_bundle == 'solution' || $parent_bundle == 'collection') {
+          if (in_array($parent_bundle, ['collection', 'solution'], TRUE)) {
             $parent = $this->createParent($parent_bundle);
             $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, $parent_bundle . '_settings');
             $meta_entity->set('group_moderation', $moderation);

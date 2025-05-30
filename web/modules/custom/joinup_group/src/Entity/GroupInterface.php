@@ -218,14 +218,6 @@ interface GroupInterface extends
   public function isModerated(): bool;
 
   /**
-   * Returns the field name of the group moderation field.
-   *
-   * @return string
-   *   The field name.
-   */
-  public function getGroupModerationFieldName(): string;
-
-  /**
    * Returns who can create content in the group.
    *
    * @return string|null
@@ -235,14 +227,6 @@ interface GroupInterface extends
    *   - \Drupal\joinup_group\ContentCreationOptions::REGISTERED_USERS
    */
   public function getContentCreators(): ?string;
-
-  /**
-   * Returns the field name of the content creation field.
-   *
-   * @return string
-   *   The field name.
-   */
-  public function getContentCreationFieldName(): string;
 
   /**
    * Returns recursively all content IDs of this group.

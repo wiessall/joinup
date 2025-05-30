@@ -158,7 +158,7 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function isModerated(): bool {
-    $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, $this->bundle() . '_settings');
+    $meta_entity = MetaEntity::loadOrCreate($this->bundle() . '_settings', $this);
     return ($meta_entity instanceof MetaEntityInterface) ? (bool) $meta_entity->get('group_moderation')->value : TRUE;
   }
 
@@ -166,7 +166,7 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
-    $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, $this->bundle() . '_settings');
+    $meta_entity = MetaEntity::loadOrCreate($this->bundle() . '_settings', $this);
     return ($meta_entity instanceof MetaEntityInterface) ? $meta_entity->get('content_creation')->value : ContentCreationOptions::FACILITATORS_AND_AUTHORS;
   }
 
@@ -314,22 +314,8 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupModerationFieldName(): string {
-    return 'group_moderation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getAbstractField(): string {
     return 'abstract';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContentCreationFieldName(): string {
-    return 'content_creation';
   }
 
 }

@@ -185,61 +185,6 @@ Feature: Collection moderation
     And I should not see the text "Some berry pie"
 
   @javascript @uploadFiles:logo.png
-  Scenario: Moderate an open collection
-    # Regression test for a bug that caused the slider that controls the
-    # content creation setting to revert to default state when the form is
-    # resubmitted, as happens during moderation. Ref. ISAICP-3200.
-    # Note that this is an issue that affected the legacy eLibrary slider which
-    # has been replaced with the Content creation radio buttons, but we are
-    # keeping the coverage for now.
-    Given I am logged in as a user with the "authenticated" role
-    # Propose a collection, filling in the required fields.
-    When I go to the propose collection form
-    Then the "Main fields" accordion section should be active
-    And I fill in the following:
-      | Title    | Spectres in fog        |
-      | Abstract | The fog is haunted.    |
-      # Contact information data.
-      | Name     | A secretary in the fog |
-      | E-mail   | fog@example.com        |
-    And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Katsumoto"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
-    And I expand the "Additional fields" accordion section
-    Then the "Additional fields" accordion section should be active
-    And I attach the file "logo.png" to "Logo"
-
-    # Regression test for a bug that caused the content creation setting to be
-    # lost when adding an item to a multivalue field. Ref. ISAICP-3200.
-    # Note that this is an issue that affected the legacy eLibrary slider which
-    # has been replaced with the Content creation radio buttons, but we are
-    # keeping the coverage for now.
-    When I press "Add another item" at the "Geographical coverage" field
-
-    # Submit the form and approve it as a moderator. This should not cause the
-    # content creation option to change.
-    When I press "Propose"
-    And the "content_creation" setting of the "Spectres in fog" collection is set to "members"
-    Then I should see the heading "Spectres in fog"
-    When I am logged in as a user with the "moderator" role
-    And I go to the edit form of the "Spectres in fog" collection
-    And I expand the "Additional fields" accordion section
-    # Also when saving and reopening the edit form the content creation option
-    # should remain unchanged.
-    When I press "Publish"
-    And the "content_creation" setting of the "Spectres in fog" collection is set to "members"
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    And I expand the "Additional fields" accordion section
-
-    # Clean up the entities that were created.
-    Then I delete the "Spectres in fog" collection
-    And I delete the "A secretary in the fog" "contact information"
-
-  @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
     # creation setting happens after an ajax callback.
@@ -271,6 +216,7 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I expand the "Additional fields" accordion section
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
     And I delete the "Domestic secretary" "contact information"
@@ -307,7 +253,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
     And I delete the "Secretary of thieves" "contact information"
@@ -338,7 +283,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     When I press "Add another item" at the "Geographical coverage" field
-
     # Save the collection.
     When I press "Propose"
     Then I should see the heading "Silken Emperor"
@@ -346,7 +290,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
     And I delete the "Secretary of Silk" "contact information"
@@ -385,7 +328,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
     And I delete the "Secretary of the harbor" "contact information"
