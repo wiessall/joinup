@@ -50,6 +50,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     When I go to the homepage of the "Some collection" collection
     And I click "Settings" in the "Entity actions" region
     And I select "All" from "Show content"
+    And the "Enable the search field" checkbox should be checked
     And I press "Save"
     Then I should see the heading "Some collection"
     Then I should see the following tiles in the correct order:

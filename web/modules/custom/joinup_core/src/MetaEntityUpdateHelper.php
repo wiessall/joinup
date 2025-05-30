@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_core;
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\SynchronizableInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\UpdateException;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
@@ -130,29 +129,25 @@ class MetaEntityUpdateHelper {
       $sandbox['nids_to_process'] = $nids;
       $sandbox['total'] = count($sandbox['nids_to_process']);
       $sandbox['processed'] = 0;
-      $sandbox[$bundle . 'SettingsCount'] = 0;
     }
 
-    $nidsToProcess = array_splice($sandbox['nids_to_process'], 0, 50);
+    $nids_to_process = array_splice($sandbox['nids_to_process'], 0, 50);
 
-    foreach ($nidsToProcess as $nid) {
+    foreach ($nids_to_process as $nid) {
       $entity = $node_storage->load($nid);
 
       try {
-        if (!$entity instanceof SolutionInterface && !$entity instanceof CollectionInterface) {
-          throw new \Exception("Entity must be a solution or collection.");
+        if (!$entity instanceof ContentEntityInterface) {
+          throw new \Exception("Entity must be ContentEntityInterface.");
         }
         $meta_entity = MetaEntity::loadOrCreate($bundle . '_settings', $entity);
-        $moderation = (int) $entity->get('group_moderation')->value;
-        $meta_entity->set('group_moderation', $moderation);
-        $meta_entity->set('content_creation', $entity->get('content_creation')->value);
-        $meta_entity->set('listing_content', $entity->get('listing_content')->getValue());
-        if ($meta_entity->hasField('list_related_entities')) {
-          $list_related_entities = (int) $entity->get('list_related_entities')->value;
-          $meta_entity->set('list_related_entities', $list_related_entities);
+        $fields = ['group_moderation', 'content_creation', 'listing_content', 'list_related_entities'];
+        foreach ($fields as $field_name) {
+          if ($meta_entity->hasField($field_name)) {
+            $meta_entity->set($field_name, $entity->get($entity)->getValue());
+          }
         }
         $meta_entity->save();
-        $sandbox[$bundle . 'SettingsCount']++;
       }
       catch (\Exception $e) {
         throw new UpdateException(sprintf(
@@ -163,15 +158,14 @@ class MetaEntityUpdateHelper {
       }
     }
 
-    $sandbox['processed'] += count($nidsToProcess);
+    $sandbox['processed'] += count($nids_to_process);
     $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
     return sprintf(
-      "Processed %s of %s %s content. Migrated %s entities so far.",
+      "Processed %s of %s %s content.",
       $sandbox['processed'],
       $sandbox['total'],
       $bundle,
-      $sandbox[$bundle . 'SettingsCount'],
     );
   }
 

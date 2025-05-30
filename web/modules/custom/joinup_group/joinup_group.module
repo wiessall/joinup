@@ -1193,7 +1193,7 @@ function joinup_group_content_creation_allowed_values(FieldStorageDefinitionInte
     return $values;
   }
 
-  if ($entity instanceof MetaEntityInterface && !$entity->getTargetEntity() instanceof SolutionInterface) {
+  if (!$entity->getTargetEntity() instanceof SolutionInterface) {
     return $values;
   }
 
