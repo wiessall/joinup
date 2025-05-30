@@ -143,6 +143,8 @@ function _normalize_keyword_name(string $name): string {
   $name = strtolower($name);
   $name = preg_replace('/\s+/', ' ', $name);
   $name = trim($name);
+  // Replace parenthesis with [] to avoid issues with selection.
+  $name = str_replace(['(', ')'], ['[', ']'], $name);
   // Remove the trailing s to combine the singular and plural forms.
   return preg_replace('/s$/', '', $name);
 }
