@@ -55,8 +55,8 @@ class JoinupSearchContext extends RawDrupalContext {
   /**
    * Navigates to the search page.
    *
-   * @Given I am on the search( results)( page)
-   * @When I visit the search( results)( page)
+   * @Given I am on the advanced search page
+   * @When I visit the advanced search page
    */
   public function visitSearchPage(): void {
     $this->visitPath('/search');

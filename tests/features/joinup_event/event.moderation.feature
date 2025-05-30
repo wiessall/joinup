@@ -31,7 +31,7 @@ Feature: Event moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
+    And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
     Then I press "Publish"
     And the "group_moderation" setting of the "Wet Lords" collection is set to "yes"
@@ -49,7 +49,7 @@ Feature: Event moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
+    And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
     And I check "Closed collection"
     And I press "Publish"

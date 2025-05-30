@@ -90,7 +90,7 @@ Feature: Collection homepage
   Scenario: Blocked users are not counted towards total member count.
     # Cache the collection overview page.
     When I am not logged in
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "3" in the "Under the mountain" tile
 
     Given I am logged in as a moderator
@@ -109,7 +109,7 @@ Feature: Collection homepage
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "4" in the "Under the mountain" tile
 
     # Block the user to ensure again that the counters are updated.
@@ -129,5 +129,5 @@ Feature: Collection homepage
     Then the "Roles" field should contain the "- Any - (3)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "3" in the "Under the mountain" tile

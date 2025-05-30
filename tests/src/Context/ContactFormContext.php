@@ -14,9 +14,9 @@ class ContactFormContext extends RawDrupalContext {
   /**
    * Navigates to the contact form.
    *
-   * @When I go to the contact form
-   * @When I visit the contact form
-   * @When I am on the contact form
+   * @When I go to the contact form page
+   * @When I visit the contact form page
+   * @When I am on the contact form page
    */
   public function visitContactForm(): void {
     $this->visitPath('contact');

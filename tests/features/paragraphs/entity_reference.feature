@@ -28,5 +28,5 @@ Feature:
     And I press "Update"
 
     When I am an anonymous user
-    And I visit the "Entity reference page" custom page
+    And I visit the "Entity reference page" custom_page
     Then I should see the "Related content" tile
