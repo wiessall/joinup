@@ -36,6 +36,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
+use Drupal\taxonomy\TermInterface;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
@@ -2190,6 +2191,34 @@ class FeatureContext extends RawDrupalContext {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();
     Assert::assertSame(0, $queue->numberOfItems());
+  }
+
+  /**
+   * Asserts that a solution refers to a set of keywords.
+   *
+   * @param string $entityLabel
+   *   The label of the entity.
+   * @param string $entityBundle
+   *   The bundle of the entity.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node containing the keywords.
+   *
+   * @Then the :entityLabel :entityBundle should refer to the following keywords:
+   */
+  public function theSolutionShouldReferToTheFollowingKeywords(string $entityLabel, string $entityBundle, TableNode $table): void {
+    $entityBundle = $this->translateBundle($entityBundle);
+    $node = $this->getEntityByLabel('node', $entityLabel, $entityBundle);
+    $keywords = $node->get('keywords')->referencedEntities();
+    $expectedKeywords = array_map(function (string $keyword): string {
+      return trim($keyword);
+    }, $table->getColumn(0));
+
+    $actualKeywords = array_map(function (TermInterface $keyword): string {
+      return $keyword->label();
+    }, $keywords);
+    sort($expectedKeywords);
+    sort($actualKeywords);
+    Assert::assertSame($expectedKeywords, $actualKeywords, sprintf('The keywords of the %s %s do not match the expected keywords.', $entityBundle, $entityLabel));
   }
 
 }
