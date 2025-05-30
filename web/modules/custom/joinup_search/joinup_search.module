@@ -224,54 +224,39 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
 /**
  * Implements hook_entity_prepare_view().
  */
-
-/**
- * Implements hook_entity_prepare_view().
- */
 function joinup_search_entity_prepare_view(string $entity_type_id, array $entities): void {
-  $bundles = ['collection', 'solution'];
+  $bundlesToProcess = ['collection', 'solution'];
+  $fieldName = 'listing_content';
+
   foreach ($entities as $fieldHostEntity) {
-    $node = $fieldHostEntity;
-    if ($node instanceof MetaEntityInterface) {
-      // Our assumption is that this is a node. (collection or solution).
-      $node = $node->getTargetEntity();
-      if (!$node instanceof NodeInterface) {
-        continue;
-      }
-    }
-    if (!in_array($node->bundle(), $bundles)) {
-      continue;
-    }
-    if ($node->getEntityTypeId() !== 'node') {
-      continue;
-    }
-
-    $field = 'listing_content';
-    // @todo This throws a warning for null offset. This should go away when
-    //   facets for fields are re-implemented.
-    $facet = $node->bundle() . '_content_status';
-    if (!isset($fieldHostEntity->{$field}) || $fieldHostEntity->{$field}->value['enabled'] === 0 || !isset($fieldHostEntity->{$field}->value['fields'][$facet])) {
-      continue;
-    }
-
-    // Always force the display of archived content.
+    $node = $fieldHostEntity instanceof MetaEntityInterface ? $fieldHostEntity->getTargetEntity() : $fieldHostEntity;
     if (
-      $node instanceof GroupInterface &&
-      $node->isArchived()
+      !$node instanceof NodeInterface ||
+      !in_array($node->bundle(), $bundlesToProcess, TRUE)
     ) {
-      $value = $fieldHostEntity->{$field}->getValue();
-      $value[0]['value']['show_archived'] = 'archived';
-      $fieldHostEntity->{$field}->setValue($value);
+      continue;
     }
-    // Because we are forcing the facet to show the values even when they are
-    // not narrowing the results, and we are altering the query as well, we need
-    // to also dynamically hide the facet when the 'show_archived' option is set
-    // to anything else than 'all' - because it will not hide automatically.
-    elseif ($fieldHostEntity->{$field}->value['show_archived'] !== 'all') {
-      $value = $fieldHostEntity->{$field}->getValue();
-      $value[0]['value']['fields'][$facet]['region'] = 'hidden';
-      $fieldHostEntity->{$field}->setValue($value);
+
+    $facetKey = $node->bundle() . '_content_status';
+
+    if (
+      !isset($fieldHostEntity->{$fieldName}) ||
+      !isset($fieldHostEntity->{$fieldName}->value['fields'][$facetKey]) ||
+      $fieldHostEntity->{$fieldName}->value['enabled'] === 0
+    ) {
+      continue;
     }
+
+    $fieldValue = $fieldHostEntity->{$fieldName}->getValue();
+
+    if ($node instanceof GroupInterface && $node->isArchived()) {
+      $fieldValue[0]['value']['show_archived'] = 'archived';
+    }
+    elseif ($fieldValue[0]['value']['show_archived'] !== 'all') {
+      $fieldValue[0]['value']['fields'][$facetKey]['region'] = 'hidden';
+    }
+
+    $fieldHostEntity->{$fieldName}->setValue($fieldValue);
   }
 }
 

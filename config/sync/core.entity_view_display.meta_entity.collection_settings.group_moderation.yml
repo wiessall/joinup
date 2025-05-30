@@ -17,7 +17,6 @@ dependencies:
     - meta_entity.type.collection_settings
   module:
     - layout_builder
-    - options
 third_party_settings:
   layout_builder:
     enabled: false
@@ -27,13 +26,6 @@ targetEntityType: meta_entity
 bundle: collection_settings
 mode: group_moderation
 content:
-  content_creation:
-    type: list_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
   group_moderation:
     type: boolean
     label: hidden
@@ -42,12 +34,13 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   announcements_enabled: true
   changed: true
   code_of_conduct: true
+  content_creation: true
   created: true
   glossary_link_only_first: true
   label: true
