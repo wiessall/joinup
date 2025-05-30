@@ -33,7 +33,7 @@ Feature: Landing custom page.
 
     #  Page without group should not generate any errors.
     Given I am an anonymous user
-    When I visit the "Twelve Tables" custom page
+    When I visit the "Twelve Tables" custom_page
     Then I should see the heading "Twelve Tables"
 
   @javascript

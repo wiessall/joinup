@@ -490,10 +490,31 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Navigates to the content overview, a.k.a. the "Keep up to date" page.
    *
-   * @When I visit the content overview( page)
+   * @When I visit the content overview page
    */
   public function visitContentOverviewPage(): void {
     $this->visitPath('/keep-up-to-date');
+  }
+
+  /**
+   * Navigates to the canonical page display of an entity.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   An alias of a bundle as defined in the
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
+   *
+   * @Given I go to (the homepage of )the :title :bundle
+   * @Given I visit (the homepage of )the :title :bundle
+   * @Given I am on (the homepage of )the :title :bundle
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function visitCanonicalPage(string $title, string $bundle): void {
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = $this->getEntityByLabel('node', $title, $bundle);
+    $this->visitPath($node->toUrl()->toString());
   }
 
   /**
@@ -510,32 +531,14 @@ class JoinupContext extends RawDrupalContext {
    * @When I go to the :action form of the :title :bundle
    */
   public function goToEntityForm(string $action, string $title, string $bundle): void {
-    $this->visitEntityForm($action, $title, $bundle);
-  }
-
-  /**
-   * Navigates to the canonical page display of a node page.
-   *
-   * This step is only to be used in scenario outlines.
-   * If possible, use a specific page selector.
-   *
-   * @param string $type
-   *   The type of the node entity.
-   * @param string $title
-   *   The name of the news page.
-   * @param string|null $rel
-   *   (optional) The link relationship type (edit-form, delete-form,...).
-   *   Defaults to NULL (canonical).
-   *
-   * @When I go to the content page of the type :type with the title :title
-   * @When I go to the :rel content page of the type :type with the title :title
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitNodePage(string $type, string $title, ?string $rel = NULL): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, $type);
-    $this->visitPath($node->toUrl($rel)->toString());
+    if (!in_array($action, ['edit', 'delete'])) {
+      /** @var \Drupal\node\Entity\Node $node */
+      $node = $this->getEntityByLabel('node', $title, $bundle);
+      $this->visitPath($node->toUrl($action)->toString());
+    }
+    else {
+      $this->visitEntityForm($action, $title, $bundle);
+    }
   }
 
   /**

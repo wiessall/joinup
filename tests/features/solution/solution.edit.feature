@@ -92,3 +92,9 @@ Feature: Solution editing.
     And I should see the text "Solution classification" in the "Modal title"
     And I should see the text "Complete Solution" in the "Modal content" region
     And I should see the text "Artifact (product, tool, or digital service)." in the "Modal content" region
+
+  @javascript
+  Scenario: User should not see fields from other steps
+    When I am logged in as a facilitator of the "Another solution" solution
+    And I go to the edit form of the "Another solution" solution
+    And the following fields should not be visible "Motivation"

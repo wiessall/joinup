@@ -10,7 +10,7 @@ Feature: Editing collections
       | Überwaldean Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
 
     When I am logged in as a facilitator of the "Überwaldean Land Eels" collection
-    And I go to the "edit-form" content page of the type "collection" with the title "Überwaldean Land Eels"
+    And I go to the edit form of the "Überwaldean Land Eels" collection
     Then I should see the heading "Edit Collection Überwaldean Land Eels"
     Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Motivation"
     And the following field widgets should be present "Contact information, Owner"
@@ -35,7 +35,7 @@ Feature: Editing collections
       | Rhyme Land Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
 
-    And I go to the "edit-form" content page of the type "collection" with the title "Rhyme Land Eels"
+    And I go to the edit form of the "Rhyme Land Eels" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     And a modal should open
     And I click "Remote video"
@@ -57,7 +57,7 @@ Feature: Editing collections
       | Rhyme Land wysiwyg Eels | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | facilitators and authors | yes              | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
 
-    And I go to the "edit-form" content page of the type "collection" with the title "Rhyme Land wysiwyg Eels"
+    And I go to the edit form of the "Rhyme Land wysiwyg Eels" collection
     And I press the button "Insert file" in the "Description" wysiwyg editor
     Then a modal should open
     And I should not see the text "0 bytes limit"

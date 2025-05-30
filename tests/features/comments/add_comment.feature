@@ -37,7 +37,7 @@ Feature: Add comments
       | title   | body                                                | <parent>       | state   | author       |
       | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
     And the "Upload image from computer" button should be available in the "Create comment" wysiwyg editor
@@ -127,7 +127,7 @@ Feature: Add comments
       | title   | abstract | field_paragraphs_body                               | <parent>       | state   | author       |
       | <title> | abstract | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
     And the "Upload image from computer" button should be available in the "Create comment" wysiwyg editor
@@ -193,7 +193,7 @@ Feature: Add comments
       | title   | body                                                | collection        | state   |
       | <title> | How could this ever happen? Moral panic on its way! | Gossip collection | <state> |
     Given I am logged in as "Miss tell tales"
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
     And I fill in "Create comment" with "<p>Mr scandal was doing something<br />weird the other day.<p/>"
     Then I press "Post comment"
@@ -233,7 +233,7 @@ Feature: Add comments
     And comment #5 indent is 2
 
     Given I am an anonymous user
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     # For anonymous users we display this message at the bottom of comment list.
     Then I should see the text "Login or create an account to comment."
     # But we don't show the Drupal core login/register links on each comment.
@@ -257,7 +257,7 @@ Feature: Add comments
 
     # Anonymous users should not be able to comment.
     Given I am an anonymous user
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     Then I should see the text "Login or create an account to comment"
     And the link "Login" should point to "caslogin"
     And the link "create an account" should point to "user/register"
@@ -266,7 +266,7 @@ Feature: Add comments
 
     # Logged-in users can still comment.
     Given I am logged in as "Miss tell tales"
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     Then the following fields should be present "Create comment"
     And I should see the button "Post comment"
 
@@ -288,7 +288,7 @@ Feature: Add comments
       | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
 
     Given I am logged in as "Miss tell tales"
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     Then the following fields should be present "Create comment, Post as anonymous"
     And I should see the button "Post comment"
     And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
@@ -303,13 +303,13 @@ Feature: Add comments
     Then comment #2 should contain the markup "Anonymous user"
 
     Given I am logged in as a moderator
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     Then I should see the text "Anonymous user (Miss Tales)"
     Then comment #2 should contain the markup "Anonymous user"
     Then comment #2 should contain the markup "Miss Tales"
 
     Given I am an anonymous user
-    When I go to the content page of the type "<content type>" with the title "<title>"
+    When I visit the "<title>" "<content type>"
     Then I should see the text "Anonymous user"
     Then comment #2 should contain the markup "Anonymous user"
 

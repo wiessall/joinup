@@ -268,7 +268,7 @@ Feature: CKEditor5
     Then I go to "/collection/antiruin-development/solution/one-exclusion-advantages/contact"
     And I should see the heading "Contact us"
 
-    When I go to the "edit-form" content page of the type "solution" with the title "One exclusion advantages"
+    When I go to the edit form of the "One exclusion advantages" solution
     And I press the button "Contact us" in the "Description" wysiwyg editor
     When I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
