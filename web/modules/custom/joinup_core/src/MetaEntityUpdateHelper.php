@@ -144,7 +144,7 @@ class MetaEntityUpdateHelper {
         $fields = ['group_moderation', 'content_creation', 'listing_content', 'list_related_entities'];
         foreach ($fields as $field_name) {
           if ($meta_entity->hasField($field_name)) {
-            $meta_entity->set($field_name, $entity->get($entity)->getValue());
+            $meta_entity->set($field_name, $entity->get($field_name)->getValue());
           }
         }
         $meta_entity->save();
