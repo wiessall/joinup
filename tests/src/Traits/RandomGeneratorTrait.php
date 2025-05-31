@@ -39,8 +39,7 @@ trait RandomGeneratorTrait {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     $query = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $vocabulary)
-      ->condition('label', '%(%)', 'LIKE');
+      ->condition('vid', $vocabulary);
     // Only get last level terms for the EIRA vocabulary.
     if ($vocabulary === 'solution_type') {
       $query->condition('parent', '0', '<>');
