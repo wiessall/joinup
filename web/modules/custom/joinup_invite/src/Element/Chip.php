@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Element;
 
+use Drupal\Core\Render\Attribute\FormElement;
 use Drupal\Core\Render\Element\FormElementBase;
 
 /**
@@ -25,9 +26,8 @@ use Drupal\Core\Render\Element\FormElementBase;
  * @endcode
  *
  * @see \Drupal\Core\Render\Element\Submit
- *
- * @FormElement("chip")
  */
+#[FormElement('chip')]
 class Chip extends FormElementBase {
 
   /**
