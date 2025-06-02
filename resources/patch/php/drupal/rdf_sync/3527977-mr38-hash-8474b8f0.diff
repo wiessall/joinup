@@ -1,0 +1,43 @@
+diff --git a/src/Form/Alter/BundleEntityFormAlter.php b/src/Form/Alter/BundleEntityFormAlter.php
+index 4dacecc119cb5ae6241d17feb1c35ad111dc1d2c..2336c0126b2259feefbef897d5a41d14e1282648 100644
+--- a/src/Form/Alter/BundleEntityFormAlter.php
++++ b/src/Form/Alter/BundleEntityFormAlter.php
+@@ -7,6 +7,7 @@ namespace Drupal\rdf_sync\Form\Alter;
+ use Drupal\Component\Plugin\PluginManagerInterface;
+ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
++use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+ use Drupal\Core\Field\FieldTypePluginManagerInterface;
+@@ -19,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
+  */
+ class BundleEntityFormAlter extends AbstractFormAlter implements ContainerInjectionInterface {
+ 
++  use DependencySerializationTrait;
++
+   /**
+    * Constructs BundleEntityFormAlter instance.
+    *
+diff --git a/src/Form/Alter/FieldConfigFormAlter.php b/src/Form/Alter/FieldConfigFormAlter.php
+index 34f61c9d71e3395c52c02ffabd54afd92656fb5e..816c670d2239a479e81d6e8df97269de73275f30 100644
+--- a/src/Form/Alter/FieldConfigFormAlter.php
++++ b/src/Form/Alter/FieldConfigFormAlter.php
+@@ -47,7 +47,7 @@ class FieldConfigFormAlter extends AbstractFormAlter {
+       $form['rdf_sync'][$column]['type'] = $this->getTypeElement($settings);
+     }
+ 
+-    $form['#entity_builders'][] = [$this, 'entityFormEntityBuild'];
++    $form['#entity_builders'][] = [__CLASS__, 'entityFormEntityBuild'];
+   }
+ 
+   /**
+@@ -62,7 +62,7 @@ class FieldConfigFormAlter extends AbstractFormAlter {
+    * @param \Drupal\Core\Form\FormStateInterface $formState
+    *   The current state of the form.
+    */
+-  public function entityFormEntityBuild(string $entityType, FieldConfigInterface $fieldConfig, array $form, FormStateInterface $formState): void {
++  public static function entityFormEntityBuild(string $entityType, FieldConfigInterface $fieldConfig, array $form, FormStateInterface $formState): void {
+     $fieldStorageConfig = $fieldConfig->getFieldStorageDefinition();
+ 
+     foreach (array_keys($fieldStorageConfig->getSchema()['columns']) as $column) {
