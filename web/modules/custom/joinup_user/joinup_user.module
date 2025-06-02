@@ -284,6 +284,16 @@ function joinup_user_form_user_form_alter(array &$form, FormStateInterface $form
   if ($form_id !== 'user_form') {
     return;
   }
+  $form['blocked_reason']['#weight'] = 5;
+  unset($form['blocked_reason']['widget']['#options']['moderation']);
+  $form['blocked_reason']['#states'] = [
+    'visible' => [
+      [':input[name="status"]' => ['value' => 0]],
+    ],
+  ];
+
+  // Add submit handler to clear the value when account is active.
+  $form['#submit'][] = 'mymodule_user_form_submit';
 
   // Add a submit callback that will send a message to the user if their account
   // gets modified by a moderator. This needs to be placed between the ::save()
@@ -325,6 +335,12 @@ function joinup_user_user_form_submit(array $form, FormStateInterface $form_stat
       $account->getPreferredLangcode(),
       $params
     );
+  }
+
+  if ($form_state->getValue('status') == '1') {
+    $user = $form_state->getFormObject()->getEntity();
+    $user->set('blocked_reason', NULL);
+    $user->save();
   }
 
   /** @var \Drupal\user\AccountForm $form_object */
@@ -580,6 +596,15 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
       ->setName('type')
       ->setClass(UserBundle::class),
   ];
+}
+
+/**
+ * Implements hook_user_presave().
+ */
+function joinup_user_user_presave(UserInterface $account): void {
+  if ($account->isNew() && $account->isBlocked()) {
+    $account->set('blocked_reason', 'moderation');
+  }
 }
 
 /**
