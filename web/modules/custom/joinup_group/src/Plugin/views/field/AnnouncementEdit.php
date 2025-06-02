@@ -7,16 +7,14 @@ namespace Drupal\joinup_group\Plugin\views\field;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\EntityLink;
 use Drupal\views\ResultRow;
 
 /**
  * Field handler to present a group announcement edit link.
- *
- * @ingroup views_field_handlers
- *
- * @ViewsField("joinup_group_announcement_edit_link")
  */
+#[ViewsField("joinup_group_announcement_edit_link")]
 class AnnouncementEdit extends EntityLink {
 
   /**

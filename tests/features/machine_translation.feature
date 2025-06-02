@@ -46,7 +46,7 @@ Feature: Machine translation
     Then I should see the Webtools eTrans button
     When I click "Digital portability"
     Then I should see the Webtools eTrans button
-    When I go to the "Increased credit card fees" custom page
+    When I go to the "Increased credit card fees" custom_page
     Then I should see the Webtools eTrans button
     When I go to the edit form of the "Increased credit card fees" "custom page"
     Then I should not see any Webtools eTrans elements
@@ -91,13 +91,13 @@ Feature: Machine translation
     # Pages that primarily list content should not be translatable.
     When I go to the homepage
     Then I should not see any Webtools eTrans elements
-    When I visit the search page
+    When I visit the advanced search page
     Then I should not see any Webtools eTrans elements
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should not see any Webtools eTrans elements
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should not see any Webtools eTrans elements
-    And I visit the content overview
+    And I visit the content overview page
     Then I should not see any Webtools eTrans elements
 
     # Pages that are not content focused should not be translatable.

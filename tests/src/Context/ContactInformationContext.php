@@ -31,21 +31,6 @@ class ContactInformationContext extends RawDrupalContext {
   use UserTrait;
 
   /**
-   * Navigates to the canonical page display of a contact information entity.
-   *
-   * @param string $label
-   *   The label of the contact information entity.
-   *
-   * @When I go to the :label contact information page
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitContactInformationPage(string $label): void {
-    $entity = $this->getEntityByLabel('node', $label, 'contact_information');
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Validates the emails of given list of contact information entities.
    *
    * @param \Behat\Gherkin\Node\TableNode $contact_info_list

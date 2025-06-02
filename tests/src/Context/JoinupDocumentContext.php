@@ -20,23 +20,6 @@ class JoinupDocumentContext extends RawDrupalContext {
   use TraversingTrait;
 
   /**
-   * Navigates to the canonical page display of a document.
-   *
-   * @param string $title
-   *   The name of the document.
-   *
-   * @When I go to the :title document
-   * @When I visit the :title document
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitDocument($title): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, 'document');
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Handles the file field for document nodes.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
