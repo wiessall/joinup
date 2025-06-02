@@ -19,7 +19,7 @@ Feature: Global search
       | Dummy news 3         | Dummy title 3         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
       | Dummy news 4         | Dummy title 4         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
-    When I visit the search page
+    When I visit the advanced search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     # Create some archived content too.
@@ -40,7 +40,7 @@ Feature: Global search
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
     # Test that archived items are not available in the autocomplete.
-    When I visit the search page
+    When I visit the advanced search page
     And I focus on the search input
     And I enter "Rummy" in the search bar
     And I wait for AJAX to finish
@@ -64,7 +64,7 @@ Feature: Global search
     And I should see the "Rummy discussion" tile
 
     Given I am logged in as a user with the "authenticated" role
-    Then I visit the search page
+    Then I visit the advanced search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Tuba de Los Lobos" tile
@@ -131,7 +131,7 @@ Feature: Global search
     And I should not see the "Foam" tile
 
     # Test ability to tick many geographical areas.
-    Given I am on the search page
+    Given I am on the advanced search page
     And I click show more from the "spatial coverage" facet
     And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     Then I should see the text "SEARCH RESULTS (1)"
@@ -139,7 +139,7 @@ Feature: Global search
     And I check the "European Union (1)" checkbox from the "spatial coverage" facet
     Then I should see the text "SEARCH RESULTS (2)"
 
-    Given I am on the search page
+    Given I am on the advanced search page
     When I check the "User profiles (2)" checkbox from the "Content types" facet
     Then the "User profiles" content checkbox item should be selected
     And I should see 2 tile
@@ -173,7 +173,7 @@ Feature: Global search
     But I should not see the "Spherification" tile
     And I should not see the "El Tuba de Los Lobos" tile
 
-    Given I am on the search page
+    Given I am on the advanced search page
     When I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Molecular cooking collection" tile
     And I should not see the "Spherification" tile
@@ -217,7 +217,7 @@ Feature: Global search
       | title          | document type | short title          | field_paragraphs_body                   | spatial coverage | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
 
-    When I visit the search page
+    When I visit the advanced search page
 
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
@@ -275,7 +275,7 @@ Feature: Global search
       | jenlyle      | jenessa.carlyle@example.com | Jenessa    | Carlyle     | Clyffco      |
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
-    When I visit the search page
+    When I visit the advanced search page
     # The Portal collection is included
     Then the "Content types" checkbox facet should allow selecting the following values "Collections (3), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (3)"
 
@@ -358,7 +358,7 @@ Feature: Global search
     Then I should be on the advanced search page
     But I should not see the link "advanced search"
     And I should not see search bar icon in navbar
-    Given I visit the collection overview
+    Given I visit the collection overview page
     Then I should not see the link "advanced search"
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
@@ -630,7 +630,7 @@ Feature: Global search
       | Funny news 4    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
-    When I visit the search page
+    When I visit the advanced search page
     And I should not see search bar icon in navbar
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
@@ -655,7 +655,7 @@ Feature: Global search
     Then the page should show only the tiles "Radio cooking collection, The Portal"
 
     # Check if search autocomplete works in navbar.
-    When I visit the collection overview
+    When I visit the collection overview page
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
     And I enter "funn" in the "search bar"
@@ -672,7 +672,7 @@ Feature: Global search
       | Funny news 2 |
 
     # Check if search did you mean works.
-    Given I visit the search page
+    Given I visit the advanced search page
     And I enter "histore" in the "search bar"
     Then I submit the search by pressing enter
     And I should see the text "Did you mean: history ?"
@@ -714,7 +714,7 @@ Feature: Global search
       | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 | 08/01/2019   |
       | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 | 09/18/2019   |
 
-    When I visit the search page
+    When I visit the advanced search page
 
     # Filter content from 01-01-2020 to 30-06-2020.
     # Only "El Cabo da Roca" and "Funny news 4" should appear.
@@ -736,7 +736,7 @@ Feature: Global search
     Given collection content:
       | title                  | moderation | topic                                                                              | state     |
       | Max 2 topic collection | no         | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis | published |
-    When I visit the search page
+    When I visit the advanced search page
     Then there should be 2 topics in the "Max 2 topic collection" card
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
@@ -749,7 +749,7 @@ Feature: Global search
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
-    When I visit the search page
+    When I visit the advanced search page
     Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
     And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
     And I should see the text "Last update: 08/01/2019" in the "The earth is square" card
@@ -759,7 +759,7 @@ Feature: Global search
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8210
 
     # Check if suggestion does not generate any warnings.
-    Given I visit the search page
+    Given I visit the advanced search page
     And there are no preexisting log records
     When I enter "-histore" in the search bar
     And I submit the search by pressing enter
@@ -800,7 +800,7 @@ Feature: Global search
       | field_body:value  | That's one small step for a man, a giant leap for mankind. |
       | field_body:format | text_html                                                  |
 
-    When I visit the search page
+    When I visit the advanced search page
     And I should see the "Pull alpha" tile
     And I should see the "Col for Sol javi" tile
     And I should see the "Solution pull" tile
@@ -844,7 +844,7 @@ Feature: Global search
       | lyleu      | lyle.u@example.com | Lyle       | Uname       | Demography          |
       | kyleu      | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
-    When I visit the search page
+    When I visit the advanced search page
     # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (4)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (3), Demography (2), E-inclusion (1)"

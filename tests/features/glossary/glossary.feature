@@ -212,7 +212,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see the link "ABC"
     And I should see the link "colrs"
 
-    When I go to the "Schedule" custom page
+    When I go to the "Schedule" custom_page
     Then I should see the link "Colors"
 
     When I go to the "The Big Talk" discussion

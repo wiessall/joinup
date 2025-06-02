@@ -22,7 +22,7 @@ Feature: Solutions Overview
       | Tortoise   | 2018-10-04 8:34am |
       | Warg       | 2018-10-04 8:39am |
     And I am an anonymous user
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the following tiles in the correct order:
       | Muffalo    |
       | Gazelle    |
@@ -74,14 +74,14 @@ Feature: Solutions Overview
 
     # Check that visiting as an anonymous does not create cache for all users.
     Given I am an anonymous user
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And the page should be cacheable
 
     # Access the page as a moderator to ensure proper caching.
     Given I am logged in as a "moderator"
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And I should see the "Non electronic health" tile
@@ -92,7 +92,7 @@ Feature: Solutions Overview
 
     # Check page for authenticated users.
     Given I am logged in as "Madam Shirley"
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     Then I should see the "Non electronic health" tile
@@ -103,7 +103,7 @@ Feature: Solutions Overview
 
     # Once more for anonymous.
     Given I am an anonymous user
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And I should see the link "Non electronic health"
@@ -140,13 +140,13 @@ Feature: Solutions Overview
     And I visit the "Colonies in Earth" solution
     And I should see the text "Colonies in Earth"
 
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the text "Colonies in Earth"
     And the page should be cacheable
 
     # Check the new solution as an anonymous user.
     When I am an anonymous user
-    When I visit the solution overview
+    When I visit the solution overview page
     Then I should see the link "Colonies in Earth"
     And the page should be cacheable
 
@@ -176,7 +176,7 @@ Feature: Solutions Overview
       | Flag Rough | Insane Wooden Crystal | no       |
 
     When I am logged in as "Joann Womack"
-    And I visit the solution overview
+    And I visit the solution overview page
     Then the "My solutions content" inline facet should allow selecting the following values:
       | My solutions (3)       |
       | Featured solutions (2) |
@@ -201,7 +201,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am logged in as "Ryker Brandon"
-    And I visit the solution overview
+    And I visit the solution overview page
     Then the "My solutions content" inline facet should allow selecting the following values:
       | Featured solutions (2) |
       | My solutions (1)       |
@@ -222,7 +222,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am an anonymous user
-    And I visit the solution overview
+    And I visit the solution overview page
     # The anonymous user has no access to the "My solutions" facet entry.
     Then the "My solutions content" inline facet should allow selecting the following values:
       | Featured solutions (2) |
@@ -240,7 +240,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am logged in as "Ryker Brandon"
-    And I visit the solution overview
+    And I visit the solution overview page
     And I click "Featured solutions" in the "My solutions content" inline facet
     Then I should see the following tiles in the correct order:
       | Subdivision Morbid           |

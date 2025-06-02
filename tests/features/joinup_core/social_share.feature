@@ -13,7 +13,7 @@ Feature: Sharing content on social networks
       | Important information | Social networks |
 
     When I am an anonymous user
-    And I go to the content page of the type "<content type>" with the title "Important information"
+    And I visit the "Important information" "<content type>"
     And I click "Share"
     Then I should see the heading "Share Important information on"
     And I should see the link "Facebook"
