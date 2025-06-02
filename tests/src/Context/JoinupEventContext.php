@@ -26,23 +26,6 @@ class JoinupEventContext extends RawDrupalContext {
   protected static $webtoolsGeocodingCacheCount;
 
   /**
-   * Navigates to the canonical page display of a event.
-   *
-   * @param string $title
-   *   The name of the event.
-   *
-   * @When I go to the :title event
-   * @When I visit the :title event
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitEvent(string $title): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, 'event');
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Converts relative dates into an accepted format.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope

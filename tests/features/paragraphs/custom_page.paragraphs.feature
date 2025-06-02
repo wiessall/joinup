@@ -25,7 +25,7 @@ Feature:
       | Body | type: ckeditor - value: BBBBBBBBBB |
     And I press "Update"
 
-    And I go to the "Paragraphs page" custom page
+    And I go to the "Paragraphs page" custom_page
     And I should see the following paragraphs in the given order:
       | AAAAAAAAAA |
       | BBBBBBBBBB |

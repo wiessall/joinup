@@ -31,11 +31,11 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page                |
+      | page                     |
       # A page with the new Ventuno theme.
-      | search page         |
+      | advanced search page     |
       # A page with the old Interoperable Europe Portal Theme theme.
-      | collection overview |
+      | collection overview page |
 
   @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
@@ -60,8 +60,8 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page                |
+      | page                     |
       # A page with the new Ventuno theme.
-      | search page         |
+      | advanced search page     |
       # A page with the old Interoperable Europe Portal Theme theme.
-      | collection overview |
+      | collection overview page |
