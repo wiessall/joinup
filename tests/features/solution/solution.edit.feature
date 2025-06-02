@@ -40,14 +40,15 @@ Feature: Solution editing.
     And I select "Logging Service" from "Solution type"
     And I press "Next"
     # Create owner.
+    And I press "Add new" at the "Owner" field
     And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
     And I check "Company"
     And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
     And I press "Create owner"
     # Create contact information.
-    And I press "Create contact information"
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
+    And I press "Create contact information"
     And I jump to the "Confirmation" of "solution" wizard
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"

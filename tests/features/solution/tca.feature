@@ -26,6 +26,7 @@ Feature: Solution TCA agreement
     And I select "Demography" from "Topic"
     And I press "Next"
     # Create owner.
+    And I press "Add new" at the "Owner" field
     And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
     And I check "Company"
     And I fill in "owner[form][0][country][0][target_id]" with "Belgium"

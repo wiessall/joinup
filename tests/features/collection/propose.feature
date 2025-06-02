@@ -234,10 +234,9 @@ Feature: Proposing a collection
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
     And I press "Next"
-    And I fill in "Name" with "Organisation valid"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
-    And I press "Create owner"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
+    # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"

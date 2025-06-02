@@ -202,10 +202,8 @@ Feature: Collection moderation
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Garnett Clifton"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
 
@@ -239,10 +237,8 @@ Feature: Collection moderation
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Coretta Simonson"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
 
@@ -276,10 +272,8 @@ Feature: Collection moderation
     And I enter "So smooth." in the "Description" wysiwyg editor
     And I select "Data gathering and processing" from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Terrance Nash"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     When I press "Add another item" at the "Geographical coverage" field

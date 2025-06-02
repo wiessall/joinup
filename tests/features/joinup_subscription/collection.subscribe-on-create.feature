@@ -16,11 +16,8 @@ Feature: Subscribing to a collection after creating
     When I select "EU and European Policies" from "Topic"
 
     # Click the button to create an organisation owner.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Acme"
-    When I check "Company"
-    And I fill in "Country" with "Belgium"
-    And I press "Create owner"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
 
     When I press "Save"
     Then I should have the following content subscriptions:
