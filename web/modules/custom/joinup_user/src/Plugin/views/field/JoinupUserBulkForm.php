@@ -15,6 +15,7 @@ use Drupal\joinup_user\JoinupUserNotificationHelperInterface;
 use Drupal\role_delegation\Plugin\views\field\RoleDelegationUserBulkForm;
 use Drupal\system\ActionConfigEntityInterface;
 use Drupal\user\UserInterface;
+use Drupal\views\Attribute\ViewsField;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,9 +26,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * through the bulk form.
  *
  * @see \Drupal\user\Plugin\views\field\UserBulkForm
- *
- * @ViewsField("joinup_user_bulk_form")
  */
+#[ViewsField("joinup_user_bulk_form")]
 class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
 
   /**

@@ -39,7 +39,7 @@ Feature:
     And I should not see the text "Crunchy text"
 
     Given I am not logged in
-    And I go to the "Paragraphs accordion page" custom page
+    And I go to the "Paragraphs accordion page" custom_page
 
     And I press "Duper"
     # Wait for the animation to finish.

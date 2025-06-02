@@ -27,7 +27,7 @@ Feature:
     # Visit the toolbox page once to ensure that solutions are properly
     # re-indexed when an EIF perspective is created or deleted and that
     # cache is invalidated properly.
-    Given I visit the "Online Assistant" custom page
+    Given I visit the "Online Assistant" custom_page
     Then I should not see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -213,7 +213,7 @@ Feature:
       | Jordan 5 |
 
     # Ensure glossary words style applied
-    When I visit the "Online Assistant" custom page
+    When I visit the "Online Assistant" custom_page
     # This glossary term doesn't show because we are in NIFO collection.
     # When we go inside the EIF perspective page we should see the 'It will be' glossary link.
     And I should not see the link "It will be"
@@ -235,7 +235,7 @@ Feature:
     # Ensure that deleting an EIF perspective, the online assistant is updated
     # as well.
     Given I delete the EIF perspective of the "Jordan 1" solution
-    When I visit the "Online Assistant" custom page
+    When I visit the "Online Assistant" custom_page
     # Validate the need for this step in ISAICP-9742.
     And I reload the page
     Then I should not see the heading "Jordan 1"

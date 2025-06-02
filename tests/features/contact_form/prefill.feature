@@ -14,7 +14,7 @@ Feature: Prefill contact form fields
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "IOP page custom page" title:
       | field_body:value  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
       | field_body:format | content_editor                                                                       |
-    When I go to the "IOP page custom page" custom page
+    When I go to the "IOP page custom page" custom_page
     And I click "link"
     Then I should see the heading "Contact"
     And the "Subject" field should contain "CAMSS Change Request"
