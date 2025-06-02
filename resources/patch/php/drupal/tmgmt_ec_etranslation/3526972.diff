@@ -1,0 +1,166 @@
+diff --git a/src/TranslationResponseProcessor.php b/src/TranslationResponseProcessor.php
+index 7e9a29cddeff7155ba1293324d55667f5674c3d1..867090694e43790ef23ad6bcd19abb3e020c6bae 100644
+--- a/src/TranslationResponseProcessor.php
++++ b/src/TranslationResponseProcessor.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\tmgmt_ec_etranslation;
+ 
++use Drupal\Core\Lock\LockBackendInterface;
+ use Drupal\tmgmt\Data;
+ use Drupal\tmgmt\JobItemInterface;
+ use Psr\Log\LoggerInterface;
+@@ -32,14 +33,23 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
+    */
+   protected TextValidatorInterface $textValidator;
+ 
++  /**
++   * Lock service.
++   *
++   * @var \Drupal\Core\Lock\LockBackendInterface
++   */
++  protected LockBackendInterface $lock;
++
+   public function __construct(
+     LoggerInterface $logger,
+     Data $tmgmtData,
+     TextValidatorInterface $textValidator,
++    LockBackendInterface $lock,
+   ) {
+     $this->logger = $logger;
+     $this->tmgmtData = $tmgmtData;
+     $this->textValidator = $textValidator;
++    $this->lock = $lock;
+   }
+ 
+   /**
+@@ -51,6 +61,8 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
+    *   The response key or identifier (external-reference).
+    * @param string $response
+    *   The raw JSON response content.
++   *
++   * @throws \Drupal\purge\Plugin\Purge\Purger\Exception\LockException
+    */
+   public function process(JobItemInterface $jobItem, string $key, string $response): void {
+     $translatableFields = $this->tmgmtData->filterTranslatable($jobItem->getData());
+@@ -68,9 +80,19 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
+       '@translation' => $translation['#text'],
+     ]);
+ 
+-    $jobItem->addTranslatedData($translation, $key);
+-    $jobItem->addMessage('Translation received: @translation', ['@translation' => $translation['#text']]);
+-    $jobItem->save();
++    $lockName = 'tmgmt_ec_etranslation_' . $jobItem->id();
++
++    if (!$this->lock->acquire($lockName)) {
++      throw new \RuntimeException(sprintf('Could not acquire lock for job item %d', $jobItem->id()));
++    }
++
++    try {
++      $jobItem->addTranslatedData($translation, $key);
++      $jobItem->addMessage('Translation received: @translation', ['@translation' => $translation['#text']]);
++    }
++    finally {
++      $this->lock->release($lockName);
++    }
+   }
+ 
+ }
+diff --git a/tests/src/Unit/TextValidatorTest.php b/tests/src/Unit/TextValidatorTest.php
+index 4bc832df632763e65163533cef11c5c934618661..e23d7c2b84071c1805fe837ee646d35453822cca 100644
+--- a/tests/src/Unit/TextValidatorTest.php
++++ b/tests/src/Unit/TextValidatorTest.php
+@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
+  * Unit tests for the TextValidator class.
+  *
+  * @coversDefaultClass \Drupal\tmgmt_ec_etranslation\TextValidator
++ *
++ * @group tmgmt_ec_etranslation
+  */
+ class TextValidatorTest extends TestCase {
+ 
+diff --git a/tests/src/Unit/TranslationQueueWorkerTest.php b/tests/src/Unit/TranslationQueueWorkerTest.php
+index 3cfb09daaefd0f11eb6341cbee011de65a59b055..590588c02866e86e798849c861832d300fdc010e 100644
+--- a/tests/src/Unit/TranslationQueueWorkerTest.php
++++ b/tests/src/Unit/TranslationQueueWorkerTest.php
+@@ -6,6 +6,7 @@ namespace Drupal\Tests\tmgmt_ec_etranslation\Unit;
+ 
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Lock\LockBackendInterface;
+ use Drupal\Core\Logger\LoggerChannelInterface;
+ use Drupal\tmgmt\Data;
+ use Drupal\tmgmt\JobItemInterface;
+@@ -58,6 +59,13 @@ class TranslationQueueWorkerTest extends TestCase {
+    */
+   protected TranslationQueueWorker $queueWorker;
+ 
++  /**
++   * Lock service.
++   *
++   * @var \Drupal\Core\Lock\LockBackendInterface
++   */
++  protected LockBackendInterface $lock;
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -68,11 +76,13 @@ class TranslationQueueWorkerTest extends TestCase {
+     $this->logger = $this->createMock(LoggerChannelInterface::class);
+     $this->tmgmtData = $this->createMock(Data::class);
+     $this->textValidator = $this->createMock(TextValidatorInterface::class);
++    $this->lock = $this->createMock(LockBackendInterface::class);
+ 
+     $translationResponseProcessor = new TranslationResponseProcessor(
+       $this->logger,
+       $this->tmgmtData,
+       $this->textValidator,
++      $this->lock
+     );
+ 
+     $this->queueWorker = new TranslationQueueWorker(
+@@ -90,10 +100,20 @@ class TranslationQueueWorkerTest extends TestCase {
+    * @covers ::processItem
+    */
+   public function testProcessItem(): void {
++    $jobItemId = 123;
++    $lockName = 'tmgmt_ec_etranslation_' . $jobItemId;
++
++    $this->lock->method('acquire')
++      ->with($lockName)
++      ->willReturn(TRUE);
++    $this->lock->method('release')
++      ->with($lockName)
++      ->willReturn($lockName);
++
+     $jobItem = $this->createMock(JobItemInterface::class);
+-    $jobItem->expects($this->once())
++    $jobItem->expects($this->exactly(2))
+       ->method('id')
+-      ->willReturn(123);
++      ->willReturn($jobItemId);
+     $jobItem->expects($this->any())
+       ->method('getData')
+       ->willReturn([
+@@ -134,8 +154,6 @@ class TranslationQueueWorkerTest extends TestCase {
+     $jobItem->expects($this->once())
+       ->method('addMessage')
+       ->with('Translation received: @translation', ['@translation' => 'HTML content']);
+-    $jobItem->expects($this->once())
+-      ->method('save');
+ 
+     $this->queueWorker->processItem([1, 'key', base64_encode('HTML content')]);
+   }
+diff --git a/tmgmt_ec_etranslation.services.yml b/tmgmt_ec_etranslation.services.yml
+index 43fff2d240e77af8e7da368d63b3e991ba58faac..a301e84d828305d64fa14ec1686359f52bf686e4 100644
+--- a/tmgmt_ec_etranslation.services.yml
++++ b/tmgmt_ec_etranslation.services.yml
+@@ -8,7 +8,7 @@ services:
+ 
+   tmgmt_ec_etranslation.translation_response_processor:
+     class: Drupal\tmgmt_ec_etranslation\TranslationResponseProcessor
+-    arguments: [ '@logger.channel.tmgmt_ec_etranslation', '@tmgmt.data', '@tmgmt_ec_etranslation.text_validator' ]
++    arguments: [ '@logger.channel.tmgmt_ec_etranslation', '@tmgmt.data', '@tmgmt_ec_etranslation.text_validator', '@lock' ]
+ 
+   logger.channel.tmgmt_ec_etranslation:
+     parent: logger.channel_base
