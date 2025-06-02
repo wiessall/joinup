@@ -47,19 +47,21 @@ third_party_settings:
         - description
         - classification
         - domain
-        - content_creation
         - field_topic
         - language
       label: 'Solution information'
       region: content
-      parent_name: ''
-      weight: 0
-      format_type: form_step
+      parent_name: group_solution_tabs
+      weight: 1
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: false
@@ -72,14 +74,17 @@ third_party_settings:
         - contact
       label: 'Contact details'
       region: content
-      parent_name: ''
-      weight: 1
-      format_type: form_step
+      parent_name: group_solution_tabs
+      weight: 2
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
@@ -98,14 +103,17 @@ third_party_settings:
         - solution_type
       label: 'Additional information'
       region: content
-      parent_name: ''
-      weight: 2
-      format_type: form_step
+      parent_name: group_solution_tabs
+      weight: 3
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
@@ -116,14 +124,17 @@ third_party_settings:
       children: {  }
       label: 'Interoperability information'
       region: content
-      parent_name: ''
-      weight: 3
-      format_type: form_step
+      parent_name: group_solution_tabs
+      weight: 4
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
@@ -133,25 +144,47 @@ third_party_settings:
     group_confirmation:
       children:
         - node_preview
-        - field_state
         - transition_motivation
         - tca
+        - field_state
       label: Confirmation
       region: content
-      parent_name: ''
-      weight: 4
-      format_type: form_step
+      parent_name: group_solution_tabs
+      weight: 5
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
         back_button_text: Previous
         next_button_text: ''
         step_help: ''
+    group_solution_tabs:
+      children:
+        - group_solution_information
+        - group_contact_details
+        - group_additional_information
+        - group_interoperability_informati
+        - group_confirmation
+      label: Tabs
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: 640
 id: node.solution.default
 targetEntityType: node
 bundle: solution
