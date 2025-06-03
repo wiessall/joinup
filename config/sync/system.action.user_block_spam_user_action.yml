@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: DyypzTfThX10FFQw-399qPfEbLLyrhXgQrKPVsmAoJ0
 id: user_block_spam_user_action
-label: 'Block the selected user(s): Spam user'
+label: 'Block the selected user(s): Spam account'
 type: user
 plugin: user_block_spam_user_action
 configuration: {  }

@@ -34,7 +34,7 @@ class BlockSpamUser extends BlockUser {
    * {@inheritdoc}
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
-    if (!in_array(['moderator', 'developer'], $account->getRoles())) {
+    if (!$account->hasRole('moderator') && !$account->hasRole('developer')) {
       return FALSE;
     }
     /** @var \Drupal\user\UserInterface $object */
