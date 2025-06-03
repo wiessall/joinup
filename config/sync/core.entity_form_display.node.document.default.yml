@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_file
-    - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -15,6 +14,7 @@ dependencies:
     - field.field.node.document.field_state
     - field.field.node.document.field_topic
     - field.field.node.document.field_type
+    - field.field.node.document.keywords
     - field.field.node.document.og_audience
     - field.field.node.document.spatial_coverage
     - image.style.thumbnail
@@ -40,7 +40,7 @@ content:
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 17
+    weight: 16
     region: content
     settings:
       title: 'Current workflow state'
@@ -49,7 +49,7 @@ content:
     third_party_settings: {  }
   field_comments:
     type: comment_default
-    weight: 15
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -63,23 +63,15 @@ content:
     third_party_settings: {  }
   field_file:
     type: file_url_generic
-    weight: 7
+    weight: 6
     region: content
     settings:
       progress_indicator: throbber
       add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
-  field_keywords:
-    type: string_textfield
-    weight: 9
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_licence:
     type: entity_reference_autocomplete
-    weight: 12
+    weight: 11
     region: content
     settings:
       match_operator: CONTAINS
@@ -89,7 +81,7 @@ content:
     third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
-    weight: 6
+    weight: 5
     region: content
     settings:
       view_mode: default
@@ -109,14 +101,14 @@ content:
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 18
+    weight: 17
     region: content
     settings:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
     type: options_select
-    weight: 8
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -126,8 +118,18 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  keywords:
+    type: entity_reference_autocomplete_tags
+    weight: 9
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   simple_sitemap:
-    weight: 13
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -150,13 +152,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 16
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 14
+    weight: 13
     region: content
     settings:
       match_operator: CONTAINS
@@ -165,7 +167,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 19
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
