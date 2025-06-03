@@ -63,9 +63,6 @@ Feature:
     When I go to the edit form of the "Structural Solar Traces" collection
     Then the following fields should be disabled "Short ID"
 
-    Then I delete the "Structural Solar Traces" collection
-    And I delete the "Contact person" "contact information"
-
   Scenario: Portal short IDs are unique in solutions.
     Given collection content:
       | title              | short ID |

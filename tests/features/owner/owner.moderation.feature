@@ -133,7 +133,3 @@ Feature: Owner moderation
     # Confirm the deletion.
     And I press "Delete"
     Then I should not see the link "EU healthy group"
-
-    # Final cleanup.
-    Then I delete the "The healthy food European project" collection
-    And I delete the "Duche Baggins" "contact information"
