@@ -77,7 +77,7 @@ Feature:
     When I visit the "Persistent news" news
     Then the persistent url should contain "/node/"
 
-    When I visit the "Persistent page" custom page
+    When I visit the "Persistent page" custom_page
     Then the persistent url should contain "/node/"
 
     # Our semantic content has a persistent canonical path at Europe's

@@ -129,7 +129,7 @@ Feature: "Add custom page" visibility options.
       | title        | collection        | field_hide_title |
       | Rubber bands | Aggressive Rubber | 1                |
 
-    When I go to the "Rubber bands" custom page
+    When I go to the "Rubber bands" custom_page
     Then I see the text "Rubber bands" in the "Visually hidden title" region
 
   Scenario: Moderators can access the "Add custom page" menu item.
@@ -159,7 +159,7 @@ Feature: "Add custom page" visibility options.
       | Rubber bands   | The aggressive ones. | Aggressive Rubber | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
       | Elastic rubber | Also aggressive.     | Aggressive Rubber | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
 
-    When I go to the "Rubber bands" custom page
+    When I go to the "Rubber bands" custom_page
     Then the "empty.rdf" link in the Content region should be visible
     And the "empty_pdf.pdf" link in the Content region should be visible
     And the "invalid_adms.rdf" link in the Content region should be visible
@@ -167,7 +167,7 @@ Feature: "Add custom page" visibility options.
     And the "text.pdf" link in the Content region should be visible
     But I should not see the button "Show more" in the Content region
 
-    When I go to the "Elastic rubber" custom page
+    When I go to the "Elastic rubber" custom_page
     Then the "ada.png" link in the Content region should be visible
     And the "alan.jpg" link in the Content region should be visible
     And the "blaise.jpg" link in the Content region should be visible

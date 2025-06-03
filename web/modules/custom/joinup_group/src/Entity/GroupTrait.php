@@ -9,7 +9,6 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\joinup_group\ContentCreationOptions;
-use Drupal\joinup_solution\Entity\Solution;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
@@ -159,35 +158,16 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function isModerated(): bool {
-    if ($this instanceof Solution) {
-      $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($this, 'solution_settings');
-      if ($meta_entity instanceof MetaEntityInterface) {
-        return (bool) $meta_entity->get('group_moderation')->value;
-      }
-      return TRUE;
-    }
-    return (int) $this->getMainPropertyValue($this->getGroupModerationFieldName()) === GroupInterface::PRE_MODERATION;
+    $meta_entity = MetaEntity::loadOrCreate($this->bundle() . '_settings', $this);
+    return ($meta_entity instanceof MetaEntityInterface) ? (bool) $meta_entity->get('group_moderation')->value : TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getContentCreators(): ?string {
-    if ($this instanceof Solution) {
-      $meta_entity = \Drupal::getContainer()
-        ->get('meta_entity.repository')
-        ->getMetaEntityForEntity($this, 'solution_settings');
-      if ($meta_entity instanceof MetaEntityInterface) {
-        return $meta_entity->get('content_creation')->value;
-      }
-      return ContentCreationOptions::FACILITATORS_AND_AUTHORS;
-    }
-    $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
-    if (is_null($contentCreators)) {
-      $loggerFactory = \Drupal::service('logger.factory');
-      $loggerFactory->get('joinup_group')->warning('Invalid content creators');
-    }
-    return $contentCreators;
+    $meta_entity = MetaEntity::loadOrCreate($this->bundle() . '_settings', $this);
+    return ($meta_entity instanceof MetaEntityInterface) ? $meta_entity->get('content_creation')->value : ContentCreationOptions::FACILITATORS_AND_AUTHORS;
   }
 
   /**
@@ -334,22 +314,8 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getGroupModerationFieldName(): string {
-    return 'group_moderation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getAbstractField(): string {
     return 'abstract';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContentCreationFieldName(): string {
-    return 'content_creation';
   }
 
 }

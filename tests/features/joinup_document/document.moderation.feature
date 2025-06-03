@@ -30,10 +30,10 @@ Feature: Document moderation
     And I should see the button "Publish"
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "The Naked Ashes"
+    And I go to the edit form of the "The Naked Ashes" collection
     And I expand the "Additional fields" accordion section
-    And I check "Moderated"
     Then I press "Publish"
+    And the "group_moderation" setting of the "The Naked Ashes" collection is set to "yes"
     And I should see the heading "The Naked Ashes"
 
     # The parent group is now pre-moderated: authenticated non-member users
@@ -48,10 +48,10 @@ Feature: Document moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "The Naked Ashes"
+    And I go to the edit form of the "The Naked Ashes" collection
     And I expand the "Additional fields" accordion section
-    And I select the radio button "Only members can create content."
     And I press "Publish"
+    And the "content_creation" setting of the "The Naked Ashes" collection is set to "members"
     # I should now have the possibility to add documents.
     When I open the plus button menu
     Then I should see the link "Add document"

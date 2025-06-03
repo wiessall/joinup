@@ -276,7 +276,7 @@ Feature: Pinning entities inside collections
     # Pinning and unpinning items should not affect the "last update" timestamp.
     # Before changing the pinned status, let's check that the solution is in the
     # expected position when searching for content ordered by last updated time.
-    When I visit the search page
+    When I visit the advanced search page
     And I select "Last update" from "Sort by"
     And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
@@ -289,7 +289,7 @@ Feature: Pinning entities inside collections
     When I click the contextual link "Unpin" in the "Drop forged screwdrivers" tile
     Then I should see the success message "Solution Drop forged screwdrivers has been unpinned in the collection Orange Screwdriver."
 
-    When I visit the search page
+    When I visit the advanced search page
     And I select "Last update" from "Sort by"
     And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
@@ -304,7 +304,7 @@ Feature: Pinning entities inside collections
 
     # Check that the "last update" timestamp has not been affected. We can check
     # this in the search page.
-    When I visit the search page
+    When I visit the advanced search page
     And I select "Last update" from "Sort by"
     And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:

@@ -29,7 +29,7 @@ Feature: Related solution
 
     # Relate two solutions.
     When I am logged in as a facilitator of the "Java" solution
-    And I go to the "edit-form" content page of the type "solution" with the title "Java"
+    And I go to the edit form of the "Java" solution
     And I jump to the "Additional information" of "solution" wizard
     And I fill in "Related solutions" with values "C, Python"
     And I jump to the "Confirmation" of "solution" wizard
@@ -44,7 +44,7 @@ Feature: Related solution
 
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "solution" with the title "Java"
+    And I go to the edit form of the "Java" solution
     And I jump to the "Additional information" of "solution" wizard
     And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"

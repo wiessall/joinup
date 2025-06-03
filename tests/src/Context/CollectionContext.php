@@ -21,7 +21,6 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
-use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
@@ -53,23 +52,6 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitProposeCollectionForm(): void {
     $this->visitPath('propose/collection');
-  }
-
-  /**
-   * Navigates to the canonical page display of a collection.
-   *
-   * @param string $collection
-   *   The title of the collection.
-   *
-   * @When I go to (the homepage of )the :collection collection
-   * @When I visit (the homepage of )the :collection collection
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitCollection(string $collection): void {
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $this->getEntityByLabel('node', $collection, 'collection');
-    $this->visitPath($entity->toUrl()->toString());
   }
 
   /**
@@ -150,7 +132,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
    *
-   * @When I visit the collection overview( page)
+   * @Given I visit the collection overview page
    */
   public function visitCollectionOverviewPage(): void {
     $this->visitPath('/collections');
@@ -182,12 +164,6 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $mapping = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
       'closed' => ['no' => 0, 'yes' => 1],
       'state' => [
         'draft' => 'draft',

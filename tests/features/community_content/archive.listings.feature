@@ -27,7 +27,6 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I am logged in as a moderator
     And I go to the edit form of the "Some collection" collection
-    And I check "Enable the search field"
     And I press "Publish"
     Then I should see the heading "Some collection"
     # By default, 'Show archived content' is set to 'unarchived'.
@@ -37,9 +36,10 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should not see the text "Archived" in the "Published news" tile
     And I should not see the text "Archived" in the "Pyraminx cube" tile
 
-    When I go to the edit form of the "Some collection" collection
+    When I go to the homepage of the "Some collection" collection
+    And I click "Settings" in the "Entity actions" region
     And I select "Archived" from "Show content"
-    And I press "Publish"
+    And I press "Save"
     Then I should see the heading "Some collection"
     Then I should see the following tiles in the correct order:
       | Archived news |
@@ -47,9 +47,11 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the text "Archived" in the "Archived news" tile
     And I should see the text "Archived" in the "Skewb cube" tile
 
-    When I go to the edit form of the "Some collection" collection
+    When I go to the homepage of the "Some collection" collection
+    And I click "Settings" in the "Entity actions" region
     And I select "All" from "Show content"
-    And I press "Publish"
+    And the "Enable the search field" checkbox should be checked
+    And I press "Save"
     Then I should see the heading "Some collection"
     Then I should see the following tiles in the correct order:
       | Published news |
@@ -134,7 +136,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "IOP published news" tile
     But I should not see the "IOP archived news" tile
 
-    When I go to the "edit-form" content page of the type "custom_page" with the title "IOP page"
+    When I go to the edit form of the "IOP page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
@@ -143,7 +145,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "IOP archived news" tile
     But I should not see the "IOP published news" tile
 
-    When I go to the "edit-form" content page of the type "custom_page" with the title "IOP page"
+    When I go to the edit form of the "IOP page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
