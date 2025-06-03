@@ -14,7 +14,7 @@ index 2a7ed1c9a787a1204f6598b39b921f53f90ca044..a870ba708a73f8ec93d7fb86067ff53f
    }
  
 diff --git a/src/TranslationResponseProcessor.php b/src/TranslationResponseProcessor.php
-index 7e9a29cddeff7155ba1293324d55667f5674c3d1..1b37315fa3e0db678fac0e5014e4f044aa103cf1 100644
+index 7e9a29cddeff7155ba1293324d55667f5674c3d1..87bc50f514c6bdae95eb52abab49751151b91c02 100644
 --- a/src/TranslationResponseProcessor.php
 +++ b/src/TranslationResponseProcessor.php
 @@ -2,6 +2,8 @@
@@ -59,16 +59,7 @@ index 7e9a29cddeff7155ba1293324d55667f5674c3d1..1b37315fa3e0db678fac0e5014e4f044
    }
  
    /**
-@@ -51,6 +71,8 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
-    *   The response key or identifier (external-reference).
-    * @param string $response
-    *   The raw JSON response content.
-+   *
-+   * @throws \Drupal\purge\Plugin\Purge\Purger\Exception\LockException
-    */
-   public function process(JobItemInterface $jobItem, string $key, string $response): void {
-     $translatableFields = $this->tmgmtData->filterTranslatable($jobItem->getData());
-@@ -68,9 +90,25 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
+@@ -68,9 +88,52 @@ class TranslationResponseProcessor implements TranslationResponseProcessorInterf
        '@translation' => $translation['#text'],
      ]);
  
@@ -77,9 +68,7 @@ index 7e9a29cddeff7155ba1293324d55667f5674c3d1..1b37315fa3e0db678fac0e5014e4f044
 -    $jobItem->save();
 +    $lockName = 'tmgmt_ec_etranslation_' . $jobItem->id();
 +
-+    while (!$this->lock->acquire($lockName)) {
-+      $this->lock->wait($lockName, 1);
-+    }
++    $this->acquireLockOrFail($lockName);
 +
 +    try {
 +      $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
@@ -93,6 +82,35 @@ index 7e9a29cddeff7155ba1293324d55667f5674c3d1..1b37315fa3e0db678fac0e5014e4f044
 +    }
 +    finally {
 +      $this->lock->release($lockName);
++    }
++  }
++
++  /**
++   * Attempts to acquire a lock up to a maximum number of tries.
++   *
++   * @param string $lockName
++   *   The name of the lock to acquire.
++   * @param int $maxTries
++   *   Maximum number of acquisition attempts.
++   * @param int $waitSeconds
++   *   Seconds to wait between attempts.
++   *
++   * @throws \RuntimeException
++   *   If the lock could not be acquired after the maximum number of tries.
++   */
++  protected function acquireLockOrFail(string $lockName, int $maxTries = 10, int $waitSeconds = 1): void {
++    $tries = 0;
++
++    while (!$this->lock->acquire($lockName)) {
++      if (++$tries >= $maxTries) {
++        throw new \RuntimeException(sprintf(
++          'Could not acquire lock "%s" after %d attempts.',
++          $lockName,
++          $maxTries
++        ));
++      }
++
++      $this->lock->wait($lockName, $waitSeconds);
 +    }
    }
  
