@@ -50,5 +50,5 @@ Feature:
     And I go to the "Share solution" solution
     Then I should see the contextual link "Share"
 
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should not see the contextual link "Share"

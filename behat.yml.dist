@@ -82,7 +82,6 @@
   - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfContext
   - Drupal\joinup\Context\ReleaseContext
-  - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:
       localDir: ${behat.screenshots.local.dir}

@@ -35,13 +35,11 @@ trait NameMappingsTrait {
         'access url' => 'website_url',
         'closed' => 'closed_group',
         'contact information' => 'contact',
-        'content creation' => 'content_creation',
         'creation date' => 'created',
         'description' => 'description',
         'featured' => 'featured',
         'keywords' => 'keywords',
         'logo' => 'logo',
-        'moderation' => 'group_moderation',
         'modification date' => 'changed',
         'owner' => 'owner',
         'published at' => 'published_at',
@@ -364,16 +362,21 @@ trait NameMappingsTrait {
    */
   protected function bundleAliases(): array {
     return [
+      'collection' => 'collection',
+      'contact information' => 'contact_information',
       'custom page' => 'custom_page',
       'discussion' => 'discussion',
       'distribution' => 'distribution',
       'document' => 'document',
       'event' => 'event',
       'glossary' => 'glossary',
+      'licence' => 'licence',
       'news' => 'news',
       'oss_solution' => 'oss_solution',
+      'owner' => 'owner',
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
+      'solution' => 'solution',
     ];
   }
 

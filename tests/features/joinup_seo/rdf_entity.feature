@@ -17,7 +17,7 @@ Feature: SEO for RDF entities.
       | @language | en         |
       | @value    | SEO entity |
 
-    When I visit the <type> overview
+    When I visit the <type> overview page
     Then the metatag graph of the item with "title" "SEO entity" should not be present
 
     Examples:

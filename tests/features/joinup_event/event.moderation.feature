@@ -31,10 +31,10 @@ Feature: Event moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
+    And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
-    And I check "Moderated"
     Then I press "Publish"
+    And the "group_moderation" setting of the "Wet Lords" collection is set to "yes"
     And I should see the heading "Wet Lords"
 
     # The parent group is now pre-moderated: authenticated non-member users
@@ -49,11 +49,11 @@ Feature: Event moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "collection" with the title "Wet Lords"
+    And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
     And I check "Closed collection"
-    And I select the radio button "Only members can create content."
     And I press "Publish"
+    And the "content_creation" setting of the "Wet Lords" collection is set to "members"
     # I should now have the possibility to add events.
     When I open the plus button menu
     Then I should see the link "Add event"

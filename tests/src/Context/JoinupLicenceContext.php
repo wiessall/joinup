@@ -21,22 +21,6 @@ class JoinupLicenceContext extends RawDrupalContext {
    *
    * @param string $licence
    *   The title of the licence.
-   *
-   * @When I go to (the homepage of )the :licence licence
-   * @When I visit (the homepage of )the :licence licence
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitLicence(string $licence): void {
-    $entity = $this->getEntityByLabel('node', $licence);
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Navigates to the canonical page display of a licence.
-   *
-   * @param string $licence
-   *   The title of the licence.
    * @param string $format
    *   The RDF serialization format.
    *

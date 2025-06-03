@@ -18,23 +18,6 @@ class JoinupDiscussionContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
-   * Navigates to the canonical page display of a discussion.
-   *
-   * @param string $title
-   *   The name of the discussion.
-   *
-   * @When I go to the :title discussion
-   * @When I visit the :title discussion
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitDiscussion(string $title): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, 'discussion');
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Checks that the given discussion has an expected number of subscribers.
    *
    * @param string $title

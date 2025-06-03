@@ -603,45 +603,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that a certain radio input is selected in a specific field.
-   *
-   * @param string $radio
-   *   The label of the radio input to find.
-   * @param string $field
-   *   The label of the field the radio is part of.
-   *
-   * @throws \Exception
-   *   Thrown when the field or the radio is not found, or if the radio is not
-   *   selected.
-   *
-   * @Then the radio button :radio from field :field should be selected
-   */
-  public function assertFieldRadioSelected(string $radio, string $field): void {
-    // Find the grouping fieldset that contains the radios field.
-    $fieldset = $this->getSession()->getPage()->find('named', [
-      'fieldset',
-      $field,
-    ]);
-
-    if (!$field) {
-      throw new \Exception("The field '$field' was not found in the page.");
-    }
-
-    // Find the field inside the container itself. Use the findField() instead
-    // of custom xpath because we are trying to find the radio by label.
-    $input = $fieldset->findField($radio);
-
-    // Verify that we have found a valid '//input[@type="radio"]'.
-    if (!$input || $input->getTagName() !== 'input' || $input->getAttribute('type') !== 'radio') {
-      throw new \Exception("The radio '$radio' was not found in the page.");
-    }
-
-    if (!$input->isChecked()) {
-      throw new \Exception("The radio '$radio' is not selected.");
-    }
-  }
-
-  /**
    * Asserts that the radio button option should be selected.
    *
    * @param string $radio

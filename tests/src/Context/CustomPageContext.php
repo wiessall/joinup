@@ -66,25 +66,6 @@ class CustomPageContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the canonical page display of a custom page.
-   *
-   * @param string $title
-   *   The name of the custom page.
-   *
-   * @When I go to the :title custom page
-   * @When I go to the :title custom_page
-   * @When I visit the :title custom page
-   * @When I visit the :title custom_page
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitCustomPage(string $title): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, 'custom_page');
-    $this->visitPath($node->toUrl()->toString());
-  }
-
-  /**
    * Checks the number of custom pages a collection or solution has.
    *
    * @param int $count

@@ -41,7 +41,7 @@ Feature: Owner moderation
     Then I should see the heading "The healthy food European project"
 
     # Make a change to the owner entity.
-    When I go to the "edit-form" content page of the type "owner" with the title "EU healthy movement"
+    When I go to the edit form of the "EU healthy movement" owner
     Then I should see the heading "Edit Owner EU healthy movement"
     And the following 2 buttons should be present "Update, Request deletion"
     And the current workflow state should be "Published"
@@ -52,7 +52,7 @@ Feature: Owner moderation
 
     # Request an update as moderator: the chosen owner type is wrong.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     Then I should see the heading "Edit Owner EU healthy group"
     And the following 3 buttons should be present "Update, Request changes, Request deletion"
     And the current workflow state should be "Published"
@@ -69,7 +69,7 @@ Feature: Owner moderation
     # The original owner creator is allowed to update the entity with the
     # requested changes.
     When I am logged in as "Raeburn Hibbert"
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     Then I should see the heading "Edit Owner EU healthy group"
     And the following 1 button should be present "Update"
     And the current workflow state should be "Needs update"
@@ -81,7 +81,7 @@ Feature: Owner moderation
 
     # The moderator approves the changes.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     And the following 2 buttons should be present "Update, Approve changes"
     And the current workflow state should be "Needs update"
     And I press "Approve changes"
@@ -90,7 +90,7 @@ Feature: Owner moderation
     # The facilitator asks for deletion. This is rejected since the owner is
     # used by the collection.
     When I am logged in as "Raeburn Hibbert"
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     And the following 2 buttons should be present "Update, Request deletion"
     And the current workflow state should be "Published"
     And I press "Request deletion"
@@ -98,7 +98,7 @@ Feature: Owner moderation
 
     # Also a moderator cannot delete the owner as it's used by the collection.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     Then I should not see the link "Delete"
 
     # Change the owner in the collection.
@@ -118,7 +118,7 @@ Feature: Owner moderation
 
     # Now the facilitator can request deletion.
     When I am logged in as "Raeburn Hibbert"
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     And the following 2 buttons should be present "Update, Request deletion"
     And the current workflow state should be "Published"
     And I press "Request deletion"
@@ -127,7 +127,7 @@ Feature: Owner moderation
 
     # Now the moderator is able to delete the old owner.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "owner" with the title "EU healthy group"
+    And I go to the edit form of the "EU healthy group" owner
     Then I should see the link "Delete"
     When I click "Delete"
     # Confirm the deletion.

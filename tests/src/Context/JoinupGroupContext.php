@@ -438,9 +438,9 @@ class JoinupGroupContext extends RawDrupalContext {
       'content_creation' => [
         'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
         'registered users' => ContentCreationOptions::REGISTERED_USERS,
+        'members' => ContentCreationOptions::MEMBERS,
       ],
     ];
-
     try {
       $groupEntity->getSetting($fieldName);
     }
@@ -467,14 +467,9 @@ class JoinupGroupContext extends RawDrupalContext {
         ->save();
     }
     else {
-      $metaEntities = \Drupal::entityTypeManager()->getStorage('meta_entity')
-        ->loadByProperties([
-          'type' => "{$group}_settings",
-          'target.target_type' => $groupEntity->getEntityTypeId(),
-          'target.target_id' => $groupEntity->id(),
-        ]);
-      $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
-      $metaEntity?->delete();
+      MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+        ->set($fieldName, NULL)
+        ->save();
     }
   }
 
@@ -485,7 +480,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    if ($node->type === 'solution') {
+    if ($node->type === 'collection' || $node->type === 'solution') {
       $meta_entity_type = $node->type . '_settings';
       $meta_entity = MetaEntity::create([
         'type' => $meta_entity_type,
@@ -510,7 +505,7 @@ class JoinupGroupContext extends RawDrupalContext {
 
       foreach ($meta_fields as $field) {
         if (property_exists($node, $field)) {
-          $meta_entity->set($field, $fieldMapping[$field][$node->$field]);
+          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
           unset($node->$field);
         }
       }

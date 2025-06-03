@@ -27,7 +27,7 @@ Feature:
  a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:27:"entity_bundle|news
 topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;}
     """
-    When I go to the "News carousel" custom page
+    When I go to the "News carousel" custom_page
     # Ensure that listings are restricted only for group content news of topic HR.
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
@@ -46,7 +46,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
-    When I go to the "News carousel" custom page
+    When I go to the "News carousel" custom_page
     Then I should see the following tiles in the correct order:
       | Some news 3 |
       | Some news 1 |
@@ -64,7 +64,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Events carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:19:"entity_bundle\|event";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
-    When I go to the "Events carousel" custom page
+    When I go to the "Events carousel" custom_page
     Then I should see the following tiles in the correct order:
       | Some event 1 |
       | Some event 2 |
@@ -86,7 +86,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
     field_event_date|2025-03-01|<";s:5:"limit";s:2:"10";}
     """
 
-    When I go to the "February events" custom page
+    When I go to the "February events" custom_page
     Then I should see the following tiles in the correct order:
       | Lumina Night Festival |
       | Stardust Gala Evening |
@@ -106,7 +106,7 @@ topic|hr";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:15:"keywords|drinks";s:5:"limit";s:2:"10";}
     """
 
-    When I go to the "February events" custom page
+    When I go to the "February events" custom_page
     Then I should see the following tiles in the correct order:
       | Quantum Horizons Conference |
       | Stardust Gala Evening       |

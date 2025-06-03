@@ -7,17 +7,15 @@ namespace Drupal\joinup_flag\Plugin\views\field;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\flag\FlaggingInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Field handler to get flagged entity.
- *
- * @ingroup views_field_handlers
- *
- * @ViewsField("joinup_flag_flagged_entity")
  */
+#[ViewsField("joinup_flag_flagged_entity")]
 class JoinupFlagFlaggedEntity extends FieldPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

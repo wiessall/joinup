@@ -63,7 +63,7 @@ Feature: Asset release moderation
     And I click "Add release" in the plus button menu
     Then I should see the text "Authored on"
 
-    And I go to the "edit-form" content page of the type "release" with the title "Release of the dark ship"
+    And I go to the edit form of the "Release of the dark ship" release
     Then the current workflow state should be "Published"
     And I should see the workflow buttons "Update, Save as draft, Request changes, Archive"
     # The "Delete" button is actually a link to the confirmation form, but it is
@@ -106,7 +106,7 @@ Feature: Asset release moderation
       | body      | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
 
     # We do not show the created time in the UI so another visit to the edit screen is required.
-    When I go to the "edit-form" content page of the type "release" with the title "Release of the dark ship"
+    When I go to the edit form of the "Release of the dark ship" release
     Then the "Authored on" date field should contain the datetime "2014-08-30 23:59:00"
 
     # Implement changes as a facilitator.
@@ -124,7 +124,7 @@ Feature: Asset release moderation
 
     # Approve changes as a moderator.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "release" with the title "Release of the dark ship"
+    And I go to the edit form of the "Release of the dark ship" release
     And I should see the workflow buttons "Update, Publish"
     And I press "Publish"
     # The published is updated.
@@ -136,23 +136,23 @@ Feature: Asset release moderation
 
     # Check archive permissions author and facilitator.
     When I am logged in as "Bonnie Holloway"
-    And I go to the "edit-form" content page of the type "release" with the title "Release fix"
+    And I go to the edit form of the "Release fix" release
     And I press "Archive"
     Then I should see the text "Archived" in the "Page title" region
 
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "release" with the title "Release fix"
+    And I go to the edit form of the "Release fix" release
     And I press "Unarchive"
     Then I should not see the text "Archived" in the "Page title" region
 
     When I am logged in as "Felix Russell"
-    And I go to the "edit-form" content page of the type "release" with the title "Release fix"
+    And I go to the edit form of the "Release fix" release
     And I press "Archive"
     Then I should see the text "Archived" in the "Page title" region
 
     When I am logged in as a moderator
     # Delete a release as a moderator.
-    When I go to the "edit-form" content page of the type "release" with the title "Release fix"
+    When I go to the edit form of the "Release fix" release
     And I click "Delete"
     And I press "Delete"
     And the following email should have been sent:
