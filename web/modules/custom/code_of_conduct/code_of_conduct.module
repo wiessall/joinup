@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GroupMembership;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
@@ -23,17 +22,6 @@ function code_of_conduct_node_update(EntityInterface $entity): void {
   elseif ($entity instanceof CustomPageInterface) {
     \Drupal::service('code_of_conduct.crud_handler')->onCodeOfConductUpdate($entity);
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function code_of_conduct_node_insert(EntityInterface $entity): void {
-  if (!$entity instanceof CollectionInterface) {
-    return;
-  }
-  $meta_entity = MetaEntity::loadOrCreate('collection_settings', $entity);
-  \Drupal::service('code_of_conduct.crud_handler')->onGroupSettingsInsertOrUpdate($meta_entity, TRUE);
 }
 
 /**
