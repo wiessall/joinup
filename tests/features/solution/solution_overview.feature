@@ -150,9 +150,6 @@ Feature: Solutions Overview
     Then I should see the link "Colonies in Earth"
     And the page should be cacheable
 
-    # Clean up the solution that was created manually.
-    And I delete the "Colonies in Earth" solution
-
   Scenario: Users are able to filter solutions they have created or that are featured site-wide.
     Given users:
       | Username        | E-mail                      |
