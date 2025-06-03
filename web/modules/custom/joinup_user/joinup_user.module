@@ -630,3 +630,15 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
   return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
     ->addCacheableDependency($account);
 }
+
+/**
+ * Implements hook_entity_view().
+ */
+function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_mode, $langcode): void {
+  if ($entity instanceof UserInterface && $view_mode->getMode() === 'group_header') {
+    $current_user = \Drupal::currentUser();
+    if (!$current_user->hasRole('moderator') && !$current_user->hasRole('developer')) {
+      unset($build['blocked_reason']);
+    }
+  }
+}
