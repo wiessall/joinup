@@ -8,15 +8,15 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
 use Drupal\private_message\Entity\PrivateMessageInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'private_message_target' field.
- *
- * @ViewsField("private_message_target")
  */
+#[ViewsField("private_message_target")]
 class PrivateMessageTarget extends FieldPluginBase {
 
   public function __construct(
