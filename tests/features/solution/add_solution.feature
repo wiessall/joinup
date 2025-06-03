@@ -190,9 +190,6 @@ Feature: Test adding solutions.
 
     When I visit "/user"
     Then I should see the link "V60 filter coffee solution"
-    # Clean up the solutions that were created through the UI.
-    Then I delete the "V60 filter coffee solution" solution
-    Then I delete the "Espresso is the solution" solution
 
   Scenario: Create a solution with a name that already exists
     Given collection content:

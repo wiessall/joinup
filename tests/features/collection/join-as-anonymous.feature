@@ -180,9 +180,6 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "You have already joined the Vul nuts collection but your membership still needs to be approved by a facilitator."
     And I should not see the text "Welcome to Vul nuts"
 
-    # Clean up the user that was created manually during the scenario.
-    Then I delete the "Iodine Maccalariat" user
-
   @javascript
   Scenario: Logged out users can join a collection after logging in
     Given users:
