@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
@@ -20,9 +21,15 @@ class GroupSettingsViewAccessCheck {
    */
   public static function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
     $meta_entity = $route_match->getParameter('meta_entity');
+    $membershipManager = \Drupal::service('Drupal\joinup_group\JoinupGroupPermissionManagerInterface');
     $bundles = ['collection_settings', 'solution_settings'];
-    if ($meta_entity instanceof MetaEntityInterface && in_array($meta_entity->bundle(), $bundles, TRUE)) {
-      return $meta_entity->access('update', $account, TRUE);
+    $group = $meta_entity->getTargetEntity();
+    if ($meta_entity instanceof MetaEntityInterface && in_array($meta_entity->bundle(), $bundles, TRUE) && $group instanceof GroupInterface) {
+      if ($meta_entity->access('update', $account, TRUE)->isAllowed() ||
+        $membershipManager->userHasOgPermission($account->id(), $group, 'edit any solution content')) {
+        return AccessResult::allowed();
+      }
+      return AccessResult::forbidden();
     }
     return AccessResult::allowed();
   }
