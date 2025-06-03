@@ -59,7 +59,7 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         label_as_html: false
-        formatter: closed
+        formatter: open
         description: ''
         required_fields: true
     group_contact_details:
@@ -135,7 +135,7 @@ third_party_settings:
         label_as_html: false
         formatter: closed
         description: ''
-        required_fields: true
+        required_fields: false
     group_solution_tabs:
       children:
         - group_solution_information

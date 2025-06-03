@@ -52,6 +52,7 @@ Feature: Test the visibility of the quick links menu.
     And I go to the "Some collection" collection
     Then I should not see the heading "Quick links"
 
+  @javascript
   Scenario: Test visibility for solutions.
     Given collection content:
       | title           | content_creation         | group_moderation |
@@ -98,7 +99,8 @@ Feature: Test the visibility of the quick links menu.
     Given I am logged in as a facilitator of the "Some solution" solution
     And I go to the "Some solution" solution
     Then I should see the text "Quick links"
-    And I should see the contextual link "Edit menu" in the Content region
+    And I should see the contextual links button in the "Navigation menu"
+    And I should see the contextual link "Edit menu" in the "Navigation menu" region
 
     When I am not logged in
     And I go to the "Some solution" solution
@@ -107,7 +109,7 @@ Feature: Test the visibility of the quick links menu.
       | Website link    |
       | Release history |
       | Documentation   |
-    And I should not see the contextual link "Edit menu" in the Content region
+    And I should not see the contextual link "Edit menu" in the "Navigation menu" region
 
   @javascript
   Scenario: Test quick links menu structure.

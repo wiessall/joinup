@@ -118,27 +118,22 @@ Feature: Solutions Overview
     And I am logged in as a moderator
     When I go to the add solution form of the "Pikachu, I choose you" collection
     And I fill in the following:
-      | Title                 | Colonies in Earth                   |
-      | Abstract              | Some abstract                       |
-      | Description           | Some space mumbo jumbo description. |
+      | Title                   | Colonies in Earth                   |
+      | Abstract                | Some abstract                       |
+      | Description             | Some space mumbo jumbo description. |
+      | Geographical coverage   | Belgium                             |
     And I select "Demography" from "Topic"
     And I select "Data Owner" from "Solution type"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Bulgarian" from "Language"
-    And I press "Next"
-    And I fill in "owner[form][0][title][0][value]" with "Organisation valid"
+    # Create owner.
+    And I fill in "owner[form][0][title][0][value]" with "Ambrosio Morison"
     And I check "Company"
-    And I fill in "Country" with "Belgium"
-    And I press "Create owner"
-    And I fill in "contact[form][0][title][0][value]" with "Contact Rapazoglou"
-    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
-    Then I press "Create contact information"
-    And I press "Next"
-    And I attach the file "logo.png" to "Logo"
-    And I fill in "Geographical coverage" with "Belgium"
-    And I press "Next"
-    And I press "Next"
+    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
+    # Create contact information.
+    And I fill in "contact[form][0][title][0][value]" with "Ambrosio Morison"
+    And I fill in "contact[form][0][email][value]" with "ambrosio.morison@example.com"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Publish"
     And I visit the "Colonies in Earth" solution

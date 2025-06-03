@@ -13,6 +13,7 @@ Feature: Related solution
       | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published | Business      |
       | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       |
 
+  @javascript
   # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.
