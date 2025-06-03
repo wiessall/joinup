@@ -9,7 +9,7 @@ Feature: Test adding solutions.
     And I go to the homepage of the "The Portal" collection
     And I click "Add solution"
 
-    When I press "Next"
+    When I press "Propose"
     Then I should see the following error messages:
       | error messages                             |
       | Title field is required.                   |
@@ -28,8 +28,8 @@ Feature: Test adding solutions.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
-    And I press "Next"
-    And I press "Next"
+    And I click "Contact details"
+    And I press "Propose"
     Then I should see the following error messages:
       | error messages                    |
       | Name field is required.           |
@@ -44,9 +44,9 @@ Feature: Test adding solutions.
     And I press "Create contact information"
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
-    And I press "Next"
+    And I click "Additional information"
     And I select "Logging Service" from "Solution type"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I press "Propose"
     Then I should see the following error messages:
       | error messages                          |
@@ -208,7 +208,7 @@ Feature: Test adding solutions.
     When I go to the homepage of the "Ocean studies" collection
     And I click "Add solution" in the plus button menu
     And I fill in "Title" with "Climate change tracker"
-    And I press "Next"
+    And I press "Propose"
     Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
@@ -226,7 +226,7 @@ Feature: Test adding solutions.
     And I select "Demography" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
-    And I press "Next"
+    And I click the "Contact details" content tab
     # Create owner.
     And I fill in "owner[form][0][title][0][value]" with "University of Basel"
     And I check "Company"
@@ -236,7 +236,7 @@ Feature: Test adding solutions.
     And I press "Create contact information"
     And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
     And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
@@ -262,9 +262,8 @@ Feature: Test adding solutions.
     And I am logged in as a moderator
 
     When I go to the edit form of the "Cleaning solution" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2

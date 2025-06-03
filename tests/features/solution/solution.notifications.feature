@@ -29,7 +29,6 @@ Feature: Solution notifications
 
     # Template 7. The moderation team proposes changes.
     And I go to the edit form of the "Solution notification to propose changes" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -42,7 +41,6 @@ Feature: Solution notifications
 
     # Template 13. The moderation team blacklists a solution.
     When I go to the edit form of the "Solution notification to blacklist" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
@@ -51,7 +49,6 @@ Feature: Solution notifications
 
     # Template 14. The moderation team restores a solution from blacklisted.
     When I go to the edit form of the "Solution notification to publish from blacklisted" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
@@ -61,7 +58,6 @@ Feature: Solution notifications
     # Template 15. The moderation team requests changes.
     When I go to the edit form of the "Solution notification to request changes" solution
     And I select "Data Owner" from "Solution type"
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Request changes"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -78,7 +74,6 @@ Feature: Solution notifications
 
     # Template 18. The moderation team deletes a solution without prior request.
     When I go to the edit form of the "Solution notification to delete by moderator team" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
@@ -90,7 +85,6 @@ Feature: Solution notifications
 
     # Template 18. The owner proposes changes.
     When I go to the edit form of the "Solution notification to propose from request changes" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
@@ -100,7 +94,6 @@ Feature: Solution notifications
     # since we do not send notifications to the actor.
     When I mark all emails as read
     And I go to the edit form of the "Solution notification to delete by owner" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I click "Delete"
     And I press "Delete"
     Then 0 e-mails should have been sent

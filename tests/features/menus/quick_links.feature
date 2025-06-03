@@ -82,11 +82,10 @@ Feature: Test the visibility of the quick links menu.
       | title        | is version of |
       | Some release | Some solution |
     And I go to the edit form of the "Some solution" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And I fill in the following:
       | Relevant website | http://www.example.com |
     Then I upload the file "text.pdf" to "Upload a new file or enter a URL"
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the text "Quick links"
     And I should see the following links:

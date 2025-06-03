@@ -85,13 +85,12 @@ Feature: Resend validation email from collection/solution about page
     When I am logged in as a moderator
     And I go to the "Klop mirubes" solution
     When I go to the edit form of the "Klop mirubes" solution
-    And I press "Next"
+    And I click "Contact details"
     And I press "Add new contact information"
     And I fill in the following:
       | E-mail | confirmation_email2.man@example.com |
       | Name   | Confirmation Invisible Man 2        |
     And I press "Create contact information"
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     When I go to the "Klop mirubes" solution
     Then I should see the text "Please confirm your contact information to enable users to contact you"
