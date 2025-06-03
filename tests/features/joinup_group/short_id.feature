@@ -124,7 +124,6 @@ Feature:
     # Publish the solution.
     When I am logged in as a moderator
     And I go to the edit form of the "I know what a solution is" solution
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the heading "I know what a solution is"
 

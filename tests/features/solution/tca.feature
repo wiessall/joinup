@@ -34,9 +34,9 @@ Feature: Solution TCA agreement
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
     And I press "Create contact information"
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And I select "Logging Service" from "Solution type"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I click "Terms of Agreement"
 
     Then a modal should open
@@ -50,5 +50,5 @@ Feature: Solution TCA agreement
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the edit form of the "Solution B" solution
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I should not see "I have read and agreed"

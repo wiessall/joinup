@@ -29,7 +29,6 @@ Feature: Solution moderation
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
-    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
@@ -53,7 +52,6 @@ Feature: Solution moderation
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
-    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose, Publish"
     And the following buttons should not be present "Request changes, Blacklist"
     And I should not see the link "Delete"
@@ -77,7 +75,6 @@ Feature: Solution moderation
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
-    And I jump to the "Confirmation" of "solution" wizard
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
