@@ -17,8 +17,8 @@ Feature: SEO for document content.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
-      | title        | author                                 | document type | published at              | changed                   | keywords         | short title | file type | file     | field_paragraphs_body | licence      | collection                                          | abstract |
-      | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | key1, key2, key3 | SEO         | upload    | test.zip | Document test1.zip    | Some license | Interoperable Europe Portal SEO document collection |          |
+      | title        | author                                 | document type | published at              | changed                   | keywords                  | short title | file type | file     | field_paragraphs_body | licence      | collection                                          | abstract |
+      | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | tags, metatag, schema.org | SEO         | upload    | test.zip | Document test1.zip    | Some license | Interoperable Europe Portal SEO document collection |          |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -36,10 +36,10 @@ Feature: SEO for document content.
       | mainEntityOfPage    | __base_url__/sites/default/files/test__random_text__.zip |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "SEO document" should have the following "about" properties:
-      | property | value |
-      | 0        | key1  |
-      | 1        | key2  |
-      | 2        | key3  |
+      | property | value      |
+      | 0        | tags       |
+      | 1        | metatag    |
+      | 2        | schema.org |
 
     And the metatag graph of the item with "name" "SEO document" should have the following "associatedMedia" properties:
       | property      | value                                                    |
