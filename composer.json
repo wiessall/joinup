@@ -486,7 +486,8 @@
                 "Warning: Undefined array key '#webform_key' in WebformManagedFileBase.php @see https://www.drupal.org/i/3502992": "resources/patch/php/drupal/webform/3502992.diff"
             },
             "gitonomy/gitlib": {
-                "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff"
+                "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
+                "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
             },
             "openeuropa/oe_webtools": {
                 "Add maps version 3.0 @see https://github.com/openeuropa/oe_webtools/pull/254": "resources/patch/php/openeuropa/oe_webtools/254.diff"
