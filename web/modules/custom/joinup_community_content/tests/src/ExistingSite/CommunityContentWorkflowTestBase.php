@@ -131,9 +131,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     foreach ($this->createAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $content_creation_data) {
         foreach ($content_creation_data as $content_creation => $allowed_roles) {
-          if ($parent_bundle == 'solution') {
+          if (in_array($parent_bundle, ['collection', 'solution'], TRUE)) {
             $parent = $this->createParent($parent_bundle);
-            $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+            $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, $parent_bundle . '_settings');
             $meta_entity->set('group_moderation', $moderation);
             $meta_entity->set('content_creation', $content_creation);
             $meta_entity->save();
@@ -224,9 +224,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'update';
     foreach ($this->updateAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        if ($parent_bundle == 'solution') {
+        if (in_array($parent_bundle, ['collection', 'solution'], TRUE)) {
           $parent = $this->createParent($parent_bundle);
-          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, $parent_bundle . '_settings');
           $meta_entity->set('group_moderation', $moderation);
           $meta_entity->save();
         }
@@ -283,9 +283,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'delete';
     foreach ($this->deleteAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        if ($parent_bundle == 'solution') {
+        if (in_array($parent_bundle, ['collection', 'solution'], TRUE)) {
           $parent = $this->createParent($parent_bundle);
-          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, 'solution_settings');
+          $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($parent, $parent_bundle . '_settings');
           $meta_entity->set('group_moderation', $moderation);
           $meta_entity->save();
         }

@@ -2,35 +2,35 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_solution\Access;
+namespace Drupal\joinup_group\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
- * Custom access check for solution_settings canonical page.
+ * Custom access check for group settings canonical page.
  */
-class SolutionSettingsViewAccessCheck {
+class GroupSettingsViewAccessCheck {
 
   /**
-   * Custom access check for solution_settings meta entity.
+   * Custom access check for group settings meta entity.
    */
   public static function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
     $meta_entity = $route_match->getParameter('meta_entity');
-    $solution = $meta_entity->getTargetEntity();
     $membershipManager = \Drupal::service('Drupal\joinup_group\JoinupGroupPermissionManagerInterface');
-
-    if ($meta_entity instanceof MetaEntityInterface && $meta_entity->bundle() === 'solution_settings') {
+    $bundles = ['collection_settings', 'solution_settings'];
+    $group = $meta_entity->getTargetEntity();
+    if ($meta_entity instanceof MetaEntityInterface && in_array($meta_entity->bundle(), $bundles, TRUE) && $group instanceof GroupInterface) {
       if ($meta_entity->access('update', $account, TRUE)->isAllowed() ||
-        $membershipManager->userHasOgPermission($account->id(), $solution, 'edit any solution content')) {
+        $membershipManager->userHasOgPermission($account->id(), $group, 'edit any solution content')) {
         return AccessResult::allowed();
       }
       return AccessResult::forbidden();
     }
-
     return AccessResult::allowed();
   }
 
