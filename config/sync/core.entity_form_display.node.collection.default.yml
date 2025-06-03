@@ -7,13 +7,10 @@ dependencies:
     - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
-    - field.field.node.collection.content_creation
     - field.field.node.collection.description
     - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.group_moderation
-    - field.field.node.collection.listing_content
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -26,13 +23,13 @@ dependencies:
     - node.type.collection
   module:
     - field_group
-    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_core
     - joinup_workflow
+    - link
+    - oe_bootstrap_theme_helper
     - oe_newsroom_newsletter
-    - search_api_field
     - text
 third_party_settings:
   field_group:
@@ -134,12 +131,6 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
-  content_creation:
-    type: options_buttons
-    weight: 9
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 9
@@ -177,20 +168,6 @@ content:
     weight: 5
     region: content
     settings: {  }
-    third_party_settings: {  }
-  group_moderation:
-    type: boolean_checkbox
-    weight: 7
-    region: content
-    settings:
-      display_label: false
-    third_party_settings: {  }
-  listing_content:
-    type: search_api_field_default
-    weight: 11
-    region: content
-    settings:
-      query_builder: false
     third_party_settings: {  }
   logo:
     type: image_library_widget

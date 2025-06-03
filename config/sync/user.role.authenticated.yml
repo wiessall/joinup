@@ -190,6 +190,7 @@ permissions:
   - 'use text format text_html'
   - 'use text format webform_default'
   - 'view bookmark'
+  - 'view collection_settings meta-entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
   - 'view interoperability'

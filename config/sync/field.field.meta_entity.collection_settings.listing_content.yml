@@ -1,20 +1,20 @@
-uuid: c780b0ae-6cd9-4d1a-bd9d-f790782d28c0
+uuid: e0b789da-9714-4cf2-842d-34739acd4e3f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.listing_content
-    - node.type.collection
+    - field.storage.meta_entity.listing_content
+    - meta_entity.type.collection_settings
   module:
     - search_api_field
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: node.collection.listing_content
+id: meta_entity.collection_settings.listing_content
 field_name: listing_content
-entity_type: node
-bundle: collection
+entity_type: meta_entity
+bundle: collection_settings
 label: 'Collection content'
 description: ''
 required: false
@@ -24,16 +24,16 @@ default_value:
     value:
       fields:
         collection_type:
-          weight: 0
+          weight: -1
           region: top
         collection_content_status:
-          weight: 1
+          weight: 0
           region: top
         collection_topic:
-          weight: 2
+          weight: -2
           region: inline_facets
         collection_event_type:
-          weight: 3
+          weight: 0
           region: inline_facets
       enabled: 1
       query_presets: ''
@@ -56,7 +56,7 @@ settings:
       event: view_mode_tile
       licence: default
       news: view_mode_tile
-      release: default
+      release: view_mode_tile
       solution: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
