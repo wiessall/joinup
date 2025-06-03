@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Plugin\views\field;
 
 use Drupal\Core\Url;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
 /**
  * Plugin implementation of the 'private_message_actions' field.
- *
- * @ViewsField("private_message_actions")
  */
+#[ViewsField("private_message_actions")]
 class PrivateMessageActions extends FieldPluginBase {
 
   /**
