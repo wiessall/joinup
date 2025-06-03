@@ -308,7 +308,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
 
     When I press "Add another item" at the "Geographical coverage" field
 
