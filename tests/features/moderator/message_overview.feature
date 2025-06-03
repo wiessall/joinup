@@ -68,7 +68,3 @@ Feature: Solutions message overview
       | You'll be able to provide feedback.                                                |
       | The requestor will be notified of your decision and feedback.                      |
       | If you think this action is not clear or not due, please contact Portal Support at |
-
-    # Clean up the collection that was created.
-    And I delete the "Message overview proposal" collection
-    And I delete the "Invisible Man" "contact information"

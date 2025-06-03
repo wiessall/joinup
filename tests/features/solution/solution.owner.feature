@@ -64,6 +64,3 @@ Feature:
     And I press "Save"
     Then I should see the heading "Solution API example"
     And the user "Solution API user" should be the owner of the "Solution API example" solution
-
-    # Clean up the solution that was created manually.
-    Then I delete the "Solution API example" solution

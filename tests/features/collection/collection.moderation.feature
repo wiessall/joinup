@@ -215,9 +215,7 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    # Clean up the entities that were created.
-    Then I delete the "Domestic bovins" collection
-    And I delete the "Domestic secretary" "contact information"
+    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
@@ -249,9 +247,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    # Clean up the entities that were created.
-    Then I delete the "Theft of Body" collection
-    And I delete the "Secretary of thieves" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
@@ -284,6 +279,38 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    # Clean up the entities that were created.
-    Then I delete the "Silken Emperor" collection
-    And I delete the "Secretary of Silk" "contact information"
+
+  @javascript @uploadFiles:logo.png
+  Scenario: Changing Content creation value - regression #4
+    # Regression test for a bug that happens when the "Closed collection" checkbox
+    # is checked and then an "Add more" button on a multi-value widget is clicked.
+    # @see collection_form_node_form_alter()
+    # Note that the "Closed collection" option no longer exists but we are
+    # keeping the coverage for now.
+    Given I am logged in as a user with the "authenticated" role
+    When I go to the propose collection form
+    And I fill in the following:
+      | Title    | The blue ships          |
+      | Abstract | The ships are blue.     |
+      # Contact information data.
+      | Name     | Secretary of the harbor |
+      | E-mail   | sh@example.com          |
+    And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
+    And I select "Employment and Support Allowance" from "Topic"
+    # An ajax callback is executed now.
+    And I press "Add new" at the "Owner" field
+    And I fill in "Name" with "Mable Pelley"
+    And I check the box "Company"
+    And I expand the "Additional fields" accordion section
+    And I attach the file "logo.png" to "Logo"
+    And I select the radio button "Only facilitators and authors can create content."
+
+    When I press "Add another item" at the "Geographical coverage" field
+
+    # Save the collection.
+    When I press "Propose"
+    Then I should see the heading "The blue ships"
+    # Edit again.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I expand the "Additional fields" accordion section

@@ -59,8 +59,6 @@ Feature: Add distribution through the UI
     # The licence label should be shown also in the solution UI.
     When I go to the homepage of the "Solution random x name" solution
     Then I should see the text "WTFPL"
-    # Clean up the distribution that was created through the UI.
-    Then I delete the "Linux x86-64 SDK" distribution
 
   # Test that unauthorized users cannot add a distribution, both for a release
   # and directly from the solution page.
@@ -129,8 +127,6 @@ Feature: Add distribution through the UI
       | Datalog                  |
 
     And I go to the homepage of the "Solution random x name" solution
-    # Clean up the distribution that was created through the UI.
-    Then I delete the "Source tarball" distribution
 
   Scenario: The distribution access URL field should accept multiple file extensions.
     Given I am logged in as a "facilitator" of the "Solution random x name" solution
@@ -168,10 +164,6 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-
-    # Clean up the entities created through the user interface.
-    Then I delete the "MacOSX binary" distribution
-    And I delete the "MacOSX binary" distribution
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
