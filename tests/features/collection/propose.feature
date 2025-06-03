@@ -186,7 +186,7 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @email
+  @email @javascript
   Scenario: Email validator after submit a Collection/Solution.
     Given owner content:
       | name               | owner type |
@@ -223,9 +223,8 @@ Feature: Proposing a collection
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
-    And I press "Next"
+    And I click "Contact details"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
     And I fill in "Country" with "Belgium"
@@ -269,7 +268,7 @@ Feature: Proposing a collection
     # Contact us page should return access denied,
     # because contact info emails are not published.
     When I go to "/collection/some-email-validation/contact"
-    Then I should get an access denied error
+    Then I should see the heading "Access denied"
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
