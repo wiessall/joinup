@@ -64,6 +64,7 @@ Feature: Related solution
     When I go to the edit form of the "Javascript" solution
     And I click "Additional information"
     And I drag the table row in the "Related solutions" region at position 2 up
+    And I press "Continue"
     And I press "Publish"
     Then I should see the heading "Javascript"
     And I should see the following tiles in the correct order:
