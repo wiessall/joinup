@@ -12,6 +12,7 @@ Feature: Report inappropriate content
       | title   | body   | collection       |
       | <title> | <body> | Deployment tools |
     Given I am not logged in
+    Then I break
     When I visit the "<title>" "<type>"
     And I click "Report"
     Then I should see the heading "Contact"

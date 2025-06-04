@@ -33,6 +33,7 @@ Feature: Related solution
     And I go to the edit form of the "Java" solution
     And I click "Additional information"
     And I fill in "Related solutions" with values "C, Python"
+    And I press "Continue"
     And I press "Propose"
     Then I should see the heading "Java"
     # The "Java" solution is not published yet.
@@ -45,6 +46,7 @@ Feature: Related solution
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
     And I go to the edit form of the "Java" solution
+    And I press "Continue"
     And I press "Publish"
     Then I should see the heading "Java"
     And I should see the "Python" tile

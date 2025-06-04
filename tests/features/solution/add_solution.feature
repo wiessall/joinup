@@ -37,6 +37,21 @@ Feature: Test adding solutions.
       | Type field is required.                 |
       | Country field is required.              |
       | E-mail address field is required.       |
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Organisation valid"
+    And I check "Company"
+    And I fill in "Country" with "Belgium"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I press "Continue"
+    And I press "Propose"
+    Then I should see the following error messages:
+      | error messages                          |
       | You must accept the Terms of Agreement. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
