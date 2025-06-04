@@ -128,6 +128,7 @@ Feature: Solutions Overview
     And I select "Defense" from "Domain"
     And I select "Bulgarian" from "Language"
     # Create owner.
+    And I press "Add new owner"
     And I fill in "owner[form][0][title][0][value]" with "Ambrosio Morison"
     And I check "Company"
     And I fill in "owner[form][0][country][0][target_id]" with "Belgium"

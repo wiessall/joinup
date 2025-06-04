@@ -28,6 +28,8 @@ Feature: Test adding solutions.
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
+    And I click "Contact details"
+    And I press "Add new owner"
     And I press "Propose"
     Then I should see the following error messages:
       | error messages                          |
@@ -212,6 +214,7 @@ Feature: Test adding solutions.
     And I select "Bulgarian" from "Language availability"
     And I click "Contact details"
     # Create owner.
+    And I press "Add new owner"
     And I fill in "owner[form][0][title][0][value]" with "University of Basel"
     And I check "Company"
     And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
