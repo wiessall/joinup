@@ -1,5 +1,5 @@
 diff --git a/src/Element/WebformElementAttributes.php b/src/Element/WebformElementAttributes.php
-index 8fffae740..69185f180 100644
+index 8fffae740..e0665788f 100644
 --- a/src/Element/WebformElementAttributes.php
 +++ b/src/Element/WebformElementAttributes.php
 @@ -2,6 +2,7 @@
@@ -10,24 +10,30 @@ index 8fffae740..69185f180 100644
  use Drupal\Core\Form\FormStateInterface;
  use Drupal\Core\Render\Element\FormElement;
  use Drupal\Core\Serialization\Yaml;
-@@ -177,7 +178,14 @@ class WebformElementAttributes extends FormElement {
+@@ -177,7 +178,20 @@ class WebformElementAttributes extends FormElement {
      }
  
      if (!empty($values['attributes'])) {
 -      $attributes += Yaml::decode($values['attributes']);
-+      // The YAML string might be invalid, but here it is enough to suppress the
-+      // exception thrown by the YAML decoder because the "webform_codemirror"
-+      // form element will perform the validation if it is configured so.
++      $decoded = [];
++      // The YAML string might be invalid, or the decoded value can be just a
++      // string. But here, it is enough to suppress the exception thrown by the
++      // YAML decoder, because the "webform_codemirror" form element will
++      // perform the validation if it is configured so.
 +      try {
-+        $attributes += Yaml::decode($values['attributes']);
++        $decoded = Yaml::decode($values['attributes']);
 +      }
 +      catch (InvalidDataTypeException) {
++      }
++
++      if (is_array($decoded)) {
++        $attributes += $decoded;
 +      }
      }
  
      $form_state->setValueForElement($element['class'], NULL);
 diff --git a/tests/src/Functional/Element/WebformElementAttributesTest.php b/tests/src/Functional/Element/WebformElementAttributesTest.php
-index 07937719f..68425acde 100644
+index 07937719f..551169729 100644
 --- a/tests/src/Functional/Element/WebformElementAttributesTest.php
 +++ b/tests/src/Functional/Element/WebformElementAttributesTest.php
 @@ -2,6 +2,8 @@
@@ -48,7 +54,7 @@ index 07937719f..68425acde 100644
    /**
     * Webforms to load.
     *
-@@ -53,4 +57,55 @@ webform_element_attributes_no_classes:
+@@ -53,4 +57,69 @@ webform_element_attributes_no_classes:
      - five");
    }
  
@@ -57,14 +63,17 @@ index 07937719f..68425acde 100644
 +   *
 +   * @param string $main_property
 +   *   Name of the main property which has a YAML attributes input.
-+   * @param string $element_title
-+   *   Human label of the main property.
++   * @param string $yaml_string
++   *   The YAML string to test with.
++   * @param string $expected_error
++   *   The expected error.
 +   *
 +   * @dataProvider providerTestInvalidYaml
 +   */
 +  public function testInvalidElementAttributesValidation(
 +    string $main_property,
-+    string $element_title,
++    string $yaml_string,
++    string $expected_error,
 +  ): void {
 +    $moduleInstaller = \Drupal::service('module_installer');
 +    $moduleInstaller->install(['webform_ui']);
@@ -73,11 +82,9 @@ index 07937719f..68425acde 100644
 +    $this->drupalGet('admin/structure/webform/manage/contact/element/message/edit');
 +    $this->assertSession()->statusCodeEquals(200);
 +
-+    $this->assertSession()->pageTextContains("$element_title custom attributes (YAML)");
-+
 +    $this->submitForm(
 +      [
-+        "properties[$main_property][attributes]" => 'invalid: YAML: string',
++        "properties[$main_property][attributes]" => $yaml_string,
 +      ],
 +      'Save',
 +    );
@@ -87,7 +94,7 @@ index 07937719f..68425acde 100644
 +    $this->assertSession()->statusCodeEquals(200);
 +    $this->assertSession()->elementTextContains('css', '[role="alert"]', 'Error message');
 +    /* @see \Drupal\webform\Element\WebformElementAttributes::processWebformElementAttributes() */
-+    $this->assertSession()->pageTextContains("$element_title custom attributes (YAML) is not valid.");
++    $this->assertSession()->elementTextContains('css', '[role="alert"]', $expected_error);
 +  }
 +
 +  /**
@@ -98,8 +105,21 @@ index 07937719f..68425acde 100644
 +   */
 +  public static function providerTestInvalidYaml(): array {
 +    return [
-+      'attributes' => ['attributes', 'Element'],
-+      'wrapper_attributes' => ['wrapper_attributes', 'Wrapper'],
++      'attributes, invalid YAML' => [
++        'attributes',
++        'invalid: YAML: string',
++        'Element custom attributes (YAML) is not valid.',
++      ],
++      'attributes, non-array YAML' => [
++        'attributes',
++        'valid YAML but not an array',
++        'YAML must contain an associative array of elements.',
++      ],
++      'wrapper_attributes, invalid YAML' => [
++        'wrapper_attributes',
++        'invalid: YAML: string',
++        'Wrapper custom attributes (YAML) is not valid.',
++      ],
 +    ];
 +  }
 +
