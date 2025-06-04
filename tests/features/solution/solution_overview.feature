@@ -127,10 +127,9 @@ Feature: Solutions Overview
     And I select "Defense" from "Domain"
     And I select "Bulgarian" from "Language"
     And I press "Next"
-    And I fill in "owner[form][0][title][0][value]" with "Organisation valid"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
-    And I press "Create owner"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
+    # Create contact information.
     And I fill in "contact[form][0][title][0][value]" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
