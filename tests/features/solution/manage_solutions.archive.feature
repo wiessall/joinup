@@ -166,6 +166,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     # Now, check the unarchive operation.
     Given I mark all emails as read
     When I go to the edit form of the "Solution" solution
+    And I press "Continue"
     Then I should see the button "Unarchive"
     When I press "Unarchive"
     Then I should see the following success messages:

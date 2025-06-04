@@ -20,6 +20,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\block\BlockInterface;
+use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
@@ -27,7 +28,6 @@ use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
@@ -400,7 +400,7 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
       ->setDisplayConfigurable('display', FALSE);
   }
 
-  if ($entity_type->id() === 'node' && $bundle === 'custom_page' && isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) {
+  if ($entity_type->id() === 'node' && ($bundle === 'custom_page' || isset(CommunityContentHelper::BUNDLES[$bundle]))) {
     $fields['report'] = BaseFieldDefinition::create('report_link')
       ->setName('report')
       ->setLabel(t('Report'))

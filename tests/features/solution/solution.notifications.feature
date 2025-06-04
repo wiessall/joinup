@@ -30,6 +30,7 @@ Feature: Solution notifications
     # Template 7. The moderation team proposes changes.
     And I go to the edit form of the "Solution notification to propose changes" solution
     And I press "Continue"
+    And I press "Propose"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
