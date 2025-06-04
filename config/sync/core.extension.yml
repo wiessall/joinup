@@ -230,6 +230,7 @@ module:
   search_api_spellcheck: 0
   serialization: 0
   simple_block: 0
+  simple_multistep: 0
   simple_sitemap: 0
   sitewide_alert: 0
   sitewide_alert_block: 0
