@@ -50,7 +50,7 @@ Feature: Solution editing.
     And I press "Create contact information"
     And I click "Additional information"
     And I select "Logging Service" from "Solution type"
-    And I click "Continue"
+    And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     # Then print last response

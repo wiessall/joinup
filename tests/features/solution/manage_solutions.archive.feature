@@ -68,6 +68,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given I am logged in as "John Moderator"
     And the "solution_archive_related_content" queue is empty
     When I go to the edit form of the "Solution" solution
+    And I press "Continue"
     Then I should see the button "Archive"
     When I press "Archive"
     Then I should see the following success messages:
@@ -244,6 +245,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
     When I go to the edit form of the "Solution" solution
+    And I press "Continue"
     Then I should see the button "Archive"
     And I press "Archive"
     Then I should see the text "Archived" in the "Header"

@@ -29,11 +29,12 @@ Feature: Solution notifications
 
     # Template 7. The moderation team proposes changes.
     And I go to the edit form of the "Solution notification to propose changes" solution
-    And I press "Propose"
+    And I press "Continue"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
     And I select "Data Owner" from "Solution type"
+    And I press "Continue"
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: Changes have been proposed for your solution" contains the following lines of text:
       | The Portal Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
@@ -41,6 +42,7 @@ Feature: Solution notifications
 
     # Template 13. The moderation team blacklists a solution.
     When I go to the edit form of the "Solution notification to blacklist" solution
+    And I press "Continue"
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
@@ -49,6 +51,7 @@ Feature: Solution notifications
 
     # Template 14. The moderation team restores a solution from blacklisted.
     When I go to the edit form of the "Solution notification to publish from blacklisted" solution
+    And I press "Continue"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
@@ -58,6 +61,7 @@ Feature: Solution notifications
     # Template 15. The moderation team requests changes.
     When I go to the edit form of the "Solution notification to request changes" solution
     And I select "Data Owner" from "Solution type"
+    And I press "Continue"
     And I press "Request changes"
     # Motivation required.
     Then I should see the error message "This action requires you to fill in the motivation field"
@@ -85,6 +89,7 @@ Feature: Solution notifications
 
     # Template 18. The owner proposes changes.
     When I go to the edit form of the "Solution notification to propose from request changes" solution
+    And I press "Continue"
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
