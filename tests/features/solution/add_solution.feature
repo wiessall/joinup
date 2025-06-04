@@ -225,7 +225,7 @@ Feature: Test adding solutions.
     And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I click "Additional information"
     And I select "Logging Service" from "Solution type"
-    And I click "Confirmation"
+    And I click "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"

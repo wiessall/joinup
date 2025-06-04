@@ -236,7 +236,7 @@ Feature: Proposing a collection
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
-    And I click "Confirmation"
+    And I click "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
