@@ -89,9 +89,6 @@ Feature:
     And I press "Submit"
     Then I should not see the warning message "You must accept this agreement before continuing."
 
-    # Clean up the user that was created manually during the scenario.
-    Then I delete the "Rick" user
-
   Scenario: Moderator tasks.
     Given I am logged in as a moderator
     When I click "Legal"

@@ -14,5 +14,5 @@ Feature: Quote paragraph tests.
       | paragraph_quote | That's one small step for a man, a giant leap for mankind. |
 
     When I am an anonymous user
-    And I visit the "Popular quotes" custom page
+    And I visit the "Popular quotes" custom_page
     Then the page should contain the html text "That's one small step for a man, a giant leap for mankind."

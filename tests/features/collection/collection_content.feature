@@ -64,7 +64,7 @@ Feature: Collection content
 
     # Create a draft version of the solution to verify that counters are not affected.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
-    When I go to the "edit-form" content page of the type "solution" with the title "Solution from draft to published"
+    When I go to the edit form of the "Solution from draft to published" solution
     And I fill in "Title" with "Solution from draft to published but draft"
     And I press "Save as draft"
     Then I should see the heading "Solution from draft to published"
@@ -72,8 +72,6 @@ Feature: Collection content
     When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
-    Then I delete the "Solution from draft to published" solution
-    And I delete the "Costas Papazoglou" "contact information"
 
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile

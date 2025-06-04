@@ -1,5 +1,5 @@
 diff --git a/config/schema/entity_print.schema.yml b/config/schema/entity_print.schema.yml
-index 2340decdecdf1f4c10138b7b8fe5c7aaf39d13bc..24f0dcc120d04c9df4212125fbb98b5096db8a79 100644
+index 387ab4e86d6454ff2c13e7ed2e09cd599157d8cd..28ae3572e1f6a9d06b55a6a1bb7bb205a0ef929c 100644
 --- a/config/schema/entity_print.schema.yml
 +++ b/config/schema/entity_print.schema.yml
 @@ -16,6 +16,12 @@ entity_print.settings:
@@ -79,7 +79,7 @@ index 39c2b42baeca37ed3f58235aaf63f248648afaa6..424449fec61184c92d7b201e219761fe
        '#type' => 'textfield',
        '#title' => '',
 diff --git a/entity_print.services.yml b/entity_print.services.yml
-index 151640a0cd9dd7d9bb564cc828fee4d968653867..1e66b846736afcbd477161e62b910758997739a9 100644
+index 277253514456818faba40c67d43a04425eb048ed..6478f4f123071e0350c7e256f0c0d853f84da249 100644
 --- a/entity_print.services.yml
 +++ b/entity_print.services.yml
 @@ -38,3 +38,10 @@ services:
@@ -167,20 +167,24 @@ index 0000000000000000000000000000000000000000..367161c8dfcb1b4f72fc2ff73afe1d87
 +
 +}
 diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
-index e96410fb3acfd6aa53ef23bf2525bc48cf3ed3ea..2bb85816c206c83b9c14ef7003be32946f8366f3 100644
+index d8a66c19e99d482ad17bb463bb93f171f769926e..c460934af57e9dfa3b92b29c6069484383651105 100644
 --- a/src/Form/SettingsForm.php
 +++ b/src/Form/SettingsForm.php
-@@ -3,7 +3,9 @@
+@@ -2,10 +2,12 @@
+ 
  namespace Drupal\entity_print\Form;
  
- use Drupal\Core\Config\ConfigFactoryInterface;
 +use Drupal\Core\Entity\ContentEntityTypeInterface;
- use Drupal\Core\Entity\EntityStorageInterface;
 +use Drupal\Core\Entity\EntityTypeInterface;
  use Drupal\Core\Form\ConfigFormBase;
- use Drupal\entity_print\Plugin\EntityPrintPluginManagerInterface;
- use Drupal\entity_print\Plugin\ExportTypeManagerInterface;
-@@ -37,6 +39,13 @@ class SettingsForm extends ConfigFormBase {
++use Drupal\Core\Form\FormStateInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Symfony\Component\HttpFoundation\Request;
+-use Drupal\Core\Form\FormStateInterface;
+ 
+ /**
+  * Defines a form that configures Entity Print settings.
+@@ -33,6 +35,13 @@ class SettingsForm extends ConfigFormBase {
     */
    protected $exportTypeManager;
  
@@ -194,7 +198,7 @@ index e96410fb3acfd6aa53ef23bf2525bc48cf3ed3ea..2bb85816c206c83b9c14ef7003be3294
    /**
     * {@inheritdoc}
     */
-@@ -45,6 +54,7 @@ class SettingsForm extends ConfigFormBase {
+@@ -41,6 +50,7 @@ class SettingsForm extends ConfigFormBase {
      $instance->pluginManager = $container->get('plugin.manager.entity_print.print_engine');
      $instance->exportTypeManager = $container->get('plugin.manager.entity_print.export_type');
      $instance->storage = $container->get('entity_type.manager')->getStorage('print_engine');
@@ -202,7 +206,7 @@ index e96410fb3acfd6aa53ef23bf2525bc48cf3ed3ea..2bb85816c206c83b9c14ef7003be3294
      return $instance;
    }
  
-@@ -120,6 +130,24 @@ class SettingsForm extends ConfigFormBase {
+@@ -116,6 +126,24 @@ class SettingsForm extends ConfigFormBase {
        '#default_value' => $config->get('base_url'),
      ];
  
@@ -227,7 +231,7 @@ index e96410fb3acfd6aa53ef23bf2525bc48cf3ed3ea..2bb85816c206c83b9c14ef7003be3294
      foreach ($this->exportTypeManager->getDefinitions() as $export_type => $definition) {
        // If we have a print_engine in the form_state then use that otherwise,
        // fall back to what was saved as this is a fresh form. Check explicitly
-@@ -222,6 +250,7 @@ class SettingsForm extends ConfigFormBase {
+@@ -218,6 +246,7 @@ class SettingsForm extends ConfigFormBase {
        ->set('default_css', $values['default_css'])
        ->set('force_download', $values['force_download'])
        ->set('base_url', $values['base_url'])
@@ -267,7 +271,7 @@ index 167e7fea93558a8b94d5966742cfb88dcd3f42ed..5c24b34f1ef10bbb13bcf174dc94e639
  
  }
 diff --git a/tests/src/Kernel/ExtraFieldsTest.php b/tests/src/Kernel/ExtraFieldsTest.php
-index 6af45750db81e2992d76bb8a5430571e476e4c1a..2de1d4e76095e1cca0291b2332d4c169b74b5379 100644
+index 260c7ed519e5335c768ff2003ef21a0aa91a4454..9a5715af05e1d58ccb253ed3250f0e4de26a149e 100644
 --- a/tests/src/Kernel/ExtraFieldsTest.php
 +++ b/tests/src/Kernel/ExtraFieldsTest.php
 @@ -2,13 +2,17 @@
@@ -289,7 +293,7 @@ index 6af45750db81e2992d76bb8a5430571e476e4c1a..2de1d4e76095e1cca0291b2332d4c169
  
  /**
   * Tests the hook_extra_fields() implementation.
-@@ -110,4 +114,89 @@ class ExtraFieldsTest extends KernelTestBase {
+@@ -112,4 +116,89 @@ class ExtraFieldsTest extends KernelTestBase {
      $this->assertTrue(stripos($text, 'View PDF') > stripos($text, 'body text'), 'View PDF link appears last');
    }
  

@@ -6,19 +6,20 @@ namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\paragraphs\Attribute\ParagraphsBehavior;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
 
 /**
  * Provides a behavior for paragraphs alignment.
- *
- * @ParagraphsBehavior(
- *   id = "alignment",
- *   label = @Translation("Content alignment"),
- *   description = @Translation("Provides a behavior for content alignment."),
- * )
  */
+#[ParagraphsBehavior(
+  id: "alignment",
+  label: new TranslatableMarkup("Content alignment"),
+  description: new TranslatableMarkup("Provides a behavior for content alignment."),
+)]
 class AlignmentBehavior extends ParagraphsBehaviorBase {
 
   /**

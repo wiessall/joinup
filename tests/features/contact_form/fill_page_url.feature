@@ -8,7 +8,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
   @javascript
   Scenario: The domain is automatically removed from Page URL field if user inputs it.
     Given I am not logged in
-    Then I go to the contact form
+    Then I go to the contact form page
     And I fill in "First name" with "Túpac"
     And I fill in "Last name" with "Amaru"
     And I fill in "Organisation" with "Vilcabamba State"
@@ -22,7 +22,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
 
-    When I go to the contact form
+    When I go to the contact form page
     And I fill in "First name" with "Josie"
     And I fill in "Last name" with "Camaru"
     And I fill in "Organisation" with "Kiolin State"
@@ -53,7 +53,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
       | collection | user          | roles              |
       | Rumba      | Julian Munson | owner, facilitator |
     Given I am not logged in
-    Then I go to the contact form
+    Then I go to the contact form page
     And I fill in "First name" with "Jonh"
     And I fill in "Last name" with "Chaves"
     And I fill in "Organisation" with "Lucotores State"

@@ -31,22 +31,6 @@ class DistributionContext extends RawDrupalContext {
   use JavascriptTrait;
 
   /**
-   * Navigates to the canonical page display of a distribution.
-   *
-   * @param string $distribution
-   *   The title of the distribution.
-   *
-   * @When I go to (the homepage of )the :distribution distribution
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitDistribution(string $distribution): void {
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $this->getEntityByLabel('node', $distribution);
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Distribution specific alterations before creation.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event

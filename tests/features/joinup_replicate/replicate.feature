@@ -47,9 +47,9 @@ Feature: Cloning of entities
 
   Scenario Outline: Only moderators and facilitators can clone content.
     Given I am <user>
-    And I go to the "Collection custom page" custom page
+    And I go to the "Collection custom page" custom_page
     Then I <collection link availability> the link "Clone content"
-    And I go to the "Solution custom page" custom page
+    And I go to the "Solution custom page" custom_page
     Then I <solution link availability> the link "Clone content"
     And I go to the "Collection event" event
     Then I <collection link availability> the link "Clone content"
@@ -83,7 +83,7 @@ Feature: Cloning of entities
     When I am logged in as a moderator
     And I go to the "Test <type> content" <type>
     Then I <link availability> the link "Clone content" in the "Entity actions" region
-    And I visit the replicate path of the "Test <type> content" content
+    And I go to the replicate form of the "Test <type> content" <type>
     Then the response status code should be <status code>
 
     Examples:
@@ -97,7 +97,7 @@ Feature: Cloning of entities
 
   Scenario Outline: User clones event, news, document.
     Given I am logged in as "<user>"
-    And I go to the "replicate" content page of the type <content type> with the title "<node title>"
+    And I go to the replicate form of the "<node title>" <content type>
     Then I should see the heading "Set the title of the new content item cloned from <node title>"
     When I fill in "New label (English)" with "Cloned <node title>"
     And I press "Clone content"

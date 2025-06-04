@@ -209,13 +209,13 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     // Check that keys are all valid language codes.
     if ($invalidKeys = array_diff_key($resolved, array_flip($allowedLanguages))) {
-      throw new \Exception('The $value array, returned by ' . $resolver::class . '::resolve()' . ', has invalid keys: ' . implode(', ', $invalidKeys));
+      throw new \Exception('The $value array, returned by ' . $resolver::class . '::resolve(), has invalid keys: ' . implode(', ', $invalidKeys));
     }
 
     // Check that each element value is an array.
     $validValues = array_filter($resolved, 'is_array');
     if ($invalidValues = array_keys(array_diff_key($resolved, $validValues))) {
-      throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve()' . ', should be array(s)');
+      throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve(), should be array(s)');
     }
   }
 

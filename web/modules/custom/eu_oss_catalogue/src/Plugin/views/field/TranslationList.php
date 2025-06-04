@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\views\field;
 
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Renders all translations for an entity.
- *
- * @ingroup views_field_handlers
- *
- * @ViewsField("translation_list")
  */
+#[ViewsField("translation_list")]
 class TranslationList extends FieldPluginBase {
 
   public function __construct(

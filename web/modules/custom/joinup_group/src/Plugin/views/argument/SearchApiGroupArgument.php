@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\views\argument;
 
 use Drupal\search_api\Plugin\views\argument\SearchApiStandard;
+use Drupal\views\Attribute\ViewsArgument;
 
 /**
  * Wraps the Search API argument handler.
- *
- * @ingroup views_argument_handlers
- *
- * @ViewsArgument("search_api_group")
  */
+#[ViewsArgument("search_api_group")]
 class SearchApiGroupArgument extends SearchApiStandard {
 
   /**
