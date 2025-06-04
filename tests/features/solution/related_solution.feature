@@ -13,6 +13,7 @@ Feature: Related solution
       | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published | Business      |
       | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       |
 
+  @javascript
   # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.
@@ -30,9 +31,8 @@ Feature: Related solution
     # Relate two solutions.
     When I am logged in as a facilitator of the "Java" solution
     And I go to the edit form of the "Java" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And I fill in "Related solutions" with values "C, Python"
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Propose"
     Then I should see the heading "Java"
     # The "Java" solution is not published yet.
@@ -45,8 +45,6 @@ Feature: Related solution
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
     And I go to the edit form of the "Java" solution
-    And I jump to the "Additional information" of "solution" wizard
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the heading "Java"
     And I should see the "Python" tile
@@ -64,9 +62,8 @@ Feature: Related solution
       | PHP  |
 
     When I go to the edit form of the "Javascript" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And I drag the table row in the "Related solutions" region at position 2 up
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then I should see the heading "Javascript"
     And I should see the following tiles in the correct order:

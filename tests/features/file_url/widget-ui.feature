@@ -12,7 +12,7 @@ Feature: User interface for the File URL field
 
     When I am logged in as a facilitator of the "Nimbus logic" solution
     And I go to the edit form of the "Nimbus logic" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And the following fields should not be present "Weight for new file"
 
     # Initially, only the radio button selector should be visible, but no option
@@ -47,7 +47,6 @@ Feature: User interface for the File URL field
     Given I am logged in as a moderator
     When I go to the edit form of the "Solution without documents" solution
     Then the response status code should be 200
-    When I jump to the "Confirmation" of "solution" wizard
     When I click "Delete"
     And I press "Delete"
     Then the response status code should be 200
