@@ -115,7 +115,7 @@ Feature:
     # The short ID is only unique among solutions, it is OK to reuse an existing
     # short ID from a collection.
     When I fill in "Portal short ID" with "sst-2020"
-    And I click "Confirmation"
+    And I click "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "I know what a solution is"
