@@ -24,41 +24,39 @@ Feature: Solution editing.
       | title            | logo     |
       | Another solution | logo.png |
 
+  @javascript
   Scenario: A solution owner can edit only its own solutions.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
-    And I click "Add solution"
+    And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
-    When I fill in the following:
-      | Title          | Solution A         |
-      | Abstract       | Abstract of "A"    |
-      | Description    | First letter       |
+    When I fill in "Title" with "Solution A"
+    And I fill in "Abstract" with "Abstract of A"
+    And I enter "First letter" in the "Description" wysiwyg editor
     And I select "Bulgarian" from "Language availability"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Logging Service" from "Solution type"
-    And I press "Next"
+    And I click "Contact details"
     # Create owner.
-    And I press "Add new" at the "Owner" field
-    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I press "Add new owner"
+    And I fill in "Name" with "Yancy owner"
     And I check "Company"
-    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
     # Create contact information.
-    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
-    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
-    And I press "Next"
-    And I select the radio button "Remote file URL"
-    And I fill in "Remote URL" with "https://www.example.com"
-    And I press "Add URL"
-    And I jump to the "Confirmation" of "solution" wizard
-    And I should see the link "https://www.example.com"
+    And I fill in "Name" with "Yancy Contact"
+    And I fill in "E-mail address" with "yancyb@example.com"
+    And I press "Create contact information"
+    And I click "Additional information"
+    And I select "Logging Service" from "Solution type"
+    And I click "Confirmation"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     # Then print last response
     Then I should see the heading "Solution A"
 
+    When I open the header local tasks menu
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
@@ -66,9 +64,10 @@ Feature: Solution editing.
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution
-    Then I should not see the link "Edit"
+    Then I open the header local tasks menu
+    And I should not see the link "Edit"
     When I go to the edit form of the "Another solution" solution
-    Then I should get an access denied error
+    Then I should see the heading "Access denied"
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
     Given collection content:
