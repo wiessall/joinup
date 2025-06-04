@@ -48,8 +48,12 @@ Feature: Solution editing.
     # Create contact information.
     And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
     And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
-    And I press "Create contact information"
+    And I press "Next"
+    And I select the radio button "Remote file URL"
+    And I fill in "Remote URL" with "https://www.example.com"
+    And I press "Add URL"
     And I jump to the "Confirmation" of "solution" wizard
+    And I should see the link "https://www.example.com"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     # Then print last response
