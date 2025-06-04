@@ -15,7 +15,6 @@ dependencies:
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
   module:
-    - options
     - search_api_field
     - user
 id: user.user.default
@@ -23,13 +22,6 @@ targetEntityType: user
 bundle: user
 mode: default
 content:
-  blocked_reason:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
-    region: content
   field_user_content:
     type: search_api_field
     label: hidden
@@ -44,6 +36,7 @@ content:
     region: content
 hidden:
   block_user: true
+  blocked_reason: true
   field_social_media: true
   field_user_business_title: true
   field_user_family_name: true

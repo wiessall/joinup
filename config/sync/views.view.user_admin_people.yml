@@ -1051,7 +1051,7 @@ display:
           exposed: true
           expose:
             operator_id: blocked_reason_value_op
-            label: 'Blocked reason (blocked_reason)'
+            label: 'Blocked reason'
             description: ''
             use_operator: false
             operator: blocked_reason_value_op
