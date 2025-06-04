@@ -106,7 +106,14 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
         }
       }
 
-      if ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
+      if ($override === FieldOverridingPolicy::Always && empty($resolved) && empty($project->getSilentErrors())) {
+        // Force-clear the field across all translations if there are no errors;
+        // otherwise, publiccode.yml is not valid, and we want to preserve the previous values.
+        foreach ($solution->getTranslationLanguages() as $langcode => $translation) {
+          $solution->getTranslation($langcode)->set($fieldName, NULL);
+        }
+      }
+      elseif ($override !== FieldOverridingPolicy::ResolvedNotEmpty || $resolved) {
         // Populate the node field.
         foreach ($resolved as $langcode => $values) {
           // Create a new translation on demand.
