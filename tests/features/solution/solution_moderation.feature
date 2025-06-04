@@ -21,10 +21,13 @@ Feature: Solution moderation
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
     And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
     And I fill in "Country" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
@@ -44,10 +47,13 @@ Feature: Solution moderation
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
     And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
     And I fill in "Country" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
@@ -67,10 +73,13 @@ Feature: Solution moderation
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
     And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
     And I fill in "Country" with "Belgium"
     And I press "Create owner"
+    # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"

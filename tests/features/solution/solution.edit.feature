@@ -39,11 +39,12 @@ Feature: Solution editing.
     And I select "Demography" from "Topic"
     And I click "Contact details"
     # Create owner.
+    And I press "Add new owner"
     And I fill in "Name" with "Yancy owner"
     And I check "Company"
     And I fill in "Country" with "Belgium"
     And I press "Create owner"
-     # Create contact information.
+    # Create contact information.
     And I fill in "Name" with "Yancy Contact"
     And I fill in "E-mail address" with "yancyb@example.com"
     And I press "Create contact information"
