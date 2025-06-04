@@ -465,9 +465,6 @@
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
-            "drupal/simple_multistep": {
-                "Preserve modified values when going back @see https://www.drupal.org/i/3463053": "resources/patch/php/drupal/simple_multistep/3463053.diff"
-            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
