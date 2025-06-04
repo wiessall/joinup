@@ -155,7 +155,7 @@ Feature: Tests the group landing page customization.
     And I click "Delete" in the "Entity actions" region
     Then I should see "You can not delete this landing page!"
     And I should see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
-    When I go to the "Custom Page 2" custom page
+    When I go to the "Custom Page 2" custom_page
     When I click "Delete" in the "Entity actions" region
     Then I should see "Are you sure you want to delete the content item Custom Page 2?"
     When I go to the edit form of the "Custom Page 1" "custom page"
@@ -164,7 +164,7 @@ Feature: Tests the group landing page customization.
     And I click "Settings"
     And I select "- Standard landing page -" from "Landing page"
     And I press "Save"
-    And I go to the "Custom Page 1" custom page
+    And I go to the "Custom Page 1" custom_page
     And I click "Delete" in the "Entity actions" region
     Then I should not see "You can not delete this landing page!"
     And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
@@ -177,7 +177,7 @@ Feature: Tests the group landing page customization.
       | title    | collection    | body                                                                                 |
       | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. |
 
-    When I go to the "Michigan" custom page
+    When I go to the "Michigan" custom_page
     Then I should be on "/collection/united-states/michigan"
 
     Given I am logged in as a moderator
@@ -186,5 +186,5 @@ Feature: Tests the group landing page customization.
     And I select "Michigan" from "Landing page"
     And I press "Save"
 
-    When I go to the "Michigan" custom page
+    When I go to the "Michigan" custom_page
     Then I should be on "/collection/united-states"

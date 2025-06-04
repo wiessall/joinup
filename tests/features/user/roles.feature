@@ -104,7 +104,7 @@ Feature: User role management
       | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
     When I am logged in as "Nibby Noob"
-    And I go to the "edit-form" content page of the type "licence" with the title "Open licence"
+    And I go to the edit form of the "Open licence" licence
     And I fill in "Title" with "Closed licence"
     And I press "Save"
     Then I should see the heading "Closed licence"

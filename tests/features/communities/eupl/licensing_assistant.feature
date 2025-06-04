@@ -17,8 +17,8 @@ Feature:
       | http://joinup.eu/licence/random | Random Licence | A licence that should not be available. |                  | Distribute                                                            |
 
     When I am not logged in
-    And I visit the "JLA" custom page
-    Then I should see the heading "JLA"
+    And I visit the "Portal Licensing Assistant" custom_page
+    Then I should see the heading "Portal Licensing Assistant"
     And I should see the link "Learn more about SPDX identifiers"
     And I should see the following filter categories in the correct order:
       | Can        |
@@ -80,7 +80,7 @@ Feature:
       | http://joinup.eu/licence/random | Random Licence | A licence that should not be available. |                  | Distribute                                                            |
 
     When I am logged in as an "Licence manager"
-    And I visit the "JLA" custom page
+    And I visit the "Portal Licensing Assistant" custom_page
     Then I should see the "button" element with the "title" attribute set to "Ability to use, copy / reproduce the work freely in unlimited quantities" in the "Content" region
     And I should see the link "Edit tooltip descriptions"
     When I click "Edit tooltip descriptions"
@@ -91,7 +91,7 @@ Feature:
     And the following fields should not be disabled "Name"
     When I fill in "Description" with "<div>Description of tooltip</div>"
     And I press "Save"
-    And I visit the "JLA" custom page
+    And I visit the "Portal Licensing Assistant" custom_page
     Then I should see the "button" element with the "title" attribute set to "Description of tooltip" in the "Content" region
 
   Scenario: Test the licence manager can not edit name fields of parent terms.
@@ -105,7 +105,7 @@ Feature:
       | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    | SPDX licence bar | Distribute                                                            |
       | http://joinup.eu/licence/random | Random Licence | A licence that should not be available. |                  | Distribute                                                            |
     When I am logged in as an "Licence manager"
-    And I visit the "JLA" custom page
+    And I visit the "Portal Licensing Assistant" custom_page
     And I should see the link "Edit tooltip descriptions"
     When I click "Edit tooltip descriptions"
     Then I should see the heading "Legal type"
@@ -134,7 +134,7 @@ Feature:
       | http://joinup.eu/licence/lgpl21   | Interoperable Europe Portal LGPL-2.1   | LGPL-2.1     | Distribute, Royalty free, Governments/EU, Place warranty              |
 
     Given I am an anonymous user
-    When I visit the "JLA" custom page
+    When I visit the "Portal Licensing Assistant" custom_page
     Then the Compare buttons are disabled
 
     When I add the "Apache-2.0" licence to the compare list
@@ -163,7 +163,7 @@ Feature:
     And I press "Compare"
     Then the url should match "/licence/compare/Apache-2.0;GPL-2.0\+"
 
-    When I visit the "JLA" custom page
+    When I visit the "Portal Licensing Assistant" custom_page
     And I add the "Apache-2.0" licence to the compare list
     And I add the "GPL-2.0+" licence to the compare list
     And I add the "BSL-1.0" licence to the compare list
@@ -418,7 +418,7 @@ Feature:
       | http://joinup.eu/licence/bsl1     | Interoperable Europe Portal BSL-1.0    | BSL-1.0      | Distribute, Modify                                                    |
 
     Given I am an anonymous user
-    When I visit the "JLA" custom page
+    When I visit the "Portal Licensing Assistant" custom_page
 
     When I press "Distribute" in the "Content" region
     # The licence was hidden.
@@ -475,8 +475,8 @@ Feature:
     But I should not see the text "Licence details for the foo licence."
 
   @javascript
-  Scenario: Check JLA entry Disclose source.
+  Scenario: Check entry Disclose source.
     Given I am an anonymous user
-    When I visit the "JLA" custom page
+    When I visit the "Portal Licensing Assistant" custom_page
     And I should see the text "Disclose source"
     And the response should contain "<button class=\"licence-filter__button\" data-joinup-licence-category=\"disclose-source\" title=\"The source code of distributed derivatives must be publicly available\" type=\"button\">"

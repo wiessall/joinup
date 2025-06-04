@@ -166,10 +166,10 @@ Feature: Collection moderation
     And collection content:
       | title          | logo     | topic             | state    |
       | Some berry pie | logo.png | Supplier exchange | proposed |
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
-    And I visit the collection overview
+    And I visit the collection overview page
     Then I should not see the text "Some berry pie"
 
     When I go to my dashboard
@@ -180,7 +180,7 @@ Feature: Collection moderation
     And I press "Publish"
     Then I should see the heading "No berry pie"
 
-    When I visit the collection overview
+    When I visit the collection overview page
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
@@ -225,7 +225,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
-    And I go to the "edit-form" content page of the type "collection" with the title "Spectres in fog"
+    And I go to the edit form of the "Spectres in fog" collection
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
@@ -235,10 +235,6 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
-
-    # Clean up the entities that were created.
-    Then I delete the "Spectres in fog" collection
-    And I delete the "A secretary in the fog" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
@@ -274,10 +270,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
-    # Clean up the entities that were created.
-    Then I delete the "Domestic bovins" collection
-    And I delete the "Domestic secretary" "contact information"
-
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
     # Regression test for a bug that causes the wrong content creation value
@@ -311,10 +303,6 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
-
-    # Clean up the entities that were created.
-    Then I delete the "Theft of Body" collection
-    And I delete the "Secretary of thieves" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
@@ -352,10 +340,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
-    # Clean up the entities that were created.
-    Then I delete the "Silken Emperor" collection
-    And I delete the "Secretary of Silk" "contact information"
-
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
@@ -391,7 +375,3 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
-
-    # Clean up the entities that were created.
-    Then I delete the "The blue ships" collection
-    And I delete the "Secretary of the harbor" "contact information"

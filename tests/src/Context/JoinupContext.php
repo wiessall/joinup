@@ -490,10 +490,31 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Navigates to the content overview, a.k.a. the "Keep up to date" page.
    *
-   * @When I visit the content overview( page)
+   * @When I visit the content overview page
    */
   public function visitContentOverviewPage(): void {
     $this->visitPath('/keep-up-to-date');
+  }
+
+  /**
+   * Navigates to the canonical page display of an entity.
+   *
+   * @param string $title
+   *   The title of the entity.
+   * @param string $bundle
+   *   An alias of a bundle as defined in the
+   *   \Drupal\joinup\Traits\NameMappingsTrait::bundleAliases method.
+   *
+   * @Given I go to (the homepage of )the :title :bundle
+   * @Given I visit (the homepage of )the :title :bundle
+   * @Given I am on (the homepage of )the :title :bundle
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function visitCanonicalPage(string $title, string $bundle): void {
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = $this->getEntityByLabel('node', $title, $bundle);
+    $this->visitPath($node->toUrl()->toString());
   }
 
   /**
@@ -510,32 +531,14 @@ class JoinupContext extends RawDrupalContext {
    * @When I go to the :action form of the :title :bundle
    */
   public function goToEntityForm(string $action, string $title, string $bundle): void {
-    $this->visitEntityForm($action, $title, $bundle);
-  }
-
-  /**
-   * Navigates to the canonical page display of a node page.
-   *
-   * This step is only to be used in scenario outlines.
-   * If possible, use a specific page selector.
-   *
-   * @param string $type
-   *   The type of the node entity.
-   * @param string $title
-   *   The name of the news page.
-   * @param string|null $rel
-   *   (optional) The link relationship type (edit-form, delete-form,...).
-   *   Defaults to NULL (canonical).
-   *
-   * @When I go to the content page of the type :type with the title :title
-   * @When I go to the :rel content page of the type :type with the title :title
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitNodePage(string $type, string $title, ?string $rel = NULL): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, $type);
-    $this->visitPath($node->toUrl($rel)->toString());
+    if (!in_array($action, ['edit', 'delete'])) {
+      /** @var \Drupal\node\Entity\Node $node */
+      $node = $this->getEntityByLabel('node', $title, $bundle);
+      $this->visitPath($node->toUrl($action)->toString());
+    }
+    else {
+      $this->visitEntityForm($action, $title, $bundle);
+    }
   }
 
   /**
@@ -2465,6 +2468,58 @@ class JoinupContext extends RawDrupalContext {
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }
+    }
+  }
+
+  /**
+   * Checks the order, region, and weight of rows in a draggable table.
+   *
+   * Example table:
+   *   | title  | type                  | weight |
+   *   | Type   | Collection content top| 0      |
+   *   | Status | Collection content top| 1      |
+   *
+   * @Then the search api widget table should be:
+   */
+  public function assertFacetDraggableTable(TableNode $table): void {
+    $this->assertJavaScriptEnabledBrowser();
+
+    $rows = $this->getSession()->getPage()->findAll('css', '#facet-display-overview tbody tr.draggable');
+    $expected = $table->getColumnsHash();
+
+    Assert::assertSameSize($expected, $rows, 'Number of table rows does not match.');
+
+    foreach ($expected as $index => $expected_row) {
+      $row = $rows[$index];
+
+      // Check title.
+      $title_element = $row->find('css', 'td .tabledrag-cell-content__item');
+      Assert::assertNotNull($title_element, "Missing title in row $index.");
+      Assert::assertEquals($expected_row['title'], trim($title_element->getText()), "Title mismatch in row $index.");
+
+      // Check type (region).
+      $type_select = $row->find('css', 'select.field-region');
+      Assert::assertNotNull($type_select, "Missing region (type) select in row $index for '{$expected_row['title']}'.");
+
+      $selected_value = $type_select->getValue();
+      $selected_option = $type_select->find('css', 'option[value="' . $selected_value . '"]');
+      Assert::assertNotNull($selected_option, 'Selected option not found by value.');
+      $option_value = $selected_option->getHtml();
+      Assert::assertEquals(
+        $expected_row['type'],
+        $option_value,
+        "Region mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['type']}', got '$option_value'."
+      );
+
+      // Check weight.
+      $weight_select = $row->find('css', 'select.field-weight');
+      Assert::assertNotNull($weight_select, "Missing weight select in row $index.");
+      $weight_value = $weight_select->getValue();
+      Assert::assertEquals(
+        $expected_row['weight'],
+        $weight_value,
+        "Weight mismatch in row $index for field '{$expected_row['title']}': expected '{$expected_row['weight']}', got '$weight_value'."
+      );
     }
   }
 

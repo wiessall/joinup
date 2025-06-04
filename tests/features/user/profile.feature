@@ -311,3 +311,40 @@ Feature: User profile
     And I should see the text "Archived" in the "Cherry arch" tile
     And I should see the text "Archived" in the "Lone handling" tile
     And I should see the text "Archived" in the "Sugar is sweet" tile
+
+  @javascript
+  # Regression test for ticket ISAICP-9586.
+  Scenario: Search widget does not save facet settings.
+    Given users:
+      | Username         | E-mail                       | First name | Family name |
+      | Lion Robert      | lion.robert@example.com      | Lion       | Robert      |
+    When I am logged in as a moderator
+    And I click "People"
+    And I click "Lion Robert"
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I should see the button "Show row weights"
+    Then I drag the "Status" table row up
+    And I press "Save"
+    # Check if was saved correctly.
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I should see the button "Show row weights"
+    Then the search api widget table should be:
+      | title  | type                   | weight |
+      | Status | Collection content top | -10    |
+      | Type   | Collection content top | -9     |
+
+    When I press "Show row weights"
+    And I should see the button "Hide row weights"
+    Then I drag the "Status" table row down
+    And I press "Save"
+
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I should not see the button "Show row weights"
+    And I should see the button "Hide row weights"
+    Then the search api widget table should be:
+      | title  | type                   | weight |
+      | Type   | Collection content top | -10    |
+      | Status | Collection content top | -9     |

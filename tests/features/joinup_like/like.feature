@@ -51,7 +51,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Very liked solution" tile
     Then I should see the statistics "2" in the "Very liked solution" tile
 
-    When I visit the search page
+    When I visit the advanced search page
     Then I should see the "Very liked solution" tile
     And I should see the statistics "2" in the "Very liked solution" tile
     When I click the "Remove like from this content" in the "Very liked solution" tile
@@ -89,7 +89,7 @@ Feature: Like/unlike feature.
       | Liked <content type> content | Very liked solution | <state> |
 
     When I am logged in as "Gregory Like"
-    And I go to the content page of the type "<content type>" with the title "Liked <content type> content"
+    And I visit the "Liked <content type> content" "<content type>"
     Then I should see the link "Like" in the "Like block"
 
     When I click "Like" in the "Like block" region
@@ -123,7 +123,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "1" in the "Likeable <content type>" tile
 
     # View mode tile horizontal
-    When I visit the search page
+    When I visit the advanced search page
     Then I should see the "Likeable <content type>" tile
     And I should see the statistics "1" in the "Likeable <content type>" tile
     When I click the "Remove like from this content" in the "Likeable <content type>" tile
@@ -164,7 +164,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Likeable discussion" tile
     Then I should see the statistics "1" in the "Likeable discussion" tile
 
-    When I visit the search page
+    When I visit the advanced search page
     And I click "Lisa Like"
 
     # Custom page vertical tile (default)
@@ -173,7 +173,7 @@ Feature: Like/unlike feature.
     When I click the "Like this content" in the "Likeable custom page" tile
     Then I should see the statistics "1" in the "Likeable custom page" tile
 
-    Then I visit the search page
+    Then I visit the advanced search page
 
     # Solution horizontal tile
     And I should see the "Likeable solution" tile

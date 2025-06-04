@@ -402,9 +402,6 @@ Feature: Messaging group announcements
     When I go to the announcements page of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
 
-    # Explicitly delete announcements created via UI.
-    And I delete the "The Big Opening is postponed" announcement
-
     Examples:
       | group      |
       | collection |
@@ -538,10 +535,6 @@ Feature: Messaging group announcements
 
     Given the delivery queue of "TEST: Mass-mailing announcement token" announcement is processed
     Then the "TEST: Mass-mailing announcement token" announcement should have been delivered for each group member
-
-    # Explicitly delete announcements created via UI.
-    And I delete the "TEST: Mass-mailing announcement" announcement
-    And I delete the "TEST: Mass-mailing announcement token" announcement
 
   @group-e
   Scenario: Wrong recipient's name in announcements.

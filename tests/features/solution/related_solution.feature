@@ -29,7 +29,7 @@ Feature: Related solution
 
     # Relate two solutions.
     When I am logged in as a facilitator of the "Java" solution
-    And I go to the "edit-form" content page of the type "solution" with the title "Java"
+    And I go to the edit form of the "Java" solution
     And I fill in "Related solutions" with values "C, Python"
     And I uncheck "Show solutions related by EIRA terms"
     And I press "Propose"
@@ -43,7 +43,7 @@ Feature: Related solution
 
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
-    And I go to the "edit-form" content page of the type "solution" with the title "Java"
+    And I go to the edit form of the "Java" solution
     And I check "Show solutions related by EIRA terms"
     And I press "Publish"
     Then I should see the heading "Java"

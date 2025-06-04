@@ -6,16 +6,14 @@ namespace Drupal\topic\Plugin\views\field;
 
 use Drupal\Core\Url;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\EntityLink;
 use Drupal\views\ResultRow;
 
 /**
  * Field handler to present a topic meta entity link to parent.
- *
- * @ingroup views_field_handlers
- *
- * @ViewsField("topic_meta_entity_parent_link")
  */
+#[ViewsField("topic_meta_entity_parent_link")]
 class TopicMetaEntityParent extends EntityLink {
 
   /**

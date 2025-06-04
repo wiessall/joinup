@@ -88,11 +88,6 @@ Feature: "Add release" visibility options.
     And I fill in "Release version" with "1.0"
     And I press "Publish"
 
-    # Clean up entities created through the UI.
-    Then I delete the "Chasing shadows" release
-    And I delete the "Chasing shadows" release
-    And I delete the "Chasing flares" release
-
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
       | uri                       | title               |

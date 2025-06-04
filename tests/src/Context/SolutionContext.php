@@ -67,24 +67,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the canonical page display of a solution.
-   *
-   * @param string $solution
-   *   The name of the solution.
-   *
-   * @When I go to (the homepage of )the :solution solution
-   * @When I visit (the homepage of )the :solution solution
-   * @Given I am on (the homepage of )the :solution solution
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  public function visitSolution(string $solution): void {
-    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $entity */
-    $entity = $this->getEntityByLabel('node', $solution);
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
    * Navigates to the solution overview page.
    *
    * @todo This is currently dependent on the Joinup profile being installed,
@@ -93,7 +75,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5176
    *
-   * @When I visit the solution overview( page)
+   * @When I visit the solution overview page
    */
   public function visitSolutionOverviewPage(): void {
     $this->visitPath('/solutions');
