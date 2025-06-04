@@ -217,7 +217,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
@@ -307,9 +306,9 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"
     And I check the box "Company"
+    And I fill in "Country" with "Belgium"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
 
     When I press "Add another item" at the "Geographical coverage" field
 
