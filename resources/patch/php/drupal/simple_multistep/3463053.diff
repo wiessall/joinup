@@ -1,0 +1,348 @@
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..ebb9b6cba7e53039b7a7adf041185e055e9b37fa
+--- /dev/null
++++ b/.gitlab-ci.yml
+@@ -0,0 +1,33 @@
++################
++# GitLabCI template for Drupal projects.
++#
++# This template is designed to give any Contrib maintainer everything they need to test, without requiring modification.
++# It is also designed to keep up to date with Core Development automatically through the use of include files that can be centrally maintained.
++# As long as you include the project, ref and three files below, any future updates added by the Drupal Association will be used in your
++# pipelines automatically. However, you can modify this template if you have additional needs for your project.
++# The full documentation is on https://project.pages.drupalcode.org/gitlab_templates/
++################
++
++# For information on alternative values for 'ref' see https://project.pages.drupalcode.org/gitlab_templates/info/templates-version/
++# To test a Drupal 7 project, change the first include filename from .main.yml to .main-d7.yml
++include:
++  - project: $_GITLAB_TEMPLATES_REPO
++    ref: $_GITLAB_TEMPLATES_REF
++    file:
++      - '/includes/include.drupalci.main.yml'
++      - '/includes/include.drupalci.variables.yml'
++      - '/includes/include.drupalci.workflows.yml'
++#
++################
++# Pipeline configuration variables are defined with default values and descriptions in the file
++# https://git.drupalcode.org/project/gitlab_templates/-/blob/main/includes/include.drupalci.variables.yml
++# Uncomment the lines below if you want to override any of the variables. The following is just an example.
++################
++# variables:
++#   SKIP_ESLINT: '1'
++#   OPT_IN_TEST_NEXT_MAJOR: '1'
++#   _CURL_TEMPLATES_REF: 'main'
++
++composer:
++  variables:
++    DRUPAL_CORE: 10.4.7
+diff --git a/src/MultistepController.php b/src/MultistepController.php
+index 6d7b6b3f04fb40296be6b06588ed1843be3313a3..7641b745bc33bd8d59e85ef18419cd52fdef5254 100644
+--- a/src/MultistepController.php
++++ b/src/MultistepController.php
+@@ -51,7 +51,7 @@ class MultistepController extends FormStep implements MultistepControllerInterfa
+       if ($key !== $this->currentStep) {
+         foreach ($all_children as $child_id) {
+           if (isset($form[$child_id])) {
+-            $form[$child_id]['#access'] = FALSE;
++            $form[$child_id]['#attributes']['class'][] = 'hidden';
+             // @todo need found solution with password.
+             if ($child_id === 'account' && isset($form[$child_id]['pass'])) {
+               $form[$child_id]['pass']['#required'] = FALSE;
+diff --git a/tests/modules/simple_multistep_test/config/install/core.entity_form_display.node.article.default.yml b/tests/modules/simple_multistep_test/config/install/core.entity_form_display.node.article.default.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..1ae8029e5883030af9a6d002bcfcaef614028aa6
+--- /dev/null
++++ b/tests/modules/simple_multistep_test/config/install/core.entity_form_display.node.article.default.yml
+@@ -0,0 +1,83 @@
++uuid: 2fca0a64-2335-4354-990d-af888709d254
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.node.article.body
++    - node.type.article
++  module:
++    - field_group
++    - text
++third_party_settings:
++  field_group:
++    group_step_1:
++      children:
++        - title
++      label: 'Step 1'
++      region: content
++      parent_name: ''
++      weight: 0
++      format_type: form_step
++      format_settings:
++        classes: ''
++        show_empty_fields: false
++        id: step_1
++        label_as_html: false
++        show_step_title: true
++        step_description: ''
++        back_button_show: false
++        back_button_text: Back
++        next_button_text: Next
++        required_fields: true
++        step_help: ''
++    group_step_2:
++      children:
++        - body
++      label: 'Step 2'
++      region: content
++      parent_name: ''
++      weight: 1
++      format_type: form_step
++      format_settings:
++        classes: ''
++        show_empty_fields: false
++        id: step_2
++        label_as_html: false
++        show_step_title: true
++        step_description: ''
++        back_button_show: true
++        back_button_text: Back
++        next_button_text: Next
++        step_help: ''
++_core:
++  default_config_hash: ewbd6G2uX456-bgwseM2Q-KQG3RkASoyHmTh-XR3oLU
++id: node.article.default
++targetEntityType: node
++bundle: article
++mode: default
++content:
++  body:
++    type: text_textarea_with_summary
++    weight: 3
++    region: content
++    settings:
++      rows: 9
++      summary_rows: 3
++      placeholder: ''
++      show_summary: false
++    third_party_settings: {  }
++  title:
++    type: string_textfield
++    weight: 1
++    region: content
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++hidden:
++  created: true
++  path: true
++  promote: true
++  status: true
++  sticky: true
++  uid: true
+diff --git a/tests/modules/simple_multistep_test/config/install/core.entity_view_display.node.article.default.yml b/tests/modules/simple_multistep_test/config/install/core.entity_view_display.node.article.default.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..bdcbc18fe85744e2191ede10a274f99f43daf619
+--- /dev/null
++++ b/tests/modules/simple_multistep_test/config/install/core.entity_view_display.node.article.default.yml
+@@ -0,0 +1,30 @@
++uuid: ef57c1a4-3dcb-4223-9ced-50dad471c857
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.node.article.body
++    - node.type.article
++  module:
++    - text
++    - user
++_core:
++  default_config_hash: br6izr-iGEu--JvNbCJNtOBpRnxpFLXfoV5y61U9Nqc
++id: node.article.default
++targetEntityType: node
++bundle: article
++mode: default
++content:
++  body:
++    type: text_default
++    label: hidden
++    settings: {  }
++    third_party_settings: {  }
++    weight: 0
++    region: content
++  links:
++    settings: {  }
++    third_party_settings: {  }
++    weight: 100
++    region: content
++hidden: {  }
+diff --git a/tests/modules/simple_multistep_test/config/install/field.field.node.article.body.yml b/tests/modules/simple_multistep_test/config/install/field.field.node.article.body.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..993cfeea356fba31c6800c6f1790342b6db81ecd
+--- /dev/null
++++ b/tests/modules/simple_multistep_test/config/install/field.field.node.article.body.yml
+@@ -0,0 +1,26 @@
++uuid: a44d0e18-dc69-4fd9-9106-dfbb72b664a1
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.body
++    - node.type.article
++  module:
++    - text
++_core:
++  default_config_hash: 4Wxs1LseZ8JsNwD9uJVIbzZqG35yQXN8Eo1Hub6NMuI
++id: node.article.body
++field_name: body
++entity_type: node
++bundle: article
++label: Body
++description: ''
++required: false
++translatable: true
++default_value: {  }
++default_value_callback: ''
++settings:
++  display_summary: true
++  required_summary: false
++  allowed_formats: {  }
++field_type: text_with_summary
+diff --git a/tests/modules/simple_multistep_test/config/install/node.type.article.yml b/tests/modules/simple_multistep_test/config/install/node.type.article.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..a0ef8cd4240a6d1ba5f372f2dd7db8db9a9afbfc
+--- /dev/null
++++ b/tests/modules/simple_multistep_test/config/install/node.type.article.yml
+@@ -0,0 +1,13 @@
++uuid: 5108a3a9-5d12-4025-a9a7-5615480562d8
++langcode: en
++status: true
++dependencies: {  }
++_core:
++  default_config_hash: Fe3N1uqaAyyKJbVkqT-btXy3t98puW8GCRD822xjl10
++name: Article
++type: article
++description: 'Use <em>articles</em> for time-sensitive content like news, press releases or blog posts.'
++help: null
++new_revision: true
++preview_mode: 1
++display_submitted: true
+diff --git a/tests/modules/simple_multistep_test/simple_multistep_test.info.yml b/tests/modules/simple_multistep_test/simple_multistep_test.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..73b75e49c0f62a9212da1dcae2aafa4af00d1307
+--- /dev/null
++++ b/tests/modules/simple_multistep_test/simple_multistep_test.info.yml
+@@ -0,0 +1,8 @@
++name: 'simple_multistep_test'
++type: module
++description: 'Support module for the Simple multistep module tests.'
++package: Testing
++core_version_requirement: ^10 || ^11
++dependencies:
++  - drupal:node
++  - simple_multistep:simple_multistep
+diff --git a/tests/src/Functional/CreateArticleWithStepGroups.php b/tests/src/Functional/CreateArticleWithStepGroups.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..1b82827b259cae9fd3d04a7833bca8e995378352
+--- /dev/null
++++ b/tests/src/Functional/CreateArticleWithStepGroups.php
+@@ -0,0 +1,87 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\simple_multistep\Functional;
++
++use Drupal\Tests\BrowserTestBase;
++
++/**
++ * Tests for creating an article with step groups.
++ *
++ * @group simple_multistep
++ */
++class CreateArticleWithStepGroups extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * Modules to install.
++   *
++   * @var array
++   */
++  protected static $modules = ['simple_multistep_test'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    // Create a new admin user.
++    $admin_user = $this->drupalCreateUser([
++      'access content',
++      'create article content',
++    ]);
++    // Login the user.
++    $this->drupalLogin($admin_user);
++  }
++
++  /**
++   * Test adding an article with multistep.
++   */
++  public function testCreateArticleWithStepGroups() {
++    // Visit the create article form.
++    $this->drupalGet('node/add/article');
++    $this->assertSession()->statusCodeEquals(200);
++
++    // Test step 1.
++    $this->assertSession()->pageTextContains('Title');
++    $this->assertSession()->pageTextContains('Step 1');
++    $this->assertSession()->pageTextContains('Step 2');
++    $this->assertSession()->buttonNotExists('Back');
++    $body_wrapper = $this->assertSession()->elementExists('css', '#edit-body-wrapper');
++    $body_wrapper->hasAttribute('hidden');
++    $title = $this->assertSession()->fieldExists('edit-title-0-value');
++    $title->setValue('Test title');
++    $next = $this->assertSession()->buttonExists('Next');
++    $next->press();
++
++    // Test step 2.
++    $title_wrapper = $this->assertSession()->elementExists('css', '#edit-title-wrapper');
++    $title_wrapper->hasAttribute('hidden');
++    $this->assertSession()->pageTextContains('Body');
++    $this->assertSession()->buttonNotExists('Next');
++    $body = $this->assertSession()->fieldExists('edit-body-0-value');
++    $body->setValue('Test body.');
++    $back = $this->assertSession()->buttonExists('Back');
++    $back->press();
++
++    // Back to test of step 1.
++    $this->assertSession()->fieldValueEquals('edit-title-0-value', 'Test title');
++    $next->press();
++
++    // Back to test of step 2.
++    $this->assertSession()->fieldValueEquals('edit-body-0-value', 'Test body.');
++
++    // Save the article and test.
++    $save = $this->assertSession()->buttonExists('Save');
++    $save->press();
++    $this->assertSession()->pageTextContains('Test title');
++    $this->assertSession()->pageTextContains('Test body.');
++  }
++
++}
+diff --git a/tests/src/Functional/ModuleLoadTest.php b/tests/src/Functional/ModuleLoadTest.php
+index 8e1e65f97f7249ccb168dc60de5a81af832ae31b..da9f476887f5acbba982e727ba36e42faa780e68 100644
+--- a/tests/src/Functional/ModuleLoadTest.php
++++ b/tests/src/Functional/ModuleLoadTest.php
+@@ -95,7 +95,7 @@ class ModuleLoadTest extends BrowserTestBase {
+     $page->checkField('modules[simple_multistep][enable]');
+     $page->pressButton('Install');
+     $assert_session->pageTextNotContains('Unable to install Simple multistep');
+-    $assert_session->pageTextContains('Module Simple multistep has been enabled');
++    $assert_session->pageTextContains('Module Simple multistep has been installed.');
+   }
+ 
+ }
