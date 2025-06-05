@@ -36,6 +36,22 @@ Feature: Publication status of keywords depends on the status of the parent.
     Then I should see the heading "ASDF solution"
     And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
 
+    # Save a draft entity to ensure that there are no duplicate keywords
+    # created.
+    Given I click "Add news" in the plus button menu
+    And I fill in the following:
+      | Short title | Some news |
+      | Headline    | Some news |
+      | Abstract    | Dummy text      |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah           |
+      | field_body:format | content_editor |
+    And I select "EU and European Policies" from "Topic"
+    And I fill in "Search keywords" with "Unpublished Keyword"
+    And I press "Save as draft"
+    Then I should see the heading "Some news"
+    And there should be 1 "taxonomy_term" with the name "Unpublished Keyword"
+
     # Save a draft item with the keyword and verify it does not unpublish it.
     Given I click "Add news" in the plus button menu
     And I fill in the following:
@@ -64,3 +80,19 @@ Feature: Publication status of keywords depends on the status of the parent.
     When I type "some" in the "Search keywords" autocomplete field
     And I wait for AJAX to finish
     Then I should not see the text "some unpublished tag"
+
+  Scenario: Access to unpublished keywords are available to privileged users.
+    Given I go to the "some unpublished tag" keyword
+    Then I should see the heading "Sign in to continue"
+
+    When I am logged in as a facilitator of the "The Portal" collection
+    And I go to the "some unpublished tag" keyword
+    Then I should get an access denied error
+
+    When I am logged in as a user with the authenticated role
+    And I go to the "some unpublished tag" keyword
+    Then I should get an access denied error
+
+    When I am logged in as a moderator
+    And I go to the "some unpublished tag" keyword
+    Then I should get an access denied error

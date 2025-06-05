@@ -351,6 +351,7 @@ trait NameMappingsTrait {
       'topic' => 'taxonomy_term',
       'user' => 'user',
       'webform' => 'webform',
+      'keyword' => 'taxonomy_term',
     ];
   }
 
@@ -377,6 +378,7 @@ trait NameMappingsTrait {
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
       'solution' => 'solution',
+      'keyword' => 'tags',
     ];
   }
 
