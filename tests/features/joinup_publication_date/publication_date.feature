@@ -35,7 +35,6 @@ Feature: Publication date works as expected on RDF entities
     When I go to the edit form of the "Solution to publish" solution
     Then I should see the heading "Edit Solution Solution to publish"
     When I fill in "Title" with "Published at test for solution"
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     And I go to the homepage of the "Published at test for solution" solution
     Then the published_at field in "Published at test for solution" solution should not be empty

@@ -1,10 +1,9 @@
-@api @group-i
+@api @group-i @javascript
 Feature: Solution TCA agreement
   In order to ensure activity by facilitators
   As a site owner and/or a collection owner
   I want users to sign the TCA agreement before creating a solution.
 
-  @javascript
   Scenario: Authenticated users can access the solution TCA agreement page.
     Given collection content:
       | title             |
@@ -24,19 +23,20 @@ Feature: Solution TCA agreement
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I press "Next"
+    And I click "Contact details"
     # Create owner.
-    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
+    And I press "Add new owner"
+    And I fill in "Name" with "Yancy owner"
     And I check "Company"
-    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
+    And I fill in "Country" with "Belgium"
     And I press "Create owner"
-    # Create contact information.
-    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
-    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
+     # Create contact information.
+    And I fill in "Name" with "Yancy Contact"
+    And I fill in "E-mail address" with "yancyb@example.com"
     And I press "Create contact information"
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     And I select "Logging Service" from "Solution type"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I click "Terms of Agreement"
 
     Then a modal should open
@@ -50,5 +50,5 @@ Feature: Solution TCA agreement
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the edit form of the "Solution B" solution
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Confirmation"
     And I should not see "I have read and agreed"

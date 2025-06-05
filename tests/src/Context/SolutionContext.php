@@ -298,18 +298,6 @@ class SolutionContext extends RawDrupalContext {
 
       // Go to the edit form and check that the expected buttons are visible.
       $this->visitEntityForm('edit', $values['solution'], 'solution');
-
-      $this->getSession()->getPage()->pressButton('Next');
-      $this->assertSubmitButtonsVisible($this->explodeCommaSeparatedStepArgument($values['Contact details buttons']));
-
-      $this->getSession()->getPage()->pressButton('Next');
-      $this->assertSubmitButtonsVisible($this->explodeCommaSeparatedStepArgument($values['Additional information buttons']));
-
-      $this->getSession()->getPage()->pressButton('Next');
-      $this->assertSubmitButtonsVisible($this->explodeCommaSeparatedStepArgument($values['Interoperability information buttons']));
-
-      $this->getSession()->getPage()->pressButton('Next');
-      $this->assertSubmitButtonsVisible($this->explodeCommaSeparatedStepArgument($values['Confirmation buttons']));
     }
   }
 
