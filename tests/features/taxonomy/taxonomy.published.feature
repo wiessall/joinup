@@ -50,3 +50,17 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I press "Save as draft"
     Then I should see the heading "Some news again"
     And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
+
+  @javascript
+  Scenario: Unpublished keywords are not available in the autocomplete.
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the "The Portal" collection
+    And I open the plus button menu
+    And I click "Add news"
+    # Keywords from the testing_terms.yml are used.
+    And I type "schema" in the "Search keywords" autocomplete field
+    And I wait for AJAX to finish
+    Then I should see the text "schema.org"
+    When I type "some" in the "Search keywords" autocomplete field
+    And I wait for AJAX to finish
+    Then I should not see the text "some unpublished tag"

@@ -267,3 +267,5 @@ tags:
   - name: 'tags'
   - name: 'metatag'
   - name: 'schema.org'
+  - name: 'some unpublished tag'
+    status: 0
