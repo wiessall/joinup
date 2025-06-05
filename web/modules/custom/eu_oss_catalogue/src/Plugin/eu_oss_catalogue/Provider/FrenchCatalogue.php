@@ -40,7 +40,7 @@ class FrenchCatalogue extends EuOssCatalogueProviderPluginBase {
   /**
    * French catalogue endpoint.
    */
-  protected const string ENDPOINT = 'https://code.gouv.fr/data/awesome-codegouvfr.json';
+  protected const string ENDPOINT = 'https://code.gouv.fr/data/awesome.json';
 
   /**
    * List of projects fetched from French catalogue API.

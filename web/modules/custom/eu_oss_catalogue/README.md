@@ -261,8 +261,9 @@ Run the following, to fetch from
 [Avoinkoodi.fi](http://avoinkoodi.fi)
 ```bash
 ./vendor/bin/drush eu-oss:fetch avoinkoodi_fi
+```
 
-This command queries the Developers Italia provider endpoint, fetches the data
+This command queries the configured provider endpoints, fetches the data
 and populates the queue. Later, the cronjob is triggering the queue worker which
 is gradually creating or updating the OSS Solutions.
 
