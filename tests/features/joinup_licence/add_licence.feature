@@ -50,9 +50,6 @@ Feature: Add a licence through the UI
     And I should see a paragraph containing the text "Copyright (C) 1989, 1991 Free Software Foundation, Inc."
     And I should see a paragraph containing the text "Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed."
 
-    # Clean up the licence that was created through the UI.
-    Then I delete the "GNU GPL 2+" licence
-
     Examples:
       | role            |
       | moderator       |

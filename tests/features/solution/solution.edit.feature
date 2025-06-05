@@ -74,9 +74,6 @@ Feature: Solution editing.
     When I go to the edit form of the "Another solution" solution
     Then I should get an access denied error
 
-    # Clean up the solution that was created through the UI.
-    Then I delete the "Solution A revised" solution
-
   Scenario: A solution facilitator can edit only the solutions he's associated with.
     Given collection content:
       | title              |
