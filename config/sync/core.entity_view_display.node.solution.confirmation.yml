@@ -27,11 +27,17 @@ dependencies:
     - field.field.node.solution.solution_type
     - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
+    - image.style.thumbnail
     - node.type.solution
   module:
+    - field_delimiter
+    - field_formatter_range
     - field_group
     - file_url
+    - joinup_slick
     - layout_builder
+    - link
+    - svg_image
     - template_suggestion
     - text
     - user
@@ -44,7 +50,9 @@ third_party_settings:
       children:
         - abstract
         - description
-        - solution_type
+        - classification
+        - domain
+        - field_topic
         - language
       label: 'Solution information'
       parent_name: ''
@@ -74,24 +82,18 @@ third_party_settings:
         description: ''
     group_additional_information:
       children:
+        - logo
+        - short_id
         - documentation
+        - spatial_coverage
+        - process_status
+        - landing_page
+        - solution_type
+        - related_solutions
       label: 'Additional information'
       parent_name: ''
       region: content
       weight: 2
-      format_type: fieldset
-      format_settings:
-        classes: 'bg-light p-4'
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        description: ''
-    group_interoperability_informati:
-      children: {  }
-      label: 'Interoperability information'
-      parent_name: ''
-      region: content
-      weight: 3
       format_type: fieldset
       format_settings:
         classes: 'bg-light p-4'
@@ -106,68 +108,244 @@ mode: confirmation
 content:
   abstract:
     type: string
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 4
+    weight: 1
+    region: content
+  classification:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
   contact:
     type: entity_reference_entity_view
     label: above
     settings:
-      view_mode: ''
+      view_mode: confirmation
       link: false
-    third_party_settings: {  }
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
     weight: 7
     region: content
   description:
     type: text_default
-    label: above
+    label: inline
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 5
+    weight: 2
     region: content
   documentation:
     type: file_url_default
-    label: above
+    label: inline
     settings:
       mode: link
-    third_party_settings: {  }
-    weight: 0
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 2
+    region: content
+  domain:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      fences:
+        fences_field_tag: div
+        fences_field_classes: ''
+        fences_field_items_wrapper_tag: none
+        fences_field_items_wrapper_classes: ''
+        fences_field_item_tag: span
+        fences_field_item_classes: ''
+        fences_label_tag: none
+        fences_label_classes: ''
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 4
+    region: content
+  field_topic:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 5
+    region: content
+  landing_page:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 6
     region: content
   language:
     type: entity_reference_label
-    label: above
+    label: inline
     settings:
       link: false
-    third_party_settings: {  }
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
     weight: 7
+    region: content
+  logo:
+    type: image
+    label: inline
+    settings:
+      image_link: ''
+      image_style: thumbnail
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
     region: content
   owner:
     type: entity_reference_entity_view
     label: above
     settings:
-      view_mode: default
+      view_mode: confirmation
       link: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 6
+    region: content
+  process_status:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 5
+    region: content
+  short_id:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
     region: content
   solution_type:
     type: entity_reference_label
-    label: above
+    label: inline
     settings:
       link: false
-    third_party_settings: {  }
-    weight: 6
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 7
+    region: content
+  spatial_coverage:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 3
     region: content
 hidden:
-  classification: true
   collections: true
   distributions: true
-  domain: true
   download_total: true
   eif_perspective: true
   featured: true
@@ -175,13 +353,10 @@ hidden:
   field_keywords: true
   field_shared_in: true
   field_state: true
-  field_topic: true
   flag_interoperability: true
   flag_like: true
-  landing_page: true
   langcode: true
   links: true
-  logo: true
   members: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
@@ -190,7 +365,6 @@ hidden:
   og_group: true
   pinned_in: true
   private_message_link: true
-  process_status: true
   published_at: true
   read_more: true
   related_solution: true
@@ -201,10 +375,8 @@ hidden:
   search_api_excerpt: true
   share_link: true
   shared_in: true
-  short_id: true
   site_featured: true
   solution_settings: true
   solution_subscribe: true
-  spatial_coverage: true
   translation: true
   uri: true
