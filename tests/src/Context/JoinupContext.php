@@ -3085,4 +3085,31 @@ class JoinupContext extends RawDrupalContext {
     \Drupal::state()->delete('image_library_widget.clicks');
   }
 
+  /**
+   * Asserts that the given entity is published or unpublished.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $entityType
+   *   The type of the entity (e.g., 'node', 'taxonomy_term').
+   * @param string $expectedStatus
+   *   The expected publication status of the entity.
+   *
+   * @Given /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/
+   */
+  public function theShouldBeUnpublished(string $label, string $entityType, string $expectedStatus): void {
+    $entity = $this->getEntityByLabel($entityType, $label);
+    if (!$entity) {
+      throw new \Exception("Entity of type '$entityType' with label '$label' not found.");
+    }
+
+    \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
+    $expectedStatus = $expectedStatus === 'published';
+
+    if ($entity->isPublished() !== $expectedStatus) {
+      $status = $expectedStatus ? 'published' : 'unpublished';
+      throw new \Exception("The entity '$label' is not $status as expected.");
+    }
+  }
+
 }
