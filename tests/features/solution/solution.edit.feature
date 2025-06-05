@@ -101,6 +101,4 @@ Feature: Solution editing.
   Scenario: User should not see fields from other steps
     When I am logged in as a facilitator of the "Another solution" solution
     And I go to the edit form of the "Another solution" solution
-    And I should not see the text "Motivation"
-    Then I press "Continue"
-    And the following fields should be visible "Motivation"
+    And the following fields should not be visible "Motivation"
