@@ -183,6 +183,7 @@ default:
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
         Contact information inline form: '#edit-contact-wrapper'
+        Content buttons: '.node-form .form-actions'
         Content listing field filter form: '.field--name-content-listing'
         Content: 'main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'

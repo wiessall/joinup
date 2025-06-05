@@ -39,7 +39,6 @@ Feature: Test adding solutions.
       | E-mail address field is required.       |
     And I click "Contact details"
     # Create owner.
-    And I press "Add new owner"
     And I fill in "Name" with "Organisation valid"
     And I check "Company"
     And I fill in "Country" with "Belgium"
