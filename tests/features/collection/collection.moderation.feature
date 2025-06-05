@@ -236,10 +236,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
-    # Clean up the entities that were created.
-    Then I delete the "Spectres in fog" collection
-    And I delete the "A secretary in the fog" "contact information"
-
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
@@ -274,10 +270,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
-    # Clean up the entities that were created.
-    Then I delete the "Domestic bovins" collection
-    And I delete the "Domestic secretary" "contact information"
-
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
     # Regression test for a bug that causes the wrong content creation value
@@ -311,10 +303,6 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
-
-    # Clean up the entities that were created.
-    Then I delete the "Theft of Body" collection
-    And I delete the "Secretary of thieves" "contact information"
 
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
@@ -352,10 +340,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
-    # Clean up the entities that were created.
-    Then I delete the "Silken Emperor" collection
-    And I delete the "Secretary of Silk" "contact information"
-
   @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
@@ -391,7 +375,3 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
-
-    # Clean up the entities that were created.
-    Then I delete the "The blue ships" collection
-    And I delete the "Secretary of the harbor" "contact information"

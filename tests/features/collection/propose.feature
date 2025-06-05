@@ -89,10 +89,6 @@ Feature: Proposing a collection
     And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
 
-    # Clean up the collection that was created.
-    Then I delete the "Ancient and Classical Mythology" collection
-    And I delete the "Contact person" "contact information"
-
   Scenario: Propose a collection with a duplicate name
     Given collection content:
       | title                  |
@@ -176,10 +172,6 @@ Feature: Proposing a collection
     When I go to the edit form of the "Just a proposal" collection
     And I expand the "Additional fields" accordion section
     Then I should see the link "logo.png"
-
-    # As some entities were created via UI, we should explicitly delete them.
-    And I delete the "Just a proposal" collection
-    And I delete the "Invisible Man" "contact information"
 
   @javascript
   # This is a regression test for a bug where nothing was happening when
@@ -288,12 +280,6 @@ Feature: Proposing a collection
     When I go to "/collection/some-email-validation/contact"
     Then I should get an access denied error
 
-    # As some entities were created via UI, we should explicitly delete them.
-    And I delete the "Contact person" "contact information"
-    And I delete the "Contact Rapazoglou" "contact information"
-    And I delete the "Some email validation" collection
-    And I delete the "Rolly email validation" solution
-
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
     Given owner content:
@@ -325,6 +311,3 @@ Feature: Proposing a collection
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection
-    # Cleanup step.
-    Then I delete the "SVG API example" collection
-    And I delete the "BasicSvgAPI Contact" "contact information"
