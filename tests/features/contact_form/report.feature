@@ -23,7 +23,7 @@ Feature: Submit the contact form
     # There should be a link to the contact form in the footer.
     Given I am not logged in
     When I go to the "Event to report" event
-    And I click "Report"
+    And I click "Report abusive content"
     And I fill in the following:
       | First name     | Balourdos                                                                      |
       | Last name      | Tsolias                                                                        |
@@ -51,7 +51,7 @@ Feature: Submit the contact form
     And I should see the heading "Event to report"
 
     # Now the reporter requires also a copy of its message.
-    When I click "Report"
+    When I click "Report abusive content"
     And I fill in the following:
       | First name     | Gavin                                                                                                     |
       | Last name      | Belson                                                                                                    |
