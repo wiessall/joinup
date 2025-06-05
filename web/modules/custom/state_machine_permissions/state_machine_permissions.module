@@ -37,7 +37,10 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
 
     $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
     $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
-    return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.');
+    return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.')
+      ->addCacheableDependency($entity)
+      ->cachePerPermissions()
+      ->cachePerUser();
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -46,7 +49,10 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
   $entity->setGroup($context['group']);
   $entity->setOwnerId($account->id());
   if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
-    return AccessResult::forbidden('No available transitions for the entity.');
+    return AccessResult::forbidden('No available transitions for the entity.')
+      ->addCacheableDependency($entity)
+      ->cachePerPermissions()
+      ->cachePerUser();
   }
 
   // OG does not check for a create permission properly, because the
