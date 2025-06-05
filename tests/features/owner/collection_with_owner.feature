@@ -22,6 +22,9 @@ Feature: Creation of owners through UI
     When I select "EU and European Policies" from "Topic"
     And I attach the file "logo.png" to "Logo"
 
+    And I should see the button "Add new owner"
+    And I should see the button "Add existing owner"
+
     # Click the button to create an organisation owner.
     And I press "Add new" at the "Owner" field
     # Since it is a 'propose' form, the field is not shown for the parent either.

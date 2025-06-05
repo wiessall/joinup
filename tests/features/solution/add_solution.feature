@@ -4,12 +4,13 @@ Feature: Test adding solutions.
   As a moderator
   I need to be able to add "Solution" through UI.
 
+  @javascript
   Scenario: Required fields should be filled in
     Given I am logged in as a facilitator of the "The Portal" collection
     And I go to the homepage of the "The Portal" collection
-    And I click "Add solution"
+    And I click "Add solution" in the plus button menu
 
-    When I press "Next"
+    When I press "Propose"
     Then I should see the following error messages:
       | error messages                             |
       | Title field is required.                   |
@@ -20,36 +21,22 @@ Feature: Test adding solutions.
       | Topic field is required.                   |
       | Language availability field is required.   |
 
-    When I fill in the following:
-      | Title       | Solution Beta  |
-      | Abstract    | Short abstract |
-      | Description | Last letter    |
+    When I fill in "Title" with "Solution Beta"
+    And I fill in "Abstract" with "Short abstract"
+    And I enter "Last letter" in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
     And I select "Bulgarian" from "Language availability"
-    And I press "Next"
-    And I press "Next"
-    Then I should see the following error messages:
-      | error messages                    |
-      | Name field is required.           |
-      | Type field is required.           |
-      | E-mail address field is required. |
-    # Create owner.
-    And I fill in "owner[form][0][title][0][value]" with "Yancy owner"
-    And I check "Company"
-    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
-    And I press "Create owner"
-    # Create contact information.
-    And I press "Create contact information"
-    And I fill in "contact[form][0][title][0][value]" with "Yancy Contact"
-    And I fill in "contact[form][0][email][value]" with "yancyb@example.com"
-    And I press "Next"
-    And I select "Logging Service" from "Solution type"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Contact details"
+    And I press "Add new owner"
     And I press "Propose"
     Then I should see the following error messages:
       | error messages                          |
+      | Name field is required.                 |
+      | Type field is required.                 |
+      | Country field is required.              |
+      | E-mail address field is required.       |
       | You must accept the Terms of Agreement. |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
@@ -191,6 +178,7 @@ Feature: Test adding solutions.
     When I visit "/user"
     Then I should see the link "V60 filter coffee solution"
 
+  @javascript
   Scenario: Create a solution with a name that already exists
     Given collection content:
       | title              |
@@ -208,7 +196,7 @@ Feature: Test adding solutions.
     When I go to the homepage of the "Ocean studies" collection
     And I click "Add solution" in the plus button menu
     And I fill in "Title" with "Climate change tracker"
-    And I press "Next"
+    And I press "Propose"
     Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
@@ -217,17 +205,16 @@ Feature: Test adding solutions.
     Given I am logged in as a member of the "Glacier monitoring" collection
     When I go to the homepage of the "Glacier monitoring" collection
     And I click "Add solution" in the plus button menu
-    And I fill in the following:
-      | Title                 | Climate change tracker                  |
-      | Abstract              | Tracks climate change                   |
-      | Description           | Logs retreat of 40 glaciers in Belgium. |
+    And I fill in "Title" with "Climate change tracker"
+    And I fill in "Abstract" with "Tracks climate change"
+    And I enter "Logs retreat of 40 glaciers in Belgium." in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" from "Domain"
     And I select "Demography" from "Topic"
-    And I select "Logging Service" from "Solution type"
     And I select "Bulgarian" from "Language availability"
-    And I press "Next"
+    And I click "Contact details"
     # Create owner.
+    And I press "Add new owner"
     And I fill in "owner[form][0][title][0][value]" with "University of Basel"
     And I check "Company"
     And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
@@ -236,18 +223,22 @@ Feature: Test adding solutions.
     And I press "Create contact information"
     And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
     And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
-    And I jump to the "Confirmation" of "solution" wizard
+    And I click "Additional information"
+    And I select "Logging Service" from "Solution type"
+    And I click "Confirmation"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
     # Check that the warning intended for moderators is not shown to regular
     # users.
-    When I click "Edit" in the "Entity actions" region
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
     Then I should not see the warning message "A solution with the same name exists in a different collection."
 
     Given I am logged in as a moderator
     And I go to my dashboard
     And I click "Climate change tracker"
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I should see the warning message "A solution with the same name exists in a different collection."
 
@@ -262,9 +253,8 @@ Feature: Test adding solutions.
     And I am logged in as a moderator
 
     When I go to the edit form of the "Cleaning solution" solution
-    And I jump to the "Additional information" of "solution" wizard
+    And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
-    And I jump to the "Confirmation" of "solution" wizard
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2

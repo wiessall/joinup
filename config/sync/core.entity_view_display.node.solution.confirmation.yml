@@ -30,6 +30,7 @@ dependencies:
     - node.type.solution
   module:
     - field_group
+    - file_url
     - layout_builder
     - template_suggestion
     - text
@@ -45,7 +46,6 @@ third_party_settings:
         - description
         - solution_type
         - language
-        - content_creation
       label: 'Solution information'
       parent_name: ''
       region: content
@@ -73,7 +73,8 @@ third_party_settings:
         label_as_html: false
         description: ''
     group_additional_information:
-      children: {  }
+      children:
+        - documentation
       label: 'Additional information'
       parent_name: ''
       region: content
@@ -129,6 +130,14 @@ content:
         template_suggestion: ''
     weight: 5
     region: content
+  documentation:
+    type: file_url_default
+    label: above
+    settings:
+      mode: link
+    third_party_settings: {  }
+    weight: 0
+    region: content
   language:
     type: entity_reference_label
     label: above
@@ -158,7 +167,6 @@ hidden:
   classification: true
   collections: true
   distributions: true
-  documentation: true
   domain: true
   download_total: true
   eif_perspective: true
