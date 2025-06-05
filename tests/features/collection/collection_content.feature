@@ -72,8 +72,6 @@ Feature: Collection content
     When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
-    Then I delete the "Solution from draft to published" solution
-    And I delete the "Costas Papazoglou" "contact information"
 
   @javascript
   Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile
