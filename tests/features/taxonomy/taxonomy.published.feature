@@ -1,7 +1,7 @@
 @api @group-i
 Feature: Publication status of keywords depends on the status of the parent.
 
-  Scenario: Keywords are created as unpublished for unpublished parents.
+  Scenario: Keywords publication management.
     Given I am logged in as a facilitator of the "The Portal" collection
     And I go to the "The Portal" collection
     And I click "Add solution"
@@ -34,4 +34,19 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I go to the edit form of the "ASDF solution" solution
     And I press "Publish"
     Then I should see the heading "ASDF solution"
+    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
+
+    # Save a draft item with the keyword and verify it does not unpublish it.
+    Given I click "Add news" in the plus button menu
+    And I fill in the following:
+      | Short title | Some news again |
+      | Headline    | Some news again |
+      | Abstract    | Dummy text      |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah           |
+      | field_body:format | content_editor |
+    And I select "EU and European Policies" from "Topic"
+    And I fill in "Search keywords" with "Unpublished Keyword"
+    And I press "Save as draft"
+    Then I should see the heading "Some news again"
     And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
