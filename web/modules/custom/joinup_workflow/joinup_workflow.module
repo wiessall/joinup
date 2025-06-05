@@ -84,10 +84,13 @@ function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $for
   // Wrap with container to ensure simple_multistep can hide the element,
   // preventing "form-control" class to take precedence.
   $form['transition_motivation'] = [
-    '#type' => 'textarea',
-    '#title' => t('Motivation'),
-    '#description' => t('Description of the reason of this operation.'),
-    '#default_value' => $form_state->getValue('transition_motivation'),
+    '#type' => 'container',
+    'transition_motivation' => [
+      '#type' => 'textarea',
+      '#title' => t('Motivation'),
+      '#description' => t('Description of the reason of this operation.'),
+      '#default_value' => $form_state->getValue('transition_motivation'),
+    ],
   ];
   $form['#validate'][] = 'joinup_workflow_motivation_form_validate';
 }
