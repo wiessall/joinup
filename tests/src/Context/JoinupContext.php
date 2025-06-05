@@ -3097,12 +3097,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Given /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/
    */
-  public function theShouldBeUnpublished(string $label, string $entityType, string $expectedStatus): void {
+  public function theEntityShouldHavePublishedStatus(string $label, string $entityType, string $expectedStatus): void {
     $entity = $this->getEntityByLabel($entityType, $label);
-    if (!$entity) {
-      throw new \Exception("Entity of type '$entityType' with label '$label' not found.");
-    }
-
     \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
     $expectedStatus = $expectedStatus === 'published';
 
