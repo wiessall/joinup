@@ -34,10 +34,6 @@ class SolutionMultistepController extends MultistepController {
     if ($this->stepSettings->group_name !== 'group_confirmation') {
       $form['field_state']['widget']['#options'] = \array_intersect_key($form['field_state']['widget']['#options'], ['delete' => TRUE]);
     }
-
-    if (isset($form['actions']['next'])) {
-      $form['actions']['next']['#limit_validation_errors'] = FALSE;
-    }
   }
 
 }
