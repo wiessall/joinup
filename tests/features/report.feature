@@ -13,7 +13,7 @@ Feature: Report inappropriate content
       | <title> | <body> | Deployment tools |
     Given I am not logged in
     When I visit the "<title>" "<type>"
-    And I click "Report abusive content"
+    And I click "Report"
     Then I should see the heading "Contact"
     And the "Category" field should contain "report"
     And the "Page URL" field should contain the link to the "<title>" page
