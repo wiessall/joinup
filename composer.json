@@ -117,6 +117,7 @@
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
+        "drupal/tagify": "^1.2",
         "drupal/taxonomy_container": "^1.4",
         "drupal/theme_rule": "^1.0",
         "drupal/tmgmt_ec_etranslation": "^1.1",
