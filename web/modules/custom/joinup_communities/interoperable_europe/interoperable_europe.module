@@ -54,6 +54,7 @@ function interoperable_europe_block_access(BlockInterface $block, string $operat
       $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
       $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
       return AccessResult::forbiddenIf(empty($allowed_transitions))
+        ->addCacheableDependency($group)
         ->cachePerPermissions()
         ->cachePerUser();
     }
