@@ -86,10 +86,10 @@ third_party_settings:
         - short_id
         - documentation
         - spatial_coverage
+        - related_solutions
         - process_status
         - landing_page
         - solution_type
-        - related_solutions
       label: 'Additional information'
       parent_name: ''
       region: content
