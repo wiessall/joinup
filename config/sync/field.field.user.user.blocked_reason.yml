@@ -1,0 +1,25 @@
+uuid: 4e25a4e6-3039-4e13-bdd0-472554ce4449
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.blocked_reason
+  module:
+    - options
+    - tmgmt_content
+    - user
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: user.user.blocked_reason
+field_name: blocked_reason
+entity_type: user
+bundle: user
+label: 'Blocked reason'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
