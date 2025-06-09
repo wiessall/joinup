@@ -125,28 +125,30 @@ third_party_settings:
         - tca
       label: Confirmation
       region: content
-      parent_name: group_solution_tabs
-      weight: 5
-      format_type: tab
+      parent_name: ''
+      weight: 2
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: false
+        show_step_title: false
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: ''
+        step_help: ''
     group_solution_tabs:
       children:
         - group_solution_information
         - group_contact_details
         - group_additional_information
         - group_interoperability_informati
-        - group_confirmation
       label: Tabs
       region: content
-      parent_name: ''
-      weight: 0
+      parent_name: group_main
+      weight: 1
       format_type: tabs
       format_settings:
         classes: ''
@@ -155,6 +157,25 @@ third_party_settings:
         label_as_html: false
         direction: horizontal
         width_breakpoint: 640
+    group_main:
+      children:
+        - group_solution_tabs
+      label: Main
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: false
+        step_description: ''
+        back_button_show: false
+        back_button_text: ''
+        next_button_text: Continue
+        step_help: ''
 id: node.solution.default
 targetEntityType: node
 bundle: solution
