@@ -569,6 +569,22 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if no option is selected.
+   *
+   * @param string $select
+   *   CSS selector of the select field.
+   *
+   * @throws \Exception
+   *   Thrown when the select is not found in the page or the selected option is
+   *   not the expected one.
+   *
+   * @Then no option from select :select is selected
+   */
+  public function assertFieldOptionNoSelected(string $select): void {
+    $this->assertFieldOptionSelectedInRegion('none', $select);
+  }
+
+  /**
    * Checks if an option is selected in a specific select element in a region.
    *
    * @param string $option
@@ -594,7 +610,10 @@ class FeatureContext extends RawDrupalContext {
 
     $option_element = $element->find('xpath', '//option[@selected="selected"]');
     if (!$option_element) {
-      throw new \Exception(sprintf('No option is selected in the %s select', $select));
+      if ($option != 'none') {
+        throw new \Exception(sprintf('No option is selected in the %s select', $select));
+      }
+      return;
     }
 
     if ($option_element->getText() !== $option) {

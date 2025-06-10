@@ -744,6 +744,7 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
   }
 
   $node = $form_state->getFormObject()->getEntity();
+  \assert($node instanceof NodeInterface);
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
   $render_array = $view_builder->view($node, 'confirmation');
   $form['node_preview'] = [

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.user.register
+    - field.field.user.user.blocked_reason
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -60,6 +61,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  blocked_reason: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
