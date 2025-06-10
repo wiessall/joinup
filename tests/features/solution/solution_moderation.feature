@@ -33,9 +33,10 @@ Feature: Solution moderation
     Then I press "Create contact information"
     And I click "Additional information"
     And I select "Logging Service" from "Solution type"
+    And I press "Continue"
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
     When I am logged in as a user with the "moderator" role
     And I go to the add solution form of the "Collection propose state test" collection
@@ -59,9 +60,10 @@ Feature: Solution moderation
     Then I press "Create contact information"
     And I click "Additional information"
     And I select "Logging Service" from "Solution type"
+    And I press "Continue"
     Then the following buttons should be present "Save as draft, Propose, Publish"
     And the following buttons should not be present "Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
     When I am logged in as a "facilitator" of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
@@ -85,9 +87,10 @@ Feature: Solution moderation
     Then I press "Create contact information"
     And I click "Additional information"
     And I select "Logging Service" from "Solution type"
+    And I press "Continue"
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
   Scenario: Test the moderation workflow available states.
     Given users:

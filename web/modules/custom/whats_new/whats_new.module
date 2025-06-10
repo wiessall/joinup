@@ -28,6 +28,9 @@ function whats_new_entity_prepare_view(string $entity_type_id, array $entities, 
   // entity's canonical page.
   /** @var \Drupal\Core\Entity\EntityInterface $entity */
   $entity = reset($entities);
+  if ($entity->isNew()) {
+    return;
+  }
 
   $whats_new_helper = \Drupal::getContainer()->get('whats_new.helper');
   if (empty($whats_new_helper->getFlagEnabledMenuLinks($entity))) {
