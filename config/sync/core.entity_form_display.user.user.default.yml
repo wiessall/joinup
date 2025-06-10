@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.blocked_reason
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -31,15 +32,21 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  blocked_reason:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_social_media:
     type: social_media_links_field_default
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   field_user_business_title:
     type: string_textfield
-    weight: 6
+    weight: 7
     region: content
     settings:
       size: 60
@@ -47,7 +54,7 @@ content:
     third_party_settings: {  }
   field_user_content:
     type: search_api_field_default
-    weight: 8
+    weight: 9
     region: content
     settings:
       query_builder: false
@@ -70,7 +77,7 @@ content:
     third_party_settings: {  }
   field_user_nationality:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 5
     region: content
     settings:
       match_operator: CONTAINS
@@ -80,7 +87,7 @@ content:
     third_party_settings: {  }
   field_user_organisation:
     type: string_textfield
-    weight: 7
+    weight: 8
     region: content
     settings:
       size: 60
@@ -88,7 +95,7 @@ content:
     third_party_settings: {  }
   field_user_photo:
     type: image_image
-    weight: 3
+    weight: 4
     region: content
     settings:
       progress_indicator: throbber
@@ -115,7 +122,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

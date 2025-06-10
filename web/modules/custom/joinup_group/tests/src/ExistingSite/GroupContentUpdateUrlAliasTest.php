@@ -113,7 +113,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Edit the solution and add a short ID.
     $edit = ['short_id[0][value]' => 'abc123'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
-    $this->submitForm($edit, 'Publish');
+    array_walk($edit, static fn($value, $key) => $assert->fieldExists($key)->setValue($value));
+    $this->getCurrentPage()->pressButton('Continue');
+    $this->submitForm([], 'Publish');
     $this->assertSession()
       ->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
 
@@ -202,7 +204,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test the success message on short ID update.
     $edit = ['short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
-    $this->submitForm($edit, 'Publish');
+    array_walk($edit, static fn($value, $key) => $assert->fieldExists($key)->setValue($value));
+    $this->getCurrentPage()->pressButton('Continue');
+    $this->submitForm([], 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
     $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
@@ -213,7 +217,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test the short ID deletion.
     $edit = ['short_id[0][value]' => ''];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
-    $this->submitForm($edit, 'Publish');
+    array_walk($edit, static fn($value, $key) => $assert->fieldExists($key)->setValue($value));
+    $this->getCurrentPage()->pressButton('Continue');
+    $this->submitForm([], 'Publish');
     $this->assertSession()
       ->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
     $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
@@ -323,7 +329,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Test updating the title of the solution.
     $edit = ['title[0][value]' => 'Solution one'];
     $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
-    $this->submitForm($edit, 'Publish');
+    array_walk($edit, static fn($value, $key) => $assert->fieldExists($key)->setValue($value));
+    $this->getCurrentPage()->pressButton('Continue');
+    $this->submitForm([], 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the solution's title from solution 1 to Solution one. It will take some time until the solution content URLs will be updated.");
 

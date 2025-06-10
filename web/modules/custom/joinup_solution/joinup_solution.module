@@ -200,7 +200,10 @@ function joinup_solution_node_access(EntityInterface $entity, $operation, Accoun
     $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
     $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
     if (empty($allowed_transitions)) {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()
+        ->addCacheableDependency($entity)
+        ->cachePerPermissions()
+        ->cachePerUser();
     }
   }
 
@@ -741,6 +744,7 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
   }
 
   $node = $form_state->getFormObject()->getEntity();
+  \assert($node instanceof NodeInterface);
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
   $render_array = $view_builder->view($node, 'confirmation');
   $form['node_preview'] = [
