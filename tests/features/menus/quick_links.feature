@@ -87,6 +87,7 @@ Feature: Test the visibility of the quick links menu.
     And I fill in the following:
       | Relevant website | http://www.example.com |
     Then I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Continue"
     And I press "Publish"
     Then I should see the text "Quick links"
     And I should see the following links:
