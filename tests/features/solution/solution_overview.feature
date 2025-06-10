@@ -135,6 +135,7 @@ Feature: Solutions Overview
     # Create contact information.
     And I fill in "contact[form][0][title][0][value]" with "Ambrosio Morison"
     And I fill in "contact[form][0][email][value]" with "ambrosio.morison@example.com"
+    And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Publish"
     And I visit the "Colonies in Earth" solution

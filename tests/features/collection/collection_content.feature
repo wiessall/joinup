@@ -46,6 +46,7 @@ Feature: Collection content
     When I go to the edit form of the "Solution from draft to published" solution
     And I fill in "Title" with "Solution from draft to published but draft"
     And I select "Bulgarian" from "Language availability"
+    And I press "Continue"
     And I press "Save as draft"
     Then I should see the heading "Solution from draft to published"
 
