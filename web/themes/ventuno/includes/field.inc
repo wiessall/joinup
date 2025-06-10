@@ -20,6 +20,11 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
+  // Add extra suggestion for field elements.
+  $has_extra_suggestions = isset($variables['element']['#extra_suggestion']);
+  if ($has_extra_suggestions) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
