@@ -26,6 +26,7 @@ use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
+use Drupal\joinup_core\ReportLinkFieldItemList;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\MailContentTypeHeader;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -80,40 +81,6 @@ function joinup_core_requirements_alter(array &$requirements): void {
  */
 function joinup_core_cron(): void {
   \Drupal::getContainer()->get('batch.storage')->cleanup();
-}
-
-/**
- * Implements hook_entity_base_field_info().
- *
- * - Provides a 'report' field on community content pages that can be used to
- *   report inappropriate content.
- */
-function joinup_core_entity_base_field_info(EntityTypeInterface $entity_type): array {
-  $fields = [];
-
-  // Add a 'report' field to community content entities. Currently all node
-  // types are community content.
-  if ($entity_type->id() === 'node') {
-    $fields['report'] = BaseFieldDefinition::create('report_link')
-      ->setName('report')
-      ->setLabel(t('Report'))
-      ->setComputed(TRUE)
-      ->setClass('\Drupal\joinup_core\ReportLinkFieldItemList')
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'weight' => 50,
-        'settings' => [
-          'trim_length' => 80,
-          'url_only' => FALSE,
-          'url_plain' => FALSE,
-          'rel' => '',
-          'target' => '',
-        ],
-      ]);
-  }
-
-  return $fields;
 }
 
 /**
@@ -383,6 +350,40 @@ function joinup_core_theme_suggestions_alter(array &$suggestions, array $variabl
     return;
   }
   $suggestions[] = "{$hook}__three_dots_menu";
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ *
+ * - Provides a 'report' field on community content pages that can be used to
+ *   report inappropriate content.
+ */
+function joinup_core_entity_base_field_info(EntityTypeInterface $entity_type): array {
+  $fields = [];
+
+  // Add a 'report' field to community content entities. Currently all node
+  // types are community content.
+  if ($entity_type->id() === 'node') {
+    $fields['report'] = BaseFieldDefinition::create('report_link')
+      ->setName('report')
+      ->setLabel(t('Report'))
+      ->setComputed(TRUE)
+      ->setClass(ReportLinkFieldItemList::class)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'weight' => 50,
+        'settings' => [
+          'trim_length' => 80,
+          'url_only' => FALSE,
+          'url_plain' => FALSE,
+          'rel' => '',
+          'target' => '',
+        ],
+      ]);
+  }
+
+  return $fields;
 }
 
 /**
