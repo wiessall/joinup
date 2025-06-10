@@ -143,7 +143,7 @@
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
-        "openeuropa/oe_webtools": "1.38.0",
+        "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
@@ -487,9 +487,6 @@
             },
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff"
-            },
-            "openeuropa/oe_webtools": {
-                "Add maps version 3.0 @see https://github.com/openeuropa/oe_webtools/pull/254": "resources/patch/php/openeuropa/oe_webtools/254.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
