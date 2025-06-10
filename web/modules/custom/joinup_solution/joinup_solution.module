@@ -315,7 +315,9 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   // Attach the related solutions component.
   if ($display->getComponent('related_solutions')) {
     $ids = joinup_solution_get_related_solutions_ids($solution);
-    $build['related_solutions'] = joinup_solution_build_related_solutions_list($ids);
+    $build['related_solutions'] = $view_mode !== 'confirmation' ?
+      joinup_solution_build_related_solutions_tiles($ids) :
+      joinup_solution_build_related_solutions_titles($ids);
   }
 
   // Attach the download total of all distributions in this solution.
@@ -484,7 +486,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
 }
 
 /**
- * Builds the render array of related solutions.
+ * Builds the render array of related solutions using tiles.
  *
  * @param int[] $ids
  *   The list of solution ids.
@@ -492,7 +494,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
  * @return array
  *   The render array of related solutions.
  */
-function joinup_solution_build_related_solutions_list(array $ids): array {
+function joinup_solution_build_related_solutions_tiles(array $ids): array {
   $build = [];
   $entities = Node::loadMultiple($ids);
   $delta = 0;
@@ -524,6 +526,42 @@ function joinup_solution_build_related_solutions_list(array $ids): array {
       '#extra_suggestion' => 'container__grid',
     ];
     $build[0] += $elements;
+  }
+  return $build;
+}
+
+/**
+ * Builds the render array of related solutions, just the titles.
+ *
+ * @param int[] $ids
+ *   The list of solution ids.
+ *
+ * @return array
+ *   The render array of related solutions.
+ */
+function joinup_solution_build_related_solutions_titles(array $ids): array {
+  $build = [];
+  $entities = array_values(Node::loadMultiple($ids));
+  $count = count($entities);
+  $elements = [];
+  for ($i = 0; $i < $count; $i++) {
+    $elements[] = [
+      '#markup' => $entities[$i]->get('title')->value . ($i === $count - 1 ?: ', '),
+    ];
+  }
+  if ($elements) {
+    $build = [
+      '#theme' => 'field',
+      '#extra_suggestion' => 'field__inline',
+      '#title' => t('Related solutions'),
+      '#field_name' => 'related_solutions',
+      '#field_type' => 'entity_reference',
+      '#entity_type' => 'node',
+      '#bundle' => 'solution',
+      '#label_display' => 'inline',
+      '#is_multiple' => TRUE,
+      '#view_mode' => 'default',
+    ] + $elements;
   }
   return $build;
 }
