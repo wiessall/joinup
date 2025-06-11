@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.user.view_mode_tile
+    - field.field.user.user.blocked_reason
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -94,6 +95,7 @@ content:
     region: content
 hidden:
   block_user: true
+  blocked_reason: true
   field_social_media: true
   field_user_content: true
   field_user_frequency: true
