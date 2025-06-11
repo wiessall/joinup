@@ -2173,7 +2173,8 @@ class JoinupContext extends RawDrupalContext {
   public function selectTagsFromTagify(string $tags, string $fieldName): void {
     if ($this->hasJavascriptSupport()) {
       $this->selectFromTagifyWithJs($tags, $fieldName);
-    } else {
+    }
+    else {
       $tags = explode(',', $tags);
       $value = $this->prepareTagArray($tags);
       $field = $this->getSession()->getPage()->findField($fieldName);
