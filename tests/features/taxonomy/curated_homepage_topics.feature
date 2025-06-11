@@ -65,7 +65,7 @@ Feature:
     And I attach the file "ada.png" to "Image"
     And I press "Upload"
     Then I should see the success message "The image was resized to fit within the maximum allowed dimensions of 552x240 pixels. The new dimensions of the resized image are 153x240 pixels."
-    And I should see the following error messages:
+    And I should see the following inline form error messages:
       | error messages                                                                                                                       |
       | The specified file ada.png could not be uploaded.                                                                                    |
       | The resized image is too small. The minimum dimensions are 552x240 pixels and after resizing, the image size will be 153x240 pixels. |
@@ -90,7 +90,7 @@ Feature:
     And I press "Add item"
 
     When I press "Save"
-    Then I should see the error message "The E-justice topic is already in the list."
+    Then I should see the inline form error message "The E-justice topic is already in the list."
 
     When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
     And I press "Add item"

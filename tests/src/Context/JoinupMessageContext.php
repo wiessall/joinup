@@ -19,7 +19,7 @@ class JoinupMessageContext extends RawDrupalContext {
   /**
    * Selector of inline form error messages.
    */
-  private const string SELECTOR = '.form-item--error-message';
+  private const string SELECTOR = '.form-item--error-message, .form-item__error-message';
 
   /**
    * Checks if the current page contains the given test as an inline form error.
