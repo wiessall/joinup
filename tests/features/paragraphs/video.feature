@@ -39,7 +39,7 @@ Feature: Video paragraph tests.
     # Instead, the user can delete the video paragraph and create a new one.
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And the following field should not be present "Remote video URL"
-    And I should see the text "Rick Astley - Never Gonna Give You Up (Official Music Video)"
+    And I should see the text "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)"
     And I press "Cancel" in the "Modal buttons" region
     And the modal should be closed
 
@@ -67,9 +67,9 @@ Feature: Video paragraph tests.
     # 2 rows: header + 1 video...
     Then the "Ventuno media library" table should have 2 rows
     And the "Ventuno media library" table should contain a column with the following data:
-      | Name                                                         |
-      | Rick Astley - Never Gonna Give You Up (Official Music Video) |
-    When I check "Rick Astley - Never Gonna Give You Up (Official Music Video)"
+      | Name                                                                 |
+      | Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster) |
+    When I check "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)"
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I select "HR" from "Topic"
