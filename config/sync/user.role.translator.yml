@@ -5,11 +5,11 @@ dependencies:
   module:
     - config_translation
     - dashboard
+    - joinup_i18n
     - l10n_client_ui
     - locale
-    - toolbar
-    - joinup_i18n
     - system
+    - toolbar
 id: translator
 label: Translator
 weight: -3
@@ -21,4 +21,5 @@ permissions:
   - 'translate configuration'
   - 'translate interface'
   - 'use localization client ui'
+  - 'view admin pages in preferred language'
   - 'view the administration theme'

@@ -31,10 +31,12 @@ class LanguageNegotiationAdminEnglish extends LanguageNegotiationUserAdmin {
    * {@inheritdoc}
    */
   public function getLangcode(?Request $request = NULL): ?string {
-    $isAdminUser = $this->currentUser->hasPermission('access administration pages') ||
-      $this->currentUser->hasPermission('view the administration theme');
+    if (!$request) {
+      return NULL;
+    }
 
-    if ($isAdminUser && $request && $this->isAdminPath($request)) {
+    $isAdminUser = $this->currentUser->hasPermission('view admin pages in preferred language');
+    if (!$isAdminUser && $this->isAdminPath($request)) {
       return 'en';
     }
 
