@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8203aa8d1f189802d88c0e1cff987eb1",
+    "content-hash": "3687464c8e5716dbbbb47c3345ab0867",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13298,20 +13298,20 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.38.0",
+            "version": "1.40.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "979433c9fc605335a9d687bd5a61c197e254618c"
+                "reference": "e83dbc7a4933f936367f1912d7a9067bab51ec4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/979433c9fc605335a9d687bd5a61c197e254618c",
-                "reference": "979433c9fc605335a9d687bd5a61c197e254618c",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/e83dbc7a4933f936367f1912d7a9067bab51ec4a",
+                "reference": "e83dbc7a4933f936367f1912d7a9067bab51ec4a",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "^10",
+                "drupal/core": "^10 || ^11",
                 "ext-json": "*",
                 "php": ">=8.1"
             },
@@ -13321,31 +13321,23 @@
             "require-dev": {
                 "composer/installers": "~1.5",
                 "drupal/captcha": "^1.10 || ^2.0",
-                "drupal/core-composer-scaffold": "^10",
+                "drupal/core-composer-scaffold": "^10 || ^11",
+                "drupal/core-dev": "^10 || ^11",
                 "drupal/drupal-extension": "^5.0",
                 "drupal/geocoder": "^4.0",
                 "drupal/geofield": "^1.0",
                 "drupal/json_field": "~1.1",
-                "drush/drush": "^12",
-                "mikey179/vfsstream": "^1.6",
-                "nikic/php-parser": "^4.18",
+                "drush/drush": "^12 || ^13",
                 "openeuropa/behat-transformation-context": "^0.2",
                 "openeuropa/code-review-drupal": "^1.0.0-alpha",
-                "openeuropa/oe_media": "^1.23",
-                "openeuropa/oe_multilingual": "^1.13",
-                "openeuropa/rdf_skos": "^1.0.0-alpha10",
+                "openeuropa/oe_media": "dev-master",
+                "openeuropa/oe_multilingual": "^1.20",
+                "openeuropa/rdf_skos": "^1.2",
                 "openeuropa/task-runner-drupal-project-symlink": "^1.0",
-                "openeuropa/webtools-geocoding-provider": "^0.3",
-                "phpspec/prophecy-phpunit": "^2",
-                "symfony/phpunit-bridge": "^6.2"
+                "openeuropa/webtools-geocoding-provider": "^0.3"
             },
             "type": "drupal-module",
             "extra": {
-                "_readme": [
-                    "Explicit requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits.",
-                    "Explicit requirement of mikey179/vfsstream to remove when drupal/core-dev is reinstated.",
-                    "Explicit requirement of nikic/php-parser as ^5.0 generates GrumPHP Parser issues."
-                ],
                 "drupal-scaffold": {
                     "locations": {
                         "web-root": "./build"
@@ -13380,9 +13372,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.38.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.40.0"
             },
-            "time": "2025-03-07T11:12:57+00:00"
+            "time": "2025-05-21T15:19:02+00:00"
         },
         {
             "name": "pear/archive_tar",
