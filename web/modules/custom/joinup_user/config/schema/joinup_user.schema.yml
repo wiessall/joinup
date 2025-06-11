@@ -29,3 +29,11 @@ views.field.joinup_user_bulk_form:
 views.field.joinup_user_is_author:
   type: views.field.boolean
   label: 'Has authored content'
+
+action.configuration.user_block_spam_user_action:
+  type: action_configuration_default
+  label: 'Block the selected users configuration: Spam account'
+
+action.configuration.user_block_suspicious_user_action:
+  type: action_configuration_default
+  label: 'Block the selected users configuration: Suspicious account'

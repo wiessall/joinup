@@ -284,6 +284,19 @@ function joinup_user_form_user_form_alter(array &$form, FormStateInterface $form
   if ($form_id !== 'user_form') {
     return;
   }
+  $form['account']['blocked_reason'] = $form['blocked_reason'];
+  $form['account']['blocked_reason']['#weight'] = 1;
+  $form['account']['roles']['#weight'] = 2;
+  unset($form['blocked_reason']);
+  unset($form['account']['blocked_reason']['widget']['#options']['moderation']);
+  $form['account']['blocked_reason']['#states'] = [
+    'visible' => [
+      [':input[name="status"]' => ['value' => 0]],
+    ],
+  ];
+
+  // Add submit handler to clear the value when account is active.
+  $form['#submit'][] = 'mymodule_user_form_submit';
 
   // Add a submit callback that will send a message to the user if their account
   // gets modified by a moderator. This needs to be placed between the ::save()
@@ -583,6 +596,18 @@ function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): ar
 }
 
 /**
+ * Implements hook_user_presave().
+ */
+function joinup_user_user_presave(UserInterface $account): void {
+  if ($account->isNew() && $account->isBlocked()) {
+    $account->set('blocked_reason', 'moderation');
+  }
+  elseif ($account->isActive()) {
+    $account->set('blocked_reason', NULL);
+  }
+}
+
+/**
  * Implements hook_entity_delete().
  */
 function joinup_user_user_delete(UserInterface $account): void {
@@ -604,4 +629,16 @@ function joinup_user_user_access(UserInterface $account): AccessResultInterface 
   $isUserDeleted = \Drupal::getContainer()->get('joinup_user.deleted')->isAccountDeleted($account);
   return AccessResult::forbiddenIf($isUserDeleted, 'Deleted account')
     ->addCacheableDependency($account);
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function joinup_user_entity_view(array &$build, EntityInterface $entity, $view_mode, $langcode): void {
+  if ($entity instanceof UserInterface && $view_mode->getMode() === 'group_header') {
+    $current_user = \Drupal::currentUser();
+    if (!$current_user->hasRole('moderator') && !$current_user->hasRole('developer')) {
+      unset($build['blocked_reason']);
+    }
+  }
 }
