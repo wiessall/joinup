@@ -33,12 +33,12 @@ Feature:
     And I select "HR" from "Topic"
     And I fill in "Short ID" with "sst-2020"
     And I press "Propose"
-    Then I should see the error message "Content with Short ID sst-2020 already exists. Please choose a different Short ID."
+    Then I should see the inline form error message "Content with Short ID sst-2020 already exists. Please choose a different Short ID."
 
     # The short ID should be lowercase.
     And I fill in "Short ID" with "SSTR-2020"
     And I press "Propose"
-    Then I should see the error message "This value is not valid."
+    Then I should see the inline form error message "This value is not valid."
 
     And I fill in "Short ID" with "sstr-2020"
     And I press "Propose"
@@ -105,12 +105,12 @@ Feature:
     # Portal short ID is case insensitive.
     And I fill in "Portal short ID" with "wkwasi"
     And I press "Continue"
-    Then I should see the error message "Content with Portal short ID wkwasi already exists. Please choose a different Portal short ID."
+    Then I should see the inline form error message "Content with Portal short ID wkwasi already exists. Please choose a different Portal short ID."
 
     # The short ID should be lowercase.
     When I fill in "Portal short ID" with "SST-2020"
     And I press "Continue"
-    Then I should see the error message "This value is not valid."
+    Then I should see the inline form error message "This value is not valid."
 
     # The short ID is only unique among solutions, it is OK to reuse an existing
     # short ID from a collection.
