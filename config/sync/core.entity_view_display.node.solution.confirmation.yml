@@ -288,9 +288,9 @@ content:
     region: content
   related_solutions:
     type: entity_reference_label
-    label: inline
+    label: above
     settings:
-      link: false
+      link: true
     third_party_settings: {  }
     weight: 4
     region: content
