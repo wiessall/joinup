@@ -17,7 +17,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
     And I fill in "Password" with "wrong password"
     And I press "Log in"
-    Then I should see the error message "Unrecognized user name or password."
+    Then I should see the inline form error message "Unrecognized user name or password."
 
     When I fill in "Password" with "Qwerty098"
     And I press "Log in"
@@ -162,8 +162,8 @@ Feature: Log in through EU Login
     And I should not see "Minimum password character types: 3"
 
     When I press "Save"
-    Then I should see the error message "First name field is required."
-    But I should not see the error message "Family name field is required."
+    Then I should see the inline form error message "First name field is required."
+    But I should not see the inline form error message "Family name field is required."
 
     # User with no profile data.
     Given I am an anonymous user
@@ -188,8 +188,8 @@ Feature: Log in through EU Login
     And I should not see "Minimum password character types: 3"
 
     When I press "Save"
-    Then I should see the error message "First name field is required."
-    And I should see the error message "Family name field is required."
+    Then I should see the inline form error message "First name field is required."
+    And I should see the inline form error message "Family name field is required."
 
     # User not linked to a CAS account.
     Given I am logged in as "without_cas"
@@ -204,8 +204,8 @@ Feature: Log in through EU Login
     And I should see "The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications."
 
     When I press "Save"
-    Then I should see the error message "First name field is required."
-    And I should see the error message "Family name field is required."
+    Then I should see the inline form error message "First name field is required."
+    And I should see the inline form error message "Family name field is required."
 
   Scenario: A new user tries to register with an existing Email.
     Given users:
@@ -313,7 +313,7 @@ Feature: Log in through EU Login
     # that moment the user has successfully logged in. In this case we are using
     # a mocked CAS server which is written in Drupal and receives this message.
     # It needs to be suppressed.
-    But I should not see the error message "Access denied. You must sign in to view this page."
+    But I should not see the inline form error message "Access denied. You must sign in to view this page."
     When I fill in the following:
       | E-mail address | j.bon@ec.example.eu |
       | Password       | abc123!#$           |

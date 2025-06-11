@@ -415,13 +415,13 @@ Feature:
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid query preset line added: wrongvalue."
+    Then I should see the inline form error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid search field specified: unknown_field."
+    Then I should see the inline form error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN', '<', '>'."
+    Then I should see the inline form error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN', '<', '>'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
     """
@@ -429,7 +429,7 @@ Feature:
     unknown_field|test
     """
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid search field specified: unknown_field."
+    Then I should see the inline form error message "Invalid search field specified: unknown_field."
 
   @javascript
   Scenario: Empty query presets and query builder field show a validation error.
@@ -446,7 +446,7 @@ Feature:
     And a modal should open
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "You need to add a filter in the Content listing block"
+    Then I should see the inline form error message "You need to add a filter in the Content listing block"
 
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
