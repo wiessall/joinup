@@ -24,6 +24,7 @@ dependencies:
     - node.type.release
     - node.type.solution
     - taxonomy.vocabulary.legal_type
+    - taxonomy.vocabulary.tags
   module:
     - collection
     - comment
@@ -188,6 +189,7 @@ permissions:
   - 'delete paragraph content webform'
   - 'delete private message thread for all'
   - 'delete sitewide alert entities'
+  - 'delete terms in tags'
   - 'download subscribers report'
   - 'edit any collection content'
   - 'edit any collection_logo media'
@@ -210,6 +212,7 @@ permissions:
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
+  - 'edit terms in tags'
   - 'eu oss catalogue log'
   - 'feature entity'
   - 'filter membership overview'

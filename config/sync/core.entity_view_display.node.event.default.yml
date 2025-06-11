@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.event.field_event_logo
     - field.field.node.event.field_event_online_location
     - field.field.node.event.field_event_web_url
-    - field.field.node.event.field_keywords
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
@@ -24,6 +23,7 @@ dependencies:
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
     - field.field.node.event.field_topic
+    - field.field.node.event.keywords
     - field.field.node.event.og_audience
     - field.field.node.event.spatial_coverage
     - image.style.logo
@@ -224,7 +224,6 @@ content:
 hidden:
   abstract: true
   featured: true
-  field_keywords: true
   field_organisation: true
   field_organisation_type: true
   field_scope: true
@@ -233,6 +232,7 @@ hidden:
   field_state: true
   field_topic: true
   flag_like: true
+  keywords: true
   langcode: true
   links: true
   og_audience: true
