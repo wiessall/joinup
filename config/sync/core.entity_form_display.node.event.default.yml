@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.event.field_event_logo
     - field.field.node.event.field_event_online_location
     - field.field.node.event.field_event_web_url
-    - field.field.node.event.field_keywords
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
@@ -23,6 +22,7 @@ dependencies:
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
     - field.field.node.event.field_topic
+    - field.field.node.event.keywords
     - field.field.node.event.og_audience
     - field.field.node.event.spatial_coverage
     - image.style.thumbnail
@@ -137,14 +137,6 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_keywords:
-    type: string_textfield
-    weight: 16
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_location:
     type: string_textarea
     weight: 6
@@ -206,6 +198,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  keywords:
+    type: entity_reference_autocomplete_tags
+    weight: 17
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   simple_sitemap:
     weight: 11
     region: content
@@ -213,7 +215,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: entity_reference_autocomplete
-    weight: 17
+    weight: 18
     region: content
     settings:
       match_operator: CONTAINS
