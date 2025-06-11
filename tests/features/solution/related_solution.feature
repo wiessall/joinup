@@ -32,7 +32,7 @@ Feature: Related solution
     When I am logged in as a facilitator of the "Java" solution
     And I go to the edit form of the "Java" solution
     And I click "Additional information"
-    And I fill in "Related solutions" with values "C, Python"
+    And I select "Python" tags from "Related solutions"
     And I press "Continue"
     And I press "Propose"
     Then I should see the heading "Java"
