@@ -24,11 +24,11 @@ Feature: Video paragraph tests.
     And the following field should be present "Remote video URL"
     And I should see the text "You can link to media from the following services: YouTube, Vimeo"
     And I press "Save" in the "Modal buttons" region
-    And I should see the error message "Remote video URL field is required."
+    And I should see the inline form error message "Remote video URL field is required."
 
     And I fill in "Remote video URL" with "http://nonsense.com"
     And I press "Save" in the "Modal buttons" region
-    And I should see the error message "The given URL does not match any known oEmbed providers."
+    And I should see the inline form error message "The given URL does not match any known oEmbed providers."
 
     And I fill in "Remote video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Save" in the "Modal buttons" region

@@ -28,8 +28,10 @@ Feature:
     And a modal should open
     And I click "IFrame"
     Then I press "Save" in the "Modal buttons" region
-    When I should see the error message "Iframe URL field is required."
-    And I should see the error message "Iframe Title field is required."
+    Then I should see the following inline form error messages:
+      | Error messages                  |
+      | Iframe URL field is required.   |
+      | Iframe Title field is required. |
     Then I fill in "Iframe URL" with "http://example.com"
     And I fill in "Iframe Title" with "example.com"
     And I press "Save" in the "Modal buttons" region
