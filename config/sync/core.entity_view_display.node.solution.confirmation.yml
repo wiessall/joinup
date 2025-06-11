@@ -180,15 +180,6 @@ content:
     settings:
       link: false
     third_party_settings:
-      fences:
-        fences_field_tag: div
-        fences_field_classes: ''
-        fences_field_items_wrapper_tag: none
-        fences_field_items_wrapper_classes: ''
-        fences_field_item_tag: span
-        fences_field_item_classes: ''
-        fences_label_tag: none
-        fences_label_classes: ''
       field_delimiter:
         delimiter: ','
       field_formatter_range:
