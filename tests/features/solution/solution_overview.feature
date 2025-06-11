@@ -126,7 +126,7 @@ Feature: Solutions Overview
     And I select "Data Owner" tags from "Solution type"
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" tags from "Domain"
-    And I select "Bulgarian" from "Language"
+    And I select "Bulgarian" tags from "Language"
     # Create owner.
     And I press "Add new owner"
     And I fill in "owner[form][0][title][0][value]" with "Ambrosio Morison"

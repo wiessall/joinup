@@ -2126,12 +2126,44 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Fills tagify autocomplete using Javascript.
+   *
+   * @param string $keywords
+   *   A keywords to input.
+   * @param string $fieldName
+   *   A field name of tagify autocomplete.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify field is not found.
+   */
+  public function selectFromTagifyWithJs(string $keywords, string $fieldName): void {
+    $session = $this->getSession();
+    $fields = \Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties([
+      'label' => $fieldName,
+    ]);
+    $field = reset($fields);
+    $fieldName = str_replace('_', '-', $field->getName());
+    $locator = '.js-form-item-' . $fieldName . ' .tagify__input';
+    $tagifyInput = $session->getPage()->find('css', $locator);
+    if (!$tagifyInput) {
+      throw new \Exception('Tagify input not found');
+    }
+
+    $keywords = explode(',', $keywords);
+    foreach ($keywords as $keyword) {
+      $tagifyInput->setValue($keyword);
+      $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $keyword . '")');
+      $dropdownItem->click();
+    }
+  }
+
+  /**
    * Fills tagify autocomplete.
    *
    * @param string $tags
    *   A keywords to input.
    * @param string $fieldName
-   *   A field name of tagify autocomplete..
+   *   A field name of tagify autocomplete.
    *
    * @throws \Exception
    *   Thrown when the tagify field is not found.
@@ -2139,17 +2171,21 @@ class JoinupContext extends RawDrupalContext {
    * @When I select :tags tags from :fieldName
    */
   public function selectTagsFromTagify(string $tags, string $fieldName): void {
-    $tags = explode(',', $tags);
-    $value = $this->prepareTagArray($tags);
-    $field = $this->getSession()->getPage()->findField($fieldName);
-    if (!$field) {
-      throw new \Exception("The field '$field' not found in the page.");
+    if ($this->hasJavascriptSupport()) {
+      $this->selectFromTagifyWithJs($tags, $fieldName);
+    } else {
+      $tags = explode(',', $tags);
+      $value = $this->prepareTagArray($tags);
+      $field = $this->getSession()->getPage()->findField($fieldName);
+      if (!$field) {
+        throw new \Exception("The field '$field' not found in the page.");
+      }
+      if (!empty($field->getValue())) {
+        $existingValues = json_decode($field->getValue(), TRUE);
+        $value = array_merge($value, $existingValues);
+      }
+      $field->setValue(json_encode($value));
     }
-    if (!empty($field->getValue())) {
-      $existingValues = json_decode($field->getValue(), TRUE);
-      $value = array_merge($value, $existingValues);
-    }
-    $field->setValue(json_encode($value));
   }
 
   /**

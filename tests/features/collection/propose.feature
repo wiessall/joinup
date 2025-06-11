@@ -58,7 +58,7 @@ Feature: Proposing a collection
       | E-mail                | contact_person@example.com                                                                           |
       | Search keywords       | government                                                                                         |
     Then I should see the text "A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content."
-    When I select "HR" from "Topic"
+    When I select "Demography" tags from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
