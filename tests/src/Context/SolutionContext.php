@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
@@ -26,7 +25,6 @@ use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
@@ -326,51 +324,6 @@ class SolutionContext extends RawDrupalContext {
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $solution, $user);
     }
-  }
-
-  /**
-   * Enable a given language.
-   *
-   * @param string $langcode
-   *   Language code.
-   *
-   * @Given the language :langcode is enabled
-   */
-  public function languageEnabled(string $langcode): void {
-    // Create the needed language.
-    $language_manager = \Drupal::languageManager();
-    if (!$language_manager->getLanguage($langcode)) {
-      ConfigurableLanguage::createFromLangcode($langcode)->save();
-    }
-  }
-
-  /**
-   * Creates a simple multilingual solution.
-   *
-   * @Given the multilingual :title solution of :collection collection
-   */
-  public function theMultilingualSolution(string $title, string $collection): void {
-    $solution = Node::create([
-      'type' => 'solution',
-      'title' => $title,
-      'field_state' => 'published',
-      'description' => "English description",
-      'og_audience' => $this->getEntityByLabel('node', $collection, 'collection'),
-    ]);
-    $solution->save();
-    // Fill with the specific content translation fields and fall-back to
-    // the remaining values from the base translation.
-    $solution_values = $solution->toArray();
-    $solution_values += [
-      'content_translation_source' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-      'content_translation_status' => TRUE,
-      'content_translation_uid' => 1,
-      'content_translation_outdated' => FALSE,
-    ];
-    $solution_values['description'] = "Catalan description";
-    // Create the translation.
-    $solution->addTranslation('ca', $solution_values)->save();
-    $this->entities['node'][$solution->id()] = $solution;
   }
 
   /**
