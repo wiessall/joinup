@@ -41,7 +41,7 @@ function joinup_discussion_node_presave(NodeInterface $discussion): void {
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
+function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle): array {
   if ($entity_type->id() === 'node' && $bundle === 'discussion') {
     return [
       'latest_update_time' => BaseFieldDefinition::create('datetime')
