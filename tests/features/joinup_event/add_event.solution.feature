@@ -71,7 +71,7 @@ Feature: "Add event" visibility options.
     And I fill the end date of the Date widget with "2018-08-29"
     And I clear the end time of the "Date" widget
     And I press "Save as draft"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                 |
       | The date and time should both be entered in the End date field |
       | Topic field is required.                                       |
