@@ -158,7 +158,7 @@ content:
     type: file_url_default
     label: inline
     settings:
-      mode: link
+      mode: plain
     third_party_settings:
       field_delimiter:
         delimiter: ','
@@ -219,8 +219,8 @@ content:
     label: inline
     settings:
       trim_length: 80
-      url_only: false
-      url_plain: false
+      url_only: true
+      url_plain: true
       rel: '0'
       target: '0'
     third_party_settings:
