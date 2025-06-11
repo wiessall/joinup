@@ -30,8 +30,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
 
     Then I fill in "Short ID" with "contact-info-test"
     And I enter "Some description" in the "Description" wysiwyg editor
-    And I select "Collaboration" from "Topic"
-    And I additionally select "Social" from "Topic"
+    Then I select "Collaboration,Social" from the "Topic" tagify autocomplete
 
     # Owner is required.
     And I press "Add new owner"

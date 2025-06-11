@@ -17,6 +17,7 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
+use Drupal\facets\Exception\Exception;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -2119,6 +2120,35 @@ class JoinupContext extends RawDrupalContext {
       }
 
       throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
+    }
+  }
+
+  /**
+   * Fills tagify autocomplete.
+   *
+   * @param string $keywords
+   *   A keywords to input.
+   * @param string $fieldName
+   *   A field name of tagify autocomplete..
+   *
+   * @throws \Exception
+   *   Thrown when the tagify field is not found.
+   *
+   * @When I select :keywords from the :fieldName tagify autocomplete
+   */
+  public function selectFromTagifyAutocomplete(string $keywords, string $fieldName): void {
+    $session = $this->getSession();
+    $fieldName = strtolower($fieldName);
+    $tagifyInput = $session->getPage()->find('css', '.js-form-item-field-' . $fieldName . ' .tagify__input');
+    if (!$tagifyInput) {
+      throw new Exception('Tagify input not found');
+    }
+
+    $keywords = explode(',', $keywords);
+    foreach ($keywords as $keyword) {
+      $tagifyInput->setValue($keyword);
+      $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $keyword . '")');
+      $dropdownItem->click();
     }
   }
 
