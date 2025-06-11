@@ -28,7 +28,7 @@ Feature: Navigation menu for custom pages
     When I fill in the following:
       | Title    | About us             |
       | Abstract | Lorem ipsum abstract |
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items

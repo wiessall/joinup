@@ -17,7 +17,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
-use Drupal\facets\Exception\Exception;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -2126,7 +2125,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Fills tagify autocomplete.
    *
-   * @param string $keywords
+   * @param string $tags
    *   A keywords to input.
    * @param string $fieldName
    *   A field name of tagify autocomplete..
@@ -2134,22 +2133,51 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the tagify field is not found.
    *
-   * @When I select :keywords from the :fieldName tagify autocomplete
+   * @When I select :tags tags from :fieldName
    */
-  public function selectFromTagifyAutocomplete(string $keywords, string $fieldName): void {
-    $session = $this->getSession();
-    $fieldName = strtolower($fieldName);
-    $tagifyInput = $session->getPage()->find('css', '.js-form-item-field-' . $fieldName . ' .tagify__input');
-    if (!$tagifyInput) {
-      throw new Exception('Tagify input not found');
+  public function selectTagsFromTagify(string $tags, string $fieldName): void {
+    $tags = explode(',', $tags);
+    $value = $this->prepareTagArray($tags);
+    $field = $this->getSession()->getPage()->findField($fieldName);
+    if (!$field) {
+      throw new \Exception("The field '$field' not found in the page.");
     }
+    if (!empty($field->getValue())) {
+      $existingValues = json_decode($field->getValue(), TRUE);
+      $value = array_merge($value, $existingValues);
+    }
+    $field->setValue(json_encode($value));
+  }
 
-    $keywords = explode(',', $keywords);
-    foreach ($keywords as $keyword) {
-      $tagifyInput->setValue($keyword);
-      $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $keyword . '")');
-      $dropdownItem->click();
+  /**
+   * Returns array of tags.
+   *
+   * @param array $tags
+   *   Array of tags.
+   *
+   * @return array
+   *   Array of tags to json encoding.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function prepareTagArray(array $tags): array {
+    $tagJson = [];
+    foreach ($tags as $tag) {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+        ->loadByProperties(['name' => $tag]);
+      if ($terms) {
+        $term = reset($terms);
+        $tagJson[] = [
+          "value" => $term->tid->value,
+          "label" => $term->name->value,
+          "entity_id" => $term->tid->value,
+          "info-label" => '',
+          "editable" => FALSE,
+        ];
+      }
     }
+    return $tagJson;
   }
 
   /**

@@ -17,12 +17,12 @@ Feature: Solution TCA agreement
       | Title    | Solution A      |
       | Abstract | Abstract of "A" |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
-    And I select "Bulgarian" from "Language availability"
+    And I select "Defense" tags from "Domain"
+    And I select "Demography" tags from "Topic"
+    And I select "Bulgarian" tags from "Language availability"
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
+    And I select "Defense" tags from "Domain"
+    And I select "Demography" tags from "Topic"
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -35,7 +35,7 @@ Feature: Solution TCA agreement
     And I fill in "E-mail address" with "yancyb@example.com"
     And I press "Create contact information"
     And I click "Additional information"
-    And I select "Logging Service" from "Solution type"
+    And I select "Logging Service" tags from "Solution type"
     And I press "Continue"
     And I click "Terms of Agreement"
 

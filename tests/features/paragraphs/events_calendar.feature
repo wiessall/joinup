@@ -27,7 +27,7 @@ Feature:
     When I fill in the following:
       | Title    | Page                           |
       | Abstract | Abstract pages Events calendar |
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -56,7 +56,7 @@ Feature:
     When I fill in the following:
       | Title    | Page 2                         |
       | Abstract | Abstract pages Events calendar |
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -91,7 +91,7 @@ Feature:
       | Dummy Event 5    | Collection two   | now -1 week         | now +2 week        |
     When I am logged in as a facilitator of the "Le Event Heureux" collection
     Then I go to the edit form of the "Future events calendar" "custom page"
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -112,7 +112,7 @@ Feature:
     Then I visit "/admin/custom-landing-pages/add"
     And I fill in "Upcoming events" for "Title"
     And I fill in "Upcoming events page" for "Abstract"
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

@@ -16,7 +16,7 @@ Feature: Embed of videos into the page.
 
     Then I fill in the following:
       | Title | United Kingdom Brexit Notification |
-    And I select "Supplier exchange" from "Topic"
+    And I select "Supplier exchange" tags from "Topic"
     And I fill in "Content" with:
     """
     <h2>Any europa.eu and *.europa.eu are allowed.</h2>
@@ -50,7 +50,7 @@ Feature: Embed of videos into the page.
     And I click "Add discussion"
     When I fill in the following:
       | Title | Some test video |
-    And I select "Supplier exchange" from "Topic"
+    And I select "Supplier exchange" tags from "Topic"
     And I press the button "Insert Media" in the "Content" wysiwyg editor
     And a modal should open
     And I should see the following lines of text:

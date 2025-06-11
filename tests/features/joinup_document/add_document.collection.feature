@@ -72,7 +72,7 @@ Feature: "Add document" visibility options.
     When I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" tags from "Topic"
     And I press "Save as draft"
     Then I should see the heading "An amazing document"
     And I should see the success message 'Document An amazing document has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'

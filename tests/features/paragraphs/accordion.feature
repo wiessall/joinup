@@ -15,7 +15,7 @@ Feature:
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
     And I fill in "Abstract" with "Abstract paragraphs accordion page"
-    And I select "HR" from "Topic"
+    And I select "Demography" tags from "Topic"
 
     Given I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |

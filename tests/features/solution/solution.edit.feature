@@ -33,10 +33,10 @@ Feature: Solution editing.
     When I fill in "Title" with "Solution A"
     And I fill in "Abstract" with "Abstract of A"
     And I enter "First letter" in the "Description" wysiwyg editor
-    And I select "Bulgarian" from "Language availability"
+    And I select "Bulgarian" tags from "Language availability"
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
+    And I select "Defense" tags from "Domain"
+    And I select "Demography" tags from "Topic"
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -49,7 +49,7 @@ Feature: Solution editing.
     And I fill in "E-mail address" with "yancyb@example.com"
     And I press "Create contact information"
     And I click "Additional information"
-    And I select "Logging Service" from "Solution type"
+    And I select "Logging Service" tags from "Solution type"
     And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"

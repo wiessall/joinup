@@ -45,7 +45,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | field_body:value  | CC notify create propose. |
       | field_body:format | content_editor            |
     And I fill in "Physical location" with "South King Street, Honolulu"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" tags from "Topic"
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                 |
@@ -61,7 +61,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | field_body:value  | CC notify create publish. |
       | field_body:format | content_editor            |
     And I fill in "Physical location" with "West Broadway, Vancouver"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" tags from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                   |
