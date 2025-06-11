@@ -68,6 +68,7 @@ class InterfaceLanguageDetectionTest extends BrowserTestBase {
     $this->translatorUser = $this->drupalCreateUser([
       'administer users',
       'bypass enforced english',
+      'view admin pages in preferred language'
     ]);
 
     $this->regularUser = $this->drupalCreateUser();
