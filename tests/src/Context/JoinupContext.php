@@ -1276,7 +1276,7 @@ class JoinupContext extends RawDrupalContext {
    * | Text 1 |
    * | Text 2 |
    *
-   * @param \Behat\Gherkin\Node\TableNode $text_table
+   * @param \Behat\Gherkin\Node\TableNode $table
    *   The table node containing the text strings.
    *
    * @Then I see the texts in the correct order:
