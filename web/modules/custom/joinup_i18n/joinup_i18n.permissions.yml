@@ -1,0 +1,3 @@
+bypass enforced english:
+  title: 'Bypass English for Regular Users'
+  description: 'Allow UI Language Selection for Privileged Users'

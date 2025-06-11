@@ -1,0 +1,24 @@
+uuid: 2b0fa882-2509-4841-9d5a-efd942ebd0d9
+langcode: en
+status: true
+dependencies:
+  module:
+    - config_translation
+    - dashboard
+    - l10n_client_ui
+    - locale
+    - toolbar
+    - joinup_i18n
+    - system
+id: translator
+label: Translator
+weight: -3
+is_admin: null
+permissions:
+  - 'access dashboard'
+  - 'access toolbar'
+  - 'bypass enforced english'
+  - 'translate configuration'
+  - 'translate interface'
+  - 'use localization client ui'
+  - 'view the administration theme'

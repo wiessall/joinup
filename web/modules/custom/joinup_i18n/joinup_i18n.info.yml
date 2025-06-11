@@ -1,0 +1,5 @@
+name: Joinup i18n
+description: Customization related to internationalization.
+type: module
+package: Joinup
+core_version_requirement: "^10.4 || ^11"
