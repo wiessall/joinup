@@ -1270,6 +1270,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given text strings are found in the correct order.
+   *
+   * Table format:
+   * | Text 1 |
+   * | Text 2 |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $text_table
+   *   The table node containing the text strings.
+   *
+   * @Then I see the texts in the correct order:
+   */
+  public function assertOrderedTextStringsPresent(TableNode $table): void {
+    $lines_of_text = $table->getColumn(0);
+    $full_text = $this->getSession()->getPage()->getText();
+    foreach ($lines_of_text as $text) {
+      $pos = strpos($full_text, $text);
+      if ($pos === FALSE) {
+        throw new \Exception("The text '$text' was not found in the page in the given order.");
+      }
+      $full_text = substr($full_text, $pos + strlen($text));
+    }
+  }
+
+  /**
    * Asserts that a certain link is present in a tile.
    *
    * @param string $heading
