@@ -47,7 +47,7 @@ Feature: Solutions message overview
       | Abstract              | Doesn't matter.           |
       | Description           | Doesn't matter.           |
       | Geographical coverage | Belgium                   |
-    When I select "HR" from "Topic"
+    When I select "HR" tags from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I fill in the following:

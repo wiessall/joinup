@@ -292,7 +292,7 @@ Feature:
     When I fill in "Title" with "Apache License, Version 2.0 changed"
     And I fill in "Description" with "nothing"
     And I select "Public domain" from "Type"
-    And I additionally select "Distribute" from "Licence legal type"
+    And I select "Distribute" tags from "Licence legal type"
     When I press "Save"
     Then I should see the heading "Apache License, Version 2.0 changed"
 

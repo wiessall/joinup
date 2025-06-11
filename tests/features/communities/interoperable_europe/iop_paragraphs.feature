@@ -45,7 +45,7 @@ Feature:
     When I fill in the following:
       | Title    | Pages carousel          |
       | Abstract | Abstract pages carousel |
-    And I select "Demography" from "Topic"
+    And I select "Demography" tags from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

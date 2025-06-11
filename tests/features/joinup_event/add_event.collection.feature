@@ -86,7 +86,7 @@ Feature: "Add event" visibility options.
       | URL                                        | Title                                |
       | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
       | https://drupal.org/                        |                                      |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" tags from "Topic"
     And I fill the end date of the Date widget with "2018-08-30"
     And I fill the end time of the Date widget with "12:57:00"
     And I press "Save as draft"

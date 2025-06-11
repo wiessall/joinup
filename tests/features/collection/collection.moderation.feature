@@ -200,7 +200,7 @@ Feature: Collection moderation
       | Name     | Domestic secretary                 |
       | E-mail   | ds@example.com                     |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" tags from "Topic"
     # An ajax callback is executed now.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "ISA²"
@@ -232,7 +232,7 @@ Feature: Collection moderation
       | Name     | Secretary of thieves |
       | E-mail   | st@example.com       |
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
-    And I select "Supplier exchange" from "Topic"
+    And I select "Supplier exchange" tags from "Topic"
     # An ajax callback is executed now.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "ISA²"
@@ -264,7 +264,7 @@ Feature: Collection moderation
       | Name     | Secretary of Silk      |
       | E-mail   | ss@example.com         |
     And I enter "So smooth." in the "Description" wysiwyg editor
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Data gathering and processing" tags from "Topic"
     # An ajax callback is executed now.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "ISA²"
@@ -295,7 +295,7 @@ Feature: Collection moderation
       | Name     | Secretary of the harbor |
       | E-mail   | sh@example.com          |
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" tags from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"

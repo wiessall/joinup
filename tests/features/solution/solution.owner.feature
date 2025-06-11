@@ -58,8 +58,8 @@ Feature:
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Leechidna"
     And I select "Bulgarian" from "Language"
-    And I select "Statistics and Analysis" from "Topic"
-    And I select "Logging Service" from "Solution type"
+    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Logging Service" tags from "Solution type"
     And I press "Add owner"
     And I press "Save"
     Then I should see the heading "Solution API example"
