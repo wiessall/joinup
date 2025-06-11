@@ -249,3 +249,21 @@ solution_classification:
 domain:
   - name: Defense
   - name: Economic affairs
+tags:
+  - name: 'ADMS'
+  - name: 'Alphabet'
+  - name: 'drinks'
+  - name: 'food'
+  - name: 'games'
+  - name: 'government'
+  - name: 'nintendo64 licences'
+  - name: 'nintendo64 manuals'
+  - name: 'public service'
+  - name: 'public sector'
+  - name: 'validation'
+  - name: 'unique'
+  - name: 'key-definitions'
+  - name: 'seo'
+  - name: 'tags'
+  - name: 'metatag'
+  - name: 'schema.org'

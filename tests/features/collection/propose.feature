@@ -56,9 +56,9 @@ Feature: Proposing a collection
       # Contact information data.
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
-      | Search keywords       | Some keyword                                                                                         |
-    Then I should see the text "Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content."
-    When I select "HR" tags from "Topic"
+      | Search keywords       | government                                                                                         |
+    Then I should see the text "A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content."
+    When I select "HR" from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
@@ -178,7 +178,7 @@ Feature: Proposing a collection
     # be shown to the user.
     Then the "Main fields" accordion section should be active
     # Fill the required fields.
-    When I select "HR" tags from "Topic"
+    When I select "Demography" tags from "Topic"
     And I fill in the following:
       | Name   | Contact person             |
       | E-mail | contact_person@example.com |
