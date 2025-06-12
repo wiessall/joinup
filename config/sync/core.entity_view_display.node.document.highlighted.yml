@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_file
-    - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -16,6 +15,7 @@ dependencies:
     - field.field.node.document.field_state
     - field.field.node.document.field_topic
     - field.field.node.document.field_type
+    - field.field.node.document.keywords
     - field.field.node.document.og_audience
     - field.field.node.document.spatial_coverage
     - node.type.document
@@ -120,7 +120,6 @@ hidden:
   featured: true
   field_comments: true
   field_file: true
-  field_keywords: true
   field_licence: true
   field_paragraphs_body: true
   field_shared_in: true
@@ -129,6 +128,7 @@ hidden:
   field_state: true
   field_topic: true
   field_type: true
+  keywords: true
   langcode: true
   links: true
   og_audience: true

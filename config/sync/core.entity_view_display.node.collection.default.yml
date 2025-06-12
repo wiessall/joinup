@@ -7,9 +7,9 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
-    - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
+    - field.field.node.collection.keywords
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -576,6 +576,14 @@ targetEntityType: node
 bundle: collection
 mode: default
 content:
+  keywords:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: main
   links:
     settings: {  }
     third_party_settings: {  }
@@ -607,7 +615,6 @@ hidden:
   contact: true
   description: true
   featured: true
-  field_keywords: true
   field_state: true
   field_topic: true
   join_collection: true
