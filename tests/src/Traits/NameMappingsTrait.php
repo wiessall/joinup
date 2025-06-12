@@ -332,8 +332,10 @@ trait NameMappingsTrait {
       'announcement' => 'message',
       'collection' => 'node',
       'contact information' => 'node',
+      'contact_information' => 'node',
       'content' => 'node',
       'custom page' => 'node',
+      'custom_page' => 'node',
       'discussion' => 'node',
       'distribution' => 'node',
       'document' => 'node',
@@ -351,6 +353,7 @@ trait NameMappingsTrait {
       'topic' => 'taxonomy_term',
       'user' => 'user',
       'webform' => 'webform',
+      'keyword' => 'taxonomy_term',
     ];
   }
 
@@ -377,6 +380,7 @@ trait NameMappingsTrait {
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
       'solution' => 'solution',
+      'keyword' => 'tags',
     ];
   }
 
