@@ -68,7 +68,7 @@ Feature: Notification test for the collection transitions.
       # Contact information data.
       | Name                  | Super Sayan Academy |
       | E-mail                | ssa@example.com     |
-    When I select "HR" tags from "Topic"
+    When I select "Demography" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "NC for all"
     And I press "Propose"

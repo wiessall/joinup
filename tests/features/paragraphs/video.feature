@@ -72,7 +72,7 @@ Feature: Video paragraph tests.
     When I check "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)"
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
-    And I select "Demography" tags from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Publish"
 
     # Delete the custom page.
@@ -96,7 +96,7 @@ Feature: Video paragraph tests.
     And I fill in the following:
       | Title    | Twelve Video Tables          |
       | Abstract | Twelve video tables abstract |
-    And I select "Data gathering and processing" tags from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

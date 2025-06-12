@@ -29,7 +29,7 @@ Feature: Solution notifications
 
     # Template 7. The moderation team proposes changes.
     And I go to the edit form of the "Solution notification to propose changes" solution
-    And I select "Data Owner" tags from "Solution type"
+    And I select "Data Owner" options from "Solution type"
     And I press "Continue"
     And I press "Propose"
     # Motivation required.
@@ -60,7 +60,7 @@ Feature: Solution notifications
 
     # Template 15. The moderation team requests changes.
     When I go to the edit form of the "Solution notification to request changes" solution
-    And I select "Data Owner" tags from "Solution type"
+    And I select "Data Owner" options from "Solution type"
     And I press "Continue"
     And I press "Request changes"
     # Motivation required.

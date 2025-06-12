@@ -90,7 +90,7 @@ Feature: "Add custom page" visibility options.
     And I press "Save as draft"
     Then I should see the error message "Topic field is required."
 
-    And I select "E-health,EU and European Policies" tags from "Topic"
+    And I select "E-health,EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
@@ -215,7 +215,7 @@ Feature: "Add custom page" visibility options.
     When I fill in the following:
       | Title    | Rubber boots          |
       | Abstract | Rubber boots abstract |
-    And I select "E-health" tags from "Topic"
+    And I select "E-health" options from "Topic"
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."

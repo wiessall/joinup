@@ -32,7 +32,7 @@ Feature: Related solution
     When I am logged in as a facilitator of the "Java" solution
     And I go to the edit form of the "Java" solution
     And I click "Additional information"
-    And I select "Python" tags from "Related solutions"
+    And I select "Python" options from "Related solutions"
     And I press "Continue"
     And I press "Propose"
     Then I should see the heading "Java"
@@ -56,7 +56,6 @@ Feature: Related solution
   @javascript
   Scenario: Moderators can reorder the related solutions.
     Given I am logged in as a moderator
-
     # Solutions that have 'Solution related by type' off, should not show solutions related by type.
     When I visit the "Javascript" solution
     Then I should see the following tiles in the correct order:
@@ -65,7 +64,7 @@ Feature: Related solution
 
     When I go to the edit form of the "Javascript" solution
     And I click "Additional information"
-    And I drag the table row in the "Related solutions" region at position 2 up
+    And I select "PHP,Java" options from "Related solutions"
     And I press "Continue"
     And I press "Publish"
     Then I should see the heading "Javascript"
