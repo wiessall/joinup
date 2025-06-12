@@ -45,7 +45,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | CCN create propose |
       | field_body:format | content_editor     |
-    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been proposed" contains the following lines of text:
       | CC Member has submitted a new news - "CCN create propose" for publication in the collection: "CC pre collection". |
@@ -77,7 +77,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | CCN create publish |
       | field_body:format | content_editor     |
-    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                            |

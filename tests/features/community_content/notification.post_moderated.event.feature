@@ -38,7 +38,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | field_body:value  | CC notify create publish |
       | field_body:format | content_editor           |
     And I fill in "Physical location" with "Capel Street, Dublin"
-    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                               |
