@@ -123,7 +123,7 @@ Feature: Add community content
     And I click "Add discussion" in the plus button menu
     And I fill in "Title" with "Published community discussion"
     When I enter "Published community discussion" in the "Content" wysiwyg editor
-    And I select "Supplier exchange" tags from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     And I press "Publish"
     Then I should see the heading "Published community discussion"
     And the publication date of the "Published community discussion" discussion should be equal to the created date
@@ -136,7 +136,7 @@ Feature: Add community content
       | Short title | Published community document |
       | Abstract    | Document abstract            |
     And I select "Document" from "Type"
-    And I select "Supplier exchange" tags from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Published community document body |
       | field_body:format | content_editor                    |
@@ -155,7 +155,7 @@ Feature: Add community content
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Published community event |
       | field_body:format | content_editor            |
-    And I select "Supplier exchange" tags from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
     And I fill the start time of the Date widget with "23:59:59"
@@ -180,7 +180,7 @@ Feature: Add community content
     And I append text to field_paragraphs_body layout paragraphs field
       | field_body:value  | Published community news |
       | field_body:format | content_editor           |
-    And I select "Supplier exchange" tags from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     And I press "Publish"
     Then I should see the heading "Published community news"
     And the publication date of the "Published community news" news should be equal to the created date

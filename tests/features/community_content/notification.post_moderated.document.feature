@@ -38,7 +38,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
     And I select "Document" from "Type"
-    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                             |

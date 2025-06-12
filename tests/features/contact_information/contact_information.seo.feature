@@ -43,7 +43,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
     And I fill in "E-mail address" with "john.doe@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
-    And I select "Demography" tags from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Publish"
     Then I should see the success message containing "Status message You've added a collection short ID: contact-info-test. It will take some time until the collection content URLs will be updated."
     And I should see the success message "A new confirmation message has been sent"

@@ -397,7 +397,7 @@ Feature: Moderate community content
       | field_body:value  | Here we go...  |
       | field_body:format | content_editor |
 
-    And I select "Statistics and Analysis" tags from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"
     When I press "Propose"
@@ -419,7 +419,7 @@ Feature: Moderate community content
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | A short body text. |
       | field_body:format | content_editor     |
-    And I select "Data gathering and processing" tags from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"
     When I press "Propose"

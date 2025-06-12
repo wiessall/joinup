@@ -74,7 +74,7 @@ Feature: Discussions added to collections
     And I press "Publish"
     Then I should see the error message "Topic field is required."
 
-    And I select "EU and European Policies" tags from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Publish"
 
     Then I should see the heading "An amazing discussion"
