@@ -2155,6 +2155,7 @@ class JoinupContext extends RawDrupalContext {
       $tagifyInput->setValue($keyword);
       $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $keyword . '")');
       $dropdownItem->click();
+      sleep(2);
     }
   }
 
@@ -2183,7 +2184,7 @@ class JoinupContext extends RawDrupalContext {
         throw new \Exception("The field '$field' not found in the page.");
       }
       if (!empty($field->getValue())) {
-        $existingValues = json_decode($field->getValue(), TRUE);
+        $existingValues = (is_array($field->getValue())) ? $field->getValue() : json_decode($field->getValue(), TRUE);
         $value = array_merge($value, $existingValues);
       }
       $field->setValue(json_encode($value));
@@ -2219,6 +2220,57 @@ class JoinupContext extends RawDrupalContext {
       }
     }
     return $tagJson;
+  }
+
+  /**
+   * Remove options from tagify autocomplete.
+   *
+   * @param string $tags
+   *   A keywords to input.
+   * @param string $fieldName
+   *   A field name of tagify autocomplete.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify field is not found.
+   *
+   * @When I remove :tags options from :fieldName
+   */
+  public function removeTagsFromTagify(string $tags, string $fieldName): void {
+    if ($this->hasJavascriptSupport()) {
+      $keywords = explode(',', $tags);
+      foreach ($keywords as $keyword) {
+        $locator = sprintf('.%s tag.tagify__tag:contains("%s")', $this->getFieldMachineNameByLabel($fieldName), $keyword);
+        $tag = $this->getSession()->getPage()->find('css', $locator);
+        if (empty($tag)) {
+          throw new \Exception('Tag "' . $keyword . '" not found');
+        }
+        $removeButton = $tag->find('css', '#tagify__tag-remove-button');
+        if (empty($removeButton)) {
+          throw new \Exception('Remove button for tag "' . $keyword . '" not found');
+        }
+        $removeButton->click();
+      }
+    }
+  }
+
+  /**
+   * Gets field machine name by label.
+   *
+   * @param string $label
+   *   Field label.
+   *
+   * @return string|null
+   *   Field machine name or null.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getFieldMachineNameByLabel(string $label): ?string {
+    $fields = \Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties([
+      'label' => $label,
+    ]);
+    $field = reset($fields);
+    return $field ? $field->getName() : NULL;
   }
 
   /**
