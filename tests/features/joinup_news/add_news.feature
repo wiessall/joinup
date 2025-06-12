@@ -67,7 +67,7 @@ Feature: Creation of news through the UI.
       | Topic field is required.                                                             |
 
     When I fill in "Short title" with "Ytterbium metal of the year"
-    And I select "EU and European Policies" tags from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Publish"
     Then I should see the success message "News Ytterbium metal of the year has been created."
     And Log entry with the message "A new news entity titled Ytterbium metal of the year has been created by Milana Laninga in Density catalogue project." should exist.

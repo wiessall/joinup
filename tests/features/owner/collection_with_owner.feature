@@ -19,7 +19,7 @@ Feature: Creation of owners through UI
       # Contact information data.
       | Name        | Larry Joe                                                                                            |
       | E-mail      | larry.joe@example.com                                                                                |
-    When I select "EU and European Policies" tags from "Topic"
+    When I select "EU and European Policies" options from "Topic"
     And I attach the file "logo.png" to "Logo"
 
     And I should see the button "Add new owner"

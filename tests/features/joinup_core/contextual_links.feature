@@ -18,7 +18,7 @@ Feature:
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | We are proud to announce another useless test entity. |
       | field_body:format | content_editor                                        |
-    And I select "EU and European Policies" tags from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
 
     # Edit the news to create a new revision.

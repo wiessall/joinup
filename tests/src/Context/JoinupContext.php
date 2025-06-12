@@ -2168,7 +2168,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the tagify field is not found.
    *
-   * @When I select :tags tags from :fieldName
+   * @When I select :tags options from :fieldName
    */
   public function selectTagsFromTagify(string $tags, string $fieldName): void {
     if ($this->hasJavascriptSupport()) {

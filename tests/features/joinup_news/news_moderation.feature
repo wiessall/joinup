@@ -157,7 +157,7 @@ Feature: News moderation.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |
-    And I select "Employment and Support Allowance" tags from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Save as draft"
     # Check reference to news page.
     Then I should see the success message 'News Eagle joins the JL has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
@@ -190,7 +190,7 @@ Feature: News moderation.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | A specific poison could expose Wonder-womans weakness |
       | field_body:format | content_editor                                        |
-    And I select "Supplier exchange" tags from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     And I press "Propose"
     # Check reference to news page.
     # Todo: Why should we not see a success message after creating a news article? See ISAICP-2761
@@ -345,7 +345,7 @@ Feature: News moderation.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |
-    And I select "Employment and Support Allowance" tags from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'News Whale joins the JL has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "Whale joins the JL"
@@ -363,7 +363,7 @@ Feature: News moderation.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |
-    And I select "Employment and Support Allowance" tags from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'News Eagle joins the CE has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "My account page"
