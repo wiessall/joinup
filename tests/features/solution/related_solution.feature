@@ -64,6 +64,7 @@ Feature: Related solution
 
     When I go to the edit form of the "Javascript" solution
     And I click "Additional information"
+    And I remove "Java,PHP" options from "Related solutions"
     And I select "PHP,Java" options from "Related solutions"
     And I press "Continue"
     And I press "Publish"

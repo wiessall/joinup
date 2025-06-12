@@ -10,9 +10,9 @@ Feature: Publication status of keywords depends on the status of the parent.
       | Abstract    | Some abstract    |
       | Description | Some description |
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "HR" from "Topic"
-    And I select "English" from "Language availability"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "English" options from "Language availability"
     And I press "Add new owner"
     And I fill in "Name" with "John Doe"
     And I check "Company"
@@ -24,19 +24,20 @@ Feature: Publication status of keywords depends on the status of the parent.
       | Name           | John Doe             |
       | E-mail address | john.doe@example.com |
     And I press "Create contact information"
-    And I fill in "Search keywords" with "Unpublished Keyword"
+    And I select "seo" options from "Search keywords"
     And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
+    Then break
     Then I should see the heading "ASDF solution"
-    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "unpublished"
+    And the publication state of the "seo" "taxonomy_term" should be "unpublished"
 
     When I am logged in as a moderator
     And I go to the edit form of the "ASDF solution" solution
     And I press "Continue"
     And I press "Publish"
     Then I should see the heading "ASDF solution"
-    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
+    And the publication state of the "seo" "taxonomy_term" should be "published"
 
     # Save a draft entity to ensure that there are no duplicate keywords
     # created.
@@ -49,10 +50,10 @@ Feature: Publication status of keywords depends on the status of the parent.
       | field_body:value  | Blah           |
       | field_body:format | content_editor |
     And I select "EU and European Policies" from "Topic"
-    And I fill in "Search keywords" with "Unpublished Keyword"
+    And I select "seo" options from "Search keywords"
     And I press "Save as draft"
     Then I should see the heading "Some news"
-    And there should be 1 "taxonomy_term" with the name "Unpublished Keyword"
+    And there should be 1 "taxonomy_term" with the name "seo"
 
     # Save a draft item with the keyword and verify it does not unpublish it.
     Given I click "Add news" in the plus button menu
@@ -64,10 +65,10 @@ Feature: Publication status of keywords depends on the status of the parent.
       | field_body:value  | Blah           |
       | field_body:format | content_editor |
     And I select "EU and European Policies" from "Topic"
-    And I fill in "Search keywords" with "Unpublished Keyword"
+    And I select "seo" options from "Search keywords"
     And I press "Save as draft"
     Then I should see the heading "Some news again"
-    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
+    And the publication state of the "seo" "taxonomy_term" should be "published"
 
   @javascript
   Scenario: Unpublished keywords are not available in the autocomplete.
@@ -76,7 +77,7 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I open the plus button menu
     And I click "Add news"
     # Keywords from the testing_terms.yml are used.
-    And I type "schema" in the "Search keywords" autocomplete field
+    And I select "schema" options from "Search keywords"
     And I wait for AJAX to finish
     Then I should see the text "schema.org"
     When I type "some" in the "Search keywords" autocomplete field
