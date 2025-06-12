@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\Functional;
 
+use Drupal\Core\Url;
 use Drupal\Tests\cas\Traits\CasTestTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
@@ -30,7 +31,8 @@ class ApprovalRegistrationTest extends JoinupExistingSiteTestBase {
       'lastname' => 'El Gran Cornholio',
     ]
     );
-    $this->casLogin($email, 'needtp');
+    $this->drupalGet(Url::fromRoute('cas.login'));
+    $this->submitForm(['email' => $email, 'password' => 'needtp'], 'Login!');
 
     $assert->statusMessageContains('Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message has been sent to your email address.');
     $assert->statusMessageContains('We would like to inform you that our system automatically places accounts registered with certain generic email domains under review.');
