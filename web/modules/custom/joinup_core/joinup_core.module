@@ -388,7 +388,7 @@ function joinup_core_theme_suggestions_alter(array &$suggestions, array $variabl
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, ?string $bundle, array $base_field_definitions): array {
   $fields = [];
   $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("thresholds.{$entity_type->id()}.$bundle");
   if ($threshold) {
