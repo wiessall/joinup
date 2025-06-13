@@ -4,4 +4,6 @@ services:
     autoconfigure: true
     autowire: true
 
-  Drupal\joinup_cas_mock_server\EventSubscriber\JoinupCasMockServerSubscriber: { }
+  Drupal\joinup_cas_mock_server\Config\JoinupCasMockServerConfigOverrider:
+    tags:
+      - { name: config.factory.override }
