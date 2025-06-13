@@ -439,4 +439,26 @@ trait NameMappingsTrait {
     return $mappings[$alias];
   }
 
+  /**
+   * Returns field machine name by label.
+   *
+   * @param string $label
+   *   Field label.
+   *
+   * @return string[]
+   *   Array of label mapping.
+   */
+  protected function getNodeFieldNameFromLabel(string $label): string {
+    $mapping = [
+      'Domain' => 'domain',
+      'Geographical coverage' => 'spatial_coverage',
+      'Language availability' => 'language',
+      'Related solutions' => 'related_solutions',
+      'Scope' => 'field_scope',
+      "Search keywords" => 'keywords',
+      'Topic' => 'field_topic',
+    ];
+    return $mapping[$label];
+  }
+
 }
