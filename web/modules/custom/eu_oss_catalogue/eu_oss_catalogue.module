@@ -83,7 +83,7 @@ function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityTy
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, string $bundle): void {
+function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, ?string $bundle): void {
   if ($entityType->id() !== 'node' || $bundle !== 'oss_solution') {
     return;
   }
