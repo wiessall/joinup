@@ -119,6 +119,17 @@ function ventuno_preprocess_field(array &$variables): void {
       $variables['items'][$key]['content']['#title'] = $title;
     }
   }
+
+  // @todo Remove this when working on https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9873
+  if (
+    $variables['element']['#view_mode'] === 'confirmation' &&
+    $variables['element']['#field_name'] === 'documentation'
+  ) {
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      $variables['items'][$key]['content']['#attributes'] += ['target' => '_blank'];
+    }
+  }
 }
 
 /**
