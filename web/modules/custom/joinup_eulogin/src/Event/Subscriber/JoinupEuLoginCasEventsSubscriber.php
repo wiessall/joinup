@@ -57,7 +57,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     #[Autowire(service: 'externalauth.authmap')]
     protected readonly Authmap $authmap,
   ) {
-    $this->settings = $configFactory->get('joinup_eulogin.settings');
+    $this->settings = $configFactory->get('oe_authentication.settings');
     $this->casSettings = $configFactory->get('cas.settings');
     $this->currentRequest = $requestStack->getCurrentRequest();
   }
@@ -99,14 +99,12 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   public function alterValidationUrl(CasPreValidateEvent $event): void {
     $parameters = [
-      'assuranceLevel' => $this->settings->get('ticket_validation.assurance_level'),
-      'ticketTypes' => implode(',', $this->settings->get('ticket_validation.ticket_types')),
+      'assuranceLevel' => $this->settings->get('assurance_level'),
+      'ticketTypes' => implode(',', $this->settings->get('ticket_types')),
+      'userDetails' => 'true',
     ];
-    if ($this->settings->get('ticket_validation.user_details')) {
-      $parameters['userDetails'] = 'true';
-    }
 
-    $event->setValidationPath($this->settings->get('ticket_validation.path'));
+    $event->setValidationPath($this->settings->get('validation_path'));
     $event->addParameters($parameters);
   }
 
