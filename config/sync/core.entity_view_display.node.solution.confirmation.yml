@@ -158,7 +158,7 @@ content:
     type: file_url_default
     label: inline
     settings:
-      mode: plain
+      mode: link
     third_party_settings:
       field_delimiter:
         delimiter: ','
