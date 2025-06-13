@@ -227,6 +227,7 @@ drupal:
           'devel',
           'filecache',
           'http_request_mock',
+          'joinup_cas_mock_server',
           'oe_authentication_eulogin_mock',
           'joinup_test',
           'masquerade',
