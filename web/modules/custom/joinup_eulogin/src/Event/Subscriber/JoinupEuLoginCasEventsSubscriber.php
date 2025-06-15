@@ -75,7 +75,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
       CasPreRegisterEvent::class => [
         ['markAsNewAccountRegistration'],
         ['handleDrupalUsernameCollision'],
-        ['preventRegisterEmailCollision'],
+        ['preventRegisterEmailCollision', 1001],
       ],
       // This runs just before CasAttributesSubscriber::onPreLogin().
       // @see \Drupal\cas_attributes\Subscriber\CasAttributesSubscriber::onPreLogin()
@@ -100,7 +100,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public function alterValidationUrl(CasPreValidateEvent $event): void {
     $parameters = [
       'assuranceLevel' => $this->settings->get('assurance_level'),
-      'ticketTypes' => implode(',', $this->settings->get('ticket_types')),
+      'ticketTypes' => $this->settings->get('ticket_types'),
       'userDetails' => 'true',
     ];
 
