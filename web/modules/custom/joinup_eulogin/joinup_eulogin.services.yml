@@ -4,4 +4,8 @@ services:
     autoconfigure: true
     autowire: true
 
+  Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber: { }
+
+  Drupal\joinup_eulogin\Routing\JoinupEuLoginRouteSubscriber: { }
+
   Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber: { }
