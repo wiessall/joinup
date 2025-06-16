@@ -8,7 +8,7 @@ Feature:
       | title                    | state     |
       | Paragraphs IG collection | published |
 
-  @javascript @uploadFiles:logo.png,topic.png,banner.jpg,linus.jpeg
+  @javascript
   Scenario: User should be able to add image gallery paragraph.
     Given custom_page content:
       | title                        | collection               | state     | abstract            |

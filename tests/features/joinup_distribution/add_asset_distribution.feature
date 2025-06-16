@@ -92,7 +92,6 @@ Feature: Add distribution through the UI
     And I open the plus button menu
     Then I should not see the link "Add distribution"
 
-  @uploadFiles:test.zip
   Scenario: Add a distribution to a release as a facilitator.
     When I am logged in as a "facilitator" of the "Solution random x name" solution
     When I go to the homepage of the "Authoritarian Alpaca" release
