@@ -24,7 +24,6 @@ Feature: Solution editing.
       | title            | logo     |
       | Another solution | logo.png |
 
-  @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
