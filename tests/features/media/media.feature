@@ -1,5 +1,6 @@
 @api @group-h
 Feature: Administer media.
+  @javascript
   Scenario: Moderators are able to administer media.
     Given users:
       | Username | Roles     |
