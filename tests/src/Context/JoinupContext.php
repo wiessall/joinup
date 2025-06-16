@@ -27,9 +27,9 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -66,11 +66,11 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
-  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
@@ -815,7 +815,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTopic()->label();
+      $node->field_topic = $this->getRandomTerm('topic')->label();
     }
 
     if (!empty($field_definitions['contact']) && !isset($node->contact)) {
