@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
@@ -19,6 +20,7 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
 
   public function __construct(
     readonly AccountInterface $currentUser,
+    readonly StateInterface $state,
   ) {}
 
   /**
@@ -36,6 +38,12 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
    */
   public function on403(ExceptionEvent $event): void {
     if (!$this->currentUser->isAnonymous()) {
+      return;
+    }
+
+    // Kill-switch allowing to disable this feature in certain conditions. Tests
+    // benefit when they're asserting a '403 Access denied' return code.
+    if ($this->state->get('joinup_eulogin.disable_redirect', FALSE)) {
       return;
     }
 
