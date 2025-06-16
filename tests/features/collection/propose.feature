@@ -117,7 +117,7 @@ Feature: Proposing a collection
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_logo
   Scenario: Propose collection form fields should be organized in tabs.
     Given owner content:
       | name                 | owner type |
@@ -280,7 +280,7 @@ Feature: Proposing a collection
     When I go to "/collection/some-email-validation/contact"
     Then I should get an access denied error
 
-  @javascript @uploadFiles:error.svg,simple.svg
+  @javascript
   Scenario: Allowing users to upload SVGs.
     Given owner content:
       | name    | owner type |
