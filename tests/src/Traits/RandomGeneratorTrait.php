@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Drupal\Component\Uuid\Php;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Helper methods for generating random data in tests.
@@ -31,13 +31,13 @@ trait RandomGeneratorTrait {
    * @param bool $skipTopLevel
    *   Skip top level.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
+   * @return \Drupal\taxonomy\TermInterface
    *   Random term.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = FALSE): EntityInterface {
+  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = TRUE): TermInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     $query = $storage->getQuery()->accessCheck(FALSE)
