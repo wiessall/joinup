@@ -8,6 +8,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\comment\Entity\Comment;
+use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
@@ -64,7 +65,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
 
     $collection = \Drupal::service('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
     $this->drupalGet($collection->toUrl());
-    $this->clickLink("Add news");
+    $this->clickLink('Add news');
 
     $fileName = strtolower($this->randomMachineName()) . '.txt';
     file_put_contents("temporary://$fileName", $this->randomString());
@@ -88,6 +89,57 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
   }
 
   /**
+   * Tests main content.
+   *
+   * @todo Extend to all other nod types.
+   */
+  public function testMainContent(): void {
+    $file = $this->createEmbedFile();
+
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'og_audience' => \Drupal::service('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
+      'title' => $this->randomString(),
+      'field_state' => 'draft',
+      'description' => [
+        'value' => $this->randomString() . ' <a href="' . $file->createFileUrl() . '" data-entity-type="file" data-entity-uuid="' . $file->uuid() . '">' . $file->label() . '</a> ' . $this->randomString(),
+        'format' => 'content_editor',
+      ],
+      'uid' => $this->account['author']->id(),
+    ]);
+
+    \Drupal::service('og.membership_manager')
+      ->createMembership($solution, $this->account['group_owner'])
+      ->addRole(OgRole::load('node-solution-administrator'))
+      ->addRole(OgRole::load('node-solution-facilitator'))
+      ->save();
+
+    // The file is accessible by the author and privileged users.
+    $this->assertFileAccessible($file, $this->account['author']);
+    $this->assertFileAccessible($file, $this->account['moderator']);
+    $this->assertFileAccessible($file, $this->account['group_owner']);
+    // The file is not accessible for a regular and anonymous user.
+    $this->assertFileNotAccessible($file, $this->account['regular']);
+    $this->assertFileNotAccessible($file);
+
+    $solution->set('field_state', 'published')->save();
+
+    // The file is now accessible for everyone.
+    $this->assertFileAccessible($file, $this->account['author']);
+    $this->assertFileAccessible($file, $this->account['moderator']);
+    $this->assertFileAccessible($file, $this->account['group_owner']);
+    $this->assertFileAccessible($file, $this->account['regular']);
+    $this->assertFileAccessible($file);
+
+    \Drupal::entityTypeManager()->getStorage('file')->resetCache();
+    $file = File::load($file->id());
+    $this->assertStringStartsWith('public://', $file->getFileUri());
+    $this->drupalGet($solution->toUrl());
+    // Check that the anchor's href was updated.
+    $this->assertSession()->responseContains($file->createFileUrl());
+  }
+
+  /**
    * Tests file protection for community content.
    */
   public function testCommunityContent(): void {
@@ -102,7 +154,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * Tests file uploads on community content.
    */
   protected function doTestCommunityContent(string $type, string $fieldName): void {
-    $file = $this->createFile('node', $type, $fieldName);
+    $file = $this->createFieldFile('node', $type, $fieldName);
 
     $node = $this->createNode([
       'type' => $type,
@@ -148,7 +200,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
     $discussions = \Drupal::entityTypeManager()->getStorage('node')
       ->loadByProperties(['type' => 'discussion']);
     $discussion = reset($discussions);
-    $file = $this->createFile('comment', 'reply', 'field_attachment');
+    $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
 
     $comment = Comment::create([
       'comment_type' => 'reply',
@@ -279,10 +331,35 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * @return \Drupal\file\FileInterface
    *   A managed file entity.
    */
-  protected function createFile(string $entityTypeId, string $bundle, string $fieldName): FileInterface {
+  protected function createFieldFile(string $entityTypeId, string $bundle, string $fieldName): FileInterface {
     $fieldConfig = FieldConfig::loadByName($entityTypeId, $bundle, $fieldName);
     $uri = $fieldConfig->getSetting('uri_scheme') . '://' . $fieldConfig->getSetting('file_directory');
     $uri = \Drupal::token()->replace($uri);
+    return $this->createFile($uri);
+  }
+
+  /**
+   * Creates a text embedded file entity.
+   *
+   * @return \Drupal\file\FileInterface
+   *   The file entity.
+   */
+  protected function createEmbedFile(): FileInterface {
+    $editor = Editor::load('content_editor');
+    $settings = $editor->getSettings()['plugins']['editor_file_file'];
+    return $this->createFile($settings['scheme'] . '://' . $settings['directory']);
+  }
+
+  /**
+   * Creates a file on a given location.
+   *
+   * @param string $uri
+   *   The file location URI.
+   *
+   * @return \Drupal\file\FileInterface
+   *   The created file entity.
+   */
+  protected function createFile(string $uri): FileInterface {
     \Drupal::service('file_system')->prepareDirectory($uri, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     $uri .= '/' . strtolower($this->randomMachineName()) . '.txt';
     file_put_contents($uri, $this->randomString());
