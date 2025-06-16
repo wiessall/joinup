@@ -28,6 +28,8 @@ trait RandomGeneratorTrait {
    *
    * @param string $vocabulary
    *   Vocabulary id.
+   * @param bool $skipTopLevel
+   *   Skip top level.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   Random term.
@@ -35,13 +37,12 @@ trait RandomGeneratorTrait {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getRandomTerm(string $vocabulary): EntityInterface {
+  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = FALSE): EntityInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('vid', $vocabulary);
-    // Only get last level terms for the EIRA vocabulary.
-    if ($vocabulary === 'solution_type') {
+    if ($skipTopLevel) {
       $query->condition('parent', '0', '<>');
     }
 
