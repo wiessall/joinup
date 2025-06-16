@@ -36,7 +36,9 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
+use Drush\TestTraits\DrushTestTrait;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
+use Joinup\TestMode;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -49,6 +51,7 @@ class FeatureContext extends RawDrupalContext {
 
   use AntispamTrait;
   use ContextualLinksTrait;
+  use DrushTestTrait;
   use EntityTrait;
   use JavascriptTrait;
   use PageCacheTrait;
@@ -1796,6 +1799,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public static function addBehatSpecificDrupalSettings(): void {
     static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
+    TestMode::set(TestMode::Behat);
   }
 
   /**
@@ -1805,6 +1809,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public static function restoreDrupalSettings(): void {
     static::runCommand('drupal:settings site-clean --root=' . static::getPath('web') . ' --sites-subdir=default');
+    TestMode::clear();
   }
 
   /**

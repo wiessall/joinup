@@ -5,3 +5,8 @@
 # Ignore publiccode.yml editor.
 /.ddev/publiccode/
 /web/publiccode-editor/
+
+# Ignore typescript for now.
+# @todo setup eslint properly later (used for playwright).
+*.ts
+*.tsx
