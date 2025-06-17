@@ -45,7 +45,8 @@ Feature: "Add release" visibility options.
     When I am logged in as a "facilitator" of the "Release Test 1" solution
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
-    Then I should see the heading "Add Release"
+    Then I should see the heading "Release Test 1" in the "Header" region
+    And I should see the heading "Add Release"
     And the following fields should be present "Name, Release version, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
