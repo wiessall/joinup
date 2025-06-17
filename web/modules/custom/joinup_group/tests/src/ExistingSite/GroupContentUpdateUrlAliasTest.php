@@ -419,7 +419,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => $this->getRandomTerm('topic'),
+      'field_topic' => $this->getRandomTerm('topic', TRUE),
       'contact' => $contact->id(),
     ]);
 
@@ -434,7 +434,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'domain' => $this->getRandomTerm('domain'),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => $this->getRandomTerm('topic'),
+      'field_topic' => $this->getRandomTerm('topic', TRUE),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/testing/PublicServiceProvider')->id(),
       'language' => $this->getTermByName('language', 'English'),
       'contact' => $contact->id(),
