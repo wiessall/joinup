@@ -383,7 +383,7 @@ drupal:
       Visitors can create their own accounts: |
         $config['user.settings']['register'] = 'visitors';
       Stage file proxy: |
-        $config['stage_file_proxy.settings']['hotlink'] = TRUE;
+        $config['stage_file_proxy.settings']['hotlink'] = FALSE;
         $config['stage_file_proxy.settings']['origin'] = 'https://interoperable-europe.ec.europa.eu';
         $config['stage_file_proxy.settings']['verify'] = FALSE;
         $config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';
