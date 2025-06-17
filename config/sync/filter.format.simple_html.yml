@@ -8,7 +8,7 @@ dependencies:
     - image.style.wysiwyg_one_third_width
   module:
     - blazy
-    - joinup_collection
+    - collection
     - editor
     - image
     - joinup_core

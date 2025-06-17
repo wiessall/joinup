@@ -55,6 +55,7 @@
         "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
+        "drupal/file_visibility": "^1.0",
         "drupal/flag": "^4.0@beta",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",

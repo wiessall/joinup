@@ -94,6 +94,8 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
     $this->submitForm(['title[0][value]' => 'Foo'], 'Update');
 
+    $this->nodeStorage->resetCache([$distribution->id()]);
+
     // Check that the file has been uploaded to the file URL field.
     $distribution = Node::load($distribution->id());
     $file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
@@ -116,9 +118,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
     $this->submitForm([], 'Update');
 
-    // @todo We should not need cache clearing here. The cache should have been
-    //   wiped out at this point. Fix this regression in ISAICP-3392.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
     $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the file has been uploaded to the file URL field.
@@ -145,9 +144,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->addFileUrlItem($field_name, 'remote', $url);
     $this->submitForm([], 'Update');
 
-    // @todo We should not need cache clearing here. The cache should have been
-    //   wiped out at this point. Fix this regression in ISAICP-3392.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
     $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the remote URL replaced the uploaded file.
