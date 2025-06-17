@@ -62,9 +62,7 @@ class ReleaseController extends ControllerBase {
     if ($node->bundle() !== 'solution') {
       throw new NotFoundHttpException();
     }
-
     return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('release', $account, [
-      // The group will be consumed in joinup_rdf_entity_create_access().
       'group' => $node,
     ], TRUE);
   }
@@ -158,12 +156,9 @@ class ReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $releases = $node->getReleases();
-    $access = AccessResult::allowedIf($node->access('view', $account, TRUE) && !empty($releases));
+    $access = AccessResult::allowedIf($node->access('view', $account, TRUE) && !empty($node->getReleases()));
     $access->addCacheableDependency($node);
-    foreach ($releases as $release) {
-      $access->addCacheableDependency($release);
-    }
+    $access->addCacheTags(['node_list:release']);
     return $access;
   }
 
