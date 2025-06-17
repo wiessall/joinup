@@ -239,7 +239,8 @@ function custom_page_menu_local_actions_alter(&$local_actions): void {
  */
 function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account): AccessResultInterface {
   if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
-    return AccessResult::neutral();
+    return AccessResult::neutral()
+      ->addCacheableDependency($node);
   }
 
   $parent = $node->getGroup();
@@ -251,22 +252,31 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
         $parent instanceof SolutionInterface &&
         $parent->isArchived()
       )
-      ->addCacheableDependency($parent);
+      ->addCacheableDependency($parent)
+      ->addCacheableDependency($node);
   }
 
   // Let parentless nodes be handled by the core access.
   if (!$parent->access('view', $account)) {
     // Anonymous users do not have access to content of non published groups.
-    return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id());
+    return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id())
+      ->addCacheableDependency($account)
+      ->addCacheableDependency($node);
   }
   $membership = $parent->getMembership($account->id());
   if (empty($membership)) {
-    return AccessResult::neutral();
+    return AccessResult::neutral()
+      ->addCacheableDependency($membership)
+      ->addCacheableDependency($account)
+      ->addCacheableDependency($node);
   }
   if (!$node->isPublished() && $membership->hasPermission("view any unpublished content")) {
-    return AccessResult::allowed();
+    return AccessResult::allowed()
+      ->addCacheableDependency($membership)
+      ->addCacheableDependency($node);
   }
-  return AccessResult::neutral();
+  return AccessResult::neutral()
+    ->addCacheableDependency($node);
 }
 
 /**
