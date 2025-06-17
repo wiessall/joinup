@@ -305,7 +305,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         && $field_definition->getTargetEntityTypeId() === 'node'
         && !$group)
         ->andIf($accessPermission)
-        ->addCacheContexts(['route']);
+        ->addCacheContexts(['og_group_context']);
 
     default:
       return AccessResult::neutral();
