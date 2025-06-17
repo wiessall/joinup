@@ -4,7 +4,6 @@ Feature: Creation of owners through UI
   As a user
   I need to be able to create owners, or add existing, through the UI when proposing a collection.
 
-  @uploadFiles:logo.png
   Scenario: Propose a collection
     Given owner content:
       | name                                                                                                                                                                                                                                                           | owner type |

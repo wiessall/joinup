@@ -26,7 +26,7 @@ default_value_callback: ''
 settings:
   handler: 'file_url_default:file'
   handler_settings: {  }
-  file_directory: 'release/documentation/[date:custom:Y]-[date:custom:m]'
+  file_directory: 'file-visibility/release/documentation/[date:custom:Y]-[date:custom:m]'
   file_extensions: 'txt doc docx pdf'
   max_filesize: ''
   description_field: false

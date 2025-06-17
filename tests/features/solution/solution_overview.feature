@@ -53,7 +53,6 @@ Feature: Solutions Overview
     But I should not see the link "Next page"
     And I should not see the link "Last page"
 
-  @uploadFiles:logo.png
   Scenario: View solution overview as an anonymous user
     Given users:
       | Username      | E-mail                            |
