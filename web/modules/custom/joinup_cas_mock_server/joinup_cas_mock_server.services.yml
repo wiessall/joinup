@@ -7,5 +7,3 @@ services:
   Drupal\joinup_cas_mock_server\Config\JoinupCasMockServerConfigOverrider:
     tags:
       - { name: config.factory.override }
-
-  Drupal\joinup_cas_mock_server\EventSubscriber\JoinupCasMockServerSubscriber: { }

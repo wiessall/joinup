@@ -33,7 +33,6 @@ Feature: Discussions added to collections
     And I go to the homepage of the "The Fallen History" collection
     Then I should see the link "Add discussion"
 
-  @uploadFiles:test.zip
   Scenario: Add discussion as a facilitator.
     Given user:
       | Username    | kesha1988                             |
@@ -122,7 +121,7 @@ Feature: Discussions added to collections
       | 176 bytes                                  |
     And I should see the link "The content of this file is mind blowing"
 
-  @javascript @generateMedia @generateMediaTypes:discussion_logo @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:discussion_logo
   Scenario: Test the image library widget.
     Given collection content:
       | title            | state     |
