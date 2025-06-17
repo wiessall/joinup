@@ -288,7 +288,8 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
       return AccessResult::allowedIf(
         $operation === 'edit'
         && $field_definition->getTargetEntityTypeId() === 'node'
-        && $field_definition->getTargetBundle() === 'custom_page');
+        && $field_definition->getTargetBundle() === 'custom_page')
+        ->addCacheableDependency($field_definition);
 
     case 'path':
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
