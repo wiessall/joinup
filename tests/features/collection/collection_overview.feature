@@ -1,7 +1,5 @@
 @api @group-a
 Feature: Collections Overview
-
-  @uploadFiles:logo.png
   Scenario: View collection overview as an anonymous user
     Given users:
       | Username      | E-mail                       |

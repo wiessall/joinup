@@ -70,6 +70,8 @@ module:
   field_ui: 0
   file: 0
   file_url: 0
+  file_visibility: 0
+  file_visibility_track_usage: 0
   filter: 0
   flag: 0
   flag_count: 0
@@ -174,6 +176,7 @@ module:
   mysql: 0
   node: 0
   node_revision_delete: 0
+  oe_authentication: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_gisco_geocoding: 0
@@ -261,6 +264,7 @@ module:
   toolbar: 0
   topic: 0
   tour: 0
+  track_usage: 0
   twig_field_value: 0
   ui_patterns: 0
   ui_patterns_library: 0

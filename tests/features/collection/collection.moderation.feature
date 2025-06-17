@@ -184,7 +184,7 @@ Feature: Collection moderation
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
     # creation setting happens after an ajax callback.
@@ -216,7 +216,7 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: Changing Content creation value - regression #2
     # Regression test for a bug that causes the wrong content creation value
     # to be saved after the "Closed collection" checkbox is checked.
@@ -247,7 +247,7 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: Changing Content creation value - regression #3
     # Regression test for a bug that happens when an "Add more" button on a
     # multi-value widget is clicked and then the "Closed collection" checkbox
@@ -279,7 +279,7 @@ Feature: Collection moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
     # is checked and then an "Add more" button on a multi-value widget is clicked.
