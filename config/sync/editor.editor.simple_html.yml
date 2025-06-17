@@ -43,8 +43,8 @@ settings:
       linkit_enabled: false
 image_upload:
   status: true
-  scheme: public
-  directory: comment-inline-images
+  scheme: private
+  directory: file-visibility/comment-inline-images
   max_size: 10M
   max_dimensions:
     width: null
