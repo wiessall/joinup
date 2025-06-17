@@ -1,0 +1,38 @@
+diff --git a/svg_image.module b/svg_image.module
+index 838030e94438e597e6f0f3ff1e0f8fb60bb6393a..afbb46770bdf64b614eecfd653f93b14f4cbdbcd 100644
+--- a/svg_image.module
++++ b/svg_image.module
+@@ -9,6 +9,7 @@ use Drupal\file\Entity\File;
+ use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageFormatter;
+ use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageUrlFormatter;
+ use Drupal\svg_image\Plugin\Field\FieldWidget\SvgImageWidget;
++use enshrined\svgSanitize\Sanitizer;
+ 
+ /**
+  * Implements hook_config_schema_info_alter().
+@@ -130,5 +131,24 @@ function svg_image_get_image_file_dimensions(File $file) {
+  *   TRUE if is SVG, FALSE otherwise.
+  */
+ function svg_image_is_file_svg(File $file) {
+-  return $file->getMimeType() === 'image/svg+xml';
++  return file_exists($file->getFileUri()) && $file->getMimeType() === 'image/svg+xml';
++}
++
++/**
++ * Implements hook_file_validate().
++ */
++function svg_image_file_validate(File $file): array {
++  $errors = [];
++  if (svg_image_is_file_svg($file)) {
++    $svgContent = file_get_contents($file->getFileUri());
++    $sanitizer = new Sanitizer();
++    $sanitizer->sanitize($svgContent);
++
++    // If the SVG is not valid or cannot be sanitized, return an error.
++    if ($sanitizer->getXmlIssues()) {
++      $errors[] = t('Invalid or unsafe SVG file.');
++    }
++  }
++
++  return $errors;
+ }
