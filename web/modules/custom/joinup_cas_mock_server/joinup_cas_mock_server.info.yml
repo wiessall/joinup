@@ -6,3 +6,4 @@ core_version_requirement: "^10.4 || ^11"
 dependencies:
   - cas_mock_server:cas_mock_server
   - joinup:joinup_eulogin
+  - oe_authentication:oe_authentication_eulogin_mock
