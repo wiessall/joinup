@@ -183,7 +183,7 @@ class CollectionContext extends RawDrupalContext {
     // @todo Should this be merged with the other node bundles? Does it create
     //   random test failures in search tests? Is the field optional somewhere?
     if (empty($node->field_topic)) {
-      $node->field_topic = $this->getRandomTerm('topic')->getName();
+      $node->field_topic = $this->getRandomTerm('topic', TRUE)->getName();
     }
   }
 
