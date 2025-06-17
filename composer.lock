@@ -5308,17 +5308,17 @@
         },
         {
             "name": "drupal/image_library_widget",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/image_library_widget.git",
-                "reference": "2.0.0-alpha2"
+                "reference": "2.0.0-alpha3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/image_library_widget-2.0.0-alpha2.zip",
-                "reference": "2.0.0-alpha2",
-                "shasum": "f1c059a9ed11e6281e815042b335869707b6debe"
+                "url": "https://ftp.drupal.org/files/projects/image_library_widget-2.0.0-alpha3.zip",
+                "reference": "2.0.0-alpha3",
+                "shasum": "45902b1672789fea81bfa6528efc145b0e979267"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -5326,8 +5326,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha2",
-                    "datestamp": "1692089588",
+                    "version": "2.0.0-alpha3",
+                    "datestamp": "1749809070",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
