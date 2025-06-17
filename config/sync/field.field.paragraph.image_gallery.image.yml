@@ -7,6 +7,10 @@ dependencies:
     - paragraphs.paragraphs_type.image_gallery
   module:
     - image
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: paragraph.image_gallery.image
 field_name: image
 entity_type: paragraph
@@ -20,7 +24,7 @@ default_value_callback: ''
 settings:
   handler: 'default:file'
   handler_settings: {  }
-  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_directory: 'file-visibility/gallery/[date:custom:Y]-[date:custom:m]'
   file_extensions: 'png gif jpg jpeg svg webp'
   max_filesize: ''
   max_resolution: ''
