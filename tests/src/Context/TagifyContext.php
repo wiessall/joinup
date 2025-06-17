@@ -186,9 +186,9 @@ class TagifyContext extends RawDrupalContext {
     $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
     $locator = '.js-form-item-' . $fieldName . ' .tagify__input';
     $tagifyInput = $session->getPage()->find('css', $locator);
-    $tagifyInput->click();
     foreach ($table->getRows() as $row) {
       $option = reset($row);
+      $tagifyInput->setValue($option);
       $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $option . '")');
       if (empty($dropdownItem)) {
         throw new \Exception('Option "' . $option . '" not found');

@@ -456,6 +456,7 @@ trait NameMappingsTrait {
       'Related solutions' => 'related_solutions',
       'Scope' => 'field_scope',
       "Search keywords" => 'keywords',
+      'Solution type' => 'solution_type',
       'Topic' => 'field_topic',
     ];
     return $mapping[$label];
