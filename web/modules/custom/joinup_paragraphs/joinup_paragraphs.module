@@ -103,9 +103,12 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   }
 
   if ($group->hasGroupPermission($account->id(), $permission)) {
+
     $access_result = AccessResult::neutral()
       ->addCacheableDependency($group->getMembership($account->id()))
-      ->cachePerPermissions();
+      ->addCacheableDependency($paragraph)
+      ->cachePerPermissions()
+      ->addCacheTags(['og_role']);
   }
 
   return $access_result;

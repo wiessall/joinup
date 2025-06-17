@@ -237,7 +237,9 @@ class InvitationAcceptanceForm extends FormBase {
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
       static::generateHash($invitation, $action) === $hash
-    );
+    )
+      ->addCacheableDependency($invitation)
+      ->addCacheContexts([$user->isAuthenticated() ? 'user.roles:authenticated' : 'user.roles:anonymous']);
   }
 
   /**
