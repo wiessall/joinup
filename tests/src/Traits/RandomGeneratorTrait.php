@@ -38,7 +38,7 @@ trait RandomGeneratorTrait {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = TRUE): TermInterface {
+  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = FALSE): TermInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     $query = $storage->getQuery()->accessCheck(FALSE)

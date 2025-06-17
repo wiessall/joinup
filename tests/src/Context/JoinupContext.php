@@ -816,7 +816,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTerm('topic')->label();
+      $node->field_topic = $this->getRandomTerm('topic', TRUE)->label();
     }
 
     if (!empty($field_definitions['contact']) && !isset($node->contact)) {
@@ -833,7 +833,7 @@ class JoinupContext extends RawDrupalContext {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('solution_type')->label();
+      $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
     }
     if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
       $node->keywords = $this->getRandomTerm('tags')->label();
