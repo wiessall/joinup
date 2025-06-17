@@ -32,7 +32,6 @@ Feature: "Add discussion" visibility options.
     And I go to the homepage of the "Eager Sliver" solution
     Then I should see the link "Add discussion"
 
-  @uploadFiles:test.zip
   Scenario: Add discussion as a facilitator.
     Given collection content:
       | title                          | logo     | state     |
