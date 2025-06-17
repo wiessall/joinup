@@ -23,7 +23,6 @@ Feature: CKEditor5
     When I go to the edit form of the "Earlier transformers" glossary
     Then I check "Definition" wysiwyg height
 
-  @uploadFiles:alan.jpg
   Scenario: Media image with CKEditor5.
     Given the following "Image" media:
       | name                                | image        | alt            | group                 | revision         |

@@ -120,8 +120,8 @@ settings:
           element: '<table class="table--columns-equal">'
     editor_file_file:
       status: true
-      scheme: public
-      directory: inline-files
+      scheme: private
+      directory: file-visibility/inline-files
       extensions: 'txt pdf doc docx xls xlsx ods odt ppt pptx vsd zip tar gz png jpg jpeg mp4 avi'
       max_size: ''
     linkit_extension:
@@ -131,8 +131,8 @@ settings:
       allow_view_mode_override: true
 image_upload:
   status: true
-  scheme: public
-  directory: inline-images
+  scheme: private
+  directory: file-visibility/inline-images
   max_size: '10 MB'
   max_dimensions:
     width: null

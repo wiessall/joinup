@@ -113,7 +113,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       $this->drupalLogout();
     }
 
-    $this->drupalGet(Url::fromRoute('user.login'));
+    $this->drupalGet(Url::fromRoute('cas.login'));
 
     // Since we are using CAS mock server, we need to override the following for
     // the difference in the form element names.
