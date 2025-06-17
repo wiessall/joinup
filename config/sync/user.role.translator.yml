@@ -4,12 +4,15 @@ status: true
 dependencies:
   module:
     - config_translation
+    - content_translation
     - dashboard
+    - joinup_i18n
     - l10n_client_ui
     - locale
-    - toolbar
-    - joinup_i18n
+    - menu_admin_per_menu
+    - menu_link_content
     - system
+    - toolbar
 id: translator
 label: Translator
 weight: -3
@@ -17,8 +20,19 @@ is_admin: null
 permissions:
   - 'access dashboard'
   - 'access toolbar'
+  - 'administer footer-about-us menu items'
+  - 'administer footer-european-commission menu items'
+  - 'administer footer-follow-us menu items'
+  - 'administer footer-help-and-support menu items'
+  - 'administer navbar menu items'
+  - 'administer support menu items'
   - 'bypass enforced english'
+  - 'create content translations'
+  - 'delete content translations'
   - 'translate configuration'
   - 'translate interface'
+  - 'translate menu_link_content'
+  - 'update content translations'
   - 'use localization client ui'
+  - 'view admin pages in preferred language'
   - 'view the administration theme'
