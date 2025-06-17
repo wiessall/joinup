@@ -66,7 +66,6 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
     //   - images/logo-solution-1.png,
     //   - Solution_1_EN_Screenshot1.jpg,
     //   - Solution_1_EN_Screenshot2.jpg,
-    //   - Solution_1_EN_Screenshot2-updated.jpg,
     // - Project 1.1:
     //   - images/logo-of-project-1-1.svg,
     //   - Group_1_Project1_IT_Screenshot.jpg.

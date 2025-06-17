@@ -7,8 +7,6 @@ Feature:
     Given collection content:
       | title                 | state     |
       | Paragraphs collection | published |
-
-  @uploadFiles:topic.png
   Scenario: Add tiles paragraph to one column layout.
     Given custom_page content:
       | title                   | collection            | state     | abstract            |
@@ -45,7 +43,6 @@ Feature:
 
     When I should not see the link "Tiles" in the "Modal content" region
 
-  @uploadFiles:topic.png
   Scenario: Regression test - System not able to recognise the apostrophe on a text.
     Given custom_page content:
       | title                    | collection            | state     | abstract                       |

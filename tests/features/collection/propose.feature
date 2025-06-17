@@ -103,7 +103,7 @@ Feature: Proposing a collection
     And I press "Save as draft"
     Then I should see the error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
 
-  @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_logo
   Scenario: Propose collection form fields should be organized in tabs.
     Given owner content:
       | name                 | owner type |
@@ -274,7 +274,7 @@ Feature: Proposing a collection
     When I go to "/collection/some-email-validation/contact"
     Then I should see the heading "Access denied"
 
-  @javascript @uploadFiles:error.svg,simple.svg
+  @javascript
   Scenario: Allowing users to upload SVGs.
     Given owner content:
       | name    | owner type |

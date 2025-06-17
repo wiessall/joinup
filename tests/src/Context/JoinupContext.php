@@ -27,9 +27,9 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -66,11 +66,11 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
-  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
@@ -512,9 +512,10 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitCanonicalPage(string $title, string $bundle): void {
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getEntityByLabel('node', $title, $bundle);
-    $this->visitPath($node->toUrl()->toString());
+    $entityType = $this->translateEntityTypeAlias($bundle);
+    $bundle = $this->translateBundle($bundle);
+    $entity = $this->getEntityByLabel($entityType, $title, $bundle);
+    $this->visitPath($entity->toUrl()->toString());
   }
 
   /**
@@ -815,7 +816,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTopic()->label();
+      $node->field_topic = $this->getRandomTerm('topic')->label();
     }
 
     if (!empty($field_definitions['contact']) && !isset($node->contact)) {
@@ -3107,6 +3108,54 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+  }
+
+  /**
+   * Asserts that the given entity is published or unpublished.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $entityType
+   *   The type of the entity (e.g., 'node', 'taxonomy_term').
+   * @param string $expectedStatus
+   *   The expected publication status of the entity.
+   *
+   * @Given /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/
+   */
+  public function theEntityShouldHavePublishedStatus(string $label, string $entityType, string $expectedStatus): void {
+    $entity = $this->getEntityByLabel($entityType, $label);
+    \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
+    $expectedStatus = $expectedStatus === 'published';
+
+    if ($entity->isPublished() !== $expectedStatus) {
+      $status = $expectedStatus ? 'published' : 'unpublished';
+      throw new \Exception("The entity '$label' is not $status as expected.");
+    }
+  }
+
+  /**
+   * Asserts the number of entities with a given name.
+   *
+   * @param int $expected
+   *   The expected number of entities.
+   * @param string $entityType
+   *   The type of the entity (e.g., 'node', 'taxonomy_term').
+   * @param string $name
+   *   The name of the entity to check.
+   *
+   * @Given /^there should be (\d+) "([^"]*)" with the name "([^"]*)"$/
+   */
+  public function thereShouldBeWithTheName(int $expected, string $entityType, string $name): void {
+    $query = \Drupal::entityQuery($entityType)
+      ->accessCheck(FALSE)
+      ->condition('name', $name);
+
+    $ids = $query->execute();
+    $count = count($ids);
+
+    if ($count !== $expected) {
+      throw new \Exception("Expected $expected entities of type '$entityType' with name '$name', but found $count.");
+    }
   }
 
 }
