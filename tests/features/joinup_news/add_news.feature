@@ -4,7 +4,6 @@ Feature: Creation of news through the UI.
   As a user
   I need to be able to create news through the UI.
 
-  @uploadFiles:logo.png,test.zip
   Scenario: Share the news in other collections/solutions.
     Given user:
       | Username    | isotopedancer      |
@@ -96,7 +95,7 @@ Feature: Creation of news through the UI.
     When I visit the content overview page
     Then I should see the image "logo.png" in the "Ytterbium metal of the year" tile
 
-  @javascript @generateMedia @generateMediaTypes:news_logo @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:news_logo
   Scenario: Test the image library widget.
     Given collection content:
       | title            | state     |

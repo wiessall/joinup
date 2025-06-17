@@ -20,7 +20,7 @@ default_value_callback: ''
 settings:
   handler: 'default:file'
   handler_settings: {  }
-  file_directory: media/file
+  file_directory: file-visibility/media/file
   file_extensions: 'txt pdf doc docx xls xlsx ods odt ppt pptx vsd zip tar gz png jpg jpeg mp4 avi ics'
   max_filesize: ''
   description_field: false
