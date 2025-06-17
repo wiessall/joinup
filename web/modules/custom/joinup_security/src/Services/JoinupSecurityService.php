@@ -5,25 +5,20 @@ declare(strict_types=1);
 namespace Drupal\joinup_security\Services;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\JoinupGroupPermissionManagerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Joinup security service.
  */
 class JoinupSecurityService {
 
-  use AutowireTrait;
-
   public function __construct(
     protected readonly AccountProxyInterface $currentUser,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    #[Autowire(service: 'Drupal\joinup_group\JoinupGroupPermissionManagerInterface')]
     protected readonly JoinupGroupPermissionManagerInterface $joinupGroupManagerPermissions,
     protected TimeInterface $time,
   ) {}

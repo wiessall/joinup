@@ -6,11 +6,13 @@ namespace Drupal\joinup_menu\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\file\FileInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\node\NodeInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +34,7 @@ final class RedirectDocumentationController extends ControllerBase {
   public function documentationFile(NodeInterface $node): Response {
     $fileId = $node->documentation->target_id;
     $file = FileUrlHandler::urlToFile($fileId);
+    assert($file instanceof FileInterface);
 
     if (FileUrlHandler::isRemote($file)) {
       $url = $file->getFileUri();
@@ -42,20 +45,12 @@ final class RedirectDocumentationController extends ControllerBase {
       return new RedirectResponse('/404');
     }
 
-    // Finally, if the file URL is a file, serve the file but as a trusted
-    // redirect response.
-    $response = new BinaryFileResponse($file->getFileUri());
-    $response->setContentDisposition('attachment', $file->getFilename());
-    // The binary response is cached on the browser side. This is to avoid
-    // re-downloading the file when the user clicks on the back button. In order
-    // to avoid the file being cached on the browser side, we set the following
-    // cache headers.
-    $response->setCache([
-      'no_cache' => TRUE,
-      'max_age' => 0,
-      'no_store' => TRUE,
-    ]);
-    return $response->send();
+    return (new CacheableRedirectResponse($file->createFileUrl()))
+      ->addCacheableDependency($node)
+      ->addCacheableDependency($file)
+      ->addCacheableDependency((new CacheableMetadata())
+        ->addCacheContexts(['user.permissions', 'og_role'])
+      );
   }
 
   /**
