@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48ca64078cb36df6ca5d59f23daa8b79",
+    "content-hash": "fb0820b6a8407a9c246f415cba45c765",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13364,6 +13364,84 @@
                 "source": "https://github.com/openeuropa/gisco-geocoding-provider/tree/1.0.0-alpha1"
             },
             "time": "2023-01-11T10:29:47+00:00"
+        },
+        {
+            "name": "openeuropa/oe_authentication",
+            "version": "1.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/oe_authentication.git",
+                "reference": "40a3cebefa72297e445a683ab50bb3f6b9c30337"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/oe_authentication/zipball/40a3cebefa72297e445a683ab50bb3f6b9c30337",
+                "reference": "40a3cebefa72297e445a683ab50bb3f6b9c30337",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/cas": "^3.0",
+                "drupal/core": "^10.3 || ^11.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "composer/installers": "^1.11",
+                "drupal/cas_mock_server": "^2.0.1",
+                "drupal/core-composer-scaffold": "^10.3 || ^11.0",
+                "drupal/drupal-extension": "^5.0",
+                "drush/drush": "^12 || ^13",
+                "mikey179/vfsstream": "^1.6.10",
+                "nikic/php-parser": "^4",
+                "openeuropa/behat-transformation-context": "^0.2",
+                "openeuropa/code-review-drupal": "^1.0.0-alpha",
+                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
+                "phpspec/prophecy-phpunit": "^2",
+                "symfony/phpunit-bridge": "^6.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "_readme": [
+                    "Explicit minimum version requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits.",
+                    "Explicit requirement of mikey179/vfsstream to remove when drupal/core-dev is reinstated.",
+                    "Explicit requirement of nikic/php-parser ^4 as later versions are not compatible with grumphp @see https://github.com/phpro/grumphp/issues/1119"
+                ],
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "./build"
+                    }
+                },
+                "enable-patching": true,
+                "installer-paths": {
+                    "build/core": [
+                        "type:drupal-core"
+                    ],
+                    "build/themes/contrib/{$name}": [
+                        "type:drupal-theme"
+                    ],
+                    "build/modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ],
+                    "build/profiles/contrib/{$name}": [
+                        "type:drupal-profile"
+                    ]
+                },
+                "composer-exit-on-patch-failure": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\oe_authentication\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "EUPL-1.2"
+            ],
+            "description": "Authentication against the OpenEuropa Authentication service.",
+            "support": {
+                "issues": "https://github.com/openeuropa/oe_authentication/issues",
+                "source": "https://github.com/openeuropa/oe_authentication/tree/1.20.0"
+            },
+            "time": "2025-04-09T15:32:03+00:00"
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
