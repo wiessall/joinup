@@ -184,10 +184,11 @@ class PrivateMessageReportForm extends FormBase {
    */
   public function access(PrivateMessageInterface $private_message): AccessResultInterface {
     if ($this->privateMessageUserService->isRecipient($private_message, (int) $this->currentUser->id())) {
-      return AccessResult::allowed();
+      return AccessResult::allowed()->addCacheableDependency($private_message);
     }
     return AccessResult::forbidden()
-      ->setReason('Access denied: You are not the target user for this private message.');
+      ->setReason('Access denied: You are not the target user for this private message.')
+      ->addCacheableDependency($private_message);
   }
 
 }
