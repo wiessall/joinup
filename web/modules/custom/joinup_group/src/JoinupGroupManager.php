@@ -100,6 +100,7 @@ readonly class JoinupGroupManager implements JoinupGroupManagerInterface {
       // Check the OG permission.
       ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
       ->addCacheableDependency($group)
+      ->addCacheableDependency($account)
       ->addCacheContexts(['og_role']);
   }
 

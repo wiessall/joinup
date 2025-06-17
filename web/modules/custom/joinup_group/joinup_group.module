@@ -331,7 +331,8 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     $group = $entity->getGroup();
     $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
     return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
-      ->addCacheableDependency($membership);
+      ->addCacheableDependency($membership)
+      ->addCacheContexts(['user.permissions', 'og_role']);
   }
 
   if (!$entity instanceof GroupInterface
@@ -349,7 +350,8 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     $membership
     && !$entity->isPublished()
     && $membership->hasPermission('view any unpublished content'))
-    ->addCacheableDependency($membership);
+    ->addCacheableDependency($membership)
+    ->addCacheContexts(['user.permissions', 'og_role']);
 }
 
 /**
@@ -1050,7 +1052,9 @@ function joinup_group_entity_field_access(string $operation, FieldDefinitionInte
       'solution_settings',
     ], TRUE)
     && !$account->hasPermission('manage group announcements')
-  );
+  )
+    ->addCacheableDependency($field_definition)
+    ->addCacheContexts(['user.permissions']);
 }
 
 /**
