@@ -6,6 +6,7 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Component\Uuid\Php;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Helper methods for generating random data in tests.
@@ -28,20 +29,22 @@ trait RandomGeneratorTrait {
    *
    * @param string $vocabulary
    *   Vocabulary id.
+   * @param bool $skipTopLevel
+   *   Skip top level.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
+   * @return \Drupal\taxonomy\TermInterface
    *   Random term.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getRandomTerm(string $vocabulary): EntityInterface {
+  protected function getRandomTerm(string $vocabulary, bool $skipTopLevel = TRUE): TermInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
     $query = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $vocabulary);
-    // Only get last level terms for the EIRA vocabulary.
-    if ($vocabulary === 'solution_type') {
+      ->condition('vid', $vocabulary)
+      ->condition('status', 1);
+    if ($skipTopLevel) {
       $query->condition('parent', '0', '<>');
     }
 

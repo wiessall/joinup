@@ -33,7 +33,6 @@ Feature: "Add event" visibility options.
     And I go to the homepage of the "The Stripped Stream" collection
     Then I should see the link "Add event"
 
-  @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
     Given collection content:
       | title            | logo     |
@@ -121,7 +120,7 @@ Feature: "Add event" visibility options.
     And I press "Save as draft"
     Then I should see the text "29/12/2018 to 02/01/2019"
 
-  @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:event_logo
   Scenario: Test the image library widget.
     Given collection content:
       | title            |
