@@ -74,6 +74,9 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     /* @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::storeAttributes */
     $this->truncateTable('users_data');
     $this->truncateTable('user__field_social_media');
+    $this->db->update('joinup_user_deleted_user')
+      ->expression('full_name', "CONCAT('user+', uid)")
+      ->execute();
   }
 
   /**
