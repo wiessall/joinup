@@ -182,7 +182,8 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
   $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity')->bundle();
   if ($meta_entity === 'topic') {
     if ($entity_bundle === 'configurable_listing') {
-      return AccessResult::allowed();
+      return AccessResult::allowed()
+        ->addCacheContexts(['route']);
     }
 
     $denied_paragraphs = [
@@ -197,7 +198,8 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
     ];
 
     if (in_array($entity_bundle, $denied_paragraphs, TRUE)) {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()
+        ->addCacheContexts(['route']);
     }
   }
 

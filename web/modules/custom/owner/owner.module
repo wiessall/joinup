@@ -92,13 +92,17 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
     // moderator.
     && !$account->hasPermission('edit any owner content')
   ) {
-    return AccessResult::forbidden('The owner is in the "deletion_request" state.');
+    return AccessResult::forbidden('The owner is in the "deletion_request" state.')
+      ->addCacheableDependency($entity)
+      ->cachePerPermissions();
   }
 
   // By specifications, deletion should be forbidden if the owner entity is
   // referenced by any other entity.
   if ($operation === 'delete') {
-    return AccessResult::forbiddenIf($entity->isReferencedByGroups());
+    return AccessResult::forbiddenIf($entity->isReferencedByGroups())
+      ->addCacheableDependency($entity)
+      ->cachePerPermissions();
   }
 
   if ($operation !== 'view') {
@@ -110,7 +114,9 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
   if ($account->isAnonymous() && $route_match->getRouteName() === 'entity.node.canonical') {
     $route_entity = $route_match->getParameter('node');
     if ($route_entity instanceof OwnerInterface && $route_entity->id() === $entity->id()) {
-      return AccessResult::forbidden('Anonymous users should not see the owner canonical route.');
+      return AccessResult::forbidden('Anonymous users should not see the owner canonical route.')
+        ->addCacheableDependency($entity)
+        ->cachePerPermissions();
     }
   }
 
