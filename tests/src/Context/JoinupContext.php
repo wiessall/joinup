@@ -27,9 +27,9 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -66,11 +66,11 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
-  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
+  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
@@ -816,7 +816,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTopic()->label();
+      $node->field_topic = $this->getRandomTerm('topic', TRUE)->label();
     }
 
     if (!empty($field_definitions['contact']) && !isset($node->contact)) {
@@ -833,10 +833,10 @@ class JoinupContext extends RawDrupalContext {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('solution_type')->label();
+      $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
     }
     if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
-      $node->keywords = $this->getRandomTerm('tags')->label();
+      $node->keywords = $this->getRandomTerm('tags', FALSE)->label();
     }
     if (!empty($field_definitions['classification']) && empty($node->classification)) {
       $node->classification = $this->getRandomTerm('solution_classification')->label();
@@ -1271,6 +1271,30 @@ class JoinupContext extends RawDrupalContext {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = array_filter($titles_table->getColumn(0));
     Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
+  }
+
+  /**
+   * Checks that the given text strings are found in the correct order.
+   *
+   * Table format:
+   * | Text 1 |
+   * | Text 2 |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node containing the text strings.
+   *
+   * @Then I see the texts in the correct order:
+   */
+  public function assertOrderedTextStringsPresent(TableNode $table): void {
+    $lines_of_text = $table->getColumn(0);
+    $full_text = $this->getSession()->getPage()->getText();
+    foreach ($lines_of_text as $text) {
+      $pos = strpos($full_text, $text);
+      if ($pos === FALSE) {
+        throw new \Exception("The text '$text' was not found in the page in the given order.");
+      }
+      $full_text = substr($full_text, $pos + strlen($text));
+    }
   }
 
   /**

@@ -78,7 +78,7 @@ Feature: Test adding solutions.
     Then I should not see the link "Add solution"
 
   # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9780.
-  @wip @uploadFiles:logo.png
+  @wip
   Scenario: Add solution as a collection facilitator.
     Given collection content:
       | title             | logo     |

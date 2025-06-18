@@ -29,7 +29,6 @@ Feature:
 
   # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8779
   @wip
-  @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given owner content:
       | name      | owner type |

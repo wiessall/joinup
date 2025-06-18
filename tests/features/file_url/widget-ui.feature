@@ -51,7 +51,7 @@ Feature: User interface for the File URL field
     And I press "Delete"
     Then the response status code should be 200
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: File URL does not trigger type error after trying to submit an invalid url
     Given document content:
       | title          | abstract | field_paragraphs_body | state | document type |

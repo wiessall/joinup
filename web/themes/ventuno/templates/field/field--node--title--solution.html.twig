@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Override field template for solutions to allow to display the title, needed in the confirmation step.
+ *
+ * @see field.html.twig
+ * @see field--node--title.html.twig
+ * @see node_preprocess_field__node()
+ */
+#}
+{% if label_hidden %}
+  {{ include(('field--node--title.html.twig')) }}
+{% else %}
+  {{ include(('field.html.twig')) }}
+{% endif %}

@@ -29,7 +29,7 @@ class TagifyContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the tagify field is not found.
    *
-   * @When I select :tags options from :fieldName
+   * @When I select :tags option(s) from :fieldName
    */
   public function selectTagsFromTagify(string $tags, string $fieldName): void {
     if ($this->hasJavascriptSupport()) {
@@ -75,16 +75,16 @@ class TagifyContext extends RawDrupalContext {
    */
   protected function selectFromTagifyWithoutJs(string $tags, string $fieldName): void {
     $tags = explode(',', $tags);
-    $value = $this->prepareTagArray($tags);
     $field = $this->getSession()->getPage()->findField($fieldName);
     if (!$field) {
       throw new \Exception("The field '$field' not found in the page.");
     }
-    if (!empty($field->getValue())) {
-      $existingValues = (is_array($field->getValue())) ? $field->getValue() : json_decode($field->getValue(), TRUE);
-      $value = array_merge($value, $existingValues);
-    }
-    $field->setValue(json_encode($value));
+
+    $currentValueRaw = $field->getValue();
+    $currentValue = $currentValueRaw
+      ? json_decode($currentValueRaw, TRUE)
+      : [];
+    $field->setValue(json_encode($currentValue + $this->prepareTagArray($tags)));
   }
 
   /**
@@ -101,29 +101,38 @@ class TagifyContext extends RawDrupalContext {
    */
   public function prepareTagArray(array $tags): array {
     $tagJson = [];
+
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $query = $storage->getQuery()
       ->condition('name', $tags, 'IN')
       ->accessCheck(TRUE);
     $tids = $query->execute();
-
-    if (empty($tids)) {
-      return $tagJson;
+    foreach ($storage->loadMultiple($tids) as $term) {
+      $tagJson[] = [
+        'value' => $term->id(),
+        'label' => $term->label(),
+        'entity_id' => $term->id(),
+        'info-label' => '',
+        'editable' => FALSE,
+      ];
     }
-
-    $terms = $storage->loadMultiple($tids);
-
-    if ($terms) {
-      foreach ($terms as $term) {
-        $tagJson[] = [
-          'value' => $term->id(),
-          'label' => $term->label(),
-          'entity_id' => $term->id(),
-          'info-label' => '',
-          'editable' => FALSE,
-        ];
-      }
-    }
+    $foundTags = array_map(
+      fn (array $item): string => (string) $item['label'],
+      $tagJson,
+    );
+    $tagJson = array_reduce(
+      $tags,
+      function (array $tagJson, $tagToCheck) use ($foundTags): array {
+        if (!in_array($tagToCheck, $foundTags, TRUE)) {
+          $tagJson[] = [
+            'value' => $tagToCheck,
+            'label' => $tagToCheck,
+          ];
+        }
+        return $tagJson;
+      },
+      $tagJson,
+    );
     return $tagJson;
   }
 
