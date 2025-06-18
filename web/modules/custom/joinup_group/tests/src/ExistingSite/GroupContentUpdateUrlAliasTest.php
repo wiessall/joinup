@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
@@ -21,7 +20,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
   use DrushTestTrait;
   use LoginTrait;
   use RandomGeneratorTrait;
-  use TopicTrait;
 
   /**
    * Testing entities.
@@ -421,7 +419,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => $this->getRandomTopic(),
+      'field_topic' => $this->getRandomTerm('topic', TRUE),
       'contact' => $contact->id(),
     ]);
 
@@ -436,7 +434,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'domain' => $this->getRandomTerm('domain'),
       'field_state' => 'published',
       'owner' => $owner->id(),
-      'field_topic' => $this->getRandomTopic(),
+      'field_topic' => $this->getRandomTerm('topic', TRUE),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/testing/PublicServiceProvider')->id(),
       'language' => $this->getTermByName('language', 'English'),
       'contact' => $contact->id(),

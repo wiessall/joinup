@@ -12,9 +12,9 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eif\EifInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -28,8 +28,8 @@ class EifContext extends RawDrupalContext {
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
-  use TopicTrait;
   use UtilityTrait;
+  use RandomGeneratorTrait;
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
@@ -50,7 +50,7 @@ class EifContext extends RawDrupalContext {
     ]);
 
     // Random topic.
-    $topic_label = $this->getRandomTopic()->label();
+    $topic_label = $this->getRandomTerm('topic', TRUE)->label();
     // Create the NIFO sample collection.
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',

@@ -11,7 +11,7 @@ Feature:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: Add webform paragraph.
     Given the following webforms:
       | id           | title        | elements                                           |

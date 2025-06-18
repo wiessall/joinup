@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueProvider;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
@@ -30,19 +31,12 @@ class TestingProvider extends DevelopersItalia {
     foreach (parent::fetch() as $project) {
       if ($project->getFullName() === 'dummy-namespace-1/dummy-name-1') {
         $values = $project->toArray();
-        $fileBlob = $values['files']['publiccodeYml'];
-        $fileBlob = str_replace(
-          [
-            'name: GitHub solution 1',
-            "- 'Solution_1_EN_Screenshot2.jpg'",
-          ],
-          [
-            'name: GitHub solution 1 (updated)',
-            "- 'Solution_1_EN_Screenshot2-updated.jpg'",
-          ],
-          $fileBlob
-        );
-        $values['files']['publiccodeYml'] = $fileBlob;
+
+        $publicCode = Yaml::decode($values['files']['publiccodeYml']);
+        $publicCode['name'] .= ' (updated)';
+        $publicCode['maintenance'] = [];
+
+        $values['files']['publiccodeYml'] = Yaml::encode($publicCode);
         $values['latestReleaseTag'] = '3.0.0';
         yield new Project(...$values);
         continue;

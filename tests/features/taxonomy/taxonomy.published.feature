@@ -24,20 +24,19 @@ Feature: Publication status of keywords depends on the status of the parent.
       | Name           | John Doe             |
       | E-mail address | john.doe@example.com |
     And I press "Create contact information"
-    And I select "seo" options from "Search keywords"
+    And I select "Unpublished Keyword" options from "Search keywords"
     And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
-    Then break
     Then I should see the heading "ASDF solution"
-    And the publication state of the "seo" "taxonomy_term" should be "unpublished"
+    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "unpublished"
 
     When I am logged in as a moderator
     And I go to the edit form of the "ASDF solution" solution
     And I press "Continue"
     And I press "Publish"
     Then I should see the heading "ASDF solution"
-    And the publication state of the "seo" "taxonomy_term" should be "published"
+    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
 
     # Save a draft entity to ensure that there are no duplicate keywords
     # created.
@@ -49,11 +48,11 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah           |
       | field_body:format | content_editor |
-    And I select "EU and European Policies" from "Topic"
-    And I select "seo" options from "Search keywords"
+    And I select "EU and European Policies" option from "Topic"
+    And I select "Unpublished Keyword" options from "Search keywords"
     And I press "Save as draft"
     Then I should see the heading "Some news"
-    And there should be 1 "taxonomy_term" with the name "seo"
+    And there should be 1 "taxonomy_term" with the name "Unpublished Keyword"
 
     # Save a draft item with the keyword and verify it does not unpublish it.
     Given I click "Add news" in the plus button menu
@@ -64,11 +63,11 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah           |
       | field_body:format | content_editor |
-    And I select "EU and European Policies" from "Topic"
-    And I select "seo" options from "Search keywords"
+    And I select "EU and European Policies" option from "Topic"
+    And I select "Unpublished Keyword" options from "Search keywords"
     And I press "Save as draft"
     Then I should see the heading "Some news again"
-    And the publication state of the "seo" "taxonomy_term" should be "published"
+    And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
 
   @javascript
   Scenario: Unpublished keywords are not available in the autocomplete.

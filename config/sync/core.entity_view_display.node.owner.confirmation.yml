@@ -1,0 +1,65 @@
+uuid: ff7a0f54-67e7-4448-ac3d-ccdce921be8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.confirmation
+    - field.field.node.owner.country
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - node.type.owner
+  module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - layout_builder
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.owner.confirmation
+targetEntityType: node
+bundle: owner
+mode: confirmation
+content:
+  country:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
+    region: content
+  owner_type:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: inline
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  private_message_link: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uri: true
