@@ -55,6 +55,7 @@
         "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
+        "drupal/file_visibility": "^1.0",
         "drupal/flag": "^4.0@beta",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
@@ -141,9 +142,10 @@
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
+        "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
-        "openeuropa/oe_webtools": "1.38.0",
+        "openeuropa/oe_webtools": "^1.40",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
@@ -452,7 +454,8 @@
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
                 "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff",
-                "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff"
+                "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff",
+                "Forms using entity builders of RDF Sync cannot be serialized @see https://drupal.org/i/3527977": "resources/patch/php/drupal/rdf_sync/3527977-mr38-hash-8dc503eb.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
@@ -470,7 +473,7 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
@@ -483,14 +486,15 @@
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
                 "Incorrect use of 'render element' for webform_submission_data @see https://www.drupal.org/i/3492193": "resources/patch/php/drupal/webform/3492193.diff",
-                "Warning: Undefined array key '#webform_key' in WebformManagedFileBase.php @see https://www.drupal.org/i/3502992": "resources/patch/php/drupal/webform/3502992.diff"
+                "Warning: Undefined array key '#webform_key' in WebformManagedFileBase.php @see https://www.drupal.org/i/3502992": "resources/patch/php/drupal/webform/3502992.diff",
+                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756-commit_4d0bc68381-6.2.x.diff"
             },
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
                 "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
             },
             "openeuropa/oe_webtools": {
-                "Add maps version 3.0 @see https://github.com/openeuropa/oe_webtools/pull/254": "resources/patch/php/openeuropa/oe_webtools/254.diff"
+                "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",

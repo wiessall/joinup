@@ -16,7 +16,7 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\TopicTrait;
+use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
@@ -35,9 +35,9 @@ class CollectionContext extends RawDrupalContext {
   use EntityTrait;
   use FormTrait;
   use OgTrait;
-  use TopicTrait;
   use UserTrait;
   use UtilityTrait;
+  use RandomGeneratorTrait;
 
   /**
    * Static cache for Joinup collection.
@@ -190,7 +190,7 @@ class CollectionContext extends RawDrupalContext {
     // @todo Should this be merged with the other node bundles? Does it create
     //   random test failures in search tests? Is the field optional somewhere?
     if (empty($node->field_topic)) {
-      $node->field_topic = $this->getRandomTopic()->getName();
+      $node->field_topic = $this->getRandomTerm('topic')->getName();
     }
   }
 
