@@ -8,7 +8,7 @@ Feature:
       | title                 |
       | Paragraphs collection |
 
-  @javascript @uploadFiles:logo.png
+  @javascript
   Scenario: User should be able to add image paragraph.
     Given custom_page content:
       | title                | collection            | abstract            |

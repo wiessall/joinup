@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "493d95c20ce4ebf26264866008570c21",
+    "content-hash": "4b8c4a068177aa9868ab00c3754151e8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4890,6 +4890,60 @@
             }
         },
         {
+            "name": "drupal/file_visibility",
+            "version": "1.0.0-alpha8",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/file_visibility.git",
+                "reference": "1.0.0-alpha8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/file_visibility-1.0.0-alpha8.zip",
+                "reference": "1.0.0-alpha8",
+                "shasum": "98c116a07ab9023a196b9420a720d70d9c303d95"
+            },
+            "require": {
+                "drupal/core": "^10.4 || ^11",
+                "drupal/track_usage": "^1.0",
+                "ext-pdo": "*",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "drupal/paragraphs": "^1.18",
+                "drupal/track_usage": "*",
+                "drush/drush": "^12.5 || ^13.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha8",
+                    "datestamp": "1750068204",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiucristea",
+                    "email": "clau.cristea@gmail.com"
+                }
+            ],
+            "description": "Keeps public files of a publicly inaccessible entity in the private filesystem until the entity becomes available for public",
+            "homepage": "https://www.drupal.org/project/file_visibility",
+            "support": {
+                "source": "https://git.drupalcode.org/project/file_visibility",
+                "issues": "https://www.drupal.org/project/issues/file_visibility"
+            }
+        },
+        {
             "name": "drupal/flag",
             "version": "4.0.0-beta7",
             "source": {
@@ -9668,6 +9722,64 @@
             }
         },
         {
+            "name": "drupal/track_usage",
+            "version": "1.0.0-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/track_usage.git",
+                "reference": "1.0.0-alpha5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/track_usage-1.0.0-alpha5.zip",
+                "reference": "1.0.0-alpha5",
+                "shasum": "0c234f7a204a92cf7a38538f84f71597b5c0f6f5"
+            },
+            "require": {
+                "drupal/core": "^10.4 || ^11",
+                "ext-dom": "*",
+                "ext-pdo": "*",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "drupal/block_field": "^1.0",
+                "drupal/dynamic_entity_reference": "^3.2",
+                "drupal/entity_browser_block": "^2.0",
+                "drupal/entity_browser_entity_form": "^2.12",
+                "drupal/paragraphs": "^1.18",
+                "drupal/redirect": "^1.11",
+                "drush/drush": "^12.5 || ^13.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha5",
+                    "datestamp": "1749542999",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiucristea",
+                    "email": "clau.cristea@gmail.com"
+                }
+            ],
+            "description": "Track usages of a certain entity type by a source entity",
+            "homepage": "https://www.drupal.org/project/track_usage",
+            "support": {
+                "source": "https://git.drupalcode.org/project/track_usage",
+                "issues": "https://www.drupal.org/project/issues/track_usage"
+            }
+        },
+        {
             "name": "drupal/twig_field_value",
             "version": "2.0.5",
             "source": {
@@ -13140,6 +13252,84 @@
             "time": "2023-01-11T10:29:47+00:00"
         },
         {
+            "name": "openeuropa/oe_authentication",
+            "version": "1.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/oe_authentication.git",
+                "reference": "40a3cebefa72297e445a683ab50bb3f6b9c30337"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/oe_authentication/zipball/40a3cebefa72297e445a683ab50bb3f6b9c30337",
+                "reference": "40a3cebefa72297e445a683ab50bb3f6b9c30337",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/cas": "^3.0",
+                "drupal/core": "^10.3 || ^11.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "composer/installers": "^1.11",
+                "drupal/cas_mock_server": "^2.0.1",
+                "drupal/core-composer-scaffold": "^10.3 || ^11.0",
+                "drupal/drupal-extension": "^5.0",
+                "drush/drush": "^12 || ^13",
+                "mikey179/vfsstream": "^1.6.10",
+                "nikic/php-parser": "^4",
+                "openeuropa/behat-transformation-context": "^0.2",
+                "openeuropa/code-review-drupal": "^1.0.0-alpha",
+                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
+                "phpspec/prophecy-phpunit": "^2",
+                "symfony/phpunit-bridge": "^6.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "_readme": [
+                    "Explicit minimum version requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits.",
+                    "Explicit requirement of mikey179/vfsstream to remove when drupal/core-dev is reinstated.",
+                    "Explicit requirement of nikic/php-parser ^4 as later versions are not compatible with grumphp @see https://github.com/phpro/grumphp/issues/1119"
+                ],
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "./build"
+                    }
+                },
+                "enable-patching": true,
+                "installer-paths": {
+                    "build/core": [
+                        "type:drupal-core"
+                    ],
+                    "build/themes/contrib/{$name}": [
+                        "type:drupal-theme"
+                    ],
+                    "build/modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ],
+                    "build/profiles/contrib/{$name}": [
+                        "type:drupal-profile"
+                    ]
+                },
+                "composer-exit-on-patch-failure": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\oe_authentication\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "EUPL-1.2"
+            ],
+            "description": "Authentication against the OpenEuropa Authentication service.",
+            "support": {
+                "issues": "https://github.com/openeuropa/oe_authentication/issues",
+                "source": "https://github.com/openeuropa/oe_authentication/tree/1.20.0"
+            },
+            "time": "2025-04-09T15:32:03+00:00"
+        },
+        {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "1.22.0",
             "source": {
@@ -13298,20 +13488,20 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.38.0",
+            "version": "1.40.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "979433c9fc605335a9d687bd5a61c197e254618c"
+                "reference": "e83dbc7a4933f936367f1912d7a9067bab51ec4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/979433c9fc605335a9d687bd5a61c197e254618c",
-                "reference": "979433c9fc605335a9d687bd5a61c197e254618c",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/e83dbc7a4933f936367f1912d7a9067bab51ec4a",
+                "reference": "e83dbc7a4933f936367f1912d7a9067bab51ec4a",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "^10",
+                "drupal/core": "^10 || ^11",
                 "ext-json": "*",
                 "php": ">=8.1"
             },
@@ -13321,31 +13511,23 @@
             "require-dev": {
                 "composer/installers": "~1.5",
                 "drupal/captcha": "^1.10 || ^2.0",
-                "drupal/core-composer-scaffold": "^10",
+                "drupal/core-composer-scaffold": "^10 || ^11",
+                "drupal/core-dev": "^10 || ^11",
                 "drupal/drupal-extension": "^5.0",
                 "drupal/geocoder": "^4.0",
                 "drupal/geofield": "^1.0",
                 "drupal/json_field": "~1.1",
-                "drush/drush": "^12",
-                "mikey179/vfsstream": "^1.6",
-                "nikic/php-parser": "^4.18",
+                "drush/drush": "^12 || ^13",
                 "openeuropa/behat-transformation-context": "^0.2",
                 "openeuropa/code-review-drupal": "^1.0.0-alpha",
-                "openeuropa/oe_media": "^1.23",
-                "openeuropa/oe_multilingual": "^1.13",
-                "openeuropa/rdf_skos": "^1.0.0-alpha10",
+                "openeuropa/oe_media": "dev-master",
+                "openeuropa/oe_multilingual": "^1.20",
+                "openeuropa/rdf_skos": "^1.2",
                 "openeuropa/task-runner-drupal-project-symlink": "^1.0",
-                "openeuropa/webtools-geocoding-provider": "^0.3",
-                "phpspec/prophecy-phpunit": "^2",
-                "symfony/phpunit-bridge": "^6.2"
+                "openeuropa/webtools-geocoding-provider": "^0.3"
             },
             "type": "drupal-module",
             "extra": {
-                "_readme": [
-                    "Explicit requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits.",
-                    "Explicit requirement of mikey179/vfsstream to remove when drupal/core-dev is reinstated.",
-                    "Explicit requirement of nikic/php-parser as ^5.0 generates GrumPHP Parser issues."
-                ],
                 "drupal-scaffold": {
                     "locations": {
                         "web-root": "./build"
@@ -13380,9 +13562,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.38.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.40.0"
             },
-            "time": "2025-03-07T11:12:57+00:00"
+            "time": "2025-05-21T15:19:02+00:00"
         },
         {
             "name": "pear/archive_tar",
