@@ -20,6 +20,10 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
+  // Add extra suggestion for field elements.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
@@ -113,6 +117,17 @@ function ventuno_preprocess_field(array &$variables): void {
       $parts = explode(':', $item['content']['#title']);
       $title = empty($parts[1]) ? $item['content']['#title'] : trim($parts[1]);
       $variables['items'][$key]['content']['#title'] = $title;
+    }
+  }
+
+  // @todo Remove this when working on https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9873
+  if (
+    $variables['element']['#view_mode'] === 'confirmation' &&
+    $variables['element']['#field_name'] === 'documentation'
+  ) {
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      $variables['items'][$key]['content']['#attributes'] += ['target' => '_blank'];
     }
   }
 }
