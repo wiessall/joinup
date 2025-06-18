@@ -61,10 +61,6 @@ class StaticFile extends PluginBase implements ServiceMockPluginInterface {
       'HEAD' => 200,
       'GET' => 200,
     ],
-    'https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2-updated.jpg' => [
-      'HEAD' => 200,
-      'GET' => 200,
-    ],
     'https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot1.jpg' => [
       'HEAD' => 200,
       'GET' => 200,

@@ -2,7 +2,7 @@
 Feature: Contact form for solution
   User can use contact form.
 
-  @javascript @email @uploadFiles:logo.png @loggedErrors
+  @javascript @email @loggedErrors
   Scenario: User can use "Contact us" form
     Given contact_information content:
       | name         | email                    | website url            | nid  |
