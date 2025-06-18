@@ -6,6 +6,7 @@ namespace Drupal\joinup_solution\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -70,7 +71,11 @@ class SolutionController extends ControllerBase {
     }
 
     $solution = $this->createNewSolution($node);
-    return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)));
+    return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)))
+      ->addCacheableDependency($solution)
+      ->addCacheableDependency($node)
+      ->cachePerPermissions()
+      ->addCacheTags(Cache::buildTags('workflow', $node->getCacheTags()));
   }
 
   /**
