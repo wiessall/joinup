@@ -30,6 +30,7 @@ Feature: Solution editing.
     And I go to the homepage of the "Collection example" collection
     And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
+    # Tab "Solution information".
     When I fill in "Title" with "Solution A"
     And I fill in "Abstract" with "Abstract of A"
     And I enter "First letter" in the "Description" wysiwyg editor
@@ -37,6 +38,7 @@ Feature: Solution editing.
     And I select "Complete Solution" from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
+    # Tab "Contact details".
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -48,12 +50,32 @@ Feature: Solution editing.
     And I fill in "Name" with "Yancy Contact"
     And I fill in "E-mail address" with "yancyb@example.com"
     And I press "Create contact information"
+    # Tab "Additional information".
     And I click "Additional information"
     And I select "Logging Service" options from "Solution type"
+    # Check Confirmation.
     And I press "Continue"
+    Then I see the texts in the correct order:
+      | Solution information                       |
+      | Title: Solution A                          |
+      | Abstract: Abstract of A                    |
+      | Description: First letter                  |
+      | Solution classification: Complete Solution |
+      | Domain: Defense                            |
+      | Topic: Demography                          |
+      | Language availability: Bulgarian           |
+      | Contact details                            |
+      | Owner                                      |
+      | Yancy owner                                |
+      | Type: Company                              |
+      | Country: Belgium                           |
+      | Contact information                        |
+      | Yancy Contact                              |
+      | Additional information                     |
+      | Status: Completed                          |
+      | Solution type: Logging Service             |
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
-    # Then print last response
     Then I should see the heading "Solution A"
 
     When I open the header local tasks menu
