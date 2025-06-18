@@ -9,7 +9,6 @@ Feature: Collections/Solutions settings
       | name       | owner type |
       | Jonny inc. | Company    |
 
-  @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     And collection content:
       | title             | access url        | closed | creation date    | content_creation         | group_moderation |

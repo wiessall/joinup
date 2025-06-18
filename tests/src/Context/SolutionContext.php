@@ -16,7 +16,6 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -42,7 +41,6 @@ class SolutionContext extends RawDrupalContext {
   use OgTrait;
   use TestingEntitiesTrait;
   use SearchTrait;
-  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;

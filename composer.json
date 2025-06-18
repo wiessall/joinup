@@ -55,6 +55,7 @@
         "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
+        "drupal/file_visibility": "^1.0",
         "drupal/flag": "^4.0@beta",
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
@@ -142,6 +143,7 @@
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
+        "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.40",
@@ -482,7 +484,7 @@
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",

@@ -9,6 +9,7 @@ testing:
     - filecache
     - http_request_mock
     - joinup_cas_mock_server
+    - oe_authentication_eulogin_mock
     - joinup_test
     # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15, in ISAICP-8337.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8337
