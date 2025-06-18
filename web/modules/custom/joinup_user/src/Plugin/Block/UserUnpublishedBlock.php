@@ -185,7 +185,7 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
     // Only allow access if the user is viewing their own profile.
     if ($user = $this->currentRouteMatch->getParameter('user')) {
       if ($user instanceof UserInterface && $user->id() === $this->currentUser->id()) {
-        return parent::blockAccess($account);
+        return parent::blockAccess($account)->cachePerUser();
       }
     }
     return AccessResult::forbidden();
