@@ -84,7 +84,7 @@ class TagifyContext extends RawDrupalContext {
     $currentValue = $currentValueRaw
       ? json_decode($currentValueRaw, TRUE)
       : [];
-    $field->setValue(json_encode($currentValue + $this->prepareTagArray($tags)));
+    $field->setValue(json_encode(array_merge($currentValue, $this->prepareTagArray($tags))));
   }
 
   /**
