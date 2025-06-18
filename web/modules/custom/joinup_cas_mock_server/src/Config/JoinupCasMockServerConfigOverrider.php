@@ -29,15 +29,14 @@ readonly class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverri
         'login_form' => [
           'title' => 'Sign in to continue',
           'email' => 'E-mail address',
+          'submit' => 'Log in',
         ],
       ],
       // The Joinup EU Login module customizes the validation path of the CAS
       // ticket validation service. Restore it to the value that corresponds to
       // the CAS 3.0 specification which is implemented by the CAS mock server.
-      'joinup_eulogin.settings' => [
-        'ticket_validation' => [
-          'path' => 'p3/serviceValidate',
-        ],
+      'oe_authentication.settings' => [
+        'validation_path' => 'p3/serviceValidate',
       ],
     ];
   }
@@ -61,7 +60,7 @@ readonly class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverri
    */
   public function getCacheableMetadata($name) {
     $metadata = new CacheableMetadata();
-    if (in_array($name, ['cas_mock_server.settings', 'joinup_eulogin.settings'])) {
+    if (in_array($name, ['cas_mock_server.settings', 'oe_authentication.settings'])) {
       $metadata->addCacheableDependency($this->configFactory->get($name));
     }
     return $metadata;

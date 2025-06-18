@@ -172,6 +172,7 @@ default:
         'manage solutions': '.view-id-manage_collection_solutions.view-display-id-manage_solutions table'
         'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
         'OSS catalogue list': '.oss-catalogue-list table'
+        'Users': 'table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~

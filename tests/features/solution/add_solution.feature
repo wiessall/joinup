@@ -51,7 +51,6 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given collection content:
       | title             | logo     |
