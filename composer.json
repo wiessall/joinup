@@ -481,7 +481,8 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch"
             },
             "drupal/tagify": {
-                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff"
+                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
+                "EntityAutocompleteTagify returns wrong value so Drupal tries to create entity without label @see https://drupal.org/i/3530799": "resources/patch/php/drupal/tagify/3530799-mr153-commit-1ff979ac70.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
