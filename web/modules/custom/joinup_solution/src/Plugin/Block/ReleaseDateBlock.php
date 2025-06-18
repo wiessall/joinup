@@ -101,7 +101,9 @@ class ReleaseDateBlock extends BlockBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIf((bool) $this->getLatestRelease());
+    return AccessResult::allowedIf((bool) $this->getLatestRelease())
+      ->addCacheContexts(['og_group_context'])
+      ->addCacheTags(['node_list:solution', 'node_list:release']);
   }
 
 }

@@ -66,6 +66,7 @@ readonly class JoinupReplicatePermission implements AccessInterface {
       $ogPermissionAccessResult = AccessResult::allowedIf($membership->hasPermission($permission));
       return $accessResult->orIf($ogPermissionAccessResult);
     }
+    $accessResult->addCacheContexts(['route']);
 
     return $accessResult;
   }
