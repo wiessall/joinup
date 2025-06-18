@@ -513,6 +513,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function visitCanonicalPage(string $title, string $bundle): void {
     /** @var \Drupal\node\Entity\Node $node */
+    $bundle = $this->translateBundle($bundle);
     $node = $this->getEntityByLabel('node', $title, $bundle);
     $this->visitPath($node->toUrl()->toString());
   }
