@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_eulogin\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
-use Drupal\joinup_eulogin\Controller\UserRegisterRedirectController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -25,9 +24,7 @@ class JoinupEuLoginRouteSubscriber extends RouteSubscriberBase {
 
     // User registration should redirect to EU Login register.
     if ($route = $collection->get('user.register')) {
-      $route
-        ->setDefaults(['_controller' => UserRegisterRedirectController::class . '::redirectUserRegister'])
-        ->setRequirements(['_user_is_logged_in' => 'FALSE']);
+      $route->setRequirements(['_user_is_logged_in' => 'FALSE']);
     }
 
     // Password reset should not be available anymore. Note that we cannot just

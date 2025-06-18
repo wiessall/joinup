@@ -27,7 +27,6 @@ Feature:
       | no         | registered users         |
       | no         | facilitators and authors |
 
-  @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given owner content:
       | name      | owner type |
