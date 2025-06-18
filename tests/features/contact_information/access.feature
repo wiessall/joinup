@@ -10,7 +10,7 @@ Feature: Contact information access
       | Phil Coulson | phil.coulson@shield.gov | http://shield.gov |
 
     When I am an anonymous user
-    When I go to the "Phil Coulson" contact_information
+    When I go to the "Phil Coulson" "contact information"
     Then I should see the heading "Sign in to continue"
 
   Scenario: Facilitator can edit contact information
