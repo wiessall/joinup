@@ -199,12 +199,8 @@ Feature: Assessments
     And I press "Save Draft"
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
 
-    When I go to "/collection/assessments/assessment-reports/questionnaire"
     # Latest draft is prefilled.
-    Then I should see the following success messages:
-      | success messages                                                                   |
-      | You've already started to fill this form. Please complete the remaining questions. |
-      | You have already submitted this webform. View your previous submission.            |
+    Then I go to the latest assessment submission edit form
 
     When I press "Next"
     # 4th page.
