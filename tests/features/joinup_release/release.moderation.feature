@@ -90,7 +90,7 @@ Feature: Asset release moderation
     When I fill in "Name" with "Release"
     And I press "Request changes"
     # Motivation required.
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I don't like it"
     And I fill in "Authored on" with the date "2014-08-30"
     And I fill in "Authored on" with the time "23:59:00"

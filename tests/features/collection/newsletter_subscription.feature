@@ -54,7 +54,7 @@ Feature: Subscribing to collection newsletters
     When I click "Edit" in the "Entity actions" region
     And I check "Enable newsletter subscriptions"
     And I press "Publish"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                                     |
       | Universe acronym field is required when newsletter subscriptions are enabled.      |
       | Newsletter service ID field is required when newsletter subscriptions are enabled. |
