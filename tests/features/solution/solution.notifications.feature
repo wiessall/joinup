@@ -33,7 +33,7 @@ Feature: Solution notifications
     And I press "Continue"
     And I press "Propose"
     # Motivation required.
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: Changes have been proposed for your solution" contains the following lines of text:
@@ -64,7 +64,7 @@ Feature: Solution notifications
     And I press "Continue"
     And I press "Request changes"
     # Motivation required.
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you change this?"
     And I press "Request changes"
     Then the following email should have been sent:

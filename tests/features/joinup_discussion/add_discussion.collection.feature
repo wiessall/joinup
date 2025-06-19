@@ -71,7 +71,7 @@ Feature: Discussions added to collections
       | Content          | This is going to be an amazing discussion. |
       | File description | The content of this file is mind blowing   |
     And I press "Publish"
-    Then I should see the error message "Topic field is required."
+    Then I should see the inline form error message "Topic field is required."
 
     And I select "EU and European Policies" from "Topic"
     And I press "Publish"

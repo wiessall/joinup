@@ -100,7 +100,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
 
     When I go to the edit form of the "CCN pre request deletion" news
     And I press "Request deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I just want to delete it."
     And I press "Request deletion"
     Then the email sent to "CC owner" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
@@ -125,7 +125,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CCN pre request changes" news
     And I press "Request changes"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
@@ -139,7 +139,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CCN pre report" news
     And I press "Report"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
@@ -157,7 +157,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CCN pre reject deletion" news
     And I press "Reject deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I still like it"
     And I press "Reject deletion"
     Then the following email should have been sent:
