@@ -17,7 +17,7 @@ Feature: Validate an ADMS-AP file through the UI
     # warnings.
     Given there are no preexisting log records on the site
     And I press "Upload"
-    Then I should see the error message "Please upload a valid RDF file."
+    Then I should see the inline form error message "Please upload a valid RDF file."
     And the site should not have any log records
 
     When I attach the file "invalid_adms.rdf" to "File"

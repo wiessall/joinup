@@ -9,7 +9,7 @@ Feature: Validation of owners created through UI
     And I go to the propose collection form
     When I press "Add new" at the "Owner" field
     And I press "Create owner"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages             |
       | Name field is required.    |
       | Type field is required.    |
