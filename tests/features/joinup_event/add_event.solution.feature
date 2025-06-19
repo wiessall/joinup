@@ -77,7 +77,7 @@ Feature: "Add event" visibility options.
       | Topic field is required.                                       |
 
     When I fill the end time of the Date widget with "23:59:00"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "An amazing event"
     And I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'

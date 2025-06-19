@@ -58,7 +58,7 @@ Feature: Proposing a collection
       | E-mail                | contact_person@example.com                                                                           |
       | Search keywords       | government                                                                                         |
     Then I should see the text "A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content."
-    When I select "HR" from "Topic"
+    When I select "Demography" options from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
@@ -83,7 +83,7 @@ Feature: Proposing a collection
     When I fill in the following:
       | Title    | About this group          |
       | Abstract | Abstract about this group |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
 
@@ -121,7 +121,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Just a proposal"
     And I fill in "Abstract" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
@@ -178,7 +178,7 @@ Feature: Proposing a collection
     # be shown to the user.
     Then the "Main fields" accordion section should be active
     # Fill the required fields.
-    When I select "HR" from "Topic"
+    When I select "Demography" options from "Topic"
     And I fill in the following:
       | Name   | Contact person             |
       | E-mail | contact_person@example.com |
@@ -197,7 +197,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Some email validation"
     And I fill in "Abstract" with "Some email validation"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation valid"
     And I press "Add owner"
@@ -221,9 +221,9 @@ Feature: Proposing a collection
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
-    And I select "Bulgarian" from "Language availability"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -285,7 +285,7 @@ Feature: Proposing a collection
     When I fill in "Title" with "SVG API example"
     And I fill in "Abstract" with "SVG API example"
     And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Svinish"
     And I press "Add owner"
@@ -293,7 +293,7 @@ Feature: Proposing a collection
       | E-mail | basic.svg.api@example.com |
       | Name   | BasicSvgAPI Contact       |
     And I press "Create contact information"
-    When I select "Data gathering and processing" from "Topic"
+    When I select "Data gathering and processing" options from "Topic"
 
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.

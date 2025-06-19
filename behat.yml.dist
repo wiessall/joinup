@@ -87,6 +87,7 @@
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
+  - Drupal\joinup\Context\TagifyContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WhatsNewContext
