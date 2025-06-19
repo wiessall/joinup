@@ -239,7 +239,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -268,7 +268,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -282,7 +282,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -357,7 +357,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -379,7 +379,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -393,7 +393,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
