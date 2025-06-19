@@ -101,8 +101,10 @@ Feature: Pool paragraph tests.
     When the following fields should be present "Question,Choice,Poll Duration,Allow cancel votes,Show number of results,Active"
 
     Then I press "Save" in the "Modal buttons" region
-    When I should see the error message "Question field is required."
-    And I should see the error message "This value should not be null."
+    And I should see the following inline form error messages:
+      | Error messages                 |
+      | Question field is required.    |
+      | This value should not be null. |
 
     Then I fill in "Question" with "What do you find scariest?"
     And I fill in "Choice" with "Heights"

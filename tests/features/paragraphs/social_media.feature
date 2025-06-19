@@ -42,7 +42,7 @@ Feature:
       | field_paragraphs_social_media:value    | <value>    |
 
     When I am an anonymous user
-    And I visit the "Social media" custom_page
+    And I visit the "Social media" "custom page"
     Then I should see the link "<name>"
 
     Examples:

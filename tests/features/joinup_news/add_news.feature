@@ -60,7 +60,7 @@ Feature: Creation of news through the UI.
     # validation.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3680
     And I press "Publish"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                                       |
       | Short title cannot be longer than 66 characters but is currently 69 characters long. |
       | Topic field is required.                                                             |
@@ -82,7 +82,7 @@ Feature: Creation of news through the UI.
     When I click "Edit" in the "Entity actions" region
     And I fill in "Referenced solution" with values "Dig do's and don'ts, Dig do's and don'ts"
     And I press "Update"
-    Then I should see the error message "The value Dig do's and don'ts is already selected for field Referenced solution."
+    Then I should see the inline form error message "The value Dig do's and don'ts is already selected for field Referenced solution."
 
     # Add another solution in the field.
     When I fill in "Referenced solution" with values "Dig do's and don'ts, Anvil test routines"

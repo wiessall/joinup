@@ -39,7 +39,7 @@ Feature: User profile
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
     And I press "Save"
-    Then I should see the error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
+    Then I should see the inline form error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
 
     When I fill in "Business title" with "Italian Renaissance polymath"
     And I press "Save"

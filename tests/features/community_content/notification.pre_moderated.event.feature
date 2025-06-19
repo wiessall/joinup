@@ -86,7 +86,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
 
     When I go to the edit form of the "CC notify pre request deletion" event
     And I press "Request deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I just want to delete it."
     And I press "Request deletion"
     Then the following email should have been sent:
@@ -112,7 +112,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre request changes" event
     And I press "Request changes"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the following email should have been sent:
@@ -127,7 +127,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre report" event
     And I press "Report"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the following email should have been sent:
@@ -146,7 +146,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre reject deletion" event
     And I press "Reject deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I still like it"
     And I press "Reject deletion"
     Then the following email should have been sent:
