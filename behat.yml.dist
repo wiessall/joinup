@@ -221,7 +221,6 @@ default:
         Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
-        SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
