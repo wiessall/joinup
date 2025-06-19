@@ -63,7 +63,7 @@ Feature: "Add discussion" visibility options.
       | Content          | This is going to be an amazing discussion. |
       | File description | A picture of a flying girlfriend           |
     And I press "Publish"
-    Then I should see the error message "Topic field is required."
+    Then I should see the inline form error message "Topic field is required."
 
     And I select "EU and European Policies" options from "Topic"
     And I press "Publish"

@@ -472,3 +472,12 @@ function joinup_private_message_block_exists_between_users(int $user1, int $user
 
   return !empty($ban_ids);
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_private_message_form_private_message_form_alter(array &$form): void {
+  // Suppress Inline Form Error on this form since the validation error added by
+  // Private Message Flood is not displayed properly.
+  $form['#disable_inline_form_errors'] = TRUE;
+}

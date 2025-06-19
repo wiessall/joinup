@@ -87,6 +87,7 @@ module:
   image_library_widget: 0
   imagecache_external: 0
   inline_entity_form: 0
+  inline_form_errors: 0
   interoperable_europe: 0
   isa2_analytics: 0
   joinup_assessment: 0

@@ -343,7 +343,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Glossary term name | XFiles           |
       | Definition         | Other definition |
     When I press "Save"
-    Then I should see the error message "The Glossary term glossary term name value (XFiles) is already taken by XFiles."
+    Then I should see the inline form error message "The Glossary term glossary term name value (XFiles) is already taken by XFiles."
 
     # It should be possible to have the same term name in different collections.
     When I go to the "Other collection" collection
@@ -365,7 +365,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     # Hard to fill a multi-value field, so we'll pre-create it with duplicates.
     When I go to the edit form of the "Duplicate" glossary
     And I press "Save"
-    Then I should see the error message "The 'DuPe' synonym is duplicated. Keep only one entry."
+    Then I should see the inline form error message "The 'DuPe' synonym is duplicated. Keep only one entry."
 
     When I go to the "A World of Things" collection
     And I click "Add glossary term" in the plus button menu
@@ -375,7 +375,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Synonym            | soMe |
       | Definition         | def  |
     And I press "Save"
-    Then I should see the error message "A synonym cannot be the same as the glossary term name (Some)."
+    Then I should see the inline form error message "A synonym cannot be the same as the glossary term name (Some)."
 
     And I fill in the following:
       # Test also if the match is case insensitive.
@@ -383,7 +383,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Synonym            | alPHABET |
       | Definition         | def      |
     And I press "Save"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                                                                               |
       | This glossary term (xyz) name is already used as synonym of Alphabet. You should remove that synonym before using this name. |
       | Some synonyms are already used in other glossary terms either as term name or as term synonyms: alPHABET in Alphabet         |
@@ -394,14 +394,14 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Synonym            | whatEVER |
       | Definition         | def      |
     And I press "Save"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                                                                               |
       | This glossary term (xyz) name is already used as synonym of Alphabet. You should remove that synonym before using this name. |
       | Some synonyms are already used in other glossary terms either as term name or as term synonyms: whatEVER in Alphabet.        |
 
     When I fill in "Synonym" with "colrs"
     And I press "Save"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                                                                                                               |
       | This glossary term (xyz) name is already used as synonym of Alphabet. You should remove that synonym before using this name. |
       | Some synonyms are already used in other glossary terms either as term name or as term synonyms: colrs in Colors.             |
