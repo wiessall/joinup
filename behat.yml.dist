@@ -59,6 +59,7 @@
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupLogContext
+  - Drupal\joinup\Context\JoinupMessageContext
   - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext

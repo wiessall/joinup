@@ -62,9 +62,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I fill in "Subject" with "Reminder to remove content"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
     Then I press "Submit"
-    And I should see the following error messages:
-      | error messages              |
-      | Page URL field is required. |
+    And I should see the inline form error message "Page URL field is required."
 
     And I fill in "Page URL" with "/collection/rumba/news/tumba-spatial"
     And I wait for AJAX to finish
