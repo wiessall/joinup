@@ -266,7 +266,6 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
   $membership = $parent->getMembership($account->id());
   if (empty($membership)) {
     return AccessResult::neutral()
-      ->addCacheableDependency($membership)
       ->addCacheableDependency($account)
       ->addCacheableDependency($node);
   }
