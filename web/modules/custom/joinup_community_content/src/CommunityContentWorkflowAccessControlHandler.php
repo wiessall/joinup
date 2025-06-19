@@ -76,12 +76,15 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
         // Commenting on content of an archived group is not allowed.
         if ($parent_state === 'archived' || $entity_state === 'archived') {
-          return AccessResult::forbidden();
+          return AccessResult::forbidden()
+            ->addCacheableDependency($parent);
         }
 
         $membership = $this->membershipManager->getMembership($parent, $account->id());
         if ($membership instanceof OgMembership) {
-          return AccessResult::allowedIf($membership->hasPermission($operation));
+          return AccessResult::allowedIf($membership->hasPermission($operation))
+            ->addCacheableDependency($membership)
+            ->cachePerUser();
         }
     }
 
