@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fe2be34356c690eabe5c2bcf4fb1105",
+    "content-hash": "ee1ecee1acf83782eda1cf1452e62d8d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8899,6 +8899,75 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/simple_block",
                 "issues": "https://www.drupal.org/project/issues/simple_block"
+            }
+        },
+        {
+            "name": "drupal/simple_multistep",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/simple_multistep.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/simple_multistep-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "14aaf7a9f8a75bc1796b51848dc474399d592936"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/field_group": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1750237803",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vitaliy Bogomazyuk (VitaliyB98)",
+                    "homepage": "https://www.drupal.org/u/vitaliyb98",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Andrei Vesterli (andrei.vesterli)",
+                    "homepage": "https://www.drupal.org/u/andreivesterli",
+                    "email": "vesterli.andrei@gmail.com",
+                    "role": "Co-maintainer"
+                },
+                {
+                    "name": "dan.golovatic",
+                    "homepage": "https://www.drupal.org/user/3668783"
+                },
+                {
+                    "name": "dmezquia",
+                    "homepage": "https://www.drupal.org/user/3334752"
+                },
+                {
+                    "name": "drakemazzy",
+                    "homepage": "https://www.drupal.org/user/44860"
+                },
+                {
+                    "name": "vitaliyb98",
+                    "homepage": "https://www.drupal.org/user/3514011"
+                }
+            ],
+            "description": "Converts an existing entity form into a multi-step form.",
+            "homepage": "https://drupal.org/project/simple_multistep",
+            "support": {
+                "source": "https://git.drupalcode.org/project/simple_multistep",
+                "issues": "https://drupal.org/project/issues/simple_multistep"
             }
         },
         {
