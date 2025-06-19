@@ -40,6 +40,25 @@ dependencies:
     - text
 third_party_settings:
   field_group:
+    group_main:
+      children:
+        - group_solution_tabs
+      label: Main
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: false
+        step_description: ''
+        back_button_show: false
+        back_button_text: ''
+        next_button_text: Continue
+        step_help: ''
     group_solution_information:
       children:
         - title
@@ -158,25 +177,6 @@ third_party_settings:
         label_as_html: false
         direction: horizontal
         width_breakpoint: 640
-    group_main:
-      children:
-        - group_solution_tabs
-      label: Main
-      region: content
-      parent_name: ''
-      weight: 0
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: false
-        step_description: ''
-        back_button_show: false
-        back_button_text: ''
-        next_button_text: Continue
-        step_help: ''
 id: node.solution.default
 targetEntityType: node
 bundle: solution
