@@ -32,10 +32,11 @@ Feature:
     And I should see "Recommendation"
 
     When I press "Save"
-    Then I should see the following error messages:
-      | error messages                                                                                    |
-      | Type of solution field is required.                                                               |
-      | An EIF perspective cannot be created without any information. Please, fill in at least one field. |
+    Then I should see the following inline form error messages:
+      | error messages                      |
+      | Type of solution field is required. |
+      | Recommendation field is required.   |
+    And I should see the error message "An EIF perspective cannot be created without any information. Please, fill in at least one field."
 
     Given I fill in "Description" with "It will be an amazing principle."
     # Solution type.

@@ -57,7 +57,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CCN post request changes" news
     And I press "Request changes"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:
@@ -67,7 +67,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CCN post report" news
     And I press "Report"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Interoperable Europe Portal: Content has been updated" contains the following lines of text:

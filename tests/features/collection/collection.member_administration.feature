@@ -281,12 +281,12 @@ Feature: Collection membership administration
     # present in the system.
     When I fill in "Name" with "donald@example.com"
     And I press "Add"
-    Then I should see the error message "Please select an existing user."
+    Then I should see the inline form error message "Please select an existing user."
     # Verify that an error message is shown when trying to add the same
     # user twice.
     When I fill uid of "Gregory House" in "Name"
     And I press "Add"
-    Then I should see the error message "The selected user is already added to the list."
+    Then I should see the inline form error message "The selected user is already added to the list."
     # Add some other users.
     When I fill uid of "Cam Bridge" in "Name"
     And I press "Add"
@@ -455,7 +455,7 @@ Feature: Collection membership administration
     And I visit the accept invitation form for the "Medical diagnosis" collection group
     Then I should see the link "Medical diagnosis" in the Header region
     When I press "Accept"
-    Then I should see the error message "You must agree to the Code of Conduct."
+    Then I should see the inline form error message "You must agree to the Code of Conduct."
     When I check the box "I have read and agree to the Code of Conduct."
     And I press "Accept"
     Then I should see the text "You have been promoted to member."

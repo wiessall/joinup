@@ -39,7 +39,7 @@ Feature: Proposing a collection
 
     # Check that validations errors are shown for required fields.
     When I press "Propose"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                    |
       | Title field is required.          |
       | Description field is required.    |
@@ -101,7 +101,7 @@ Feature: Proposing a collection
       | Name        | Some contact                                                      |
       | E-mail      | some.contact@example.com                                          |
     And I press "Save as draft"
-    Then I should see the error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
+    Then I should see the inline form error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
 
   @javascript @generateMedia @generateMediaTypes:collection_logo
   Scenario: Propose collection form fields should be organized in tabs.
@@ -298,9 +298,9 @@ Feature: Proposing a collection
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.
     And I attach the file "error.svg" to "Logo"
-    Then I should see the error message "Invalid or unsafe SVG file."
+    Then I should see the inline form error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
-    Then I should not see the error message "Invalid or unsafe SVG file."
+    Then I should not see the inline form error message "Invalid or unsafe SVG file."
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection

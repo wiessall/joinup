@@ -15,7 +15,7 @@ Feature: Add a licence through the UI
     And the "Licence legal type" field should contain the "Can, Must, Cannot, Compatible, Law, Support" option groups
 
     When I press "Save"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                 |
       | Title field is required.       |
       | Description field is required. |
