@@ -33,7 +33,7 @@ Feature: Landing custom page.
 
     #  Page without group should not generate any errors.
     Given I am an anonymous user
-    When I visit the "Twelve Tables" custom_page
+    When I visit the "Twelve Tables" "custom page"
     Then I should see the heading "Twelve Tables"
 
   @javascript
@@ -47,7 +47,7 @@ Feature: Landing custom page.
     And I fill in "<path>" for "URL alias"
 
     And I press "Publish"
-    Then I should see the error message "<path> can not be used for URL alias field"
+    Then I should see the inline form error message "<path> can not be used for URL alias field"
 
     Examples:
       | path         |

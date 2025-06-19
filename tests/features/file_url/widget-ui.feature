@@ -63,7 +63,7 @@ Feature: User interface for the File URL field
     And I select the radio button "Remote file URL"
     And I fill in "field_file[0][file_url_remote]" with "foo"
     And I press "Add URL"
-    Then I should see the error message "The URL foo is not valid"
+    Then I should see the inline form error message "The URL foo is not valid"
     And I select the radio button "Upload file"
     And I attach the file "logo.png" to "files[field_file_0][]"
     And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."

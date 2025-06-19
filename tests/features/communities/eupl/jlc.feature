@@ -330,7 +330,7 @@ Feature:
     # Authenticated users should also be able to see the licence compatibility
     # checker and the compatibility documents.
     Given I am logged in as an "authenticated user"
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then I should see the heading "JLC"
     And the page should be cacheable
     When I reload the page
@@ -367,7 +367,7 @@ Feature:
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -384,7 +384,7 @@ Feature:
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the European Union Public Licence 1.2 (outbound licence)."
     And I should see the text "Freedom for using and re-distributing is a basic common characteristic of all open licences."
 
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "LGPL-2.1" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -395,7 +395,7 @@ Feature:
     And I should see the heading "Compatibility between the GNU Lesser General Public License 2.1 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
     And I should see the text "Freedom for using and re-distributing is a basic common characteristic of all open licences."
 
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -406,7 +406,7 @@ Feature:
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
     And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be published."
 
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -417,7 +417,7 @@ Feature:
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the CeCILL-C (outbound licence)."
     And I should see the text "You have to check if the text of EUPL-1.2 has expressly mentioned CECILL-C as compatible."
 
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "LGPL-2.1" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -428,7 +428,7 @@ Feature:
     And I should see the heading "Compatibility between the GNU Lesser General Public License 2.1 (inbound licence) and the CeCILL-C (outbound licence)."
     And I should see the text "LGPL-2.1 is not compatible with CECILL-C"
 
-    Given I visit the "JLC" custom_page
+    Given I visit the "JLC" "custom page"
     And I choose "CECILL-C" as the "Outbound" licence
     And I choose "LGPL-2.1" as the "Inbound" licence
     When I click "Check compatibility"
@@ -441,14 +441,14 @@ Feature:
     # forms in the licence compatibility overview. The licences are laid out as
     # thin strips which don't have enough room for contextual links.
     Given I am logged in as a moderator
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     And I should not see the link "Report abusive content"
     Then I should not see any contextual links in the "Content" region
 
     # Authenticated users should also be able to see the licence compatibility
     # checker and compatibility documents.
     Given I am logged in as an "authenticated user"
-    When I visit the "JLC" custom_page
+    When I visit the "JLC" "custom page"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled

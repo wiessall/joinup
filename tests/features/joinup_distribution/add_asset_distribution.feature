@@ -25,14 +25,15 @@ Feature: Add distribution through the UI
     Then I should see the link "Add distribution"
 
     When I click "Add distribution"
-    Then I should see the heading "Add Distribution"
+    Then I should see the heading "Solution random x name" in the "Header" region
+    And I should see the heading "Add Distribution"
     And the following fields should be present "Title, Description, Access URL, Licence, Format, Representation technique"
     But the following fields should not be present "Langcode, Translation"
     And the "Licence" field should contain the "WTFPL" options
     But the "Licence" field should not contain the "Deprecated licence" options
 
     When I press "Publish"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages             |
       | Title field is required.   |
       | Licence field is required. |
@@ -155,7 +156,7 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-    Then I should see the error message "A distribution with title MacOSX binary already exists in this release. Please choose a different title."
+    Then I should see the inline form error message "A distribution with title MacOSX binary already exists in this release. Please choose a different title."
 
     Given I am logged in as a facilitator of the "Solubility of gases" solution
     When I go to the homepage of the "1.0.0 Adolf Sieverts" release
@@ -174,7 +175,7 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "Windows - source"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-    Then I should see the error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
+    Then I should see the inline form error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
 
   Scenario: Licences are not shown in the solution header.
     Given licence content:

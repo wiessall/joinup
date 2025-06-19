@@ -53,7 +53,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify post request changes" discussion
     And I press "Request changes"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the following email should have been sent:
@@ -64,7 +64,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify post report" discussion
     And I press "Report"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the following email should have been sent:

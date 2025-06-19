@@ -59,6 +59,7 @@
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupLogContext
+  - Drupal\joinup\Context\JoinupMessageContext
   - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
@@ -221,7 +222,6 @@ default:
         Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
-        SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'

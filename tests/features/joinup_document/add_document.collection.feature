@@ -63,7 +63,7 @@ Feature: "Add document" visibility options.
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                 |
       | Topic field is required.       |
       | This value should not be null. |
