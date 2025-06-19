@@ -25,7 +25,8 @@ Feature: Add distribution through the UI
     Then I should see the link "Add distribution"
 
     When I click "Add distribution"
-    Then I should see the heading "Add Distribution"
+    Then I should see the heading "Solution random x name" in the "Header" region
+    And I should see the heading "Add Distribution"
     And the following fields should be present "Title, Description, Access URL, Licence, Format, Representation technique"
     But the following fields should not be present "Langcode, Translation"
     And the "Licence" field should contain the "WTFPL" options
