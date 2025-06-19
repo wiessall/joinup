@@ -45,7 +45,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
     And I select "Document" from "Type"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                    |
@@ -61,7 +61,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
     And I select "Document" from "Type"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                      |

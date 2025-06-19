@@ -1,4 +1,4 @@
-@api @group-clone
+@api @group-clone @javascript
 Feature: Test adding solutions with clone data.
   In order to manage solutions
   As a moderator
@@ -6,9 +6,9 @@ Feature: Test adding solutions with clone data.
 
   Scenario: Moderator can add a solution with the right language availabilities.
     Given I am logged in as a moderator
-    When I go to the homepage of the "Interoperable Europe" collection
+    When I go to the homepage of the "The portal" collection
     And I click "Add solution" in the plus button menu
-    Then the "Language availability" select should contain the following options:
+    Then the "Language availability" tagify autocomplete should contain the following options:
       | Bulgarian   |
       | Croatian    |
       | Czech       |

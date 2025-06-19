@@ -13,7 +13,7 @@ Feature: Subscribing to a collection after creating
       # Contact information data.
       | Name        | Larry Jaoe                                                                                             |
       | E-mail      | larry.jaoe@example.com                                                                                 |
-    When I select "EU and European Policies" from "Topic"
+    When I select "EU and European Policies" options from "Topic"
 
     # Click the button to create an organisation owner.
     And I press "Add existing" at the "Owner" field

@@ -76,7 +76,7 @@ Feature:
     When I fill in the following:
       | Title    | Latest content       |
       | Abstract | Lorem ipsum abstract |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -173,7 +173,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
     And I fill in "Abstract" with "Abstract chosen content"
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -327,7 +327,7 @@ Feature:
     When I fill in the following:
       | Title    | Collection content          |
       | Abstract | Abstract collection content |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -477,7 +477,7 @@ Feature:
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | A new movie is coming out. |
       | field_body:format | content_editor             |
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then I should see the text "Current wars"
 

@@ -56,7 +56,7 @@ Feature: Collections Overview
       # Contact information data.
       | Name        | Overviewer contact                  |
       | E-mail      | overviewer@example.com              |
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I attach the file "logo.png" to "Logo"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field

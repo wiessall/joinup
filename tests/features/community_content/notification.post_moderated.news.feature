@@ -38,7 +38,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | CCN create publish |
       | field_body:format | content_editor     |
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                        |

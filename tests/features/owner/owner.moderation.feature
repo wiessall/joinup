@@ -24,7 +24,7 @@ Feature: Owner moderation
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
     And I click the 'Categorisation' tab
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
 
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab

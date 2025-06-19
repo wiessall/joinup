@@ -37,6 +37,7 @@ dependencies:
     - inline_entity_form
     - joinup_core
     - joinup_workflow
+    - tagify
     - text
 third_party_settings:
   field_group:
@@ -231,10 +232,18 @@ content:
       add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
   domain:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 5
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   field_is_description:
     type: text_textarea
@@ -252,20 +261,32 @@ content:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 6
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   keywords:
-    type: entity_reference_autocomplete_tags
+    type: tagify_entity_reference_autocomplete_widget
     weight: 37
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   landing_page:
     type: link_legacy_multicardinality
@@ -276,10 +297,18 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   language:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 9
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   logo:
     type: image_library_widget
@@ -321,14 +350,18 @@ content:
     settings: {  }
     third_party_settings: {  }
   related_solutions:
-    type: entity_reference_autocomplete
+    type: tagify_entity_reference_autocomplete_widget
     weight: 38
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   short_id:
     type: string_textfield
@@ -339,20 +372,32 @@ content:
       placeholder: 'Minimum 4 characters required.'
     third_party_settings: {  }
   solution_type:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 41
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  spatial_coverage:
-    type: entity_reference_autocomplete
-    weight: 38
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
+    third_party_settings: {  }
+  spatial_coverage:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 37
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   tca:
     weight: 17
