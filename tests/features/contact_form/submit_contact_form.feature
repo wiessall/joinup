@@ -86,7 +86,7 @@ Feature: Submit the contact form
   Scenario: Check required fields
     When I am on the contact form page
     And I press "Submit"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                    |
       | E-mail address field is required. |
       | First name field is required.     |

@@ -11,7 +11,7 @@ Feature: Test adding solutions.
     And I click "Add solution" in the plus button menu
 
     And I press "Continue"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                             |
       | Title field is required.                   |
       | Abstract field is required.                |
@@ -31,7 +31,7 @@ Feature: Test adding solutions.
     And I click "Contact details"
     And I press "Add new owner"
     And I press "Continue"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                          |
       | Name field is required.                 |
       | Type field is required.                 |
@@ -49,9 +49,7 @@ Feature: Test adding solutions.
     Then I press "Create contact information"
     And I press "Continue"
     And I press "Propose"
-    Then I should see the following error messages:
-      | error messages                          |
-      | You must accept the Terms of Agreement. |
+    Then I should see the inline form error message "You must accept the Terms of Agreement."
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
@@ -211,7 +209,7 @@ Feature: Test adding solutions.
     And I click "Add solution" in the plus button menu
     And I fill in "Title" with "Climate change tracker"
     And I press "Continue"
-    Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
+    Then I should see the inline form error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
     # then this is allowed to be submitted but a warning should be shown to the
