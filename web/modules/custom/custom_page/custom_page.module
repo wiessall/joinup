@@ -294,7 +294,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
         'manage custom landing pages',
         'administer url aliases',
-      ], 'OR')->cachePerPermissions();
+      ], 'OR');
 
       // Check if we are in group context.
       $group = \Drupal::service('og.context')->getGroup();
