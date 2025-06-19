@@ -74,9 +74,9 @@ Feature: "Add event" visibility options.
     And I select "National" from "Scope"
     And  I additionally select "Regional" from "Scope"
     And I press "Save as draft"
-    Then I should see the following error messages:
+    Then I should see the error message "At least one location field should be filled in."
+    And I should see the following inline form error messages:
       | error messages                                           |
-      | At least one location field should be filled in.         |
       | Topic field is required.                                 |
       | The duration of the event cannot be longer than 2 weeks. |
 

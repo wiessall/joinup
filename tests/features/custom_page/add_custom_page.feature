@@ -87,7 +87,7 @@ Feature: "Add custom page" visibility options.
     And I should not see the button "Delete"
 
     And I press "Save as draft"
-    Then I should see the error message "Topic field is required."
+    Then I should see the inline form error message "Topic field is required."
 
     And I select "E-health,EU and European Policies" options from "Topic"
     And I press "Save as draft"
@@ -202,7 +202,7 @@ Feature: "Add custom page" visibility options.
       | Title    | Rubber boots          |
       | Abstract | Rubber boots abstract |
     And I press "Save"
-    Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
+    Then I should see the inline form error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
 
     # It should still be possible to create a custom page with the existing
     # title in a different group.

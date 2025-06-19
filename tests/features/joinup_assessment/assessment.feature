@@ -17,24 +17,24 @@ Feature: Assessments
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
-    Then I should see the error message "Type of public sector body field is required."
+    Then I should see the inline form error message "Type of public sector body field is required."
 
     When I select "Regional public sector body" from "Type of public sector body"
     And I press "Next"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                               |
       | Select your country field is required.       |
       | Name of your organisation field is required. |
 
     When I select "Luxembourg" from "Select your country"
-    Then I should see the error message "Name of your organisation field is required."
+    Then I should see the inline form error message "Name of your organisation field is required."
     And I press "Next"
 
     When I fill in "Name of your organisation" with "ACME"
 
     When I select "European Union agency" from "Type of public sector body"
     And I press "Next"
-    Then I should see the error message "Select your Agency field is required."
+    Then I should see the inline form error message "Select your Agency field is required."
 
     When I select "Eurojust" from "Select your Agency"
     And I press "Next"
@@ -43,7 +43,7 @@ Feature: Assessments
     When I check "Defense"
     And I fill in "Nr." with "-1"
     And I press "Next"
-    Then I should see the error message "Nr. must be higher than or equal to 1."
+    Then I should see the inline form error message "Nr. must be higher than or equal to 1."
     When I clear the field "Nr."
     And I press "Next"
 

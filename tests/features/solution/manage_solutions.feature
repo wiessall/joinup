@@ -55,7 +55,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     # Trying to move solutions to the same collection should result in an error.
     When I fill in "Select the destination collection" with "Source"
     And I press "Move solutions"
-    Then I should see the error message "The destination collection cannot be the same as the source collection."
+    Then I should see the inline form error message "The destination collection cannot be the same as the source collection."
 
     When I fill in "Select the destination collection" with "Destination"
     And I press "Move solutions"
