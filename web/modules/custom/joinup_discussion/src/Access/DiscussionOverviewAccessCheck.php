@@ -35,6 +35,7 @@ readonly class DiscussionOverviewAccessCheck implements AccessInterface {
     }
 
     return AccessResult::allowedIf($group->isPublished() && $this->groupInspector->groupHasDiscussions($group))
+      ->addCacheableDependency($group)
       ->addCacheTags(Cache::buildTags('og-group-content', $group->getCacheTags()))
       ->addCacheContexts(['og_group_context']);
   }
