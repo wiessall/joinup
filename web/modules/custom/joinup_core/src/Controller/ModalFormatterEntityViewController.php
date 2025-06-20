@@ -104,9 +104,7 @@ readonly class ModalFormatterEntityViewController implements ContainerInjectionI
       $accessResult = $entity->get($field)->access('view', NULL, TRUE);
     }
 
-    return $accessResult->addCacheableDependency($entity)
-      ->cachePerUser()
-      ->cachePerPermissions();
+    return $accessResult;
   }
 
   /**
