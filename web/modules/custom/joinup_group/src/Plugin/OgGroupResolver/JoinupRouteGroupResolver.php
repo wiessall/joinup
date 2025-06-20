@@ -38,6 +38,8 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
       '/node/{node}/reports/actions-log' => 'node',
       '/node/{node}/reports/actions-log/csv' => 'node',
       '/node/{node}/solution/add' => 'node',
+      '/node/{node}/release/add' => 'node',
+      '/node/{node}/distribution/add' => 'node',
     ];
   }
 
