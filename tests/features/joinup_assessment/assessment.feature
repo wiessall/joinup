@@ -215,10 +215,7 @@ Feature: Assessments
 
     Given I am logged in as "Notify moderator"
     And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
-    And the cache has been cleared
-    And I reload the page
     And I should see "Assessment Abbey Road"
-    And I take a screenshot
     When I select the radio button "Require updates"
     And I fill in "What updates are needed?" with "Please drastically reconsider this form. I mean it!"
     And I press "Submit"
