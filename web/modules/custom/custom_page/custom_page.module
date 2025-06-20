@@ -260,22 +260,20 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
   if (!$parent->access('view', $account)) {
     // Anonymous users do not have access to content of non published groups.
     return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id())
-      ->addCacheableDependency($account)
-      ->addCacheableDependency($node);
+      ->addCacheableDependency($node)
+      ->cachePerUser();
   }
   $membership = $parent->getMembership($account->id());
   if (empty($membership)) {
     return AccessResult::neutral()
-      ->addCacheableDependency($account)
-      ->addCacheableDependency($node);
+      ->cachePerUser();
   }
   if (!$node->isPublished() && $membership->hasPermission("view any unpublished content")) {
     return AccessResult::allowed()
       ->addCacheableDependency($membership)
       ->addCacheableDependency($node);
   }
-  return AccessResult::neutral()
-    ->addCacheableDependency($node);
+  return AccessResult::neutral();
 }
 
 /**
