@@ -53,7 +53,7 @@ class TagifyContext extends RawDrupalContext {
   protected function selectFromTagifyWithJs(string $tags, string $fieldName): void {
     $session = $this->getSession();
     $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
-    $locator = '.js-form-item-' . $fieldName . ' .tagify__input';
+    $locator = '.field--name-' . $fieldName . ' .tagify__input';
     $tagifyInput = $session->getPage()->find('css', $locator);
     if (!$tagifyInput) {
       throw new \Exception('Tagify input not found');

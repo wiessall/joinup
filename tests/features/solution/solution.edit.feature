@@ -43,8 +43,8 @@ Feature: Solution editing.
     # Create owner.
     And I press "Add new owner"
     And I fill in "Name" with "Yancy owner"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     # Create contact information.
     And I fill in "Name" with "Yancy Contact"
@@ -52,6 +52,7 @@ Feature: Solution editing.
     And I press "Create contact information"
     # Tab "Additional information".
     And I click "Additional information"
+    And I wait for 5 seconds
     And I select "Logging Service" options from "Solution type"
     # Check Confirmation.
     And I press "Continue"
