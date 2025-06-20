@@ -237,13 +237,13 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 0
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
-      parent_selection: 1
+      parent_selection: 0
     third_party_settings: {  }
   field_is_description:
     type: text_textarea
@@ -266,13 +266,13 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 0
       placeholder: ''
-      suggestions_dropdown: 1
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
-      parent_selection: 1
+      parent_selection: 0
     third_party_settings: {  }
   keywords:
     type: tagify_entity_reference_autocomplete_widget
