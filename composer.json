@@ -493,7 +493,8 @@
                 "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756-commit_4d0bc68381-6.2.x.diff"
             },
             "gitonomy/gitlib": {
-                "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff"
+                "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
+                "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
             },
             "openeuropa/oe_webtools": {
                 "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"

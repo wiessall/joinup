@@ -3,7 +3,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
 
   Scenario: Check the page of an entity which had schema issues before
     Given I am logged in as a user with the "moderator" role
-    When I go to the "TES team" contact_information
+    When I go to the "TES team" "contact information"
     Then I should get a 200 HTTP response
     And I should see the text "TES team" in the "Page title" region
     # "ContactInformation" is just a property value alias. We need to check the
@@ -50,7 +50,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
     And I should see the success message "A new confirmation message has been sent"
 
     # Visit the canonical page of the contact information entity created by IEF.
-    When I go to the "Mr. John Doe DLA" contact_information
+    When I go to the "Mr. John Doe DLA" "contact information"
     # "ContactInformation" is just a property value alias. We need to check the
     # real value.
     Then 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
