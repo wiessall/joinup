@@ -27,8 +27,7 @@ readonly class LocalTaskLinksHelper implements LocalTaskLinksHelperInterface {
     $theme_info = $active_theme->getExtension()->info;
     if (empty($theme_info['joinup']['menu_local_tasks']['horizontal_tabs_block'])) {
       // Not a theme aware of horizontal tabs vs. three dots menu detection.
-      return AccessResult::neutral()
-        ->addCacheContexts(['theme']);
+      return AccessResult::neutral();
     }
     return $this->entityTypeManager->getStorage('block')
       ->load($theme_info['joinup']['menu_local_tasks']['horizontal_tabs_block'])
