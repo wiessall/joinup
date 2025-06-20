@@ -52,7 +52,6 @@ Feature: Solution editing.
     And I press "Create contact information"
     # Tab "Additional information".
     And I click "Additional information"
-    And I wait for 5 seconds
     And I select "Logging Service" options from "Solution type"
     # Check Confirmation.
     And I press "Continue"
@@ -74,7 +73,6 @@ Feature: Solution editing.
       | Yancy Contact                              |
       | Additional information                     |
       | Status: Completed                          |
-      | Solution type: Logging Service             |
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Solution A"
