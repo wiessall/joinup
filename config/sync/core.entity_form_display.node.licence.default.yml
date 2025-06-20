@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.licence.spdx_licence
     - node.type.licence
   module:
+    - tagify
     - text
 id: node.licence.default
 targetEntityType: node
@@ -32,10 +33,18 @@ content:
       placeholder: ''
     third_party_settings: {  }
   legal_type:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 4
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 15
+      placeholder: ''
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   licence_type:
     type: options_select

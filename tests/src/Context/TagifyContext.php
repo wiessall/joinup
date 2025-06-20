@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\NameMappingsTrait;
@@ -51,14 +52,7 @@ class TagifyContext extends RawDrupalContext {
    *   Thrown when the tagify field is not found.
    */
   protected function selectFromTagifyWithJs(string $tags, string $fieldName): void {
-    $session = $this->getSession();
-    $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
-    $locator = '.field--name-' . $fieldName . ' .tagify__input';
-    $tagifyInput = $session->getPage()->find('css', $locator);
-    if (!$tagifyInput) {
-      throw new \Exception('Tagify input not found');
-    }
-
+    $tagifyInput = $this->getTagifyInput($fieldName);
     $tags = explode(',', $tags);
     foreach ($tags as $tag) {
       $tagifyInput->setValue($tag);
@@ -191,10 +185,7 @@ class TagifyContext extends RawDrupalContext {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
     }
-    $session = $this->getSession();
-    $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
-    $locator = '.js-form-item-' . $fieldName . ' .tagify__input';
-    $tagifyInput = $session->getPage()->find('css', $locator);
+    $tagifyInput = $this->getTagifyInput($fieldName);
     foreach ($table->getRows() as $row) {
       $option = reset($row);
       $tagifyInput->setValue($option);
@@ -203,6 +194,60 @@ class TagifyContext extends RawDrupalContext {
         throw new \Exception('Option "' . $option . '" not found');
       }
     }
+  }
+
+  /**
+   * Checks if option groups are visible in tagify dropdown options.
+   *
+   * @param string $fieldName
+   *   Field name.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Table of expected dropdown options.
+   *
+   * @throws \Exception
+   *   Thrown when the tagify option group is not found.
+   *
+   * @When the :fieldName tagify autocomplete should contain the following option groups:
+   */
+  public function checkTagifyOptionGroups(string $fieldName, TableNode $table): void {
+    if (!$this->hasJavascriptSupport()) {
+      throw new \Exception('This step requires JavaScript to run.');
+    }
+    $tagifyInput = $this->getTagifyInput($fieldName);
+    $tagifyInput->click();
+    $dropdown = $this->waitForElement('css', '.tagify__dropdown');
+    foreach ($table->getRows() as $row) {
+      $optionGroup = reset($row);
+      $dropdownItem = $dropdown->find('css', '.dropdown_group:contains("' . $optionGroup . '")');
+      if (empty($dropdownItem)) {
+        throw new \Exception('Option group ' . $optionGroup . ' not found');
+      }
+    }
+  }
+
+  /**
+   * Gets tagify inupt element.
+   *
+   * @param string $fieldName
+   *   Field name.
+   *
+   * @return \Behat\Mink\Element\NodeElement|mixed
+   *   Tagify input element.
+   *
+   * @throws \Exception
+   */
+  protected function getTagifyInput(string $fieldName): NodeElement {
+    if (!$this->hasJavascriptSupport()) {
+      throw new \Exception('This function requires JavaScript to run.');
+    }
+    $session = $this->getSession();
+    $fieldName = str_replace('_', '-', $this->getNodeFieldNameFromLabel($fieldName));
+    $locator = '.field--name-' . $fieldName . ' .tagify__input';
+    $tagifyInput = $session->getPage()->find('css', $locator);
+    if (!$tagifyInput) {
+      throw new \Exception('Tagify input not found');
+    }
+    return $tagifyInput;
   }
 
 }

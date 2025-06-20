@@ -453,6 +453,7 @@ trait NameMappingsTrait {
       'Domain' => 'domain',
       'Geographical coverage' => 'spatial_coverage',
       'Language availability' => 'language',
+      'Licence legal type' => 'legal_type',
       'Related solutions' => 'related_solutions',
       'Scope' => 'field_scope',
       "Search keywords" => 'keywords',
