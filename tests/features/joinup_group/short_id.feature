@@ -30,7 +30,7 @@ Feature:
       # Contact information data.
       | Name        | Contact person             |
       | E-mail      | contact_person@example.com |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I fill in "Short ID" with "sst-2020"
     And I press "Propose"
     Then I should see the inline form error message "Content with Short ID sst-2020 already exists. Please choose a different Short ID."
@@ -79,10 +79,10 @@ Feature:
     When I fill in "Title" with "I know what a solution is"
     And I fill in "Abstract" with "Some summary"
     And I enter "Dummy text" in the "Description" wysiwyg editor
-    And I select "Demography" from "Topic"
+    And I select "Demography" options from "Topic"
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Bulgarian" from "Language availability"
+    And I select "Defense" options from "Domain"
+    And I select "Bulgarian" options from "Language availability"
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -95,7 +95,7 @@ Feature:
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I press "Create contact information"
     And I click "Additional information"
-    And I select "Data Owner" from "Solution type"
+    And I select "Data Owner" options from "Solution type"
     # Assert the Portal short ID description.
     Then I should see the following lines of text:
       | Used as the web address (URL). Example: a solution named 'European Standards for Internet Of Things' could use 'es-iot'. |

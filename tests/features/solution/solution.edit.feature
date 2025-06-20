@@ -34,10 +34,10 @@ Feature: Solution editing.
     When I fill in "Title" with "Solution A"
     And I fill in "Abstract" with "Abstract of A"
     And I enter "First letter" in the "Description" wysiwyg editor
-    And I select "Bulgarian" from "Language availability"
+    And I select "Bulgarian" options from "Language availability"
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
     # Tab "Contact details".
     And I click "Contact details"
     # Create owner.
@@ -52,7 +52,7 @@ Feature: Solution editing.
     And I press "Create contact information"
     # Tab "Additional information".
     And I click "Additional information"
-    And I select "Logging Service" from "Solution type"
+    And I select "Logging Service" options from "Solution type"
     # Check Confirmation.
     And I press "Continue"
     Then I see the texts in the correct order:

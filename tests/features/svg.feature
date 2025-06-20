@@ -39,7 +39,7 @@ Feature: Test SVG attachments.
     When I fill in the following:
       | Title   | SVG discussion |
       | Content | SVG discussion |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
 
     And I attach the file "simple.svg" to "Logo"
     And I press "Upload"
