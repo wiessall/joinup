@@ -110,7 +110,7 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
     $isOwner = $account->id() === $content->getOwnerId();
     if ($account->hasPermission('view any unpublished content')
-      || ($account->id() === $isOwner && $account->hasPermission('view own unpublished content'))) {
+      || ($isOwner && $account->hasPermission('view own unpublished content'))) {
       return AccessResult::allowed()
         ->addCacheableDependency($content)
         ->addCacheableDependency($account)
