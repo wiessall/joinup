@@ -30,3 +30,18 @@ Feature: Edit licence through UI
       | role            |
       | moderator       |
       | licence_manager |
+
+  @javascript
+  Scenario: Check if licence legal type displays all option groups.
+    Given licence content:
+      | title            | description                | uri                   | licence type  |
+      | Creative commons | <p>This is so creative</p> | http://i-am-creative/ | Public domain |
+    When I am logged in as a moderator
+    And I go to the edit form of the "Creative commons" licence
+    Then the "Licence legal type" tagify autocomplete should contain the following option groups:
+      | Can        |
+      | Must       |
+      | Cannot     |
+      | Compatible |
+      | Law        |
+      | Support    |
