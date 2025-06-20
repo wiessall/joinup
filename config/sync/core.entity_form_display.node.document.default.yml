@@ -25,6 +25,7 @@ dependencies:
     - joinup_workflow
     - layout_paragraphs
     - svg_image
+    - tagify
 id: node.document.default
 targetEntityType: node
 bundle: document
@@ -107,10 +108,18 @@ content:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
-    type: options_select
-    weight: 7
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 8
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   field_type:
     type: options_select
@@ -119,14 +128,18 @@ content:
     settings: {  }
     third_party_settings: {  }
   keywords:
-    type: entity_reference_autocomplete_tags
+    type: tagify_entity_reference_autocomplete_widget
     weight: 9
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   simple_sitemap:
     weight: 12
@@ -134,14 +147,18 @@ content:
     settings: {  }
     third_party_settings: {  }
   spatial_coverage:
-    type: entity_reference_autocomplete
+    type: tagify_entity_reference_autocomplete_widget
     weight: 10
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   title:
     type: string_textfield

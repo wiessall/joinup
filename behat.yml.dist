@@ -87,6 +87,7 @@
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
+  - Drupal\joinup\Context\TagifyContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WhatsNewContext
@@ -221,7 +222,6 @@ default:
         Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
-        SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'

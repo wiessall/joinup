@@ -116,7 +116,7 @@ Feature: Administer media.
 
     Then I fill in the following:
       | Title | Sample discussion |
-    And I select "Supplier exchange" from "Topic"
+    And I select "Supplier exchange" options from "Topic"
 
     # Add in the body multiple times the media image.
     And I fill in "Content" with:

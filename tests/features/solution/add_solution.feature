@@ -25,9 +25,9 @@ Feature: Test adding solutions.
     And I fill in "Abstract" with "Short abstract"
     And I enter "Last letter" in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
-    And I select "Bulgarian" from "Language availability"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
     And I click "Contact details"
     And I press "Add new owner"
     And I press "Continue"
@@ -112,8 +112,8 @@ Feature: Test adding solutions.
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
     And I additionally select "Bulgarian" from "Language"
-    And I select "Data Owner" from "Solution type"
-    And I select "Demography" from "Topic"
+    And I select "Data Owner" options from "Solution type"
+    And I select "Demography" options from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     # The owner field should have a help text.
@@ -169,8 +169,8 @@ Feature: Test adding solutions.
       | Name                  | Ajit Tamboli               |
       | E-mail address        | tambotamboli@gocloud.in    |
     And I select "Bulgarian" from "Language"
-    Then I select "Data Owner" from "Solution type"
-    And I select "E-inclusion" from "Topic"
+    Then I select "Data Owner" options from "Solution type"
+    And I select "E-inclusion" options from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     And I attach the file "logo.png" to "Logo"
@@ -221,9 +221,9 @@ Feature: Test adding solutions.
     And I fill in "Abstract" with "Tracks climate change"
     And I enter "Logs retreat of 40 glaciers in Belgium." in the "Description" wysiwyg editor
     And I select "Complete Solution" from "Solution classification"
-    And I select "Defense" from "Domain"
-    And I select "Demography" from "Topic"
-    And I select "Bulgarian" from "Language availability"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
@@ -236,7 +236,7 @@ Feature: Test adding solutions.
     And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
     And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I click "Additional information"
-    And I select "Logging Service" from "Solution type"
+    And I select "Logging Service" options from "Solution type"
     And I press "Continue"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
