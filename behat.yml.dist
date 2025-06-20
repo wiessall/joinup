@@ -217,7 +217,6 @@ default:
         Private message autocomplete results: '#private-message-create-form-wrapper+.ui-autocomplete'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
-        SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Solution edit form additional fields accordion: '.accordion .accordion-item #additional-fields'
         Solution edit form main fields accordion: '.accordion .accordion-item #main-fields'
