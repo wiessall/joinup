@@ -125,8 +125,6 @@ class InviteToDiscussionForm extends InviteFormBase {
    *   The access result object.
    */
   public function access(AccountProxyInterface $account, ?NodeInterface $node = NULL): AccessResultInterface {
-    $access = FALSE;
-
     // The node should be a published discussion.
     if ($node instanceof DiscussionInterface && $node->isPublished()) {
       // Only allow access if the current user is a group administrator (a.k.a.
@@ -140,10 +138,13 @@ class InviteToDiscussionForm extends InviteFormBase {
       $is_owner = $user->id() == $node->getOwnerId();
       $is_discussion_inviter = $this->ogAccess->userAccess($group, 'invite users to discussions')->isAllowed();
 
-      $access = $is_group_administrator || $is_owner || $is_discussion_inviter;
+      return AccessResult::allowedIf($is_group_administrator || $is_owner || $is_discussion_inviter)
+        ->addCacheableDependency($node)
+        ->addCacheableDependency($group)
+        ->addCacheContexts(['user', 'user.permissions']);
     }
 
-    return AccessResult::allowedIf($access);
+    return AccessResult::neutral();
   }
 
   /**
