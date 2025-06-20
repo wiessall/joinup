@@ -218,7 +218,10 @@ class TagifyContext extends RawDrupalContext {
     $dropdown = $this->waitForElement('css', '.tagify__dropdown');
     foreach ($table->getRows() as $row) {
       $optionGroup = reset($row);
-      $dropdown->find('css', '.dropdown_group:contains("' . $optionGroup . '")');
+      $dropdownItem = $dropdown->find('css', '.dropdown_group:contains("' . $optionGroup . '")');
+      if (empty($dropdownItem)) {
+        throw new \Exception('Option group ' . $optionGroup . ' not found');
+      }
     }
   }
 
