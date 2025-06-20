@@ -185,7 +185,9 @@ class AssessmentModerationForm extends FormBase {
   public function access(WebformSubmissionInterface $submission, AccountInterface $account): AccessResultInterface {
     $accessResult = AccessResult::allowedIf($submission->isCompleted())
       ->andIf(AccessResult::allowedIf($submission->isLocked()))
-      ->andIf(AccessResult::allowedIfHasPermission($account, 'manage assessments'));
+      ->andIf(AccessResult::allowedIfHasPermission($account, 'manage assessments'))
+      ->addCacheableDependency($submission)
+      ->addCacheableDependency($account);
 
     if (!$accessResult->isAllowed()) {
       return $accessResult;
