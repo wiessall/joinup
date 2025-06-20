@@ -67,7 +67,8 @@ class FeaturedContentController extends ControllerBase {
    *   The access result.
    */
   public function featureAccess(ContentEntityInterface $node): AccessResultInterface {
-    return AccessResult::allowedIf($node instanceof FeaturedContentInterface && !$node->isFeatured());
+    return AccessResult::allowedIf($node instanceof FeaturedContentInterface && !$node->isFeatured())
+      ->addCacheableDependency($node);
   }
 
   /**
