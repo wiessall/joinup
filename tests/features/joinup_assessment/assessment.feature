@@ -207,6 +207,7 @@ Feature: Assessments
     # 4th page.
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+    And I log out
     And the following email should have been sent:
       | recipient_list_contains | Notify moderator                 |
       | subject                 | Assessment submission (Complete) |
