@@ -8,26 +8,40 @@ dependencies:
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - node.type.owner
+  module:
+    - tagify
 id: node.owner.inline
 targetEntityType: node
 bundle: owner
 mode: inline
 content:
   country:
-    type: entity_reference_autocomplete
+    type: tagify_entity_reference_autocomplete_widget
     weight: 2
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   owner_type:
-    type: options_buttons
+    type: tagify_entity_reference_autocomplete_widget
     weight: 1
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   title:
     type: string_textfield
