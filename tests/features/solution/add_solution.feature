@@ -43,9 +43,8 @@ Feature: Test adding solutions.
       | Type field is required.                 |
       | Country field is required.              |
       | E-mail address field is required.       |
-    And I click "Contact details"
-    # Create owner.
-    And I fill in "Name" with "Organisation valid"
+    # Create owner. Validation errors must have activated the tab "Contact details".
+    When I fill in "Name" with "Organisation valid"
     And I select "Company" options from "Type"
     And I select "Belgium" from "Country"
     And I press "Create owner"
