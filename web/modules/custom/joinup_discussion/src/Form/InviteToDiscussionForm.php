@@ -139,9 +139,7 @@ class InviteToDiscussionForm extends InviteFormBase {
       $is_discussion_inviter = $this->ogAccess->userAccess($group, 'invite users to discussions')->isAllowed();
 
       return AccessResult::allowedIf($is_group_administrator || $is_owner || $is_discussion_inviter)
-        ->addCacheableDependency($node)
-        ->addCacheableDependency($group)
-        ->addCacheContexts(['user', 'user.permissions']);
+        ->addCacheableDependency($node);
     }
 
     return AccessResult::neutral();
