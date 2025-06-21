@@ -4,7 +4,7 @@ Feature: Test adding solutions.
   As a moderator
   I need to be able to add "Solution" through UI.
 
-  @javascript
+  @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Required fields should be filled in
     Given I am logged in as a facilitator of the "The Portal" collection
     And I go to the homepage of the "The Portal" collection
@@ -21,6 +21,12 @@ Feature: Test adding solutions.
       | Topic field is required.                   |
       | Language availability field is required.   |
 
+    # Test that the tab doesn't change when an image is uploaded.
+    When I click "Additional information"
+    And I select image #2 as solution logo
+    Then I should see the text "Logo"
+
+    When I click "Solution information"
     When I fill in "Title" with "Solution Beta"
     And I fill in "Abstract" with "Short abstract"
     And I enter "Last letter" in the "Description" wysiwyg editor
