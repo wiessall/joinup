@@ -1,17 +1,17 @@
-Subject: [PATCH] Set "Drag to re-order taxonomy terms." only if description is empty
----
-Index: src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
 diff --git a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
---- a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php	(revision 2c6eecc15e6c0870070618625c3a6b841be88710)
-+++ b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php	(date 1750685384341)
-@@ -312,15 +312,7 @@
-       $message = $this->t("Drag to re-order @entity_types.", ['@entity_types' => $entity_definition->getPluralLabel()]);
+index a795c5060014de02a465b93a27cad713be0213ad..2276998c308880df5676274e89ace6501d37e8a4 100644
+--- a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
++++ b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
+@@ -306,24 +306,6 @@ class TagifyEntityReferenceAutocompleteWidget extends WidgetBase {
+       $element['#info_label'] = $this->getSetting('info_label');
+     }
  
-       if ($cardinality) {
+-    // Add description if it doesn't exist.
+-    if ($target_type) {
+-      $entity_definition = $this->entityTypeManager->getDefinition($target_type);
+-      $message = $this->t("Drag to re-order @entity_types.", ['@entity_types' => $entity_definition->getPluralLabel()]);
+-
+-      if ($cardinality) {
 -        $element['#description'] = !empty($element['#description'])
 -          ? [
 -            '#theme' => 'item_list',
@@ -21,7 +21,38 @@ diff --git a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidge
 -            ],
 -          ]
 -          : $message;
-+        $element['#description'] = !empty($element['#description']) ? $element['#description'] : $message;
-       }
-     }
+-      }
+-    }
+-
+     return $element;
+   }
  
+diff --git a/src/Plugin/Field/FieldWidget/TagifySelectWidget.php b/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
+index 426d64692eb056131b11c4fdd6eb27d61a0c4119..5c89cf5746bff18cdb58158e8037e21dcfe6fd29 100644
+--- a/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
++++ b/src/Plugin/Field/FieldWidget/TagifySelectWidget.php
+@@ -181,24 +181,6 @@ class TagifySelectWidget extends OptionsWidgetBase {
+       '#identifier' => $tags_identifier,
+     ];
+ 
+-    // Add description if it doesn't exist.
+-    if ($target_type) {
+-      $entity_definition = $this->entityTypeManager->getDefinition($target_type);
+-      $message = $this->t("Drag to re-order @entity_types.", ['@entity_types' => $entity_definition->getPluralLabel()]);
+-
+-      if ($cardinality) {
+-        $element['#description'] = !empty($element['#description'])
+-          ? [
+-            '#theme' => 'item_list',
+-            '#items' => [
+-              $element['#description'],
+-              $message,
+-            ],
+-          ]
+-          : $message;
+-      }
+-    }
+-
+     $empty_value = $element['#empty_value'] ?? NULL;
+ 
+     if (!$element['#multiple'] && !isset($element['#options'][$empty_value])) {
