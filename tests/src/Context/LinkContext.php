@@ -155,6 +155,10 @@ class LinkContext extends RawDrupalContext {
       throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
     }
 
+    if (!str_starts_with($url, $GLOBALS['base_url'])) {
+      $url = $GLOBALS['base_url'] . $url;
+    }
+
     return $url;
   }
 
