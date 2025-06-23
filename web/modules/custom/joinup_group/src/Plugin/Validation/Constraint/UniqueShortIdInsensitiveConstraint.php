@@ -11,8 +11,8 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 /**
  * Checks if an entity field has a unique value within its bundle.
  *
- * The validation is case insensitive. Works only for RDF entities. This
- * constraint was created explicitly for the RDF entity "Short ID" field.
+ * The validation is case-insensitive. This constraint was created specifically
+ * for the group entities "Short ID" field.
  */
 #[Constraint(
   id: 'UniqueShortIdInsensitive',
@@ -21,17 +21,24 @@ use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 class UniqueShortIdInsensitiveConstraint extends SymfonyConstraint {
 
   /**
-   * The message to show when validation fails.
+   * The regex to validate the format.
    *
    * @var string
    */
-  public $message = 'Content with @field_name %value already exists. Please choose a different @field_name.';
+  public string $formatRegex = '/^[a-z0-9-]{4,26}$/';
 
   /**
-   * {@inheritdoc}
+   * Violation message when the format is invalid.
+   *
+   * @var string
    */
-  public function validatedBy(): string {
-    return '\Drupal\joinup_group\Plugin\Validation\Constraint\UniqueShortIdInsensitiveValidator';
-  }
+  public string $formatInvalidMessage = '@field_name must be 4–26 characters: only lowercase letters, digits, and hyphens allowed.';
+
+  /**
+   * Violation message when uniqueness fails.
+   *
+   * @var string
+   */
+  public string $notUniqueMessage = 'Content with @field_name %value already exists. Please choose a different @field_name.';
 
 }
