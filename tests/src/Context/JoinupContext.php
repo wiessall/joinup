@@ -27,7 +27,6 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
-use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -70,7 +69,6 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
