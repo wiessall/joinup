@@ -30,8 +30,8 @@ Feature: Creation of owners through UI
     # It is safe to check that the field is not found in the entire form.
     Then the following fields should not be present "Current workflow state, Langcode, Translation"
     And I fill in "Name" with "Acme"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     Then I should see "Acme"
     And I should see the link "Company"
@@ -39,9 +39,8 @@ Feature: Creation of owners through UI
     # Edit.
     When I press "Edit" at the "Owner" field
     And I fill in "Name" with "Acme Inc."
-    And I check "Industry consortium"
-    And I check "Company"
-    And I fill in "Country" with "Switzerland"
+    And I select "Industry consortium" options from "Type"
+    And I select "Switzerland" from "Country"
     Then I press "Update owner"
     Then I should see "Acme Inc."
     And I should see the link "Industry consortium"
@@ -55,8 +54,8 @@ Feature: Creation of owners through UI
     # Create a person owner as well.
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "John Doe"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     Then I should see "John Doe"
     And I should see the link "Company"
