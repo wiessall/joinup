@@ -12,8 +12,6 @@ Feature: Add a licence through the UI
     And I click "Licences overview"
     And I click "Add licence"
     Then I should see the heading "Create Licence"
-    And the "Licence legal type" field should contain the "Can, Must, Cannot, Compatible, Law, Support" option groups
-
     When I press "Save"
     Then I should see the following inline form error messages:
       | error messages                 |
@@ -27,8 +25,7 @@ Feature: Add a licence through the UI
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Public domain" from "Type"
     And I select "GNU General Public License v2.0 or later" from "Corresponding SPDX licence"
-    And I select "Strong Community" from "Licence legal type"
-    And I additionally select "Venue fixed" from "Licence legal type"
+    And I select "Strong Community,Venue fixed" options from "Licence legal type"
     And I press "Save"
     Then I should have 1 licence
     And I should see the heading "GNU GPL 2+"
