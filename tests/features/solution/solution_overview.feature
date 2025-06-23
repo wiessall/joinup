@@ -128,9 +128,9 @@ Feature: Solutions Overview
     And I select "Bulgarian" options from "Language"
     # Create owner.
     And I press "Add new owner"
-    And I fill in "owner[form][0][title][0][value]" with "Ambrosio Morison"
-    And I check "Company"
-    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
+    And I fill in "Name" with "Ambrosio Morison"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     # Create contact information.
     And I fill in "contact[form][0][title][0][value]" with "Ambrosio Morison"
     And I fill in "contact[form][0][email][value]" with "ambrosio.morison@example.com"
