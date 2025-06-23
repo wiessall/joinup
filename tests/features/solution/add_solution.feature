@@ -40,8 +40,8 @@ Feature: Test adding solutions.
     And I click "Contact details"
     # Create owner.
     And I fill in "Name" with "Organisation valid"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     # Create contact information.
     And I fill in "Name" with "Contact Rapazoglou"
@@ -227,9 +227,9 @@ Feature: Test adding solutions.
     And I click "Contact details"
     # Create owner.
     And I press "Add new owner"
-    And I fill in "owner[form][0][title][0][value]" with "University of Basel"
-    And I check "Company"
-    And I fill in "owner[form][0][country][0][target_id]" with "Belgium"
+    And I fill in "Name" with "University of Basel"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     # Create contact information.
     And I press "Create contact information"
