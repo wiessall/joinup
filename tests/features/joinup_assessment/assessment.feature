@@ -207,7 +207,6 @@ Feature: Assessments
     # 4th page.
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
-    And I log out
     And the following email should have been sent:
       | recipient_list_contains | Notify moderator                 |
       | subject                 | Assessment submission (Complete) |
@@ -216,6 +215,8 @@ Feature: Assessments
 
     Given I am logged in as "Notify moderator"
     And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
+    And the cache has been cleared
+    And I reload the page
     And I should see "Assessment Abbey Road"
     When I select the radio button "Require updates"
     And I fill in "What updates are needed?" with "Please drastically reconsider this form. I mean it!"
