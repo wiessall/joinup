@@ -1,0 +1,27 @@
+Subject: [PATCH] Set "Drag to re-order taxonomy terms." only if description is empty
+---
+Index: src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php
+--- a/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php	(revision 2c6eecc15e6c0870070618625c3a6b841be88710)
++++ b/src/Plugin/Field/FieldWidget/TagifyEntityReferenceAutocompleteWidget.php	(date 1750685384341)
+@@ -312,15 +312,7 @@
+       $message = $this->t("Drag to re-order @entity_types.", ['@entity_types' => $entity_definition->getPluralLabel()]);
+ 
+       if ($cardinality) {
+-        $element['#description'] = !empty($element['#description'])
+-          ? [
+-            '#theme' => 'item_list',
+-            '#items' => [
+-              $element['#description'],
+-              $message,
+-            ],
+-          ]
+-          : $message;
++        $element['#description'] = !empty($element['#description']) ? $element['#description'] : $message;
+       }
+     }
+ 
