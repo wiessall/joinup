@@ -6,14 +6,19 @@ dependencies:
     - field.storage.node.field_topic
     - node.type.collection
     - taxonomy.vocabulary.topic
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.collection.field_topic
 field_name: field_topic
 entity_type: node
 bundle: collection
 label: Topic
-description: ''
+description: 'Select the option(s) that best refer to your collection'
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
