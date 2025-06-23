@@ -228,6 +228,7 @@ drupal:
           'filecache',
           'http_request_mock',
           'joinup_cas_mock_server',
+          'oe_authentication_eulogin_mock',
           'joinup_test',
           'masquerade',
           'memcache_admin',
@@ -383,7 +384,6 @@ drupal:
       Visitors can create their own accounts: |
         $config['user.settings']['register'] = 'visitors';
       Stage file proxy: |
-        $config['stage_file_proxy.settings']['hotlink'] = TRUE;
         $config['stage_file_proxy.settings']['origin'] = 'https://interoperable-europe.ec.europa.eu';
         $config['stage_file_proxy.settings']['verify'] = FALSE;
         $config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';

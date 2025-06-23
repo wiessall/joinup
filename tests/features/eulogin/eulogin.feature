@@ -247,7 +247,7 @@ Feature: Log in through EU Login
     When I visit "/user/login"
     Then I should not see the link "Create new account"
     When I visit "/user/register"
-    Then the url should match "/cas/eim/external/register.cgi"
+    Then the url should match "/cas-mock-server/eim/external/register.cgi"
 
   Scenario: The CAS module 'Add CAS user(s)' functionality is dismantled.
     Given I am logged in as a moderator
