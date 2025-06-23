@@ -81,7 +81,6 @@ function contact_information_node_access(EntityInterface $entity, string $operat
     if ($route_entity instanceof ContactInformationInterface && $route_entity->id() === $entity->id()) {
       return AccessResult::forbidden('Anonymous users should not see the contact information canonical route.')
         ->addCacheContexts(['user.roles:anonymous', 'route'])
-        ->addCacheableDependency($route_entity)
         ->addCacheableDependency($entity);
     }
   }
