@@ -83,8 +83,7 @@ readonly class CommunityContentWorkflowAccessControlHandler {
         $membership = $this->membershipManager->getMembership($parent, $account->id());
         if ($membership instanceof OgMembership) {
           return AccessResult::allowedIf($membership->hasPermission($operation))
-            ->addCacheableDependency($membership)
-            ->cachePerUser();
+            ->addCacheableDependency($membership);
         }
     }
 
