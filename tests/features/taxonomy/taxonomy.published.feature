@@ -15,8 +15,8 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I select "English" options from "Language availability"
     And I press "Add new owner"
     And I fill in "Name" with "John Doe"
-    And I check "Company"
-    And I fill in "Country" with "European Union"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
 
     And I fill in the following:
