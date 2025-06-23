@@ -65,7 +65,7 @@ Feature:
     Then the url should match "collection/pathauto-collection/news/pathauto-news"
     When I visit the "Pathauto news 2" news
     Then the url should match "collection/pathauto-collection/solution/pathauto-solution/news/pathauto-news-2"
-    When I visit the "Pathauto collection page" custom_page
+    When I visit the "Pathauto collection page" "custom page"
     Then the url should match "collection/pathauto-collection/pathauto-collection-page"
-    When I visit the "Pathauto solution page" custom_page
+    When I visit the "Pathauto solution page" "custom page"
     Then the url should match "collection/pathauto-collection/solution/pathauto-solution/pathauto-solution-page"
