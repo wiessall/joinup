@@ -43,8 +43,8 @@ Feature: Solution editing.
     # Create owner.
     And I press "Add new owner"
     And I fill in "Name" with "Yancy owner"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     # Create contact information.
     And I fill in "Name" with "Yancy Contact"
@@ -73,7 +73,6 @@ Feature: Solution editing.
       | Yancy Contact                              |
       | Additional information                     |
       | Status: Completed                          |
-      | Solution type: Logging Service             |
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Solution A"

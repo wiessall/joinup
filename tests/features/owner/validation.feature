@@ -15,8 +15,8 @@ Feature: Validation of owners created through UI
       | Type field is required.    |
       | Country field is required. |
     And I fill in "Name" with "Leandro Keen"
-    And I check "Company"
-    And I fill in "Country" with "Belgium"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     Then the "Owner IEF" table should contain the following columns:
       | Title        | Type    | Country | Status    |
