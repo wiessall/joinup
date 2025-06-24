@@ -12,7 +12,7 @@
         background: $primary;
       }
     }
-    &:before {
+    &::before {
       top: 0;
     }
   }
