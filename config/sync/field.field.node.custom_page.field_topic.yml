@@ -6,12 +6,17 @@ dependencies:
     - field.storage.node.field_topic
     - node.type.custom_page
     - taxonomy.vocabulary.topic
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.custom_page.field_topic
 field_name: field_topic
 entity_type: node
 bundle: custom_page
 label: Topic
-description: ''
+description: 'Select the option(s) that best refer to your custom page'
 required: true
 translatable: false
 default_value: {  }
