@@ -192,10 +192,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   classification:
-    type: options_select
+    type: tagify_select_widget
     weight: 4
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
     third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
