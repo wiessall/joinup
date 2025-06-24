@@ -75,9 +75,7 @@ third_party_settings:
         - logo
         - keywords
         - spatial_coverage
-        - group_moderation
         - closed_group
-        - content_creation
       label: 'Additional fields'
       region: content
       parent_name: group_general
@@ -150,8 +148,8 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
-      placeholder: ''
+      match_limit: 0
+      placeholder: 'Select or start typing...'
       suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
