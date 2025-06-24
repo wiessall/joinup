@@ -27,7 +27,6 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
-use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -70,7 +69,6 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
@@ -836,7 +834,7 @@ class JoinupContext extends RawDrupalContext {
       $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
     }
     if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
-      $node->keywords = $this->getRandomTerm('tags', FALSE)->label();
+      $node->keywords = $this->getRandomTerm('tags')->label();
     }
     if (!empty($field_definitions['classification']) && empty($node->classification)) {
       $node->classification = $this->getRandomTerm('solution_classification')->label();
