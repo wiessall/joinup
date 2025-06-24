@@ -9,6 +9,7 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\NameMappingsTrait;
+use WebDriver\Element;
 
 /**
  * Behat step definitions that are generally useful for the Joinup project.
@@ -53,13 +54,20 @@ class TagifyContext extends RawDrupalContext {
    */
   protected function selectFromTagifyWithJs(string $tags, string $fieldName): void {
     $tagifyInput = $this->getTagifyInput($fieldName);
-    $tags = explode(',', $tags);
-    foreach ($tags as $tag) {
-      $tagifyInput->setValue($tag);
+    $element = $this->getSession()->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
+    \assert($element instanceof Element);
+
+    $explodedTags = array_map('trim', explode(',', $tags));
+    foreach ($explodedTags as $tag) {
+      // \Behat\Mink\Driver\Selenium2Driver::setValue() will call .blur() on
+      // the element, which does not play well with tagify.
+      // Use postValue directly and blur after selecting all values, triggering
+      // the change event.
+      $element->postValue(['text' => $tag]);
       $dropdownItem = $this->waitForElementVisible('css', '.tagify__dropdown__item:contains("' . $tag . '")');
       $dropdownItem->click();
-      $this->waitForNoElement('css', '.tagify__dropdown__item:contains("' . $tag . '")');
     }
+    $this->getSession()->getDriver()->blur($tagifyInput->getXpath());
   }
 
   /**
