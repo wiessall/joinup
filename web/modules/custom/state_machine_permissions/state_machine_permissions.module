@@ -40,8 +40,7 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.')
       ->addCacheableDependency($entity)
       ->cachePerPermissions()
-      ->cachePerUser()
-      ->addCacheTags(['workflow']);
+      ->cachePerUser();
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -53,8 +52,7 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::forbidden('No available transitions for the entity.')
       ->addCacheableDependency($entity)
       ->cachePerPermissions()
-      ->cachePerUser()
-      ->addCacheTags(['workflow']);
+      ->cachePerUser();
   }
 
   // OG does not check for a create permission properly, because the
@@ -113,12 +111,7 @@ function _state_machine_permissions_check_transition_access(EntityInterface $ent
   if ($operation === 'delete') {
     // If the operation is delete, there is no need to check for transitions.
     return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account))
-      ->addCacheableDependency($entity)
-      ->addCacheContexts([
-        'og_group_context',
-        $account->isAuthenticated() ? 'user.roles:authenticated' : 'user.roles:anonymous',
-      ])
-      ->addCacheTags(['workflow', 'og-group-content']);
+      ->addCacheTags(['og-group-content']);
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -128,11 +121,5 @@ function _state_machine_permissions_check_transition_access(EntityInterface $ent
     // delete permission.
     $access = AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
   }
-  $access->addCacheableDependency($entity);
-  $access->addCacheContexts([
-    'og_group_context',
-    $account->isAuthenticated() ? 'user.roles:authenticated' : 'user.roles:anonymous',
-  ]);
-  $access->addCacheTags(['workflow', 'og-group-content']);
   return $access;
 }
