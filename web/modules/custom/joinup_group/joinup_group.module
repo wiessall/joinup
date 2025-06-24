@@ -341,8 +341,8 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $access = \Drupal::getContainer()->get('og.access')->userAccess($entity->getGroup(), 'view any unpublished content', $account);
-  return $access->andIf(!$entity->isPublished());
+  $access = \Drupal::getContainer()->get('og.access')->userAccessEntity('view any unpublished content', $entity, $account);
+  return $access->andIf(AccessResult::allowed(!$entity->isPublished()));
 }
 
 /**
