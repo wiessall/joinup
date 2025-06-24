@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - solution
+    - joinup_solution
 id: unarchive_solution
 label: 'Unarchive (publish) solutions'
 type: node
