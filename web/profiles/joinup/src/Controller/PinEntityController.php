@@ -104,10 +104,7 @@ class PinEntityController extends ControllerBase {
       return AccessResult::forbidden()->addCacheableDependency($group)->addCacheableDependency($entity);
     }
 
-    return $this->ogAccess->userAccess($group, 'pin group content', $account)
-      ->addCacheableDependency($group)
-      ->addCacheableDependency($entity)
-      ->addCacheContexts(['user.permissions']);
+    return $this->ogAccess->userAccess($group, 'pin group content', $account)->addCacheableDependency($entity);
   }
 
   /**
@@ -137,10 +134,7 @@ class PinEntityController extends ControllerBase {
       return AccessResult::forbidden()->addCacheableDependency($group)->addCacheableDependency($entity);
     }
 
-    return $this->ogAccess->userAccess($group, 'unpin group content', $account)
-      ->addCacheableDependency($group)
-      ->addCacheableDependency($entity)
-      ->addCacheContexts(['user.permissions']);
+    return $this->ogAccess->userAccess($group, 'unpin group content', $account)->addCacheableDependency($entity);
   }
 
   /**
