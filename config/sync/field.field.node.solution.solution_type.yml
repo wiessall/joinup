@@ -21,13 +21,13 @@ field_name: solution_type
 entity_type: node
 bundle: solution
 label: 'Solution type'
-description: 'Select the type that best describes your solution.'
+description: 'Select the type that best describes your solution according to the EIRA building blocks'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: taxonomy_container
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
       solution_type: solution_type
@@ -36,5 +36,4 @@ settings:
       direction: asc
     auto_create: false
     auto_create_bundle: ''
-    prefix: '-'
 field_type: entity_reference
