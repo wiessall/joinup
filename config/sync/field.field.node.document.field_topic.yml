@@ -6,12 +6,17 @@ dependencies:
     - field.storage.node.field_topic
     - node.type.document
     - taxonomy.vocabulary.topic
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.document.field_topic
 field_name: field_topic
 entity_type: node
 bundle: document
 label: Topic
-description: ''
+description: 'Select the option(s) that best refer to your document'
 required: true
 translatable: false
 default_value: {  }
