@@ -51,3 +51,87 @@
 .multi-select {
   @extend .form-select;
 }
+
+.container-inline {
+  .form-radios {
+    label {
+      font-size: 1rem;
+    }
+    .form-check {
+      margin-right: $spacer;
+    }
+  }
+}
+
+// Unify field label styling #ISAICP-9908.
+.field--type-file-url {
+  summary {
+    font-family: $headings-font-family;
+    font-size: $h3-font-size;
+    font-weight: $font-weight-normal !important;
+  }
+  .form-label {
+    font-family: $font-family-base;
+    font-size: var(--bs-body-font-size);
+  }
+  .form-managed-file {
+    .form-item + .container-inline {
+      margin-top: $spacer;
+    }
+  }
+}
+
+// Overrides for Solution wizard form #ISAICP-9918.
+.node-solution-edit-form {
+  // Override horizontal-tabs.
+  .horizontal-tabs {
+    border: 0;
+    .horizontal-tabs-list {
+      margin-bottom: -8px;
+      border-left: 1px solid $gray-300;
+      background: none;
+    }
+    .horizontal-tab-button {
+      margin-top: 0 !important;
+      margin-bottom: -1px !important;
+      border-top: 1px solid $gray-300;
+      border-right: 1px solid $gray-300;
+      background: $gray-200;
+      font-size: 1.2em;
+      &.selected {
+        background-color: #fff;
+        a {
+          color: $gray-900;
+        }
+      }
+      a {
+        text-decoration: none !important;
+        color: $gray-700;
+      }
+    }
+    .horizontal-tabs-panes {
+      border: 1px solid $gray-300;
+      .horizontal-tabs-pane {
+        padding: 0 1.2em;
+      }
+    }
+    .details-wrapper {
+      padding: 0 !important;
+      .form-label:not(.form-radios .form-label) {
+        color: $gray-900;
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  // Override Tables.
+  .table.table-bordered {
+    vertical-align: middle;
+    > :not(caption) > * > * {
+      border-width: 0;
+    }
+    > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
+      --#{$prefix}table-accent-bg: $white;
+    }
+  }
+}
