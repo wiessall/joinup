@@ -270,7 +270,6 @@ Feature: Collection moderation
     And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    When I press "Add another item" at the "Geographical coverage" field
     # Save the collection.
     When I press "Propose"
     Then I should see the heading "Silken Emperor"
@@ -303,8 +302,6 @@ Feature: Collection moderation
     And I select "Belgium" from "Country"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-
-    When I press "Add another item" at the "Geographical coverage" field
 
     # Save the collection.
     When I press "Propose"
