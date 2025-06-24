@@ -92,12 +92,12 @@
       background: none;
     }
     .horizontal-tab-button {
+      margin-top: 0 !important;
+      margin-bottom: -1px !important;
       border-top: 1px solid $gray-300;
       border-right: 1px solid $gray-300;
       background: $gray-200;
       font-size: 1.2em;
-      margin-top: 0 !important;
-      margin-bottom: -1px !important;
       &.selected {
         background-color: #fff;
         a {
@@ -123,6 +123,7 @@
       }
     }
   }
+
   // Override Tables.
   .table.table-bordered {
     vertical-align: middle;
