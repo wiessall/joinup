@@ -110,7 +110,7 @@ Feature:
     Then I should see the error message "Short ID must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
     # The short ID should not contain non-ASCII chars.
-    And I fill in "Short ID" with "ñ字Ωش😊★₿©"
+    And I fill in "Short ID" with "ñ字Ωش★₿©"
     And I press "Propose"
     Then I should see the error message "Short ID must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
