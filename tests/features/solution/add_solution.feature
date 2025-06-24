@@ -276,3 +276,17 @@ Feature: Test adding solutions.
     And I press "Continue"
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
+
+  @javascript
+  Scenario: User should see all topic categories.
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
+    And I click "Add solution" in the plus button menu
+    When the "Topic" tagify autocomplete should contain the following option groups:
+      | Economy and Welfare  |
+      | eGov                 |
+      | E-health Dpt.        |
+      | HR Dpt.              |
+      | Info                 |
+      | Law and Justice      |
+      | Social and Political |

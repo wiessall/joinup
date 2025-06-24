@@ -44,7 +44,7 @@ content:
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
-      parent_selection: 1
+      parent_selection: 0
     third_party_settings: {  }
   licence_type:
     type: options_select
