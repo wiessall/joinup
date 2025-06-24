@@ -238,8 +238,8 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      placeholder: ''
-      suggestions_dropdown: 1
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -266,9 +266,9 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
-      placeholder: ''
-      suggestions_dropdown: 1
+      match_limit: 0
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
@@ -302,8 +302,8 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
-      placeholder: ''
+      match_limit: 0
+      placeholder: 'Select or start typing...'
       suggestions_dropdown: 0
       show_entity_id: 0
       show_info_label: 0
@@ -378,7 +378,7 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      placeholder: ''
+      placeholder: 'Start typing to select the solution type...'
       suggestions_dropdown: 1
       show_entity_id: 0
       show_info_label: 0
