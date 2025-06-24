@@ -57,9 +57,8 @@ class TagifyContext extends RawDrupalContext {
     $element = $this->getSession()->getDriver()->getWebDriverSession()?->element('xpath', $tagifyInput->getXpath());
     \assert($element instanceof Element);
 
-    $exploded_tags = explode(',', $tags);
-    $exploded_tags = array_map('trim', $exploded_tags);
-    foreach ($exploded_tags as $tag) {
+    $explodedTags = array_map('trim', explode(',', $tags));
+    foreach ($explodedTags as $tag) {
       // \Behat\Mink\Driver\Selenium2Driver::setValue() will call .blur() on
       // the element, which does not play well with tagify.
       // Use postValue directly and blur after selecting all values, triggering
