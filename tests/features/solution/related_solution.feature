@@ -33,7 +33,7 @@ Feature: Related solution
     And I go to the edit form of the "Java" solution
     And I click "Additional information"
     And I select "Python" options from "Related solutions"
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Propose"
     Then I should see the heading "Java"
     # The "Java" solution is not published yet.
@@ -46,7 +46,7 @@ Feature: Related solution
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
     And I go to the edit form of the "Java" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "Java"
     And I should see the "Python" tile
@@ -66,7 +66,7 @@ Feature: Related solution
     And I click "Additional information"
     And I remove "Java,PHP" options from "Related solutions"
     And I select "PHP,Java" options from "Related solutions"
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "Javascript"
     And I should see the following tiles in the correct order:

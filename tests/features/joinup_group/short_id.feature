@@ -104,18 +104,18 @@ Feature:
 
     # Portal short ID is case insensitive.
     And I fill in "Portal short ID" with "wkwasi"
-    And I press "Continue"
+    And I press "Confirm"
     Then I should see the inline form error message "Content with Portal short ID wkwasi already exists. Please choose a different Portal short ID."
 
     # The short ID should be lowercase.
     When I fill in "Portal short ID" with "SST-2020"
-    And I press "Continue"
+    And I press "Confirm"
     Then I should see the inline form error message "This value is not valid."
 
     # The short ID is only unique among solutions, it is OK to reuse an existing
     # short ID from a collection.
     When I fill in "Portal short ID" with "sst-2020"
-    And I press "Continue"
+    And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "I know what a solution is"
@@ -126,7 +126,7 @@ Feature:
     # Publish the solution.
     When I am logged in as a moderator
     And I go to the edit form of the "I know what a solution is" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "I know what a solution is"
 
