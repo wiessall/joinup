@@ -43,11 +43,15 @@ trait RandomGeneratorTrait {
 
     $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('vid', $vocabulary)
-      ->condition('status', 1);
+      ->condition('status', 1)
+      ->range(0, 50);
     if ($skipTopLevel) {
       $query->condition('parent', '0', '<>');
     }
-
+    // Skip corrupted data associated with keywords.
+    if ($vocabulary === 'tags') {
+      $query->condition('name', '%,%', 'NOT LIKE');
+    }
     $tids = array_values($query->execute());
     return $storage->load($tids[array_rand($tids)]);
   }
