@@ -24,7 +24,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: taxonomy_container
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
       legal_type: legal_type
@@ -33,5 +33,4 @@ settings:
       direction: asc
     auto_create: false
     auto_create_bundle: ''
-    prefix: '-'
 field_type: entity_reference
