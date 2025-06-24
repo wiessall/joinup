@@ -19,7 +19,6 @@ use Drupal\node\NodeInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
-use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -183,12 +182,10 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected function blockAccess(AccountInterface $account): AccessResultInterface {
     // Only allow access if the user is viewing their own profile.
-    if ($user = $this->currentRouteMatch->getParameter('user')) {
-      if ($user instanceof UserInterface && $user->id() === $this->currentUser->id()) {
-        return parent::blockAccess($account)->cachePerUser();
-      }
-    }
-    return AccessResult::forbidden();
+    /** @var \Drupal\user\UserInterface $user_route */
+    $user_route = $this->getContextValue('user_route');
+    $access = $user_route->id() === $this->currentUser->id() ? AccessResult::forbidden() : AccessResult::allowed();
+    return $access->cachePerUser();
   }
 
 }

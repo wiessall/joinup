@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -84,15 +85,14 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
     return AccessResult::neutral();
   }
 
-  if ($operation === 'edit'
-    && $entity->getWorkflowState() === 'deletion_request'
-    && $entity->getOwnerId() === $account->id()
-    // We need to differentiate between the owner and the moderator. The 'edit
-    // any owner content' permission is used to determine if the user is a
-    // moderator.
-    && !$account->hasPermission('edit any owner content')
-  ) {
-    return AccessResult::forbidden('The owner is in the "deletion_request" state.')
+  if ($operation === 'edit') {
+    $condition = $entity->getWorkflowState() === 'deletion_request'
+      && $entity->getOwnerId() === $account->id()
+      // We need to differentiate between the owner and the moderator. The 'edit
+      // any owner content' permission is used to determine if the user is a
+      // moderator.
+      && !$account->hasPermission('edit any owner content');
+    return AccessResult::forbiddenIf($condition, 'The owner is in the "deletion_request" state.')
       ->addCacheableDependency($entity)
       ->cachePerPermissions();
   }
@@ -101,26 +101,28 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
   // referenced by any other entity.
   if ($operation === 'delete') {
     return AccessResult::forbiddenIf($entity->isReferencedByGroups())
-      ->addCacheableDependency($entity)
-      ->cachePerPermissions();
+      ->addCacheTags(['node_list']);
   }
 
-  if ($operation !== 'view') {
-    return AccessResult::neutral();
-  }
+  if ($operation === 'view') {
+    $cacheability = new CacheableMetadata();
+    $cacheability->addCacheContexts(['user.roles:anonymous']);
 
-  // For anonymous users, deny access to the canonical route.
-  $route_match = \Drupal::routeMatch();
-  if ($account->isAnonymous() && $route_match->getRouteName() === 'entity.node.canonical') {
-    $route_entity = $route_match->getParameter('node');
-    if ($route_entity instanceof OwnerInterface && $route_entity->id() === $entity->id()) {
-      return AccessResult::forbidden('Anonymous users should not see the owner canonical route.')
-        ->addCacheableDependency($entity)
-        ->cachePerPermissions();
+    // For anonymous users, deny access to the canonical route.
+    if ($account->isAnonymous()) {
+      $route_match = \Drupal::routeMatch();
+      $cacheability->addCacheContexts(['route']);
+      if ($route_match->getRouteName() === 'entity.node.canonical') {
+        $route_entity = $route_match->getParameter('node');
+        if ($route_entity instanceof OwnerInterface && $route_entity->id() === $entity->id()) {
+          return AccessResult::forbidden('Anonymous users should not see the owner canonical route.')
+            ->addCacheableDependency($cacheability);
+        }
+      }
     }
-  }
 
-  return AccessResult::neutral();
+    return AccessResult::neutral()->addCacheableDependency($cacheability);
+  }
 }
 
 /**
