@@ -356,7 +356,7 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      placeholder: ''
+      placeholder: 'Start typing to select related solutions...'
       suggestions_dropdown: 1
       show_entity_id: 0
       show_info_label: 0
