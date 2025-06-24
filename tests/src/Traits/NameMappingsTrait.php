@@ -456,7 +456,7 @@ trait NameMappingsTrait {
       'Licence legal type' => 'legal_type',
       'Related solutions' => 'related_solutions',
       'Scope' => 'field_scope',
-      "Search keywords" => 'keywords',
+      'Search keywords' => 'keywords',
       'Solution type' => 'solution_type',
       'Topic' => 'field_topic',
       'Type' => 'owner_type',
