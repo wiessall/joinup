@@ -3,6 +3,8 @@
  * Joinup solution behaviors.
  */
 ((Drupal, window) => {
+
+  // Define constants for the selectors and classes used in the script.
   const CONSTANTS = {
     LINK_CLASSES: ["btn", "btn-primary", "joinup-tabs-nav-link"],
     SELECTORS: {
@@ -13,8 +15,12 @@
     },
   };
 
+  // Cache the actions element to avoid repeated DOM queries.
   let cachedActionsElement;
 
+  /**
+   * Get the actions element.
+   */
   function getActionsElement() {
     if (!cachedActionsElement) {
       cachedActionsElement = document.querySelector(
@@ -24,8 +30,17 @@
     return cachedActionsElement;
   }
 
-  // Combined navigation functionality into a single function
+  /**
+   * Recreate the navigation links based on on the click event of the tabs.
+   *
+   * @param currentTab
+   *   The currently selected tab element.
+   * @param isInit
+   *   A boolean indicating if this is the initial call (default is false).
+   */
   function handleTabInteraction(currentTab, isInit = false) {
+    // The if statement mainly avoids adding the fragment of the default tab
+    // to window.location.hash on page load.
     if (!isInit) {
       currentTab.click();
       window.location.hash = currentTab.getAttribute("href");
@@ -71,6 +86,13 @@
     });
   }
 
+  /**
+   * Drupal behavior to handle solution tabs navigation.
+   *
+   * This behavior initializes the tab navigation by prepending a "Previous"
+   * and "Next" link in the list of actions. Checks whether there are available
+   * tabs - thus does not interfere with the confirmation screen.
+   */
   Drupal.behaviors.joinupSolutionTabsNavigation = {
     attach(context) {
       const actionsElement = context.querySelector(CONSTANTS.SELECTORS.ACTIONS);
