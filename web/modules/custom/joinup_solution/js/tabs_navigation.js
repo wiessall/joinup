@@ -3,7 +3,6 @@
  * Joinup solution behaviors.
  */
 ((Drupal, window) => {
-
   // Define constants for the selectors and classes used in the script.
   const CONSTANTS = {
     LINK_CLASSES: ["btn", "btn-primary", "joinup-tabs-nav-link"],
@@ -33,9 +32,9 @@
   /**
    * Recreate the navigation links based on on the click event of the tabs.
    *
-   * @param currentTab
+   * @param {HTMLElement} currentTab
    *   The currently selected tab element.
-   * @param isInit
+   * @param {boolean} [isInit=false]
    *   A boolean indicating if this is the initial call (default is false).
    */
   function handleTabInteraction(currentTab, isInit = false) {
@@ -43,7 +42,7 @@
     // to window.location.hash on page load.
     if (!isInit) {
       currentTab.click();
-      window.location.hash = currentTab.getAttribute("href");
+      window.history.replaceState(null, "", currentTab.getAttribute("href"));
     }
 
     const targetElement = document.getElementById(
