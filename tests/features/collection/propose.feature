@@ -57,7 +57,7 @@ Feature: Proposing a collection
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
       | Search keywords       | government                                                                                         |
-    Then I should see the text "A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content."
+    Then I should see the text "Relevant keywords improve the search ranking of your content."
     When I select "Demography" options from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
