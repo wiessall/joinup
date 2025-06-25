@@ -35,7 +35,7 @@ Feature: Solution editing.
     And I fill in "Abstract" with "Abstract of A"
     And I enter "First letter" in the "Description" wysiwyg editor
     And I select "Bulgarian" options from "Language availability"
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     # Tab "Contact details".
