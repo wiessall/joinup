@@ -82,7 +82,8 @@
 }
 
 // Overrides for Solution wizard form #ISAICP-9918.
-.node-solution-edit-form {
+.node-solution-edit-form,
+.node-solution-form {
   // Override horizontal-tabs.
   .horizontal-tabs {
     border: 0;
