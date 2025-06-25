@@ -57,7 +57,7 @@ Feature: Proposing a collection
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
       | Search keywords       | government                                                                                         |
-    Then I should see the text "A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content."
+    Then I should see the text "Relevant keywords improve the search ranking of your content."
     When I select "Demography" options from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
@@ -236,7 +236,7 @@ Feature: Proposing a collection
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
-    And I press "Continue"
+    And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
@@ -260,7 +260,7 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
     When I go to the edit form of the "Rolly email validation" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |

@@ -16,7 +16,7 @@ field_name: keywords
 entity_type: node
 bundle: event
 label: 'Search keywords'
-description: 'A comma separated list of keywords. Start typing to see suggestions. Relevant keywords improve the search ranking of your content.'
+description: 'Relevant keywords improve the search ranking of your content.'
 required: false
 translatable: false
 default_value: {  }
