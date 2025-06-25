@@ -269,7 +269,7 @@ Feature: CKEditor5
 
     When I go to the edit form of the "One exclusion advantages" solution
     And I press the button "Contact us" in the "Description" wysiwyg editor
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     And I should see the heading "One exclusion advantages"
     When I click "Contact us"
