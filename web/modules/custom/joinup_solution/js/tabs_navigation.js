@@ -3,113 +3,104 @@
  * Joinup solution behaviors.
  */
 (function (Drupal) {
+  const CONSTANTS = {
+    LINK_CLASSES: ["btn", "btn-primary", "joinup-tabs-nav-link"],
+    SELECTORS: {
+      ACTIONS: "#edit-actions",
+      HORIZONTAL_TABS: ".horizontal-tabs-list",
+      NAV_LINKS: ".joinup-tabs-nav-link",
+      TARGET: "#edit-group-main",
+    },
+  };
 
-  'use strict';
+  let cachedActionsElement;
 
-  function updatePrevNextLinks(selectedTab) {
-    const linkClasses = ["btn", "btn-primary", "joinup-tabs-nav-link"];
-    const actionsElement = document.querySelector("#edit-actions");
-    if (!actionsElement) return;
+  function getActionsElement() {
+    if (!cachedActionsElement) {
+      cachedActionsElement = document.querySelector(
+        CONSTANTS.SELECTORS.ACTIONS,
+      );
+    }
+    return cachedActionsElement;
+  }
 
-    // Remove old links if present
-    actionsElement
-      .querySelectorAll(".joinup-tabs-nav-link")
-      .forEach((el) => el.remove());
+  function createNavigationLink(tab, text) {
+    const link = document.createElement("a");
+    link.href = tab.getAttribute("href");
+    link.textContent = text;
+    link.className = CONSTANTS.LINK_CLASSES.join(" ");
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      navigateToTab(tab);
+    });
+    return link;
+  }
 
-    const allTabs = Array.from(
-      document.querySelectorAll(".horizontal-tabs-list li a"),
+  function navigateToTab(tab) {
+    tab.click();
+    history.pushState(null, "", tab.getAttribute("href"));
+    updatePrevNextLinks(tab);
+
+    const targetElement = document.getElementById(
+      CONSTANTS.SELECTORS.TARGET.slice(1),
     );
-    const currentIndex = allTabs.indexOf(selectedTab);
-
-    // Determine previous and next tabs
-    const prevTab = allTabs[currentIndex > 0 ? currentIndex - 1 : 0];
-    const nextTab =
-      allTabs[
-        currentIndex < allTabs.length - 1
-          ? currentIndex + 1
-          : allTabs.length - 1
-      ];
-
-    const prevLink = document.createElement("a");
-    prevLink.href = prevTab.getAttribute("href");
-    prevLink.textContent = "Previous";
-    prevLink.className = linkClasses.join(" ");
-    prevLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      prevTab.click();
-      history.pushState(null, "", prevTab.getAttribute("href"));
-      updatePrevNextLinks(prevTab);
-    });
-
-    const nextLink = document.createElement("a");
-    nextLink.href = nextTab.getAttribute("href");
-    nextLink.textContent = "Next";
-    nextLink.className = linkClasses.join(" ");
-    nextLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      nextTab.click();
-      history.pushState(null, "", nextTab.getAttribute("href"));
-      updatePrevNextLinks(nextTab);
-    });
-
-    // Prepend links to actionsElement
-    actionsElement.prepend(nextLink);
-    actionsElement.prepend(prevLink);
-
-    // Scroll to the corresponding tab link.
-    const targetElement = document.getElementById("edit-group-main");
     if (targetElement) {
-      // Scroll to the top of the page.
       targetElement.scrollIntoView({ behavior: "smooth" });
     }
   }
 
+  function updatePrevNextLinks(selectedTab) {
+    const actionsElement = getActionsElement();
+    if (!actionsElement) return;
+
+    // Remove old links
+    actionsElement
+      .querySelectorAll(CONSTANTS.SELECTORS.NAV_LINKS)
+      .forEach((el) => el.remove());
+
+    const allTabs = Array.from(
+      document.querySelectorAll(`${CONSTANTS.SELECTORS.HORIZONTAL_TABS} li a`),
+    );
+    const currentIndex = allTabs.indexOf(selectedTab);
+
+    const prevTab = allTabs[currentIndex > 0 ? currentIndex - 1 : 0];
+    const nextTab = allTabs[Math.min(currentIndex + 1, allTabs.length - 1)];
+
+    const prevLink = createNavigationLink(prevTab, "Previous");
+    const nextLink = createNavigationLink(nextTab, "Next");
+
+    actionsElement.prepend(nextLink, prevLink);
+  }
+
   Drupal.behaviors.joinupSolutionTabsNavigation = {
     attach(context, settings) {
-      const actionsElement = context.querySelector("#edit-actions");
-      if (!actionsElement) {
-        return;
-      }
+      const actionsElement = context.querySelector(CONSTANTS.SELECTORS.ACTIONS);
+      const horizontalTabsList = context.querySelector(
+        CONSTANTS.SELECTORS.HORIZONTAL_TABS,
+      );
 
-      // Get all the list items from the '.horizontal-tabs-list' element.
-      const horizontalTabsList = context.querySelector(".horizontal-tabs-list");
-      if (!horizontalTabsList) {
-        return;
-      }
+      if (!actionsElement || !horizontalTabsList) return;
+
       const listItems = horizontalTabsList.querySelectorAll("li");
-      if (listItems.length === 0) {
-        return;
-      }
+      if (listItems.length === 0) return;
 
-      // Check if there is already a selected tab from the fragment.
+      // Initialize selected tab
       const fragment = window.location.hash;
-      let selectedTab = null;
-      if (fragment) {
-        selectedTab = horizontalTabsList.querySelector(
-          `li a[href="${fragment}"]`,
-        );
-      } else {
-        // If no fragment, select the first tab by default.
-        selectedTab = horizontalTabsList.querySelector("li a");
+      const selectedTab = fragment
+        ? horizontalTabsList.querySelector(`li a[href="${fragment}"]`)
+        : horizontalTabsList.querySelector("li a");
+
+      if (selectedTab) {
+        updatePrevNextLinks(selectedTab);
       }
 
-      updatePrevNextLinks(selectedTab);
+      // Event delegation for tab clicks
+      horizontalTabsList.addEventListener("click", (e) => {
+        const tabLink = e.target.closest("a");
+        if (!tabLink) return;
 
-      // Integrate with the horizontal tabs to update the links if the tabs
-      // are clicked manually.
-      listItems.forEach((item) => {
-        const tabLink = item.querySelector("a");
-        // Smooth scroll to the tab content when clicked.
-        tabLink.addEventListener("click", function (e) {
-          e.preventDefault();
-          const targetId = tabLink.getAttribute("href").substring(1);
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: "smooth" });
-          }
-          // Update the selected tab and previous/next links.
-          updatePrevNextLinks(tabLink);
-        });
+        e.preventDefault();
+        navigateToTab(tabLink);
       });
     },
   };
