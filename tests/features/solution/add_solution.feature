@@ -10,7 +10,7 @@ Feature: Test adding solutions.
     And I go to the homepage of the "The Portal" collection
     And I click "Add solution" in the plus button menu
 
-    And I press "Continue"
+    And I press "Confirm"
     Then I should see the following inline form error messages:
       | error messages                             |
       | Title field is required.                   |
@@ -36,7 +36,7 @@ Feature: Test adding solutions.
     And I select "Bulgarian" options from "Language availability"
     And I click "Contact details"
     And I press "Add new owner"
-    And I press "Continue"
+    And I press "Confirm"
     Then I should see the following inline form error messages:
       | error messages                          |
       | Name field is required.                 |
@@ -52,7 +52,7 @@ Feature: Test adding solutions.
     And I fill in "Name" with "Contact Rapazoglou"
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     Then I press "Create contact information"
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Propose"
     Then I should see the inline form error message "You must accept the Terms of Agreement."
 
@@ -213,7 +213,7 @@ Feature: Test adding solutions.
     When I go to the homepage of the "Ocean studies" collection
     And I click "Add solution" in the plus button menu
     And I fill in "Title" with "Climate change tracker"
-    And I press "Continue"
+    And I press "Confirm"
     Then I should see the inline form error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
@@ -242,7 +242,7 @@ Feature: Test adding solutions.
     And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
     And I click "Additional information"
     And I select "Logging Service" options from "Solution type"
-    And I press "Continue"
+    And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
@@ -273,7 +273,7 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
 
