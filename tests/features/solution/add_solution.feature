@@ -290,3 +290,36 @@ Feature: Test adding solutions.
       | Info                 |
       | Law and Justice      |
       | Social and Political |
+
+    @javascript
+    Scenario: Previous and Next buttons should be present and functional.
+      Given I am logged in as a facilitator of the "The Portal" collection
+      And I go to the homepage of the "The Portal" collection
+      And I open the plus button menu
+      And I click "Add solution"
+
+      Then I should see the link "Previous"
+      And I should see the link "Next"
+
+      # Initially there is no fragment.
+      And the url should match "^/collection/.*/solution/add$"
+      # Navigating with the links should add the fragment accordingly.
+      When I click "Next"
+      Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+      When I click "Next"
+      Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
+      When I click "Previous"
+      Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+      When I click "Previous"
+      Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
+
+      # Clicking on a specific tab should update the fragment and affect the
+      # "Previous" and "Next" buttons.
+      When I click "Contact details"
+      Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+      When I click "Previous"
+      Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
+      When I click "Contact details"
+      Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+      When I click "Next"
+      Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
