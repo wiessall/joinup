@@ -101,8 +101,8 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      placeholder: ''
-      suggestions_dropdown: 0
+      placeholder: 'Start typing to select or add a keyword...'
+      suggestions_dropdown: 1
       show_entity_id: 0
       show_info_label: 0
       info_label: ''
