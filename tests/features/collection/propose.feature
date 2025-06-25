@@ -236,7 +236,7 @@ Feature: Proposing a collection
     And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
-    And I press "Continue"
+    And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
@@ -260,7 +260,7 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
     When I go to the edit form of the "Rolly email validation" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
