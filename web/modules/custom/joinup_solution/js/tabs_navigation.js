@@ -71,8 +71,8 @@
 
     // (Re)create the "Previous" and "Next" links.
     [
-      { targetTab: prevTab, text: "Previous" },
       { targetTab: nextTab, text: "Next" },
+      { targetTab: prevTab, text: "Previous" },
     ].forEach(({ targetTab, text }) => {
       const link = document.createElement("a");
       link.href = targetTab.getAttribute("href");
@@ -105,17 +105,18 @@
       const listItems = horizontalTabsList.querySelectorAll("li");
       if (listItems.length === 0) return;
 
-      // Initialize selected tab
+      // Initialize selected tab.
       const fragment = window.location.hash;
       const selectedTab = fragment
         ? horizontalTabsList.querySelector(`li a[href="${fragment}"]`)
+        // Otherwise, get the tab that has the 'selected' class.
         : horizontalTabsList.querySelector("li a");
 
       if (selectedTab) {
         handleTabInteraction(selectedTab, true);
       }
 
-      // Event delegation for tab clicks
+      // Event delegation for tab clicks.
       horizontalTabsList.addEventListener("click", (e) => {
         const tabLink = e.target.closest("a");
         if (!tabLink) return;
