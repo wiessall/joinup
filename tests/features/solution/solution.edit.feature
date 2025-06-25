@@ -54,7 +54,7 @@ Feature: Solution editing.
     And I click "Additional information"
     And I select "Logging Service" options from "Solution type"
     # Check Confirmation.
-    And I press "Continue"
+    And I press "Confirm"
     Then I see the texts in the correct order:
       | Solution information                       |
       | Title: Solution A                          |
@@ -123,5 +123,5 @@ Feature: Solution editing.
     When I am logged in as a facilitator of the "Another solution" solution
     And I go to the edit form of the "Another solution" solution
     And I should not see the text "Motivation"
-    Then I press "Continue"
+    Then I press "Confirm"
     And the following fields should be visible "Motivation"
