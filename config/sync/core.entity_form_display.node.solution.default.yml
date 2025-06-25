@@ -293,8 +293,8 @@ content:
     weight: 40
     region: content
     settings:
-      placeholder_url: ''
-      placeholder_title: ''
+      placeholder_url: 'This must be an external URL such as https://example.com.'
+      placeholder_title: 'This must be an external URL such as https://example.com.'
     third_party_settings: {  }
   language:
     type: tagify_entity_reference_autocomplete_widget
