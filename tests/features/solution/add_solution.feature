@@ -30,7 +30,7 @@ Feature: Test adding solutions.
     When I fill in "Title" with "Solution Beta"
     And I fill in "Abstract" with "Short abstract"
     And I enter "Last letter" in the "Description" wysiwyg editor
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I select "Bulgarian" options from "Language availability"
@@ -225,7 +225,7 @@ Feature: Test adding solutions.
     And I fill in "Title" with "Climate change tracker"
     And I fill in "Abstract" with "Tracks climate change"
     And I enter "Logs retreat of 40 glaciers in Belgium." in the "Description" wysiwyg editor
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I select "Bulgarian" options from "Language availability"
