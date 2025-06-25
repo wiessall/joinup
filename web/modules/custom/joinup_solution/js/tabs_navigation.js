@@ -30,7 +30,6 @@
           : allTabs.length - 1
       ];
 
-    // Create Previous link
     const prevLink = document.createElement("a");
     prevLink.href = prevTab.getAttribute("href");
     prevLink.textContent = "Previous";
@@ -42,7 +41,6 @@
       updatePrevNextLinks(prevTab);
     });
 
-    // Create Next link
     const nextLink = document.createElement("a");
     nextLink.href = nextTab.getAttribute("href");
     nextLink.textContent = "Next";
@@ -61,12 +59,8 @@
     // Scroll to the corresponding tab link.
     const targetElement = document.getElementById("edit-group-main");
     if (targetElement) {
+      // Scroll to the top of the page.
       targetElement.scrollIntoView({ behavior: "smooth" });
-      // scroll further up according to the sticky header height.
-      const headerHeight = document.querySelector(".sticky-header")
-        ? document.querySelector(".sticky-header").offsetHeight
-        : 0;
-      window.scrollBy(0, -headerHeight);
     }
   }
 
