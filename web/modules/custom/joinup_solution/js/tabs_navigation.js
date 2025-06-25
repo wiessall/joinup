@@ -2,7 +2,7 @@
  * @file
  * Joinup solution behaviors.
  */
-(function (Drupal) {
+((Drupal, window) => {
   const CONSTANTS = {
     LINK_CLASSES: ["btn", "btn-primary", "joinup-tabs-nav-link"],
     SELECTORS: {
@@ -24,22 +24,12 @@
     return cachedActionsElement;
   }
 
-  function createNavigationLink(tab, text) {
-    const link = document.createElement("a");
-    link.href = tab.getAttribute("href");
-    link.textContent = text;
-    link.className = CONSTANTS.LINK_CLASSES.join(" ");
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      navigateToTab(tab);
-    });
-    return link;
-  }
-
-  function navigateToTab(tab) {
-    tab.click();
-    history.pushState(null, "", tab.getAttribute("href"));
-    updatePrevNextLinks(tab);
+  // Combined navigation functionality into a single function
+  function handleTabInteraction(currentTab, isInit = false) {
+    if (!isInit) {
+      currentTab.click();
+      window.location.hash = currentTab.getAttribute("href");
+    }
 
     const targetElement = document.getElementById(
       CONSTANTS.SELECTORS.TARGET.slice(1),
@@ -47,9 +37,7 @@
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: "smooth" });
     }
-  }
 
-  function updatePrevNextLinks(selectedTab) {
     const actionsElement = getActionsElement();
     if (!actionsElement) return;
 
@@ -61,19 +49,30 @@
     const allTabs = Array.from(
       document.querySelectorAll(`${CONSTANTS.SELECTORS.HORIZONTAL_TABS} li a`),
     );
-    const currentIndex = allTabs.indexOf(selectedTab);
+    const currentIndex = allTabs.indexOf(currentTab);
 
     const prevTab = allTabs[currentIndex > 0 ? currentIndex - 1 : 0];
     const nextTab = allTabs[Math.min(currentIndex + 1, allTabs.length - 1)];
 
-    const prevLink = createNavigationLink(prevTab, "Previous");
-    const nextLink = createNavigationLink(nextTab, "Next");
-
-    actionsElement.prepend(nextLink, prevLink);
+    // Create navigation links
+    [
+      { targetTab: prevTab, text: "Previous" },
+      { targetTab: nextTab, text: "Next" },
+    ].forEach(({ targetTab, text }) => {
+      const link = document.createElement("a");
+      link.href = targetTab.getAttribute("href");
+      link.textContent = text;
+      link.className = CONSTANTS.LINK_CLASSES.join(" ");
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleTabInteraction(targetTab);
+      });
+      actionsElement.prepend(link);
+    });
   }
 
   Drupal.behaviors.joinupSolutionTabsNavigation = {
-    attach(context, settings) {
+    attach(context) {
       const actionsElement = context.querySelector(CONSTANTS.SELECTORS.ACTIONS);
       const horizontalTabsList = context.querySelector(
         CONSTANTS.SELECTORS.HORIZONTAL_TABS,
@@ -91,7 +90,7 @@
         : horizontalTabsList.querySelector("li a");
 
       if (selectedTab) {
-        updatePrevNextLinks(selectedTab);
+        handleTabInteraction(selectedTab, true);
       }
 
       // Event delegation for tab clicks
@@ -100,8 +99,8 @@
         if (!tabLink) return;
 
         e.preventDefault();
-        navigateToTab(tabLink);
+        handleTabInteraction(tabLink);
       });
     },
   };
-})(Drupal);
+})(Drupal, window);
