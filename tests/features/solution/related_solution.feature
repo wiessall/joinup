@@ -32,6 +32,7 @@ Feature: Related solution
     When I am logged in as a facilitator of the "Java" solution
     And I go to the edit form of the "Java" solution
     And I click "Additional information"
+    And the "placeholder" attribute of "Related solutions" should be "Start typing to select related solutions..."
     And I select "Python" options from "Related solutions"
     And I press "Continue"
     And I press "Propose"
