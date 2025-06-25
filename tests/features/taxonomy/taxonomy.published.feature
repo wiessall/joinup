@@ -9,7 +9,7 @@ Feature: Publication status of keywords depends on the status of the parent.
       | Title       | ASDF solution    |
       | Abstract    | Some abstract    |
       | Description | Some description |
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I select "English" options from "Language availability"
