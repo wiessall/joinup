@@ -307,7 +307,7 @@ Feature: Global search
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
+    Then the page should show the tiles "Alternative event, Document omega, Event Omega, News omega, Page omega, Release Alpha, Solution alpha"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
