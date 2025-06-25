@@ -301,7 +301,7 @@ content:
     weight: 40
     region: content
     settings:
-      placeholder_url: ''
+      placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
       placeholder_title: ''
     third_party_settings: {  }
   language:
