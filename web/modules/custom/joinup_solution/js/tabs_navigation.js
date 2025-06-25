@@ -55,11 +55,12 @@
     const actionsElement = getActionsElement();
     if (!actionsElement) return;
 
-    // Remove old links
+    // Remove old links if exist.
     actionsElement
       .querySelectorAll(CONSTANTS.SELECTORS.NAV_LINKS)
       .forEach((el) => el.remove());
 
+    // Get all tabs so that we can determine the previous and next tabs.
     const allTabs = Array.from(
       document.querySelectorAll(`${CONSTANTS.SELECTORS.HORIZONTAL_TABS} li a`),
     );
@@ -68,7 +69,7 @@
     const prevTab = allTabs[currentIndex > 0 ? currentIndex - 1 : 0];
     const nextTab = allTabs[Math.min(currentIndex + 1, allTabs.length - 1)];
 
-    // Create navigation links
+    // (Re)create the "Previous" and "Next" links.
     [
       { targetTab: prevTab, text: "Previous" },
       { targetTab: nextTab, text: "Next" },
