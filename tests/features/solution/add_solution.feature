@@ -298,28 +298,28 @@ Feature: Test adding solutions.
     And I open the plus button menu
     And I click "Add solution"
 
-    Then I should see the link "Previous"
-    And I should see the link "Next"
+    Then I should see the button "Previous"
+    And I should see the button "Next"
 
     # Initially there is no fragment.
     And the url should match "^/collection/.*/solution/add$"
     # Navigating with the links should add the fragment accordingly.
-    When I click "Next"
+    When I press "Next"
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
-    When I click "Next"
+    When I press "Next"
     Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
-    When I click "Previous"
+    When I press "Previous"
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
-    When I click "Previous"
+    When I press "Previous"
     Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
 
     # Clicking on a specific tab should update the fragment and affect the
     # "Previous" and "Next" buttons.
     When I click "Contact details"
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
-    When I click "Previous"
+    When I press "Previous"
     Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
     When I click "Contact details"
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
-    When I click "Next"
+    When I press "Next"
     Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
