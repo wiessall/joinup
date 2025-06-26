@@ -20,7 +20,7 @@ Feature: Solution TCA agreement
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I select "Bulgarian" options from "Language availability"
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I click "Contact details"
@@ -36,7 +36,7 @@ Feature: Solution TCA agreement
     And I press "Create contact information"
     And I click "Additional information"
     And I select "Logging Service" options from "Solution type"
-    And I press "Continue"
+    And I press "Confirm"
     And I click "Terms of Agreement"
 
     Then a modal should open
@@ -50,5 +50,5 @@ Feature: Solution TCA agreement
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the edit form of the "Solution B" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I should not see "I have read and agreed"

@@ -457,6 +457,7 @@ trait NameMappingsTrait {
       'Scope' => 'field_scope',
       'Search keywords' => 'keywords',
       'Solution type' => 'solution_type',
+      'Solution classification' => 'classification',
       'Topic' => 'field_topic',
       'Type' => 'owner_type',
     ];

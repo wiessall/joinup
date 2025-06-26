@@ -57,7 +57,7 @@ third_party_settings:
         step_description: ''
         back_button_show: false
         back_button_text: ''
-        next_button_text: Continue
+        next_button_text: Confirm
         step_help: ''
     group_solution_information:
       children:
@@ -190,10 +190,18 @@ content:
       placeholder: ''
     third_party_settings: {  }
   classification:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 4
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
@@ -291,7 +299,7 @@ content:
     weight: 40
     region: content
     settings:
-      placeholder_url: ''
+      placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
       placeholder_title: ''
     third_party_settings: {  }
   language:

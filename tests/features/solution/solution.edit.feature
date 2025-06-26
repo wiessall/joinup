@@ -35,7 +35,7 @@ Feature: Solution editing.
     And I fill in "Abstract" with "Abstract of A"
     And I enter "First letter" in the "Description" wysiwyg editor
     And I select "Bulgarian" options from "Language availability"
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     # Tab "Contact details".
@@ -54,7 +54,7 @@ Feature: Solution editing.
     And I click "Additional information"
     And I select "Logging Service" options from "Solution type"
     # Check Confirmation.
-    And I press "Continue"
+    And I press "Confirm"
     Then I see the texts in the correct order:
       | Solution information                       |
       | Title: Solution A                          |
@@ -123,5 +123,5 @@ Feature: Solution editing.
     When I am logged in as a facilitator of the "Another solution" solution
     And I go to the edit form of the "Another solution" solution
     And I should not see the text "Motivation"
-    Then I press "Continue"
+    Then I press "Confirm"
     And the following fields should be visible "Motivation"
