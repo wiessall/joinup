@@ -92,7 +92,7 @@ Feature: Resend validation email from collection/solution about page
       | E-mail | confirmation_email2.man@example.com |
       | Name   | Confirmation Invisible Man 2        |
     And I press "Create contact information"
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     When I go to the "Klop mirubes" solution
     Then I should see the text "Please confirm your contact information to enable users to contact you"

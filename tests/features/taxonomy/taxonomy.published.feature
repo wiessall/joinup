@@ -9,7 +9,7 @@ Feature: Publication status of keywords depends on the status of the parent.
       | Title       | ASDF solution    |
       | Abstract    | Some abstract    |
       | Description | Some description |
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
     And I select "English" options from "Language availability"
@@ -25,7 +25,7 @@ Feature: Publication status of keywords depends on the status of the parent.
       | E-mail address | john.doe@example.com |
     And I press "Create contact information"
     And I select "Unpublished Keyword" options from "Search keywords"
-    And I press "Continue"
+    And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "ASDF solution"
@@ -33,7 +33,7 @@ Feature: Publication status of keywords depends on the status of the parent.
 
     When I am logged in as a moderator
     And I go to the edit form of the "ASDF solution" solution
-    And I press "Continue"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "ASDF solution"
     And the publication state of the "Unpublished Keyword" "taxonomy_term" should be "published"
