@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains install hooks and requirements for the whats_new module.
+ */
+
+declare (strict_types=1);
+
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+
+/**
+ * Implements hook_uninstall().
+ */
+function whats_new_uninstall(): void {
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $field_storage = $entity_definition_update_manager->getFieldStorageDefinition('live_link', 'menu_link_content');
+
+  if ($field_storage instanceof FieldStorageDefinitionInterface) {
+    $entity_definition_update_manager->uninstallFieldStorageDefinition($field_storage);
+  }
+}
