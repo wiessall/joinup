@@ -13,9 +13,18 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
  * Implements hook_uninstall().
  */
 function whats_new_uninstall(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $links = $storage->getQuery()
+    ->condition('menu_name', 'support')
+    ->accessCheck(FALSE)
+    ->execute();
+  if (!empty($links)) {
+    $entities = $storage->loadMultiple($links);
+    $storage->delete($entities);
+  }
+
   $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
   $field_storage = $entity_definition_update_manager->getFieldStorageDefinition('live_link', 'menu_link_content');
-
   if ($field_storage instanceof FieldStorageDefinitionInterface) {
     $entity_definition_update_manager->uninstallFieldStorageDefinition($field_storage);
   }
