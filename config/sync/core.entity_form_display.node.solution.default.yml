@@ -237,7 +237,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 100
       placeholder: 'Select or start typing...'
       suggestions_dropdown: 0
       show_entity_id: 0
@@ -266,7 +266,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 0
+      match_limit: 100
       placeholder: 'Select or start typing...'
       suggestions_dropdown: 0
       show_entity_id: 0
@@ -280,7 +280,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 0
+      match_limit: 100
       placeholder: 'Start typing to select or add a keyword...'
       suggestions_dropdown: 1
       show_entity_id: 0
@@ -302,7 +302,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 0
+      match_limit: 100
       placeholder: 'Select or start typing...'
       suggestions_dropdown: 0
       show_entity_id: 0
@@ -355,7 +355,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 100
       placeholder: 'Start typing to select related solutions...'
       suggestions_dropdown: 1
       show_entity_id: 0
@@ -377,7 +377,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 100
       placeholder: 'Start typing to select the solution type...'
       suggestions_dropdown: 1
       show_entity_id: 0
@@ -391,7 +391,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
+      match_limit: 100
       placeholder: ''
       suggestions_dropdown: 0
       show_entity_id: 0
