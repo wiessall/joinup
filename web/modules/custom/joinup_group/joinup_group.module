@@ -330,8 +330,10 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     }
     $group = $entity->getGroup();
     $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
-    return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
-      ->addCacheableDependency($membership);
+    $access = $membership
+      ? AccessResult::allowedIf($membership->hasPermission('view any unpublished content'))
+      : AccessResult::neutral();
+    return $access->addCacheContexts(['og_role']);
   }
 
   if (!$entity instanceof GroupInterface
@@ -339,17 +341,14 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
     || $operation !== 'view'
   ) {
-    return AccessResult::neutral();
+    return AccessResult::neutral()->cachePerPermissions()->addCacheContexts(['og_role']);
   }
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $membership = $entity->getMembership($account->id());
-  return AccessResult::allowedIf(
-    $membership
-    && !$entity->isPublished()
-    && $membership->hasPermission('view any unpublished content'))
-    ->addCacheableDependency($membership);
+  $access = \Drupal::getContainer()->get('og.access')->userAccessEntityOperation('view any unpublished content', $entity, $account);
+  $access->andIf(AccessResult::allowedIf(!$entity->isPublished()));
+  return $access->addCacheContexts(['og_role']);
 }
 
 /**
