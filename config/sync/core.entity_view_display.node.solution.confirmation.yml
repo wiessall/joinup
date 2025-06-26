@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - image.style.thumbnail
     - node.type.solution
@@ -85,7 +84,6 @@ third_party_settings:
         - logo
         - short_id
         - documentation
-        - spatial_coverage
         - related_solutions
         - process_status
         - landing_page
@@ -321,26 +319,6 @@ content:
       template_suggestion:
         template_suggestion: inline
     weight: 7
-    region: content
-  spatial_coverage:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: inline
-    weight: 3
     region: content
 hidden:
   collections: true
