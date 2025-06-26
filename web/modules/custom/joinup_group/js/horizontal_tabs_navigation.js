@@ -1,6 +1,8 @@
 /**
  * @file
- * Joinup solution behaviors.
+ * Horizontal tabs navigation behavior.
+ *
+ * Adds previous/next buttons to control horizontal tabs.
  */
 ((Drupal, window, $) => {
   // Extend Drupal.HorizontalTab to dispatch an event on tab focus.
@@ -10,10 +12,10 @@
     $(this.details).trigger("horizontalTabFocused", [this]);
   };
 
-  Drupal.behaviors.joinupSolutionTabsNavigation = {
+  Drupal.behaviors.horizontalTabsNavigation = {
     attach(context) {
       once(
-        "joinup-solution-tabs-navigation",
+        "horizontal-tabs-navigation",
         "[data-horizontal-tabs]",
         context,
       ).forEach((tabsWrapper) => {
@@ -32,30 +34,14 @@
           return; // Required DOM elements not found, exit early.
         }
 
-        // Ensure the active tab input is set to the first pane if not already set.
+        // Determine the index of the currently active tab.
         const getActiveIndex = () => {
           const activeId = activeTabInput.value;
           return panes.findIndex((pane) => pane.id === activeId);
         };
 
-        // Create a button with the specified label and activation function.
-        const createButton = (label, onActivate) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "btn btn-secondary me-1";
-          btn.textContent = label;
-          btn.addEventListener("click", onActivate);
-          btn.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onActivate();
-            }
-          });
-          return btn;
-        };
-
         // Focus the tab at the specified offset from the current active tab.
-        function focusTabAtOffset(offset) {
+        const focusTabAtOffset = (offset) => {
           const activeIndex = getActiveIndex();
           const targetPane = panes[activeIndex + offset];
           const horizontalTab = $(targetPane).data("horizontalTab");
@@ -66,21 +52,46 @@
               block: "start",
             });
           }
-        }
+        };
 
-        // Create buttons before using them.
-        const prevButton = createButton(Drupal.t("Previous"), () =>
-          focusTabAtOffset(-1),
-        );
-        const nextButton = createButton(Drupal.t("Next"), () =>
-          focusTabAtOffset(1),
-        );
+        // Helper to create navigation buttons.
+        const createButton = (label, offset) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn-secondary me-1";
+          btn.textContent = Drupal.t(label);
+          btn.setAttribute("aria-label", `${label} tab`);
+          btn.addEventListener("click", () => focusTabAtOffset(offset));
+          btn.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              focusTabAtOffset(offset);
+            }
+          });
+          return btn;
+        };
 
-        // Update the state of the previous and next buttons based on the active tab index.
+        // Create navigation buttons.
+        const prevButton = createButton("Previous", -1);
+        const nextButton = createButton("Next", 1);
+
+        // Update the state of the previous and next buttons.
         const updateButtonState = () => {
           const index = getActiveIndex();
           prevButton.disabled = index <= 0;
           nextButton.disabled = index >= panes.length - 1;
+
+          if (index > 0) {
+            prevButton.setAttribute("aria-controls", panes[index - 1].id);
+          } else {
+            prevButton.removeAttribute("aria-controls");
+          }
+
+          if (index < panes.length - 1) {
+            nextButton.setAttribute("aria-controls", panes[index + 1].id);
+          } else {
+            nextButton.removeAttribute("aria-controls");
+          }
         };
 
         // Prepend buttons to the target location.
@@ -90,9 +101,7 @@
         // Update buttons state on init and tab focus event.
         updateButtonState();
         panes.forEach((pane) => {
-          $(pane).on("horizontalTabFocused", () => {
-            updateButtonState();
-          });
+          $(pane).on("horizontalTabFocused", updateButtonState);
         });
       });
     },
