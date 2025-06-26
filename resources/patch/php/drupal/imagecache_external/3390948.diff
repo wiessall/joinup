@@ -74,7 +74,7 @@ index 8f03bbb634d0dc65aad4be9bb0e869c033efc288..de0d854693bc9501f6b301a45fe73f61
 +    ->save(TRUE);
 +}
 diff --git a/imagecache_external.module b/imagecache_external.module
-index df28db52df5b5f402c0ed7ddbaa04cc46b543ece..bfd9e00965c29d6f94d366e2139892ceb4c55a87 100644
+index b3fccb25fec9b6bc0df101a95cb18f83a6f895ad..c50feec6850452eb3e514f5bf73c2a3e8723b8ec 100644
 --- a/imagecache_external.module
 +++ b/imagecache_external.module
 @@ -9,6 +9,9 @@ use Drupal\Component\Utility\UrlHelper;
@@ -84,10 +84,10 @@ index df28db52df5b5f402c0ed7ddbaa04cc46b543ece..bfd9e00965c29d6f94d366e2139892ce
 +use Drupal\imagecache_external\Svg\ImagecacheExternalAttributes;
 +use Drupal\imagecache_external\Svg\ImagecacheExternalTags;
 +use enshrined\svgSanitize\Sanitizer;
+ use Drupal\image\Hook\ImageHooks;
  
  const IMAGECACHE_EXTERNAL_FLUSH_DIRECTORIES = '_IMAGECACHE_FLUSH_DIRECTORIES_';
- 
-@@ -145,7 +148,7 @@ function imagecache_external_generate_path(?string $url) {
+@@ -146,7 +149,7 @@ function imagecache_external_generate_path(?string $url) {
  
    // Add the extension for real images.
    $extension = strtolower(pathinfo($url_parameters['path'], PATHINFO_EXTENSION));
@@ -96,7 +96,7 @@ index df28db52df5b5f402c0ed7ddbaa04cc46b543ece..bfd9e00965c29d6f94d366e2139892ce
      $filename .= '.' . $extension;
    }
    else {
-@@ -225,16 +228,20 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -226,16 +229,20 @@ function imagecache_external_fetch(string $url, string $cachepath) {
      $content_type_array = explode(';', $response_mimetype);
      $content_type_allowed = FALSE;
      foreach ($content_type_array as $content_type) {
@@ -121,7 +121,7 @@ index df28db52df5b5f402c0ed7ddbaa04cc46b543ece..bfd9e00965c29d6f94d366e2139892ce
          return $file->getFileUri();
        }
      }
-@@ -252,6 +259,36 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -253,6 +260,36 @@ function imagecache_external_fetch(string $url, string $cachepath) {
    }
  }
  
