@@ -17,4 +17,6 @@ horizontal_tabs_navigation:
     js/horizontal_tabs_navigation.js: {}
   dependencies:
     - core/drupal
-    - field_group/horizontal_tabs
+    - core/once
+    - core/jquery
+    - field_group/element.horizontal_tabs
