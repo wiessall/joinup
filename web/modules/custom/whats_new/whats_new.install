@@ -23,6 +23,10 @@ function whats_new_uninstall(): void {
     $storage->delete($entities);
   }
 
+  /** @var \Drupal\user\UserDataInterface $user_data */
+  $user_data = \Drupal::service('user.data');
+  $user_data->delete('whats_new');
+
   $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
   $field_storage = $entity_definition_update_manager->getFieldStorageDefinition('live_link', 'menu_link_content');
   if ($field_storage instanceof FieldStorageDefinitionInterface) {
