@@ -43,6 +43,7 @@ Feature: Creation of owners through UI
     And I select "Switzerland" from "Country"
     Then I press "Update owner"
     Then I should see "Acme Inc."
+    And I should see "Company, Industry consortium"
     And I should see the link "Industry consortium"
     And I should see the link "Company"
 
