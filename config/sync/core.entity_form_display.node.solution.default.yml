@@ -104,7 +104,6 @@ third_party_settings:
         - short_id
         - documentation
         - keywords
-        - spatial_coverage
         - related_solutions
         - process_status
         - landing_page

@@ -177,7 +177,6 @@ trait NameMappingsTrait {
         'related solutions' => 'related_solutions',
         'solution classification' => 'classification',
         'solution type' => 'solution_type',
-        'spatial coverage' => 'spatial_coverage',
         'status' => 'field_status',
         'state' => 'field_state',
         'collection' => 'og_audience',
