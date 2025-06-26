@@ -129,7 +129,7 @@ function owner_inline_entity_form_table_fields_alter(array &$fields, array $cont
       'weight' => 10,
       'display_options' => [
         'type' => 'entity_reference_label',
-        'settings' => ['link' => FALSE],
+        'settings' => ['link' => TRUE],
         'third_party_settings' => [
           'field_delimiter' => ['delimiter' => ','],
           'template_suggestion' => ['template_suggestion' => 'inline'],

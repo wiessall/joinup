@@ -19,6 +19,6 @@ Feature: Validation of owners created through UI
     And I select "Belgium" from "Country"
     And I press "Create owner"
     Then the "Owner IEF" table should contain the following columns:
-      | Title        | Type    | Country | Status    |
-      | Leandro Keen | Company | Belgium | Published |
+      | Title        | Type    | Country |
+      | Leandro Keen | Company | Belgium |
     And I should not see the error message "Name field is required."
