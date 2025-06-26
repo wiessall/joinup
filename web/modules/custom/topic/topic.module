@@ -183,7 +183,7 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
   if ($meta_entity === 'topic') {
     if ($entity_bundle === 'configurable_listing') {
       return AccessResult::allowed()
-        ->addCacheContexts(['route']);
+        ->addCacheableDependency($meta_entity);
     }
 
     $denied_paragraphs = [
@@ -199,7 +199,7 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
 
     if (in_array($entity_bundle, $denied_paragraphs, TRUE)) {
       return AccessResult::forbidden()
-        ->addCacheContexts(['route']);
+        ->addCacheableDependency($meta_entity);
     }
   }
 

@@ -63,6 +63,8 @@ class ReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
     return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('release', $account, [
+      // The group will be consumed in
+      // state_machine_permissions_node_create_access().
       'group' => $node,
     ], TRUE);
   }
@@ -156,10 +158,9 @@ class ReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $access = AccessResult::allowedIf($node->access('view', $account, TRUE) && !empty($node->getReleases()));
-    $access->addCacheableDependency($node);
-    $access->addCacheTags(['node_list:release']);
-    return $access;
+    return $node->access('view', $account, TRUE)
+      ->andIf(AccessResult::allowedIf(!empty($node->getReleases())))
+      ->addCacheTags(['node_list:release']);
   }
 
   /**

@@ -239,7 +239,7 @@ class InvitationAcceptanceForm extends FormBase {
       static::generateHash($invitation, $action) === $hash
     )
       ->addCacheableDependency($invitation)
-      ->addCacheContexts([$user->isAuthenticated() ? 'user.roles:authenticated' : 'user.roles:anonymous']);
+      ->addCacheContexts(['user.roles:authenticated']);
   }
 
   /**

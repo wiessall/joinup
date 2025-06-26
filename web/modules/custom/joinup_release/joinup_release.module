@@ -193,11 +193,7 @@ function joinup_release_node_access(EntityInterface $release, $operation, Accoun
 
   // Allow access depending on the publication status and the corresponding
   // permission in the group.
-  return AccessResult::allowedIf(!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view any unpublished content'))
-    ->addCacheableDependency($release)
-    ->addCacheableDependency($parent)
-    ->cachePerPermissions()
-    ->addCacheContexts(['og_group_context']);
+  return AccessResult::allowedIf(!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view any unpublished content'));
 }
 
 /**

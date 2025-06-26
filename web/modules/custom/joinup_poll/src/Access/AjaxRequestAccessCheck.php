@@ -30,11 +30,9 @@ class AjaxRequestAccessCheck implements AccessInterface {
     $ajaxRequirement = filter_var($route->getRequirement('_ajax_request'), FILTER_VALIDATE_BOOLEAN);
     $isAjax = $request->isXmlHttpRequest();
 
-    if ($ajaxRequirement === $isAjax) {
-      return AccessResult::allowed()->addCacheContexts(['headers:X-Requested-With']);
-    }
-
-    return AccessResult::forbidden()->addCacheContexts(['headers:X-Requested-With']);
+    $access = $ajaxRequirement === $isAjax ? AccessResult::allowed() : AccessResult::forbidden();
+    $access->addCacheContexts(['headers:X-Requested-With']);
+    return $access;
   }
 
 }
