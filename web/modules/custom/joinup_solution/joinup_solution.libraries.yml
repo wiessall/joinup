@@ -1,5 +1,0 @@
-tabs_navigation:
-  js:
-    js/tabs_navigation.js: {}
-  dependencies:
-    - core/drupal
