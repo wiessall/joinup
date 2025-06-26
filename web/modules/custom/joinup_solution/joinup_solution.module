@@ -201,8 +201,7 @@ function joinup_solution_node_access(EntityInterface $entity, $operation, Accoun
       return AccessResult::forbidden()
         ->addCacheableDependency($entity)
         ->cachePerPermissions()
-        ->cachePerUser()
-        ->addCacheTags(['workflow']);
+        ->cachePerUser();
     }
   }
 

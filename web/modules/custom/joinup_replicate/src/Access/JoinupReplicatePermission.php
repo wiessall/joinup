@@ -48,6 +48,7 @@ readonly class JoinupReplicatePermission implements AccessInterface {
   public function access(AccountInterface $account, RouteMatchInterface $routeMatch): AccessResultInterface {
     $permission = $routeMatch->getRouteObject()->getRequirement('_joinup_replicate_permission');
     $accessResult = AccessResult::allowedIfHasPermission($account, $permission);
+    $accessResult->addCacheContexts(['route']);
     $entity = static::getContentEntityFromRoute($routeMatch);
     $group = static::getGroup($entity);
     $membership = $group instanceof GroupInterface
@@ -66,7 +67,6 @@ readonly class JoinupReplicatePermission implements AccessInterface {
       $ogPermissionAccessResult = AccessResult::allowedIf($membership->hasPermission($permission));
       return $accessResult->orIf($ogPermissionAccessResult);
     }
-    $accessResult->addCacheContexts(['route']);
 
     return $accessResult;
   }
