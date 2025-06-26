@@ -63,10 +63,6 @@ final class PlainGlossaryFormatter extends FormatterBase {
     foreach ($items as $delta => $item) {
       $filter = $this->filterPluginManager->createInstance('collection_glossary');
       $value = $filter->process($item->value, $langcode);
-      $filter = $this->filterPluginManager->createInstance('linkit', [
-        'settings' => ['title' => FALSE],
-      ]);
-      $value = $filter->process($value, $langcode);
       $element[$delta] = [
         '#markup' => $value,
       ];
