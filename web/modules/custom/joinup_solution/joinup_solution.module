@@ -817,9 +817,6 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
       ],
     ];
   }
-
-  // Attach the library that provides the navigation buttons for the tabs.
-  $form['#attached']['library'][] = 'joinup_solution/tabs_navigation';
 }
 
 /**
