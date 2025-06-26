@@ -16,7 +16,7 @@ field_name: classification
 entity_type: node
 bundle: solution
 label: 'Solution classification'
-description: 'Select the option that best describes your solution. Get more info on available option'
+description: 'Info on available classification options'
 required: true
 translatable: false
 default_value: {  }
