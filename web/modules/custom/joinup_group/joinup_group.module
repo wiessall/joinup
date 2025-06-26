@@ -328,7 +328,10 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     if (!$entity->hasGroup()) {
       return AccessResult::neutral();
     }
-    return \Drupal::getContainer()->get('og.access')->userAccess($entity->getGroup(), 'view any unpublished content', $account);
+    $group = $entity->getGroup();
+    $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
+    return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
+      ->addCacheableDependency($membership);
   }
 
   if (!$entity instanceof GroupInterface
@@ -341,8 +344,12 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  $access = \Drupal::getContainer()->get('og.access')->userAccessEntity('view any unpublished content', $entity, $account);
-  return $access->andIf(AccessResult::allowed(!$entity->isPublished()));
+  $membership = $entity->getMembership($account->id());
+  return AccessResult::allowedIf(
+    $membership
+    && !$entity->isPublished()
+    && $membership->hasPermission('view any unpublished content'))
+    ->addCacheableDependency($membership);
 }
 
 /**

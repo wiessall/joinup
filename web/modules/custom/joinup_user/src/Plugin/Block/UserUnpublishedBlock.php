@@ -184,7 +184,7 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
     // Only allow access if the user is viewing their own profile.
     /** @var \Drupal\user\UserInterface $user_route */
     $user_route = $this->getContextValue('user_route');
-    $access = $user_route->id() === $this->currentUser->id() ? AccessResult::forbidden() : AccessResult::allowed();
+    $access = $user_route->id() === $this->currentUser->id() ? AccessResult::allowed() : AccessResult::forbidden();
     return $access->cachePerUser();
   }
 
