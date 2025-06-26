@@ -152,7 +152,8 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "yaireo/tagify": "^4.32"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -555,6 +556,18 @@
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                     "type": "git",
                     "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "yaireo/tagify",
+                "version": "4.32.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/yaireo/tagify/archive/refs/tags/v4.32.2.zip",
+                    "type": "zip"
                 }
             }
         }
