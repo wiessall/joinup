@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - image.style.thumbnail
     - media.type.solution_logo
@@ -105,7 +104,6 @@ third_party_settings:
         - short_id
         - documentation
         - keywords
-        - spatial_coverage
         - related_solutions
         - process_status
         - landing_page
@@ -192,10 +190,18 @@ content:
       placeholder: ''
     third_party_settings: {  }
   classification:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 4
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
@@ -293,7 +299,7 @@ content:
     weight: 40
     region: content
     settings:
-      placeholder_url: ''
+      placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
       placeholder_title: ''
     third_party_settings: {  }
   language:
@@ -384,20 +390,6 @@ content:
       show_info_label: 0
       info_label: ''
       parent_selection: 0
-    third_party_settings: {  }
-  spatial_coverage:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 37
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 100
-      placeholder: ''
-      suggestions_dropdown: 0
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 1
     third_party_settings: {  }
   tca:
     weight: 17
