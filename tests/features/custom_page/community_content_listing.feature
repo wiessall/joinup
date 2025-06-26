@@ -351,7 +351,7 @@ Feature:
     And I press "Save"
     Then I should see the heading "Collection content"
     # Verify that unwanted facets are not shown in the page.
-    And I should see the following facet items "Discussion, Event, News" in this order
+    And I should see the following facet items "Discussions, Event, News" in this order
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
@@ -362,7 +362,7 @@ Feature:
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the heading "20 year anniversary"
     # Some unwanted facets were showing after selecting one of the tabs.
-    And I should see the following facet items "News, Discussion, Event" in this order
+    And I should see the following facet items "News, Discussions, Event" in this order
     # Filter on events.
     When I click the Event content tab
     Then I should see the heading "20 year anniversary"
@@ -710,7 +710,7 @@ Feature:
 
     And I go to the "Multi paragraph facets" custom_page
     Then I should see the heading "Multi paragraph facets"
-    And I should see the following facet items "Discussion, Event, News" in this order
+    And I should see the following facet items "Discussions, Events, News" in this order
 
     Given I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
