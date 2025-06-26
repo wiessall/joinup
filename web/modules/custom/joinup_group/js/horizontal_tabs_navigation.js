@@ -5,7 +5,7 @@
 ((Drupal, window) => {
   // Define constants for the selectors and classes used in the script.
   const CONSTANTS = {
-    LINK_CLASSES: ["btn", "btn-primary", "joinup-tabs-nav-link"],
+    LINK_CLASSES: ["btn", "btn-secondary", "joinup-tabs-nav-link", "me-1"],
     SELECTORS: {
       ACTIONS: "#edit-actions",
       HORIZONTAL_TABS: ".horizontal-tabs-list",
@@ -124,6 +124,13 @@
         e.preventDefault();
         handleTabInteraction(tabLink);
       });
+
+      // Replace .btn-outline-danger with .btn-primary in the actions section.
+      const dangerButton = actionsElement.querySelector(".btn-outline-danger");
+      if (dangerButton) {
+        dangerButton.classList.remove("btn-outline-danger");
+        dangerButton.classList.add("btn-primary");
+      }
     },
   };
 })(Drupal, window);

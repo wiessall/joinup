@@ -120,10 +120,9 @@ Feature: Solutions Overview
       | Title                   | Colonies in Earth                   |
       | Abstract                | Some abstract                       |
       | Description             | Some space mumbo jumbo description. |
-      | Geographical coverage   | Belgium                             |
     And I select "Demography" options from "Topic"
     And I select "Data Owner" options from "Solution type"
-    And I select "Complete Solution" from "Solution classification"
+    And I select "Complete Solution" options from "Solution classification"
     And I select "Defense" options from "Domain"
     And I select "Bulgarian" options from "Language"
     # Create owner.
