@@ -237,9 +237,9 @@ Feature: Global search
       | name          | email             | state     |
       | Go-to contact | go-to@example.com | validated |
     And collection content:
-      | title            | description                                          | abstract                       | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
+      | title            | description                                          | abstract                       | keywords            | state     |
+      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | nintendo64 licences | published |
+      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | nintendo64 licences | published |
     Given solution content:
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
       | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
@@ -256,15 +256,15 @@ Feature: Global search
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
-      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
-      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
+      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords            | collection       | solution       | state     |
+      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet            |                  | Solution alpha | published |
+      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               | nintendo64 licences | Collection alpha |                | published |
     And document content:
       | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
-      | title            | body                                                              | solution       | state     |
-      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | published |
+      | title            | body                                                              | solution       | keywords            | state     |
+      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | nintendo64 licences | published |
     And custom_page content:
       | title      | body                                     | collection       | state     | keywords |
       | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
@@ -305,9 +305,11 @@ Feature: Global search
     When I enter "epsilon" in the search bar and press enter
     Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
-    # "Alphabet" is used in all the keywords fields.
+    # Test "Alphabet" and "nintendo64" in keyword fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Document omega, Event Omega, News omega, Page omega, Release Alpha, Solution alpha"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
+    When I enter "nintendo64" in the search bar and press enter
+    Then the page should show the tiles "Alternative event, Col for Sol, Collection alpha, Discussion omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
