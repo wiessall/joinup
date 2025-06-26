@@ -28,9 +28,9 @@
         const panes = Array.from(
           tabPanesWrapper.querySelectorAll("details.horizontal-tabs-pane"),
         );
-        const targetLocation = context.querySelector("#edit-actions");
+        const actionsElement = context.querySelector("#edit-actions");
 
-        if (!activeTabInput || !targetLocation || panes.length === 0) {
+        if (!activeTabInput || !actionsElement || panes.length === 0) {
           return; // Required DOM elements not found, exit early.
         }
 
@@ -51,6 +51,8 @@
               behavior: "smooth",
               block: "start",
             });
+            // Update the window history state to reflect the new active tab.
+            window.history.replaceState(null, "", `#${targetPane.id}`);
           }
         };
 
@@ -94,9 +96,9 @@
           }
         };
 
-        // Prepend buttons to the target location.
-        targetLocation.prepend(nextButton);
-        targetLocation.prepend(prevButton);
+        // Prepend buttons to the actions element.
+        actionsElement.prepend(nextButton);
+        actionsElement.prepend(prevButton);
 
         // Update buttons state on init and tab focus event.
         updateButtonState();
