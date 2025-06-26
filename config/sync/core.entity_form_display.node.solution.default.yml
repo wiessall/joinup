@@ -377,7 +377,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 100
+      match_limit: 200
       placeholder: 'Start typing to select the solution type...'
       suggestions_dropdown: 1
       show_entity_id: 0
