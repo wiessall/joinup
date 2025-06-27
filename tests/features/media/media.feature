@@ -1,5 +1,6 @@
 @api @group-h
 Feature: Administer media.
+
   @javascript
   Scenario: Moderators are able to administer media.
     Given users:
@@ -157,3 +158,24 @@ Feature: Administer media.
     And I press "Publish"
     Then I should see the text "Sample discussion"
     And the site should not have log records with level lower than Warning
+
+  # Regression test for the release and distribution description fields.
+  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9874
+  Scenario: Media are rendered correctly for releases and distributions.
+    Given the following "Image" media:
+      | name                               | image      | alt            | group      | revision         | uuid        |
+      | The Image in Shaping of disruption | simple.svg | A simple image | The Portal | 2016-07-10T13:00 | abcde-12345 |
+    And solution content:
+      | title         | description |
+      | Some solution | Meh...      |
+    And release content:
+      | title        | release number | release notes                                                                               | is version of |
+      | Some release | 0.1            | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some solution |
+    And distribution content:
+      | title             | description                                                                                 | release      |
+      | Some distribution | <drupal-media data-entity-type="media" data-entity-uuid="abcde-12345">&nbsp;</drupal-media> | Some release |
+
+    When I go to the "Some release" release
+    Then the response should contain "/sites/default/files/file-visibility/media/image/simple.svg"
+    When I go to the "Some distribution" distribution
+    Then the response should contain "/sites/default/files/file-visibility/media/image/simple.svg"
