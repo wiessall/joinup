@@ -122,9 +122,7 @@ class UnshareForm extends ShareFormBase {
       $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groupLabels) . '.');
     }
 
-    if (!$this->getRequest()->query->has('destination')) {
-      $form_state->setRedirectUrl($this->entity->toUrl());
-    }
+    $form_state->setRedirectUrl($this->entity->toUrl());
   }
 
   /**
