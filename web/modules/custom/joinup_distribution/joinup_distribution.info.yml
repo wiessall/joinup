@@ -7,4 +7,4 @@ core_version_requirement: ">= 10.2"
 dependencies:
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_release'
-  - 'joinup:solution'
+  - 'joinup:joinup_solution'

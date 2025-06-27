@@ -280,6 +280,12 @@ function joinup_group_form_node_form_alter(&$form, FormStateInterface $formState
     if (isset($form['short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
       $form['short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
+
+    // For now, only apply it to the solution forms.
+    if ($entity instanceof SolutionInterface) {
+      // Attach the library that provides the navigation buttons for the tabs.
+      $form['#attached']['library'][] = 'joinup_group/horizontal_tabs_navigation';
+    }
   }
 }
 
