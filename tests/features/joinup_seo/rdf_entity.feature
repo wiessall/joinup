@@ -65,9 +65,9 @@ Feature: SEO for RDF entities.
   Scenario: Keywords are converted to literals in the normalization.
     Given solution content:
       | title        | keywords |
-      | SEO solution | drinks   |
+      | SEO solution | games    |
     When I go to the "SEO solution" solution
     Then the metatag graph of the item with title "SEO solution" should be present
     And the metatag graph of the item with "@type" "http://www.w3.org/ns/dcat#Dataset" should have the following properties:
-      | property                          | value  |
-      | http://www.w3.org/ns/dcat#keyword | drinks |
+      | property                          | value |
+      | http://www.w3.org/ns/dcat#keyword | games |
