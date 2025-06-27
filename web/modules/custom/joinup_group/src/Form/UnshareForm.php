@@ -100,11 +100,6 @@ class UnshareForm extends ShareFormBase {
       '#value' => $this->t('Submit'),
     ];
 
-    if ($this->isModal() || $this->isAjaxForm()) {
-      $form['actions']['submit']['#ajax'] = [
-        'callback' => '::ajaxSubmit',
-      ];
-    }
 
     return $form;
   }
@@ -126,7 +121,10 @@ class UnshareForm extends ShareFormBase {
     if (!empty($groupLabels)) {
       $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groupLabels) . '.');
     }
-    $form_state->setRedirectUrl($this->entity->toUrl());
+
+    if (!$this->getRequest()->query->has('destination')) {
+      $form_state->setRedirectUrl($this->entity->toUrl());
+    }
   }
 
   /**
