@@ -116,12 +116,6 @@ class ShareForm extends ShareFormBase {
       '#value' => empty($groups) ? $this->t('Close') : $this->t('Share'),
     ];
 
-    if ($this->isModal() || $this->isAjaxForm()) {
-      $form['actions']['submit']['#ajax'] = [
-        'callback' => '::ajaxSubmit',
-      ];
-    }
-
     return $form;
   }
 
@@ -146,7 +140,9 @@ class ShareForm extends ShareFormBase {
       $this->messenger()->addStatus('Item was shared on the following groups: ' . implode(', ', $group_labels) . '.');
     }
 
-    $form_state->setRedirectUrl($this->entity->toUrl());
+    if (!$this->getRequest()->query->has('destination')) {
+      $form_state->setRedirectUrl($this->entity->toUrl());
+    }
   }
 
   /**
