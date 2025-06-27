@@ -44,3 +44,18 @@ button#eTransButton.wt-ecl-button {
 .nav-link:focus-visible {
   outline: 1px auto blue; // #ISAICP-9733 Override bcl-bootstrap 'outline: 0' to browser standard.
 }
+
+
+// #ISAICP-9924 Adjust Tagify styles.
+.tagify.form-control {
+  padding: .375rem .375rem 0 .375rem !important;
+  display: flex;
+  .tagify__input {
+    margin: 0 0 .375rem;
+    padding: .375rem;
+  }
+  .tagify__tag {
+    margin-inline: 0 5px;
+    margin-block: 0 5px;
+  }
+}
