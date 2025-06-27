@@ -100,7 +100,6 @@ class UnshareForm extends ShareFormBase {
       '#value' => $this->t('Submit'),
     ];
 
-
     return $form;
   }
 
