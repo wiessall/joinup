@@ -140,9 +140,7 @@ class ShareForm extends ShareFormBase {
       $this->messenger()->addStatus('Item was shared on the following groups: ' . implode(', ', $group_labels) . '.');
     }
 
-    if (!$this->getRequest()->query->has('destination')) {
-      $form_state->setRedirectUrl($this->entity->toUrl());
-    }
+    $form_state->setRedirectUrl($this->entity->toUrl());
   }
 
   /**
