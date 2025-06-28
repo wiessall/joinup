@@ -118,8 +118,8 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
       $fields['short_id']->addPropertyConstraints('value', [
         'Regex' => ['pattern' => '/^[a-z0-9-]{4,26}$/'],
+        'UniqueShortIdInsensitive' => [],
       ]);
-      $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
 
     if (in_array($bundle, ShareableContentInterface::NODE_BUNDLES, TRUE)) {

@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -26,22 +27,19 @@ class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements C
   /**
    * {@inheritdoc}
    */
-  public function validate($items, Constraint $constraint) {
-    $group = $items->getEntity();
+  public function validate($value, Constraint $constraint) {
+    $fieldItemList = $this->context->getObject()->getParent()->getParent();
+    assert($fieldItemList instanceof FieldItemListInterface);
+    $group = $fieldItemList->getEntity();
     if (!$group instanceof GroupInterface) {
       throw new \RuntimeException('UniqueShortidInsensitiveConstraint can only be applied to collections and solutions because the SQL like condition is not case insensitive.');
-    }
-
-    // Short ID has cardinality 1. Does not need to iterate over other deltas.
-    if (!$item ??= $items->first()?->getValue()['value']) {
-      return;
     }
 
     $query = $this->database->select('node__short_id')
       ->fields('node__short_id', ['short_id_value'])
       ->condition('bundle', $group->bundle())
       ->where('LOWER(short_id_value) = :value', [
-        ':value' => strtolower($item),
+        ':value' => strtolower($value),
       ]);
     if (!$group->isNew()) {
       $query->condition('entity_id', $group->id(), '<>');
@@ -49,9 +47,9 @@ class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements C
 
     if ($query->execute()->fetchField()) {
       $this->context->addViolation($constraint->message, [
-        '%value' => $item,
+        '%value' => $value,
         '@entity_type' => $group->getEntityType()->getSingularLabel(),
-        '@field_name' => $items->getFieldDefinition()->getLabel(),
+        '@field_name' => $fieldItemList->getFieldDefinition()->getLabel(),
       ]);
     }
   }
