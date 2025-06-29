@@ -323,3 +323,24 @@ Feature: Test adding solutions.
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
     When I press "Next"
     Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
+
+  @javascript
+  Scenario: Custom constraints point to the correct field.
+    Given solution content:
+      | title | short ID | state | collection    |
+      | Test  | qwerty        | published | The Portal |
+    Given I am logged in as a moderator
+    And I go to the "The Portal" collection
+    And I open the plus button menu
+    And I click "Add solution"
+    When I click "Additional information"
+    And I fill in "Portal short ID" with "qwerty"
+    And I press "Confirm"
+    Then I should see the text "errors have been found:"
+    And I should see the link "Portal short ID"
+    But I should not see the text "qwerty"
+    And I should not see the text "Content with Portal short ID qwerty already exists."
+    # The link should point to the "Portal short ID" field.
+    When I click "Portal short ID"
+    Then I should see the text "Portal short ID"
+    And I should see the text "Content with Portal short ID qwerty already exists."
