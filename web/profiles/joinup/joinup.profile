@@ -217,10 +217,11 @@ function joinup_preprocess_node(&$variables): void {
 function _joinup_preprocess_entity_tiles(array &$variables): void {
   // View modes where tiles are expected.
   $tile_view_modes = [
-    'highlighted',
     'view_mode_tile',
     'view_mode_tile_horizontal',
     'carousel',
+    // @todo Revisit and align in ISAICP-9497.
+    'spotlight',
   ];
   if (!in_array($variables['view_mode'], $tile_view_modes)) {
     return;
