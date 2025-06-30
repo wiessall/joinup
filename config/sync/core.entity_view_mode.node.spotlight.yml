@@ -1,0 +1,11 @@
+uuid: 88d97800-75c7-4847-a028-b561a0202ed0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.spotlight
+label: Spotlight
+description: 'View mode intended for use on the front page, in the "In the Spotlight" section'
+targetEntityType: node
+cache: true
