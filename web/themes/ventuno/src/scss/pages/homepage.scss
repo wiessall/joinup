@@ -68,28 +68,6 @@
   border-bottom: 1px solid rgba($primary, 0.1);
 }
 
-// Highlighted Content
-.block-entityqueue--highlighted-content {
-  position: relative;
-  height: 100%;
-  padding-bottom: $spacer * 3; // 48px
-  border-bottom: 1px solid rgba($primary, 0.1);
-  .more-link {
-    position: absolute;
-    right: 0;
-    bottom: $spacer;
-    &::after {
-      @include get-bootstrap-icon("arrow-right");
-
-      margin-left: $spacer * 0.5; // 8px
-    }
-    @include media-breakpoint-up(md) {
-      top: $spacer;
-      bottom: unset;
-    }
-  }
-}
-
 // Latest News
 .block-views-blocklatest-news-block {
   position: relative;
