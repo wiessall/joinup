@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4fcf7559ffd1a2760a1b6c2bb3468d76",
+    "content-hash": "f5bc2468f206a3da5741dda7f47b69a3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8174,17 +8174,17 @@
         },
         {
             "name": "drupal/replicate_actions",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/replicate_actions.git",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/replicate_actions-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "29781c65a6824b122499ffe4f55fb975e0739b38"
+                "url": "https://ftp.drupal.org/files/projects/replicate_actions-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "05f8ead18332db48fdc0e948cfeff97a35f6a761"
             },
             "require": {
                 "drupal/core": "^9.1 || ^10 || ^11",
@@ -8194,8 +8194,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1723191122",
+                    "version": "8.x-1.7",
+                    "datestamp": "1750242900",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
