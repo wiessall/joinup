@@ -6,10 +6,12 @@ user_inactive_value: 0
 user_inactive_period: year
 user_blocked_value: 0
 user_blocked_period: year
-enabled_never_loggedin_users: true
+enabled_never_loggedin_users: false
 enabled_loggedin_users: true
 enabled_inactive_users: false
 enabled_blocked_users: false
+enabled_do_not_purge_authors: false
+enabled_do_not_purge_commenters: false
 purge_included_users_roles:
   authenticated: authenticated
   licence_manager: '0'
