@@ -185,6 +185,7 @@ Feature: Assessments
       | empty_pdf1.pdf                                                                                                                          |
       | Please add any other comment you would like to share. {Empty}                                                                           |
 
+    Then I mark all emails as read
     When I move backward one page
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Abbey Road"
     And I select the radio button "No"
@@ -199,20 +200,24 @@ Feature: Assessments
     And I press "Save Draft"
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
 
-    When I go to "/collection/assessments/assessment-reports/questionnaire"
     # Latest draft is prefilled.
-    Then I should see the following success messages:
-      | success messages                                                                   |
-      | You've already started to fill this form. Please complete the remaining questions. |
-      | You have already submitted this webform. View your previous submission.            |
+    Then I go to the latest assessment submission edit form
 
     When I press "Next"
     # 4th page.
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
+    And the following email should have been sent:
+      | recipient_list_contains | Notify moderator                 |
+      | subject                 | Assessment submission (Complete) |
+      | body                    | Please moderate the submission   |
+      | signature_required      | no                               |
 
     Given I am logged in as "Notify moderator"
     And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
+    And the cache has been cleared
+    And I reload the page
+    And I should see "Assessment Abbey Road"
     When I select the radio button "Require updates"
     And I fill in "What updates are needed?" with "Please drastically reconsider this form. I mean it!"
     And I press "Submit"
