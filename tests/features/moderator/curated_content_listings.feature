@@ -76,6 +76,9 @@ Feature: Curated content listings
     Then I should see the heading "Curated content listings"
 
     When I am on the homepage
+    # These must be removed if we won't display "featured" status in the
+    # new view mode.
+    # @todo Revisit and align this in ISAICP-9497.
     And I click the contextual link "Feature" in the "Licrogravity" tile
     Then the "Licrogravity" tile should be marked as featured
 

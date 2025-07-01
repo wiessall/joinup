@@ -220,6 +220,8 @@ function _joinup_preprocess_entity_tiles(array &$variables): void {
     'view_mode_tile',
     'view_mode_tile_horizontal',
     'carousel',
+    // Next line can be removed if we don't want to reveal the "star" icon
+    // representing the "featured" status of the content.
     // @todo Revisit and align in ISAICP-9497.
     'spotlight',
   ];
