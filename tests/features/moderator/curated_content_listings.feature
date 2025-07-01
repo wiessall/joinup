@@ -37,8 +37,8 @@ Feature: Curated content listings
     Then I should see the heading "Update curated content listing In the spotlight"
 
   @javascript
-  Scenario: Regression test for ISAICP-6658
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658
+  Scenario: Tests whether queue can be populated
+  Also a regression test for ISAICP-6658
 
     Given collection content:
       | title           |
@@ -55,12 +55,6 @@ Feature: Curated content listings
     And event content:
       | title           | collection      | topic                    |
       | Stay at the CSS | Spacex in space | EU and European Policies |
-    And the "In the spotlight" content listing contains:
-      | type    | label                |
-      | content | Cardio atrophy       |
-      | content | Reference of gravity |
-      | content | Licrogravity         |
-      | content | Stay at the CSS      |
 
     Given I am logged in as a "moderator"
     And I am on the homepage
@@ -70,12 +64,36 @@ Feature: Curated content listings
     Then I should see the heading "Curated content listings"
 
     When I click "In the spotlight"
-    Then I press "Shuffle"
+    # Populate the queue with the UI.
+    And I type "Cardio" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Cardio atrophy" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    And I press "Save"
+    # Check queue min size.
+    Then I should see the error message "This queue can not hold less than 4 items."
+
+    Then I type "Reference" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Reference of gravity" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    Then I type "Licro" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Licrogravity" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    Then I type "Stay at the CSS" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Stay at the CSS" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    # Verify that the upper limit is reached.
+    Then I should not see the button "Add item"
     And I press "Save"
     Then I should see the message "The entity subqueue In the spotlight has been updated."
     Then I should see the heading "Curated content listings"
 
-    When I am on the homepage
+    Given I am on the homepage
+    Then I should see the following tiles in the "In the spotlight" region:
+      | Cardio atrophy       |
+      | Reference of gravity |
+      | Licrogravity         |
+      | Stay at the CSS      |
+
     # These must be removed if we won't display "featured" status in the
     # new view mode.
     # @todo Revisit and align this in ISAICP-9497.
