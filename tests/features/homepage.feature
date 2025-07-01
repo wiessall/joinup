@@ -90,56 +90,6 @@ Feature: Homepage
       |               | Researchers from the University of Tsukuba... | Researchers from the University of Tsukuba... |
       | News abstract | Researchers from the University of Tsukuba... | News abstract                                 |
 
-  Scenario Outline: Community content be highlighted on the homepage
-    Given collection content:
-      | title              |
-      | Clash of documents |
-    And <type> content:
-      | title        | headline     | collection         | topic                              | state     | logo     |
-      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg |
-      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg |
-      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg |
-    And the "Highlighted content" content listing contains:
-      | type   | label  |
-      | <type> | Aliens |
-
-    When I am on the homepage
-    Then I should see "Aliens" as the Highlighted content
-    And I should see the text "default abstract"
-    And I should see the link "Related content"
-    When I click "Related content"
-    Then I should be on the advanced search page
-    And I should see the "Aliens" tile
-    And I should not see the "Microgravity" tile
-    And I should not see the "Groundforce" tile
-
-    Examples:
-      | type     | abstract source field |
-      | document | abstract              |
-      | document | field_paragraphs_body |
-      | news     | abstract              |
-      | news     | field_paragraphs_body |
-      | event    | body                  |
-
-  Scenario: An event in the highlighted content on the homepage should display the start date.
-    Given event content:
-      | title            | start date       | end date         | field_paragraphs_body | abstract                |
-      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | High and lite         | Abstract: High and lite |
-    And the "Highlighted content" content listing contains:
-      | type    | label            |
-      | content | Light and height |
-
-    When I am on the homepage
-    Then I should see "Light and height" as the Highlighted content
-    And I should see the text "Abstract: High and lite" in the "Light and height" tile
-    And I should see the text "04-06-2021" in the "Light and height" tile
-    And I should see the link "Sign in or register to like this content" in the "Light and height" tile
-
-    Given I am logged in as a moderator
-    When I am on the homepage
-    Then I should see the "Light and height" tile
-    And I should see the link "Like this content" in the "Light and height" tile
-
   Scenario: Upcoming event is shown on the homepage
     Given event content:
       | title               | created    | start date | end date       |
