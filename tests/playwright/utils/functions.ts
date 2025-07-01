@@ -1,6 +1,7 @@
 /**
- * Useful functions for Playwright.
+ * @file Utility functions for Playwright.
  */
+
 import { execSync } from "child_process";
 
 /**
@@ -8,12 +9,16 @@ import { execSync } from "child_process";
  * Generally you'll use this function and let it figure out
  * how to execute Drush (locally, remotely, native OS, inside container, etc.).
  *
- * @param cmd - The Drush command.
- * @param args - Array of string arguments to pass to Drush.
- * @param options - Array of string options to pass to Drush.
- * @returns The output from executing the command in a shell.
+ * @param {string} cmd - The Drush command.
+ * @param {string[]} [args=[]] - Array of string arguments to pass to Drush.
+ * @param {string[]} [options=[]] - Array of string options to pass to Drush.
+ * @return {string} The output from executing the command in a shell.
  */
-export function execDrush(cmd: string, args: string[] = [], options: string[] = []): string {
+export default function execDrush(
+  cmd: string,
+  args: string[] = [],
+  options: string[] = [],
+): string {
   let output = "";
 
   if (!Array.isArray(args)) {
