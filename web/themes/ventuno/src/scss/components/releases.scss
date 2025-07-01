@@ -12,5 +12,8 @@
         background: $primary;
       }
     }
+    &::before {
+      top: 0;
+    }
   }
 }

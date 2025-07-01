@@ -7,23 +7,29 @@
 
 declare (strict_types=1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
- * Implements hook_install().
+ * Implements hook_uninstall().
  */
-function whats_new_install(bool $is_syncing): void {
-  $field_storage_definition = BaseFieldDefinition::create('boolean')
-    ->setName('live_link')
-    ->setLabel(t('Live link'))
-    ->setDescription(t('If checked <strong>and</strong> the link points to a content entity, it will appear as featured as long as the user has not visited the page.'))
-    ->setDefaultValue(0)
-    ->setDisplayOptions('form', [
-      'type' => 'boolean_checkbox',
-      'settings' => [
-        'display_label' => TRUE,
-      ],
-    ])
-    ->setDisplayConfigurable('form', TRUE);
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('live_link', 'menu_link_content', 'menu_link_content', $field_storage_definition);
+function whats_new_uninstall(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $links = $storage->getQuery()
+    ->condition('menu_name', 'support')
+    ->accessCheck(FALSE)
+    ->execute();
+  if (!empty($links)) {
+    $entities = $storage->loadMultiple($links);
+    $storage->delete($entities);
+  }
+
+  /** @var \Drupal\user\UserDataInterface $user_data */
+  $user_data = \Drupal::service('user.data');
+  $user_data->delete('whats_new');
+
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $field_storage = $entity_definition_update_manager->getFieldStorageDefinition('live_link', 'menu_link_content');
+  if ($field_storage instanceof FieldStorageDefinitionInterface) {
+    $entity_definition_update_manager->uninstallFieldStorageDefinition($field_storage);
+  }
 }
