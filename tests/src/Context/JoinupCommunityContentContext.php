@@ -468,7 +468,16 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
       // Check the body text.
       $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getText();
-      Assert::assertEquals($expected_data['body'], $actual_body, sprintf('The body text for the article "%s" in the "In the spotlight" section does not contain the expected text.', $actual_title));
+      Assert::assertEquals(
+        $expected_data['body'],
+        $actual_body,
+        sprintf(
+          'The body text for the article "%s" in the "In the spotlight" section contains "%s", which does not match the expected text "%s".',
+          $actual_title,
+          $actual_body,
+          $expected_data['body'],
+        )
+      );
 
       foreach ($expected_topic_titles as $j => $expected_topic_title) {
         /** @var \Behat\Mink\Element\NodeElement $topic_element */
