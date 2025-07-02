@@ -3,7 +3,7 @@
  * Global teardown.
  */
 
-import execDrush from "./utils/functions";
+import { execDrush } from "./utils/functions";
 
 export default async function globalTeardown() {
   // Disable test mode (see \Joinup\TestModeManager::clear).

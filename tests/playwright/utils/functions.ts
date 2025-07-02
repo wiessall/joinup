@@ -14,7 +14,7 @@ import { execSync } from "child_process";
  * @param {string[]} [options=[]] - Array of string options to pass to Drush.
  * @return {string} The output from executing the command in a shell.
  */
-export default function execDrush(
+export function execDrush(
   cmd: string,
   args: string[] = [],
   options: string[] = [],
