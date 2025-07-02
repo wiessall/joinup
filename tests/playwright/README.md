@@ -11,7 +11,7 @@ To ensure consistent rendering across different systems, tests are executed usin
 1. **Install dependencies and set up the environment:**
 
    ```bash
-   ddev install
+   ddev playwright install
    ```
 
 2. **Run the visual regression tests:**
