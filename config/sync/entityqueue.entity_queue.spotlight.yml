@@ -19,10 +19,11 @@ entity_settings:
       news: news
     sort:
       field: _none
+      direction: ASC
     auto_create: false
     auto_create_bundle: discussion
 queue_settings:
-  min_size: 3
-  max_size: 3
+  min_size: 4
+  max_size: 4
   act_as_queue: false
   reverse: false
