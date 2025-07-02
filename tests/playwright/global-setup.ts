@@ -3,7 +3,7 @@
  * Global setup.
  */
 
-import { execDrush } from "./utils/functions";
+import execDrush from "./utils/functions";
 
 export default async function globalSetup() {
   // Enable test mode (see \Joinup\TestModeManager::set).

@@ -4,7 +4,7 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { execDrush } from "../utils/functions";
+import execDrush from "../utils/functions";
 
 // Test for superadmin (logged-in case)
 test.describe("Solution homepage - superadmin", () => {
