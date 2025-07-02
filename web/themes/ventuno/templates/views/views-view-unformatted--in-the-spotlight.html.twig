@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Template override for in the spotlight.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-4">
+  {% for row in rows %}
+    {{- row.content -}}
+  {% endfor %}
+</div>
