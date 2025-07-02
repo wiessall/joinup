@@ -90,7 +90,6 @@
   - Drupal\joinup\Context\TagifyContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
-  - Drupal\joinup\Context\WhatsNewContext
   - Drupal\joinup\Context\WysiwygContext
   - Drupal\Tests\cas_mock_server\Context\CasMockServerContext:
       attributes_map:

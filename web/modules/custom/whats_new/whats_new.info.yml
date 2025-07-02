@@ -3,6 +3,3 @@ description: Provides a way to feature a menu item and remember users that visit
 type: module
 package: Joinup
 core_version_requirement: "^10.4 || ^11"
-
-dependencies:
-  - drupal:menu_link_content

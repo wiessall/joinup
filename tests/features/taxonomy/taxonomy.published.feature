@@ -76,9 +76,9 @@ Feature: Publication status of keywords depends on the status of the parent.
     And I open the plus button menu
     And I click "Add news"
     # Keywords from the testing_terms.yml are used.
-    And I select "schema" options from "Search keywords"
+    And I select "gam" options from "Search keywords"
     And I wait for AJAX to finish
-    Then I should see the text "schema.org"
+    Then I should see the text "games"
     When I type "some" in the "Search keywords" autocomplete field
     And I wait for AJAX to finish
     Then I should not see the text "some unpublished tag"
