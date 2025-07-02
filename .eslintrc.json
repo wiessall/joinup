@@ -23,7 +23,8 @@
           }
         ],
         "import/no-unresolved": "off",
-        "no-console": "warn"  // Optional: Warn but don't error on console logs
+        "no-console": "warn",  // Optional: Warn but don't error on console logs
+        "import/prefer-default-export": "off"
       }
     },
     // Empty mappings are allowed in the docker-compose file. This indicates
