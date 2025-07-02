@@ -30,8 +30,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "~10.4.5",
-        "drupal/core-recommended": "~10.4.5",
+        "drupal/core-composer-scaffold": "^10.5.1",
+        "drupal/core-recommended": "^10.5.1",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -62,7 +62,7 @@
         "drupal/honeypot": "~2",
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
-        "drupal/imagecache_external": "3.0.4",
+        "drupal/imagecache_external": "^3.0",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
@@ -97,7 +97,7 @@
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
-        "drupal/replicate_actions": "1.6",
+        "drupal/replicate_actions": "^1.7",
         "drupal/replicate_ui": "^1.1",
         "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.1",
@@ -326,7 +326,7 @@
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
-                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.3.x-115.diff",
+                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.5.x-115.diff",
                 "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/php/drupal/core/2381293-10.3.x-240.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
@@ -355,7 +355,7 @@
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff",
                 "Time-based custom caching is broken since configuration expects an integer @see https://www.drupal.org/i/3233105": "resources/patch/php/drupal/core/3233105.diff",
-                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691.diff",
+                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
                 "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
@@ -371,6 +371,9 @@
             },
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+            },
+            "drupal/editor_file": {
+                "CKeditor crashes and prevents saving on 10.5 in some circumstances. @see https://www.drupal.org/i/3532269": "resources/patch/php/drupal/editor_file/3532269.diff"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
@@ -486,6 +489,9 @@
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
                 "EntityAutocompleteTagify returns wrong value so Drupal tries to create entity without label @see https://drupal.org/i/3530799": "resources/patch/php/drupal/tagify/3530799-mr153-commit-1ff979ac70.diff",
                 "Remove 'Drag to re-order @entity_types' description @see https://www.drupal.org/project/tagify/issues/3531807": "resources/patch/php/drupal/tagify/3531807.diff"
+            },
+            "drupal/tmgmt_ec_etranslation": {
+                "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",
