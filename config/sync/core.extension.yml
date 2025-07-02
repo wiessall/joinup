@@ -278,7 +278,6 @@ module:
   webform_entity_print: 0
   webform_ui: 0
   webform_views: 0
-  whats_new: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1
