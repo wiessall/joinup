@@ -186,7 +186,8 @@ class AssessmentModerationForm extends FormBase {
     $accessResult = AccessResult::allowedIf($submission->isCompleted())
       ->andIf(AccessResult::allowedIf($submission->isLocked()))
       ->andIf(AccessResult::allowedIfHasPermission($account, 'manage assessments'))
-      ->addCacheableDependency($submission);
+      ->addCacheableDependency($submission)
+      ->addCacheableDependency($account);
 
     if (!$accessResult->isAllowed()) {
       return $accessResult;

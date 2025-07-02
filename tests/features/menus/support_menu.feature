@@ -1,10 +1,10 @@
 @api @group-h
 Feature:
-  - As a moderator, in order to maintain the support dropdown, I am able to administer the 'support' menu.
+  - As a moderator, in order to maintain the site, I am able to administer menus.
   - As a user, I should see the the 'Take a tour' menu item only on pages that are implementing tours.
   - As a moderator I can add custom menu items and disable default menu items.
 
-  Scenario Outline: Moderators are not able to admin menus except the support and footer menus.
+  Scenario Outline: Moderators are not able to admin menus except footer menus.
 
     Given I am an anonymous user
     When I go to "/admin/structure/menu/manage/<menu>"
@@ -26,7 +26,6 @@ Feature:
       | admin                      | 403  | not see  |
       | footer                     | 403  | not see  |
       | main                       | 403  | not see  |
-      | support                    | 200  | see      |
       | footer-about-us            | 200  | see      |
       | footer-european-commission | 200  | see      |
       | footer-follow-us           | 200  | see      |
