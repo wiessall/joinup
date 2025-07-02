@@ -12,13 +12,6 @@ joinup_core.edit_support_menu:
   parent: system.admin
   weight: 0
 
-joinup_core.support.contact:
-  title: 'Contact support'
-  menu_name: support
-  url: 'internal:/contact'
-  weight: -100
-  destination: true
-
 joinup_core.support.homepage_contact:
   title: 'Contact Portal Support'
   menu_name: footer-help-and-support
