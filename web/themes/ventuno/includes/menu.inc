@@ -18,7 +18,6 @@ function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variab
   // be styled in the same way.
   if (in_array($variables['menu_name'], [
     'footer',
-    'support',
     'footer-about-us',
     'footer-european-commission',
     'footer-follow-us',
