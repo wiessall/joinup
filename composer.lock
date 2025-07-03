@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "113fe53360ddb89e2d1dcd0cd970ef85",
+    "content-hash": "fde1dc90e0ce8c36189b2425fc0b0932",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18808,15 +18808,6 @@
                 "source": "https://github.com/geocoder-php/php-common/tree/5.0.0"
             },
             "time": "2025-01-01T15:52:42+00:00"
-        },
-        {
-            "name": "yaireo/tagify",
-            "version": "4.32.2",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/yaireo/tagify/archive/refs/tags/v4.32.2.zip"
-            },
-            "type": "drupal-library"
         },
         {
             "name": "zozlak/rdf-constants",
