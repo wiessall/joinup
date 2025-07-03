@@ -640,7 +640,7 @@ settings:
   preview_exclude_empty: true
   preview_exclude_empty_checkbox: false
   draft: authenticated
-  draft_multiple: false
+  draft_multiple: true
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: "<p>You've already started to fill this form. Please complete the remaining questions.</p>"
