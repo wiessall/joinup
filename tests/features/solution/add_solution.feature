@@ -38,11 +38,11 @@ Feature: Test adding solutions.
     And I press "Add new owner"
     And I press "Confirm"
     Then I should see the following inline form error messages:
-      | error messages                          |
-      | Name field is required.                 |
-      | Type field is required.                 |
-      | Country field is required.              |
-      | E-mail address field is required.       |
+      | error messages                    |
+      | Name field is required.           |
+      | Type field is required.           |
+      | Country field is required.        |
+      | E-mail address field is required. |
     # Create owner. Validation errors must have activated the tab "Contact details".
     When I fill in "Name" with "Organisation valid"
     And I select "Company" options from "Type"
@@ -327,8 +327,8 @@ Feature: Test adding solutions.
   @javascript
   Scenario: Custom constraints point to the correct field.
     Given solution content:
-      | title | short ID | state | collection    |
-      | Test  | qwerty        | published | The Portal |
+      | title | short ID | state     | collection |
+      | Test  | qwerty   | published | The Portal |
     Given I am logged in as a moderator
     And I go to the "The Portal" collection
     And I open the plus button menu
