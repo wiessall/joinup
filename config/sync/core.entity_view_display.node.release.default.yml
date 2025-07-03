@@ -15,7 +15,6 @@ dependencies:
     - field.field.node.release.spatial_coverage
     - node.type.release
   module:
-    - collection
     - field_delimiter
     - field_formatter_range
     - file_url
@@ -23,6 +22,7 @@ dependencies:
     - options
     - svg_image
     - template_suggestion
+    - text
     - user
 id: node.release.default
 targetEntityType: node
@@ -30,7 +30,7 @@ bundle: release
 mode: default
 content:
   description:
-    type: collection_plain_glossary
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }

@@ -541,13 +541,13 @@ Feature: Global search
 
   Scenario: Collections are found by their keywords.
     Given collection content:
-      | title             | keywords                | state     |
-      | Collection sample | unique, key-definitions | published |
+      | title             | keywords                      | state     |
+      | Collection sample | Alphabet, nintendo64 licences | published |
 
-    When I enter "key-definitions" in the search bar and press enter
+    When I enter "nintendo64 licences" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
 
-    When I enter "unique" in the search bar and press enter
+    When I enter "Alphabet" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
 
   @javascript

@@ -8,10 +8,6 @@ services:
 
   Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber: { }
 
-  Drupal\joinup_replicate\JoinupReplicateSetEntityEdit:
-    decorates: replicate_actions.replicate_entity_edit
-    public: false
-
   Drupal\joinup_replicate\Access\JoinupReplicatePermission:
     tags:
       - { name: access_check, applies_to: _joinup_replicate_permission }
