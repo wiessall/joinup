@@ -130,6 +130,12 @@ function ventuno_preprocess_form_element(array &$variables): void {
     $variables['element']['#name'] === 'layout_paragraphs[layout]') {
     $variables['attributes']['class'][] = 'm-0 p-0';
   }
+
+  // Add the element ID for all form elements.
+  if (!isset($variables['attributes']['id']) && isset($variables['element']['#name'])) {
+    $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '[') ?: strlen($variables['element']['#name']));
+    $variables['attributes']['id'] = 'edit-' . str_replace(['_', '-', '.'], '-', $base_name);
+  }
 }
 
 /**
