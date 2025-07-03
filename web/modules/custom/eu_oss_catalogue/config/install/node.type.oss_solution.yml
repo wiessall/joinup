@@ -3,7 +3,8 @@ status: true
 label_singular: OSS Solution
 label_plural: OSS Solutions
 label_count:
-  - 1 open source software solution\x03@count open source software solutions
+  0: "1 open source software solution\x03@count open source software solutions"
+  no_count_capitalize: "Open source software solution\x03Open source software solutions"
 name: Open Source Software Solution
 type: oss_solution
 description: An open source software business solution
