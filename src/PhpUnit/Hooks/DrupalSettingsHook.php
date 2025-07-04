@@ -6,6 +6,7 @@ namespace Joinup\PhpUnit\Hooks;
 
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\TestMode;
+use Joinup\TestModeManager;
 use PHPUnit\Runner\AfterLastTestHook;
 use PHPUnit\Runner\BeforeFirstTestHook;
 
@@ -21,7 +22,7 @@ class DrupalSettingsHook implements BeforeFirstTestHook, AfterLastTestHook {
    */
   public function executeBeforeFirstTest(): void {
     static::runCommand("drupal:settings phpunit --root={$this->getPath('web')} --sites-subdir=default");
-    TestMode::set(TestMode::PhpUnit);
+    TestModeManager::set(TestMode::PhpUnit);
   }
 
   /**
@@ -29,7 +30,7 @@ class DrupalSettingsHook implements BeforeFirstTestHook, AfterLastTestHook {
    */
   public function executeAfterLastTest(): void {
     static::runCommand("drupal:settings site-clean --root={$this->getPath('web')} --sites-subdir=default");
-    TestMode::clear();
+    TestModeManager::clear();
   }
 
 }
