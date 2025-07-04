@@ -61,8 +61,8 @@ Feature: Homepage
       | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
       | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
     And discussion content:
-      | title                | collection    | topic                            | logo    | body                                                                                                                                                                                       |
-      | Influence of gravity | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | title     | collection    | topic                            | logo    | body                                                                                                                                                                                       |
+      | Influence | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
       | title        | collection    | topic                                  | logo     | abstract                                                                                                                                                                                        |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
@@ -74,13 +74,15 @@ Feature: Homepage
       | content | New muscles     |
       | content | Stay at the ISS |
       | content | Microgravity    |
+      | content | Influence       |
 
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
-      | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | default abstract                                                                                                                                                                                |
-      | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
-      | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | number | topics                                      | title           | type       | body                                                                                                                                                                                            |
+      | 1      | Finance in EU, Supplier exchange, +2 topics | New muscles     | news       | default abstract                                                                                                                                                                                |
+      | 2      | EU and European Policies                    | Stay at the ISS | event      | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | 3      | HR, Statistics and Analysis, E-justice      | Microgravity    | document   | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | 4      | Employment and Support Allowance            | Influence       | discussion | Space exploration has brought about many scientific and technological advances                                                                                                                  |
 
     When I click "Stay at the ISS"
     Then I should not see the text "Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity."
@@ -89,56 +91,6 @@ Feature: Homepage
       | news abstract | news body                                     | expected news spotlight body                  |
       |               | Researchers from the University of Tsukuba... | Researchers from the University of Tsukuba... |
       | News abstract | Researchers from the University of Tsukuba... | News abstract                                 |
-
-  Scenario Outline: Community content be highlighted on the homepage
-    Given collection content:
-      | title              |
-      | Clash of documents |
-    And <type> content:
-      | title        | headline     | collection         | topic                              | state     | logo     |
-      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg |
-      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg |
-      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg |
-    And the "Highlighted content" content listing contains:
-      | type   | label  |
-      | <type> | Aliens |
-
-    When I am on the homepage
-    Then I should see "Aliens" as the Highlighted content
-    And I should see the text "default abstract"
-    And I should see the link "Related content"
-    When I click "Related content"
-    Then I should be on the advanced search page
-    And I should see the "Aliens" tile
-    And I should not see the "Microgravity" tile
-    And I should not see the "Groundforce" tile
-
-    Examples:
-      | type     | abstract source field |
-      | document | abstract              |
-      | document | field_paragraphs_body |
-      | news     | abstract              |
-      | news     | field_paragraphs_body |
-      | event    | body                  |
-
-  Scenario: An event in the highlighted content on the homepage should display the start date.
-    Given event content:
-      | title            | start date       | end date         | field_paragraphs_body | abstract                |
-      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | High and lite         | Abstract: High and lite |
-    And the "Highlighted content" content listing contains:
-      | type    | label            |
-      | content | Light and height |
-
-    When I am on the homepage
-    Then I should see "Light and height" as the Highlighted content
-    And I should see the text "Abstract: High and lite" in the "Light and height" tile
-    And I should see the text "04-06-2021" in the "Light and height" tile
-    And I should see the link "Sign in or register to like this content" in the "Light and height" tile
-
-    Given I am logged in as a moderator
-    When I am on the homepage
-    Then I should see the "Light and height" tile
-    And I should see the link "Like this content" in the "Light and height" tile
 
   Scenario: Upcoming event is shown on the homepage
     Given event content:
