@@ -149,11 +149,7 @@ function ventuno_preprocess_form_element(array &$variables): void {
     return;
   }
 
-  if (isset($variables['element']['#id'])) {
-    // If the element has an ID, use it directly.
-    $variables['attributes']['id'] = $variables['element']['#id'];
-  }
-  elseif (isset($variables['element']['#name']) && str_contains($variables['element']['#name'], '[')) {
+  if (isset($variables['element']['#name']) && str_contains($variables['element']['#name'], '[')) {
     // If the name contains brackets, use the part before the first bracket.
     $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '['));
     $base_name = str_replace(['.', '_', '-'], '-', $base_name);
