@@ -214,7 +214,7 @@ Feature:
       | Hellow world | Grumpy author     | author      |
       | Hellow world | Jelly Facilitator | facilitator |
     And <content type> content:
-      | title                | abstract | field_paragraphs_body                  | author        | <group type> |
+      | title                | abstract | body                                   | author        | <group type> |
       | Goodbi world         | abstract | Because I cannot spell Goodbye either. | Clumsy Bounce | Hellow world |
       | Careful with that ax | abstract | Someone needs to ax these questions.   | Grumpy Author | Hellow world |
     And <content type> revisions:
@@ -264,7 +264,7 @@ Feature:
     # Create a second revision. This will unlock the revisions page. We need at
     # least 2 revisions since the page allows us to compare different revisions.
     Given <content type> revisions:
-      | current title | title         | field_paragraphs_body      |
+      | current title | title         | body                       |
       | Goodbi world  | Goodbye world | I found the spell checker. |
 
     Given I am an anonymous user
