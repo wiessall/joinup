@@ -110,7 +110,6 @@ permissions:
   - 'administer shared entities'
   - 'administer sitewide alert entities'
   - 'administer solution ownership'
-  - 'administer support menu items'
   - 'administer users'
   - 'administer webform via ui'
   - 'assign licence_manager role'
