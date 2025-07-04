@@ -143,6 +143,8 @@ function ventuno_preprocess_form_element(array &$variables): void {
     || (!isset($variables['element']['#input']) || $variables['element']['#input'] === FALSE)
     // Or there are AJAX settings in the element.
     || !empty($variables['element']['#ajax'])
+    // Or the element is a container.
+    || (isset($variables['element']['#type']) && $variables['element']['#type'] === 'textarea')
   ) {
     return;
   }
