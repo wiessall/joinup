@@ -61,7 +61,9 @@ button.button--primary {
   .horizontal-tabs .form-wrapper {
     .btn-primary {
       @extend .btn-light;
-      &:hover {
+      &:hover,
+      &:focus-visible {
+        color: var(--bs-btn-hover-color);
         background-color: var(--bs-btn-hover-bg);
       }
     }
