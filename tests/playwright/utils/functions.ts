@@ -17,11 +17,11 @@ export function execDrush(cmd: string, args: string[] = [], options: string[] = 
   let output = "";
 
   if (!Array.isArray(args)) {
-    console.error("execDrush: Pass an array for arguments.");
+    throw new Error("execDrush: args must be an array.");
   }
 
   if (!Array.isArray(options)) {
-    console.error("execDrush: Pass an array for options.");
+    throw new Error("execDrush: options must be an array.");
   }
 
   const drushAlias = "./vendor/bin/drush";
@@ -32,7 +32,7 @@ export function execDrush(cmd: string, args: string[] = [], options: string[] = 
   try {
     output = execSync(command, { encoding: "utf-8" }).toString();
   } catch (error) {
-    console.error(`execDrush error: ${(error as Error).message}`);
+    throw new Error(`execDrush error: ${(error as Error).message}`);
   }
 
   return output;
