@@ -55,6 +55,8 @@ export default defineConfig({
         "--font-render-hinting=none",
         "--disable-skia-runtime-opts",
         "--disable-lcd-text",
+        // Hide scrollbars for consistency between headed and headless.
+        "--hide-scrollbars",
       ],
     },
   },
