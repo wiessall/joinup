@@ -26,6 +26,10 @@ Feature: Test adding solutions.
     And I select image #2 as solution logo
     Then I should see the text "Logo"
 
+    # Check Domain field description.
+    And I should see the text "Available info for Government functions"
+    And I should see the link "Government functions"
+
     When I click "Solution information"
     When I fill in "Title" with "Solution Beta"
     And I fill in "Abstract" with "Short abstract"
