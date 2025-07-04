@@ -214,9 +214,9 @@ Feature:
       | Hellow world | Grumpy author     | author      |
       | Hellow world | Jelly Facilitator | facilitator |
     And <content type> content:
-      | title                | abstract | body                                   | author        | <group type> |
-      | Goodbi world         | abstract | Because I cannot spell Goodbye either. | Clumsy Bounce | Hellow world |
-      | Careful with that ax | abstract | Someone needs to ax these questions.   | Grumpy Author | Hellow world |
+      | title                | body                                   | author        | <group type> |
+      | Goodbi world         | Because I cannot spell Goodbye either. | Clumsy Bounce | Hellow world |
+      | Careful with that ax | Someone needs to ax these questions.   | Grumpy Author | Hellow world |
     And <content type> revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |
