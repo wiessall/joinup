@@ -11,8 +11,6 @@ use Drush\TestTraits\DrushTestTrait;
  */
 final class TestModeManager {
 
-  use DrushTestTrait;
-
   public const string CONFIG_NAME = 'joinup_test.settings';
 
   /**
@@ -34,14 +32,23 @@ final class TestModeManager {
    * Set the test mode.
    */
   public static function set(TestMode $mode): void {
-    (new self())->drush('config:set', [self::CONFIG_NAME, 'test_mode', $mode->value], ['yes' => NULL]);
+    self::getDrushRunner()->drush('config:set', [self::CONFIG_NAME, 'test_mode', $mode->value], ['yes' => NULL]);
   }
 
   /**
    * Clear/unset the test mode.
    */
   public static function clear(): void {
-    (new self())->drush('config:set', [self::CONFIG_NAME, 'test_mode', 'NULL'], ['yes' => NULL]);
+    self::getDrushRunner()->drush('config:set', [self::CONFIG_NAME, 'test_mode', 'NULL'], ['yes' => NULL]);
+  }
+
+  /**
+   * Returns an anonymous class that uses DrushTestTrait.
+   */
+  private static function getDrushRunner(): object {
+    return new class() {
+      use DrushTestTrait;
+    };
   }
 
 }
