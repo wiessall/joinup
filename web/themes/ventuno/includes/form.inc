@@ -131,10 +131,31 @@ function ventuno_preprocess_form_element(array &$variables): void {
     $variables['attributes']['class'][] = 'm-0 p-0';
   }
 
-  // Add the element ID for all form elements.
-  if (!isset($variables['attributes']['id']) && isset($variables['element']['#name'])) {
-    $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '[') ?: strlen($variables['element']['#name']));
-    $variables['attributes']['id'] = 'edit-' . str_replace(['_', '-', '.'], '-', $base_name);
+  // Constraints can be added to a form element or its children properties. If
+  // it is added to the element itself, the inline form errors can fail to
+  // properly generate a link that links to the field as form elements not
+  // always have an ID. We are forcing an ID here to ensure that the inline
+  // form errors can link to the field.
+  if (
+    // Do not force an ID if there is already an ID.
+    !empty($variables['attributes']['id'])
+    // Or the element is not an input.
+    || (!isset($variables['element']['#input']) || $variables['element']['#input'] === FALSE)
+    // Or there are AJAX settings in the element.
+    || !empty($variables['element']['#ajax'])
+  ) {
+    return;
+  }
+
+  if (isset($variables['element']['#id'])) {
+    // If the element has an ID, use it directly.
+    $variables['attributes']['id'] = $variables['element']['#id'];
+  }
+  elseif (isset($variables['element']['#name']) && str_contains($variables['element']['#name'], '[')) {
+    // If the name contains brackets, use the part before the first bracket.
+    $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '['));
+    $base_name = str_replace(['.', '_', '-'], '-', $base_name);
+    $variables['attributes']['id'] = 'edit-' . $base_name;
   }
 }
 
