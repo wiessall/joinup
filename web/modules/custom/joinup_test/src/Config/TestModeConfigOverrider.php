@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorableConfigBase;
 use Drupal\Core\Config\StorageInterface;
 use Joinup\TestMode;
+use Joinup\TestModeManager;
 
 /**
  * Applies global config overrides during tests, depending on the test mode.
@@ -41,7 +42,7 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
   public function __construct(
     protected ConfigFactoryInterface $configFactory,
   ) {
-    $this->testMode = TestMode::current()?->value;
+    $this->testMode = TestModeManager::current()?->value;
 
     // Flatten all overridden config names across all test modes into one array.
     $config_names = [];
@@ -88,7 +89,7 @@ class TestModeConfigOverrider implements ConfigFactoryOverrideInterface {
   public function getCacheableMetadata($name): CacheableMetadata {
     $metadata = new CacheableMetadata();
     if (in_array($name, $this->configNames, TRUE)) {
-      $metadata->addCacheableDependency($this->configFactory->get(TestMode::CONFIG_NAME));
+      $metadata->addCacheableDependency($this->configFactory->get(TestModeManager::CONFIG_NAME));
     }
     return $metadata;
   }

@@ -39,6 +39,7 @@ use Drupal\media\Entity\Media;
 use Drush\TestTraits\DrushTestTrait;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\TestMode;
+use Joinup\TestModeManager;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -1799,7 +1800,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public static function addBehatSpecificDrupalSettings(): void {
     static::runCommand('drupal:settings behat --root=' . static::getPath('web') . ' --sites-subdir=default');
-    TestMode::set(TestMode::Behat);
+    TestModeManager::set(TestMode::Behat);
   }
 
   /**
@@ -1809,7 +1810,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public static function restoreDrupalSettings(): void {
     static::runCommand('drupal:settings site-clean --root=' . static::getPath('web') . ' --sites-subdir=default');
-    TestMode::clear();
+    TestModeManager::clear();
   }
 
   /**
