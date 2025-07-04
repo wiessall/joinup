@@ -38,7 +38,7 @@ Feature:
     # The short ID should be lowercase.
     And I fill in "Short ID" with "SSTR-2020"
     And I press "Propose"
-    Then I should see the inline form error message "This value is not valid."
+    Then I should see the inline form error message "Custom URL Identifier must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
     And I fill in "Short ID" with "sstr-2020"
     And I press "Propose"
@@ -108,9 +108,14 @@ Feature:
     Then I should see the inline form error message "Content with Custom URL Identifier wkwasi already exists. Please choose a different Custom URL Identifier."
 
     # The short ID should be lowercase.
-    When I fill in "Custom URL Identifier" with "SST-2020"
+    And I fill in "Custom URL Identifier" with "SST-2020"
     And I press "Confirm"
-    Then I should see the inline form error message "This value is not valid."
+    Then I should see the error message "Custom URL Identifier must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
+
+    # The short ID should not contain non-ASCII chars.
+    And I fill in "Custom URL Identifier" with "ñ字Ωش★₿©"
+    And I press "Confirm"
+    Then I should see the error message "Custom URL Identifier must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
     # The short ID is only unique among solutions, it is OK to reuse an existing
     # short ID from a collection.
