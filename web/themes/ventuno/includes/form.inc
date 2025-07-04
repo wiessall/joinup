@@ -145,11 +145,18 @@ function ventuno_preprocess_form_element(array &$variables): void {
     || !empty($variables['element']['#ajax'])
     // Or the element is a container.
     || (isset($variables['element']['#type']) && $variables['element']['#type'] === 'textarea')
+    // Or the element is a webform AJAX element.
+    || isset($variables['element']['#webform_ajax_element_id'])
+    // Or the element name is not a string (can occur on the paragraph webform
+    // selector if the elements of the webform do not have a name).
+    || !is_string($variables['element']['#name'])
+    // Or the element is a paragraph field.
+    || str_starts_with($variables['element']['#name'], 'paragraph_')
   ) {
     return;
   }
 
-  if (isset($variables['element']['#name']) && str_contains($variables['element']['#name'], '[')) {
+  if (str_contains($variables['element']['#name'], '[')) {
     // If the name contains brackets, use the part before the first bracket.
     $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '['));
     $base_name = str_replace(['.', '_', '-'], '-', $base_name);
