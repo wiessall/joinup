@@ -44,3 +44,9 @@ button#eTransButton.wt-ecl-button {
 .nav-link:focus-visible {
   outline: 1px auto blue; // #ISAICP-9733 Override bcl-bootstrap 'outline: 0' to browser standard.
 }
+
+// #ISAICP-9935 Offset Tagify hidden input fields that are anchor targets to match the anchor links position.
+.tagify + input.tagify-widget,
+.tagify + textarea.tagify-widget {
+  top: 2em;
+}
