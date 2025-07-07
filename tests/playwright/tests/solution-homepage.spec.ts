@@ -3,13 +3,13 @@
  * Solution homepage components.
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 import { execDrush } from "../utils/functions";
 
 // Define your test cases
 const testCases = [
-  { label: 'superadmin', nameToLoginWith: 'admin' },
-  { label: 'anonymous', nameToLoginWith: false },
+  { label: "superadmin", nameToLoginWith: "admin" },
+  { label: "anonymous", nameToLoginWith: false },
 ] as const;
 
 testCases.forEach(({ label, nameToLoginWith }) => {
@@ -23,21 +23,25 @@ testCases.forEach(({ label, nameToLoginWith }) => {
         await page.goto(loginUrl);
 
         const message = page.locator(
-          '[data-drupal-messages] div.messages--status, [data-drupal-messages] div.alert-success'
+          "[data-drupal-messages] div.messages--status, [data-drupal-messages] div.alert-success",
         );
 
         await expect(message).toContainText(
-          'You have used a one-time login link. You can set your new password now.'
+          "You have used a one-time login link. You can set your new password now.",
         );
       }
 
       // Visit the solution page
       await page.goto(
-        '/collection/portal/solution/information-sharing-protocols'
+        "/collection/portal/solution/information-sharing-protocols",
       );
 
-      await expect(page.locator(".region-header")).toHaveScreenshot(`group-header-${label}.png`);
-      await expect(page.locator(".content .region-content-top")).toHaveScreenshot(`action-buttons-on-top.png`);
+      await expect(page.locator(".region-header")).toHaveScreenshot(
+        `group-header-${label}.png`,
+      );
+      await expect(
+        page.locator(".content .region-content-top"),
+      ).toHaveScreenshot(`action-buttons-on-top.png`);
     });
   });
 });
