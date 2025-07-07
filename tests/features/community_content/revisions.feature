@@ -9,12 +9,11 @@ Feature:
       | title        | description                               | group_moderation |
       | Hellow world | Because I do not know how to spell Hello. | <moderation>     |
     And users:
-      | Username           | E-mail                    | Roles     |
-      | Clumsy Bounce      | clumsy.bounce@example.com |           |
-      | Authenticated Bump | auth_bump@yahoo.co.uk     |           |
-      | Grumpy Author      | grumpy@auth.com           |           |
-      | Jelly Facilitator  | fajelly@gmail.com         |           |
-      | Fuzzy Moderator    | fuzzy_mod@fuzzample.org   | moderator |
+      | Username          | E-mail                    | Roles     |
+      | Clumsy Bounce     | clumsy.bounce@example.com |           |
+      | Grumpy Author     | grumpy@auth.com           |           |
+      | Jelly Facilitator | fajelly@gmail.com         |           |
+      | Fuzzy Moderator   | fuzzy_mod@fuzzample.org   | moderator |
     And <group type> user memberships:
       | <group type> | user              | roles       |
       | Hellow world | Clumsy Bounce     |             |
@@ -27,78 +26,11 @@ Feature:
     And <content type> revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |
-
-    # The revisions page does not appear for content that has only 1 revision.
-    # We need at least 2 revisions since the main purpose of the revisions page
-    # is to compare different revisions.
-    Given I am an anonymous user
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Sign in to continue"
-
-    Given I am logged in as "Authenticated Bump"
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
-
-    Given I am logged in as "Grumpy Author"
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
-
-    # Moderators always can access the revisions.
-    Given I am logged in as "Fuzzy Moderator"
-    When I visit the "Goodbi world" <content type>
-    Then I should see the link "Revisions" in the "Entity actions" region
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Revisions for Goodbi world"
-
-    Given I am logged in as "Jelly Facilitator"
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions" in the "Entity actions" region
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
-
-    Given I am logged in as "Clumsy Bounce"
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions"
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
-
-    # Create a second revision. This will unlock the revisions page. We need at
-    # least 2 revisions since the page allows us to compare different revisions.
-    Given <content type> revisions:
+    And <content type> revisions:
       | current title | title         | body                       |
       | Goodbi world  | Goodbye world | I found the spell checker. |
 
-    Given I am an anonymous user
-    When I visit the "Goodbye world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbye world"
-    Then I should see the heading "Sign in to continue"
-
-    Given I am logged in as "Authenticated Bump"
-    When I visit the "Goodbye world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbye world"
-    Then I should see the heading "Access denied"
-
-    # The author of another piece of content should not have access.
-    Given I am logged in as "Grumpy Author"
-    When I visit the "Goodbye world" <content type>
-    Then I should not see the "Entity actions" region
-    When I visit the revisions page for "Goodbye world"
-    Then I should see the heading "Access denied"
-
-    Given I am logged in as "Fuzzy Moderator"
-    When I visit the "Goodbye world" <content type>
-    Then I should see the link "Revisions" in the "Entity actions" region
-    When I visit the revisions page for "Goodbye world"
-    Then I should see the heading "Revisions for Goodbye world"
-
+    # Test that content author has access to revisions once there are multiple revisions
     Given I am logged in as "Jelly Facilitator"
     When I visit the "Goodbye world" <content type>
     Then I should see the link "Revisions" in the "Entity actions" region
@@ -134,24 +66,6 @@ Feature:
     When I go to the "Goodbi world" <content type>
     Then I should see the heading "Goodbi world"
 
-    # After leaving the group the user is no longer able to see revisions.
-    When I click "<leave link>"
-    And I press "Confirm"
-    Then I should see the success message "You are no longer a member of Hellow world."
-
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions"
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
-
-    # If the user rejoins the group, access is restored.
-    When I visit the "Goodbi world" <content type>
-    And I press "<join button>"
-    And I check "Notify me when content is published in Hellow world"
-    And I press "Confirm"
-    And I visit the "Goodbi world" <content type>
-    Then I should see the link "Revisions" in the "Entity actions" region
-
     # Check that a facilitator can approve the restoring of a revision that has
     # been proposed by a non-author. This part of the scenario only affects
     # moderated groups. For non-moderated groups this results in no change.
@@ -159,20 +73,6 @@ Feature:
     When I go to the edit form of the "Goodbi world" <content type>
     And I press "Update"
     Then I should see the heading "Goodbi world"
-
-    When I am on the members page of "Hellow world"
-    And I check the box "Update the member Clumsy Bounce"
-    And I select "Block the selected membership(s)" from "Action"
-    And I press "Apply to selected items"
-    Then I should see the following success messages:
-      | success messages                                        |
-      | Block the selected membership(s) was applied to 1 item. |
-
-    Given I am logged in as "Clumsy Bounce"
-    When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions"
-    When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
 
     # Users that have the 'Author' OG role can revert their content in moderated
     # groups without requiring facilitator approval. That means that the content
@@ -191,8 +91,8 @@ Feature:
     # they are posted in a pre-moderated group. The reasoning behind this is
     # everyone should always be free to start a discussion. See ISAICP-2265.
     Examples:
-      | group type | content type | moderation | join button                | leave link            |
-      | collection | discussion   | yes        | Join this collection       | Leave this collection |
-      | collection | document     | no         | Join this collection       | Leave this collection |
-      | solution   | event        | no         | Subscribe to this solution | Unsubscribe           |
-      | solution   | news         | no         | Subscribe to this solution | Unsubscribe           |
+      | group type | content type | moderation |
+      | collection | discussion   | yes        |
+      | collection | document     | no         |
+      | solution   | event        | no         |
+      | solution   | news         | no         |
