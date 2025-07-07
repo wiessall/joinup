@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-f
 Feature: Collection membership administration
   In order to build a community
   As a privileged user
