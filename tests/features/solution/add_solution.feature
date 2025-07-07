@@ -83,8 +83,7 @@ Feature: Test adding solutions.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9780.
-  @wip
+  @javascript
   Scenario: Add solution as a collection facilitator.
     Given collection content:
       | title             | logo     |
@@ -102,38 +101,43 @@ Feature: Test adding solutions.
 
     When I am logged in as "Wendell Silva"
     And I go to the homepage of the "Belgian barista's" collection
-    And I click "Add solution"
+    And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
     And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
     And I should not see the text "Only members can create content"
-    And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
-    And the available options in the "Language" select should not include the "Multilingual Code"
-    When I fill in the following:
-      | Title                 | Espresso is the solution  |
-      | Abstract              | Abstract used for testing |
-      | Description           | This is a test text       |
-      | Geographical coverage | Belgium                   |
-      | Name                  | Ernst Brice               |
-      | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Bulgarian" from "Language"
-    And I select "Data Owner" options from "Solution type"
+    And the "Language availability" tagify should not contain the following option "Multilingual Code"
+    And I fill in "Title" with "Espresso is the solution"
+    And I fill in "Abstract" with "Abstract used for testing"
+    And I enter "This is a test text" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
     And I select "Demography" options from "Topic"
-    # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
+    And I press "Add existing owner"
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Ernst Brice"
+    And I fill in "contact[form][0][email][value]" with "ernsy1999@gmail.com"
+    And I press "Create contact information"
+    And I click "Additional information"
+    And I select "Data Owner" options from "Solution type"
+    # Attach a PDF to the documentation.
+    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Completed" from "Status"
-    And the "Show solutions related by EIRA terms" checkbox should not be checked
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
@@ -150,6 +154,7 @@ Feature: Test adding solutions.
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
     And I go to the edit form of the "Espresso is the solution" solution
+    And I press "Confirm"
     And I press "Publish"
     # The name of the solution should exist in the block of the relative content in a collection.
     Then I should see the heading "Espresso is the solution"
@@ -168,24 +173,31 @@ Feature: Test adding solutions.
     When I am logged in as a facilitator of the "Belgian barista's" collection
     # Make sure that when another solution is added, both are affiliated.
     When I go to the homepage of the "Belgian barista's" collection
-    And I click "Add solution"
-    When I fill in the following:
-      | Title                 | V60 filter coffee solution |
-      | Abstract              | Abstract of filter coffee  |
-      | Description           | This is a test text        |
-      | Geographical coverage | Belgium                    |
-      | Name                  | Ajit Tamboli               |
-      | E-mail address        | tambotamboli@gocloud.in    |
-    And I select "Bulgarian" from "Language"
-    Then I select "Data Owner" options from "Solution type"
+    And I click "Add solution" in the plus button menu
+    And I fill in "Title" with "V60 filter coffee solution"
+    And I fill in "Abstract" with "Abstract of filter coffee"
+    And I enter "This is a test text" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
     And I select "E-inclusion" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Click the button to select an existing owner.
+    And I press "Add existing owner"
+    And I fill in "Owner" with "Organisation example"
+    And I press "Add owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Ajit Tamboli"
+    And I fill in "contact[form][0][email][value]" with "tambotamboli@gocloud.in"
+    And I press "Create contact information"
+    And I click "Additional information"
+    Then I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     And I attach the file "logo.png" to "Logo"
-    # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Organisation example"
-    And I press "Add owner"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "V60 filter coffee solution"
     # The name of the solution should exist in the block of the relative content in a collection.
