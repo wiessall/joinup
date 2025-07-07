@@ -42,7 +42,7 @@
       {{ _title_suffix }}
       <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0"
          href="{{ _url }}"
-         title="{{ _label }}"></a>
+         title="{{ _label|render|striptags|trim }}"></a>
 
       <div class="tile__body d-flex flex-column justify-content-between">
         {% if _info %}
