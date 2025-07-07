@@ -25,19 +25,17 @@
     'js-form-item',
     'form-item',
     'js-form-wrapper',
-    'mb-4',
+    'mb-3',
     errors ? 'has-error',
   ]
 %}
-<fieldset{{ attributes.addClass(classes).removeClass('bg-light', 'p-4') }}>
+<fieldset{{ attributes.addClass(classes) }}>
   {% set legend_classes = [
     'col-form-label',
-    'mb-2',
   ] %}
   {% set legend_span_classes = [
     'fieldset-legend',
     'fw-bold',
-    'h3',
     required ? 'js-form-required',
     required ? 'form-required',
   ] %}
@@ -45,7 +43,8 @@
   <legend{{ legend.attributes.addClass(legend_classes) }}>
     <span{{ legend_span.attributes.addClass(legend_span_classes) }}>{{ legend.title }}</span>
   </legend>
-  <div class="fieldset-wrapper bg-light p-4">
+<div class="fieldset-wrapper">
+
     {% if prefix %}
       <span class="field-prefix">{{ prefix }}</span>
     {% endif %}
