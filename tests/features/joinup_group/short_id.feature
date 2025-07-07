@@ -38,7 +38,7 @@ Feature:
     # The short ID should be lowercase.
     And I fill in "Short ID" with "SSTR-2020"
     And I press "Propose"
-    Then I should see the inline form error message "This value is not valid."
+    Then I should see the inline form error message "Short ID must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
     And I fill in "Short ID" with "sstr-2020"
     And I press "Propose"
@@ -64,7 +64,7 @@ Feature:
     Then the following fields should be disabled "Short ID"
 
   @javascript
-  Scenario: Portal short IDs are unique in solutions.
+  Scenario: Custom URL Identifiers are unique in solutions.
     Given collection content:
       | title              | short ID |
       | Scientific Studies | sst-2020 |
@@ -96,32 +96,37 @@ Feature:
     And I press "Create contact information"
     And I click "Additional information"
     And I select "Data Owner" options from "Solution type"
-    # Assert the Portal short ID description.
+    # Assert the Custom URL Identifier description.
     Then I should see the following lines of text:
       | Used as the web address (URL). Example: a solution named 'European Standards for Internet Of Things' could use 'es-iot'. |
       | Cannot be changed once the solution is published.                                                                        |
       | The ID is between 4-26 characters and consists of lowercase letters, numbers and the dash symbol (-).                    |
 
-    # Portal short ID is case insensitive.
-    And I fill in "Portal short ID" with "wkwasi"
+    # Custom URL Identifier is case insensitive.
+    And I fill in "Custom URL Identifier" with "wkwasi"
     And I press "Confirm"
-    Then I should see the inline form error message "Content with Portal short ID wkwasi already exists. Please choose a different Portal short ID."
+    Then I should see the inline form error message "Content with Custom URL Identifier wkwasi already exists. Please choose a different Custom URL Identifier."
 
     # The short ID should be lowercase.
-    When I fill in "Portal short ID" with "SST-2020"
+    And I fill in "Custom URL Identifier" with "SST-2020"
     And I press "Confirm"
-    Then I should see the inline form error message "This value is not valid."
+    Then I should see the inline form error message "Custom URL Identifier must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
+
+    # The short ID should not contain non-ASCII chars.
+    And I fill in "Custom URL Identifier" with "ñ字Ωش★₿©"
+    And I press "Confirm"
+    Then I should see the inline form error message "Custom URL Identifier must be 4–26 characters: only lowercase letters, digits, and hyphens allowed."
 
     # The short ID is only unique among solutions, it is OK to reuse an existing
     # short ID from a collection.
-    When I fill in "Portal short ID" with "sst-2020"
+    When I fill in "Custom URL Identifier" with "sst-2020"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "I know what a solution is"
 
     When I go to the edit form of the "I know what a solution is" solution
-    Then the following fields should not be disabled "Portal short ID"
+    Then the following fields should not be disabled "Custom URL Identifier"
 
     # Publish the solution.
     When I am logged in as a moderator
@@ -130,14 +135,14 @@ Feature:
     And I press "Publish"
     Then I should see the heading "I know what a solution is"
 
-    # Check that the "Portal short ID" field is not disabled for moderators.
+    # Check that the "Custom URL Identifier" field is not disabled for moderators.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then the following fields should not be disabled "Portal short ID"
+    Then the following fields should not be disabled "Custom URL Identifier"
 
     # Check that the field is not editable for facilitators.
     When I am logged in as a facilitator of the "I know what a solution is" solution
     And I go to the edit form of the "I know what a solution is" solution
-    Then the following fields should be disabled "Portal short ID"
+    Then the following fields should be disabled "Custom URL Identifier"
 
     Then I delete the "I know what a solution is" solution

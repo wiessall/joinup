@@ -37,10 +37,11 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
         'short_id' => $short_id,
       ]);
 
-      $violations = $entity->validate()->findByCodes([RegexConstraint::REGEX_FAILED_ERROR]);
+      $violations = $entity->validate()->getByFields(['short_id']);
       $violations = iterator_to_array($violations);
-
-      $this->assertCount((int) $violation_expected, $violations);
+      $violation_expected
+        ? $this->assertNotEmpty($violations)
+        : $this->assertEmpty($violations);
     }
   }
 
@@ -72,6 +73,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
       'uppercase with number' => ['aA-ab1', TRUE],
       'valid 26 characters long' => ['abcdefghijklmnopqrstuvwxyz', FALSE],
       'too long 27 characters long' => ['abcdefghijklmnopqrstuvwxyz0', TRUE],
+      'non-ascii chars' => ['ñ字Ωش😊★₿©', TRUE],
     ];
   }
 
