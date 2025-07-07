@@ -130,38 +130,6 @@ function ventuno_preprocess_form_element(array &$variables): void {
     $variables['element']['#name'] === 'layout_paragraphs[layout]') {
     $variables['attributes']['class'][] = 'm-0 p-0';
   }
-
-  // Constraints can be added to a form element or its children properties. If
-  // it is added to the element itself, the inline form errors can fail to
-  // properly generate a link that links to the field as form elements not
-  // always have an ID. We are forcing an ID here to ensure that the inline
-  // form errors can link to the field.
-  if (
-    // Do not force an ID if there is already an ID.
-    !empty($variables['attributes']['id'])
-    // Or the element is not an input.
-    || (!isset($variables['element']['#input']) || $variables['element']['#input'] === FALSE)
-    // Or there are AJAX settings in the element.
-    || !empty($variables['element']['#ajax'])
-    // Or the element is a container.
-    || (isset($variables['element']['#type']) && $variables['element']['#type'] === 'textarea')
-    // Or the element is a webform AJAX element.
-    || isset($variables['element']['#webform_ajax_element_id'])
-    // Or the element name is not a string (can occur on the paragraph webform
-    // selector if the elements of the webform do not have a name).
-    || !is_string($variables['element']['#name'])
-    // Or the element is a paragraph field.
-    || str_starts_with($variables['element']['#name'], 'paragraph_')
-  ) {
-    return;
-  }
-
-  if (str_contains($variables['element']['#name'], '[')) {
-    // If the name contains brackets, use the part before the first bracket.
-    $base_name = substr($variables['element']['#name'], 0, strpos($variables['element']['#name'], '['));
-    $base_name = str_replace(['.', '_', '-'], '-', $base_name);
-    $variables['attributes']['id'] = 'edit-' . $base_name;
-  }
 }
 
 /**

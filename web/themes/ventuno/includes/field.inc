@@ -79,6 +79,14 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       }
     }
   }
+
+  // Fix for inline_form_errors links, ensures every field (multiple or not)
+  // has an ID and print it in the template.
+  // See https://www.drupal.org/project/drupal/issues/3229493
+  /* @see web/themes/ventuno/templates/form/field-multiple-value-form.html.twig */
+  if (isset($variables['element']['#id'])) {
+    $variables['attributes']['id'] = $variables['element']['#id'];
+  }
 }
 
 /**
