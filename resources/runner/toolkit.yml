@@ -34,6 +34,13 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/node_modules
 
+  test:
+    phpunit:
+      commands:
+        after:
+          - task: exec
+            command: SELENIUM_REMOTE_URL=$WEBDRIVER_URL ./node_modules/.bin/playwright test
+
   install:
     clone:
       commands:
