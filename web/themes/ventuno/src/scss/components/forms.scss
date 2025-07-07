@@ -135,4 +135,24 @@
       --#{$prefix}table-accent-bg: $white;
     }
   }
+
+  // Override fieldset elements on confirmation page.
+  .solution--confirmation {
+    fieldset {
+      padding: 0 !important;
+      background-color: $white !important;
+    }
+    legend {
+      color: $primary;
+      font-family: $headings-font-family;
+      font-size: $h3-font-size;
+    }
+    .fieldset-wrapper {
+      padding: $spacer;
+      background-color: rgba(
+        var(--bs-light-rgb),
+        var(--bs-bg-opacity)
+      ) !important;
+    }
+  }
 }
