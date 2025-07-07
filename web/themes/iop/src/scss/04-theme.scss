@@ -11,6 +11,7 @@
 
 // @import "@openeuropa/bcl-bootstrap/scss/reboot";
 @import "partials/overrides/reboot"; // Hack to prevent build break
+@import "partials/overrides/general";
 @import "@openeuropa/bcl-bootstrap/scss/type";
 @import "@openeuropa/bcl-bootstrap/scss/transitions";
 @import "@openeuropa/bcl-bootstrap/scss/utilities";
