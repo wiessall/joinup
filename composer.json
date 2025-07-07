@@ -142,6 +142,7 @@
         "npm-asset/jquery-jsonview": "^1.2.3",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
+        "npm-asset/yaireo--tagify": "^4.35.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
@@ -265,6 +266,9 @@
             ],
             "web/libraries/colorbox": [
                 "npm-asset/jquery-colorbox"
+            ],
+            "web/libraries/tagify": [
+                "npm-asset/yaireo--tagify"
             ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
