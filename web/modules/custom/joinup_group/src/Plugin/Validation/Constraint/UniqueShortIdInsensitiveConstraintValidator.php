@@ -14,10 +14,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 /**
  * Validates that a field is unique for the given entity type within a bundle.
  *
- * The validation is case-insensitive. Works only for RDF entities. This
- * constraint was created explicitly for the group entities "Short ID" field.
+ * The validation is case-insensitive. This constraint was created specifically
+ * for the group entities "Short ID" field.
  */
-class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements ContainerInjectionInterface {
+class UniqueShortIdInsensitiveConstraintValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   use AutowireTrait;
 
@@ -33,23 +33,36 @@ class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements C
     }
 
     // Short ID has cardinality 1. Does not need to iterate over other deltas.
-    if (!$item ??= $items->first()?->getValue()['value']) {
+    if (!$value ??= $items->first()?->getValue()['value']) {
       return;
     }
 
+    // Validate the format, exit on failure.
+    if (!preg_match($constraint->formatRegex, $value)) {
+      $this->context->addViolation($constraint->formatInvalidMessage, [
+        '%value' => $value,
+        '@entity_type' => $group->getEntityType()->getSingularLabel(),
+        '@field_name' => $items->getFieldDefinition()->getLabel(),
+      ]);
+
+      // @todo Consider using Sequentially once included https://www.drupal.org/project/drupal/issues/3521131
+      return;
+    }
+
+    // Validate the uniqueness.
     $query = $this->database->select('node__short_id')
       ->fields('node__short_id', ['short_id_value'])
       ->condition('bundle', $group->bundle())
       ->where('LOWER(short_id_value) = :value', [
-        ':value' => strtolower($item),
+        ':value' => strtolower($value),
       ]);
     if (!$group->isNew()) {
       $query->condition('entity_id', $group->id(), '<>');
     }
 
     if ($query->execute()->fetchField()) {
-      $this->context->addViolation($constraint->message, [
-        '%value' => $item,
+      $this->context->addViolation($constraint->notUniqueMessage, [
+        '%value' => $value,
         '@entity_type' => $group->getEntityType()->getSingularLabel(),
         '@field_name' => $items->getFieldDefinition()->getLabel(),
       ]);
