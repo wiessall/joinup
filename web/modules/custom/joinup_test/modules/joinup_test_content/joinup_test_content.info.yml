@@ -1,0 +1,8 @@
+name: 'joinup_test_content'
+type: module
+description: 'Contains functionality to test content of Joinup.'
+package: Joinup
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:default_content
+  - joinup_test:joinup_test
