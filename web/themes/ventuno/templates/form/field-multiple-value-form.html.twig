@@ -20,7 +20,7 @@
  */
 #}
 {% if multiple %}
-  <div class="js-form-item form-item">
+  <div{{ attributes.addClass(['js-form-item', 'form-item']) }}>
     {{ table }}
     {% if description.content %}
       <div{{ description.attributes.addClass(['description', 'form-text', 'text-muted']) }} >{{ description.content }}</div>
@@ -30,7 +30,9 @@
     {% endif %}
   </div>
 {% else %}
-  {% for element in elements %}
-    {{ element }}
-  {% endfor %}
+  <div{{ attributes.addClass(classes) }}>
+    {% for element in elements %}
+      {{ element }}
+    {% endfor %}
+  </div>
 {% endif %}
