@@ -119,7 +119,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         ]);
       }
       $node = $variables['elements']['#node'];
-      // @todo Revisit and align in ISAICP-9497.
       $variables['extra_data'][] = [
         'icon' => 'chat',
         'label' => $node->get('field_replies')->comment_count,
@@ -253,7 +252,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
   }
 
-  // @todo Revisit and align in ISAICP-9497.
   if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
     $variables['extra_data'][] = [
       'icon' => 'archive-fill',
