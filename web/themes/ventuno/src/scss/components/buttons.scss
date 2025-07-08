@@ -62,6 +62,8 @@ button.button--primary {
     .btn-primary {
       @extend .btn-light;
       &:hover,
+      &:active,
+      &:focus,
       &:focus-visible {
         color: var(--bs-btn-hover-color);
         background-color: var(--bs-btn-hover-bg);
