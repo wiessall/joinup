@@ -38,7 +38,7 @@
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
-        "drupal/editor_file": "^2.0",
+        "drupal/editor_file": "^2.1",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
@@ -69,7 +69,7 @@
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
-        "drupal/linkit": "^6.1",
+        "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^1.0",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
@@ -366,9 +366,6 @@
             "drupal/dynamic_entity_reference": {
                 "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
             },
-            "drupal/editor_file": {
-                "CKeditor crashes and prevents saving on 10.5 in some circumstances. @see https://www.drupal.org/i/3532269": "resources/patch/php/drupal/editor_file/3532269.diff"
-            },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
             },
@@ -412,7 +409,7 @@
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.patch",
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
                 "Uri processing fails for websites running in a subdirectory @see https://www.drupal.org/i/3472501": "resources/patch/php/drupal/linkit/3472501.patch"
             },
             "drupal/layout_paragraphs": {
