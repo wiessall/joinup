@@ -349,13 +349,13 @@ Feature: Test adding solutions.
     And I open the plus button menu
     And I click "Add solution"
     When I click "Additional information"
-    And I fill in "Portal short ID" with "qwerty"
+    And I fill in "Custom URL Identifier" with "qwerty"
     And I press "Confirm"
     Then I should see the text "errors have been found:"
-    And I should see the link "Portal short ID"
+    And I should see the link "Custom URL Identifier"
     But I should not see the text "qwerty"
-    And I should not see the text "Content with Portal short ID qwerty already exists."
-    # The link should point to the "Portal short ID" field.
-    When I click "Portal short ID"
-    Then I should see the text "Portal short ID"
-    And I should see the text "Content with Portal short ID qwerty already exists."
+    And I should not see the text "Content with Custom URL Identifier qwerty already exists."
+    # The link should point to the "Custom URL Identifier" field.
+    When I click "Custom URL Identifier"
+    Then I should see the text "Custom URL Identifier"
+    And I should see the text "Content with Custom URL Identifier qwerty already exists."
