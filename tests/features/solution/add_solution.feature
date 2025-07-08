@@ -41,11 +41,11 @@ Feature: Test adding solutions.
     And I press "Add new owner"
     And I press "Confirm"
     Then I should see the following inline form error messages:
-      | error messages                          |
-      | Name field is required.                 |
-      | Type field is required.                 |
-      | Country field is required.              |
-      | E-mail address field is required.       |
+      | error messages                    |
+      | Name field is required.           |
+      | Type field is required.           |
+      | Country field is required.        |
+      | E-mail address field is required. |
     # Create owner. Validation errors must have activated the tab "Contact details".
     When I fill in "Name" with "Organisation valid"
     And I select "Company" options from "Type"
@@ -338,3 +338,24 @@ Feature: Test adding solutions.
     Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
     When I press "Next"
     Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
+
+  @javascript
+  Scenario: Custom constraints point to the correct field.
+    Given solution content:
+      | title | short ID | state     | collection |
+      | Test  | qwerty   | published | The Portal |
+    Given I am logged in as a moderator
+    And I go to the "The Portal" collection
+    And I open the plus button menu
+    And I click "Add solution"
+    When I click "Additional information"
+    And I fill in "Custom URL Identifier" with "qwerty"
+    And I press "Confirm"
+    Then I should see the text "errors have been found:"
+    And I should see the link "Custom URL Identifier"
+    But I should not see the text "qwerty"
+    And I should not see the text "Content with Custom URL Identifier qwerty already exists."
+    # The link should point to the "Custom URL Identifier" field.
+    When I click "Custom URL Identifier"
+    Then I should see the text "Custom URL Identifier"
+    And I should see the text "Content with Custom URL Identifier qwerty already exists."
