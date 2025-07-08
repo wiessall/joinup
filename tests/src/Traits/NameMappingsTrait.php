@@ -72,6 +72,7 @@ trait NameMappingsTrait {
       ],
       'document' => [
         'document type' => 'field_type',
+        'body' => 'field_paragraphs_body',
         'file' => 'field_file',
         'keywords' => 'field_keywords',
         'licence' => 'field_licence',
@@ -109,6 +110,7 @@ trait NameMappingsTrait {
         'legal type' => 'legal_type',
       ],
       'news' => [
+        'body' => 'field_paragraphs_body',
         'headline' => 'field_news_headline',
         'keywords' => 'field_keywords',
         'logo' => 'field_news_logo',
