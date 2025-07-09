@@ -1,18 +1,18 @@
 diff --git a/js/linkit.autocomplete.js b/js/linkit.autocomplete.js
-index 63a7c8b..f49f5cc 100644
+index 846fe29380fd7a02b77ee41968a03bdb04dadcc5..38727988c2a150f9215a664e3a955499e4650d8f 100644
 --- a/js/linkit.autocomplete.js
 +++ b/js/linkit.autocomplete.js
 @@ -89,7 +89,7 @@
        }
      }
-
+ 
 -    event.target.value = ui.item.path;
 +    event.target.value = ui.item.alias ? ui.item.alias : ui.item.path;
-
+ 
      return false;
    }
 diff --git a/src/Element/Linkit.php b/src/Element/Linkit.php
-index 7824dd8..8f650d2 100644
+index 7824dd80b1da366ade8e12799a7cba6279ce3cbf..8f650d223660af28eadfc19cd4e69e220177fa2c 100644
 --- a/src/Element/Linkit.php
 +++ b/src/Element/Linkit.php
 @@ -86,6 +86,21 @@ class Linkit extends FormElement {
@@ -36,9 +36,9 @@ index 7824dd8..8f650d2 100644
 +    }
      return Textfield::preRenderTextfield($element);
    }
-
+ 
 diff --git a/src/Plugin/Linkit/Matcher/EntityMatcher.php b/src/Plugin/Linkit/Matcher/EntityMatcher.php
-index 76ba3b3..2374805 100644
+index 76ba3b3cfc52004c2cb591c8285514b54be9f0f1..2374805223f1393d2a1adaaeb91c9c2b6966deeb 100644
 --- a/src/Plugin/Linkit/Matcher/EntityMatcher.php
 +++ b/src/Plugin/Linkit/Matcher/EntityMatcher.php
 @@ -429,7 +429,8 @@ class EntityMatcher extends ConfigurableMatcherBase {
@@ -48,7 +48,7 @@ index 76ba3b3..2374805 100644
 -      ->setPath($this->buildPath($entity));
 +      ->setPath($this->buildPath($entity))
 +      ->setAlias($this->buildPath($entity));
-
+ 
      return $suggestion;
    }
 @@ -494,7 +495,7 @@ class EntityMatcher extends ConfigurableMatcherBase {
@@ -61,13 +61,13 @@ index 76ba3b3..2374805 100644
      // strip '/edit' from the end of the canonical URL returned
      // by $entity->toUrl().
 diff --git a/src/Suggestion/EntitySuggestion.php b/src/Suggestion/EntitySuggestion.php
-index bd55db3..e1a5c33 100644
+index bd55db3c4e7e45834712eee42d85ab4c9a9284da..e1a5c337aa8bf292f989f67f4cae858ad260f2c7 100644
 --- a/src/Suggestion/EntitySuggestion.php
 +++ b/src/Suggestion/EntitySuggestion.php
 @@ -7,6 +7,13 @@ namespace Drupal\linkit\Suggestion;
   */
  class EntitySuggestion extends DescriptionSuggestion {
-
+ 
 +  /**
 +   * The entity's path alias.
 +   *
@@ -81,7 +81,7 @@ index bd55db3..e1a5c33 100644
 @@ -28,6 +35,19 @@ class EntitySuggestion extends DescriptionSuggestion {
     */
    protected $substitutionId;
-
+ 
 +  /**
 +   * Sets the path alias.
 +   *
@@ -105,3 +105,4 @@ index bd55db3..e1a5c33 100644
 +      'alias' => $this->alias,
      ];
    }
+ 
