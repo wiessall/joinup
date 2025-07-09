@@ -196,7 +196,6 @@ default:
         Mobile menu: '.joinup-navbar ul.navbar-nav .mmenu-nav__menu'
         Header: '.region-header'
         Homepage topics: '.view-homepage-topics'
-        Highlighted content: '.block-entityqueue--highlighted-content'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Upcoming event: '.block-views-blockupcoming-event-block'

@@ -1,9 +1,9 @@
-uuid: d5d48389-336e-4698-8dd3-df18345169a6
+uuid: 743ecda3-0abb-49e3-b0bf-b47177f577d0
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.highlighted
+    - core.entity_view_mode.node.spotlight
     - field.field.node.event.abstract
     - field.field.node.event.field_attachment
     - field.field.node.event.field_comments
@@ -27,34 +27,24 @@ dependencies:
     - field.field.node.event.og_audience
     - field.field.node.event.spatial_coverage
     - node.type.event
-    - responsive_image.styles.highlighted_content
   module:
-    - datetime_range
-    - field_delimiter
     - field_fallback_formatter
-    - field_formatter_range
     - joinup_core
-    - joinup_html_stripper
-    - layout_builder
-    - responsive_image
+    - joinup_event
     - template_suggestion
     - user
-third_party_settings:
-  layout_builder:
-    enabled: false
-    allow_custom: false
-id: node.event.highlighted
+id: node.event.spotlight
 targetEntityType: node
 bundle: event
-mode: highlighted
+mode: spotlight
 content:
   abstract:
     type: field_fallback_formatter
-    label: visually_hidden
+    label: hidden
     settings:
-      main_field_formatter_id: joinup_html_stripper_stripped
+      main_field_formatter_id: string
       main_field_formatter_settings:
-        trim_length: 200
+        link_to_entity: false
       fallback_field_id: field_paragraphs_body
       fallback_field_formatter_id: filtered_entity_reference_bundles
       fallback_field_formatter_settings:
@@ -70,51 +60,16 @@ content:
     weight: 1
     region: content
   field_event_date:
-    type: daterange_custom
+    type: date_tile
     label: hidden
     settings:
       timezone_override: ''
-      date_format: d-m-Y
-      from_to: start_date
+      from_to: both
       separator: '-'
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
-    weight: 3
-    region: content
-  field_event_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: highlighted_content
-      image_link: ''
-      image_loading:
-        attribute: lazy
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
-  field_topic:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: true
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 2
-        offset: 0
-      template_suggestion:
         template_suggestion: ''
     weight: 2
-    region: content
-  flag_like:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
     region: content
 hidden:
   anonymous_comment_links: true
@@ -124,6 +79,7 @@ hidden:
   field_event_agenda: true
   field_event_contact_email: true
   field_event_coordinates: true
+  field_event_logo: true
   field_event_online_location: true
   field_event_web_url: true
   field_location: true
@@ -136,6 +92,8 @@ hidden:
   field_site_featured: true
   field_state: true
   keywords: true
+  field_topic: true
+  flag_like: true
   langcode: true
   links: true
   og_audience: true

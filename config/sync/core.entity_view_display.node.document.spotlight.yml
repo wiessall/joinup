@@ -1,9 +1,9 @@
-uuid: 5fbb7f17-0be8-4c70-8a5c-ceb806015a8f
+uuid: a5af912d-20b9-4740-b5c0-1ad3a5336a14
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.highlighted
+    - core.entity_view_mode.node.spotlight
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
@@ -19,66 +19,19 @@ dependencies:
     - field.field.node.document.og_audience
     - field.field.node.document.spatial_coverage
     - node.type.document
-    - responsive_image.styles.highlighted_content
   module:
     - field_fallback_formatter
-    - field_group
     - joinup_core
-    - layout_builder
-    - responsive_image
     - template_suggestion
     - user
-third_party_settings:
-  field_group:
-    group_categorisation:
-      children:
-        - field_licence
-        - field_short_title
-        - field_type
-      label: Categorisation
-      parent_name: ''
-      region: hidden
-      weight: 22
-      format_type: html_element
-      format_settings:
-        classes: ''
-        id: ''
-        element: div
-        show_label: true
-        label_element: h3
-        attributes: ''
-        effect: none
-        speed: fast
-    group_attachment:
-      children:
-        - field_file
-      label: Attachment
-      parent_name: ''
-      region: hidden
-      weight: 23
-      format_type: html_element
-      format_settings:
-        classes: ''
-        id: ''
-        element: div
-        show_label: true
-        label_element: h3
-        attributes: ''
-        effect: none
-        speed: fast
-  layout_builder:
-    enabled: false
-    allow_custom: false
-_core:
-  default_config_hash: IBVftmfYLkfapLokxuyLrv1me4toJj5yidZu0ixGxQM
-id: node.document.highlighted
+id: node.document.spotlight
 targetEntityType: node
 bundle: document
-mode: highlighted
+mode: spotlight
 content:
   abstract:
     type: field_fallback_formatter
-    label: visually_hidden
+    label: hidden
     settings:
       main_field_formatter_id: string
       main_field_formatter_settings:
@@ -97,28 +50,11 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
-  field_document_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: highlighted_content
-      image_link: ''
-      image_loading:
-        attribute: lazy
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
-  flag_like:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
-    region: content
 hidden:
   anonymous_comment_links: true
   featured: true
   field_comments: true
+  field_document_logo: true
   field_file: true
   field_licence: true
   field_paragraphs_body: true
@@ -129,6 +65,7 @@ hidden:
   field_topic: true
   field_type: true
   keywords: true
+  flag_like: true
   langcode: true
   links: true
   og_audience: true

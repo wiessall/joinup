@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.view_mode_tile_horizontal
+    - core.entity_view_mode.node.spotlight
     - entityqueue.entity_queue.spotlight
   module:
     - entityqueue
@@ -75,12 +75,12 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          view_mode: view_mode_tile_horizontal
+          view_mode: spotlight
       pager:
         type: some
         options:
           offset: 0
-          items_per_page: 3
+          items_per_page: 4
       exposed_form:
         type: basic
         options:
@@ -164,7 +164,10 @@ display:
           limit_queue: spotlight
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
