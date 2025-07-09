@@ -76,6 +76,14 @@ class MenuHelper implements MenuHelperInterface {
       'query' => $this->getDestinationArray(),
     ]);
 
+    // Add a random query parameter to the link force the browser to
+    // recalculate the 302 redirect to the external service.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9903.
+    // @todo Remove these lines in ISAICP-9990.
+    $query = $cas_login_link->getOption('query');
+    $query['t'] = rand(1000, 9999);
+    $cas_login_link->setOption('query', $query);
+
     $anonymous_links[] = [
       'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
