@@ -12,8 +12,8 @@ Feature: SEO for discussion forum posts.
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kindle     | eReader     |
     And "discussion" content:
-      | title                           | published at              | changed                   | content                                                      | author                                 | attachments         | keywords                       | collection                                            |
-      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | Interoperable Europe Portal SEO discussion collection |
+      | title                           | published at              | changed                   | content                                                      | author                                 | attachments         | keywords                                                 | collection                                            |
+      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Interoperable Europe Portal SEO author | test.zip, test1.zip | nintendo64 manuals, Alphabet, nintendo64 licences, games | Interoperable Europe Portal SEO discussion collection |
 
     When I visit the "Discussions are now forum posts" discussion
     Then the metatag JSON should be attached in the page
@@ -30,11 +30,11 @@ Feature: SEO for discussion forum posts.
       | mainEntityOfPage    | __base_url__/collection/interoperable-europe-portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "about" properties:
-      | property | value      |
-      | 0        | seo        |
-      | 1        | tags       |
-      | 2        | metatag    |
-      | 3        | schema.org |
+      | property | value               |
+      | 0        | nintendo64 manuals  |
+      | 1        | Alphabet            |
+      | 2        | nintendo64 licences |
+      | 3        | games               |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "image" properties:
       | property | value                                                                                                                                  |
       | @type    | http://schema.org/ImageObject                                                                                                          |

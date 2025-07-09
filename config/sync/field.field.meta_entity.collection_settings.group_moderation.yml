@@ -1,0 +1,28 @@
+uuid: 16cc9088-09b7-4119-949d-48c53ac33012
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.group_moderation
+    - meta_entity.type.collection_settings
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.collection_settings.group_moderation
+field_name: group_moderation
+entity_type: meta_entity
+bundle: collection_settings
+label: Moderation
+description: 'If checked, community content items (news, events, discussions and documents) are pre-moderated: they have to be validated by the moderators of the collection before they will be published.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: Moderated
+  off_label: 'Non moderated'
+field_type: boolean

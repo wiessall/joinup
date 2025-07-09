@@ -24,13 +24,14 @@ Feature: Owner moderation
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
     And I click the 'Categorisation' tab
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
 
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
-    And I check the box "Industry consortium"
     And I fill in "Name" with "EU healthy movement"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     When I press "Create owner"
     Then I should see "EU healthy movement"
 
@@ -73,7 +74,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check the box "Company"
+    When I check "Company"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

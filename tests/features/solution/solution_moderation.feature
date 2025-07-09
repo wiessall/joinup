@@ -4,6 +4,7 @@ Feature: Solution moderation
   As a user of the website
   I need to be able to transit the solutions from one state to another.
 
+  @javascript
   # Access checks are not being made here. They are run in the solution add feature.
   Scenario: 'Save as draft' and 'Propose' states are available but moderators should also see 'Publish' state.
     Given collection content:
@@ -12,24 +13,84 @@ Feature: Solution moderation
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in "Title" with "Solution Beta"
+    And I fill in "Abstract" with "Short abstract"
+    And I enter "Last letter" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Organisation valid"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I click "Additional information"
+    And I select "Logging Service" options from "Solution type"
+    And I press "Confirm"
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
     When I am logged in as a user with the "moderator" role
     And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in "Title" with "Solution Beta"
+    And I fill in "Abstract" with "Short abstract"
+    And I enter "Last letter" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Organisation valid"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I click "Additional information"
+    And I select "Logging Service" options from "Solution type"
+    And I press "Confirm"
     Then the following buttons should be present "Save as draft, Propose, Publish"
     And the following buttons should not be present "Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
     When I am logged in as a "facilitator" of the "Collection propose state test" collection
-    And I go to the homepage of the "Collection propose state test" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
+    And I go to the add solution form of the "Collection propose state test" collection
+    When I fill in "Title" with "Solution Beta"
+    And I fill in "Abstract" with "Short abstract"
+    And I enter "Last letter" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Organisation valid"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I click "Additional information"
+    And I select "Logging Service" options from "Solution type"
+    And I press "Confirm"
     Then the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    And I should not see the link "Delete" in the "Content buttons"
 
   Scenario: Test the moderation workflow available states.
     Given users:
@@ -148,34 +209,27 @@ Feature: Solution moderation
       | The Guardian of the Stream | Tyrone Underwood | yes         |
       | Flames in the Swords       | Tyrone Underwood | yes         |
 
-    # Authentication sample checks.
+    # Access denied checks.
     Given I am logged in as "William Curtis"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
 
-    # Expected access.
-    And I go to the "Azure Ship" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose"
-    And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
+    Given I am logged in as "Franklin Walker"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
 
-    # Expected access denied.
-    When I go to the "The Last Illusion" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose"
-    And the following buttons should not be present "Publish, Request changes, Blacklist"
-    And I should not see the link "Delete"
-
-    # One check for the moderator.
-    Given I am logged in as "Tyrone Underwood"
-    # Expected access.
-    And I go to the "Azure Ship" solution
-    Then I should see the link "Edit"
-    When I click "Edit"
-    Then I should not see the heading "Access denied"
-    And the following buttons should be present "Save as draft, Propose, Publish"
-    And the following buttons should not be present "Request changes, Blacklist"
-    And I should see the link "Delete"
+    Given I am logged in as "Isabel Banks"
+    When I go to the edit form of the "Azure Ship" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "The Last Illusion" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Rose of Doors" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Time Bandit" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Fire Swords" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "The Guardian of the Stream" solution
+    Then I should see the heading "Access denied"
+    When I go to the edit form of the "Flames in the Swords" solution
+    Then I should see the heading "Access denied"

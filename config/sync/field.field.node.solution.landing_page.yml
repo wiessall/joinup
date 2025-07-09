@@ -7,14 +7,18 @@ dependencies:
     - node.type.solution
   module:
     - link
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.solution.landing_page
 field_name: landing_page
 entity_type: node
 bundle: solution
-label: 'Landing page'
-description: 'Homepage of the solution in an external platform'
+label: 'Relevant website'
+description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

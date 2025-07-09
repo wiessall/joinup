@@ -12,7 +12,7 @@ Feature: Editing collections
     When I am logged in as a facilitator of the "Überwaldean Land Eels" collection
     And I go to the edit form of the "Überwaldean Land Eels" collection
     Then I should see the heading "Edit Collection Überwaldean Land Eels"
-    Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Content creation, Moderated, Motivation"
+    Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Motivation"
     And the following field widgets should be present "Contact information, Owner"
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
     And I should see "Short description text of the collection. Appears on the Overview page."

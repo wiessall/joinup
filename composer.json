@@ -52,7 +52,7 @@
         "drupal/field_delimiter": "^2.0",
         "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
-        "drupal/field_group": "^3.6",
+        "drupal/field_group": "4.0.0 as 3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/file_visibility": "^1.0",
@@ -108,6 +108,7 @@
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
         "drupal/simple_block": "^1.3",
+        "drupal/simple_multistep": "^2.1",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^2.1",
         "drupal/slick": "^3.0",
@@ -117,6 +118,8 @@
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
+        "drupal/tagify": "^1.2",
+        "drupal/taxonomy_container": "^1.4",
         "drupal/theme_rule": "^1.0",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
@@ -139,6 +142,7 @@
         "npm-asset/jquery-jsonview": "^1.2.3",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
+        "npm-asset/yaireo--tagify": "^4.35.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
@@ -263,6 +267,9 @@
             "web/libraries/colorbox": [
                 "npm-asset/jquery-colorbox"
             ],
+            "web/libraries/tagify": [
+                "npm-asset/yaireo--tagify"
+            ],
             "drush/Commands/{$name}": [
                 "type:drupal-drush"
             ],
@@ -352,7 +359,10 @@
                 "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff",
                 "Time-based custom caching is broken since configuration expects an integer @see https://www.drupal.org/i/3233105": "resources/patch/php/drupal/core/3233105.diff",
-                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff"
+                "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
+                "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
+                "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
+                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -383,13 +393,17 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch"
             },
+            "drupal/field_group": {
+                "Links from validation message don't point to proper fields under horizontal tabs @see https://www.drupal.org/i/3362124": "resources/patch/php/drupal/field_group/3362124-mr110-commit_6462709d7f.diff",
+                "Activate tab by link anchor is broken @see https://www.drupal.org/project/field_group/issues/3226844": "resources/patch/php/drupal/field_group/3226844.diff"
+            },
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
             },
             "drupal/file_url": {
                 "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
                 "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
+                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
@@ -406,7 +420,8 @@
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
-                "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch"
+                "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
+                "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff"
             },
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
@@ -470,6 +485,11 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
+            },
+            "drupal/tagify": {
+                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
+                "EntityAutocompleteTagify returns wrong value so Drupal tries to create entity without label @see https://drupal.org/i/3530799": "resources/patch/php/drupal/tagify/3530799-mr153-commit-1ff979ac70.diff",
+                "Remove 'Drag to re-order @entity_types' description @see https://www.drupal.org/project/tagify/issues/3531807": "resources/patch/php/drupal/tagify/3531807.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"

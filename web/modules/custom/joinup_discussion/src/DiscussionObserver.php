@@ -32,7 +32,7 @@ readonly class DiscussionObserver implements ObserverInterface {
           'title',
           'body',
           'field_topic',
-          'field_keywords',
+          'keywords',
           'field_attachment',
           'field_state',
         ],

@@ -4,17 +4,16 @@ Feature: User interface for the File URL field
   As an authenticated user
   I need to be able to interact with a field widget that offers both options
 
-  Background:
-    Given collection content:
-      | title            |
-      | Regression tests |
-
   @javascript
   Scenario: Interact with both the 'File upload' and 'External URL' options
-    Given I am logged in as a member of the "Regression tests" collection
-    # An example of the File URL field is the "Documentation" field in the
-    # solution form.
-    And I go to the add solution form of the "Regression tests" collection
+    Given solution content:
+      | title    |
+      | Nimbus logic |
+
+    When I am logged in as a facilitator of the "Nimbus logic" solution
+    And I go to the edit form of the "Nimbus logic" solution
+    And I click "Additional information"
+    And the following fields should not be present "Weight for new file"
 
     # Initially, only the radio button selector should be visible, but no option
     # is selected.
@@ -23,7 +22,7 @@ Feature: User interface for the File URL field
     But the following fields should not be visible "Choose a file,Remote URL"
     And I should not see the text "Allowed types: txt doc docx pdf."
     And I should not see the description "This must be an external URL such as http://example.com." for "Upload a new file or enter a URL"
-    And I expand the "Additional fields" accordion section
+
     # Try to upload a file.
     Given I select the radio button "Upload file"
     Then the following field should be visible "Choose a file"
@@ -41,8 +40,8 @@ Feature: User interface for the File URL field
 
   Scenario: User should be able to remove entity even document's entities do not exist
     Given solution content:
-      | title                      | documentation | collection       |
-      | Solution without documents | text.pdf      | Regression tests |
+      | title                      | documentation |
+      | Solution without documents | text.pdf      |
     And I delete documents from "Solution without documents" solution
 
     Given I am logged in as a moderator
@@ -55,8 +54,8 @@ Feature: User interface for the File URL field
   @javascript
   Scenario: File URL does not trigger type error after trying to submit an invalid url
     Given document content:
-      | title          | abstract | field_paragraphs_body | state | document type | collection       |
-      | Document title | Abstract | Body                  | draft | document      | Regression tests |
+      | title          | abstract | field_paragraphs_body | state | document type |
+      | Document title | Abstract | Body                  | draft | document      |
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Document title" document
@@ -64,7 +63,7 @@ Feature: User interface for the File URL field
     And I select the radio button "Remote file URL"
     And I fill in "field_file[0][file_url_remote]" with "foo"
     And I press "Add URL"
-    Then I should see the error message "The URL foo is not valid"
+    Then I should see the inline form error message "The URL foo is not valid"
     And I select the radio button "Upload file"
     And I attach the file "logo.png" to "files[field_file_0][]"
     And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."
