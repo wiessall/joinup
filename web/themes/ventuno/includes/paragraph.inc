@@ -62,6 +62,10 @@ function ventuno_preprocess_field__paragraph__call_to_action(array &$variables):
   if (isset($styles['rounded'])) {
     $variables['attributes']['class'][] = 'rounded-pill';
   }
+  // Add cacheability metadata to ensure correct caching behavior.
+  $cacheability = new CacheableMetadata();
+  $cacheability->addCacheableDependency($paragraph);
+  $cacheability->applyTo($variables);
 }
 
 /**
