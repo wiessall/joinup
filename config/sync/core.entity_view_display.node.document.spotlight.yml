@@ -64,8 +64,8 @@ hidden:
   field_state: true
   field_topic: true
   field_type: true
-  keywords: true
   flag_like: true
+  keywords: true
   langcode: true
   links: true
   og_audience: true
