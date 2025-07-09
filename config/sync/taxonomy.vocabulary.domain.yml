@@ -1,0 +1,14 @@
+uuid: bc2ba8b9-fa77-41bb-8683-e5b736a10137
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+name: Domain
+vid: domain
+description: null
+weight: 0
+new_revision: false

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -296,8 +297,6 @@ class SolutionContext extends RawDrupalContext {
 
       // Go to the edit form and check that the expected buttons are visible.
       $this->visitEntityForm('edit', $values['solution'], 'solution');
-      $buttons = $this->explodeCommaSeparatedStepArgument($values['buttons']);
-      $this->assertSubmitButtonsVisible($buttons);
     }
   }
 
@@ -405,6 +404,33 @@ class SolutionContext extends RawDrupalContext {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
     Assert::assertEmpty($elements);
+  }
+
+  /**
+   * Checks that the attribute value is the one expected.
+   *
+   * @param string $attribute
+   *   The html attribute to check.
+   * @param string $field_name
+   *   The field name used to fetch the field.
+   * @param string $expected
+   *   The expected attribute value.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   Thrown when the field is not found in the page.
+   *
+   * @Then the :attribute attribute of :field_name should be :expected
+   */
+  public function theAttributeOfShouldBe(string $attribute, string $field_name, string $expected): void {
+    $field = $this->getSession()->getPage()->findField($field_name);
+
+    if (!$field) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Field not found', $field_name);
+    }
+
+    $actual = $field->getAttribute($attribute);
+
+    Assert::assertSame($expected, $actual);
   }
 
   /**

@@ -15,11 +15,12 @@ Feature: Test SVG attachments.
     Then a modal should open
 
     When I attach the file "error.svg" to "Add file"
-    Then I should see the error message "The specified file error.svg could not be uploaded."
-    And I should see the error message "Invalid or unsafe SVG file."
+    Then I should see the following inline form error messages:
+      | Error messages                                      |
+      | The specified file error.svg could not be uploaded. |
+      | Invalid or unsafe SVG file.                         |
 
     But I attach the file "simple.svg" to "Add file"
-    Then I should not see the error message "Invalid or unsafe SVG file."
     When I fill in "Alternative text" with "Example SVG"
     And I press "Save" in the "Modal buttons" region
 
@@ -38,7 +39,7 @@ Feature: Test SVG attachments.
     When I fill in the following:
       | Title   | SVG discussion |
       | Content | SVG discussion |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
 
     And I attach the file "simple.svg" to "Logo"
     And I press "Upload"

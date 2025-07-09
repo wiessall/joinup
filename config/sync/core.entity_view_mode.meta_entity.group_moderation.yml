@@ -1,0 +1,11 @@
+uuid: 07bbf58c-14f8-41cc-9c5c-2fac984c068e
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: meta_entity.group_moderation
+label: Moderation
+description: ''
+targetEntityType: meta_entity
+cache: true

@@ -1,0 +1,27 @@
+uuid: 1d919f94-59de-4133-9439-de5fb6c9a978
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.content_creation
+    - meta_entity.type.collection_settings
+  module:
+    - options
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.collection_settings.content_creation
+field_name: content_creation
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Content creation'
+description: 'Choose which users can create content (news, events, discussions and documents) in the collection.'
+required: true
+translatable: false
+default_value:
+  -
+    value: only_members
+default_value_callback: ''
+settings: {  }
+field_type: list_string
