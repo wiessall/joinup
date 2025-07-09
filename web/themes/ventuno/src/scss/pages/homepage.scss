@@ -63,30 +63,20 @@
 
 // In the Spotlight
 .block-views-blockin-the-spotlight-block {
-  height: 100%;
-  padding-bottom: $spacer * 3; // 48px
-  border-bottom: 1px solid rgba($primary, 0.1);
-}
+  @include full-width-color-to-top(
+    $primary,
+    $white,
+    8rem,
+    3rem,
+    $primary,
+    0,
+    3rem
+  );
 
-// Highlighted Content
-.block-entityqueue--highlighted-content {
-  position: relative;
-  height: 100%;
-  padding-bottom: $spacer * 3; // 48px
-  border-bottom: 1px solid rgba($primary, 0.1);
-  .more-link {
-    position: absolute;
-    right: 0;
-    bottom: $spacer;
-    &::after {
-      @include get-bootstrap-icon("arrow-right");
+  padding-bottom: $spacer * 2; // 32px
 
-      margin-left: $spacer * 0.5; // 8px
-    }
-    @include media-breakpoint-up(md) {
-      top: $spacer;
-      bottom: unset;
-    }
+  .layout-block__title--in_the_spotlight-block {
+    color: $white;
   }
 }
 
@@ -143,50 +133,6 @@
         color: $white;
         font-size: 1.25rem;
         font-weight: normal;
-      }
-    }
-    .event--highlighted-date {
-      overflow: hidden;
-      margin: 0 1px 1px;
-      border-top: 8px solid $joinup-info;
-      border-radius: $border-radius-sm;
-      background: $gray-300;
-    }
-    .field--name-field-event-date {
-      display: flex;
-      flex-flow: row;
-      align-items: center;
-      justify-content: space-around;
-      color: $dark;
-      background: white;
-      .joinup-date-tile {
-        display: flex;
-        flex-flow: column;
-        flex-grow: 1;
-        text-align: center;
-        & + .joinup-date-tile {
-          position: relative;
-          &::before {
-            position: absolute;
-            top: 27%;
-            left: -2px;
-            content: "-";
-          }
-        }
-        .joinup-date-tile__month {
-          text-transform: uppercase;
-          line-height: 1;
-        }
-        .joinup-date-tile__day {
-          font-size: $h2-font-size;
-          font-weight: $font-weight-bold;
-          line-height: 1;
-        }
-        .joinup-date-tile__year {
-          border-top: 1px solid $gray-300;
-          background-color: $gray-100;
-          line-height: 1.4;
-        }
       }
     }
     footer {
