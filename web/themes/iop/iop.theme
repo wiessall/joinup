@@ -97,6 +97,11 @@ function iop_preprocess_page(array &$variables): void {
       $variables['page_header']['title'] = t('Events');
     }
   }
+
+  // Depend the page to the oe_authentication settings in order to refresh the
+  // Sign in link when changes are updated.
+  // @todo Remove these lines in ISAICP-9990.
+  $variables['#cache']['tags'][] = 'config:oe_authentication.settings';
 }
 
 /**

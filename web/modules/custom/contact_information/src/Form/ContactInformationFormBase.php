@@ -228,6 +228,13 @@ abstract class ContactInformationFormBase extends ContactForm {
       ['honeypot', 'time_restriction'],
     );
 
+    // Add the oe_authentication.settings config as a cacheable dependency in
+    // order to be invalidated after changing the above settings.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9903.
+    // @todo Remove these lines in ISAICP-9990.
+    $cacheable_metadata = CacheableMetadata::createFromRenderArray($form);
+    $cacheable_metadata->addCacheableDependency($this->config('oe_authentication.settings'));
+
     return $form;
   }
 
