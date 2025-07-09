@@ -29,6 +29,15 @@ class JoinupModalAnonymousController extends ControllerBase {
     $login = Url::fromRoute('cas.login', [], [
       'query' => $this->getDestinationArray(),
     ]);
+
+    // Add a random query parameter to the link force the browser to
+    // recalculate the 302 redirect to the external service.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9903.
+    // @todo Remove these lines in ISAICP-9990.
+    $query = $login->getOption('query');
+    $query['t'] = rand(1000, 9999);
+    $login->setOption('query', $query);
+
     return [
       '#theme' => "joinup_modal_anonymous__$type",
       '#title' => $this->t('You are not signed in'),
