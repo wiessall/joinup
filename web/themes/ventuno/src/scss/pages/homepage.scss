@@ -84,38 +84,27 @@
 .block-views-blocklatest-news-block {
   position: relative;
   margin-bottom: $spacer * 3; // 48px
+  padding-bottom: $spacer * 3; // 48px
   .more-link {
-    position: absolute;
-    right: 0;
-    bottom: $spacer * -3;
+    margin-bottom: $spacer * 1.2;
     &::after {
       @include get-bootstrap-icon("arrow-right");
 
       margin-left: $spacer * 0.5; // 8px
-    }
-    @include media-breakpoint-up(md) {
-      top: $spacer;
-      bottom: unset;
     }
   }
 }
 
 // Upcoming event.
 .block-views-blockupcoming-event-block {
-  position: relative;
-  margin-bottom: $spacer * 3; // 48px;
+  margin-bottom: $spacer * 3; // 48px
+  padding-bottom: $spacer * 3; // 48px;
   .more-link {
-    position: absolute;
-    right: 0;
-    bottom: $spacer * -3;
+    margin-bottom: $spacer * 1.2;
     &::after {
       @include get-bootstrap-icon("arrow-right");
 
       margin-left: $spacer * 0.5; // 8px
-    }
-    @include media-breakpoint-up(md) {
-      top: $spacer;
-      bottom: unset;
     }
   }
   article {
