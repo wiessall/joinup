@@ -1,9 +1,9 @@
-uuid: 31b72862-7d67-46f5-8bb4-798fe4a2818c
+uuid: 86aa625b-3631-4224-bca0-ed9b2576c03e
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.highlighted
+    - core.entity_view_mode.node.spotlight
     - field.field.node.news.abstract
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
@@ -19,43 +19,15 @@ dependencies:
     - field.field.node.news.og_audience
     - field.field.node.news.spatial_coverage
     - node.type.news
-    - responsive_image.styles.highlighted_content
   module:
-    - field_delimiter
     - field_fallback_formatter
-    - field_formatter_range
-    - field_group
     - joinup_core
-    - layout_builder
-    - responsive_image
     - template_suggestion
     - user
-third_party_settings:
-  field_group:
-    group_references:
-      children:
-        - field_news_source_url
-      label: References
-      parent_name: ''
-      region: hidden
-      weight: 25
-      format_type: html_element
-      format_settings:
-        classes: ''
-        id: ''
-        element: div
-        show_label: true
-        label_element: h3
-        attributes: ''
-        effect: none
-        speed: fast
-  layout_builder:
-    enabled: false
-    allow_custom: false
-id: node.news.highlighted
+id: node.news.spotlight
 targetEntityType: node
 bundle: news
-mode: highlighted
+mode: spotlight
 content:
   abstract:
     type: field_fallback_formatter
@@ -75,42 +47,8 @@ content:
         trim_chars: ...
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
-    region: content
-  field_news_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: highlighted_content
-      image_link: content
-      image_loading:
-        attribute: lazy
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
-  field_topic:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: true
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 2
-        offset: 0
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
-    region: content
-  flag_like:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
     region: content
 hidden:
   anonymous_comment_links: true
@@ -119,12 +57,15 @@ hidden:
   field_comments: true
   field_keywords: true
   field_news_headline: true
+  field_news_logo: true
   field_news_referenced_solution: true
   field_news_source_url: true
   field_paragraphs_body: true
   field_shared_in: true
   field_site_featured: true
   field_state: true
+  field_topic: true
+  flag_like: true
   langcode: true
   links: true
   og_audience: true
