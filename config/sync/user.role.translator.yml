@@ -25,7 +25,6 @@ permissions:
   - 'administer footer-follow-us menu items'
   - 'administer footer-help-and-support menu items'
   - 'administer navbar menu items'
-  - 'administer support menu items'
   - 'bypass enforced english'
   - 'create content translations'
   - 'delete content translations'
