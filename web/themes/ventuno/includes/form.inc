@@ -243,17 +243,3 @@ function ventuno_preprocess_input__submit(array &$variables): void {
     $variables['attributes']['class'][] = 'btn-primary';
   }
 }
-
-/**
- * Implements hook_preprocess_select().
- */
-function ventuno_preprocess_select(array &$variables): void {
-  if (isset($variables['element']['#name'])) {
-    switch ($variables['element']['#name']) {
-      case 'field_topic':
-      case 'solution_type':
-        $variables['attributes']['class'][] = 'h-50vh';
-        break;
-    }
-  }
-}

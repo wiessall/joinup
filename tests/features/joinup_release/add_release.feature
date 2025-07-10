@@ -52,14 +52,14 @@ Feature: "Add release" visibility options.
     And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                     |
       | Name field is required.            |
       | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"
     And I press "Publish"
-    Then I should see the error message "Release version field is required."
+    Then I should see the inline form error message "Release version field is required."
 
     When I fill in "Release version" with "1.0"
     And I fill in "Release notes" with "Changed release."
@@ -67,7 +67,7 @@ Feature: "Add release" visibility options.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Completed" from "Status"
     And I press "Publish"
-    Then I should see the error message "A release with title Chasing shadows and version 1.0 already exists in this solution. Please choose a different title or version."
+    Then I should see the inline form error message "A release with title Chasing shadows and version 1.0 already exists in this solution. Please choose a different title or version."
 
     # It should be possible to choose a different version number.
     And I fill in "Release version" with "1.1"
@@ -115,4 +115,4 @@ Feature: "Add release" visibility options.
     And I fill in "Release version" with "1"
     And I fill in "Authored on" with the date "+2 day"
     And I press "Publish"
-    Then I should see the error message 'Your "Authored on" field date is greater than'
+    Then I should see the inline form error message 'Your "Authored on" field date is greater than'

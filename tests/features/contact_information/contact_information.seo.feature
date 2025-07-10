@@ -30,13 +30,12 @@ Feature: Contact Information entities don't cause exceptions because of their in
 
     Then I fill in "Short ID" with "contact-info-test"
     And I enter "Some description" in the "Description" wysiwyg editor
-    And I select "Collaboration" from "Topic"
-    And I additionally select "Social" from "Topic"
 
     # Owner is required.
     And I press "Add new owner"
     And I fill in "Name" with "Ms. Jane Doe PHD"
-    And I check "Company"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
 
     # Add the contact information entity.
@@ -44,7 +43,7 @@ Feature: Contact Information entities don't cause exceptions because of their in
     And I fill in "E-mail address" with "john.doe@example.com"
     And I fill in "Website URL" with "http://example.com/john-doe"
     Then I press "Create contact information"
-
+    And I select "Demography" options from "Topic"
     And I press "Publish"
     Then I should see the success message containing "Status message You've added a collection short ID: contact-info-test. It will take some time until the collection content URLs will be updated."
     And I should see the success message "A new confirmation message has been sent"

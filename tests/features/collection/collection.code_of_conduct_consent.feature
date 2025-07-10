@@ -57,7 +57,7 @@ Feature:
       | Add solution   |
 
     When I press "Accept"
-    Then I should see the error message "You must accept the Code of Conduct"
+    Then I should see the inline form error message "You must accept the Code of Conduct"
 
     When I check "I have read and agree to the Code of Conduct of Knowledge Hive."
     And I press "Accept"

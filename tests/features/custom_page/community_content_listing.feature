@@ -76,7 +76,7 @@ Feature:
     When I fill in the following:
       | Title    | Latest content       |
       | Abstract | Lorem ipsum abstract |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -173,7 +173,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
     And I fill in "Abstract" with "Abstract chosen content"
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -327,7 +327,7 @@ Feature:
     When I fill in the following:
       | Title    | Collection content          |
       | Abstract | Abstract collection content |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -415,13 +415,13 @@ Feature:
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid query preset line added: wrongvalue."
+    Then I should see the inline form error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid search field specified: unknown_field."
+    Then I should see the inline form error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN', '<', '>'."
+    Then I should see the inline form error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN', '<', '>'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
     """
@@ -429,7 +429,7 @@ Feature:
     unknown_field|test
     """
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "Invalid search field specified: unknown_field."
+    Then I should see the inline form error message "Invalid search field specified: unknown_field."
 
   @javascript
   Scenario: Empty query presets and query builder field show a validation error.
@@ -446,7 +446,7 @@ Feature:
     And a modal should open
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
-    Then I should see the error message "You need to add a filter in the Content listing block"
+    Then I should see the inline form error message "You need to add a filter in the Content listing block"
 
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
@@ -477,7 +477,7 @@ Feature:
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | A new movie is coming out. |
       | field_body:format | content_editor             |
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then I should see the text "Current wars"
 

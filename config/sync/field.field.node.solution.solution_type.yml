@@ -5,8 +5,13 @@ dependencies:
   config:
     - field.storage.node.solution_type
     - node.type.solution
-    - taxonomy.vocabulary.eira
+    - taxonomy.vocabulary.solution_type
+  module:
+    - rdf_sync
+    - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/type'
@@ -16,18 +21,19 @@ field_name: solution_type
 entity_type: node
 bundle: solution
 label: 'Solution type'
-description: 'EIRA Building block'
-required: true
-translatable: true
+description: 'Select the type that best describes your solution according to the EIRA building blocks'
+required: false
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: grouped_taxonomy_term_selection
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
       solution_type: solution_type
     sort:
       field: _none
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

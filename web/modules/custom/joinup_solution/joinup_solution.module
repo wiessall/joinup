@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -25,6 +26,7 @@ use Drupal\joinup_solution\CollectionSolutionsFieldItemList;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
+use Drupal\joinup_solution\SolutionMultistepController;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
@@ -260,6 +262,17 @@ function joinup_solution_entity_extra_field_info(): array {
       'description' => t('Amount of members of the solution'),
       'visible' => FALSE,
     ];
+    $form = &$fields['node'][$solution->id()]['form'];
+    $form['node_preview'] = [
+      'label' => t('Node preview'),
+      'description' => t('Displays a preview of the solution.'),
+      'visible' => FALSE,
+    ];
+    $form['tca'] = [
+      'label' => t('Terms of Agreement'),
+      'description' => t('I have read and agreed checkbox.'),
+      'visible' => FALSE,
+    ];
   }
 
   return $fields;
@@ -302,7 +315,9 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   // Attach the related solutions component.
   if ($display->getComponent('related_solutions')) {
     $ids = joinup_solution_get_related_solutions_ids($solution);
-    $build['related_solutions'] = joinup_solution_build_related_solutions_list($ids);
+    $build['related_solutions'] = $view_mode !== 'confirmation' ?
+      joinup_solution_build_related_solutions_tiles($ids) :
+      joinup_solution_build_related_solutions_titles($ids);
   }
 
   // Attach the download total of all distributions in this solution.
@@ -438,7 +453,8 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
 
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
-  if ($entity->get('list_related_entities')->value === '1') {
+  $meta_entity = \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, 'solution_settings');
+  if ($meta_entity?->get('list_related_entities')->value === '1') {
     // Get all solutions that reference the same EIRA building block.
     $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('solution_type')->getValue());
     $eira = array_map(fn(TermInterface $term): string => $term->id(), $term_storage->loadMultiple($tids));
@@ -470,7 +486,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
 }
 
 /**
- * Builds the render array of related solutions.
+ * Builds the render array of related solutions using tiles.
  *
  * @param int[] $ids
  *   The list of solution ids.
@@ -478,7 +494,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
  * @return array
  *   The render array of related solutions.
  */
-function joinup_solution_build_related_solutions_list(array $ids): array {
+function joinup_solution_build_related_solutions_tiles(array $ids): array {
   $build = [];
   $entities = Node::loadMultiple($ids);
   $delta = 0;
@@ -510,6 +526,42 @@ function joinup_solution_build_related_solutions_list(array $ids): array {
       '#extra_suggestion' => 'container__grid',
     ];
     $build[0] += $elements;
+  }
+  return $build;
+}
+
+/**
+ * Builds the render array of related solutions, just the titles.
+ *
+ * @param int[] $ids
+ *   The list of solution ids.
+ *
+ * @return array
+ *   The render array of related solutions.
+ */
+function joinup_solution_build_related_solutions_titles(array $ids): array {
+  $build = [];
+  $entities = array_values(Node::loadMultiple($ids));
+  $count = count($entities);
+  $elements = [];
+  for ($i = 0; $i < $count; $i++) {
+    $elements[] = [
+      '#markup' => $entities[$i]->get('title')->value . ($i === $count - 1 ?: ', '),
+    ];
+  }
+  if ($elements) {
+    $build = [
+      '#theme' => 'field',
+      '#extra_suggestion' => 'field__inline',
+      '#title' => t('Related solutions'),
+      '#field_name' => 'related_solutions',
+      '#field_type' => 'entity_reference',
+      '#entity_type' => 'node',
+      '#bundle' => 'solution',
+      '#label_display' => 'inline',
+      '#is_multiple' => TRUE,
+      '#view_mode' => 'default',
+    ] + $elements;
   }
   return $build;
 }
@@ -630,6 +682,12 @@ function joinup_solution_module_implements_alter(array &$implementations, string
     unset($implementations['joinup_solution']);
     $implementations = ['joinup_solution' => $solution] + $implementations;
   }
+  if ($hook === 'form_alter') {
+    // Make sure the solution form alter hook runs after simple_multistep.
+    $solution = $implementations['joinup_solution'];
+    unset($implementations['joinup_solution']);
+    $implementations = $implementations + ['joinup_solution' => $solution];
+  }
 }
 
 /**
@@ -663,6 +721,13 @@ function joinup_solution_theme(array $existing, string $type, string $theme, str
       'variables' => [
         'count' => 0,
         'view_mode' => '',
+      ],
+    ],
+    'more_description' => [
+      'variables' => [
+        'description' => FALSE,
+        'url' => FALSE,
+        'name' => FALSE,
       ],
     ],
     'flag_interoperable_text' => [
@@ -706,4 +771,69 @@ function joinup_solution_theme_suggestions_flag_interoperable_text(array $variab
  */
 function _joinup_solution_status_default_value(): int {
   return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_solution_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if (!in_array($form_id, ['node_solution_form', 'node_solution_edit_form'])) {
+    return;
+  }
+
+  $node = $form_state->getFormObject()->getEntity();
+  \assert($node instanceof NodeInterface);
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $render_array = $view_builder->view($node, 'confirmation');
+  $form['node_preview'] = [
+    '#type' => 'container',
+    '#title' => t('Preview'),
+    'content' => $render_array,
+  ];
+
+  if (isset($form['classification']['widget']['#description'])) {
+    $form['classification']['widget']['#description'] = [
+      '#theme' => 'more_description',
+      '#description' => $form['classification']['widget']['#description'],
+      '#url' => URL::fromUserInput('/solution-classification'),
+      '#name' => $form['classification']['widget']['#title'],
+    ];
+  }
+
+  if ($form_state->get('form_display')->getComponent('tca') && $node->isNew()) {
+    $form['tca'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['tca-container']],
+      'tca' => [
+        '#type' => 'checkbox',
+        '#required' => TRUE,
+        '#title' => t('I have read and agreed to the <a href=":tca" class="use-ajax" data-dialog-type="modal" data-dialog-options = "@json" target="_blank">Terms of Agreement</a>', [
+          ':tca' => Url::fromRoute('joinup_solution.collection_solution.tca')
+            ->toString(),
+          '@json' => Json::encode(['width' => 800]),
+        ]),
+        '#required_error' => t('You must accept the Terms of Agreement.'),
+        '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_simple_multistep_controller_alter().
+ */
+function joinup_solution_simple_multistep_controller_alter(array &$form): void {
+  $form['#multistep_controller'] = SolutionMultistepController::class;
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function joinup_solution_preprocess_node(&$variables): void {
+  if ($variables['view_mode'] !== 'confirmation' || !$variables['node'] instanceof SolutionInterface) {
+    return;
+  }
+  // Show the title in the confirmation step.
+  $variables['label']['#label_display'] = 'inline';
+  $variables['content']['title'] = $variables['label'];
 }

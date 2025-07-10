@@ -1,0 +1,9 @@
+uuid: 3b40a08e-f51e-4cc0-a98d-e9c93bc6cee8
+langcode: en
+status: true
+dependencies: {  }
+id: search_api_field__meta_entity.collection_settings.listing_content
+name: 'search_api_field:meta_entity.collection_settings.listing_content'
+filter_key: null
+url_processor: query_string
+breadcrumb: {  }

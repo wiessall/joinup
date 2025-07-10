@@ -8,9 +8,9 @@ Feature: Global search
       | title                        | logo     | moderation | topic      | spatial coverage | state     |
       | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
     Given solution content:
-      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
+      | title          | collection                   | description                                                                                                                          | topic      | state     |
+      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | published |
+      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       | published |
     And news content:
       | title                | headline              | field_paragraphs_body | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
@@ -77,7 +77,7 @@ Feature: Global search
     # count increased by one each. See joinup_test.install
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), Luxembourg (5)"
 
     # Check that only one search field is available. In an earlier version of
     # Interoperable Europe Portal there were two search fields, but this was confusing users.
@@ -113,7 +113,7 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (3)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
-    Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1)"
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     But I should not see the "El Tuba de Los Lobos" tile
@@ -123,7 +123,7 @@ Feature: Global search
     When I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     And the "Belgium" content checkbox item should be selected
     Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
     But I should not see the "El Tuba de Los Lobos" tile
@@ -136,8 +136,6 @@ Feature: Global search
     And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     Then I should see the text "SEARCH RESULTS (1)"
     When I click show more from the "spatial coverage" facet
-    And I check the "European Union (1)" checkbox from the "spatial coverage" facet
-    Then I should see the text "SEARCH RESULTS (2)"
 
     Given I am on the advanced search page
     When I check the "User profiles (2)" checkbox from the "Content types" facet
@@ -158,7 +156,7 @@ Feature: Global search
     Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (2)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Tuba de Los Lobos" tile
     But I should see the "Spherification" tile
@@ -239,9 +237,9 @@ Feature: Global search
       | name          | email             | state     |
       | Go-to contact | go-to@example.com | validated |
     And collection content:
-      | title            | description                                          | abstract                       | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
+      | title            | description                                          | abstract                       | keywords            | state     |
+      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | nintendo64 licences | published |
+      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | nintendo64 licences | published |
     Given solution content:
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
       | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
@@ -258,15 +256,15 @@ Feature: Global search
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
-      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
-      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
+      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords            | collection       | solution       | state     |
+      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet            |                  | Solution alpha | published |
+      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               | nintendo64 licences | Collection alpha |                | published |
     And document content:
       | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
-      | title            | body                                                              | solution       | state     |
-      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | published |
+      | title            | body                                                              | solution       | keywords            | state     |
+      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | nintendo64 licences | published |
     And custom_page content:
       | title      | body                                     | collection       | state     | keywords |
       | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
@@ -307,9 +305,11 @@ Feature: Global search
     When I enter "epsilon" in the search bar and press enter
     Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
-    # "Alphabet" is used in all the keywords fields.
+    # Test "Alphabet" and "nintendo64" in keyword fields.
     When I enter "Alphabet" in the search bar and press enter
     Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
+    When I enter "nintendo64" in the search bar and press enter
+    Then the page should show the tiles "Alternative event, Col for Sol, Collection alpha, Discussion omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -541,13 +541,13 @@ Feature: Global search
 
   Scenario: Collections are found by their keywords.
     Given collection content:
-      | title             | keywords                | state     |
-      | Collection sample | unique, key-definitions | published |
+      | title             | keywords                      | state     |
+      | Collection sample | Alphabet, nintendo64 licences | published |
 
-    When I enter "key-definitions" in the search bar and press enter
+    When I enter "nintendo64 licences" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
 
-    When I enter "unique" in the search bar and press enter
+    When I enter "Alphabet" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
 
   @javascript
@@ -618,9 +618,9 @@ Feature: Global search
       | title                    | logo     | moderation | topic      | spatial coverage | state     |
       | Radio cooking collection | logo.png | no         | Demography | Belgium          | published |
     Given solution content:
-      | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
+      | title    | collection               | description                                                                                                                                                   | topic      | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | published |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            | published |
     And news content:
       | title           | field_paragraphs_body                                                                | collection               | topic                   | spatial coverage | state     |
       | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
@@ -840,9 +840,9 @@ Feature: Global search
   @javascript @restart-session
   Scenario: Check topics filter for users.
     Given users:
-      | Username  | E-mail              | First name | Family name | Professional domain |
-      | lyleu      | lyle.u@example.com | Lyle       | Uname       | Demography          |
-      | kyleu      | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
+      | Username | E-mail             | First name | Family name | Professional domain |
+      | lyleu    | lyle.u@example.com | Lyle       | Uname       | Demography          |
+      | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
     # The Portal collection is included

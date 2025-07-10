@@ -27,7 +27,6 @@
       this.header = context.querySelector(SELECTORS.HEADER);
       this.headerInner = context.querySelector(SELECTORS.HEADER_INNER);
       this.html = context.querySelector(SELECTORS.HTML);
-      this.scrollPT = 0;
       this.isSticky = false;
       this.observer = null;
     }
@@ -38,9 +37,6 @@
         return;
       }
 
-      // Init scrollPT.
-      this.scrollPT = parseInt(this.html.style.scrollPaddingTop, 10) || 0;
-
       // Unset navbar sticky behavior.
       this.navbar.classList.remove("navbar--sticky");
       this.navbar.classList.add("position-static");
@@ -48,10 +44,15 @@
       // Init the observer.
       this.updateObserver();
 
+      // Set initial scroll padding to account for header and toolbar
+      this.updateScrollPadding();
+
       // Refresh the observer when Drupal.displace offsets change, for new
       // rootMargin's to take effect.
       $(this.context).on("drupalViewportOffsetChange", () => {
         this.updateObserver();
+        // Update scroll padding when toolbar changes
+        this.updateScrollPadding();
       });
     }
 
@@ -96,16 +97,29 @@
         // 1. Set/unset fixed height on the header.
         this.header.style.height = goSticky ? `${height}px` : null;
 
-        // 2. Adjust scroll padding (for navigating to anchors).
-        const offset = goSticky ? displace.offsets.top + height : 0;
-        this.html.style.scrollPaddingTop = `${this.scrollPT + offset}px`;
-
-        // 3. Add/remove fixed position class on headerInner.
+        // 2. Add/remove fixed position class on headerInner.
         this.headerInner.classList.toggle("fixed-top", goSticky);
 
-        // 4. Update current state.
+        // 3. Update current state.
         this.isSticky = nowSticky;
+
+        // 4. Update scroll padding to account for any height changes
+        this.updateScrollPadding();
       }
+    }
+
+    /**
+     * Updates scroll padding to always account for both:
+     * - Drupal toolbar height (displace.offsets.top)
+     * - Header inner height (regardless of sticky state)
+     * This ensures anchor links are always positioned below both elements.
+     */
+    updateScrollPadding() {
+      // Always include both toolbar offset and header height
+      const offset = displace.offsets.top + this.headerInner.offsetHeight + 50;
+
+      // Apply to root element
+      this.html.style.scrollPaddingTop = `${offset}px`;
     }
   }
 

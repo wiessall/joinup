@@ -74,9 +74,9 @@ Feature: "Add event" visibility options.
     And I select "National" from "Scope"
     And  I additionally select "Regional" from "Scope"
     And I press "Save as draft"
-    Then I should see the following error messages:
+    Then I should see the error message "At least one location field should be filled in."
+    And I should see the following inline form error messages:
       | error messages                                           |
-      | At least one location field should be filled in.         |
       | Topic field is required.                                 |
       | The duration of the event cannot be longer than 2 weeks. |
 
@@ -85,7 +85,7 @@ Feature: "Add event" visibility options.
       | URL                                        | Title                                |
       | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
       | https://drupal.org/                        |                                      |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I fill the end date of the Date widget with "2018-08-30"
     And I fill the end time of the Date widget with "12:57:00"
     And I press "Save as draft"

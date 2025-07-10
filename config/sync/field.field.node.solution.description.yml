@@ -9,17 +9,20 @@ dependencies:
   module:
     - rdf_sync
     - text
+    - tmgmt_content
 third_party_settings:
   rdf_sync:
     value:
       predicate: 'http://purl.org/dc/terms/description'
       type: null
+  tmgmt_content:
+    excluded: false
 id: node.solution.description
 field_name: description
 entity_type: node
 bundle: solution
 label: Description
-description: 'At least 5 words, not similar to the title.'
+description: 'Main description of the solution for its default overview page.'
 required: true
 translatable: false
 default_value: {  }
