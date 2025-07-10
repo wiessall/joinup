@@ -59,6 +59,7 @@
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupLogContext
+  - Drupal\joinup\Context\JoinupMessageContext
   - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
@@ -77,6 +78,7 @@
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
+  - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfContext
   - Drupal\joinup\Context\ReleaseContext
@@ -85,6 +87,7 @@
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
+  - Drupal\joinup\Context\TagifyContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WysiwygContext
@@ -171,6 +174,7 @@ default:
         'manage solutions': '.view-id-manage_collection_solutions.view-display-id-manage_solutions table'
         'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
         'OSS catalogue list': '.oss-catalogue-list table'
+        'Owner IEF': '.field--name-owner .ief-entity-table'
         'Users': 'table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
@@ -180,6 +184,7 @@ default:
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
         Contact information inline form: '#edit-contact-wrapper'
+        Content buttons: '.node-form .form-actions'
         Content listing field filter form: '.field--name-content-listing'
         Content: 'main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
@@ -191,7 +196,6 @@ default:
         Mobile menu: '.joinup-navbar ul.navbar-nav .mmenu-nav__menu'
         Header: '.region-header'
         Homepage topics: '.view-homepage-topics'
-        Highlighted content: '.block-entityqueue--highlighted-content'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Upcoming event: '.block-views-blockupcoming-event-block'
@@ -217,8 +221,6 @@ default:
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-related-solutions'
         Search filters: '.joinup-search-filters'
-        Solution edit form additional fields accordion: '.accordion .accordion-item #additional-fields'
-        Solution edit form main fields accordion: '.accordion .accordion-item #main-fields'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'

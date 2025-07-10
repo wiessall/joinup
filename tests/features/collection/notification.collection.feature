@@ -68,7 +68,7 @@ Feature: Notification test for the collection transitions.
       # Contact information data.
       | Name                  | Super Sayan Academy |
       | E-mail                | ssa@example.com     |
-    When I select "HR" from "Topic"
+    When I select "Demography" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "NC for all"
     And I press "Propose"
@@ -145,7 +145,7 @@ Feature: Notification test for the collection transitions.
     And I go to the edit form of the "NC to reject archival" collection
     # @todo This should change into a separate transition.
     And I press "Publish"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "It will not be archived."
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to archive collection NC to reject archival has been rejected" contains the following lines of text:
@@ -155,7 +155,7 @@ Feature: Notification test for the collection transitions.
     # Test the 'archive' operation.
     And I go to the edit form of the "NC to archive" collection
     And I press "Archive"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "As you wish."
     And I press "Archive"
     Then the following email should have been sent:

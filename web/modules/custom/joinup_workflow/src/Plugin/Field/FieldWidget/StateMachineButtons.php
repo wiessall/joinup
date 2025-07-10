@@ -126,6 +126,11 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     $element['#process'][] = [static::class, 'processActions'];
     // Let ::processActions() know the original state ID.
     $element['#original_state_id'] = $state;
+    // Ensure the value is stored in form_state values.
+    // It just needs to be in form_state values
+    // when submitting (clicking next/back).
+    // @see \Drupal\Core\Entity\EntityForm::buildEntity
+    $element['#default_value'] = $state;
     // As the '#element_validate' callbacks are running before field constraint
     // validators, we use this element validator to set the $element new value
     // in case of a transition. In this way, the state field new value will be

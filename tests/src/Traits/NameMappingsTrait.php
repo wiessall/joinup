@@ -35,13 +35,11 @@ trait NameMappingsTrait {
         'access url' => 'website_url',
         'closed' => 'closed_group',
         'contact information' => 'contact',
-        'content creation' => 'content_creation',
         'creation date' => 'created',
         'description' => 'description',
         'featured' => 'featured',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'logo' => 'logo',
-        'moderation' => 'group_moderation',
         'modification date' => 'changed',
         'owner' => 'owner',
         'published at' => 'published_at',
@@ -58,22 +56,23 @@ trait NameMappingsTrait {
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'logo' => 'field_custom_page_logo',
         'state' => 'field_state',
       ],
       'discussion' => [
         'attachments' => 'field_attachment',
         'content' => 'body',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'logo' => 'field_discussion_logo',
         'published at' => 'published_at',
         'state' => 'field_state',
       ],
       'document' => [
         'document type' => 'field_type',
+        'body' => 'field_paragraphs_body',
         'file' => 'field_file',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'licence' => 'field_licence',
         'logo' => 'field_document_logo',
         'published at' => 'published_at',
@@ -85,7 +84,7 @@ trait NameMappingsTrait {
         'agenda' => 'field_event_agenda',
         'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'location' => 'field_location',
         'logo' => 'field_event_logo',
         'online location' => 'field_event_online_location',
@@ -109,8 +108,9 @@ trait NameMappingsTrait {
         'legal type' => 'legal_type',
       ],
       'news' => [
+        'body' => 'field_paragraphs_body',
         'headline' => 'field_news_headline',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'logo' => 'field_news_logo',
         'published at' => 'published_at',
         'spatial coverage' => 'spatial_coverage',
@@ -119,6 +119,7 @@ trait NameMappingsTrait {
       'owner' => [
         'name' => 'title',
         'owner type' => 'owner_type',
+        'owner country' => 'country',
         'state' => 'field_state',
         'author' => 'uid',
       ],
@@ -145,7 +146,7 @@ trait NameMappingsTrait {
         'is version of' => 'og_audience',
         'title' => 'title',
         'release number' => 'release_number',
-        'keywords' => 'field_keywords',
+        'keywords' => 'keywords',
         'spatial coverage' => 'spatial_coverage',
         'status' => 'process_status',
         'state' => 'field_state',
@@ -162,23 +163,22 @@ trait NameMappingsTrait {
         'short ID' => 'short_id',
         'abstract' => 'abstract',
         'contact information' => 'contact',
-        'content creation' => 'content_creation',
         'creation date' => 'created',
         'description' => 'description',
         'documentation' => 'documentation',
-        'keywords' => 'field_keywords',
+        'domain' => 'domain',
+        'keywords' => 'keywords',
         'landing page' => 'landing_page',
         'language' => 'language',
         'logo' => 'logo',
         'metrics page' => 'metrics_page',
-        'moderation' => 'group_moderation',
         'modification date' => 'changed',
         'owner' => 'owner',
         'topic' => 'field_topic',
         'related by type' => 'list_related_entities',
         'related solutions' => 'related_solutions',
+        'solution classification' => 'classification',
         'solution type' => 'solution_type',
-        'spatial coverage' => 'spatial_coverage',
         'status' => 'field_status',
         'state' => 'field_state',
         'collection' => 'og_audience',
@@ -333,8 +333,10 @@ trait NameMappingsTrait {
       'announcement' => 'message',
       'collection' => 'node',
       'contact information' => 'node',
+      'contact_information' => 'node',
       'content' => 'node',
       'custom page' => 'node',
+      'custom_page' => 'node',
       'discussion' => 'node',
       'distribution' => 'node',
       'document' => 'node',
@@ -352,6 +354,7 @@ trait NameMappingsTrait {
       'topic' => 'taxonomy_term',
       'user' => 'user',
       'webform' => 'webform',
+      'keyword' => 'taxonomy_term',
     ];
   }
 
@@ -378,6 +381,7 @@ trait NameMappingsTrait {
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
       'solution' => 'solution',
+      'keyword' => 'tags',
     ];
   }
 
@@ -434,6 +438,32 @@ trait NameMappingsTrait {
     }
 
     return $mappings[$alias];
+  }
+
+  /**
+   * Returns field machine name by label.
+   *
+   * @param string $label
+   *   Field label.
+   *
+   * @return string[]
+   *   Array of label mapping.
+   */
+  protected function getNodeFieldNameFromLabel(string $label): string {
+    $mapping = [
+      'Domain' => 'domain',
+      'Geographical coverage' => 'spatial_coverage',
+      'Language availability' => 'language',
+      'Licence legal type' => 'legal_type',
+      'Related solutions' => 'related_solutions',
+      'Scope' => 'field_scope',
+      'Search keywords' => 'keywords',
+      'Solution type' => 'solution_type',
+      'Solution classification' => 'classification',
+      'Topic' => 'field_topic',
+      'Type' => 'owner_type',
+    ];
+    return $mapping[$label];
   }
 
 }

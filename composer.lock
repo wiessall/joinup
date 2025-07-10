@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cbcdf038ac6e134ddc15222c2e64503",
+    "content-hash": "303b1ed90c2607fe8ceae79112c64c4b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3678,29 +3678,29 @@
         },
         {
             "name": "drupal/editor_file",
-            "version": "2.0.0-rc2",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/editor_file.git",
-                "reference": "2.0.0-rc2"
+                "reference": "2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/editor_file-2.0.0-rc2.zip",
-                "reference": "2.0.0-rc2",
-                "shasum": "8389fed36294df09d38c528dd1e7ee829ce67145"
+                "url": "https://ftp.drupal.org/files/projects/editor_file-2.1.2.zip",
+                "reference": "2.1.2",
+                "shasum": "200c1ade610c385a4ee0504f9920a174bb4cc686"
             },
             "require": {
-                "drupal/core": "^10 || ^11"
+                "drupal/core": "^10.5 || ^11.2"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-rc2",
-                    "datestamp": "1732012868",
+                    "version": "2.1.2",
+                    "datestamp": "1751421089",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -3714,7 +3714,7 @@
                     "homepage": "https://www.drupal.org/user/931394"
                 }
             ],
-            "description": "Allow users to link uploaded files in the text Editor.",
+            "description": "Editor File upload",
             "homepage": "https://www.drupal.org/project/editor_file",
             "support": {
                 "source": "https://git.drupalcode.org/project/editor_file"
@@ -4626,20 +4626,20 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "3.6.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/field_group.git",
-                "reference": "8.x-3.6"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.6.zip",
-                "reference": "8.x-3.6",
-                "shasum": "427c0a65dc1936e69e60c120776056cfe5b43e86"
+                "url": "https://ftp.drupal.org/files/projects/field_group-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "d3ff81d8a64b6ac392989b668cfa417be5101642"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10 || ^11"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
                 "drupal/jquery_ui_accordion": "*"
@@ -4647,8 +4647,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.6",
-                    "datestamp": "1722672510",
+                    "version": "4.0.0",
+                    "datestamp": "1745478894",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5923,20 +5923,20 @@
         },
         {
             "name": "drupal/linkit",
-            "version": "6.1.6",
+            "version": "7.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/linkit.git",
-                "reference": "6.1.6"
+                "reference": "7.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/linkit-6.1.6.zip",
-                "reference": "6.1.6",
-                "shasum": "113d8e569cfb92f8d7feb0a2f7713953c0715e92"
+                "url": "https://ftp.drupal.org/files/projects/linkit-7.0.5.zip",
+                "reference": "7.0.5",
+                "shasum": "58baf9f76c46c73e02639ac79857889c52c46113"
             },
             "require": {
-                "drupal/core": "^10.1"
+                "drupal/core": "^10.1 || ^11"
             },
             "require-dev": {
                 "drupal/ckeditor": "*",
@@ -5945,8 +5945,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "6.1.6",
-                    "datestamp": "1729189029",
+                    "version": "7.0.5",
+                    "datestamp": "1750458295",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8911,6 +8911,75 @@
             }
         },
         {
+            "name": "drupal/simple_multistep",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/simple_multistep.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/simple_multistep-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "14aaf7a9f8a75bc1796b51848dc474399d592936"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/field_group": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1750237803",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vitaliy Bogomazyuk (VitaliyB98)",
+                    "homepage": "https://www.drupal.org/u/vitaliyb98",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Andrei Vesterli (andrei.vesterli)",
+                    "homepage": "https://www.drupal.org/u/andreivesterli",
+                    "email": "vesterli.andrei@gmail.com",
+                    "role": "Co-maintainer"
+                },
+                {
+                    "name": "dan.golovatic",
+                    "homepage": "https://www.drupal.org/user/3668783"
+                },
+                {
+                    "name": "dmezquia",
+                    "homepage": "https://www.drupal.org/user/3334752"
+                },
+                {
+                    "name": "drakemazzy",
+                    "homepage": "https://www.drupal.org/user/44860"
+                },
+                {
+                    "name": "vitaliyb98",
+                    "homepage": "https://www.drupal.org/user/3514011"
+                }
+            ],
+            "description": "Converts an existing entity form into a multi-step form.",
+            "homepage": "https://drupal.org/project/simple_multistep",
+            "support": {
+                "source": "https://git.drupalcode.org/project/simple_multistep",
+                "issues": "https://drupal.org/project/issues/simple_multistep"
+            }
+        },
+        {
             "name": "drupal/simple_sitemap",
             "version": "4.2.2",
             "source": {
@@ -9469,6 +9538,108 @@
             "homepage": "https://www.drupal.org/project/symfony_mailer_lite",
             "support": {
                 "source": "https://git.drupalcode.org/project/symfony_mailer_lite"
+            }
+        },
+        {
+            "name": "drupal/tagify",
+            "version": "1.2.40",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/tagify.git",
+                "reference": "1.2.40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/tagify-1.2.40.zip",
+                "reference": "1.2.40",
+                "shasum": "5a4bcc41fe1997a3cd9548e0641268741f68c0a1"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/better_exposed_filters": "^7.0",
+                "drupal/facets": "^2.0",
+                "drupal/iconify_icons": "*",
+                "drupal/search_api": "^1.31",
+                "drupal/ui_icons": "*",
+                "drupal/ui_icons_field": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.2.40",
+                    "datestamp": "1748686447",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "David Galeano",
+                    "homepage": "https://www.drupal.org/u/gxleano"
+                }
+            ],
+            "description": "Integration with the Tagify JavaScript library.",
+            "homepage": "https://drupal.org/project/tagify",
+            "support": {
+                "source": "https://git.drupalcode.org/project/tagify",
+                "issues": "https://www.drupal.org/project/issues/tagify"
+            }
+        },
+        {
+            "name": "drupal/taxonomy_container",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/taxonomy_container.git",
+                "reference": "8.x-1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/taxonomy_container-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "a283a910977a67d1baae0cd35cda7737a4b491d2"
+            },
+            "require": {
+                "drupal/core": "^9.0 || ^10.0",
+                "php": ">=7.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.4",
+                    "datestamp": "1704094727",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Chi",
+                    "homepage": "https://www.drupal.org/user/556138"
+                }
+            ],
+            "description": "Provides a select list with optgroups for taxonomy terms selection.",
+            "homepage": "https://www.drupal.org/project/taxonomy_container",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/taxonomy_container",
+                "issues": "https://www.drupal.org/project/issues/taxonomy_container"
             }
         },
         {
@@ -13055,6 +13226,18 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/yaireo--tagify",
+            "version": "4.35.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.1.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -25888,6 +26071,12 @@
         }
     ],
     "aliases": [
+        {
+            "package": "drupal/field_group",
+            "version": "4.0.0.0",
+            "alias": "3.6",
+            "alias_normalized": "3.6.0.0"
+        },
         {
             "package": "drupal/private_message",
             "version": "4.0.0.0-alpha4",

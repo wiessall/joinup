@@ -4,18 +4,16 @@ status: true
 dependencies:
   config:
     - field.field.node.solution.abstract
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
-    - field.field.node.solution.field_keywords
+    - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.group_moderation
+    - field.field.node.solution.keywords
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -26,7 +24,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - node.type.solution
     - og_menu.ogmenu.quick_links
@@ -795,55 +792,26 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
-          61904816-a582-4f13-a69f-56e1a3cfb3e7:
-            uuid: 61904816-a582-4f13-a69f-56e1a3cfb3e7
+          16740c7b-5aa2-4776-a101-f7f7853eda27:
+            uuid: 16740c7b-5aa2-4776-a101-f7f7853eda27
             region: content
             configuration:
-              id: 'extra_field_block:node:solution:node_solution_listing_content_top'
-              label: 'Facet region: Solution content top'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 0
-            additional: {  }
-          0bb387b8-9608-4c90-be5c-da153ee539c4:
-            uuid: 0bb387b8-9608-4c90-be5c-da153ee539c4
-            region: content
-            configuration:
-              id: 'extra_field_block:node:solution:node_solution_listing_content_inline_facets'
-              label: 'Facet region: Inline facets'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-          9ce2a0b7-b4f4-4a26-b50e-3c31ed63ae2c:
-            uuid: 9ce2a0b7-b4f4-4a26-b50e-3c31ed63ae2c
-            region: content
-            configuration:
-              id: 'field_block:node:solution:listing_content'
-              label: 'Solution content'
+              id: 'field_block:node:solution:solution_settings'
+              label: 'Solution settings reference'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: search_api_field
-                label: above
-                settings: {  }
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: listing_content
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
@@ -1124,53 +1092,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          9e5b07e6-1b4d-44a4-97b7-7429b7e4e86d:
-            uuid: 9e5b07e6-1b4d-44a4-97b7-7429b7e4e86d
-            region: content
-            configuration:
-              id: 'field_block:node:solution:spatial_coverage'
-              label: 'Geographical coverage'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: false
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ','
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  joinup_slick:
-                    preset: ''
-                    field_label: true
-                    custom_label: ''
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 5
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           62807d5d-f198-4b51-9b19-926f89c108d5:
             uuid: 62807d5d-f198-4b51-9b19-926f89c108d5
             region: content
@@ -1275,44 +1196,22 @@ third_party_settings:
                 format: content_editor
             weight: 0
             additional: {  }
-          d62e710e-0fee-4640-9ab3-0c01f58fa8a1:
-            uuid: d62e710e-0fee-4640-9ab3-0c01f58fa8a1
+          9e947083-17c7-42aa-8183-e9402cc0b292:
+            uuid: 9e947083-17c7-42aa-8183-e9402cc0b292
             region: content
             configuration:
-              id: 'field_block:node:solution:content_creation'
-              label: 'Content creation'
+              id: 'field_block:node:solution:solution_settings'
+              label: 'Moderation settings'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: list_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 1
-            additional: {  }
-          32722fbb-ff26-4e4b-a5cd-a6bdfd5505c6:
-            uuid: 32722fbb-ff26-4e4b-a5cd-a6bdfd5505c6
-            region: content
-            configuration:
-              id: 'field_block:node:solution:group_moderation'
-              label: Moderation
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: boolean
+                type: entity_reference_entity_view
                 label: hidden
                 settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
+                  view_mode: group_moderation
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -1419,25 +1318,24 @@ content:
     region: content
 hidden:
   abstract: true
+  classification: true
   collections: true
   contact: true
-  content_creation: true
   description: true
   documentation: true
+  domain: true
   download_total: true
   eif_perspective: true
   featured: true
   field_is_description: true
-  field_keywords: true
   field_shared_in: true
   field_state: true
   field_topic: true
   group_moderation: true
+  keywords: true
   landing_page: true
   langcode: true
   language: true
-  list_related_entities: true
-  listing_content: true
   logo: true
   members: true
   metrics_page: true
@@ -1459,8 +1357,8 @@ hidden:
   shared_in: true
   short_id: true
   site_featured: true
+  solution_settings: true
   solution_subscribe: true
   solution_type: true
-  spatial_coverage: true
   translation: true
   uri: true

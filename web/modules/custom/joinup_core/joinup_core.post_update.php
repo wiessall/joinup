@@ -14,3 +14,18 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Move the highlighted content item into the "In the Spotlight" queue.
+ */
+function joinup_core_post_update_200500(): void {
+  $queueStorage = \Drupal::entityTypeManager()->getStorage('entity_subqueue');
+  $highlightedContentQueue = $queueStorage->load('highlighted_content');
+  $spotlightQueue = $queueStorage->load('spotlight');
+  foreach ($highlightedContentQueue->get('items')->referencedEntities() as $entity) {
+    $highlightedContentQueue->removeItem($entity);
+    $spotlightQueue->addItem($entity);
+  }
+  $highlightedContentQueue->delete();
+  $spotlightQueue->save();
+}

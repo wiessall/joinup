@@ -58,8 +58,8 @@ function _joinup_like_flag_suggestions_alter(&$suggestions, array $variables, st
   $tiles_view_modes = [
     'view_mode_tile',
     'view_mode_tile_horizontal',
-    'highlighted',
     'carousel',
+    'spotlight',
   ];
   if (in_array($variables['view_mode'], $tiles_view_modes)) {
     $suggestions[] = $original_suggestion . 'mini';

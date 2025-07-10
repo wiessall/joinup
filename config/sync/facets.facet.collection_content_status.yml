@@ -9,7 +9,7 @@ min_count: 0
 missing: false
 missing_label: others
 url_alias: collection_content_status
-facet_source_id: 'search_api_field:node.collection.listing_content'
+facet_source_id: 'search_api_field:meta_entity.collection_settings.listing_content'
 field_identifier: entity_status
 query_operator: or
 hard_limit: 0

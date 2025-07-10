@@ -35,7 +35,7 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
         '#title' => $this->t('Overview label'),
         '#description' => $this->t('It overwrites the default label for the "Overview" tab'),
         '#default_value' => $link->getTitle(),
-        '#weight' => 10,
+        '#weight' => 6,
         '#required' => TRUE,
       ];
 

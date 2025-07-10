@@ -24,11 +24,11 @@ Feature: Video paragraph tests.
     And the following field should be present "Remote video URL"
     And I should see the text "You can link to media from the following services: YouTube, Vimeo"
     And I press "Save" in the "Modal buttons" region
-    And I should see the error message "Remote video URL field is required."
+    And I should see the inline form error message "Remote video URL field is required."
 
     And I fill in "Remote video URL" with "http://nonsense.com"
     And I press "Save" in the "Modal buttons" region
-    And I should see the error message "The given URL does not match any known oEmbed providers."
+    And I should see the inline form error message "The given URL does not match any known oEmbed providers."
 
     And I fill in "Remote video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Save" in the "Modal buttons" region
@@ -72,7 +72,7 @@ Feature: Video paragraph tests.
     When I check "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)"
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Publish"
 
     # Delete the custom page.
@@ -96,7 +96,7 @@ Feature: Video paragraph tests.
     And I fill in the following:
       | Title    | Twelve Video Tables          |
       | Abstract | Twelve video tables abstract |
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

@@ -11,7 +11,7 @@ id: node.solution.documentation
 field_name: documentation
 entity_type: node
 bundle: solution
-label: Documentation
+label: 'Related documents'
 description: ''
 required: false
 translatable: true

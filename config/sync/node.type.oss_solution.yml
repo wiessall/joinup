@@ -31,8 +31,8 @@ _core:
 label_singular: 'OSS Solution'
 label_plural: 'OSS Solutions'
 label_count:
-  0: !!binary MSBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBzb2x1dGlvbgNAY291bnQgb3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb25z
-  no_count_capitalize: !!binary T3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb24DT3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb25z
+  0: "1 open source software solution\x03@count open source software solutions"
+  no_count_capitalize: "Open source software solution\x03Open source software solutions"
 name: 'Open Source Software Solution'
 type: oss_solution
 description: 'A federated open source software business solution'

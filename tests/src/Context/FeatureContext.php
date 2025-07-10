@@ -36,6 +36,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
+use Drupal\taxonomy\TermInterface;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
@@ -617,45 +618,6 @@ class FeatureContext extends RawDrupalContext {
 
     if ($option_element->getText() !== $option) {
       throw new \Exception(sprintf('The option "%s" was expected to be selected, but %s was selected instead.', $option, $this->getSession()->getCurrentUrl(), $option_element->getHtml()));
-    }
-  }
-
-  /**
-   * Checks that a certain radio input is selected in a specific field.
-   *
-   * @param string $radio
-   *   The label of the radio input to find.
-   * @param string $field
-   *   The label of the field the radio is part of.
-   *
-   * @throws \Exception
-   *   Thrown when the field or the radio is not found, or if the radio is not
-   *   selected.
-   *
-   * @Then the radio button :radio from field :field should be selected
-   */
-  public function assertFieldRadioSelected(string $radio, string $field): void {
-    // Find the grouping fieldset that contains the radios field.
-    $fieldset = $this->getSession()->getPage()->find('named', [
-      'fieldset',
-      $field,
-    ]);
-
-    if (!$field) {
-      throw new \Exception("The field '$field' was not found in the page.");
-    }
-
-    // Find the field inside the container itself. Use the findField() instead
-    // of custom xpath because we are trying to find the radio by label.
-    $input = $fieldset->findField($radio);
-
-    // Verify that we have found a valid '//input[@type="radio"]'.
-    if (!$input || $input->getTagName() !== 'input' || $input->getAttribute('type') !== 'radio') {
-      throw new \Exception("The radio '$radio' was not found in the page.");
-    }
-
-    if (!$input->isChecked()) {
-      throw new \Exception("The radio '$radio' is not selected.");
     }
   }
 
@@ -2209,6 +2171,34 @@ class FeatureContext extends RawDrupalContext {
     $queue = \Drupal::queue($queueName);
     $queue->deleteQueue();
     Assert::assertSame(0, $queue->numberOfItems());
+  }
+
+  /**
+   * Asserts that a solution refers to a set of keywords.
+   *
+   * @param string $entityLabel
+   *   The label of the entity.
+   * @param string $entityBundle
+   *   The bundle of the entity.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node containing the keywords.
+   *
+   * @Then the :entityLabel :entityBundle should refer to the following keywords:
+   */
+  public function theSolutionShouldReferToTheFollowingKeywords(string $entityLabel, string $entityBundle, TableNode $table): void {
+    $entityBundle = $this->translateBundle($entityBundle);
+    $node = $this->getEntityByLabel('node', $entityLabel, $entityBundle);
+    $keywords = $node->get('keywords')->referencedEntities();
+    $expectedKeywords = array_map(function (string $keyword): string {
+      return trim($keyword);
+    }, $table->getColumn(0));
+
+    $actualKeywords = array_map(function (TermInterface $keyword): string {
+      return $keyword->label();
+    }, $keywords);
+    sort($expectedKeywords);
+    sort($actualKeywords);
+    Assert::assertSame($expectedKeywords, $actualKeywords, sprintf('The keywords of the %s %s do not match the expected keywords.', $entityBundle, $entityLabel));
   }
 
 }

@@ -10,7 +10,6 @@ Feature: Curated content listings
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
     And I should see the following links:
-      | Highlighted content |
       | In the spotlight    |
     When I click "In the spotlight"
     Then I should see the heading "Update curated content listing In the spotlight"
@@ -24,29 +23,22 @@ Feature: Curated content listings
     Given I am an anonymous user
     And I am on the homepage
     Then I should not see any contextual links in the "In the spotlight" region
-    And I should not see any contextual links in the "Highlighted content" region
 
     Given I am logged in as an "authenticated user"
     And I am on the homepage
     Then I should not see any contextual links in the "In the spotlight" region
-    And I should not see any contextual links in the "Highlighted content" region
 
     Given I am logged in as a "moderator"
     And I am on the homepage
     Then I should see the contextual link "Update curated content" in the "In the spotlight" region
-    And I should see the contextual link "Update curated content" in the "Highlighted content" region
 
     Given I am on the homepage
     When I click the contextual link "Update curated content" in the "In the spotlight" region
     Then I should see the heading "Update curated content listing In the spotlight"
 
-    Given I am on the homepage
-    When I click the contextual link "Update curated content" in the "Highlighted content" region
-    Then I should see the heading "Update curated content listing Highlighted content"
-
   @javascript
-  Scenario: Regression test for ISAICP-6658
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658
+  Scenario: Tests whether queue can be populated
+  Also a regression test for ISAICP-6658
 
     Given collection content:
       | title           |
@@ -63,14 +55,6 @@ Feature: Curated content listings
     And event content:
       | title           | collection      | topic                    |
       | Stay at the CSS | Spacex in space | EU and European Policies |
-    And the "Highlighted content" content listing contains:
-      | type     | label        |
-      | document | Licrogravity |
-    And the "In the spotlight" content listing contains:
-      | type    | label                |
-      | content | Cardio atrophy       |
-      | content | Reference of gravity |
-      | content | Licrogravity         |
 
     Given I am logged in as a "moderator"
     And I am on the homepage
@@ -78,44 +62,43 @@ Feature: Curated content listings
     Then I click "Dashboard"
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
-    And I should see the following links:
-      | Highlighted content |
-      | In the spotlight    |
-
-    When I click "Highlighted content"
-    And I press "Save"
-    Then I should see the heading "Curated content listings"
 
     When I click "In the spotlight"
-    Then I press "Shuffle"
+    # Populate the queue with the UI.
+    And I type "Cardio" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Cardio atrophy" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    And I press "Save"
+    # Check queue min size.
+    Then I should see the error message "This queue can not hold less than 4 items."
+
+    Then I type "Reference" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Reference of gravity" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    Then I type "Licro" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Licrogravity" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    Then I type "Stay at the CSS" in the "items[add_more][new_item][target_id]" autocomplete field
+    And I pick "Stay at the CSS" from the "items[add_more][new_item][target_id]" autocomplete suggestions
+    And I press "Add item"
+    # Verify that the upper limit is reached.
+    Then I should not see the button "Add item"
     And I press "Save"
     Then I should see the message "The entity subqueue In the spotlight has been updated."
     Then I should see the heading "Curated content listings"
 
-    When I am on the homepage
+    Given I am on the homepage
+    Then I should see the following tiles in the "In the spotlight" region:
+      | Cardio atrophy       |
+      | Reference of gravity |
+      | Licrogravity         |
+      | Stay at the CSS      |
+
+    # These must be removed if we won't display "featured" status in the
+    # new view mode.
+    # @todo Revisit and align this in ISAICP-9497.
     And I click the contextual link "Feature" in the "Licrogravity" tile
     Then the "Licrogravity" tile should be marked as featured
 
     Then I visit the advanced search page
     And the "Licrogravity" tile should be marked as featured
-
-  @loggedErrors @javascript
-  Scenario: Regression test for ISAICP-8152
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
-
-    Given collection content:
-      | title           |
-      | Spacex in space |
-    And news content:
-      | title          | collection      | topic                                      |
-      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health |
-
-    Given I am logged in as a "moderator"
-    When there are no preexisting log records on the site
-    And I visit "/admin/structure/entityqueue/highlighted_content/highlighted_content"
-    And I fill in "edit-items-add-more-new-item-target-id" with "Cardio atrophy"
-    And I press "Add item"
-    And I press "Save"
-
-    Then I should see the message "The entity subqueue Highlighted content has been updated."
-    And the site should not have log records with level lower than "notice"

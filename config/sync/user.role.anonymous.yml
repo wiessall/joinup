@@ -44,6 +44,7 @@ permissions:
   - 'use text format plain_text_glossary'
   - 'use text format simple_text'
   - 'view bookmark'
+  - 'view collection_settings meta-entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
@@ -78,4 +79,5 @@ permissions:
   - 'view paragraph content video'
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
+  - 'view solution_settings meta-entity'
   - 'view topic meta-entity'
