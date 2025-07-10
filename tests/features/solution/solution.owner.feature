@@ -27,6 +27,7 @@ Feature:
       | no         | registered users         |
       | no         | facilitators and authors |
 
+  @javascript
   Scenario: Assign ownership during creation of solutions through UI
     Given owner content:
       | name      | owner type |
@@ -42,24 +43,28 @@ Feature:
       | Solution API user | This is a klm collection | facilitator |
     And I am logged in as "Solution API user"
     When I visit the "This is a klm collection" collection
-    # And I click on element ".mdl-button__ripple-container"
-    Then I should see the link "Add solution"
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    When I fill in the following:
-      | Title          | Solution API example                         |
-      | Description    | We do not care that much about descriptions. |
-      | Abstract       | We do not care that much about abstract.     |
-      | Name           | Gopheadow                                    |
-      | E-mail address | solutionAPI@example.com                      |
-    And I attach the file "logo.png" to "Logo"
-    And I press "Add existing" at the "Owner" field
+    And I click "Add solution" in the plus button menu
+    And I fill in "Title" with "Solution API example"
+    And I fill in "Abstract" with "We do not care that much about abstract."
+    And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add existing owner"
     And I fill in "Owner" with "Leechidna"
-    And I select "Flemish" from "Language"
-    And I select "Statistics and Analysis" from "Topic"
-    And I select "Logging Service" from "Solution type"
     And I press "Add owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Leechidna"
+    And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
+    And I press "Create contact information"
+    And I click "Additional information"
+    And I attach the file "logo.png" to "Logo"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Save"
     Then I should see the heading "Solution API example"
     And the user "Solution API user" should be the owner of the "Solution API example" solution

@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - solution
+    - joinup_solution
 id: change_collection
 label: 'Move to other collection'
 type: node

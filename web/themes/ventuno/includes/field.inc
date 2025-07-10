@@ -20,6 +20,10 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
+  // Add extra suggestion for field elements.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
@@ -75,6 +79,14 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       }
     }
   }
+
+  // Fix for inline_form_errors links, ensures every field (multiple or not)
+  // has an ID and print it in the template.
+  // See https://www.drupal.org/project/drupal/issues/3229493
+  /* @see web/themes/ventuno/templates/form/field-multiple-value-form.html.twig */
+  if (isset($variables['element']['#id'])) {
+    $variables['attributes']['id'] = $variables['element']['#id'];
+  }
 }
 
 /**
@@ -113,6 +125,17 @@ function ventuno_preprocess_field(array &$variables): void {
       $parts = explode(':', $item['content']['#title']);
       $title = empty($parts[1]) ? $item['content']['#title'] : trim($parts[1]);
       $variables['items'][$key]['content']['#title'] = $title;
+    }
+  }
+
+  // @todo Remove this when working on https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9873
+  if (
+    $variables['element']['#view_mode'] === 'confirmation' &&
+    $variables['element']['#field_name'] === 'documentation'
+  ) {
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      $variables['items'][$key]['content']['#attributes'] += ['target' => '_blank'];
     }
   }
 }

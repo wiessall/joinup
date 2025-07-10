@@ -1,0 +1,27 @@
+uuid: 57cc0162-7cc6-4d3c-8ed3-beb2aa8e6e3f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.content_creation
+    - meta_entity.type.solution_settings
+  module:
+    - options
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: meta_entity.solution_settings.content_creation
+field_name: content_creation
+entity_type: meta_entity
+bundle: solution_settings
+label: Contributors
+description: 'Choose which users can create content (news, events, discussions and documents) in the solution.'
+required: true
+translatable: false
+default_value:
+  -
+    value: facilitators_and_authors
+default_value_callback: ''
+settings: {  }
+field_type: list_string

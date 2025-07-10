@@ -1,0 +1,9 @@
+uuid: 8796f3ba-e24a-4daa-9388-fbb24343ecc3
+langcode: en
+status: true
+dependencies: {  }
+id: search_api_field__meta_entity.solution_settings.listing_content
+name: 'search_api_field:meta_entity.solution_settings.listing_content'
+filter_key: null
+url_processor: query_string
+breadcrumb: {  }

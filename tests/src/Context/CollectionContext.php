@@ -16,12 +16,10 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RandomGeneratorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
-use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
@@ -37,7 +35,6 @@ class CollectionContext extends RawDrupalContext {
   use OgTrait;
   use UserTrait;
   use UtilityTrait;
-  use RandomGeneratorTrait;
 
   /**
    * Static cache for Joinup collection.
@@ -165,12 +162,6 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $mapping = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
       'closed' => ['no' => 0, 'yes' => 1],
       'state' => [
         'draft' => 'draft',
@@ -185,12 +176,6 @@ class CollectionContext extends RawDrupalContext {
       if (isset($node->{$field}) && isset($values[$node->{$field}])) {
         $node->{$field} = $values[$node->{$field}];
       }
-    }
-
-    // @todo Should this be merged with the other node bundles? Does it create
-    //   random test failures in search tests? Is the field optional somewhere?
-    if (empty($node->field_topic)) {
-      $node->field_topic = $this->getRandomTerm('topic')->getName();
     }
   }
 

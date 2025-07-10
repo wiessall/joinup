@@ -18,25 +18,29 @@ Feature: Creation of owners through UI
       # Contact information data.
       | Name        | Larry Joe                                                                                            |
       | E-mail      | larry.joe@example.com                                                                                |
-    When I select "EU and European Policies" from "Topic"
+    When I select "EU and European Policies" options from "Topic"
     And I attach the file "logo.png" to "Logo"
+
+    And I should see the button "Add new owner"
+    And I should see the button "Add existing owner"
 
     # Click the button to create an organisation owner.
     And I press "Add new" at the "Owner" field
     # Since it is a 'propose' form, the field is not shown for the parent either.
     # It is safe to check that the field is not found in the entire form.
     Then the following fields should not be present "Current workflow state, Langcode, Translation"
-    When I check the box "Company"
     And I fill in "Name" with "Acme"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     Then I should see "Acme"
     And I should see the link "Company"
 
     # Edit.
     When I press "Edit" at the "Owner" field
-    And I check the box "Industry consortium"
-    And I check the box "Company"
     And I fill in "Name" with "Acme Inc."
+    And I select "Industry consortium" options from "Type"
+    And I select "Switzerland" from "Country"
     Then I press "Update owner"
     Then I should see "Acme Inc."
     And I should see the link "Industry consortium"
@@ -49,8 +53,9 @@ Feature: Creation of owners through UI
 
     # Create a person owner as well.
     And I press "Add new" at the "Owner" field
-    And I check the box "Company"
     And I fill in "Name" with "John Doe"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
     Then I should see "John Doe"
     And I should see the link "Company"

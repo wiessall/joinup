@@ -50,7 +50,7 @@ class EifContext extends RawDrupalContext {
     ]);
 
     // Random topic.
-    $topic_label = $this->getRandomTerm('topic')->label();
+    $topic_label = $this->getRandomTerm('topic', TRUE)->label();
     // Create the NIFO sample collection.
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',

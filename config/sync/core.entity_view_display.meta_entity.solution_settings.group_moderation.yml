@@ -1,0 +1,56 @@
+uuid: 9dbefb51-4c59-46a5-aa18-f959c4531530
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.meta_entity.group_moderation
+    - field.field.meta_entity.solution_settings.announcements_enabled
+    - field.field.meta_entity.solution_settings.content_creation
+    - field.field.meta_entity.solution_settings.group_moderation
+    - field.field.meta_entity.solution_settings.landing_page
+    - field.field.meta_entity.solution_settings.list_related_entities
+    - field.field.meta_entity.solution_settings.listing_content
+    - field.field.meta_entity.solution_settings.metadata_banner_disabled
+    - meta_entity.type.solution_settings
+  module:
+    - layout_builder
+    - options
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: meta_entity.solution_settings.group_moderation
+targetEntityType: meta_entity
+bundle: solution_settings
+mode: group_moderation
+content:
+  content_creation:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  group_moderation:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  announcements_enabled: true
+  changed: true
+  created: true
+  label: true
+  landing_page: true
+  list_related_entities: true
+  listing_content: true
+  meta_entity_solution_settings_listing_content_inline_facets: true
+  meta_entity_solution_settings_listing_content_top: true
+  metadata_banner_disabled: true
+  search_api_excerpt: true
+  target: true

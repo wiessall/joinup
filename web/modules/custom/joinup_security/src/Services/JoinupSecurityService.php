@@ -38,7 +38,7 @@ class JoinupSecurityService {
     $uid = $this->currentUser->id();
     if (
       $this->currentUser->hasPermission('bypass node creation limit') ||
-      $this->joinupGroupManagerPermissions->userHasOgCollectionPermission($uid, $collection, 'bypass node creation limit')
+      $this->joinupGroupManagerPermissions->userHasOgPermission($uid, $collection, 'bypass node creation limit')
     ) {
       return FALSE;
     }

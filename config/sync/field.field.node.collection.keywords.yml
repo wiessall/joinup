@@ -1,0 +1,38 @@
+uuid: 6234f14d-e73b-40f8-8115-63aa9132a728
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.keywords
+    - node.type.collection
+    - taxonomy.vocabulary.tags
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/dcat#keyword'
+      type: null
+id: node.collection.keywords
+field_name: keywords
+entity_type: node
+bundle: collection
+label: 'Search keywords'
+description: 'Relevant keywords improve the search ranking of your content.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      tags: tags
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

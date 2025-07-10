@@ -92,10 +92,11 @@ function ventuno_preprocess_node(array &$variables): void {
 
   // View modes where tiles are expected.
   $tile_view_modes = [
-    'highlighted',
     'view_mode_tile',
     'view_mode_tile_horizontal',
     'carousel',
+    // @todo Align or remove in ISAICP-9497.
+    'spotlight',
   ];
   // Prepare data for the tiles.
   if (in_array($variables['view_mode'], $tile_view_modes)) {

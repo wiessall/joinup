@@ -9,8 +9,17 @@ Feature: Validation of owners created through UI
     And I go to the propose collection form
     When I press "Add new" at the "Owner" field
     And I press "Create owner"
-    Then I should see the error message "Name field is required."
+    Then I should see the following inline form error messages:
+      | error messages             |
+      | Name field is required.    |
+      | Type field is required.    |
+      | Country field is required. |
     And I fill in "Name" with "Leandro Keen"
+    And I select "Company" options from "Type"
+    And I select "Industry consortium" options from "Type"
+    And I select "Belgium" from "Country"
     And I press "Create owner"
-    Then I should see "Leandro Keen"
+    Then the "Owner IEF" table should contain the following columns:
+      | Title        | Type                         | Country |
+      | Leandro Keen | Company, Industry consortium | Belgium |
     And I should not see the error message "Name field is required."
