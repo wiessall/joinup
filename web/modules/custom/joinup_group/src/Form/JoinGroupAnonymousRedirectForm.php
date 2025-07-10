@@ -116,11 +116,6 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // to the group page.
     $url = (new Url('cas.login'))->setOption('query', [
       'destination' => $this->group->toUrl($relationship)->toString(),
-      // Add a random query parameter to the link force the browser to
-      // recalculate the 302 redirect to the external service.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9903.
-      // @todo Remove these lines in ISAICP-9990.
-      't' => rand(1000, 9999),
     ]);
     $form_state->setRedirectUrl($url);
   }
