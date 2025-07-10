@@ -1,7 +1,12 @@
 uuid: 74940e83-8e13-4faf-8581-92d0343bc5c2
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
 id: fi
 label: Finnish
 direction: ltr
