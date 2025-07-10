@@ -39,10 +39,6 @@ function ventuno_preprocess_page(array &$variables): void {
 
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
-  // Depend the page to the oe_authentication settings in order to refresh the
-  // Sign in link when changes are updated.
-  // @todo Remove these lines in ISAICP-9990.
-  $variables['#cache']['tags'][] = 'config:oe_authentication.settings';
 
   // The "About us" link is only shown if the Joinup collection exists.
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
