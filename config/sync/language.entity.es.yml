@@ -1,7 +1,12 @@
 uuid: dd3f59e9-b3a1-4644-bd89-248edb1e76c9
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
 id: es
 label: Spanish
 direction: ltr

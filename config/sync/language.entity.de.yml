@@ -1,7 +1,12 @@
 uuid: 5a95347f-3af3-434c-8347-e251fa621178
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
 id: de
 label: German
 direction: ltr

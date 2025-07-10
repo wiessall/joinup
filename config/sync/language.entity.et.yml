@@ -1,7 +1,12 @@
 uuid: 915cc709-d1d3-4ce3-b54c-4b228a07041b
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
 id: et
 label: Estonian
 direction: ltr

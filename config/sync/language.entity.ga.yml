@@ -1,7 +1,12 @@
 uuid: 136249fd-90cc-49f4-b22e-1ee6aa89a1b7
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4;'
 id: ga
 label: Irish
 direction: ltr

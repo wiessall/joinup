@@ -1,7 +1,12 @@
 uuid: 22cf411f-aa29-4be9-9d5f-87264f8cac13
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);'
 id: sl
 label: Slovenian
 direction: ltr
