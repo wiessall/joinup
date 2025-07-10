@@ -4,7 +4,8 @@
  * Default theme implementation for a link to a file.
  *
  * Available variables:
- * - attributes: The HTML attributes for the containing element.
+ * - attributes: The HTML attributes for the containing element
+ * and for contained element if it is the attribute target.
  * - link: A link to the file.
  * - file_size: The size of the file.
  *
@@ -13,4 +14,7 @@
  * @ingroup themeable
  */
 #}
-<span{{ attributes }}>{{ link }}</span>
+{% if attributes['target'] is defined %}
+  {% set link = link|merge({'#attributes': {target: attributes['target']}}) %}
+{% endif %}
+<span{{ attributes|without('target') }}>{{ link }}</span>

@@ -39,7 +39,7 @@ Feature: Proposing a collection
 
     # Check that validations errors are shown for required fields.
     When I press "Propose"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                    |
       | Title field is required.          |
       | Description field is required.    |
@@ -56,11 +56,9 @@ Feature: Proposing a collection
       # Contact information data.
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
-      | Search keywords       | Some keyword                                                                                         |
-    Then I should see the text "Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content."
-    When I select "HR" from "Topic"
-    And I select the radio button "Only members can create content."
-    And I check "Moderated"
+      | Search keywords       | government                                                                                         |
+    Then I should see the text "Relevant keywords improve the search ranking of your content."
+    When I select "Demography" options from "Topic"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
@@ -85,7 +83,7 @@ Feature: Proposing a collection
     When I fill in the following:
       | Title    | About this group          |
       | Abstract | Abstract about this group |
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
 
@@ -103,19 +101,7 @@ Feature: Proposing a collection
       | Name        | Some contact                                                      |
       | E-mail      | some.contact@example.com                                          |
     And I press "Save as draft"
-    Then I should see the error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
-
-  @javascript
-  # This is a regression test for a bug in which the label texts of the options
-  # vanished after performing an AJAX request in a different element on the
-  # page.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2589
-  Scenario: Content creation options should not vanish after AJAX request.
-    Given I am logged in as a user with the "authenticated" role
-    When I go to the propose collection form
-    And I expand the "Additional fields" accordion section
-    And I should see the text "Only members can create content."
-    And I should see the text "Any user can create content."
+    Then I should see the inline form error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
 
   @javascript @generateMedia @generateMediaTypes:collection_logo
   Scenario: Propose collection form fields should be organized in tabs.
@@ -127,7 +113,7 @@ Feature: Proposing a collection
     When I go to the propose collection form
     Then the following fields should be visible "Title, Abstract, Description, Topic"
     And the following field widgets should be visible "Owner"
-    And the following fields should not be visible "Moderated, Content creation, Geographical coverage"
+    And the following fields should not be visible "Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should be visible "Contact information"
 
@@ -135,7 +121,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Just a proposal"
     And I fill in "Abstract" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
@@ -149,7 +135,7 @@ Feature: Proposing a collection
     And I collapse the "Main fields" accordion section
     Then the following fields should not be visible "Title, Abstract, Description, Topic"
     And the following field widgets should not be visible "Owner"
-    And the following fields should be visible "Content creation, Moderated, Geographical coverage"
+    And the following fields should be visible "Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should not be visible "Contact information"
 
@@ -192,7 +178,7 @@ Feature: Proposing a collection
     # be shown to the user.
     Then the "Main fields" accordion section should be active
     # Fill the required fields.
-    When I select "HR" from "Topic"
+    When I select "Demography" options from "Topic"
     And I fill in the following:
       | Name   | Contact person             |
       | E-mail | contact_person@example.com |
@@ -200,7 +186,7 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @email
+  @email @javascript
   Scenario: Email validator after submit a Collection/Solution.
     Given owner content:
       | name               | owner type |
@@ -211,7 +197,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Some email validation"
     And I fill in "Abstract" with "Some email validation"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation valid"
     And I press "Add owner"
@@ -231,20 +217,27 @@ Feature: Proposing a collection
       | html               | yes                                                                                                                                   |
 
     When I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     Then I fill in "Title" with "Rolly email validation"
     And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
-    And I select "HR" from "Topic"
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Organisation valid"
-    And I press "Add owner"
-    And I fill in the following:
-      | Name   | Contact Rapazoglou             |
-      | E-mail | contact_Rapazoglou@example.com |
-    And I press "Create contact information"
-    And I select "Logging Service" from "Solution type"
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Organisation valid"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    And I fill in "Website URL" with "http://example.com/john-doe"
+    Then I press "Create contact information"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
 
     # Email confirmation occurs only for published groups.
@@ -267,6 +260,7 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
     When I go to the edit form of the "Rolly email validation" solution
+    And I press "Confirm"
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
@@ -278,7 +272,7 @@ Feature: Proposing a collection
     # Contact us page should return access denied,
     # because contact info emails are not published.
     When I go to "/collection/some-email-validation/contact"
-    Then I should get an access denied error
+    Then I should see the heading "Access denied"
 
   @javascript
   Scenario: Allowing users to upload SVGs.
@@ -291,7 +285,7 @@ Feature: Proposing a collection
     When I fill in "Title" with "SVG API example"
     And I fill in "Abstract" with "SVG API example"
     And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Svinish"
     And I press "Add owner"
@@ -299,15 +293,14 @@ Feature: Proposing a collection
       | E-mail | basic.svg.api@example.com |
       | Name   | BasicSvgAPI Contact       |
     And I press "Create contact information"
-    When I select "Data gathering and processing" from "Topic"
+    When I select "Data gathering and processing" options from "Topic"
 
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.
     And I attach the file "error.svg" to "Logo"
-    Then I should see the error message "Invalid or unsafe SVG file."
+    Then I should see the inline form error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
-    Then I should not see the error message "Invalid or unsafe SVG file."
-    And I check "Moderated"
+    Then I should not see the inline form error message "Invalid or unsafe SVG file."
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection

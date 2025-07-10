@@ -1,0 +1,54 @@
+uuid: b97df96a-9dd6-4e7e-a9d6-dd1e8ea7380f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.confirmation
+    - field.field.node.contact_information.email
+    - field.field.node.contact_information.field_state
+    - field.field.node.contact_information.webpage
+    - node.type.contact_information
+  module:
+    - layout_builder
+    - link
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.contact_information.confirmation
+targetEntityType: node
+bundle: contact_information
+mode: confirmation
+content:
+  email:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  webpage:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: true
+      url_plain: true
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  private_message_link: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uri: true

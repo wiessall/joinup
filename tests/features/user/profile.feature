@@ -53,7 +53,7 @@ Feature: User profile
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
     And I fill in "Family name" with "di ser Piero da Vinci"
-    And I select "Supplier exchange" from "Professional domain"
+    And I select "Supplier exchange" options from "Professional domain"
     And I fill in "Country of origin" with "Belgium"
     And I fill in "Facebook" with "leodavinci"
     And I fill in "X" with "therealdavinci"
@@ -64,7 +64,7 @@ Feature: User profile
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
     And I press "Save"
-    Then I should see the error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
+    Then I should see the inline form error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
 
     When I fill in "Business title" with "Italian Renaissance polymath"
     And I press "Save"
@@ -111,7 +111,7 @@ Feature: User profile
     And I should not see the text "Username: Leonardo Da Vinci"
     And I fill in "First name" with "Leo"
     And I fill in "Family name" with "di ser Piero da Vinci"
-    And I select "Finance in EU" from "Professional domain"
+    And I select "Finance in EU" options from "Professional domain"
     And I fill in "Country of origin" with "Belgium"
     And I press "Save"
     Then I should see the success message "The changes have been saved."

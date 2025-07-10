@@ -185,58 +185,6 @@ Feature: Collection moderation
     And I should not see the text "Some berry pie"
 
   @javascript
-  Scenario: Moderate an open collection
-    # Regression test for a bug that caused the slider that controls the
-    # content creation setting to revert to default state when the form is
-    # resubmitted, as happens during moderation. Ref. ISAICP-3200.
-    # Note that this is an issue that affected the legacy eLibrary slider which
-    # has been replaced with the Content creation radio buttons, but we are
-    # keeping the coverage for now.
-    Given I am logged in as a user with the "authenticated" role
-    # Propose a collection, filling in the required fields.
-    When I go to the propose collection form
-    Then the "Main fields" accordion section should be active
-    And I fill in the following:
-      | Title    | Spectres in fog        |
-      | Abstract | The fog is haunted.    |
-      # Contact information data.
-      | Name     | A secretary in the fog |
-      | E-mail   | fog@example.com        |
-    And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Katsumoto"
-    And I check the box "Company"
-    And I expand the "Additional fields" accordion section
-    Then the "Additional fields" accordion section should be active
-    And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Any user can create content."
-
-    # Regression test for a bug that caused the content creation setting to be
-    # lost when adding an item to a multivalue field. Ref. ISAICP-3200.
-    # Note that this is an issue that affected the legacy eLibrary slider which
-    # has been replaced with the Content creation radio buttons, but we are
-    # keeping the coverage for now.
-    When I press "Add another item" at the "Geographical coverage" field
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
-
-    # Submit the form and approve it as a moderator. This should not cause the
-    # content creation option to change.
-    When I press "Propose"
-    Then I should see the heading "Spectres in fog"
-    When I am logged in as a user with the "moderator" role
-    And I go to the edit form of the "Spectres in fog" collection
-    And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
-    # Also when saving and reopening the edit form the content creation option
-    # should remain unchanged.
-    When I press "Publish"
-    And I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
-
-  @javascript
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
     # creation setting happens after an ajax callback.
@@ -252,23 +200,21 @@ Feature: Collection moderation
       | Name     | Domestic secretary                 |
       | E-mail   | ds@example.com                     |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Garnett Clifton"
-    And I check the box "Company"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Any user can create content."
 
     # Save the collection.
     When I press "Propose"
+    And the "content_creation" setting of the "Domestic bovins" collection is set to "members"
     Then I should see the heading "Domestic bovins"
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Any user can create content." from field "Content creation" should be selected
 
   @javascript
   Scenario: Changing Content creation value - regression #2
@@ -286,14 +232,12 @@ Feature: Collection moderation
       | Name     | Secretary of thieves |
       | E-mail   | st@example.com       |
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
-    And I select "Supplier exchange" from "Topic"
+    And I select "Supplier exchange" options from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Coretta Simonson"
-    And I check the box "Company"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
     When I press "Propose"
@@ -302,7 +246,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
   @javascript
   Scenario: Changing Content creation value - regression #3
@@ -321,16 +264,12 @@ Feature: Collection moderation
       | Name     | Secretary of Silk      |
       | E-mail   | ss@example.com         |
     And I enter "So smooth." in the "Description" wysiwyg editor
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     # An ajax callback is executed now.
-    And I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Terrance Nash"
-    And I check the box "Company"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "ISA²"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    When I press "Add another item" at the "Geographical coverage" field
-    And I select the radio button "Only facilitators and authors can create content."
-
     # Save the collection.
     When I press "Propose"
     Then I should see the heading "Silken Emperor"
@@ -338,7 +277,6 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
   @javascript
   Scenario: Changing Content creation value - regression #4
@@ -356,16 +294,14 @@ Feature: Collection moderation
       | Name     | Secretary of the harbor |
       | E-mail   | sh@example.com          |
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
-    And I select "Employment and Support Allowance" from "Topic"
+    And I select "Employment and Support Allowance" options from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I fill in "Name" with "Mable Pelley"
-    And I check the box "Company"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I select the radio button "Only facilitators and authors can create content."
-
-    When I press "Add another item" at the "Geographical coverage" field
 
     # Save the collection.
     When I press "Propose"
@@ -374,4 +310,3 @@ Feature: Collection moderation
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
-    Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected

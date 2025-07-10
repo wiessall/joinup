@@ -54,7 +54,7 @@ Feature: "Add document" visibility options.
     And I select "Document" from "Type"
     Then I upload the file "test1.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                 |
       | Topic field is required.       |
       | This value should not be null. |
@@ -62,7 +62,7 @@ Feature: "Add document" visibility options.
     When I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "The Sparks of the Butterfly"
     And I should see the success message 'Document The Sparks of the Butterfly has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'

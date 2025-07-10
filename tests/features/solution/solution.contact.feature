@@ -86,7 +86,7 @@ Feature: Contact form for solution
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
     And I press "Send e-mail" in the "Modal buttons" region
-    Then I should see the error message "You must enter a valid e-mail address."
+    Then I should see the inline form error message "You must enter a valid e-mail address."
 
     When I fill in "Your e-mail address" with "example@test.test"
     And I fill in "Organization" with "My organization"
