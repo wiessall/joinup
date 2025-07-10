@@ -5,9 +5,9 @@
 ((Drupal, displace, once) => {
   Drupal.behaviors.adjustScrollPaddingTop = {
     attach(context) {
-      once('adjust-scroll-padding', 'html', context).forEach(() => {
+      once("adjust-scroll-padding", "html", context).forEach(() => {
         const htmlEl = document.documentElement;
-        const navbar = document.querySelector('.iop-navbar');
+        const navbar = document.querySelector(".iop-navbar");
 
         const updateScrollPadding = () => {
           const toolbarOffset = displace?.offsets?.top || 0;
@@ -25,12 +25,12 @@
         };
 
         // Run after everything is fully loaded
-        window.addEventListener('load', scheduleUpdate);
+        window.addEventListener("load", scheduleUpdate);
 
         // Re-run on admin bar changes or resize
-        document.addEventListener('drupalViewportOffsetChange', scheduleUpdate);
-        window.addEventListener('resize', scheduleUpdate);
+        document.addEventListener("drupalViewportOffsetChange", scheduleUpdate);
+        window.addEventListener("resize", scheduleUpdate);
       });
-    }
+    },
   };
 })(Drupal, Drupal.displace, once);
