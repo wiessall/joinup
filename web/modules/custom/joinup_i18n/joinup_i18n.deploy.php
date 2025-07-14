@@ -14,8 +14,8 @@ use Drupal\language\Entity\ConfigurableLanguage;
  */
 function joinup_i18n_update_200500(): void {
   $languages = \Drupal::languageManager()->getLanguages();
+  $pluralFormula = \Drupal::service('l10n_pconfig.drupalorg_plural_formula');
   foreach ($languages as $language) {
-    $pluralFormula = \Drupal::service('l10n_pconfig.drupalorg_plural_formula');
     $configurableLanguage = ConfigurableLanguage::load($language->getId());
     $pluralFormula->updatePluralFormula($configurableLanguage);
   }
