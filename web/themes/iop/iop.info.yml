@@ -12,6 +12,7 @@ libraries:
   - ventuno/layout
   - iop/components
   - iop/theme
+  - iop/sticky-nav
 
 libraries-override:
   tour/tour-styling: false
