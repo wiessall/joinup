@@ -1,16 +1,7 @@
 diff --git a/l10n_pconfig.module b/l10n_pconfig.module
-index a91e3b7493c60951e1ee042e16605e05fe7b138d..03662b2d32485bd426659d890aa1485307d6d365 100644
+index a91e3b7493c60951e1ee042e16605e05fe7b138d..bec303b8040d1dd453175faa3b1cf85c8f40fedc 100644
 --- a/l10n_pconfig.module
 +++ b/l10n_pconfig.module
-@@ -2,7 +2,7 @@
- 
- /**
-  * @file
-- *   Plural formula configurator module.
-+ * Plural formula configurator module.
-  *
-  *   Drupal itself does not let you edit plural formulas for languages because
-  *   of the complexity involved. This is an "advanced" user module letting you
 @@ -10,6 +10,7 @@
   */
  
@@ -47,7 +38,7 @@ index 1713b79b5f33fd9030afec01acc4a06bc720bc1a..8bfd0b46b4bb02f5df1f83c896928eaf
      class: Drupal\l10n_pconfig\DrupalOrgPluralFormula
 +    arguments: ['@locale.plural.formula']
 diff --git a/src/DrupalOrgPluralFormula.php b/src/DrupalOrgPluralFormula.php
-index ccdcc39959a08e22f9a609681caeea3907744450..63fcaae80da94c59b7535c3c347b176111e4a258 100644
+index ccdcc39959a08e22f9a609681caeea3907744450..4c096a5b247f9a1a3e563181ec47aa29fed67370 100644
 --- a/src/DrupalOrgPluralFormula.php
 +++ b/src/DrupalOrgPluralFormula.php
 @@ -2,6 +2,10 @@
@@ -79,15 +70,6 @@ index ccdcc39959a08e22f9a609681caeea3907744450..63fcaae80da94c59b7535c3c347b1761
    /**
     * {@inheritDoc}
     *
-@@ -87,7 +102,7 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
-       'nl' => $default,
-       'nn' => $default,
-       // The 'no' code is superseded by nb and nn
--      //'no' => array('Norwegian', $default),
-+      // 'no' => array('Norwegian', $default),.
-       'pa' => $default,
-       'pl' => 'nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
-       'pt' => $default,
 @@ -120,4 +135,18 @@ class DrupalOrgPluralFormula implements DrupalOrgPluralFormulaInterface {
      ];
    }
@@ -150,7 +132,7 @@ index df2c5bf3c64c4cb00894d84ccba1ecc889f00754..8f8caeff6f914495bdaf2e68bc48fd28
      }
    }
 diff --git a/src/Form/PluralFormulaLanguageFormBase.php b/src/Form/PluralFormulaLanguageFormBase.php
-index 08d0e41133cc927b428cc16b7c8b615fc3c31412..9a4914d8c61e767ccaf304b18c288c7f37b441d4 100644
+index 08d0e41133cc927b428cc16b7c8b615fc3c31412..66e7a0b1b4bec8f442552f7ff45c9cddfab16695 100644
 --- a/src/Form/PluralFormulaLanguageFormBase.php
 +++ b/src/Form/PluralFormulaLanguageFormBase.php
 @@ -7,9 +7,9 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -173,31 +155,6 @@ index 08d0e41133cc927b428cc16b7c8b615fc3c31412..9a4914d8c61e767ccaf304b18c288c7f
     */
    public static function create(ContainerInterface $container) {
      return new static(
-@@ -79,7 +79,7 @@ abstract class PluralFormulaLanguageFormBase implements ContainerInjectionInterf
-     }
-     $examples = [];
-     foreach ($types as $plural_formula => $languages) {
--      $examples[] = t('<strong>@formula</strong> used by %languages', array('@formula' => $plural_formula, '%languages' => join(', ', $languages)));
-+      $examples[] = t('<strong>@formula</strong> used by %languages', ['@formula' => $plural_formula, '%languages' => join(', ', $languages)]);
-     }
- 
-     // Pick previous plural formula if editing an existing language.
-@@ -88,13 +88,13 @@ abstract class PluralFormulaLanguageFormBase implements ContainerInjectionInterf
-     $plural_formula = $language->isNew() ? '' : $language->getThirdPartySetting('l10n_pconfig', 'formula');
- 
-     // Add text field to enter the plural formula.
--    $form['custom_language']['plural_formula'] = array(
-+    $form['custom_language']['plural_formula'] = [
-       '#type' => 'textfield',
-       '#title' => t('Plural formula'),
-       '#description' => $this->t('The plural formula for this language in the format used in .po files. Either check a pre-existing .po file or see <a href="http://translate.sourceforge.net/wiki/l10n/pluralforms">the wordforge plural forms list</a>. Some known examples:'),
-       '#default_value' => $plural_formula,
-       '#maxlength' => 255,
--    );
-+    ];
-     $form['custom_language']['plural_formula_examples'] = [
-       '#theme' => 'item_list',
-       '#items' => $examples,
 @@ -102,7 +102,7 @@ abstract class PluralFormulaLanguageFormBase implements ContainerInjectionInterf
      ];
      $form['custom_language']['submit']['#weight'] = 50;
@@ -249,18 +206,10 @@ index 08d0e41133cc927b428cc16b7c8b615fc3c31412..9a4914d8c61e767ccaf304b18c288c7f
  
  }
 diff --git a/tests/src/Functional/PluralFormulaLanguageFormTest.php b/tests/src/Functional/PluralFormulaLanguageFormTest.php
-index ddbac766fbd0a5f2b9211896b73a3159cb5624f8..303309e9640aa1f11190f38fbe55e2b001528bf4 100644
+index ddbac766fbd0a5f2b9211896b73a3159cb5624f8..45e54008255c14fdc9e2e18a18900ac73f2bdd88 100644
 --- a/tests/src/Functional/PluralFormulaLanguageFormTest.php
 +++ b/tests/src/Functional/PluralFormulaLanguageFormTest.php
-@@ -2,6 +2,7 @@
- 
- namespace Drupal\Tests\l10n_pconfig\Functional;
- 
-+use Drupal\Core\Language\LanguageInterface;
- use Drupal\language\Entity\ConfigurableLanguage;
- use Drupal\Tests\BrowserTestBase;
- 
-@@ -174,4 +175,21 @@ class PluralFormulaLanguageFormTest extends BrowserTestBase {
+@@ -174,4 +174,31 @@ class PluralFormulaLanguageFormTest extends BrowserTestBase {
      $this->assertSession()->pageTextContains('Incorrect plural formula format. Please check your sources again.');
    }
  
@@ -274,11 +223,21 @@ index ddbac766fbd0a5f2b9211896b73a3159cb5624f8..303309e9640aa1f11190f38fbe55e2b0
 +    ]);
 +    $language->save();
 +    // Ensure the 'formula' setting under 'l10n_pconfig' is initially null.
-+    $this->assertNull($language->getThirdPartySetting('l10n_pconfig', 'formula'));
++    $this->assertNull($this->container->get('state')->get('locale.translation.formulae'));
 +    // Set a 3rd party 'formula' setting for the language.
 +    $language->setThirdPartySetting('l10n_pconfig', 'formula', 'nplurals=2; plural=(n!=1);');
 +    $language->save();
 +    // Verify that the 'formula' setting has been correctly saved.
-+    $this->assertEquals('nplurals=2; plural=(n!=1);', $language->getThirdPartySetting('l10n_pconfig', 'formula'));
++    $expected = [
++      'fr' => [
++        'plurals' => '2',
++        'formula' => [
++          1 => 0,
++          'default' => 1,
++        ],
++      ],
++    ];
++    $this->assertEquals($expected, $this->container->get('state')->get('locale.translation.formulae'));
 +  }
++
  }
