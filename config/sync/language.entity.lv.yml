@@ -1,7 +1,12 @@
 uuid: 654329ab-e28d-492c-9cb6-69ad69b058d7
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;'
 id: lv
 label: Latvian
 direction: ltr

@@ -1,7 +1,12 @@
 uuid: 8eb99cdb-f870-4b2e-b749-da94228ebdbb
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);'
 id: pl
 label: Polish
 direction: ltr
