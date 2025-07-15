@@ -15,6 +15,7 @@ use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Event\CasPostValidateEvent;
 use Drupal\cas\Event\CasPreLoginEvent;
+use Drupal\cas\Event\CasPreRedirectEvent;
 use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\externalauth\Authmap;
@@ -67,6 +68,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
+      CasPreRedirectEvent::class => 'handleBrowserCache',
       CasPreValidateEvent::class => 'alterValidationUrl',
       CasPostValidateEvent::class => [
         ['prepareAttributes'],
@@ -85,6 +87,24 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         ['setRedirectAndStatusOnNewAccount', -20],
       ],
     ];
+  }
+
+  /**
+   * Avoids a browser-cached destination page.
+   *
+   * @param \Drupal\cas\Event\CasPreRedirectEvent $event
+   *   The CAS event.
+   */
+  public function handleBrowserCache(CasPreRedirectEvent $event): void {
+    if (!$destination = $event->getCasRedirectData()->getServiceParameter('destination')) {
+      $destination = $this->configFactory->get('system.site')->get('page.front');
+    }
+
+    $key = strtolower((new Random())->machineName(3));
+    $value = bin2hex(random_bytes(3));
+    $new_destination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY, $new_destination);
+
+    $event->getCasRedirectData()->setServiceParameter('destination', $new_destination);
   }
 
   /**
