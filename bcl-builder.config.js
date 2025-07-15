@@ -86,7 +86,7 @@ module.exports = {
       sourceFolder: path.resolve(paths.themes.iop, "src/js/"),
       destFolder: path.resolve(paths.themes.iop, "assets/js/"),
       defaultOptions: { minify: true, sourceMap: !isProd },
-      objects: ["glide.js"].map((file) => ({
+      objects: ["glide.js", "sticky-nav.js"].map((file) => ({
         entry: file,
         dest: file,
       })),
