@@ -1,7 +1,12 @@
 uuid: 9fa95516-f876-4481-a52f-de2364795564
 langcode: pt
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
 id: pt
 label: Portuguese
 direction: ltr
