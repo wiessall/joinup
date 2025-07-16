@@ -9,7 +9,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\CatalogueType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -55,7 +54,7 @@ class CustomCatalogueDeriver extends DeriverBase implements ContainerDeriverInte
    */
   protected function getValidJsonFiles(): array {
     $valid_files = [];
-    
+
     $module_path = $this->moduleHandler->getModule('joinup_oss_catalogue')->getPath();
     $data_directory = DRUPAL_ROOT . '/' . $module_path . '/data';
 
@@ -109,13 +108,13 @@ class CustomCatalogueDeriver extends DeriverBase implements ContainerDeriverInte
    */
   protected function createDerivativeDefinition(array $data, string $json_file, array $base_plugin_definition): array {
     $derivative_id = $data['id'];
-    
+
     return [
       'id' => "custom:$derivative_id",
-      'label' => new TranslatableMarkup($data['label']),
+      'label' => $data['label'],
       'parser' => 'publiccode_yml',
       'type' => isset($data['type']) ? CatalogueType::from($data['type']) : CatalogueType::Local,
-      'description' => isset($data['description']) ? new TranslatableMarkup($data['description']) : NULL,
+      'description' => $data['description'] ?? NULL,
       'weblinks' => [],
       'country' => NULL,
       'json_file' => $json_file,

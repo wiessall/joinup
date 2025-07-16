@@ -42,8 +42,8 @@ class Custom extends UrlListCatalogueProviderBase {
     ];
 
     return [
-        'endpoints' => $endpoints,
-      ] + parent::defaultConfiguration();
+      'endpoints' => $endpoints,
+    ] + parent::defaultConfiguration();
   }
 
 }
