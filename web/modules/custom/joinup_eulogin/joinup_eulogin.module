@@ -178,3 +178,13 @@ function joinup_eulogin_preprocess_menu(&$variables): void {
     unset($variables['items']['joinup_eulogin.eu_login_info']);
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_eulogin_preprocess_page(&$variables): void {
+  // Depend the page to the oe_authentication settings in order to refresh the
+  // Sign in link when changes are updated.
+  // @todo Remove these lines in ISAICP-9990.
+  $variables['#cache']['tags'][] = 'config:oe_authentication.settings';
+}

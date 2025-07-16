@@ -102,3 +102,11 @@ tile:
   css:
     theme:
       assets/css/tile.min.css: { minified: true }
+
+sticky-nav:
+  js:
+    assets/js/sticky-nav.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/drupal.displace
+    - core/once
