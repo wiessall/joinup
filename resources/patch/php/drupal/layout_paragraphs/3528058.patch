@@ -1,0 +1,419 @@
+From 09ec9ef977003c236dd8984da9db700c3dcb6e9a Mon Sep 17 00:00:00 2001
+From: drishu <aszilagyi@live.com>
+Date: Tue, 3 Jun 2025 14:05:35 +0200
+Subject: [PATCH 1/5] Test the back behaviour.
+
+---
+ .../FunctionalJavascript/BackButtonTest.php   | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 tests/src/FunctionalJavascript/BackButtonTest.php
+
+diff --git a/tests/src/FunctionalJavascript/BackButtonTest.php b/tests/src/FunctionalJavascript/BackButtonTest.php
+new file mode 100644
+index 00000000..38178c68
+--- /dev/null
++++ b/tests/src/FunctionalJavascript/BackButtonTest.php
+@@ -0,0 +1,59 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
++
++/**
++ * Tests that behaviour when the browser back button is used.
++ *
++ * @see https://www.drupal.org/project/layout_paragraphs/issues/3528058
++ * @group layout_paragraphs
++ */
++class BackButtonTest extends BuilderTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'layout_paragraphs',
++    'paragraphs',
++    'node',
++    'field',
++    'field_ui',
++    'block',
++    'paragraphs_test',
++    'layout_paragraphs_form_rendering_test',
++  ];
++
++  /**
++   * Tests the back button behavior in the Layout Paragraphs widget.
++   */
++  public function testBackButtonBehavior() {
++    $this->loginWithPermissions([
++      'create page content',
++      'edit own page content',
++    ]);
++
++    $this->drupalGet('node/add/page');
++    $page = $this->getSession()->getPage();
++
++    $this->addSectionComponent(0, '.lpb-btn--add');
++    // Make sure the "Test field" form element appears.
++    $this->assertSession()->pageTextContains('Test field');
++    // Save the node.
++    $this->submitForm([
++      'title[0][value]' => 'Node title',
++    ], 'Save');
++    // Make sure the node appears correctly.
++    $this->assertSession()->pageTextContains('Node title');
++    $this->assertSession()->pageTextContains('Test field');
++
++    // Go back.
++    $this->getSession()->back();
++    $this->getSession()->getPage()->pressButton('Save');
++echo $page->getHtml();
++    $this->assertSession()->pageTextContains('The Test field field has stale values, please amend the content.');
++  }
++
++}
+-- 
+GitLab
+
+
+From 36911c9eef083a2a559bfc50975c437122c6fc1f Mon Sep 17 00:00:00 2001
+From: drishu <aszilagyi@live.com>
+Date: Tue, 3 Jun 2025 16:06:40 +0200
+Subject: [PATCH 2/5] Remove layout from tempstorage after use.
+
+---
+ layout_paragraphs.module | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/layout_paragraphs.module b/layout_paragraphs.module
+index 0d2ae300..5b2ceb5c 100644
+--- a/layout_paragraphs.module
++++ b/layout_paragraphs.module
+@@ -5,6 +5,7 @@
+  * Contains layout_paragraphs.module.
+  */
+ 
++use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Url;
+ use Drupal\Component\Utility\Html;
+ use Drupal\Component\Serialization\Json;
+@@ -381,6 +382,21 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
+   }
+ }
+ 
++/**
++ * Implements hook_ENTITY_insert().
++ */
++function layout_paragraphs_entity_insert(EntityInterface $entity) {
++  if (!$entity instanceof ParagraphInterface) {
++    return;
++  }
++
++  $tempStorage = \Drupal::service('layout_paragraphs.tempstore_repository');
++
++  if ($entity->_layoutParagraphsLayout) {
++    $tempStorage->delete($entity->_layoutParagraphsLayout);
++  }
++}
++
+ /**
+  * Implements hook_entity_translation_create().
+  *
+-- 
+GitLab
+
+
+From b76c18f33949fc42176ef01bc8f980525f647ba6 Mon Sep 17 00:00:00 2001
+From: drishu <aszilagyi@live.com>
+Date: Tue, 3 Jun 2025 16:07:22 +0200
+Subject: [PATCH 3/5] Amend the workflow and add error message.
+
+---
+ .../FieldWidget/LayoutParagraphsWidget.php    | 49 +++++++++++++++++--
+ 1 file changed, 45 insertions(+), 4 deletions(-)
+
+diff --git a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+index 52b04f2b..80be0a9d 100644
+--- a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
++++ b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+@@ -185,7 +185,15 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+       $this->fieldDefinition->getName(),
+       'layout_paragraphs_storage_key',
+     ]);
++
+     $layout_paragraphs_storage_key = NestedArray::getValue($input, $parents);
++
++    // On subsequent form renders, this loads the correct Layout Paragraphs
++    // Layout from the tempstore using the storage key.
++    if ($layout_paragraphs_storage_key) {
++      $this->layoutParagraphsLayout = $this->tempstore->getWithStorageKey($layout_paragraphs_storage_key);
++    }
++
+     // If the form is being rendered for the first time, create a new Layout
+     // Paragraphs Layout instance, save it to tempstore, and store the key.
+     if (empty($layout_paragraphs_storage_key)) {
+@@ -193,12 +201,16 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+       $this->tempstore->set($this->layoutParagraphsLayout);
+       $layout_paragraphs_storage_key = $this->tempstore->getStorageKey($this->layoutParagraphsLayout);
+     }
+-    // On subsequent form renders, this loads the correct Layout Paragraphs
+-    // Layout from the tempstore using the storage key.
+-    else {
+-      $this->layoutParagraphsLayout = $this->tempstore->getWithStorageKey($layout_paragraphs_storage_key);
++
++    if (empty($this->layoutParagraphsLayout)) {
++      $this->layoutParagraphsLayout = new LayoutParagraphsLayout($items, $this->getSettings());
++      $this->tempstore->set($this->layoutParagraphsLayout);
++      $layout_paragraphs_storage_key = $this->tempstore->getStorageKey($this->layoutParagraphsLayout);
++      $element['#is_stale'] = TRUE;
+     }
++
+     $this->initTranslations($form_state);
++
+     $element += [
+       '#type' => 'fieldset',
+       '#title' => $this->fieldDefinition->getLabel(),
+@@ -212,13 +224,42 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+         '#type' => 'hidden',
+         '#default_value' => $layout_paragraphs_storage_key,
+       ],
++      '#element_validate' => [
++        [static::class, 'validate'],
++      ],
++      '#after_build' => [
++        [static::class, 'afterBuildStorageKey'],
++      ],
+     ];
++
+     if ($source = $form_state->get(['content_translation', 'source'])) {
+       $element['layout_paragraphs_builder']['#source_langcode'] = $source->getId();
+     }
+     return $element;
+   }
+ 
++  public static function afterBuildStorageKey(array $element, FormStateInterface $form_state) {
++    if (empty($element['#is_stale'])) {
++      return $element;
++    }
++
++    $element['layout_paragraphs_storage_key']['#value'] = $element['layout_paragraphs_storage_key']['#default_value'];
++    $parents = array_merge($element['#parents'], ['layout_paragraphs_storage_key']);
++    $form_state->setValue($parents, $element['layout_paragraphs_storage_key']['#default_value']);
++
++    return $element;
++  }
++
++  public static function validate($element, FormStateInterface $form_state) {
++    if (empty($element['#is_stale'])) {
++      return;
++    }
++
++    $form_state->setError($element, t('The <em>@label</em> field has stale values, please amend the content.', [
++      '@label' => $element['#title'],
++    ]));
++  }
++
+   /**
+    * Determine if widget is in translation.
+    *
+-- 
+GitLab
+
+
+From 1578bc9245cf19795e4f69f0ecefaf0e84cdc9ba Mon Sep 17 00:00:00 2001
+From: drishu <aszilagyi@live.com>
+Date: Tue, 3 Jun 2025 20:02:32 +0200
+Subject: [PATCH 4/5] Refine the test.
+
+---
+ .../FunctionalJavascript/BackButtonTest.php   | 57 ++++++++++---------
+ 1 file changed, 29 insertions(+), 28 deletions(-)
+
+diff --git a/tests/src/FunctionalJavascript/BackButtonTest.php b/tests/src/FunctionalJavascript/BackButtonTest.php
+index 38178c68..5a5310f6 100644
+--- a/tests/src/FunctionalJavascript/BackButtonTest.php
++++ b/tests/src/FunctionalJavascript/BackButtonTest.php
+@@ -12,20 +12,6 @@ namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
+  */
+ class BackButtonTest extends BuilderTestBase {
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  protected static $modules = [
+-    'layout_paragraphs',
+-    'paragraphs',
+-    'node',
+-    'field',
+-    'field_ui',
+-    'block',
+-    'paragraphs_test',
+-    'layout_paragraphs_form_rendering_test',
+-  ];
+-
+   /**
+    * Tests the back button behavior in the Layout Paragraphs widget.
+    */
+@@ -38,22 +24,37 @@ class BackButtonTest extends BuilderTestBase {
+     $this->drupalGet('node/add/page');
+     $page = $this->getSession()->getPage();
+ 
++    $page->fillField('Title', 'Node title');
+     $this->addSectionComponent(0, '.lpb-btn--add');
+-    // Make sure the "Test field" form element appears.
+-    $this->assertSession()->pageTextContains('Test field');
+-    // Save the node.
+-    $this->submitForm([
+-      'title[0][value]' => 'Node title',
+-    ], 'Save');
+-    // Make sure the node appears correctly.
+-    $this->assertSession()->pageTextContains('Node title');
+-    $this->assertSession()->pageTextContains('Test field');
+-
+-    // Go back.
++
++    // Field layout_paragraphs_storage_key is not accessible.
++    $layout_paragraphs_storage_key = $this->getSession()
++      ->evaluateScript('return document.querySelector(\'input[name="field_content[layout_paragraphs_storage_key]"]\').value;');
++    $this->assertNotEmpty($layout_paragraphs_storage_key);
++
++    $page->pressButton('Save');
++
++    // Assert the page was created successfully.
++    $this->assertSession()->pageTextContains('page Node title has been created.');
++
++    // Session back does not actually behave like the browser,
++    // it does not fill in the old form values,
++    // so we have to simulate this behaviour.
+     $this->getSession()->back();
+-    $this->getSession()->getPage()->pressButton('Save');
+-echo $page->getHtml();
+-    $this->assertSession()->pageTextContains('The Test field field has stale values, please amend the content.');
++
++    $session = $this->getSession();
++    $session->executeScript('document.querySelector(\'input[name="field_content[layout_paragraphs_storage_key]"]\').value = "'.$layout_paragraphs_storage_key.'";');
++
++    $page->fillField('Title', 'Node title 2');
++
++    $page->pressButton('Save');
++    $this->assertSession()->pageTextContains('The field_content field has stale values, please amend the content.');
++
++    // Assert that a new key was generated.
++    $new_storage_key = $this->getSession()
++      ->evaluateScript('return document.querySelector(\'input[name="field_content[layout_paragraphs_storage_key]"]\').value;');
++    $this->assertNotEmpty($new_storage_key);
++    $this->assertNotEquals($layout_paragraphs_storage_key, $new_storage_key);
+   }
+ 
+ }
+-- 
+GitLab
+
+
+From ae37589fbc4eabd71e16b8b163283c626014248e Mon Sep 17 00:00:00 2001
+From: drishu <aszilagyi@live.com>
+Date: Tue, 3 Jun 2025 20:17:55 +0200
+Subject: [PATCH 5/5] Improve coding standards.
+
+---
+ layout_paragraphs.module                      |  4 +--
+ .../FieldWidget/LayoutParagraphsWidget.php    | 29 +++++++++++++++----
+ .../FunctionalJavascript/BackButtonTest.php   |  2 +-
+ 3 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/layout_paragraphs.module b/layout_paragraphs.module
+index 5b2ceb5c..d667d79d 100644
+--- a/layout_paragraphs.module
++++ b/layout_paragraphs.module
+@@ -390,10 +390,10 @@ function layout_paragraphs_entity_insert(EntityInterface $entity) {
+     return;
+   }
+ 
+-  $tempStorage = \Drupal::service('layout_paragraphs.tempstore_repository');
++  $temp_storage = \Drupal::service('layout_paragraphs.tempstore_repository');
+ 
+   if ($entity->_layoutParagraphsLayout) {
+-    $tempStorage->delete($entity->_layoutParagraphsLayout);
++    $temp_storage->delete($entity->_layoutParagraphsLayout);
+   }
+ }
+ 
+diff --git a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+index 80be0a9d..c6f4d4a3 100644
+--- a/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
++++ b/src/Plugin/Field/FieldWidget/LayoutParagraphsWidget.php
+@@ -202,6 +202,7 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+       $layout_paragraphs_storage_key = $this->tempstore->getStorageKey($this->layoutParagraphsLayout);
+     }
+ 
++    // This identifies a browser back where stale content is presented.
+     if (empty($this->layoutParagraphsLayout)) {
+       $this->layoutParagraphsLayout = new LayoutParagraphsLayout($items, $this->getSettings());
+       $this->tempstore->set($this->layoutParagraphsLayout);
+@@ -224,11 +225,11 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+         '#type' => 'hidden',
+         '#default_value' => $layout_paragraphs_storage_key,
+       ],
+-      '#element_validate' => [
+-        [static::class, 'validate'],
+-      ],
+       '#after_build' => [
+-        [static::class, 'afterBuildStorageKey'],
++        [static::class, 'storageKeyAfterBuild'],
++      ],
++      '#element_validate' => [
++        [static::class, 'storageKeyValidate'],
+       ],
+     ];
+ 
+@@ -238,7 +239,15 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+     return $element;
+   }
+ 
+-  public static function afterBuildStorageKey(array $element, FormStateInterface $form_state) {
++  /**
++   * After build handler for storage hey element.
++   *
++   * @param array $element
++   *   The form element.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The form state.
++   */
++  public static function storageKeyAfterBuild(array $element, FormStateInterface $form_state): array {
+     if (empty($element['#is_stale'])) {
+       return $element;
+     }
+@@ -250,7 +259,15 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
+     return $element;
+   }
+ 
+-  public static function validate($element, FormStateInterface $form_state) {
++  /**
++   * Form validation handler for storage hey element.
++   *
++   * @param array $element
++   *   The form element.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The form state.
++   */
++  public static function storageKeyValidate($element, FormStateInterface $form_state): void {
+     if (empty($element['#is_stale'])) {
+       return;
+     }
+diff --git a/tests/src/FunctionalJavascript/BackButtonTest.php b/tests/src/FunctionalJavascript/BackButtonTest.php
+index 5a5310f6..89e895d8 100644
+--- a/tests/src/FunctionalJavascript/BackButtonTest.php
++++ b/tests/src/FunctionalJavascript/BackButtonTest.php
+@@ -43,7 +43,7 @@ class BackButtonTest extends BuilderTestBase {
+     $this->getSession()->back();
+ 
+     $session = $this->getSession();
+-    $session->executeScript('document.querySelector(\'input[name="field_content[layout_paragraphs_storage_key]"]\').value = "'.$layout_paragraphs_storage_key.'";');
++    $session->executeScript('document.querySelector(\'input[name="field_content[layout_paragraphs_storage_key]"]\').value = "' . $layout_paragraphs_storage_key . '";');
+ 
+     $page->fillField('Title', 'Node title 2');
+ 
+-- 
+GitLab
+
