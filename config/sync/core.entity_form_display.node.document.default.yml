@@ -148,10 +148,10 @@ content:
     weight: 7
     region: content
     settings:
-      title: 'Paragraph'
-      title_plural: 'Paragraphs'
+      title: Paragraph
+      title_plural: Paragraphs
       edit_mode: closed
-      closed_mode: summary
+      closed_mode: preview
       autocollapse: none
       closed_mode_threshold: 0
       add_mode: button
