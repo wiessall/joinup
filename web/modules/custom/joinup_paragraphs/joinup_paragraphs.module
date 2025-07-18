@@ -175,3 +175,25 @@ function joinup_paragraphs_preprocess_paragraph__image_gallery(array &$variables
 function joinup_paragraphs_preprocess_paragraph__heading(&$variables): void {
   $variables['attributes']['id'] = 'paragraph-' . $variables['paragraph']->id();
 }
+
+/**
+ * Implements hook_paragraphs_widget_actions_alter().
+ */
+function joinup_paragraphs_paragraphs_widget_actions_alter(array &$widget_actions, array &$context): void {
+  $paragraph = $context['paragraphs_entity'];
+  if (!$paragraph instanceof ParagraphInterface ||
+    !in_array($paragraph->bundle(), ['resource_file', 'resource_link'], TRUE)) {
+    return;
+  }
+
+  // Hide all actions for resource paragraphs.
+  $widget_actions['actions'] = [];
+
+  // Move remove button from dropdown to main actions to keep it visible.
+  if (isset($widget_actions['dropdown_actions']['remove_button'])) {
+    $widget_actions['actions']['remove_button'] = $widget_actions['dropdown_actions']['remove_button'];
+  }
+
+  // Clear dropdown actions.
+  $widget_actions['dropdown_actions'] = [];
+}
