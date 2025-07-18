@@ -25,6 +25,16 @@
     border: 1px solid color.adjust($oss-brand, $lightness: -5%);
     background-color: $oss-brand !important;
   }
+  .btn-blue {
+    color: $brand-darker;
+    background-color: $secondary;
+    &:hover {
+      text-decoration: none;
+      color: $brand-darker;
+      background-color: $secondary-darker;
+      box-shadow: $box-shadow;
+    }
+  }
   .btn-outline-brand {
     color: $oss-brand;
     border: 1px solid $oss-brand;
