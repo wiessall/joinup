@@ -1,0 +1,10 @@
+uuid: a54b0ad1-ca3d-4e9c-ae83-ba215740c0bb
+langcode: en
+status: true
+dependencies: {  }
+id: resource_file
+label: 'Resource file'
+icon_uuid: null
+icon_default: null
+description: "For file uploads\r\n"
+behavior_plugins: {  }
