@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.keywords
     - field.field.node.document.og_audience
+    - field.field.node.document.resources
     - field.field.node.document.spatial_coverage
     - node.type.document
   module:
@@ -95,6 +96,7 @@ hidden:
   published_at: true
   read_more: true
   report: true
+  resources: true
   search_api_excerpt: true
   share_link: true
   shared_in: true

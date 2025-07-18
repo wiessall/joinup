@@ -17,10 +17,12 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.keywords
     - field.field.node.document.og_audience
+    - field.field.node.document.resources
     - field.field.node.document.spatial_coverage
     - node.type.document
   module:
     - comment
+    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
@@ -168,6 +170,15 @@ content:
       template_suggestion:
         template_suggestion: no_wrappers
     weight: 5
+    region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 12
     region: content
   share_link:
     settings: {  }
