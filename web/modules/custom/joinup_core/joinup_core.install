@@ -26,29 +26,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Backup keyword values.
- */
-function joinup_core_update_200500(): string {
-  $keywords = \Drupal::database()->select('node__field_keywords', 'k')
-    ->fields('k')
-    ->execute()
-    ->fetchAll(\PDO::FETCH_OBJ);
-
-  $backup = [];
-  // Fields returned by the query are:
-  // entity_id, revision_id, bundle, delta, field_keywords_value.
-  foreach ($keywords as $data) {
-    $backup[$data->entity_id][] = [
-      'entity_id' => $data->entity_id,
-      'revision_id' => $data->revision_id,
-      'bundle' => $data->bundle,
-      'delta' => $data->delta,
-      'field_keywords_value' => $data->field_keywords_value,
-    ];
-  }
-
-  \Drupal::state()->set('joinup_core.keywords', $backup);
-  return 'Keywords have been backed up.';
-}
