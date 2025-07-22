@@ -2,26 +2,50 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_paragraphs;
+namespace Drupal\joinup_paragraphs\Migrate;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\paragraphs\Entity\Paragraph;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Service for migrating field data between different field types.
  */
-readonly class FieldMigration implements FieldMigrationInterface {
+final class MigrateData implements ContainerInjectionInterface {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-  ) {}
+  ) {
+  }
 
   /**
    * {@inheritdoc}
    */
-  public function migrateField(EntityInterface $entity, string $from_field, string $to_field): void {
+  public static function create(ContainerInterface $container): self {
+    return new self(
+      $container->get('entity_type.manager'),
+    );
+  }
+
+  /**
+   * Migrates field data from one field to another.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to migrate fields on.
+   * @param string $from_field
+   *   The source field name.
+   * @param string $to_field
+   *   The target field name.
+   *
+   * @throws \InvalidArgumentException
+   *   If the entity doesn't have the required fields.
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *   If there are issues saving the entity or paragraphs.
+   */
+  protected function migrateField(EntityInterface $entity, string $from_field, string $to_field): void {
     if (!$entity->hasField($from_field)) {
       throw new \InvalidArgumentException("Entity does not have field '$from_field'");
     }
@@ -107,7 +131,6 @@ readonly class FieldMigration implements FieldMigrationInterface {
    *   If there are issues creating or saving the paragraph.
    */
   protected function createResourceFileParagraph(int $file_id): ?Paragraph {
-    // Create the resource_file paragraph.
     $paragraph = Paragraph::create([
       'type' => 'resource_file',
       'resource_file' => $file_id,
@@ -130,12 +153,10 @@ readonly class FieldMigration implements FieldMigrationInterface {
    *   If there are issues creating or saving the paragraph.
    */
   protected function createResourceLinkParagraph(string $url): ?Paragraph {
-    // Skip if URL is not valid using Drupal's built-in validation.
     if (!$this->isValidUrl($url)) {
       return NULL;
     }
 
-    // Create the resource_link paragraph.
     $paragraph = Paragraph::create([
       'type' => 'resource_link',
       'remote_file_url' => $url,
@@ -143,6 +164,61 @@ readonly class FieldMigration implements FieldMigrationInterface {
     $paragraph->save();
 
     return $paragraph;
+  }
+
+  /**
+   * Migrates fields for a specific node type using batch processing.
+   *
+   * @param array $sandbox
+   *   The batch sandbox array.
+   * @param string $node_type
+   *   The node type to migrate.
+   * @param string $field_from
+   *   The source field name.
+   * @param string $field_to
+   *   The target field name.
+   *
+   * @return string
+   *   Status message for the batch operation.
+   */
+  public function migrateNodeTypeFields(array &$sandbox, string $node_type, string $field_from, string $field_to): string {
+    if (!isset($sandbox['progress'])) {
+      $sandbox['progress'] = 0;
+      $sandbox['current_index'] = 0;
+
+      $sandbox['node_ids'] = $this->entityTypeManager->getStorage('node')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', $node_type)
+        ->condition($field_from . '.target_id', NULL, 'IS NOT NULL')
+        ->sort('nid')
+        // TODO: remove
+        ->range(0,50)
+        ->execute();
+
+      $sandbox['max'] = count($sandbox['node_ids']);
+      $sandbox['message'] = "Starting migration of {$sandbox['max']} {$node_type} nodes...";
+    }
+
+    $node_ids = array_slice($sandbox['node_ids'], $sandbox['current_index'], 10);
+    if (empty($node_ids)) {
+      $sandbox['#finished'] = 1;
+      return "Migration completed. Processed {$sandbox['progress']} {$node_type} nodes.";
+    }
+
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($node_ids);
+
+    foreach ($nodes as $node) {
+      $sandbox['current_index']++;
+      $sandbox['progress']++;
+
+      $this->migrateField($node, $field_from, $field_to);
+    }
+
+    $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
+    $remaining = $sandbox['max'] - $sandbox['progress'];
+
+    return "Processed {$sandbox['progress']} of {$sandbox['max']} {$node_type} nodes. {$remaining} remaining...";
   }
 
   /**
