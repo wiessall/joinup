@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Prepares migration structure by creating required paragraph types and field configurations.
+ * Prepares the structure for the file_url migration.
  */
 final class PrepareMigration implements ContainerInjectionInterface {
 
