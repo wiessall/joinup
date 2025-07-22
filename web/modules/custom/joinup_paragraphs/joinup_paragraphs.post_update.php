@@ -7,8 +7,8 @@
 
 declare(strict_types=1);
 
-use \Drupal\joinup_paragraphs\Migrate\PrepareMigration;
-use \Drupal\joinup_paragraphs\Migrate\MigrateData;
+use Drupal\joinup_paragraphs\Migrate\MigrateData;
+use Drupal\joinup_paragraphs\Migrate\PrepareMigration;
 
 /**
  * Prepare migration structure.
@@ -25,7 +25,7 @@ function joinup_paragraphs_post_update_251000(array &$sandbox): string {
 /**
  * Migrate field_file data to resources field for document nodes.
  */
-function joinup_paragraphs_post_update_251001(array &$sandbox = NULL): string {
+function joinup_paragraphs_post_update_251001(array &$sandbox): string {
   /** @var \Drupal\joinup_paragraphs\Migrate\MigrateData $migration */
   $migration = \Drupal::classResolver(MigrateData::class);
   return $migration->migrateNodeTypeFields($sandbox, 'document', 'field_file', 'resources');
