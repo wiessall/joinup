@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Prepares migration structure by creating required paragraph types and field configurations.
  */
-
 final class PrepareMigration implements ContainerInjectionInterface {
 
   public function __construct(
@@ -32,7 +31,7 @@ final class PrepareMigration implements ContainerInjectionInterface {
   }
 
   /**
-   * Prepare structure.
+   * Prepare paragraph's structure.
    */
   public function prepareParagraphs(): void {
     $config_entities = [
@@ -53,6 +52,9 @@ final class PrepareMigration implements ContainerInjectionInterface {
     $this->createConfigEntities($config_entities);
   }
 
+  /**
+   * Prepare node's structure.
+   */
   public function prepareNodeFields(): void {
     $config_entities = [
       'field_storage_config' => [
@@ -81,4 +83,5 @@ final class PrepareMigration implements ContainerInjectionInterface {
       }
     }
   }
+
 }

@@ -192,8 +192,8 @@ final class MigrateData implements ContainerInjectionInterface {
         ->condition('type', $node_type)
         ->condition($field_from . '.target_id', NULL, 'IS NOT NULL')
         ->sort('nid')
-        // TODO: remove
-        ->range(0,50)
+        // @todo remove
+        ->range(0, 50)
         ->execute();
 
       $sandbox['max'] = count($sandbox['node_ids']);
