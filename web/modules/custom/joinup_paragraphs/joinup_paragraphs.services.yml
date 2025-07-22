@@ -5,5 +5,3 @@ services:
     autowire: true
 
   Drupal\joinup_paragraphs\EventSubscriber\TilesParagraphRestrictionSubscriber: { }
-
-  Drupal\joinup_paragraphs\FieldMigration: { }
