@@ -13,6 +13,7 @@ Feature: Related solution
       | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published | Business      |
       | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       |
 
+  @javascript
   # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.
@@ -30,8 +31,10 @@ Feature: Related solution
     # Relate two solutions.
     When I am logged in as a facilitator of the "Java" solution
     And I go to the edit form of the "Java" solution
-    And I fill in "Related solutions" with values "C, Python"
-    And I uncheck "Show solutions related by EIRA terms"
+    And I click "Additional information"
+    And the "placeholder" attribute of "Related solutions" should be "Start typing to select related solutions..."
+    And I select "Python" options from "Related solutions"
+    And I press "Confirm"
     And I press "Propose"
     Then I should see the heading "Java"
     # The "Java" solution is not published yet.
@@ -44,7 +47,7 @@ Feature: Related solution
     # Test that checking the eira related checkbox will make the tiles available again.
     When I am logged in as a moderator
     And I go to the edit form of the "Java" solution
-    And I check "Show solutions related by EIRA terms"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "Java"
     And I should see the "Python" tile
@@ -54,7 +57,6 @@ Feature: Related solution
   @javascript
   Scenario: Moderators can reorder the related solutions.
     Given I am logged in as a moderator
-
     # Solutions that have 'Solution related by type' off, should not show solutions related by type.
     When I visit the "Javascript" solution
     Then I should see the following tiles in the correct order:
@@ -62,8 +64,10 @@ Feature: Related solution
       | PHP  |
 
     When I go to the edit form of the "Javascript" solution
-    And I expand the "Additional fields" accordion section
-    And I drag the table row in the "Related solutions" region at position 2 up
+    And I click "Additional information"
+    And I remove "Java,PHP" options from "Related solutions"
+    And I select "PHP,Java" options from "Related solutions"
+    And I press "Confirm"
     And I press "Publish"
     Then I should see the heading "Javascript"
     And I should see the following tiles in the correct order:

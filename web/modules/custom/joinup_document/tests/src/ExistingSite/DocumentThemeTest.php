@@ -29,7 +29,6 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
       'title' => 'Document title',
       'og_audience' => $collection->id(),
       'body' => 'Hello document body',
-      'field_keywords' => ['keyword_sample'],
       'field_short_title' => 'DocTitle',
       'field_state' => 'published',
     ]);
@@ -42,7 +41,6 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($collection->toUrl());
     $assert->pageTextContains('Document title');
     $assert->pageTextNotContains('Hello document body');
-    $assert->pageTextNotContains('keyword_sample');
 
     $file = $this->getTestFile('text');
     $file->save();
@@ -53,7 +51,6 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
 
     $assert->pageTextContains('Document title');
     $assert->pageTextNotContains('Hello document body');
-    $assert->pageTextNotContains('keyword_sample');
   }
 
 }

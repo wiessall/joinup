@@ -25,7 +25,7 @@ Feature: Landing custom page.
     And I fill in the following:
       | Title    | Twelve Tables          |
       | Abstract | Twelve tables abstract |
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     And I press "Publish"
 
     When I visit "/admin/custom-landing-pages"
@@ -41,13 +41,13 @@ Feature: Landing custom page.
     Given I am logged in as a "moderator"
     When I visit "/admin/custom-landing-pages/add"
     And I fill in "Alias test" for "Title"
-    And I select "Data gathering and processing" from "Topic"
+    And I select "Data gathering and processing" options from "Topic"
     And I press "URL alias"
     And I uncheck the box "Generate automatic URL alias"
     And I fill in "<path>" for "URL alias"
 
     And I press "Publish"
-    Then I should see the error message "<path> can not be used for URL alias field"
+    Then I should see the inline form error message "<path> can not be used for URL alias field"
 
     Examples:
       | path         |

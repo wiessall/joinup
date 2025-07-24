@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: event_type
-facet_source_id: 'search_api_field:node.collection.listing_content'
+facet_source_id: 'search_api_field:meta_entity.collection_settings.listing_content'
 field_identifier: field_event_date
 query_operator: or
 hard_limit: 0
@@ -53,15 +53,20 @@ processor_configs:
     weights:
       build: 5
     settings:
-      collection_topic:
-        enable: false
-        condition: null
-        values: ''
-        negate: false
       collection_type:
         enable: true
         condition: values
         values: event
+        negate: false
+      collection_content_status:
+        enable: false
+        condition: null
+        values: ''
+        negate: false
+      collection_topic:
+        enable: false
+        condition: null
+        values: ''
         negate: false
   display_value_widget_order:
     processor_id: display_value_widget_order

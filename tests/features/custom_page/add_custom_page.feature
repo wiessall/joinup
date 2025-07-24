@@ -87,11 +87,9 @@ Feature: "Add custom page" visibility options.
     And I should not see the button "Delete"
 
     And I press "Save as draft"
-    Then I should see the error message "Topic field is required."
+    Then I should see the inline form error message "Topic field is required."
 
-    When I select "E-health" from "Topic"
-    And I additionally select "EU and European Policies" from "Topic"
-    And I additionally select "HR" from "Topic"
+    And I select "E-health,EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
@@ -101,7 +99,6 @@ Feature: "Add custom page" visibility options.
     But I should not see the link "Alan"
     And I should not see the link "E-health"
     And I should not see the link "EU and European Policies"
-    And I should not see the link "HR"
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>
@@ -205,7 +202,7 @@ Feature: "Add custom page" visibility options.
       | Title    | Rubber boots          |
       | Abstract | Rubber boots abstract |
     And I press "Save"
-    Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
+    Then I should see the inline form error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
 
     # It should still be possible to create a custom page with the existing
     # title in a different group.
@@ -217,7 +214,7 @@ Feature: "Add custom page" visibility options.
     When I fill in the following:
       | Title    | Rubber boots          |
       | Abstract | Rubber boots abstract |
-    And I select "HR" from "Topic"
+    And I select "E-health" options from "Topic"
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."

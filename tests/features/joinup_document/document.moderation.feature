@@ -32,8 +32,8 @@ Feature: Document moderation
     When I am logged in as a moderator
     And I go to the edit form of the "The Naked Ashes" collection
     And I expand the "Additional fields" accordion section
-    And I check "Moderated"
     Then I press "Publish"
+    And the "group_moderation" setting of the "The Naked Ashes" collection is set to "yes"
     And I should see the heading "The Naked Ashes"
 
     # The parent group is now pre-moderated: authenticated non-member users
@@ -50,8 +50,8 @@ Feature: Document moderation
     When I am logged in as a moderator
     And I go to the edit form of the "The Naked Ashes" collection
     And I expand the "Additional fields" accordion section
-    And I select the radio button "Only members can create content."
     And I press "Publish"
+    And the "content_creation" setting of the "The Naked Ashes" collection is set to "members"
     # I should now have the possibility to add documents.
     When I open the plus button menu
     Then I should see the link "Add document"
@@ -74,7 +74,7 @@ Feature: Document moderation
       | field_body:format | content_editor                           |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
 
@@ -135,7 +135,7 @@ Feature: Document moderation
       | field_body:format | content_editor                                      |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document about life has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "An amazing document about life"
@@ -154,7 +154,7 @@ Feature: Document moderation
       | field_body:format | content_editor                           |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document about health has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "My account page"

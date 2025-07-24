@@ -6,18 +6,23 @@ dependencies:
     - field.storage.node.field_topic
     - node.type.event
     - taxonomy.vocabulary.topic
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: node.event.field_topic
 field_name: field_topic
 entity_type: node
 bundle: event
 label: Topic
-description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
+description: 'Select the option(s) that best refer to your event'
 required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: grouped_taxonomy_term_selection
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
       topic: topic

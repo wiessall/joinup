@@ -1,0 +1,89 @@
+From c50d35ffb2d16381e8a7f3a3f115872ef4d6ad06 Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Fri, 27 Jun 2025 13:17:32 +0300
+Subject: [PATCH 1/2] Check for a subelement from the property path if the
+ nested array can be more specific than just the delta.
+
+---
+ core/lib/Drupal/Core/Field/WidgetBase.php | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/core/lib/Drupal/Core/Field/WidgetBase.php b/core/lib/Drupal/Core/Field/WidgetBase.php
+index b6d7a283830e..623f4ef59983 100644
+--- a/core/lib/Drupal/Core/Field/WidgetBase.php
++++ b/core/lib/Drupal/Core/Field/WidgetBase.php
+@@ -615,7 +615,24 @@ public function flagErrors(FieldItemListInterface $items, ConstraintViolationLis
+             $delta_element = $element[$original_delta];
+           }
+           foreach ($delta_violations as $violation) {
+-            $error_element = $this->errorElement($delta_element, $violation, $form, $form_state);
++            $violation_element = $delta_element;
++            $property_path = $violation->getPropertyPath();
++            // Remove the delta from the property path.
++            if (is_numeric($property_path[0])) {
++              $property_path = substr($property_path, strpos($property_path, '.') + 1);
++            }
++
++            // If the violation is for a specific property, find the element
++            // that corresponds to it.
++            if ($property_path) {
++              $violation_element = NestedArray::getValue($delta_element, explode('.', $property_path), $exists);
++              if (!$exists) {
++                // If the property path does not exist, use the main element.
++                $violation_element = $delta_element;
++              }
++            }
++
++            $error_element = $this->errorElement($violation_element, $violation, $form, $form_state);
+             if ($error_element !== FALSE) {
+               $form_state->setError($error_element, $violation->getMessage());
+             }
+-- 
+GitLab
+
+
+From beed0d79ae221753f1eb90dfda0e9a593237e74e Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Sat, 28 Jun 2025 15:22:17 +0300
+Subject: [PATCH 2/2] Avoid trying to look for an element when the element is
+ already returned by formError.
+
+---
+ core/lib/Drupal/Core/Field/WidgetBase.php | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/core/lib/Drupal/Core/Field/WidgetBase.php b/core/lib/Drupal/Core/Field/WidgetBase.php
+index 623f4ef59983..113ed58254d0 100644
+--- a/core/lib/Drupal/Core/Field/WidgetBase.php
++++ b/core/lib/Drupal/Core/Field/WidgetBase.php
+@@ -624,15 +624,22 @@ public function flagErrors(FieldItemListInterface $items, ConstraintViolationLis
+ 
+             // If the violation is for a specific property, find the element
+             // that corresponds to it.
++            $property_path = explode('.', $property_path);
++            $error_element = $this->errorElement($delta_element, $violation, $form, $form_state);
+             if ($property_path) {
+-              $violation_element = NestedArray::getValue($delta_element, explode('.', $property_path), $exists);
+-              if (!$exists) {
+-                // If the property path does not exist, use the main element.
+-                $violation_element = $delta_element;
++              $violation_element = NestedArray::getValue($delta_element, $property_path, $exists);
++              if (
++                $exists
++                && Element::isVisibleElement($violation_element)
++                // Some elements return the property as part of the
++                // ::errorElement method. Trying to descend into it would
++                // result in an property not found error.
++                && $violation_element !== $error_element
++              ) {
++                $error_element = $this->errorElement($violation_element, $violation, $form, $form_state);
+               }
+             }
+ 
+-            $error_element = $this->errorElement($violation_element, $violation, $form, $form_state);
+             if ($error_element !== FALSE) {
+               $form_state->setError($error_element, $violation->getMessage());
+             }
+-- 
+GitLab
+

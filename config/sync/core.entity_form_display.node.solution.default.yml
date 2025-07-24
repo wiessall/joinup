@@ -5,18 +5,16 @@ dependencies:
   config:
     - core.entity_form_mode.node.inline
     - field.field.node.solution.abstract
+    - field.field.node.solution.classification
     - field.field.node.solution.contact
-    - field.field.node.solution.content_creation
     - field.field.node.solution.description
     - field.field.node.solution.documentation
-    - field.field.node.solution.field_keywords
+    - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
-    - field.field.node.solution.group_moderation
+    - field.field.node.solution.keywords
     - field.field.node.solution.landing_page
     - field.field.node.solution.language
-    - field.field.node.solution.list_related_entities
-    - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
@@ -27,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - image.style.thumbnail
     - media.type.solution_logo
@@ -37,78 +34,148 @@ dependencies:
     - file_url
     - image_library_widget
     - inline_entity_form
+    - joinup_core
     - joinup_workflow
-    - link
-    - search_api_field
+    - tagify
     - text
 third_party_settings:
   field_group:
-    group_general:
+    group_main:
       children:
-        - group_main_fields
-        - group_additional_fields
-      label: General
+        - group_solution_tabs
+      label: Main
       region: content
       parent_name: ''
       weight: 0
-      format_type: accordion
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        effect: none
-    group_main_fields:
+        label_as_html: false
+        show_step_title: false
+        step_description: ''
+        back_button_show: false
+        back_button_text: ''
+        next_button_text: Confirm
+        step_help: ''
+    group_solution_information:
       children:
         - title
-        - short_id
         - abstract
         - description
-        - contact
+        - classification
+        - domain
         - field_topic
-        - owner
-        - solution_type
-        - group_moderation
-        - content_creation
-        - current_workflow_state
-        - field_state
-        - transition_motivation
-      label: 'Main fields'
+        - language
+      label: 'Solution information'
       region: content
-      parent_name: group_general
-      weight: 31
-      format_type: accordion_item
+      parent_name: group_solution_tabs
+      weight: 1
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
+        label_as_html: false
         formatter: open
         description: ''
         required_fields: true
-    group_additional_fields:
+    group_contact_details:
       children:
-        - logo
-        - documentation
-        - spatial_coverage
-        - field_keywords
-        - related_solutions
-        - list_related_entities
-        - process_status
-        - language
-        - landing_page
-        - metrics_page
-        - listing_content
-      label: 'Additional fields'
+        - owner
+        - contact
+      label: 'Contact details'
       region: content
-      parent_name: group_general
-      weight: 32
-      format_type: accordion_item
+      parent_name: group_solution_tabs
+      weight: 2
+      format_type: tab
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
+        label_as_html: false
         formatter: closed
         description: ''
         required_fields: true
+    group_additional_information:
+      children:
+        - logo
+        - short_id
+        - documentation
+        - keywords
+        - related_solutions
+        - process_status
+        - landing_page
+        - solution_type
+      label: 'Additional information'
+      region: content
+      parent_name: group_solution_tabs
+      weight: 3
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_interoperability_informati:
+      children: {  }
+      label: 'Interoperability information'
+      region: content
+      parent_name: group_solution_tabs
+      weight: 4
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_confirmation:
+      children:
+        - node_preview
+        - field_state
+        - transition_motivation
+        - tca
+      label: Confirmation
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: form_step
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        show_step_title: false
+        step_description: ''
+        back_button_show: true
+        back_button_text: Back
+        next_button_text: ''
+        step_help: ''
+    group_solution_tabs:
+      children:
+        - group_solution_information
+        - group_contact_details
+        - group_additional_information
+        - group_interoperability_informati
+      label: Tabs
+      region: content
+      parent_name: group_main
+      weight: 1
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: 640
 id: node.solution.default
 targetEntityType: node
 bundle: solution
@@ -116,15 +183,29 @@ mode: default
 content:
   abstract:
     type: string_textfield
-    weight: 3
+    weight: 2
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  classification:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
+    third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
-    weight: 4
+    weight: 13
     region: content
     settings:
       form_mode: inline
@@ -140,21 +221,6 @@ content:
       revision: false
       removed_reference: optional
     third_party_settings: {  }
-  content_creation:
-    type: options_buttons
-    weight: 9
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  current_workflow_state:
-    type: current_workflow_state_widget
-    weight: 10
-    region: content
-    settings:
-      title: 'Current workflow state'
-      title_display: before
-      show_for_new_entities: false
-    third_party_settings: {  }
   description:
     type: text_textarea
     weight: 3
@@ -165,11 +231,25 @@ content:
     third_party_settings: {  }
   documentation:
     type: file_url_generic
-    weight: 1
+    weight: 36
     region: content
     settings:
       progress_indicator: throbber
       add_new_label: 'Upload a new file or enter a URL'
+    third_party_settings: {  }
+  domain:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 100
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   field_is_description:
     type: text_textarea
@@ -179,67 +259,66 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  field_keywords:
-    type: string_textfield
-    weight: 3
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 16
+    weight: 15
     region: content
     settings:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
-    type: options_select
-    weight: 5
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 6
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 100
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 0
     third_party_settings: {  }
-  group_moderation:
-    type: boolean_checkbox
-    weight: 8
+  keywords:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 37
     region: content
     settings:
-      display_label: false
-    third_party_settings:
-      oe_bootstrap_theme_helper:
-        switch: false
+      match_operator: CONTAINS
+      match_limit: 100
+      placeholder: 'Start typing to select or add a keyword...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
+    third_party_settings: {  }
   landing_page:
-    type: link_default
-    weight: 8
+    type: link_legacy_multicardinality
+    weight: 40
     region: content
     settings:
-      placeholder_url: ''
+      placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
       placeholder_title: ''
     third_party_settings: {  }
   language:
-    type: options_select
-    weight: 7
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  list_related_entities:
-    type: boolean_checkbox
-    weight: 5
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 9
     region: content
     settings:
-      display_label: true
-    third_party_settings: {  }
-  listing_content:
-    type: search_api_field_default
-    weight: 10
-    region: content
-    settings:
-      query_builder: true
+      match_operator: CONTAINS
+      match_limit: 100
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   logo:
     type: image_library_widget
-    weight: 0
+    weight: 34
     region: content
     settings:
       progress_indicator: throbber
@@ -247,17 +326,14 @@ content:
       media_type_id: solution_logo
       library_label: ''
     third_party_settings: {  }
-  metrics_page:
-    type: link_default
-    weight: 9
+  node_preview:
+    weight: 14
     region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
+    settings: {  }
     third_party_settings: {  }
   owner:
     type: inline_entity_form_complex
-    weight: 6
+    weight: 11
     region: content
     settings:
       form_mode: inline
@@ -275,48 +351,50 @@ content:
     third_party_settings: {  }
   process_status:
     type: options_select
-    weight: 6
+    weight: 39
     region: content
     settings: {  }
     third_party_settings: {  }
   related_solutions:
-    type: entity_reference_autocomplete
-    weight: 4
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 38
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      match_limit: 100
+      placeholder: 'Start typing to select related solutions...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   short_id:
     type: string_textfield
-    weight: 2
+    weight: 35
     region: content
     settings:
       size: 60
       placeholder: 'Minimum 4 characters required.'
     third_party_settings: {  }
-  simple_sitemap:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   solution_type:
-    type: options_select
-    weight: 7
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  spatial_coverage:
-    type: entity_reference_autocomplete
-    weight: 2
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 41
     region: content
     settings:
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      match_limit: 200
+      placeholder: 'Start typing to select the solution type...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 0
+    third_party_settings: {  }
+  tca:
+    weight: 17
+    region: content
+    settings: {  }
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -327,18 +405,22 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 17
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
+  current_workflow_state: true
+  field_shared_in: true
   langcode: true
+  metrics_page: true
   og_audience: true
   path: true
   promote: true
   published_at: true
   release_number: true
+  simple_sitemap: true
   site_featured: true
   status: true
   sticky: true

@@ -27,7 +27,6 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RandomGeneratorTrait;
-use Drupal\joinup\Traits\RandomGeneratorTrait as JoinupRandomGeneratorTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -70,7 +69,6 @@ class JoinupContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-  use JoinupRandomGeneratorTrait;
 
   /**
    * Creates a user with data provided in a table.
@@ -512,10 +510,10 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitCanonicalPage(string $title, string $bundle): void {
-    /** @var \Drupal\node\Entity\Node $node */
+    $entityType = $this->translateEntityTypeAlias($bundle);
     $bundle = $this->translateBundle($bundle);
-    $node = $this->getEntityByLabel('node', $title, $bundle);
-    $this->visitPath($node->toUrl()->toString());
+    $entity = $this->getEntityByLabel($entityType, $title, $bundle);
+    $this->visitPath($entity->toUrl()->toString());
   }
 
   /**
@@ -816,7 +814,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = $this->getRandomTerm('topic')->label();
+      $node->field_topic = $this->getRandomTerm('topic', TRUE)->label();
     }
 
     if (!empty($field_definitions['contact']) && !isset($node->contact)) {
@@ -833,7 +831,19 @@ class JoinupContext extends RawDrupalContext {
       $node->description = 'default description';
     }
     if (!empty($field_definitions['solution_type']) && empty($node->solution_type)) {
-      $node->solution_type = $this->getRandomTerm('solution_type')->label();
+      $node->solution_type = $this->getRandomTerm('solution_type', TRUE)->label();
+    }
+    if (!empty($field_definitions['keywords']) && empty($node->keywords)) {
+      $node->keywords = $this->getRandomTerm('tags')->label();
+    }
+    if (!empty($field_definitions['classification']) && empty($node->classification)) {
+      $node->classification = $this->getRandomTerm('solution_classification')->label();
+    }
+    if (!empty($field_definitions['domain']) && empty($node->domain)) {
+      $node->domain = $this->getRandomTerm('domain')->label();
+    }
+    if (!empty($field_definitions['language']) && empty($node->language)) {
+      $node->language = 'Bulgarian';
     }
 
     // Handle file URL fields.
@@ -1259,6 +1269,30 @@ class JoinupContext extends RawDrupalContext {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = array_filter($titles_table->getColumn(0));
     Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
+  }
+
+  /**
+   * Checks that the given text strings are found in the correct order.
+   *
+   * Table format:
+   * | Text 1 |
+   * | Text 2 |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node containing the text strings.
+   *
+   * @Then I see the texts in the correct order:
+   */
+  public function assertOrderedTextStringsPresent(TableNode $table): void {
+    $lines_of_text = $table->getColumn(0);
+    $full_text = $this->getSession()->getPage()->getText();
+    foreach ($lines_of_text as $text) {
+      $pos = strpos($full_text, $text);
+      if ($pos === FALSE) {
+        throw new \Exception("The text '$text' was not found in the page in the given order.");
+      }
+      $full_text = substr($full_text, $pos + strlen($text));
+    }
   }
 
   /**
@@ -2045,7 +2079,9 @@ class JoinupContext extends RawDrupalContext {
     // Remove the leading base URL or base path from the link href.
     $base_url = rtrim($this->getMinkParameter('base_url') ?? '', '/');
     if (str_starts_with($actual_href, $base_url)) {
-      $actual_href = ltrim(substr($actual_href, strlen($base_url)), '/');
+      // Strip the URL base, the leading slash, the query string and the
+      // fragment.
+      $actual_href = ltrim(parse_url($actual_href, PHP_URL_PATH), '/');
     }
 
     Assert::assertSame($expected_href, $actual_href, "The link '$link' doesn't point to the expected path '$expected_href'.");
@@ -2141,42 +2177,6 @@ class JoinupContext extends RawDrupalContext {
 
     $attribute = trim($element->getAttribute('href'), '/');
     Assert::assertEquals($href, $attribute, "The link '$link' in the region '$region' doesn't point to the expected path '$href'.");
-  }
-
-  /**
-   * Assert that fields are present in the given region in the given order.
-   *
-   * @param string $fields
-   *   Fields.
-   * @param string $region
-   *   Region.
-   *
-   * @throws \Exception
-   *   Thrown when an expected field is not present.
-   *
-   * @Then the fields :fields should be correctly ordered in the region :region
-   */
-  public function assertFieldsPresentInOrder(string $fields, string $region): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
-    /** @var \Behat\Mink\Element\Element $regionObj */
-    $regionObj = $this->getRegion($region);
-    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//h4[contains(concat(' ', normalize-space(@class), ' '), ' label ')] | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//fieldset//legend[contains(concat(' ', normalize-space(@class), ' '), ' col-form-label ')]");
-    $labels_on_page = [];
-    /** @var \Behat\Mink\Element\NodeElement $label */
-    foreach ($labels as $label) {
-      $labels_on_page[] = $label->getText();
-    }
-    $previous = -1;
-    foreach ($fields as $field) {
-      $key = array_search($field, $labels_on_page);
-      if ($key === FALSE) {
-        throw new \Exception("Could not find expected field $field in the page");
-      }
-      if (!($key > $previous)) {
-        throw new \Exception("Field out of order: $field");
-      }
-      $previous = $key;
-    }
   }
 
   /**
@@ -3108,6 +3108,54 @@ class JoinupContext extends RawDrupalContext {
 
     // Also, clean the media click counter.
     \Drupal::state()->delete('image_library_widget.clicks');
+  }
+
+  /**
+   * Asserts that the given entity is published or unpublished.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $entityType
+   *   The type of the entity (e.g., 'node', 'taxonomy_term').
+   * @param string $expectedStatus
+   *   The expected publication status of the entity.
+   *
+   * @Given /^the publication state of the "([^"]*)" "([^"]*)" should be "([^"]*)"$/
+   */
+  public function theEntityShouldHavePublishedStatus(string $label, string $entityType, string $expectedStatus): void {
+    $entity = $this->getEntityByLabel($entityType, $label);
+    \assert(in_array($expectedStatus, ['published', 'unpublished']), 'Expected status must be either "published" or "unpublished".');
+    $expectedStatus = $expectedStatus === 'published';
+
+    if ($entity->isPublished() !== $expectedStatus) {
+      $status = $expectedStatus ? 'published' : 'unpublished';
+      throw new \Exception("The entity '$label' is not $status as expected.");
+    }
+  }
+
+  /**
+   * Asserts the number of entities with a given name.
+   *
+   * @param int $expected
+   *   The expected number of entities.
+   * @param string $entityType
+   *   The type of the entity (e.g., 'node', 'taxonomy_term').
+   * @param string $name
+   *   The name of the entity to check.
+   *
+   * @Given /^there should be (\d+) "([^"]*)" with the name "([^"]*)"$/
+   */
+  public function thereShouldBeWithTheName(int $expected, string $entityType, string $name): void {
+    $query = \Drupal::entityQuery($entityType)
+      ->accessCheck(FALSE)
+      ->condition('name', $name);
+
+    $ids = $query->execute();
+    $count = count($ids);
+
+    if ($count !== $expected) {
+      throw new \Exception("Expected $expected entities of type '$entityType' with name '$name', but found $count.");
+    }
   }
 
 }
