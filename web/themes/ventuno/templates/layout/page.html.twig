@@ -68,7 +68,7 @@
 
   <div class="content container">
     {% block page_featured %}
-      {% if page.featured %}
+      {% if page.featured|render|trim is not empty %}
         <div class="region-featured">
           {{ page.featured }}
         </div>

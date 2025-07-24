@@ -254,14 +254,13 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     foreach ($this->getEndpoints() as $endpointConfig) {
       ['rootKeys' => $rootKeys, 'apiUrl' => $endpointUrl] = $endpointConfig;
       try {
-        $response = $this->httpClient->get($endpointUrl);
-        $decodedResponse = Json::decode($response->getBody()->getContents());
+        $decodedResponse = $this->fetchDataFromSource($endpointUrl);
         if (!is_array($decodedResponse)) {
-          throw new \Exception('API returned response is not a valid JSON response.');
+          throw new \Exception('Source returned response is not a valid JSON response.');
         }
         $value = NestedArray::getValue($decodedResponse, $rootKeys, $keyExists);
         if (!$keyExists) {
-          throw new \Exception("The configured root keys don't exist on the decoded API response.");
+          throw new \Exception("The configured root keys don't exist on the decoded response.");
         }
         $this->numberOfItems += count($value);
         $this->processResponseData($value, $endpointConfig);
@@ -269,7 +268,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       catch (\Exception $exception) {
         // Log the exception as error, but let the loop continue.
         $this->logger->error(
-          "Exception when fetching / processing API endpoint '@endpoint' of @catalogue-label: @message",
+          "Exception when fetching / processing endpoint '@endpoint' of @catalogue-label: @message",
           [
             '@endpoint' => $endpointUrl,
             '@catalogue-label' => (string) $this->getPluginLabel(),
@@ -278,6 +277,41 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         );
       }
     }
+  }
+
+  /**
+   * Fetches data from the given source.
+   *
+   * @param string $source
+   *   The source URL or file path.
+   *
+   * @return array
+   *   The decoded JSON data.
+   *
+   * @throws \Exception
+   *   When the source cannot be fetched or is not valid JSON.
+   */
+  protected function fetchDataFromSource(string $source): array {
+    // Check if source is a file path.
+    if (str_starts_with($source, 'file://') || (!str_contains($source, '://') && file_exists($source))) {
+      $filePath = str_starts_with($source, 'file://') ? substr($source, 7) : $source;
+      $content = file_get_contents($filePath);
+      if ($content === FALSE) {
+        throw new \Exception("Could not read file: $filePath");
+      }
+    }
+    else {
+      // Fetch from HTTP.
+      $response = $this->httpClient->get($source);
+      $content = $response->getBody()->getContents();
+    }
+
+    $decodedResponse = Json::decode($content);
+    if (!is_array($decodedResponse)) {
+      throw new \Exception('Source returned response is not a valid JSON response.');
+    }
+
+    return $decodedResponse;
   }
 
   /**
