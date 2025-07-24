@@ -223,7 +223,7 @@ Feature: Like/unlike feature.
 
     And I fill in "Title" with "Carousel of likes"
     And I fill in "Abstract" with "Abstract carousel of likes"
-    And I select "HR" from "Topic"
+    And I select "Demography" options from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

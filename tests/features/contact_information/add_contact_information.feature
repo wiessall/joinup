@@ -11,7 +11,7 @@ Feature: Creation of contact information
     Then I should see the description "This must be an external URL such as https://example.com." for the "Website URL" field
 
     When I press "Create contact information"
-    Then I should see the following error messages:
+    Then I should see the following inline form error messages:
       | error messages                    |
       | Name field is required.           |
       | E-mail address field is required. |

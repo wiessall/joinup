@@ -9,10 +9,13 @@ Feature: Collections/Solutions settings
       | name       | owner type |
       | Jonny inc. | Company    |
 
-  Scenario: Edit settings in a collection
-    And collection content:
-      | title             | access url        | closed | creation date    | content_creation         | group_moderation |
-      | Jillian Land Eels | http://spice.com/ | yes    | 28-01-1995 12:05 | facilitators and authors | yes              |
+  Scenario: Edit settings in a collection and solution
+    Given collection content:
+      | title             |
+      | Jillian Land Eels |
+    And solution content:
+      | title         | collection        |
+      | Solution Beta | Jillian Land Eels |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -33,29 +36,8 @@ Feature: Collections/Solutions settings
     Then the "Highlight only the first term appearance" checkbox should be checked
     And the "Announcements enabled" checkbox should be unchecked
 
-    When I am logged in as a owner of the "Jillian Land Eels" collection
-    And I go to the homepage of the "Jillian Land Eels" collection
-    And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    Then I should see the heading "Add solution"
-
-    When I fill in the following:
-      | Title          | Solution Beta    |
-      | Abstract       | Short abstract   |
-      | Description    | Last letter      |
-      | Name           | Jony Burton      |
-      | E-mail address | jonb@example.com |
-    And I attach the file "logo.png" to "Logo"
-    And I select "Flemish" from "Language"
-    And I select "EU and European Policies" from "Topic"
-    And I select "Logging Service" from "Solution type"
-
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Jonny inc."
-    And I press "Add owner"
-    And I press "Propose"
-    Then I should see the heading "Solution Beta"
+    When I am logged in as a owner of the "Solution Beta" solution
+    And I go to the homepage of the "Solution Beta" solution
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
@@ -117,3 +99,35 @@ Feature: Collections/Solutions settings
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
+
+  Scenario Outline: Only moderators and owners have access to collection/solution meta entity canonical page
+    Given users:
+      | Username         | Roles     |
+      | John User        |           |
+      | John Moderator   | moderator |
+      | John Facilitator |           |
+      | John Author      |           |
+      | John Owner       |           |
+      | John Member      |           |
+    Given solution content:
+      | title           |
+      | Custom solution |
+    And the following solution user memberships:
+      | solution        | user             | roles       |
+      | Custom solution | John Owner       | owner       |
+      | Custom solution | John Facilitator | facilitator |
+      | Custom solution | John Author      | author      |
+      | Custom solution | John Member      | member      |
+
+    Given I am logged in as <user>
+    When I go to the canonical path of the "solution_settings" meta entity of the "Custom solution" solution_settings "content"
+    Then I should get a <code> HTTP response
+
+    Examples:
+      | user               | code |
+      | "John User"        | 403  |
+      | "John Moderator"   | 200  |
+      | "John Facilitator" | 200  |
+      | "John Author"      | 403  |
+      | "John Owner"       | 200  |
+      | "John Member"      | 403  |

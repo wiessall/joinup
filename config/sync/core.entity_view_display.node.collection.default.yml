@@ -6,13 +6,10 @@ dependencies:
     - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
-    - field.field.node.collection.content_creation
     - field.field.node.collection.description
-    - field.field.node.collection.field_keywords
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
-    - field.field.node.collection.group_moderation
-    - field.field.node.collection.listing_content
+    - field.field.node.collection.keywords
     - field.field.node.collection.logo
     - field.field.node.collection.newsletter
     - field.field.node.collection.owner
@@ -196,6 +193,16 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 2
             additional: {  }
+          a5906bd8-23a0-4a77-9c80-15ee68551aaa:
+            uuid: a5906bd8-23a0-4a77-9c80-15ee68551aaa
+            region: main
+            configuration:
+              id: 'extra_field_block:node:collection:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -254,55 +261,26 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
-          0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e:
-            uuid: 0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e
+          4602a181-011a-4626-9f18-7e34e81b1c07:
+            uuid: 4602a181-011a-4626-9f18-7e34e81b1c07
             region: content
             configuration:
-              id: 'extra_field_block:node:collection:node_collection_listing_content_top'
-              label: 'Facet region: Collection content top'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 0
-            additional: {  }
-          0d98251b-e552-45fe-8fab-90a270086d0d:
-            uuid: 0d98251b-e552-45fe-8fab-90a270086d0d
-            region: content
-            configuration:
-              id: 'extra_field_block:node:collection:node_collection_listing_content_inline_facets'
-              label: 'Facet region: Inline facets'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-          f9b3f9a3-e794-45ed-8c02-c8af9144f444:
-            uuid: f9b3f9a3-e794-45ed-8c02-c8af9144f444
-            region: content
-            configuration:
-              id: 'field_block:node:collection:listing_content'
-              label: 'Collection content'
+              id: 'field_block:node:collection:collection_settings'
+              label: 'Collection settings reference'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: search_api_field
+                type: entity_reference_entity_view
                 label: hidden
-                settings: {  }
+                settings:
+                  view_mode: listing_content
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
@@ -548,8 +526,29 @@ third_party_settings:
                   class: fw-bold
                   style: ''
                   data: ''
-          c6dec25c-d2fd-459b-b354-39faa44fb841:
-            uuid: c6dec25c-d2fd-459b-b354-39faa44fb841
+          40705ee6-bc27-470c-a72e-bef97483a670:
+            uuid: 40705ee6-bc27-470c-a72e-bef97483a670
+            region: content
+            configuration:
+              id: 'field_block:node:collection:collection_settings'
+              label: 'Moderation settings'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: group_moderation
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+          086378ea-f73b-490f-9f8c-b4748e7aa36b:
+            uuid: 086378ea-f73b-490f-9f8c-b4748e7aa36b
             region: content
             configuration:
               id: 'field_block:node:collection:closed_group'
@@ -570,68 +569,21 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-          2b9bb25a-cb37-441d-891c-89c23842eee3:
-            uuid: 2b9bb25a-cb37-441d-891c-89c23842eee3
-            region: content
-            configuration:
-              id: 'field_block:node:collection:group_moderation'
-              label: Moderation
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: boolean
-                label: hidden
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 3
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
+            additional: {  }
         third_party_settings: {  }
 id: node.collection.default
 targetEntityType: node
 bundle: collection
 mode: default
 content:
+  keywords:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: main
   links:
     settings: {  }
     third_party_settings: {  }
@@ -661,17 +613,13 @@ hidden:
   closed_group: true
   collection_settings: true
   contact: true
-  content_creation: true
   description: true
   featured: true
-  field_keywords: true
   field_state: true
   field_topic: true
-  group_moderation: true
   join_collection: true
   langcode: true
   last_update: true
-  listing_content: true
   logo: true
   members: true
   newsletter: true

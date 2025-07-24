@@ -1,31 +1,63 @@
 @api @group-h
-Feature: "Add solution" visibility options.
+Feature: Test adding solutions.
   In order to manage solutions
   As a moderator
-  I need to be able to add "Solution" rdf entities through UI.
+  I need to be able to add "Solution" through UI.
 
+  @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Required fields should be filled in
-    Given collection content:
-      | title            |
-      | Language parsers |
-    And I am logged in as a facilitator of the "Language parsers" collection
-    And I go to the homepage of the "Language parsers" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
+    And I click "Add solution" in the plus button menu
 
-    # Submit the incomplete form, so error messages about missing fields will
-    # be shown.
-    When I press "Propose"
-    Then I should see the following error messages:
+    And I press "Confirm"
+    Then I should see the following inline form error messages:
+      | error messages                             |
+      | Title field is required.                   |
+      | Abstract field is required.                |
+      | Description field is required.             |
+      | Solution classification field is required. |
+      | Domain field is required.                  |
+      | Topic field is required.                   |
+      | Language availability field is required.   |
+
+    # Test that the tab doesn't change when an image is uploaded.
+    When I click "Additional information"
+    And I select image #2 as solution logo
+    Then I should see the text "Logo"
+
+    When I click "Solution information"
+    # Check Domain field description.
+    And I should see the text "Available info for Government functions"
+    And I should see the link "Government functions"
+    When I fill in "Title" with "Solution Beta"
+    And I fill in "Abstract" with "Short abstract"
+    And I enter "Last letter" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    And I press "Add new owner"
+    And I press "Confirm"
+    Then I should see the following inline form error messages:
       | error messages                    |
-      | Title field is required.          |
-      | Description field is required.    |
       | Name field is required.           |
+      | Type field is required.           |
+      | Country field is required.        |
       | E-mail address field is required. |
-      | Topic field is required.          |
-      | Owner field is required.          |
-      | Solution type field is required.  |
+    # Create owner. Validation errors must have activated the tab "Contact details".
+    When I fill in "Name" with "Organisation valid"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I fill in "Name" with "Contact Rapazoglou"
+    And I fill in "E-mail address" with "contact_Rapazoglou@example.com"
+    Then I press "Create contact information"
+    And I press "Confirm"
+    And I press "Propose"
+    Then I should see the inline form error message "You must accept the Terms of Agreement."
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
     Given collection content:
@@ -51,6 +83,7 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
+  @javascript
   Scenario: Add solution as a collection facilitator.
     Given collection content:
       | title             | logo     |
@@ -68,40 +101,43 @@ Feature: "Add solution" visibility options.
 
     When I am logged in as "Wendell Silva"
     And I go to the homepage of the "Belgian barista's" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
+    And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
     And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
     And I should not see the text "Only members can create content"
-    And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
-    And the available options in the "Language" select should not include the "Multilingual Code"
-    When I fill in the following:
-      | Title                 | Espresso is the solution  |
-      | Abstract              | Abstract used for testing |
-      | Description           | This is a test text       |
-      | Geographical coverage | Belgium                   |
-      | Name                  | Ernst Brice               |
-      | E-mail address        | ernsy1999@gmail.com       |
-    And I additionally select "Flemish" from "Language"
-    And I select "Data Owner" from "Solution type"
-    And I select "Demography" from "Topic"
-    # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And the "Language availability" tagify should not contain the following option "Multilingual Code"
+    And I fill in "Title" with "Espresso is the solution"
+    And I fill in "Abstract" with "Abstract used for testing"
+    And I enter "This is a test text" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
     # The owner field should have a help text.
     And I should see the text "The Owner is the organisation that owns this entity and is the only responsible for it."
     # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
+    And I press "Add existing owner"
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Ernst Brice"
+    And I fill in "contact[form][0][email][value]" with "ernsy1999@gmail.com"
+    And I press "Create contact information"
+    And I click "Additional information"
+    And I select "Data Owner" options from "Solution type"
+    # Attach a PDF to the documentation.
+    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Completed" from "Status"
-    And the "Show solutions related by EIRA terms" checkbox should not be checked
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
@@ -118,6 +154,7 @@ Feature: "Add solution" visibility options.
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
     And I go to the edit form of the "Espresso is the solution" solution
+    And I press "Confirm"
     And I press "Publish"
     # The name of the solution should exist in the block of the relative content in a collection.
     Then I should see the heading "Espresso is the solution"
@@ -126,7 +163,7 @@ Feature: "Add solution" visibility options.
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
     And I should not see the link "Belgium"
-    And I should not see the link "Flemish"
+    And I should not see the link "Bulgarian"
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
@@ -136,26 +173,31 @@ Feature: "Add solution" visibility options.
     When I am logged in as a facilitator of the "Belgian barista's" collection
     # Make sure that when another solution is added, both are affiliated.
     When I go to the homepage of the "Belgian barista's" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    When I fill in the following:
-      | Title                 | V60 filter coffee solution |
-      | Abstract              | Abstract of filter coffee  |
-      | Description           | This is a test text        |
-      | Geographical coverage | Belgium                    |
-      | Name                  | Ajit Tamboli               |
-      | E-mail address        | tambotamboli@gocloud.in    |
-    And I select "Flemish" from "Language"
-    Then I select "Data Owner" from "Solution type"
-    And I select "E-inclusion" from "Topic"
+    And I click "Add solution" in the plus button menu
+    And I fill in "Title" with "V60 filter coffee solution"
+    And I fill in "Abstract" with "Abstract of filter coffee"
+    And I enter "This is a test text" in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "E-inclusion" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Click the button to select an existing owner.
+    And I press "Add existing owner"
+    And I fill in "Owner" with "Organisation example"
+    And I press "Add owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Ajit Tamboli"
+    And I fill in "contact[form][0][email][value]" with "tambotamboli@gocloud.in"
+    And I press "Create contact information"
+    And I click "Additional information"
+    Then I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     And I attach the file "logo.png" to "Logo"
-    # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "Organisation example"
-    And I press "Add owner"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "V60 filter coffee solution"
     # The name of the solution should exist in the block of the relative content in a collection.
@@ -168,45 +210,7 @@ Feature: "Add solution" visibility options.
     When I visit "/user"
     Then I should see the link "V60 filter coffee solution"
 
-  Scenario: Correct transition buttons are shown after a partial filled form is submitted.
-    # This is a regression test for a bug that was causing the owner state
-    # buttons to leak into the solution create form, causing critical errors
-    # when an invalid state button was pressed.
-    # @see issue ISAICP-3209
-    Given collection content:
-      | title            |
-      | Language parsers |
-    When I am logged in as a facilitator of the "Language parsers" collection
-    And I go to the homepage of the "Language parsers" collection
-    And I click "Add solution"
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    And I fill in the following:
-      | Title       | PHP comments parser                             |
-      | Description | A simple parser that goes through PHP comments. |
-    And I select "Data gathering and processing" from "Topic"
-    And I select "Data Owner" from "Solution type"
-
-    # Submit the incomplete form, so error messages about missing fields will
-    # be shown.
-    When I press "Propose"
-    Then I should see the following error message:
-      | error messages                    |
-      | Name field is required.           |
-      | E-mail address field is required. |
-
-    # Fill the owner inline form, but don't submit it.
-    When I press "Add new" at the "Owner" field
-    And I fill in "Name" with "Azure Tennison"
-
-    # Buttons should be shown for the allowed solution transitions.
-    When I press "Propose"
-    Then I should see the button "Save as draft"
-    And I should see the button "Propose"
-    # The owner entity state buttons should not be shown.
-    But I should not see the link "Delete"
-    And I should not see the button "Update"
-
+  @javascript
   Scenario: Create a solution with a name that already exists
     Given collection content:
       | title              |
@@ -223,11 +227,9 @@ Feature: "Add solution" visibility options.
     Given I am logged in as a member of the "Ocean studies" collection
     When I go to the homepage of the "Ocean studies" collection
     And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
     And I fill in "Title" with "Climate change tracker"
-    And I press "Propose"
-    Then I should see the error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
+    And I press "Confirm"
+    Then I should see the inline form error message "A solution titled Climate change tracker already exists in this collection. Please choose a different title."
 
     # If a solution with a duplicate name is created in a different collection
     # then this is allowed to be submitted but a warning should be shown to the
@@ -235,30 +237,40 @@ Feature: "Add solution" visibility options.
     Given I am logged in as a member of the "Glacier monitoring" collection
     When I go to the homepage of the "Glacier monitoring" collection
     And I click "Add solution" in the plus button menu
-    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
-    And I press "Yes"
-    And I fill in the following:
-      | Title                 | Climate change tracker                  |
-      | Abstract              | Tracks climate change                   |
-      | Description           | Logs retreat of 40 glaciers in Belgium. |
-      | Geographical coverage | Belgium                                 |
-      | Name                  | Angela Crespi                           |
-      | E-mail address        | angela_crespi@glacmon.basel-uni.ch      |
-    And I select "Data gathering and processing" from "Topic"
-    And I select "Logging Service" from "Solution type"
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "University of Basel"
-    And I press "Add owner"
+    And I fill in "Title" with "Climate change tracker"
+    And I fill in "Abstract" with "Tracks climate change"
+    And I enter "Logs retreat of 40 glaciers in Belgium." in the "Description" wysiwyg editor
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Demography" options from "Topic"
+    And I select "Bulgarian" options from "Language availability"
+    And I click "Contact details"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "University of Basel"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    And I press "Create owner"
+    # Create contact information.
+    And I press "Create contact information"
+    And I fill in "contact[form][0][title][0][value]" with "Angela Crespi"
+    And I fill in "contact[form][0][email][value]" with "angela_crespi@glacmon.basel-uni.ch"
+    And I click "Additional information"
+    And I select "Logging Service" options from "Solution type"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "Climate change tracker"
     # Check that the warning intended for moderators is not shown to regular
     # users.
-    When I click "Edit" in the "Entity actions" region
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
     Then I should not see the warning message "A solution with the same name exists in a different collection."
 
     Given I am logged in as a moderator
     And I go to my dashboard
     And I click "Climate change tracker"
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I should see the warning message "A solution with the same name exists in a different collection."
 
@@ -267,15 +279,83 @@ Feature: "Add solution" visibility options.
     Given collection content:
       | title         |
       | Ocean studies |
-    Given solution content:
+    And solution content:
       | title             | collection    |
       | Cleaning solution | Ocean studies |
+    And I am logged in as a moderator
 
-    Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
-    When I expand the "Additional fields" accordion section
-    And I remove the first file from "Logo"
-
-    When I select image #2 as solution logo
+    And I click "Additional information"
+    Then I remove the first file from "Logo"
+    And I select image #2 as solution logo
+    And I press "Confirm"
     And I press "Publish"
-    And the "Cleaning solution" solution logo is image #2
+    Then the "Cleaning solution" solution logo is image #2
+
+  @javascript
+  Scenario: User should see all topic categories.
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
+    And I click "Add solution" in the plus button menu
+    When the "Topic" tagify autocomplete should contain the following option groups:
+      | Economy and Welfare  |
+      | eGov                 |
+      | E-health Dpt.        |
+      | HR Dpt.              |
+      | Info                 |
+      | Law and Justice      |
+      | Social and Political |
+
+  @javascript
+  Scenario: Previous and Next buttons should be present and functional.
+    Given I am logged in as a facilitator of the "The Portal" collection
+    And I go to the homepage of the "The Portal" collection
+    And I open the plus button menu
+    And I click "Add solution"
+
+    Then I should see the button "Previous"
+    And I should see the button "Next"
+
+    # Initially there is no fragment.
+    And the url should match "^/collection/.*/solution/add$"
+    # Navigating with the links should add the fragment accordingly.
+    When I press "Next"
+    Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+    When I press "Next"
+    Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
+    When I press "Previous"
+    Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+    When I press "Previous"
+    Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
+
+    # Clicking on a specific tab should update the fragment and affect the
+    # "Previous" and "Next" buttons.
+    When I click "Contact details"
+    Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+    When I press "Previous"
+    Then the url should match "^/collection/.*/solution/add#edit-group-solution-information$"
+    When I click "Contact details"
+    Then the url should match "^/collection/.*/solution/add#edit-group-contact-details$"
+    When I press "Next"
+    Then the url should match "^/collection/.*/solution/add#edit-group-additional-information$"
+
+  @javascript
+  Scenario: Custom constraints point to the correct field.
+    Given solution content:
+      | title | short ID | state     | collection |
+      | Test  | qwerty   | published | The Portal |
+    Given I am logged in as a moderator
+    And I go to the "The Portal" collection
+    And I open the plus button menu
+    And I click "Add solution"
+    When I click "Additional information"
+    And I fill in "Custom URL Identifier" with "qwerty"
+    And I press "Confirm"
+    Then I should see the text "errors have been found:"
+    And I should see the link "Custom URL Identifier"
+    But I should not see the text "qwerty"
+    And I should not see the text "Content with Custom URL Identifier qwerty already exists."
+    # The link should point to the "Custom URL Identifier" field.
+    When I click "Custom URL Identifier"
+    Then I should see the text "Custom URL Identifier"
+    And I should see the text "Content with Custom URL Identifier qwerty already exists."

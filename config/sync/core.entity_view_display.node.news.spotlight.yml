@@ -1,0 +1,81 @@
+uuid: 86aa625b-3631-4224-bca0-ed9b2576c03e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.spotlight
+    - field.field.node.news.abstract
+    - field.field.node.news.field_attachment
+    - field.field.node.news.field_comments
+    - field.field.node.news.field_news_headline
+    - field.field.node.news.field_news_logo
+    - field.field.node.news.field_news_referenced_solution
+    - field.field.node.news.field_news_source_url
+    - field.field.node.news.field_paragraphs_body
+    - field.field.node.news.field_site_featured
+    - field.field.node.news.field_state
+    - field.field.node.news.field_topic
+    - field.field.node.news.keywords
+    - field.field.node.news.og_audience
+    - field.field.node.news.spatial_coverage
+    - node.type.news
+  module:
+    - field_fallback_formatter
+    - joinup_core
+    - template_suggestion
+    - user
+id: node.news.spotlight
+targetEntityType: node
+bundle: news
+mode: spotlight
+content:
+  abstract:
+    type: field_fallback_formatter
+    label: visually_hidden
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
+    region: content
+hidden:
+  anonymous_comment_links: true
+  featured: true
+  field_attachment: true
+  field_comments: true
+  field_news_headline: true
+  field_news_logo: true
+  field_news_referenced_solution: true
+  field_news_source_url: true
+  field_paragraphs_body: true
+  field_shared_in: true
+  field_site_featured: true
+  field_state: true
+  field_topic: true
+  flag_like: true
+  keywords: true
+  langcode: true
+  links: true
+  og_audience: true
+  pinned_in: true
+  private_message_link: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  shared_in: true
+  spatial_coverage: true
+  visit_count: true

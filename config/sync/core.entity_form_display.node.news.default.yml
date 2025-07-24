@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.news.abstract
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
-    - field.field.node.news.field_keywords
     - field.field.node.news.field_news_headline
     - field.field.node.news.field_news_logo
     - field.field.node.news.field_news_referenced_solution
@@ -15,6 +14,7 @@ dependencies:
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
+    - field.field.node.news.keywords
     - field.field.node.news.og_audience
     - field.field.node.news.spatial_coverage
     - image.style.thumbnail
@@ -27,6 +27,7 @@ dependencies:
     - joinup_workflow
     - layout_paragraphs
     - link
+    - tagify
 id: node.news.default
 targetEntityType: node
 bundle: news
@@ -34,7 +35,7 @@ mode: default
 content:
   abstract:
     type: string_textfield
-    weight: 2
+    weight: 3
     region: content
     settings:
       size: 255
@@ -42,7 +43,7 @@ content:
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 14
+    weight: 17
     region: content
     settings:
       title: 'Current workflow state'
@@ -51,24 +52,16 @@ content:
     third_party_settings: {  }
   field_attachment:
     type: file_generic
-    weight: 11
+    weight: 14
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   field_comments:
     type: comment_default
-    weight: 9
+    weight: 11
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_keywords:
-    type: string_textfield
-    weight: 8
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_news_headline:
     type: string_textfield
@@ -80,7 +73,7 @@ content:
     third_party_settings: {  }
   field_news_logo:
     type: image_library_widget
-    weight: 3
+    weight: 4
     region: content
     settings:
       progress_indicator: throbber
@@ -90,7 +83,7 @@ content:
     third_party_settings: {  }
   field_news_referenced_solution:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 12
     region: content
     settings:
       match_operator: CONTAINS
@@ -100,7 +93,7 @@ content:
     third_party_settings: {  }
   field_news_source_url:
     type: link_default
-    weight: 5
+    weight: 6
     region: content
     settings:
       placeholder_url: ''
@@ -108,7 +101,7 @@ content:
     third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
-    weight: 4
+    weight: 5
     region: content
     settings:
       view_mode: default
@@ -120,16 +113,38 @@ content:
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 15
+    weight: 18
     region: content
     settings:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 7
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 0
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 0
+    third_party_settings: {  }
+  keywords:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 10
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Start typing to select or add a keyword...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   langcode:
     type: language_select
@@ -139,19 +154,23 @@ content:
       include_locked: true
     third_party_settings: {  }
   simple_sitemap:
-    weight: 10
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   spatial_coverage:
-    type: entity_reference_autocomplete
+    type: tagify_entity_reference_autocomplete_widget
     weight: 6
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
       placeholder: ''
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -162,13 +181,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 13
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 12
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -177,7 +196,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 16
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }

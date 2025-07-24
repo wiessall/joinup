@@ -45,6 +45,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
+      | collection/portal/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |
@@ -118,6 +119,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
+      | collection/portal/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |
