@@ -65,12 +65,12 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
           '#format' => 'plain_text',
         ],
       ],
-      'weblinks' => [
+      'weblinks' => !empty($definition['weblinks']) ? [
         'data' => array_map(fn($weblink) => Link::fromTextAndUrl(
           $weblink['title'] ?? $weblink['url'],
           Url::fromUri($weblink['url'])
-        )->toRenderable(), $definition['weblinks'] ?? []),
-      ],
+        )->toRenderable(), $definition['weblinks']),
+      ] : NULL,
     ];
   }
 
