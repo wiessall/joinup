@@ -190,15 +190,10 @@ readonly class CommunityContentWorkflowAccessControlHandler {
     $anyPermission = "delete any {$content->bundle()} content";
 
     // Global roles with the 'any permission' can always delete any content.
-    if ($account->hasPermission($anyPermission)) {
-      return AccessResult::allowed()
-        ->addCacheableDependency($account)
-        ->cachePerUser();
-    }
-
-    // No users get the `delete own 'bundle' content` in global roles. Access
-    // for owned content is checked in OG.
-    return AccessResult::neutral();
+    // If user does not have the permission then access for owned content is
+    // checked in OG.
+    return AccessResult::allowedIfHasPermission($account, $anyPermission)
+      ->addCacheableDependency($content);
   }
 
   /**
