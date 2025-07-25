@@ -76,7 +76,7 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
         // Commenting on content of an archived group is not allowed.
         if ($parent_state === 'archived' || $entity_state === 'archived') {
-          return AccessResult::forbidden()
+          return AccessResult::forbidden('Cannot comment on archived content.')
             ->addCacheableDependency($parent);
         }
 
@@ -160,15 +160,14 @@ readonly class CommunityContentWorkflowAccessControlHandler {
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
     if ($this->workflowHelper->accountCanNotUnarchive($content, $account)) {
-      return AccessResult::forbidden()
+      return AccessResult::forbidden('Cannot unarchive this content.')
         ->addCacheableDependency($content)
-        ->addCacheableDependency($account)
         ->cachePerUser();
     }
 
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($content, $account);
     if (empty($allowed_states)) {
-      return AccessResult::forbidden()
+      return AccessResult::forbidden('No available workflow transitions.')
         ->addCacheableDependency($content)
         ->cachePerUser();
     }
