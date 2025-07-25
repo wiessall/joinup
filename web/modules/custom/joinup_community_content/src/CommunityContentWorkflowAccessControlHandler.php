@@ -112,7 +112,6 @@ readonly class CommunityContentWorkflowAccessControlHandler {
       || ($isOwner && $account->hasPermission('view own unpublished content'))) {
       return AccessResult::allowed()
         ->addCacheableDependency($content)
-        ->addCacheableDependency($account)
         ->cachePerUser();
     }
 
