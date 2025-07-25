@@ -131,7 +131,7 @@ function joinup_distribution_node_access(EntityInterface $entity, string $operat
     return AccessResult::forbidden()->addCacheableDependency($solution);
   }
 
-  return AccessResult::neutral();
+  return AccessResult::neutral()->addCacheableDependency($solution);
 }
 
 /**
