@@ -51,12 +51,12 @@
     z-index: 1;
     float: right;
     margin-top: -3.6em;
-    &:has(
-      + .block-private-message-inbox-block
-        .private-message-thread--full-container:empty
-    ) {
-      display: none !important;
-    }
+  }
+  .private-messages-toggle-inbox:has(
+    + .block-private-message-inbox-block
+      .private-message-thread--full-container:empty
+  ) {
+    display: none !important;
   }
   @include media-breakpoint-up(lg) {
     position: sticky;
