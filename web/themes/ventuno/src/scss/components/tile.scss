@@ -21,6 +21,9 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1;
+    @include media-breakpoint-up(lg) {
+      aspect-ratio: 2 / 1;
+    }
     & picture {
       & img {
         width: 100%;
