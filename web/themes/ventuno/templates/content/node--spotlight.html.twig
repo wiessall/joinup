@@ -4,9 +4,7 @@
  * Tile pattern for content using the spotlight view mode.
  */
 #}
-{% apply spaceless %}
-
-  {# Parameters with defaults #}
+{# Parameters with defaults #}
   {% set _horizontal = horizontal|default(false) %}
   {% set _attributes = attributes|default({}) %}
   {% set _url = url|default('') %}
@@ -145,5 +143,3 @@
       </div>
     </article>
   </div>
-
-{% endapply %}
