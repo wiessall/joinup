@@ -52,9 +52,9 @@
     float: right;
     margin-top: -3.6em;
     &:has(
-        + .block-private-message-inbox-block
-          .private-message-thread--full-container:empty
-      ) {
+      + .block-private-message-inbox-block
+        .private-message-thread--full-container:empty
+    ) {
       display: none !important;
     }
   }
