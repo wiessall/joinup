@@ -5,141 +5,141 @@
  */
 #}
 {# Parameters with defaults #}
-  {% set _horizontal = horizontal|default(false) %}
-  {% set _attributes = attributes|default({}) %}
-  {% set _url = url|default('') %}
-  {% set _highlighted = highlighted|default({}) %}
-  {% set _info = info|default('') %}
-  {% set _title_prefix = title_prefix|default('') %}
-  {% set _label = label|default('') %}
-  {% set _title_suffix = title_suffix|default('') %}
-  {% set _text = text|default({}) %}
-  {% set _action = action|default({}) %}
-  {% set _badges = badges|default([]) %}
-  {% set _extra_data = extra_data|default([]) %}
-  {% set _bundle = bundle|default({}) %}
-  {% set _indicators = indicators|default([]) %}
+{% set _horizontal = horizontal|default(false) %}
+{% set _attributes = attributes|default({}) %}
+{% set _url = url|default('') %}
+{% set _highlighted = highlighted|default({}) %}
+{% set _info = info|default('') %}
+{% set _title_prefix = title_prefix|default('') %}
+{% set _label = label|default('') %}
+{% set _title_suffix = title_suffix|default('') %}
+{% set _text = text|default({}) %}
+{% set _action = action|default({}) %}
+{% set _badges = badges|default([]) %}
+{% set _extra_data = extra_data|default([]) %}
+{% set _bundle = bundle|default({}) %}
+{% set _indicators = indicators|default([]) %}
 
-  {{ attach_library('ventuno/tile') }}
+{{ attach_library('ventuno/tile') }}
 
-  {% if _attributes is empty %}
-    {% set _attributes = create_attribute() %}
-  {% endif %}
-  {% set _classes = [
-    'tile',
-    'tile--spotlight',
-    'rounded',
-    _horizontal ? 'tile--horizontal',
-    'd-flex',
-    'mb-3',
-  ] %}
+{% if _attributes is empty %}
+  {% set _attributes = create_attribute() %}
+{% endif %}
+{% set _classes = [
+  'tile',
+  'tile--spotlight',
+  'rounded',
+  _horizontal ? 'tile--horizontal',
+  'd-flex',
+  'mb-3',
+] %}
 
-  <div class="col">
-    <article{{ _attributes.addClass(_classes) }}>
-      {{ _title_prefix }}
-      {{ _title_suffix }}
-      <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0"
-         href="{{ _url }}"
-         title="{{ _label|render|striptags|trim }}"></a>
+<div class="col">
+  <article{{ _attributes.addClass(_classes) }}>
+    {{- _title_prefix -}}
+    {{- _title_suffix -}}
+    <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0"
+       href="{{ _url }}"
+       title="{{ _label|render|striptags|trim }}"></a>
 
-      <div class="tile__body d-flex flex-column justify-content-between">
-        {% if _info %}
-          <div class="fs-sm d-flex align-items-center justify-content-start mb-3 mt-2 text-dark">
-            <svg class="tile__info-icon bi icon--xs me-1">
-              <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
-            </svg>
-            <span class="tile__info-text tile__action">{{ _info.label }}</span>
-          </div>
-        {% endif %}
-
-        <div class="row g-3 align-items-start">
-          {% set hasHighlight = _highlighted.text is not empty %}
-          {% if hasHighlight %}
-            <div class="event--highlighted-date col-4">
-              {{ _highlighted.text }}
-            </div>
-          {% endif %}
-          <div class="{{ hasHighlight ? 'col-8' }}">
-            <h3 class="tile__title h5 text-primary fw-bold my-0">{{ _label }}</h3>
-          </div>
+    <div class="tile__body d-flex flex-column justify-content-between">
+      {%- if _info -%}
+        <div class="fs-sm d-flex align-items-center justify-content-start mb-3 mt-2 text-dark">
+          <svg class="tile__info-icon bi icon--xs me-1">
+            <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
+          </svg>
+          <span class="tile__info-text tile__action">{{- _info.label -}}</span>
         </div>
+      {%- endif -%}
 
-        {% if _text is not empty %}
-          <div class="tile__text text-dark fs-sm my-1">{{ _text }}</div>
-        {% endif %}
-
-        {% if _action %}
-          <div class="tile__action">
-            {{ _action }}
+      <div class="row g-3 align-items-start">
+        {% set hasHighlight = _highlighted.text is not empty %}
+        {%- if hasHighlight -%}
+          <div class="event--highlighted-date col-4">
+            {{- _highlighted.text -}}
           </div>
-        {% endif %}
-
-        {% if _badges is not empty and _badges is iterable %}
-          <div class="my-2">
-            {{ attach_library('ventuno/badge') }}
-            {% for _badge in _badges %}
-              {{ include('@oe-bcl/badge', {
-                label: _badge.label,
-                background: 'light',
-                rounded_pill: true,
-                attributes: create_attribute().addClass(['fs-xs', 'me-1', 'mb-1', 'bg-white']),
-              }, false) }}
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        {% if _indicators is not empty and _indicators is iterable %}
-          <div class="mt-2 d-flex flex-wrap">
-            {% for _indicator in _indicators %}
-              {{ _indicator }}
-            {% endfor %}
-          </div>
-        {% endif %}
+        {%- endif -%}
+        <div class="{{ hasHighlight ? 'col-8' }}">
+          <h3 class="tile__title h5 text-primary fw-bold my-0">{{- _label -}}</h3>
+        </div>
       </div>
 
-      <div class="tile__footer tile__action p-3">
-        <div class="d-flex flex-wrap align-items-center justify-content-between">
-          <div data-joinup-card-stats class="d-flex align-items-center fs-xs text-dark">
-            {% for key, data in _extra_data %}
-              {% if key != 'flag_interoperability' %}
-                <span class="d-flex align-items-center me-2">
-                  {% if data.icon is defined and data.icon is not empty %}
-                    <svg class="bi icon--xs me-1">
-                      <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
-                    </svg>
-                  {% endif %}
-                  {% if data.label is defined and data.label is not empty %}
-                    {{ data.label }}
-                  {% endif %}
-                </span>
-              {% endif %}
-            {% endfor %}
-          </div>
+      {%- if _text is not empty -%}
+        <div class="tile__text text-dark fs-sm my-1">{{- _text -}}</div>
+      {%- endif -%}
 
-          <div class="d-flex flex-wrap">
-            {% if _extra_data['flag_interoperability'] is defined and _extra_data['flag_interoperability'] is not empty %}
+      {%- if _action -%}
+        <div class="tile__action">
+          {{- _action -}}
+        </div>
+      {%- endif -%}
+
+      {%- if _badges is not empty and _badges is iterable -%}
+        <div class="my-2">
+          {{- attach_library('ventuno/badge') -}}
+          {%- for _badge in _badges -%}
+            {{- include('@oe-bcl/badge', {
+              label: _badge.label,
+              background: 'light',
+              rounded_pill: true,
+              attributes: create_attribute().addClass(['fs-xs', 'me-1', 'mb-1', 'bg-white']),
+            }, false) -}}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if _indicators is not empty and _indicators is iterable -%}
+        <div class="mt-2 d-flex flex-wrap">
+          {%- for _indicator in _indicators -%}
+            {{- _indicator -}}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="tile__footer tile__action p-3">
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div data-joinup-card-stats class="d-flex align-items-center fs-xs text-dark">
+          {%- for key, data in _extra_data -%}
+            {%- if key != 'flag_interoperability' -%}
               <span class="d-flex align-items-center me-2">
-                {% if _extra_data['flag_interoperability'].icon is defined and _extra_data['flag_interoperability'].icon is not empty %}
+                {%- if data.icon is defined and data.icon is not empty -%}
                   <svg class="bi icon--xs me-1">
-                    <use xlink:href="{{ bcl_icon_path }}#{{ _extra_data['flag_interoperability'].icon }}"></use>
+                    <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
                   </svg>
-                {% endif %}
-                {% if _extra_data['flag_interoperability'].label is defined and _extra_data['flag_interoperability'].label is not empty %}
-                  {{ _extra_data['flag_interoperability'].label }}
-                {% endif %}
+                {%- endif -%}
+                {%- if data.label is defined and data.label is not empty -%}
+                  {{- data.label -}}
+                {%- endif -%}
               </span>
-            {% endif %}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
 
-            <span class="d-flex align-items-center fs-sm">
-              <div class="d-flex align-items-center justify-content-center text-dark">
-                {{ _bundle.label }}
-                <svg class="bi icon--xl text-primary ms-2">
-                  <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
+        <div class="d-flex flex-wrap">
+          {%- if _extra_data['flag_interoperability'] is defined and _extra_data['flag_interoperability'] is not empty -%}
+            <span class="d-flex align-items-center me-2">
+              {%- if _extra_data['flag_interoperability'].icon is defined and _extra_data['flag_interoperability'].icon is not empty -%}
+                <svg class="bi icon--xs me-1">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ _extra_data['flag_interoperability'].icon }}"></use>
                 </svg>
-              </div>
+              {%- endif -%}
+              {%- if _extra_data['flag_interoperability'].label is defined and _extra_data['flag_interoperability'].label is not empty -%}
+                {{- _extra_data['flag_interoperability'].label -}}
+              {%- endif -%}
             </span>
-          </div>
+          {%- endif -%}
+
+          <span class="d-flex align-items-center fs-sm">
+            <div class="d-flex align-items-center justify-content-center text-dark">
+              {{- _bundle.label -}}
+              <svg class="bi icon--xl text-primary ms-2">
+                <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
+              </svg>
+            </div>
+          </span>
         </div>
       </div>
-    </article>
-  </div>
+    </div>
+  </article>
+</div>
