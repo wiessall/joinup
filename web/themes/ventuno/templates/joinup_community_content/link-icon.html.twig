@@ -20,11 +20,5 @@
     'px-3',
   ]
 %}
-{% apply spaceless %}
-<a href="{{ url }}"{{ attributes.addClass(classes) }}>
-  {{ title }}
-  <svg class="ms-1 bi icon--fluid">
-    <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
-  </svg>
-</a>
-{% endapply %}
+{% set attributes = attributes.addClass(classes) %}
+<a href="{{ url }}"{{ attributes }}>{{- title -}}<svg class="ms-1 bi icon--fluid"><use xlink:href="{{ bcl_icon_path }}#arrow-right"></use></svg></a>
