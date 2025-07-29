@@ -17,18 +17,14 @@
   }
   &__figure {
     display: flex;
-    overflow: hidden;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 2 / 1;
     & picture {
       & img {
         width: 100%;
         margin-bottom: 0;
       }
-    }
-    @include media-breakpoint-up(lg) {
-      aspect-ratio: 2 / 1;
     }
   }
   &__default-img {
