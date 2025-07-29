@@ -11,3 +11,12 @@ pinned_entities:
   dependencies:
     - core/drupal
     - core/once
+
+horizontal_tabs_navigation:
+  js:
+    js/horizontal_tabs_navigation.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/jquery
+    - field_group/element.horizontal_tabs

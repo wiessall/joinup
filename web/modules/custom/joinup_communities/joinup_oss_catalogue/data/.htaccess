@@ -1,0 +1,4 @@
+# Deny all requests
+<RequireAll>
+  Require all denied
+</RequireAll>

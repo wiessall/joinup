@@ -74,8 +74,9 @@
   }
   &.navbar--sticky {
     position: sticky;
-    z-index: 49; // Avoid navbar to be overlapped by search page offcanvas AND to overlap joinup navbar's search bar
-    top: 0;
+    z-index: 49; // Avoid navbar to overlap toolbar-tray
+    top: var(--drupal-displace-offset-top, 0);
+    left: var(--drupal-displace-offset-left, 0);
   }
   @include media-breakpoint-up(lg) {
     padding: $spacer 0; // 16px 0

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-a
 Feature: Event moderation
   In order to manage events
   As a user of the website
@@ -33,8 +33,8 @@ Feature: Event moderation
     When I am logged in as a moderator
     And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
-    And I check "Moderated"
     Then I press "Publish"
+    And the "group_moderation" setting of the "Wet Lords" collection is set to "yes"
     And I should see the heading "Wet Lords"
 
     # The parent group is now pre-moderated: authenticated non-member users
@@ -52,8 +52,8 @@ Feature: Event moderation
     And I go to the edit form of the "Wet Lords" collection
     And I expand the "Additional fields" accordion section
     And I check "Closed collection"
-    And I select the radio button "Only members can create content."
     And I press "Publish"
+    And the "content_creation" setting of the "Wet Lords" collection is set to "members"
     # I should now have the possibility to add events.
     When I open the plus button menu
     Then I should see the link "Add event"
@@ -76,7 +76,7 @@ Feature: Event moderation
     And I fill the start time of the Date widget with "23:59:00"
     And I fill the end date of the Date widget with "2018-09-01"
     And I fill the end time of the Date widget with "00:30:00"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Event Rainbow of Worlds has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I should see the text "30/08 to 01/09/2018"
@@ -139,7 +139,7 @@ Feature: Event moderation
     And I fill the start time of the Date widget with "23:59:00"
     And I fill the end date of the Date widget with "2018-09-01"
     And I fill the end time of the Date widget with "00:30:00"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Event Rainbow Beach has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "Rainbow Beach"
@@ -158,7 +158,7 @@ Feature: Event moderation
     And I fill the start time of the Date widget with "23:59:00"
     And I fill the end date of the Date widget with "2018-09-01"
     And I fill the end time of the Date widget with "00:30:00"
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Event Rainbow vinyls has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I click "My account page"

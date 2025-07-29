@@ -116,12 +116,6 @@ class ShareForm extends ShareFormBase {
       '#value' => empty($groups) ? $this->t('Close') : $this->t('Share'),
     ];
 
-    if ($this->isModal() || $this->isAjaxForm()) {
-      $form['actions']['submit']['#ajax'] = [
-        'callback' => '::ajaxSubmit',
-      ];
-    }
-
     return $form;
   }
 

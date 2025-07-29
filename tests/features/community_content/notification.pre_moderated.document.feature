@@ -45,7 +45,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
     And I select "Document" from "Type"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                    |
@@ -61,7 +61,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
     And I select "Document" from "Type"
-    And I select "Statistics and Analysis" from "Topic"
+    And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                      |
@@ -86,7 +86,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
 
     When I go to the edit form of the "CC notify pre request deletion" document
     And I press "Request deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I just want to delete it."
     And I press "Request deletion"
     Then the following email should have been sent:
@@ -112,7 +112,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre request changes" document
     And I press "Request changes"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the following email should have been sent:
@@ -127,7 +127,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre report" document
     And I press "Report"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the following email should have been sent:
@@ -146,7 +146,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify pre reject deletion" document
     And I press "Reject deletion"
-    Then I should see the error message "This action requires you to fill in the motivation field"
+    Then I should see the inline form error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "I still like it"
     And I press "Reject deletion"
     Then the following email should have been sent:

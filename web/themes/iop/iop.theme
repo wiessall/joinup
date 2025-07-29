@@ -249,16 +249,3 @@ function iop_preprocess_page_title(array &$variables): void {
     $variables['url_more'] = $link;
   }
 }
-
-/**
- * Implements hook_preprocess_select().
- */
-function iop_preprocess_select(array &$variables): void {
-  $field_name = $variables['element']['#name'];
-  switch ($field_name) {
-    case 'field_topic':
-    case 'solution_type':
-      $variables['attributes']['class'][] = 'h-50vh';
-      break;
-  }
-}

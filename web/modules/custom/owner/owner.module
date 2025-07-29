@@ -132,11 +132,25 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
  */
 function owner_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
   if ($context['entity_type'] == 'node' && $context['allowed_bundles'] === ['owner']) {
-    // Add the type column.
+    // Add type and country field columns.
     $fields['owner_type'] = [
       'type' => 'field',
       'label' => t('Type'),
       'weight' => 10,
+      'display_options' => [
+        'type' => 'entity_reference_label',
+        'settings' => ['link' => TRUE],
+        'third_party_settings' => [
+          'field_delimiter' => ['delimiter' => ','],
+          'template_suggestion' => ['template_suggestion' => 'inline'],
+        ],
+      ],
     ];
+    $fields['country'] = [
+      'type' => 'field',
+      'label' => t('Country'),
+      'weight' => 11,
+    ];
+    unset($fields['status']);
   }
 }

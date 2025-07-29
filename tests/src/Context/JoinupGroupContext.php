@@ -8,10 +8,12 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
+use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -431,7 +433,14 @@ class JoinupGroupContext extends RawDrupalContext {
     $groupEntity = static::getEntityByLabel('node', $groupLabel, $group);
     Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
-
+    $fieldMapping = [
+      'group_moderation' => ['yes' => 1, 'no' => 0],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+        'members' => ContentCreationOptions::MEMBERS,
+      ],
+    ];
     try {
       $groupEntity->getSetting($fieldName);
     }
@@ -449,19 +458,58 @@ class JoinupGroupContext extends RawDrupalContext {
         ? static::getEntityByLabel($this->translateEntityTypeAlias($entityTypeId), $value)
         : $value;
 
+      if (isset($fieldMapping[$fieldName][$newValue])) {
+        $newValue = $fieldMapping[$fieldName][$newValue];
+      }
+
       MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
         ->set($fieldName, $newValue)
         ->save();
     }
     else {
-      $metaEntities = \Drupal::entityTypeManager()->getStorage('meta_entity')
-        ->loadByProperties([
-          'type' => "{$group}_settings",
-          'target.target_type' => $groupEntity->getEntityTypeId(),
-          'target.target_id' => $groupEntity->id(),
-        ]);
-      $metaEntity = $metaEntities ? reset($metaEntities) : NULL;
-      $metaEntity?->delete();
+      MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+        ->set($fieldName, NULL)
+        ->save();
+    }
+  }
+
+  /**
+   * Stores settings fields in meta_entity.
+   *
+   * @BeforeNodeCreate
+   */
+  public function beforeNodeCreateMetaEntity(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type === 'collection' || $node->type === 'solution') {
+      $meta_entity_type = $node->type . '_settings';
+      $meta_entity = MetaEntity::create([
+        'type' => $meta_entity_type,
+      ]);
+
+      $meta_fields = [
+        'group_moderation',
+        'content_creation',
+        'list_related_entities',
+        'listing_content',
+      ];
+
+      $fieldMapping = [
+        'group_moderation' => ['yes' => 1, 'no' => 0],
+        'list_related_entities' => ['yes' => 1, 'no' => 0],
+        'content_creation' => [
+          'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+          'registered users' => ContentCreationOptions::REGISTERED_USERS,
+          'members' => ContentCreationOptions::MEMBERS,
+        ],
+      ];
+
+      foreach ($meta_fields as $field) {
+        if (property_exists($node, $field)) {
+          $meta_entity->set($field, $fieldMapping[$field][$node->$field] ?? $node->$field);
+          unset($node->$field);
+        }
+      }
+      $node->$meta_entity_type = $meta_entity;
     }
   }
 

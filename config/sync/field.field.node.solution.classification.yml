@@ -1,0 +1,34 @@
+uuid: 1ed42a84-9f76-43d8-a630-13ce7556cc70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.classification
+    - node.type.solution
+    - taxonomy.vocabulary.solution_classification
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.solution.classification
+field_name: classification
+entity_type: node
+bundle: solution
+label: 'Solution classification'
+description: 'Info on available classification options'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      solution_classification: solution_classification
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

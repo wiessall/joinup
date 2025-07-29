@@ -15,6 +15,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use PHPUnit\Framework\Assert;
@@ -909,11 +910,16 @@ class JoinupSearchContext extends RawDrupalContext {
     $options = ['all', 'archived', 'unarchived'];
     Assert::assertTrue(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
     $entity = $this->getEntityByLabel('node', $label, $bundle);
-    $data = $entity->get('listing_content')->getValue();
-    if (!empty($data)) {
-      $data[0]['value']['show_archived'] = 'all';
-      $entity->set('listing_content', $data);
-      $entity->save();
+    $meta_entity = \Drupal::getContainer()
+      ->get('meta_entity.repository')
+      ->getMetaEntityForEntity($entity, $entity->bundle() . '_settings');
+    if ($meta_entity instanceof MetaEntityInterface) {
+      $data = $meta_entity->get('listing_content')->getValue();
+      if (!empty($data)) {
+        $data[0]['value']['show_archived'] = 'all';
+        $meta_entity->set('listing_content', $data);
+        $meta_entity->save();
+      }
     }
   }
 
@@ -936,14 +942,19 @@ class JoinupSearchContext extends RawDrupalContext {
     $facet = $this->getFacetIdFromAlias($facet);
     $entity = $this->getEntityByLabel('node', $label, $bundle);
     $region = strtolower($region);
-    $data = $entity->get('listing_content')->getValue();
-    if (!empty($data)) {
-      $data[0]['value']['fields'][$facet] = [
-        'region' => $region,
-        'weight' => 0,
-      ];
-      $entity->set('listing_content', $data);
-      $entity->save();
+    $meta_entity = \Drupal::getContainer()
+      ->get('meta_entity.repository')
+      ->getMetaEntityForEntity($entity, $bundle . '_settings');
+    if ($meta_entity instanceof MetaEntityInterface) {
+      $data = $meta_entity->get('listing_content')->getValue();
+      if (!empty($data)) {
+        $data[0]['value']['fields'][$facet] = [
+          'region' => $region,
+          'weight' => 0,
+        ];
+        $meta_entity->set('listing_content', $data);
+        $meta_entity->save();
+      }
     }
   }
 
