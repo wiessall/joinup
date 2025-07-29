@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
+use Drupal\joinup_group\Access\GroupSettingsViewAccessCheck;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -67,6 +68,9 @@ class RouteSubscriber extends RouteSubscriberBase {
       if ($route = $collection->get($route_name)) {
         $route->setRequirement('_archived_group', 'TRUE');
       }
+    }
+    if ($route = $collection->get('entity.meta_entity.canonical')) {
+      $route->setRequirement('_custom_access', GroupSettingsViewAccessCheck::class . '::access');
     }
   }
 

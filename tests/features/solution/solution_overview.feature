@@ -60,16 +60,13 @@ Feature: Solutions Overview
     And collection content:
       | title                 | logo     |
       | Pikachu, I choose you | logo.png |
-    Given solution content:
+    And solution content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
       | Non electronic health | Supports health-related fields | published |
       | Closed data           | Facilitate access to data sets | published |
       | Isolating Europe      | Reusable tools and services    | published |
       | Uniting Europe        | Unusable tools and services    | draft     |
-    And owner content:
-      | name              | owner type |
-      | NonProfit example | Company    |
 
     # Check that visiting as an anonymous does not create cache for all users.
     Given I am an anonymous user
@@ -120,21 +117,24 @@ Feature: Solutions Overview
     And I am logged in as a moderator
     When I go to the add solution form of the "Pikachu, I choose you" collection
     And I fill in the following:
-      | Title                 | Colonies in Earth                   |
-      | Abstract              | Some abstract                       |
-      | Description           | Some space mumbo jumbo description. |
-      | Geographical coverage | Belgium                             |
-      | Name                  | Ambrosio Morison                    |
-      | E-mail address        | ambrosio.morison@example.com        |
-    And I select "Data Owner" from "Solution type"
-    And I select "Flemish" from "Language"
-    And I select "Demography" from "Topic"
-    And I attach the file "logo.png" to "Logo"
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
-    # Click the button to select an existing owner.
-    And I press "Add existing" at the "Owner" field
-    And I fill in "Owner" with "NonProfit example"
-    And I press "Add owner"
+      | Title                   | Colonies in Earth                   |
+      | Abstract                | Some abstract                       |
+      | Description             | Some space mumbo jumbo description. |
+    And I select "Demography" options from "Topic"
+    And I select "Data Owner" options from "Solution type"
+    And I select "Complete Solution" options from "Solution classification"
+    And I select "Defense" options from "Domain"
+    And I select "Bulgarian" options from "Language"
+    # Create owner.
+    And I press "Add new owner"
+    And I fill in "Name" with "Ambrosio Morison"
+    And I select "Company" options from "Type"
+    And I select "Belgium" from "Country"
+    # Create contact information.
+    And I fill in "contact[form][0][title][0][value]" with "Ambrosio Morison"
+    And I fill in "contact[form][0][email][value]" with "ambrosio.morison@example.com"
+    And I press "Confirm"
+    And I check "I have read and agreed to the Terms of Agreement"
     And I press "Publish"
     And I visit the "Colonies in Earth" solution
     And I should see the text "Colonies in Earth"

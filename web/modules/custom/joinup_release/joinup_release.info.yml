@@ -19,6 +19,5 @@ dependencies:
   - 'joinup:joinup_workflow'
   - 'joinup:joinup_solution'
   - 'joinup:owner'
-  - 'joinup:solution'
   - 'og:og'
   - 'state_machine:state_machine'

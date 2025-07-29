@@ -85,7 +85,7 @@ Feature:
     And I go to the edit form of the "IOP validation page" "custom page"
     And I fill in "Title" with ""
     And I press "Update"
-    Then I should see the error message "Title field is required."
+    Then I should see the inline form error message "Title field is required."
 
   Scenario Outline: Visibility of Report link and eTranslate button.
     Given <type> content:

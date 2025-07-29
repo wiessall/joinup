@@ -1,0 +1,11 @@
+uuid: ec795cb9-28a2-405b-915f-bc03dc16970f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.confirmation
+label: Confirmation
+description: ''
+targetEntityType: node
+cache: true

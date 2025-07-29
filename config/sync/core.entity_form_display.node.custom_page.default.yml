@@ -7,10 +7,10 @@ dependencies:
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_hide_title
-    - field.field.node.custom_page.field_keywords
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
+    - field.field.node.custom_page.keywords
     - field.field.node.custom_page.og_audience
     - image.style.thumbnail
     - node.type.custom_page
@@ -21,6 +21,7 @@ dependencies:
     - oe_bootstrap_theme_helper
     - path
     - svg_image
+    - tagify
 id: node.custom_page.default
 targetEntityType: node
 bundle: custom_page
@@ -58,14 +59,6 @@ content:
     third_party_settings:
       oe_bootstrap_theme_helper:
         switch: true
-  field_keywords:
-    type: string_textfield
-    weight: 6
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
     weight: 4
@@ -86,10 +79,32 @@ content:
       use_transition_label: 1
     third_party_settings: {  }
   field_topic:
-    type: options_select
+    type: tagify_entity_reference_autocomplete_widget
     weight: 5
     region: content
-    settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 0
+      placeholder: 'Select or start typing...'
+      suggestions_dropdown: 0
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 0
+    third_party_settings: {  }
+  keywords:
+    type: tagify_entity_reference_autocomplete_widget
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Start typing to select or add a keyword...'
+      suggestions_dropdown: 1
+      show_entity_id: 0
+      show_info_label: 0
+      info_label: ''
+      parent_selection: 1
     third_party_settings: {  }
   langcode:
     type: language_select

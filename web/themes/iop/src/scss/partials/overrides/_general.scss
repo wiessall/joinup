@@ -1,0 +1,19 @@
+// #ISAICP-9935 Offset Tagify hidden input fields that are anchor targets to match the anchor links position.
+.tagify + input.tagify-widget,
+.tagify + textarea.tagify-widget {
+  top: 2em;
+}
+
+// #ISAICP-9924 Adjust Tagify styles.
+.tagify.form-control {
+  display: flex;
+  padding: 0.375rem 0.375rem 0 0.375rem !important;
+  .tagify__input {
+    margin: 0 0 0.375rem;
+    padding: 0.375rem;
+  }
+  .tagify__tag {
+    margin-inline: 0 5px;
+    margin-block: 0 5px;
+  }
+}

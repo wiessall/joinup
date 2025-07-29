@@ -13,18 +13,12 @@ joinup_solution.collection_solution.add:
           - collection
 
 joinup_solution.collection_solution.tca:
-  path: 'node/{node}/solution/tca'
+  path: '/solution-terms-of-agreement'
   defaults:
-    _form: '\Drupal\joinup_solution\Form\TcaForm'
+    _controller: '\Drupal\joinup_solution\Controller\TermsAndConditionsController::display'
     _title: 'Terms of agreement'
   requirements:
-    _custom_access: '\Drupal\joinup_solution\Controller\SolutionController::createSolutionAccess'
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - collection
+    _permission: 'access content'
 
 joinup_solution.change_collection:
   path: '/node/{node}/change-collection'

@@ -21,22 +21,14 @@ Feature: Dashboard
   Scenario Outline: Moderators should see proposed collections and solutions.
     Given I am logged in as a "moderator"
     And <group type> content:
-      | title          | state     |
-      | Some berry pie | published |
+      | title           | state     |
+      | Some berry pie  | published |
+      | Some cherry pie | proposed  |
     When I go to my dashboard
     Then I should not see the "Some berry pie" tile
-    When I go to the edit form of the "Some berry pie" <group type>
-    And I fill in "Motivation" with "I want to know."
-    And I press "Propose"
-    Then I should see the success message "<Group type> Some berry pie has been updated."
-    When I go to my dashboard
-    Then I should see the "Some berry pie" tile
-    When I go to the edit form of the "Some berry pie" <group type>
-    And I press "Publish"
-    When I go to my dashboard
-    Then I should not see the "Some berry pie" tile
+    But I should see the "Some cherry pie" tile
 
     Examples:
-      | group type | Group type |
-      | collection | Collection |
-      | solution   | Solution   |
+      | group type |
+      | collection |
+      | solution   |

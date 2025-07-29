@@ -54,3 +54,20 @@ button.button--primary {
   @extend .btn;
   @extend .btn-secondary;
 }
+
+// Override buttons inside Solution wizard form #ISAICP-9918.
+.node-solution-edit-form,
+.node-solution-form {
+  .horizontal-tabs .form-wrapper {
+    .btn-primary {
+      @extend .btn-light;
+      &:hover,
+      &:active,
+      &:focus,
+      &:focus-visible {
+        color: var(--bs-btn-hover-color);
+        background-color: var(--bs-btn-hover-bg);
+      }
+    }
+  }
+}

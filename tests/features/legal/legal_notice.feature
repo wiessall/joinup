@@ -31,7 +31,7 @@ Feature:
 
     # Submit without accepting the 'Legal notice'.
     When I press "Submit"
-    Then I should see the error message "You must accept the Legal notice in order to use our platform."
+    Then I should see the inline form error message "You must accept the Legal notice in order to use our platform."
 
     # After accepting the agreement the user can continue.
     Given I check "I have read and accept the Legal notice"
@@ -155,7 +155,7 @@ Feature:
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
 
     When I press "Submit"
-    Then I should see the error message "You must accept the Legal notice in order to use our platform."
+    Then I should see the inline form error message "You must accept the Legal notice in order to use our platform."
 
     But I check "I have read and accept the Legal notice"
     When I press "Submit"

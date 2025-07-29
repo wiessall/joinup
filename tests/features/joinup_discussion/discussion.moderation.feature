@@ -24,7 +24,7 @@ Feature: Discussion moderation
     And I fill in the following:
       | Title   | Best method to cut logs        |
       | Content | Paying somebody else to do it? |
-    And I select "EU and European Policies" from "Topic"
+    And I select "EU and European Policies" options from "Topic"
     And I press "Publish"
     Then I should see the heading "Best method to cut logs"
     And I should see the link "Edit" in the "Entity actions" region

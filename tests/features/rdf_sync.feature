@@ -38,13 +38,13 @@ Feature: RDF synchronization of contents.
       | http://example.com/collection1 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no               | Demography | Atlantis         | published | no       |
       | http://example.com/collection2 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no               | Demography | Atlantis         | draft     | no       |
     Given solution content:
-      | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | documentation | content_creation | keywords         | landing page                    | language | metrics page                    | group_moderation | topic                    | related solutions | solution type                      | spatial coverage | status    | featured |
-      | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no               | EU and European Policies |                   | Networking Infrastructure Enablers | Atlantis         | Completed | no       |
+      | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | documentation | content_creation | keywords        | landing page                    | language | metrics page                    | group_moderation | topic                    | related solutions | solution type                      | status    | featured |
+      | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | Alphabet, games | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no               | EU and European Policies |                   | Networking Infrastructure Enablers | Completed | no       |
     And release content:
       | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
-      | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | food     | Atlantic |
+      | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | Alphabet     | Atlantic |
       # Draft release should not be synced.
-      | http://example.com/release2 | Draft release   | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | food     | Atlantic |
+      | http://example.com/release2 | Draft release   | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | Alphabet     | Atlantic |
 
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
@@ -118,7 +118,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2017-11-12T11:11:00Z                                       |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
@@ -250,7 +250,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2017-11-12T11:11:00Z                                       |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
@@ -274,7 +274,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2019-12-02T08:44:00Z                                       |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
@@ -338,7 +338,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2019-12-02T08:44:00Z                                       |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
@@ -591,9 +591,9 @@ Feature: RDF synchronization of contents.
       | title       | state     | uri                          |
       | Early Omega | published | http://example.com/solution1 |
     And release content:
-      | uri                         | title    | documentation | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords   |
-      | http://example.com/release1 | Omega3   | text.pdf      | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | food       |
-      | http://example.com/release2 | Omega3.1 | text.pdf      | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | food,games |
+      | uri                         | title    | documentation | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords       |
+      | http://example.com/release1 | Omega3   | text.pdf      | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | Alphabet       |
+      | http://example.com/release2 | Omega3.1 | text.pdf      | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | Alphabet,games |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Omega3                                |
@@ -602,7 +602,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                  |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2024-07-31T10:19:33Z                  |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                  |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                              |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1          |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                               |
       | http://example.com/release2 | http://purl.org/dc/terms/title                  | Omega3.1                              |
@@ -611,14 +611,14 @@ Feature: RDF synchronization of contents.
       | http://example.com/release2 | http://purl.org/dc/terms/issued                 | 2024-08-01T10:19:33Z                  |
       | http://example.com/release2 | http://purl.org/dc/terms/modified               | 2024-08-01T10:19:33Z                  |
       | http://example.com/release2 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
-      | http://example.com/release2 | http://www.w3.org/ns/dcat#keyword               | food                                  |
+      | http://example.com/release2 | http://www.w3.org/ns/dcat#keyword               | Alphabet                              |
       | http://example.com/release2 | http://www.w3.org/ns/dcat#keyword               | games                                 |
       | http://example.com/release2 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1          |
       | http://example.com/release2 | http://www.w3.org/ns/adms#versionNotes          | New 3.1                               |
     When I update the entity having "http://example.com/release1" as RDF resource:
-      | title          | Omega the third      |
-      | field_keywords | food,drinks          |
-      | changed        | 2024-07-31T15:20:00Z |
+      | title    | Omega the third              |
+      | keywords | Alphabet,nintendo64 licences |
+      | changed  | 2024-07-31T15:20:00Z         |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Omega the third                       |
@@ -627,7 +627,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                  |
       | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2024-07-31T15:20:00Z                  |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                  |
-      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | drinks                                |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | Alphabet                              |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | nintendo64 licences                   |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1          |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                               |
