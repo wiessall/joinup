@@ -76,12 +76,14 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
         // Commenting on content of an archived group is not allowed.
         if ($parent_state === 'archived' || $entity_state === 'archived') {
-          return AccessResult::forbidden();
+          return AccessResult::forbidden('Cannot comment on archived content.')
+            ->addCacheableDependency($parent);
         }
 
         $membership = $this->membershipManager->getMembership($parent, $account->id());
         if ($membership instanceof OgMembership) {
-          return AccessResult::allowedIf($membership->hasPermission($operation));
+          return AccessResult::allowedIf($membership->hasPermission($operation))
+            ->addCacheableDependency($membership);
         }
     }
 
@@ -107,16 +109,21 @@ readonly class CommunityContentWorkflowAccessControlHandler {
 
     $isOwner = $account->id() === $content->getOwnerId();
     if ($account->hasPermission('view any unpublished content')
-      || ($account->id() === $isOwner && $account->hasPermission('view own unpublished content'))) {
-      return AccessResult::allowed();
+      || ($isOwner && $account->hasPermission('view own unpublished content'))) {
+      return AccessResult::allowed()
+        ->addCacheableDependency($content)
+        ->cachePerUser();
     }
 
     if ($group = $content->getGroup()) {
+      $membership = $group->getMembership($account->id());
       if ($group->hasGroupPermission($account->id(), 'view any unpublished content')) {
-        return AccessResult::allowed();
+        return AccessResult::allowed()
+          ->addCacheableDependency($membership);
       }
       elseif ($isOwner && $group->hasGroupPermission($account->id(), 'view own unpublished content')) {
-        return AccessResult::allowed();
+        return AccessResult::allowed()
+          ->addCacheableDependency($membership);
       }
     }
 
@@ -152,12 +159,16 @@ readonly class CommunityContentWorkflowAccessControlHandler {
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
     if ($this->workflowHelper->accountCanNotUnarchive($content, $account)) {
-      return AccessResult::forbidden()->addCacheableDependency($content);
+      return AccessResult::forbidden('Cannot unarchive this content.')
+        ->addCacheableDependency($content)
+        ->cachePerUser();
     }
 
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($content, $account);
     if (empty($allowed_states)) {
-      return AccessResult::forbidden()->addCacheableDependency($content);
+      return AccessResult::forbidden('No available workflow transitions.')
+        ->addCacheableDependency($content)
+        ->cachePerUser();
     }
 
     return AccessResult::neutral();
@@ -178,13 +189,10 @@ readonly class CommunityContentWorkflowAccessControlHandler {
     $anyPermission = "delete any {$content->bundle()} content";
 
     // Global roles with the 'any permission' can always delete any content.
-    if ($account->hasPermission($anyPermission)) {
-      return AccessResult::allowed();
-    }
-
-    // No users get the `delete own 'bundle' content` in global roles. Access
-    // for owned content is checked in OG.
-    return AccessResult::neutral();
+    // If user does not have the permission then access for owned content is
+    // checked in OG.
+    return AccessResult::allowedIfHasPermission($account, $anyPermission)
+      ->addCacheableDependency($content);
   }
 
   /**

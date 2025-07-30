@@ -37,7 +37,8 @@ class ArchivedGroupAccessCheck implements AccessInterface {
 
     // If the group is archived, access is denied.
     if ($group instanceof GroupInterface && $group->getWorkflowState() === 'archived') {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()
+        ->addCacheableDependency($group);
     }
 
     // @todo Why return allowed here? Why not neutral? Is this the sole access
