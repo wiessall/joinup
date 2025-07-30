@@ -34,7 +34,8 @@ class JoinupCollectionLeaveController {
       $node instanceof CollectionInterface &&
       $node->getUri() === JoinupCollectionHelper::JOINUP_COLLECTION_URI
     ) {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()
+        ->addCacheableDependency($node);
     }
     return LeaveGroupConfirmForm::access($node);
   }
