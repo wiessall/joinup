@@ -94,19 +94,18 @@ readonly class ModalFormatterEntityViewController implements ContainerInjectionI
    *   The access result object.
    */
   public function access(EntityInterface $entity, string $field): AccessResultInterface {
-    $accessResult = AccessResult::forbidden();
-
     if (
       $entity instanceof ContentEntityInterface
       && $entity->hasField($field)
       && !$entity->get($field)->isEmpty()
     ) {
-      $accessResult = $entity->get($field)->access('view', NULL, TRUE);
+      // Return field access result with proper cache metadata.
+      return $entity->get($field)->access('view', NULL, TRUE);
     }
 
-    return $accessResult->addCacheableDependency($entity)
-      ->cachePerUser()
-      ->cachePerPermissions();
+    // Return forbidden with proper cache metadata.
+    return AccessResult::forbidden('Field does not exist or is empty')
+      ->addCacheableDependency($entity);
   }
 
   /**
