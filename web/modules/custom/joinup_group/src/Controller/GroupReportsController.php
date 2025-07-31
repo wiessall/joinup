@@ -100,7 +100,8 @@ class GroupReportsController extends ControllerBase {
     // Check if the user has the global permission to access group reports of
     // all groups (e.g. moderators).
     if ($user->hasPermission('access group reports')) {
-      return AccessResult::allowed();
+      return AccessResult::allowed()
+        ->addCacheContexts(['user.permissions']);
     }
 
     // Check if the user has permission to access the group reports page of this
