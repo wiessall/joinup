@@ -7,8 +7,10 @@
  * - languages: Array of language objects with 'code', 'name', and 'url'.
  */
 #}
-<div class="oe-language-picker__grid">
-  {% for language in languages %}
+<div class="oe-language-picker__container">
+  <h3 class="oe-language-picker__title">{{ 'Select your language'|t }}</h3>
+  <div class="oe-language-picker__grid">
+    {% for language in languages %}
     <div class="oe-language-picker__item">
       <a href="{{ language.url }}" class="oe-language-picker__link">
         <span class="oe-language-picker__code">{{ language.code|upper }}</span>
@@ -16,4 +18,5 @@
       </a>
     </div>
   {% endfor %}
+  </div>
 </div>
