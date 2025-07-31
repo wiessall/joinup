@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Contains oe_language_picker.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function oe_language_picker_theme(): array {
+  return [
+    'language_picker_grid' => [
+      'variables' => [
+        'languages' => [],
+      ],
+      'template' => 'language-picker-grid',
+    ],
+  ];
+}

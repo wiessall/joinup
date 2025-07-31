@@ -1,0 +1,6 @@
+language_picker:
+  css:
+    theme:
+      css/language-picker.css: { }
+  dependencies:
+    - oe_popover/popover
