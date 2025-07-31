@@ -18,8 +18,8 @@
 {% set popover_class_list = ['oe-popover']|merge(popover_classes) %}
 
 <div class="{{ popover_class_list|join(' ') }}"{{ popover_attributes ? create_attribute(popover_attributes) }}>
-  <button 
-    type="button" 
+  <button
+    type="button"
     class="{{ trigger_class_list|join(' ') }}"
     data-bs-toggle="popover"
     data-bs-placement="{{ placement }}"

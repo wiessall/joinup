@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @file
- * Contains oe_popover.module.
+ * Contains hooks and functions related to oe_popover.
  */
+
+declare(strict_types=1);
 
 /**
  * Implements hook_theme().

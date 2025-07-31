@@ -52,7 +52,7 @@ class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginI
     $current_language = $this->languageManager->getCurrentLanguage();
     $language_links = $this->buildLanguageLinks($current_language);
 
-    // Build language grid content
+    // Build language grid content.
     $language_content = [
       '#theme' => 'language_picker_grid',
       '#languages' => $language_links,
