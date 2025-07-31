@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38bf65abc1908bac2dd29673c9003f3c",
+    "content-hash": "4d928d2a04aca269d96442731b76feb1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9851,6 +9851,18 @@
                     "name": "Claudiu Cristea",
                     "homepage": "https://www.drupal.org/u/claudiucristea",
                     "email": "clau.cristea@gmail.com"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "huzooka",
+                    "homepage": "https://www.drupal.org/user/281301"
+                },
+                {
+                    "name": "idimopoulos",
+                    "homepage": "https://www.drupal.org/user/2578708"
                 }
             ],
             "description": "Track usages of a certain entity type by a source entity",

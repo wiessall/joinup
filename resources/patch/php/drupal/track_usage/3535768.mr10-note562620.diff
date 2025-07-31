@@ -1,0 +1,1295 @@
+diff --git a/src/Hook/RecordUsageHook.php b/src/Hook/RecordUsageHook.php
+index 4e045a2840ffbf60ec8dd806bbb3769ec367c85b..def934eb6fe4944fa682c29e4aa2a0287b427b60 100644
+--- a/src/Hook/RecordUsageHook.php
++++ b/src/Hook/RecordUsageHook.php
+@@ -101,14 +101,14 @@ class RecordUsageHook {
+         ->fields(RecorderInterface::TABLE, ['source_type', 'source_id_string', 'source_revision'])
+         ->condition('config', $config->id())
+         ->execute()
+-        ->fetchAll($this->fetchMode(\PDO::FETCH_NUM));
++        ->fetchAll();
+ 
+       // Remove all recorded usages for this config first.
+       $this->recorder->cleanup($config, Operation::Delete);
+ 
+       foreach ($records as $record) {
+-        $record[] = $config->id();
+-        $this->recorder->recordRaw(...$record);
++        $entity = $this->loadEntity($record->source_type, $record->source_id_string, $record->source_revision);
++        $this->recorder->record($entity, $config);
+       }
+     }
+   }
+diff --git a/src/ReaderInterface.php b/src/ReaderInterface.php
+index 68f891201f3d63c4a1c6507abfb3d12ec4a9583e..4a1ebdb72f5860f47f7c2f814c21dcee082faaec 100644
+--- a/src/ReaderInterface.php
++++ b/src/ReaderInterface.php
+@@ -25,7 +25,7 @@ interface ReaderInterface {
+    *   The track usage configuration to use.
+    *
+    * @return iterable<int|string>
+-   *   A list if target entity IDs.
++   *   A list of target entity IDs.
+    */
+   public function getTargetsForEntity(FieldableEntityInterface $entity, string $targetEntityTypeId, TrackConfigInterface $config): iterable;
+ 
+@@ -37,12 +37,12 @@ interface ReaderInterface {
+    * @param \Drupal\track_usage\Entity\TrackConfigInterface $config
+    *   The track usage configuration to use.
+    *
+-   * @return iterable<array{string, string, string}>
+-   *   The paths to the target entity. Each element is a triplet:
++   * @return list<list<array{string, string, string}>>
++   *   A list of paths to the target entity. Each path is a list of triplets:
+    *   0: The entity type ID.
+    *   1: The entity ID.
+    *   2: The revision ID.
+    */
+-  public function getPathsToTarget(EntityInterface $target, TrackConfigInterface $config): iterable;
++  public function getPathsToTarget(EntityInterface $target, TrackConfigInterface $config): array;
+ 
+ }
+diff --git a/src/Recorder.php b/src/Recorder.php
+index 32d7b6a9e931bd3633fcac9bb289c95ceb81f721..b35adde8ddf8d164ea189a5e5b0c542755afced5 100644
+--- a/src/Recorder.php
++++ b/src/Recorder.php
+@@ -4,9 +4,9 @@ declare(strict_types=1);
+ 
+ namespace Drupal\track_usage;
+ 
+-use Drupal\Component\Serialization\Json;
+ use Drupal\Core\Database\Connection;
+-use Drupal\Core\Database\Query\Delete;
++use Drupal\Core\Database\Query\Condition;
++use Drupal\Core\Database\Query\ConditionInterface;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+@@ -41,23 +41,11 @@ class Recorder implements RecorderInterface {
+    * {@inheritdoc}
+    */
+   public function record(EntityInterface $entity, TrackConfigInterface $config): void {
+-    $this->recordRaw($entity->getEntityTypeId(), $entity->id(), $this->getRevisionId($entity), $config->id());
+-  }
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function recordRaw(string $entityTypeId, int|string $entityId, int|string $revisionId, string $configId): void {
+-    $entity = $this->loadEntity($entityTypeId, $entityId, intval($revisionId));
++    $entity = $this->loadEntity($entity->getEntityTypeId(), $entity->id(), $this->getRevisionId($entity));
+     if (!$entity) {
+       return;
+     }
+ 
+-    $config = $this->entityTypeManager->getStorage('track_usage_config')->load($configId);
+-    if (!$config) {
+-      return;
+-    }
+-
+     if ($config->isTraversable($entity)) {
+       assert($entity instanceof FieldableEntityInterface);
+       // Re-queue all source entities where this entity is involved.
+@@ -68,28 +56,15 @@ class Recorder implements RecorderInterface {
+     if (!$config->isSource($entity)) {
+       return;
+     }
+-
+     assert($entity instanceof FieldableEntityInterface);
+ 
+-    $entityTypeId = $entity->getEntityTypeId();
+-    $entityIdAsInteger = $this->getIntegerIdColumnValue($entity);
+-    $entityIdAsString = $this->getStringIdColumnValue($entity);
++    // Cleanup first all records for this entity.
++    $this->deleteUsageRecords($this->getCondition(entity: $entity, revision: TRUE));
+ 
++    // Insert usage records.
+     foreach ($this->getTranslations($entity) as $translation) {
+       foreach ($this->tracker->track($translation, $config) as $usage) {
+-        assert($usage instanceof Usage);
+-        $meta = json_encode((object) ['paths' => $usage->paths]);
+-        $this->db->merge(self::TABLE)->keys([
+-          'config' => $config->id(),
+-          'source_type' => $entityTypeId,
+-          'source_id_int' => $entityIdAsInteger,
+-          'source_id_string' => $entityIdAsString,
+-          'source_langcode' => $translation->language()->getId(),
+-          'source_revision' => $this->getRevisionId($translation),
+-          'target_type' => $usage->targetEntity->getEntityTypeId(),
+-          'target_id_int' => $this->getIntegerIdColumnValue($usage->targetEntity),
+-          'target_id_string' => $this->getStringIdColumnValue($usage->targetEntity),
+-        ])->fields(['meta' => $meta])->execute();
++        $this->createUsageRecord($config, $translation, $usage);
+       }
+     }
+   }
+@@ -125,17 +100,16 @@ class Recorder implements RecorderInterface {
+       return;
+     }
+ 
+-    $ids = $this->db->select(self::TABLE)
++    // Find all usage records where this entity appears in the path.
++    $query = $this->db->select(self::TABLE_PATHS)
+       ->distinct()
+       ->fields(self::TABLE, ['target_id_string'])
+       ->condition('target_type', $targetEntityTypeId)
+-      ->where("JSON_CONTAINS(meta, JSON_QUOTE(:entity), '\$.paths')", [
+-        ':entity' => $this->getKey($entity),
+-      ])
+-      ->execute()
+-      ->fetchCol();
++      ->condition('type', $entity->getEntityTypeId())
++      ->condition('id', $entity->id());
++    $query->innerJoin(table: self::TABLE, condition: self::TABLE_PATHS . '.tid = ' . self::TABLE . '.tid');
+ 
+-    foreach ($ids as $id) {
++    foreach ($query->execute()->fetchCol() as $id) {
+       yield $id;
+     }
+   }
+@@ -143,27 +117,20 @@ class Recorder implements RecorderInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getPathsToTarget(EntityInterface $target, TrackConfigInterface $config): iterable {
+-    $yielded = [];
+-
+-    $query = $this->db->select(self::TABLE)
++  public function getPathsToTarget(EntityInterface $target, TrackConfigInterface $config): array {
++    $query = $this->db->select(self::TABLE_PATHS)
++      ->fields(self::TABLE_PATHS)
+       ->condition('config', $config->id())
+       ->condition('target_type', $target->getEntityTypeId())
+       ->condition($this->getIdColumnName($target, EntityRole::Target), $this->getIdColumnValueByEntity($target));
+-    $query->addExpression("JSON_EXTRACT(meta, '$.paths')", 'paths');
+-
+-    foreach ($query->execute()->fetchAll($this->fetchMode(\PDO::FETCH_ASSOC)) as $row) {
+-      $paths = Json::decode($row['paths']);
+-      foreach ($paths as $path) {
+-        // Convert from key to array. E.g., 'media:1:2' -> ['media', '1', '2'].
+-        $path = array_map(fn(string $key): array => explode(':', $key, 3), $path);
++    $query->innerJoin(table: self::TABLE, condition: self::TABLE_PATHS . '.tid = ' . self::TABLE . '.tid');
+ 
+-        if (!in_array($path, $yielded, TRUE)) {
+-          $yielded[] = $path;
+-          yield $path;
+-        }
+-      }
++    $paths = [];
++    foreach ($query->execute() as $record) {
++      $paths["$record->tid:$record->path"][$record->delta] = [$record->type, $record->id, $record->revision];
+     }
++
++    return array_values($paths);
+   }
+ 
+   /**
+@@ -175,33 +142,33 @@ class Recorder implements RecorderInterface {
+   protected function onEntityDelete(EntityInterface $entity): void {
+     // A track usage config was deleted. Remove all its records.
+     if ($entity instanceof TrackConfigInterface) {
+-      $this->db->delete(self::TABLE)->condition('config', $entity->id())->execute();
++      $this->deleteUsageRecords((new Condition('AND'))->condition('config', $entity->id()));
+       return;
+     }
+     // A language has been deleted.
+     elseif ($entity instanceof ConfigurableLanguageInterface) {
+-      $this->db->delete(self::TABLE)->condition('source_langcode', $entity->id())->execute();
++      $this->deleteUsageRecords((new Condition('AND'))->condition('source_langcode', $entity->id()));
+       return;
+     }
+ 
+     $entityTypeId = $entity->getEntityTypeId();
+     $entityId = $this->getIdColumnValueByEntity($entity);
+ 
+-    $query = $this->db->delete(self::TABLE);
+-    $or = $query->orConditionGroup()
+-      ->condition(
+-        // Delete records when the entity acts like a target entity.
+-        $query->andConditionGroup()
+-          ->condition('target_type', $entityTypeId)
+-          ->condition($this->getIdColumnName($entityTypeId, EntityRole::Target), $entityId)
+-      )
+-      ->condition(
+-        // Or when the entity acts like a source entity.
+-        $query->andConditionGroup()
+-          ->condition('source_type', $entityTypeId)
+-          ->condition($this->getIdColumnName($entityTypeId, EntityRole::Source), $entityId)
+-      );
+-    $query->condition($or)->execute();
++    $condition = new Condition('OR');
++    // The Entity acts like a target entity.
++    $condition->condition(
++      (new Condition('AND'))
++        ->condition('target_type', $entityTypeId)
++        ->condition($this->getIdColumnName($entityTypeId, EntityRole::Target), $entityId)
++    );
++    // Or when the entity acts like a source entity.
++    $condition->condition(
++      (new Condition('AND'))
++        ->condition('source_type', $entityTypeId)
++        ->condition($this->getIdColumnName($entityTypeId, EntityRole::Source), $entityId)
++    );
++
++    $this->deleteUsageRecords($condition);
+   }
+ 
+   /**
+@@ -211,7 +178,7 @@ class Recorder implements RecorderInterface {
+    *   The entity revision being deleted.
+    */
+   protected function onEntityRevisionDelete(EntityInterface $revision): void {
+-    $this->getQuery($revision)->condition('source_revision', $revision->getRevisionId())->execute();
++    $this->deleteUsageRecords($this->getCondition(entity: $revision, revision: TRUE));
+   }
+ 
+   /**
+@@ -221,25 +188,7 @@ class Recorder implements RecorderInterface {
+    *   The entity translation being deleted.
+    */
+   protected function onEntityTranslationDelete(EntityInterface $translation): void {
+-    $langcode = $translation->language()->getId();
+-    $this->getQuery($translation)->condition('source_langcode', $langcode)->execute();
+-  }
+-
+-  /**
+-   * Provides a base query to delete records.
+-   *
+-   * @param \Drupal\Core\Entity\EntityInterface $entity
+-   *   The entity revision or translation.
+-   *
+-   * @return \Drupal\Core\Database\Query\Delete
+-   *   A delete query.
+-   */
+-  protected function getQuery(EntityInterface $entity): Delete {
+-    $entityTypeId = $entity->getEntityTypeId();
+-    $entityId = $this->getIdColumnValueByEntity($entity);
+-    return $this->db->delete(self::TABLE)
+-      ->condition('source_type', $entityTypeId)
+-      ->condition($this->getIdColumnName($entityTypeId, EntityRole::Source), $entityId);
++    $this->deleteUsageRecords($this->getCondition($translation, TRUE, TRUE));
+   }
+ 
+   /**
+@@ -278,32 +227,132 @@ class Recorder implements RecorderInterface {
+    *   The track config.
+    */
+   protected function requeueSourceEntities(FieldableEntityInterface $traversableEntity, TrackConfigInterface $config): void {
+-    $fields = ['config', 'source_type', 'source_id_string', 'source_revision'];
+-    $rows = $this->db->select(self::TABLE)
++    $query = $this->db->select(self::TABLE_PATHS)
+       ->distinct()
+-      ->fields(self::TABLE, $fields)
+-      ->where("JSON_CONTAINS(meta, JSON_QUOTE(:entity), '\$.paths')", [
+-        ':entity' => $this->getKey($traversableEntity),
+-      ])
+-      ->execute()
+-      ->fetchAll($this->fetchMode(\PDO::FETCH_NUM));
+-
++      ->fields(self::TABLE, ['config', 'source_type', 'source_id_string', 'source_revision'])
++      ->condition('type', $traversableEntity->getEntityTypeId())
++      ->condition('id', $traversableEntity->id())
++      ->condition('revision', $this->getRevisionId($traversableEntity));
++    $query->innerJoin(table: self::TABLE, condition: self::TABLE_PATHS . '.tid = ' . self::TABLE . '.tid');
++    $rows = $query->execute()->fetchAll($this->fetchMode(\PDO::FETCH_NUM));
++
++    $configStorage = $this->entityTypeManager->getStorage('track_usage_config');
+     foreach ($rows as $row) {
+       [$configId, $entityTypeId, $entityIdAsString, $revisionId] = $row;
+ 
+       $entityIdColumn = $this->getIdColumnName($entityTypeId, EntityRole::Source);
+       $entityId = $this->getIdColumnValue($entityTypeId, $entityIdAsString);
+ 
+-      $this->db->delete(self::TABLE)
+-        ->condition('config', $config->id())
++      $condition = (new Condition('AND'))
++        ->condition('config', $configId)
+         ->condition('source_type', $entityTypeId)
+         ->condition($entityIdColumn, $entityId)
+-        ->condition('source_revision', intval($revisionId))
+-        ->execute();
++        ->condition('source_revision', intval($revisionId));
++      $this->deleteUsageRecords($condition);
+ 
+       // Re-queue this source entity.
+-      $this->recordRaw($entityTypeId, $entityIdAsString, $revisionId, $configId);
++      $entity = $this->loadEntity($entityTypeId, $entityIdAsString, $revisionId);
++      $this->record($entity, $configStorage->load($configId));
++    }
++  }
++
++  /**
++   * Inserts entity usage record in the backend.
++   *
++   * @param \Drupal\track_usage\Entity\TrackConfigInterface $config
++   *   The track usage config.
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The entity for which to create a new record.
++   * @param \Drupal\track_usage\Model\Usage $usage
++   *   The usage object.
++   */
++  protected function createUsageRecord(TrackConfigInterface $config, EntityInterface $entity, Usage $usage): void {
++    $tid = $this->db->insert(self::TABLE)->fields([
++      'config' => $config->id(),
++      'source_type' => $entity->getEntityTypeId(),
++      'source_id_int' => $this->getIntegerIdColumnValue($entity),
++      'source_id_string' => $this->getStringIdColumnValue($entity),
++      'source_langcode' => $entity->language()->getId(),
++      'source_revision' => $this->getRevisionId($entity),
++      'target_type' => $usage->targetEntity->getEntityTypeId(),
++      'target_id_int' => $this->getIntegerIdColumnValue($usage->targetEntity),
++      'target_id_string' => $this->getStringIdColumnValue($usage->targetEntity),
++    ])->execute();
++
++    if (!$usage->paths) {
++      return;
++    }
++
++    // Insert path records.
++    $insert = $this->db->insert(self::TABLE_PATHS)
++      ->fields(['tid', 'path', 'delta', 'type', 'id', 'revision']);
++
++    foreach ($usage->paths as $path => $keys) {
++      foreach ($keys as $delta => $key) {
++        [$type, $id, $revision] = explode(':', $key, 3);
++        $insert->values([
++          'tid' => $tid,
++          'path' => $path,
++          'delta' => $delta,
++          'type' => $type,
++          'id' => $id,
++          'revision' => $revision,
++        ]);
++      }
++    }
++
++    $insert->execute();
++  }
++
++  /**
++   * Deletes usages based on a condition.
++   *
++   * @param \Drupal\Core\Database\Query\ConditionInterface $condition
++   *   A condition to apply against {track_usage} table.
++   */
++  protected function deleteUsageRecords(ConditionInterface $condition): void {
++    $tids = $this->db->select(self::TABLE)
++      ->fields(self::TABLE, ['tid'])
++      ->condition($condition)
++      ->execute()
++      ->fetchCol();
++
++    if ($tids) {
++      $this->db->delete(self::TABLE_PATHS)->condition('tid', $tids, 'IN')->execute();
+     }
++    $this->db->delete(self::TABLE)->condition($condition)->execute();
++  }
++
++  /**
++   * Returns a base condition to be used on revision and language deletion.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The entity.
++   * @param bool $revision
++   *   (optional) Condition includes also the revision. Defaults to FALSE.
++   * @param bool $langcode
++   *   (optional) Condition includes also the language. Defaults to FALSE.
++   *
++   * @return \Drupal\Core\Database\Query\ConditionInterface
++   *   A condition instance.
++   */
++  protected function getCondition(EntityInterface $entity, bool $revision = FALSE, bool $langcode = FALSE): ConditionInterface {
++    $entityTypeId = $entity->getEntityTypeId();
++    $entityId = $this->getIdColumnValueByEntity($entity);
++
++    $condition = (new Condition('AND'))
++      ->condition('source_type', $entityTypeId)
++      ->condition($this->getIdColumnName($entityTypeId, EntityRole::Source), $entityId);
++
++    if ($revision) {
++      $condition->condition('source_revision', $this->getRevisionId($entity));
++    }
++
++    if ($langcode) {
++      $condition->condition('source_langcode', $entity->language()->getId());
++    }
++
++    return $condition;
+   }
+ 
+ }
+diff --git a/src/RecorderInterface.php b/src/RecorderInterface.php
+index 5e944c439da488d1a07df684a6b396a8c80e7814..87c0f6f8e7f08cef5856814ad0a546624a77f39a 100644
+--- a/src/RecorderInterface.php
++++ b/src/RecorderInterface.php
+@@ -18,6 +18,11 @@ interface RecorderInterface extends ReaderInterface {
+    */
+   public const TABLE = 'track_usage';
+ 
++  /**
++   * Table for paths storage.
++   */
++  public const TABLE_PATHS = 'track_usage_paths';
++
+   /**
+    * Records target entity usages of an entity.
+    *
+@@ -28,23 +33,6 @@ interface RecorderInterface extends ReaderInterface {
+    */
+   public function record(EntityInterface $entity, TrackConfigInterface $config): void;
+ 
+-  /**
+-   * Records target entity usages of an entity given entity data.
+-   *
+-   * This is an alternative to self::record() which doesn't expect an entity
+-   * object but the entity type ID, the entity ID and the entity revision.
+-   *
+-   * @param string $entityTypeId
+-   *   The entity type.
+-   * @param int|string $entityId
+-   *   The entity ID.
+-   * @param int|string $revisionId
+-   *   The entity revision ID.
+-   * @param string $configId
+-   *   The configuration ID.
+-   */
+-  public function recordRaw(string $entityTypeId, int|string $entityId, int|string $revisionId, string $configId): void;
+-
+   /**
+    * Cleans up the usage records.
+    *
+diff --git a/tests/fixtures/expectation/recorder.yml b/tests/fixtures/expectation/recorder.yml
+index 1b5a87498e9c7efcfccf32e895d5e36892fcdf38..aad3a9ec22d5ec84008f87fa2f2fc6bdbadfcd0e 100644
+--- a/tests/fixtures/expectation/recorder.yml
++++ b/tests/fixtures/expectation/recorder.yml
+@@ -3,201 +3,216 @@
+ #   - FID7 is the thumbnail created automatically by Media module.
+ asserts:
+   Initial content: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 4 | 4 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 4 | 4 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]} |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 4 | 4 | [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 4 | 4 | [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
+     # FID7 is the thumbnail created automatically by Media module.
+-    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
+ 
+-  Added node NID=1 revision VID=2: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 4 | 4 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
++  'NID1: Added revision VID=2': |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 4 | 4 | [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
+     # On a new parent node revision, a new paragraph revision is created. In this case paragraph:2:5.
+-    | test | node | 1 | 1 | en | 2 | file | 4 | 4 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:2:5", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1"], ["node:1:2", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 4 | 4 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]} |
+-    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 4 | 4 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:2:2", "paragraph:1:1"]]}                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1"], ["node:1:2", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]} |
++    | test | node | 1 | 1 | en | 2 | file | 4 | 4 | [["node:1:2"], ["node:1:2", "paragraph:2:5", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:5", "paragraph:1:1"], ["node:1:2", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]                      |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 4 | 4 | [["node:1:1"], ["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
++    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 4 | 4 | [["node:1:2"], ["node:1:2", "paragraph:2:2", "paragraph:1:1"]]                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:2", "paragraph:1:1"], ["node:1:2", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]] |
+     # FID7 is the thumbnail created automatically by Media module.
+-    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]}                      |
++    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]                      |
+ 
+   Deleted file FID=4: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1"], ["node:1:2", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]} |
+-    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]}                      |
+-    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1"], ["node:1:2", "media:2:2"]]}                                   |
+-    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]} |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:5", "paragraph:1:1"], ["node:1:2", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]                      |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"], ["node:1:1", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "media:2:2"]]                      |
++    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:2", "paragraph:1:1"], ["node:1:2", "media:2:2"]]                                   |
++    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]] |
+     # FID7 is the thumbnail created automatically by Media module.
+-    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]}                      |
++    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "media:2:2"]]                      |
+ 
+   Deleted media MID=2: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                              |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1"]]}                                                              |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1"]]}                                                              |
+-    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]} |
+-    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1"]]}                                                              |
+-    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]} |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                              |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:5", "paragraph:1:1"]]                                                              |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 5 | 5 | [["node:1:1", "paragraph:2:2", "paragraph:1:1"]]                                                              |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 5 | 5 | [["node:1:2", "paragraph:2:2", "paragraph:1:1"]]                                                              |
++    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]] |
+     # FID7 is the thumbnail created automatically by Media module.
+-    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
++    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
+ 
+   Extracted FID=4 and FID=5 from paragraph text: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | {"paths": [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]} |
+-    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
+-    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | {"paths": [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]}                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                                                                |
+-    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]} |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | ro | 2 | file | 1 | 1 | [["node:1:2"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:2", "paragraph:3:3", "paragraph:4:4"]] |
+     # FID7 is the thumbnail created automatically by Media module.
+-    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]}                                                 |
++    | test | node | 1 | 1 | ro | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
+ 
+-  Deleted node NID=1 translation ID=ro: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
++  'NID1: Deleted translation ID=ro': |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]                                                 |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
+ 
+-  Added node NID=1 translation ID=it: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | it | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | it | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | it | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | it | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | it | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
++  'NID1: Added translation ID=it': |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | it | 2 | file | 1 | 1 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | it | 2 | file | 2 | 2 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | it | 2 | file | 3 | 3 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | it | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | it | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
+ 
+   Deleted language ID=it: |
+-    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | {"paths": [["node:1:1"]]}                                                |
+-    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | {"paths": [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
++    | test | node | 1 | 1 | en | 1 | file | 1 | 1 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 2 | 2 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 3 | 3 | [["node:1:1"]]                                                |
++    | test | node | 1 | 1 | en | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 1 | 1 | [["node:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]]                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 2 | 2 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 3 | 3 | [["node:1:1"]]                                                                                                |
++    | test | node | 1 | 1 | ro | 1 | file | 6 | 6 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"], ["node:1:1", "paragraph:3:3", "paragraph:4:4"]] |
++    | test | node | 1 | 1 | ro | 1 | file | 7 | 7 | [["node:1:1", "paragraph:2:2", "paragraph:1:1", "media:1:1"]]                                                 |
+ 
+-  Deleted node NID=1 revision VID=1: |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
++  'NID1: Deleted revision VID=1': |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
+ 
+-  Added node NID=1 revision VID=3: |
+-    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | {"paths": [["node:1:2"]]}                                                |
+-    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | {"paths": [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 6 | 6 | {"paths": [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 3 | file | 7 | 7 | {"paths": [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]]} |
++  'NID1: Added revision VID=3': |
++    | test | node | 1 | 1 | en | 2 | file | 1 | 1 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 2 | 2 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 3 | 3 | [["node:1:2"]]                                                |
++    | test | node | 1 | 1 | en | 2 | file | 6 | 6 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 2 | file | 7 | 7 | [["node:1:2", "paragraph:2:5", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 6 | 6 | [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 3 | file | 7 | 7 | [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]] |
+ 
+-  Deleted node NID=1 revision VID=2: |
+-    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | {"paths": [["node:1:3"]]}                                                |
+-    | test | node | 1 | 1 | en | 3 | file | 6 | 6 | {"paths": [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]]} |
+-    | test | node | 1 | 1 | en | 3 | file | 7 | 7 | {"paths": [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]]} |
++  'NID1: Deleted revision VID=2': |
++    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | [["node:1:3"]]                                                |
++    | test | node | 1 | 1 | en | 3 | file | 6 | 6 | [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]] |
++    | test | node | 1 | 1 | en | 3 | file | 7 | 7 | [["node:1:3", "paragraph:2:6", "paragraph:1:1", "media:1:1"]] |
+ 
+   Deleted paragraph ID=2, REVISION_ID=6: |
+-    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | {"paths": [["node:1:3"]]} |
+-    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | {"paths": [["node:1:3"]]} |
+-    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | {"paths": [["node:1:3"]]} |
++    | test | node | 1 | 1 | en | 3 | file | 1 | 1 | [["node:1:3"]] |
++    | test | node | 1 | 1 | en | 3 | file | 2 | 2 | [["node:1:3"]] |
++    | test | node | 1 | 1 | en | 3 | file | 3 | 3 | [["node:1:3"]] |
+ 
+   Deleted NID=1: ''
+diff --git a/tests/src/Kernel/RecorderTest.php b/tests/src/Kernel/RecorderTest.php
+index 0b5fcdc2850835ed37e7b0572e30170ae3565a8b..7142e2b8b06a1d991db2d8b3ad49b8dcf5845a80 100644
+--- a/tests/src/Kernel/RecorderTest.php
++++ b/tests/src/Kernel/RecorderTest.php
+@@ -9,7 +9,6 @@ use Drupal\file\Entity\File;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\media\Entity\Media;
+ use Drupal\track_usage\Entity\TrackConfig;
+-use Drupal\track_usage\Recorder;
+ use Drupal\track_usage\RecorderInterface;
+ use Drupal\track_usage\Trait\BackwardsCompatibilityTrait;
+ use Symfony\Component\Yaml\Yaml;
+@@ -56,7 +55,7 @@ class RecorderTest extends TrackUsageTestBase {
+ 
+     $node->set('title', $this->randomString())->setNewRevision();
+     $node->save();
+-    $this->assertRecordedUsage('Added node NID=1 revision VID=2');
++    $this->assertRecordedUsage('NID1: Added revision VID=2');
+ 
+     File::load(4)->delete();
+     $this->assertRecordedUsage('Deleted file FID=4');
+@@ -72,26 +71,26 @@ class RecorderTest extends TrackUsageTestBase {
+ 
+     $node->removeTranslation('ro');
+     $node->save();
+-    $this->assertRecordedUsage('Deleted node NID=1 translation ID=ro');
++    $this->assertRecordedUsage('NID1: Deleted translation ID=ro');
+ 
+     $node->addTranslation('it', ['title' => $this->randomString()] + $this->entity['node'][1]->toArray());
+     $node->save();
+-    $this->assertRecordedUsage('Added node NID=1 translation ID=it');
++    $this->assertRecordedUsage('NID1: Added translation ID=it');
+ 
+     ConfigurableLanguage::load('it')->delete();
+     $this->assertRecordedUsage('Deleted language ID=it');
+ 
+     $nodeStorage->deleteRevision(1);
+-    $this->assertRecordedUsage('Deleted node NID=1 revision VID=1');
++    $this->assertRecordedUsage('NID1: Deleted revision VID=1');
+ 
+     $node->set('title', $this->randomString())->setNewRevision();
+     $node->save();
+-    $this->assertRecordedUsage('Added node NID=1 revision VID=3');
++    $this->assertRecordedUsage('NID1: Added revision VID=3');
+ 
+     // Try to edit a revision and delete it in the same request.
+     $nodeStorage->loadRevision(2)->set('title', $this->randomString())->save();
+     $nodeStorage->deleteRevision(2);
+-    $this->assertRecordedUsage('Deleted node NID=1 revision VID=2');
++    $this->assertRecordedUsage('NID1: Deleted revision VID=2');
+ 
+     // Delete a paragraph which is a traversable entity. Prove that deleting a
+     // traversable entity revision will recalculate source entity usages.
+@@ -110,8 +109,7 @@ class RecorderTest extends TrackUsageTestBase {
+    *   The expectation identifier according to recorder.yml test cases.
+    */
+   protected function assertRecordedUsage(string $expectation): void {
+-    $config = TrackConfig::load('test');
+-    $this->container->get(Recorder::class)->record($this->entity['node'][1], $config);
++    // Check main usage records.
+     $actualRecords = $this->container->get('database')
+       ->select(RecorderInterface::TABLE)
+       ->fields(RecorderInterface::TABLE)
+@@ -121,10 +119,38 @@ class RecorderTest extends TrackUsageTestBase {
+     $expectedRecords = $this->getExpectation($expectation);
+     $this->assertCount(count($expectedRecords), $actualRecords);
+     foreach ($actualRecords as $delta => $actualRecord) {
++      $tid = (int) array_shift($actualRecord);
++      $actualRecord[] = $this->getPaths($tid);
+       $this->assertEquals($expectedRecords[$delta], $actualRecord, "Expectation '$expectation' failed at row $delta");
+     }
+   }
+ 
++  /**
++   * Gets the paths for a given usage.
++   *
++   * @param int $tid
++   *   The usage record ID.
++   *
++   * @return array<int, array<int, string>>
++   *   A structured array of paths.
++   */
++  public function getPaths(int $tid): array {
++    $paths = [];
++    $items = $this->container->get('database')->select(RecorderInterface::TABLE_PATHS)
++      ->fields(RecorderInterface::TABLE_PATHS)
++      ->condition('tid', $tid)
++      ->orderBy('path')
++      ->orderBy('delta')
++      ->execute()
++      ->fetchAll($this->fetchMode(\PDO::FETCH_ASSOC));
++
++    foreach ($items as $item) {
++      $paths[$item['path']][$item['delta']] = "{$item['type']}:{$item['id']}:{$item['revision']}";
++    }
++
++    return $paths;
++  }
++
+   /**
+    * Processes one expectation case give its identifier.
+    *
+@@ -145,6 +171,8 @@ class RecorderTest extends TrackUsageTestBase {
+             continue;
+           }
+           $columns = array_filter(array_map('trim', explode('|', trim($line, '|'))));
++          // Decode the paths-JSON for easy comparison.
++          $columns[9] = json_decode($columns[9], TRUE);
+           $this->expectations[$expectation][] = $columns;
+         }
+         $this->expectations[$expectation] = array_filter($this->expectations[$expectation]);
+diff --git a/tests/src/Kernel/Track/TrackTestBase.php b/tests/src/Kernel/Track/TrackTestBase.php
+index 2719b8e9678b2ae6496a4d0feb8ef02377012e2b..54aeeb3bacc0d20c44fe1d7efef8e9aa5bc415a8 100644
+--- a/tests/src/Kernel/Track/TrackTestBase.php
++++ b/tests/src/Kernel/Track/TrackTestBase.php
+@@ -39,7 +39,10 @@ abstract class TrackTestBase extends KernelTestBase {
+ 
+     $this->installEntitySchema('path_alias');
+     $this->installEntitySchema('redirect');
+-    $this->installSchema('track_usage', [RecorderInterface::TABLE]);
++    $this->installSchema('track_usage', [
++      RecorderInterface::TABLE,
++      RecorderInterface::TABLE_PATHS,
++    ]);
+     $this->setSetting('file_public_path', 'sites/default/files');
+   }
+ 
+diff --git a/track_usage.install b/track_usage.install
+index 024f3e42afbbbbd69d683fd0ffb5c34af7a7de49..2675ebac467abe62f4ec34b7d4405904b381459a 100644
+--- a/track_usage.install
++++ b/track_usage.install
+@@ -10,16 +10,6 @@ declare(strict_types=1);
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\track_usage\RecorderInterface;
+ 
+-/**
+- * Implements hook_install().
+- */
+-function track_usage_install(bool $is_syncing): void {
+-  // @todo Move to schema when #3343634 lands.
+-  // @todo Figure out how to index this field/hotpath.
+-  // @see https://www.drupal.org/i/3343634
+-  \Drupal::database()->query('ALTER TABLE {' . RecorderInterface::TABLE . '} ADD meta JSON');
+-}
+-
+ /**
+  * Implements hook_schema().
+  */
+@@ -28,6 +18,13 @@ function track_usage_schema(): array {
+     RecorderInterface::TABLE => [
+       'description' => 'Stores relation between host and file entities',
+       'fields' => [
++        'tid' => [
++          'description' => 'Unique identifier for the record',
++          'type' => 'serial',
++          'size' => 'big',
++          'not null' => TRUE,
++          'unsigned' => TRUE,
++        ],
+         'config' => [
+           'description' => 'Configuration',
+           'type' => 'varchar_ascii',
+@@ -85,16 +82,19 @@ function track_usage_schema(): array {
+           'not null' => TRUE,
+         ],
+       ],
+-      'primary key' => [
+-        'config',
+-        'source_type',
+-        'source_id_int',
+-        'source_id_string',
+-        'source_langcode',
+-        'source_revision',
+-        'target_type',
+-        'target_id_int',
+-        'target_id_string',
++      'primary key' => ['tid'],
++      'unique keys' => [
++        'track' => [
++          'config',
++          'source_type',
++          'source_id_int',
++          'source_id_string',
++          'source_langcode',
++          'source_revision',
++          'target_type',
++          'target_id_int',
++          'target_id_string',
++        ],
+       ],
+       'indexes' => [
+         'target_entity' => ['target_type', 'target_id_int'],
+@@ -103,5 +103,247 @@ function track_usage_schema(): array {
+         'source_entity_string' => ['source_type', 'source_id_string'],
+       ],
+     ],
++    RecorderInterface::TABLE_PATHS => [
++      'description' => 'Stores paths to target entities',
++      'fields' => [
++        'tid' => [
++          'description' => 'Unique identifier for the tracking record',
++          'type' => 'serial',
++          'not null' => TRUE,
++          'unsigned' => TRUE,
++        ],
++        'path' => [
++          'description' => 'The path identifier. One entity can have multiple references to the same target entity',
++          'type' => 'int',
++          'size' => 'tiny',
++          'not null' => TRUE,
++          'unsigned' => TRUE,
++        ],
++        'delta' => [
++          'description' => 'The sequence of a traversable item inside a path',
++          'type' => 'int',
++          'size' => 'tiny',
++          'not null' => TRUE,
++          'unsigned' => TRUE,
++          'default' => 0,
++        ],
++        'type' => [
++          'description' => 'The type of the traversable entity',
++          'type' => 'varchar_ascii',
++          'length' => EntityTypeInterface::ID_MAX_LENGTH,
++          'not null' => TRUE,
++        ],
++        'id' => [
++          'description' => 'The ID if the traversable entity',
++          'type' => 'varchar_ascii',
++          'length' => 255,
++          'not null' => TRUE,
++        ],
++        'revision' => [
++          'description' => 'The revision of the traversable entity',
++          'type' => 'int',
++          'unsigned' => TRUE,
++          'not null' => TRUE,
++          'default' => 0,
++        ],
++      ],
++      'primary key' => [
++        'tid',
++        'path',
++        'delta',
++      ],
++      // A traversable entity cannot occur more than one time in the same path.
++      'unique keys' => [
++        'entity_in_path' => [
++          'tid',
++          'path',
++          'delta',
++          'type',
++          'id',
++        ],
++      ],
++      'indexes' => [
++        'traversable' => ['type', 'id', 'revision'],
++      ],
++      'foreign keys' => [
++        'track_usage' => [
++          'table' => RecorderInterface::TABLE,
++          'columns' => [
++            'tid' => 'tid',
++          ],
++        ],
++      ],
++    ],
+   ];
+ }
++
++/**
++ * Add new serial field to track_usage table.
++ */
++function track_usage_update_8001(): void {
++  $schema = \Drupal::database()->schema();
++
++  // Drop primary key first.
++  $schema->dropPrimaryKey(RecorderInterface::TABLE);
++
++  $schema->addField(RecorderInterface::TABLE, 'tid', [
++    'description' => 'Unique identifier for the record',
++    'type' => 'serial',
++    'size' => 'big',
++    'not null' => TRUE,
++    'unsigned' => TRUE,
++  ], ['primary key' => ['tid']]);
++
++  // The legacy primary key defines the uniqueness.
++  $schema->addUniqueKey(RecorderInterface::TABLE, 'track', [
++    'config',
++    'source_type',
++    'source_id_int',
++    'source_id_string',
++    'source_langcode',
++    'source_revision',
++    'target_type',
++    'target_id_int',
++    'target_id_string',
++  ]);
++}
++
++/**
++ * Create a new {track_usage_paths} table.
++ */
++function track_usage_update_8002(): void {
++  \Drupal::database()->schema()->createTable(RecorderInterface::TABLE_PATHS, [
++    'description' => 'Stores paths to target entities',
++    'fields' => [
++      'tid' => [
++        'description' => 'Unique identifier for the tracking record',
++        'type' => 'serial',
++        'not null' => TRUE,
++        'unsigned' => TRUE,
++      ],
++      'path' => [
++        'description' => 'The path identifier. One entity can have multiple references to the same target entity',
++        'type' => 'int',
++        'size' => 'tiny',
++        'not null' => TRUE,
++        'unsigned' => TRUE,
++      ],
++      'delta' => [
++        'description' => 'The sequence of a traversable item inside a path',
++        'type' => 'int',
++        'size' => 'tiny',
++        'not null' => TRUE,
++        'unsigned' => TRUE,
++        'default' => 0,
++      ],
++      'type' => [
++        'description' => 'The type of the traversable entity',
++        'type' => 'varchar_ascii',
++        'length' => EntityTypeInterface::ID_MAX_LENGTH,
++        'not null' => TRUE,
++      ],
++      'id' => [
++        'description' => 'The ID if the traversable entity',
++        'type' => 'varchar_ascii',
++        'length' => 255,
++        'not null' => TRUE,
++      ],
++      'revision' => [
++        'description' => 'The revision of the traversable entity',
++        'type' => 'int',
++        'unsigned' => TRUE,
++        'not null' => TRUE,
++        'default' => 0,
++      ],
++    ],
++    'primary key' => [
++      'tid',
++      'path',
++      'delta',
++    ],
++    // A traversable entity cannot occur more than one time in the same path.
++    'unique keys' => [
++      'entity_in_path' => [
++        'tid',
++        'path',
++        'delta',
++        'type',
++        'id',
++      ],
++    ],
++    'indexes' => [
++      'traversable' => ['type', 'id', 'revision'],
++    ],
++    'foreign keys' => [
++      'track_usage' => [
++        'table' => RecorderInterface::TABLE,
++        'columns' => [
++          'tid' => 'tid',
++        ],
++      ],
++    ],
++  ]);
++}
++
++/**
++ * Migrate paths into the {track_usage_paths} table.
++ */
++function track_usage_update_8003(array &$sandbox): string {
++  $db = \Drupal::database();
++
++  if (!isset($sandbox['data'])) {
++    // Get all records with non-empty meta-data.
++    $sandbox['data'] = $db->select(RecorderInterface::TABLE)
++      ->fields(RecorderInterface::TABLE, ['tid', 'meta'])
++      ->isNotNull('meta')
++      ->condition('meta', '', '!=')
++      ->execute()
++      ->fetchAll();
++
++    $sandbox['progress'] = 0;
++    $sandbox['count'] = count($sandbox['data']);
++  }
++
++  $data = array_splice($sandbox['data'], 0, 200);
++
++  $insert = $db->insert(RecorderInterface::TABLE_PATHS)
++    ->fields(['tid', 'path', 'delta', 'type', 'id', 'revision']);
++
++  foreach ($data as $record) {
++    $sandbox['progress']++;
++
++    if (!($meta = json_decode($record->meta, TRUE)) || !isset($meta['paths']) && !is_array($meta['paths'])) {
++      // Doesn't contain valid JSON or no `paths` array exists.
++      continue;
++    }
++
++    foreach ($meta['paths'] as $path => $keys) {
++      foreach ($keys as $delta => $key) {
++        [$type, $id, $revision] = explode(':', $key, 3);
++        $insert->values([
++          'tid' => $record->tid,
++          'path' => $path,
++          'delta' => $delta,
++          'type' => $type,
++          'id' => $id,
++          'revision' => $revision,
++        ]);
++      }
++    }
++  }
++
++  if ($insert->count()) {
++    $insert->execute();
++  }
++
++  $sandbox['#finished'] = empty($sandbox['data']);
++
++  return "Processed {$sandbox['progress']} out of {$sandbox['count']} usages";
++}
++
++/**
++ * Remove the meta-information column.
++ */
++function track_usage_update_8004(): void {
++  \Drupal::database()->query('ALTER TABLE {' . RecorderInterface::TABLE . '} DROP COLUMN meta');
++}
