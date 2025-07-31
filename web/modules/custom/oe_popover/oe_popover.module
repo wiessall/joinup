@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Contains oe_popover.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function oe_popover_theme(): array {
+  return [
+    'oe_popover' => [
+      'variables' => [
+        'trigger_text' => '',
+        'trigger_classes' => [],
+        'content' => '',
+        'popover_classes' => [],
+        'placement' => 'bottom',
+        'trigger_attributes' => [],
+        'popover_attributes' => [],
+      ],
+      'template' => 'oe-popover',
+    ],
+  ];
+}
