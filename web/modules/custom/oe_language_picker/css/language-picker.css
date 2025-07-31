@@ -22,11 +22,11 @@
 }
 
 .oe-language-picker__code {
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
   min-width: 1.5rem;
   text-align: center;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .oe-language-picker__name {
