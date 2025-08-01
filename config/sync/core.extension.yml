@@ -153,6 +153,7 @@ module:
   l10n_client_ui: 0
   l10n_pconfig: 0
   language: 0
+  language_picker: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_custom_section_classes: 0
@@ -186,7 +187,6 @@ module:
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_gisco_geocoding: 0
-  oe_language_picker: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0

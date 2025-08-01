@@ -36,7 +36,7 @@ function ventuno_preprocess_page(array &$variables): void {
 
   // Add language picker block.
   $block_manager = \Drupal::service('plugin.manager.block');
-  $block_plugin = $block_manager->createInstance('oe_language_picker');
+  $block_plugin = $block_manager->createInstance('language_picker');
   if ($block_plugin) {
     $variables['language_picker'] = $block_plugin->build();
   }

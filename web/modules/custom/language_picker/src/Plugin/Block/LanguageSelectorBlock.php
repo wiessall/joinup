@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\oe_language_picker\Plugin\Block;
+namespace Drupal\language_picker\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
@@ -18,9 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a Language Selector block with Bootstrap popover.
  */
 #[Block(
-  id: 'oe_language_picker',
-  admin_label: new TranslatableMarkup('OE Language Picker'),
-  category: new TranslatableMarkup('OpenEuropa'),
+  id: 'language_picker',
+  admin_label: new TranslatableMarkup('Language Picker'),
 )]
 class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
@@ -62,10 +61,10 @@ class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginI
       '#theme' => 'ventuno_popover',
       '#trigger_text' => strtoupper($current_language->getId()),
       '#content' => $language_content,
-      '#popover_classes' => ['oe-language-picker'],
+      '#popover_classes' => ['language-picker'],
       '#placement' => 'bottom',
       '#attached' => [
-        'library' => ['oe_language_picker/language_picker'],
+        'library' => ['language_picker/language_picker'],
       ],
     ];
   }
