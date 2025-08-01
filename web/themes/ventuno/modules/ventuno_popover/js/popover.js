@@ -11,7 +11,11 @@
    */
   Drupal.behaviors.ventunoPopover = {
     attach(context) {
-      const triggers = once("ventuno-popover", ".ventuno-popover__trigger", context);
+      const triggers = once(
+        "ventuno-popover",
+        ".ventuno-popover__trigger",
+        context,
+      );
 
       triggers.forEach((trigger) => {
         const popover = trigger.closest(".ventuno-popover");
