@@ -1,6 +1,0 @@
-language_picker:
-  css:
-    theme:
-      css/language-picker.css: { }
-  dependencies:
-    - ventuno_popover/popover

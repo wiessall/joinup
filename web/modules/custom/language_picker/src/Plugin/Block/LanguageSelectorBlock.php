@@ -51,26 +51,18 @@ class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginI
     $current_language = $this->languageManager->getCurrentLanguage();
     $language_links = $this->buildLanguageLinks($current_language);
 
-    // Build language grid content.
-    $language_content = [
-      '#theme' => 'language_picker_grid',
-      '#languages' => $language_links,
-    ];
-
     return [
-      '#theme' => 'ventuno_popover',
-      '#trigger_text' => strtoupper($current_language->getId()),
-      '#content' => $language_content,
-      '#popover_classes' => ['language-picker'],
-      '#placement' => 'bottom',
-      '#attached' => [
-        'library' => ['language_picker/language_picker'],
+      '#theme' => 'language_picker',
+      '#current_language' => [
+        'code' => $current_language->getId(),
+        'name' => $current_language->getName(),
       ],
+      '#languages' => $language_links,
     ];
   }
 
   /**
-   * Builds the language links for the popover.
+   * Builds the language links for the language picker.
    *
    * @param \Drupal\Core\Language\LanguageInterface $current_language
    *   The current language.
