@@ -239,8 +239,13 @@ function joinup_core_block_access(BlockInterface $block, string $operation, Acco
   }
 
   // Check if we are on a route that is suitable for machine translation.
-  if (!empty(joinup_core_get_etrans_block_config_for_current_page())) {
-    return AccessResult::allowed();
+  $build = [];
+  $etrans_config = joinup_core_get_etrans_block_config_for_current_page($build);
+
+  if (!empty($etrans_config)) {
+    $cache_meta = CacheableMetadata::createFromRenderArray($build);
+    return AccessResult::allowed()
+      ->addCacheableDependency($cache_meta);
   }
   return AccessResult::forbidden();
 }
