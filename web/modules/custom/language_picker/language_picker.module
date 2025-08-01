@@ -12,11 +12,12 @@ declare(strict_types=1);
  */
 function language_picker_theme(): array {
   return [
-    'language_picker_grid' => [
+    'language_picker' => [
       'variables' => [
+        'current_language' => NULL,
         'languages' => [],
       ],
-      'template' => 'language-picker-grid',
+      'template' => 'language-picker',
     ],
   ];
 }

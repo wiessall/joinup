@@ -1,7 +1,6 @@
 name: 'Language Picker'
 type: module
-description: 'Language picker with Bootstrap popover similar to European Commission site'
+description: 'Language picker'
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:language
-  - ventuno_popover:ventuno_popover
