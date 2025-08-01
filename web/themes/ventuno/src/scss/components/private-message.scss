@@ -51,10 +51,7 @@
     z-index: 1;
     float: right;
     margin-top: -3.6em;
-    &:has(
-      + .block-private-message-inbox-block
-        .private-message-thread--full-container:empty
-    ) {
+    &.hidden-toggle {
       display: none !important;
     }
   }
