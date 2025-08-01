@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\language_picker\Plugin\Block;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -88,7 +89,7 @@ class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginI
     }
 
     // Sort languages by weight.
-    usort($language_links, fn($a, $b) => $a['weight'] <=> $b['weight']);
+    uasort($language_links, [SortArray::class, 'sortByWeightElement']);
 
     return $language_links;
   }
