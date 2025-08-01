@@ -16,13 +16,13 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Language Selector block with Bootstrap popover.
+ * Provides a Language Picker block.
  */
 #[Block(
   id: 'language_picker',
   admin_label: new TranslatableMarkup('Language Picker'),
 )]
-class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class LanguagePickerBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
     array $configuration,
