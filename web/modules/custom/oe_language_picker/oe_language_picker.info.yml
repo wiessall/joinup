@@ -6,5 +6,5 @@ dependencies:
   - drupal:language
   - drupal:block
   - drupal:system
-  - oe_popover:oe_popover
+  - ventuno_popover:ventuno_popover
 package: OpenEuropa

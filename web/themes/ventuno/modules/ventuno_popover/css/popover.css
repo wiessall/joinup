@@ -1,12 +1,12 @@
 /**
- * Generic OE Popover Styles.
+ * Generic Ventuno Popover Styles.
  */
-.oe-popover {
+.ventuno-popover {
   position: relative;
   display: inline-block;
 }
 
-.oe-popover__trigger {
+.ventuno-popover__trigger {
   display: inline-flex;
   align-items: center;
   padding: 0;
@@ -18,29 +18,29 @@
   gap: 0.25rem;
 }
 
-.oe-popover__trigger:focus-visible {
+.ventuno-popover__trigger:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
 
-.oe-popover__trigger-text {
+.ventuno-popover__trigger-text {
   font-weight: inherit;
 }
 
-.popover.oe-popover-component {
+.popover.ventuno-popover-component {
   max-width: 500px;
 }
 
-.popover.oe-popover-component .popover-body {
+.popover.ventuno-popover-component .popover-body {
   padding: 0.75rem;
 }
 
 @media (max-width: 767.98px) {
-  .popover.oe-popover-component {
+  .popover.ventuno-popover-component {
     max-width: calc(100vw - 2rem);
   }
 
-  .popover.oe-popover-component .popover-body {
+  .popover.ventuno-popover-component .popover-body {
     padding: 0.5rem;
   }
 }

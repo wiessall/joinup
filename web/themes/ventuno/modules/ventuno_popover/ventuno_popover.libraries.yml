@@ -7,4 +7,3 @@ popover:
   dependencies:
     - core/drupal
     - core/jquery
-    - oe_bootstrap_theme/bootstrap

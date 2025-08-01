@@ -59,7 +59,7 @@ class LanguageSelectorBlock extends BlockBase implements ContainerFactoryPluginI
     ];
 
     return [
-      '#theme' => 'oe_popover',
+      '#theme' => 'ventuno_popover',
       '#trigger_text' => strtoupper($current_language->getId()),
       '#content' => $language_content,
       '#popover_classes' => ['oe-language-picker'],
