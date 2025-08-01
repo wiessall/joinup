@@ -188,7 +188,6 @@ module:
   oe_gisco_geocoding: 0
   oe_language_picker: 0
   oe_newsroom_newsletter: 0
-  oe_popover: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
   oe_webtools_cookie_consent: 0
@@ -277,6 +276,7 @@ module:
   ui_patterns_settings: 0
   user: 0
   ventuno_helper: 0
+  ventuno_popover: 0
   view_unpublished: 0
   views_block_area: 0
   views_bulk_operations: 0

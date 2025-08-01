@@ -1,6 +1,6 @@
 /**
  * @file
- * Generic OE Popover functionality.
+ * Generic Ventuno Popover functionality.
  */
 
 /* global bootstrap */
@@ -9,12 +9,12 @@
   /**
    * Initialize generic popovers.
    */
-  Drupal.behaviors.oePopover = {
+  Drupal.behaviors.ventunoPopover = {
     attach(context) {
-      const triggers = once("oe-popover", ".oe-popover__trigger", context);
+      const triggers = once("ventuno-popover", ".ventuno-popover__trigger", context);
 
       triggers.forEach((trigger) => {
-        const popover = trigger.closest(".oe-popover");
+        const popover = trigger.closest(".ventuno-popover");
         const targetId = trigger.getAttribute("data-popover-target");
         const content = document.getElementById(targetId);
 
@@ -28,7 +28,7 @@
           html: true,
           placement: trigger.getAttribute("data-bs-placement") || "bottom",
           trigger: "click",
-          customClass: "oe-popover-component",
+          customClass: "ventuno-popover-component",
           boundary: "viewport",
           fallbackPlacements: ["top", "left", "right"],
         });
@@ -37,7 +37,7 @@
         document.addEventListener("click", (event) => {
           if (
             !popover.contains(event.target) &&
-            !event.target.closest(".popover.oe-popover-component")
+            !event.target.closest(".popover.ventuno-popover-component")
           ) {
             bsPopover.hide();
           }

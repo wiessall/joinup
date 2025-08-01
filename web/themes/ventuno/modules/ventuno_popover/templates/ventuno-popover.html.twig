@@ -13,9 +13,9 @@
  * - popover_attributes: Additional attributes for the popover content.
  */
 #}
-{% set popover_id = 'oe-popover-' ~ random() %}
-{% set trigger_class_list = ['oe-popover__trigger']|merge(trigger_classes) %}
-{% set popover_class_list = ['oe-popover']|merge(popover_classes) %}
+{% set popover_id = 'ventuno-popover-' ~ random() %}
+{% set trigger_class_list = ['ventuno-popover__trigger']|merge(trigger_classes) %}
+{% set popover_class_list = ['ventuno-popover']|merge(popover_classes) %}
 
 <div class="{{ popover_class_list|join(' ') }}"{{ popover_attributes ? create_attribute(popover_attributes) }}>
   <button
@@ -29,11 +29,11 @@
     {{ trigger_attributes ? create_attribute(trigger_attributes) }}
   >
     {% if trigger_text %}
-      <span class="oe-popover__trigger-text">{{ trigger_text }}</span>
+      <span class="ventuno-popover__trigger-text">{{ trigger_text }}</span>
     {% endif %}
   </button>
 
-  <div id="{{ popover_id }}" class="oe-popover__content visually-hidden">
+  <div id="{{ popover_id }}" class="ventuno-popover__content visually-hidden">
     {{ content }}
   </div>
 </div>
