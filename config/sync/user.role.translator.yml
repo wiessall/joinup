@@ -7,7 +7,6 @@ dependencies:
     - content_translation
     - dashboard
     - joinup_i18n
-    - l10n_client_ui
     - locale
     - menu_admin_per_menu
     - menu_link_content
@@ -32,6 +31,5 @@ permissions:
   - 'translate interface'
   - 'translate menu_link_content'
   - 'update content translations'
-  - 'use localization client ui'
   - 'view admin pages in preferred language'
   - 'view the administration theme'
