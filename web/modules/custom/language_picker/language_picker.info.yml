@@ -1,10 +1,7 @@
-name: 'OE Language Picker'
+name: 'Language Picker'
 type: module
 description: 'Language picker with Bootstrap popover similar to European Commission site'
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:language
-  - drupal:block
-  - drupal:system
   - ventuno_popover:ventuno_popover
-package: OpenEuropa

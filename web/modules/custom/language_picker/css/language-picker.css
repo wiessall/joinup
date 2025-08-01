@@ -1,7 +1,7 @@
 /**
  * Language Picker Structural Styles
  */
-.oe-language-picker__grid {
+.language-picker__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.5rem;
@@ -9,11 +9,11 @@
   max-width: 480px;
 }
 
-.oe-language-picker__item {
+.language-picker__item {
   margin: 0;
 }
 
-.oe-language-picker__link {
+.language-picker__link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -21,7 +21,7 @@
   color: inherit;
 }
 
-.oe-language-picker__code {
+.language-picker__code {
   min-width: 1.5rem;
   text-align: center;
   text-transform: uppercase;
@@ -29,13 +29,13 @@
   font-weight: 600;
 }
 
-.oe-language-picker__name {
+.language-picker__name {
   flex: 1;
 }
 
 /* Mobile grid layout */
 @media (max-width: 767.98px) {
-  .oe-language-picker__grid {
+  .language-picker__grid {
     grid-template-columns: 1fr;
     min-width: 200px;
     max-width: calc(100vw - 2rem);
