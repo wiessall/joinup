@@ -96,9 +96,7 @@ readonly class JoinupGroupManager implements JoinupGroupManagerInterface {
     // Then check for OG, if not allowed yet.
     // This condition prevents merging expensive cacheability,
     // such as "user" context.
-    if (!$access->isAllowed()) {
-      $access = $access->orIf($this->ogAccess->userAccess($group, $og_permission, $account));
-    }
+    $access->orIf($this->ogAccess->userAccess($group, $og_permission, $account));
 
     return $access;
   }
