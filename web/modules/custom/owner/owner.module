@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -100,8 +101,12 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
   // By specifications, deletion should be forbidden if the owner entity is
   // referenced by any other entity.
   if ($operation === 'delete') {
+    $tags = Cache::buildTags('node_list', [
+      'collection',
+      'solution',
+    ]);
     return AccessResult::forbiddenIf($entity->isReferencedByGroups())
-      ->addCacheTags(['node_list']);
+      ->addCacheTags($tags);
   }
 
   if ($operation === 'view') {
