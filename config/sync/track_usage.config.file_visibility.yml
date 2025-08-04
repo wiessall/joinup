@@ -28,6 +28,13 @@ traversable:
     - image
     - news_logo
     - solution_logo
-  paragraph: {  }
+  paragraph:
+    - accordion_item
+    - entity_reference
+    - image
+    - image_gallery
+    - simple_paragraph
+    - testimony
+    - tile
 target:
   file: {  }
