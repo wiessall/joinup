@@ -1,7 +1,7 @@
-diff --git a/core/modules/tour/js/tour.js b/core/modules/tour/js/tour.js
+diff --git a/js/tour.js b/js/tour.js
 index 43858e4..d74fe08 100644
---- a/core/modules/tour/js/tour.js
-+++ b/core/modules/tour/js/tour.js
+--- a/js/tour.js
++++ b/js/tour.js
 @@ -29,7 +29,7 @@
          const model = new Drupal.tour.models.StateModel();
          // eslint-disable-next-line no-new
@@ -10,7 +10,7 @@ index 43858e4..d74fe08 100644
 +          el: $(context).find('.js-tour-start-button'),
            model,
          });
- 
+
 @@ -135,10 +135,17 @@
          this.$el.toggleClass('hidden', this._getTour().length === 0);
          // Render the state.
@@ -32,12 +32,12 @@ index 43858e4..d74fe08 100644
 +        });
          return this;
        },
- 
-diff --git a/core/modules/tour/tests/src/FunctionalJavascript/TourTriggerTest.php b/core/modules/tour/tests/src/FunctionalJavascript/TourTriggerTest.php
+
+diff --git a/tests/src/FunctionalJavascript/TourTriggerTest.php b/tests/src/FunctionalJavascript/TourTriggerTest.php
 new file mode 100644
 index 0000000..ce99dcb
 --- /dev/null
-+++ b/core/modules/tour/tests/src/FunctionalJavascript/TourTriggerTest.php
++++ b/tests/src/FunctionalJavascript/TourTriggerTest.php
 @@ -0,0 +1,110 @@
 +<?php
 +
@@ -149,11 +149,11 @@ index 0000000..ce99dcb
 +  }
 +
 +}
-diff --git a/core/modules/tour/tests/tour_test/config/install/tour.tour.tour-test-3.yml b/core/modules/tour/tests/tour_test/config/install/tour.tour.tour-test-3.yml
+diff --git a/tests/tour_test/config/install/tour.tour.tour-test-3.yml b/tests/tour_test/config/install/tour.tour.tour-test-3.yml
 new file mode 100644
 index 0000000..223bb98
 --- /dev/null
-+++ b/core/modules/tour/tests/tour_test/config/install/tour.tour.tour-test-3.yml
++++ b/tests/tour_test/config/install/tour.tour.tour-test-3.yml
 @@ -0,0 +1,23 @@
 +id: tour-test-3
 +module: tour_test
@@ -178,14 +178,14 @@ index 0000000..223bb98
 +    weight: 2
 +    attributes:
 +      data-id: tour-test-2
-diff --git a/core/modules/tour/tests/tour_test/src/Controller/TourTestController.php b/core/modules/tour/tests/tour_test/src/Controller/TourTestController.php
+diff --git a/tests/tour_test/src/Controller/TourTestController.php b/tests/tour_test/src/Controller/TourTestController.php
 index 56505aa..633a787 100644
---- a/core/modules/tour/tests/tour_test/src/Controller/TourTestController.php
-+++ b/core/modules/tour/tests/tour_test/src/Controller/TourTestController.php
+--- a/tests/tour_test/src/Controller/TourTestController.php
++++ b/tests/tour_test/src/Controller/TourTestController.php
 @@ -2,10 +2,13 @@
- 
+
  namespace Drupal\tour_test\Controller;
- 
+
 +use Drupal\Core\StringTranslation\StringTranslationTrait;
 +
  /**
@@ -193,7 +193,7 @@ index 56505aa..633a787 100644
   */
  class TourTestController {
 +  use StringTranslationTrait;
- 
+
    /**
     * Outputs some content for testing tours.
 @@ -24,35 +27,35 @@ public function tourTest1($locale = 'foo') {
@@ -244,9 +244,9 @@ index 56505aa..633a787 100644
 -      '#children' => t('Pangram example'),
 +      '#children' => $this->t('Pangram example'),
      ];
- 
+
    }
- 
+
 +  /**
 +   * Callback method for 'tour_test.4' route.
 +   *
@@ -290,10 +290,10 @@ index 56505aa..633a787 100644
 +  }
 +
  }
-diff --git a/core/modules/tour/tests/tour_test/tour_test.routing.yml b/core/modules/tour/tests/tour_test/tour_test.routing.yml
+diff --git a/tests/tour_test/tour_test.routing.yml b/tests/tour_test/tour_test.routing.yml
 index 86ffeac..368c5c7 100644
---- a/core/modules/tour/tests/tour_test/tour_test.routing.yml
-+++ b/core/modules/tour/tests/tour_test/tour_test.routing.yml
+--- a/tests/tour_test/tour_test.routing.yml
++++ b/tests/tour_test/tour_test.routing.yml
 @@ -28,3 +28,12 @@ tour_test.3:
      _controller: '\Drupal\tour_test\Controller\TourTestController::tourTest1'
    requirements:
@@ -307,18 +307,18 @@ index 86ffeac..368c5c7 100644
 +    _admin_route: TRUE
 +  requirements:
 +    _access: 'TRUE'
-diff --git a/core/modules/tour/tour.module b/core/modules/tour/tour.module
+diff --git a/tour.module b/tour.module
 index e6bbd2a..3751251 100644
---- a/core/modules/tour/tour.module
-+++ b/core/modules/tour/tour.module
+--- a/tour.module
++++ b/tour.module
 @@ -22,7 +22,14 @@ function tour_help($route_name, RouteMatchInterface $route_match) {
        $output .= '<dt>' . t('Viewing tours') . '</dt>';
        $output .= '<dd>' . t("If a tour is available on a page, a <em>Tour</em> button will be visible in the toolbar. If you click this button the first tip of the tour will appear. The tour continues after clicking the <em>Next</em> button in the tip. To see a tour users must have the permission <em>Access tour</em> and JavaScript must be enabled in the browser") . '</dd>';
        $output .= '<dt>' . t('Creating tours') . '</dt>';
 -      $output .= '<dd>' . t("Tours can be written as YAML-documents with a text editor, or using the contributed <a href=':tour_ui'>Tour UI</a> module. For more information, see <a href=':doc_url'>the online documentation for writing tours</a>.", [':doc_url' => 'https://www.drupal.org/developing/api/tour', ':tour_ui' => 'https://www.drupal.org/project/tour_ui']) . '</dd>';
-+      $output .= '<dd>' . t("Tours can be written as YAML-documents with a 
-+      text editor, or using the contributed <a href=':tour_ui'>Tour UI</a> 
-+      module. For more information, see <a href=':doc_url'>the online 
++      $output .= '<dd>' . t("Tours can be written as YAML-documents with a
++      text editor, or using the contributed <a href=':tour_ui'>Tour UI</a>
++      module. For more information, see <a href=':doc_url'>the online
 +      documentation for writing tours</a>.", [
 +        ':doc_url' =>
 +        'https://www.drupal.org/developing/api/tour',
