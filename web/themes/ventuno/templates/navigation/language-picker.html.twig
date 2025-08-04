@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Ventuno theme override for language picker with popover functionality.
+ *
+ * Available variables:
+ * - current_language: The current language object.
+ * - languages: Array of language objects with 'code', 'name', and 'url'.
+ */
+#}
+{{ attach_library('ventuno_popover/popover') }}
+{% set popover_content %}
+  <div class="language-picker__grid">
+    {% for language in languages %}
+    <div class="language-picker__item">
+      <a href="{{ language.url }}" class="language-picker__link">
+        <span class="language-picker__code">{{ language.code|upper }}</span>
+        <span class="language-picker__name">{{ language.name }}</span>
+      </a>
+    </div>
+  {% endfor %}
+  </div>
+{% endset %}
+
+{{ {
+  '#theme': 'ventuno_popover',
+  '#trigger_text': current_language.code|upper,
+  '#content': popover_content,
+  '#popover_classes': ['language-picker'],
+  '#placement': 'bottom',
+} }}

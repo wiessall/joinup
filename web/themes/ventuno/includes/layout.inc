@@ -34,6 +34,13 @@ function ventuno_preprocess_page(array &$variables): void {
   $menu_helper = \Drupal::service('joinup_menu.menu_helper');
   $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
 
+  // Add language picker block.
+  $block_manager = \Drupal::service('plugin.manager.block');
+  $block_plugin = $block_manager->createInstance('language_picker');
+  if ($block_plugin) {
+    $variables['language_picker'] = $block_plugin->build();
+  }
+
   // Export the user account menu in the format expected by the header template.
   $variables['profile_links'] = $menu_helper->getBclAccountMenu();
 

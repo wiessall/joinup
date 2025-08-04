@@ -153,6 +153,7 @@ module:
   l10n_client_ui: 0
   l10n_pconfig: 0
   language: 0
+  language_picker: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_custom_section_classes: 0
@@ -275,6 +276,7 @@ module:
   ui_patterns_settings: 0
   user: 0
   ventuno_helper: 0
+  ventuno_popover: 0
   view_unpublished: 0
   views_block_area: 0
   views_bulk_operations: 0

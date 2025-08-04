@@ -1,0 +1,6 @@
+name: 'Language Picker'
+type: module
+description: 'Language picker'
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:language
