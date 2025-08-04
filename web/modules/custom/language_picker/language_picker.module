@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and functions related to language_picker.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_theme().
+ */
+function language_picker_theme(): array {
+  return [
+    'language_picker' => [
+      'variables' => [
+        'current_language' => NULL,
+        'languages' => [],
+      ],
+      'template' => 'language-picker',
+    ],
+  ];
+}
