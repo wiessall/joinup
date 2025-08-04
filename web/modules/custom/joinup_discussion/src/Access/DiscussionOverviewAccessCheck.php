@@ -31,10 +31,12 @@ readonly class DiscussionOverviewAccessCheck implements AccessInterface {
   public function access(): AccessResultInterface {
     $group = $this->groupManager->getGroupFromContext();
     if (!$group) {
-      return AccessResult::forbidden('Not a group page');
+      return AccessResult::forbidden('Not a group page')
+        ->addCacheContexts(['og_group_context']);
     }
 
     return AccessResult::allowedIf($group->isPublished() && $this->groupInspector->groupHasDiscussions($group))
+      ->addCacheableDependency($group)
       ->addCacheTags(Cache::buildTags('og-group-content', $group->getCacheTags()))
       ->addCacheContexts(['og_group_context']);
   }

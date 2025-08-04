@@ -251,20 +251,25 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
         $parent instanceof SolutionInterface &&
         $parent->isArchived()
       )
-      ->addCacheableDependency($parent);
+      ->addCacheableDependency($parent)
+      ->addCacheableDependency($node);
   }
 
   // Let parentless nodes be handled by the core access.
   if (!$parent->access('view', $account)) {
     // Anonymous users do not have access to content of non published groups.
-    return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id());
+    return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id())
+      ->addCacheableDependency($node)
+      ->cachePerUser();
   }
   $membership = $parent->getMembership($account->id());
   if (empty($membership)) {
     return AccessResult::neutral();
   }
   if (!$node->isPublished() && $membership->hasPermission("view any unpublished content")) {
-    return AccessResult::allowed();
+    return AccessResult::allowed()
+      ->addCacheableDependency($membership)
+      ->addCacheableDependency($node);
   }
   return AccessResult::neutral();
 }
@@ -278,13 +283,14 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
       return AccessResult::allowedIf(
         $operation === 'edit'
         && $field_definition->getTargetEntityTypeId() === 'node'
-        && $field_definition->getTargetBundle() === 'custom_page');
+        && $field_definition->getTargetBundle() === 'custom_page')
+        ->addCacheableDependency($field_definition);
 
     case 'path':
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
         'manage custom landing pages',
         'administer url aliases',
-      ], 'OR')->cachePerPermissions();
+      ], 'OR');
 
       // Check if we are in group context.
       $group = \Drupal::service('og.context')->getGroup();
@@ -294,7 +300,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         && $field_definition->getTargetEntityTypeId() === 'node'
         && !$group)
         ->andIf($accessPermission)
-        ->addCacheContexts(['route']);
+        ->addCacheContexts(['og_group_context']);
 
     default:
       return AccessResult::neutral();
