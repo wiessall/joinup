@@ -69,7 +69,7 @@
     <figure class="tile__figure mb-0">
       {{- _image -}}
     </figure>
-    <div class="tile__body d-flex flex-column justify-content-between{% if _highlighted is not empty %} position-relative{% endif %}">
+    <div class="tile__body d-flex flex-column{% if _highlighted is not empty %} position-relative{% endif %}">
       {%- if _highlighted.text is not empty -%}
         <div class="tile__standout-info position-absolute d-flex align-items-center text-end bg-brand rounded text-white fw-bold px-2 py-1">
           {%- if _highlighted.icon is not empty -%}

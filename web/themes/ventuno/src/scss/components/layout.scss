@@ -48,6 +48,7 @@ div[data-drupal-messages] + .region-content-top {
     }
     .view-content > div {
       display: flex;
+      flex-direction: column;
       height: 100%;
     }
     .layout-block {
