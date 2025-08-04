@@ -82,9 +82,9 @@
 
 // Latest News
 .block-views-blocklatest-news-block {
-  position: relative;
-  margin-bottom: $spacer * 3; // 48px
-  padding-bottom: $spacer * 3; // 48px
+  & > div {
+    padding-bottom: $spacer * 3; // 48px
+  }
   .more-link {
     margin-bottom: $spacer * 1.2;
     &::after {
@@ -93,12 +93,16 @@
       margin-left: $spacer * 0.5; // 8px
     }
   }
+  .block-content .view .view-content .col {
+    margin-bottom: 0;
+  }
 }
 
 // Upcoming event.
 .block-views-blockupcoming-event-block {
-  margin-bottom: $spacer * 3; // 48px
-  padding-bottom: $spacer * 3; // 48px;
+  & > div {
+    padding-bottom: $spacer * 3; // 48px
+  }
   .more-link {
     margin-bottom: $spacer * 1.2;
     &::after {
