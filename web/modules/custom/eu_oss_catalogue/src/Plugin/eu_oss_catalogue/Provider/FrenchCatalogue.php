@@ -35,8 +35,8 @@ class FrenchCatalogue extends UrlListCatalogueProviderBase {
       'endpoints' => [
         [
           'apiUrl' => 'https://code.gouv.fr/data/awesome.json',
-          'rootKeys' => ['projects'],
-          'urlKeys' => ['code_url'],
+          'rootKeys' => [],
+          'urlKeys' => ['url'],
         ],
       ],
     ] + parent::defaultConfiguration();
