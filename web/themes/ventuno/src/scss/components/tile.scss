@@ -17,10 +17,9 @@
   }
   &__figure {
     display: flex;
-    overflow: hidden;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 2 / 1;
     & picture {
       & img {
         width: 100%;
@@ -33,9 +32,6 @@
     @include media-breakpoint-up(md) {
       aspect-ratio: 1 / 1;
     }
-  }
-  &__body {
-    padding: $spacer;
   }
   &__standout-info {
     top: $spacer * -1;
@@ -155,7 +151,7 @@
       width: 100%;
       padding: $spacer;
     }
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
       flex-direction: row;
       flex-wrap: wrap;
       height: auto;
@@ -167,7 +163,6 @@
         padding: $spacer 0 0 $spacer;
       }
       .tile__body {
-        flex: 1 1 calc(100% - 180px);
         max-width: calc(100% - 180px);
         padding: $spacer $spacer 0 $spacer;
         overflow-wrap: anywhere;
@@ -181,7 +176,6 @@
       .tile__footer {
         align-self: end;
         width: 100%;
-        margin-top: $spacer;
         border-top: $border-width solid $border-color;
       }
     }
