@@ -29,7 +29,8 @@ button.button--primary {
   @extend .btn-primary;
 }
 
-.button--secondary {
+.button--secondary,
+.btn-blue {
   @extend .btn-secondary;
 }
 
