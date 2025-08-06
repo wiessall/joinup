@@ -153,7 +153,6 @@ module:
   l10n_client_ui: 0
   l10n_pconfig: 0
   language: 0
-  language_picker: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_custom_section_classes: 0

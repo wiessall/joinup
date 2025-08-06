@@ -16,3 +16,18 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
     unset($implementations['locale']);
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_i18n_theme(): array {
+  return [
+    'language_picker' => [
+      'variables' => [
+        'current_language' => NULL,
+        'languages' => [],
+      ],
+      'template' => 'language-picker',
+    ],
+  ];
+}
