@@ -29,12 +29,6 @@
       }
     }
   }
-  &__default-img {
-    aspect-ratio: 4 / 3;
-    @include media-breakpoint-up(md) {
-      aspect-ratio: 1 / 1;
-    }
-  }
   &__standout-info {
     top: $spacer * -1;
     right: $spacer * 0.5;
