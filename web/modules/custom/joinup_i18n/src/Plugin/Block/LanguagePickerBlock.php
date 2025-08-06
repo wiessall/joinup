@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\language_picker\Plugin\Block;
+namespace Drupal\joinup_i18n\Plugin\Block;
 
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Block\Attribute\Block;
