@@ -78,6 +78,7 @@ Feature:
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah blah nobody cares. |
       | field_body:format | content_editor          |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     Then I should see the heading "POLI"
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
@@ -102,6 +103,7 @@ Feature:
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Blah blah nobody cares. |
       | field_body:format | content_editor          |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I press "Save as draft"
     Then I should see the heading "POLI"
     # The "Published on" is empty and the Last update points to the current date.
