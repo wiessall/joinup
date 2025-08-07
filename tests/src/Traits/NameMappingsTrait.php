@@ -71,7 +71,7 @@ trait NameMappingsTrait {
       'document' => [
         'document type' => 'field_type',
         'body' => 'field_paragraphs_body',
-        'file' => 'field_file',
+        'file' => 'resources',
         'keywords' => 'keywords',
         'licence' => 'field_licence',
         'logo' => 'field_document_logo',

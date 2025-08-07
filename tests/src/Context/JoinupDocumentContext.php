@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\TraversingTrait;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions for testing documents.
@@ -39,9 +40,9 @@ class JoinupDocumentContext extends RawDrupalContext {
       return;
     }
 
-    if (!empty($node->field_file)) {
+    if (!empty($node->resources)) {
       $type = $node->{'file type'} ?? 'remote';
-      if ($type !== 'remote') {
+      if ($type != 'remote') {
         // If the file is local we want to copy it from the fixtures into the
         // file system and register it in the DocumentSubContext so it can be
         // cleaned up after the scenario ends. Perform a small dance to get
@@ -50,8 +51,27 @@ class JoinupDocumentContext extends RawDrupalContext {
         $environment = $scope->getEnvironment();
         /** @var \Drupal\joinup\Context\JoinupDocumentContext $context */
         $context = $environment->getContext(self::class);
-        $node->field_file = $context->createFile($node->field_file)->id();
+        $file_id = $context->createFile($node->resources)->id();
+        $paragraph = Paragraph::create([
+          'type' => 'resource_file',
+          'resource_file' => [
+            [
+              'target_id' => $file_id,
+            ],
+          ],
+        ]);
       }
+      else {
+        $paragraph = Paragraph::create([
+          'type' => 'resource_link',
+          'remote_file_url' => $node->resources,
+        ]);
+
+      }
+      $paragraph->save();
+      $node->{"resources:target_id"} = $paragraph->id();
+      $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
+      unset($node->resources);
 
       unset($node->{'file type'});
     }

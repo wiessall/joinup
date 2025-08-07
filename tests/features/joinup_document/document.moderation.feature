@@ -74,7 +74,6 @@ Feature: Document moderation
       | field_body:format | content_editor                           |
     And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
-    Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
@@ -136,7 +135,6 @@ Feature: Document moderation
       | field_body:format | content_editor                                      |
     And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
-    Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document about life has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
@@ -156,7 +154,6 @@ Feature: Document moderation
       | field_body:format | content_editor                           |
     And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
-    Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'Document An amazing document about health has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
