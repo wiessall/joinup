@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_file
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -77,7 +76,6 @@ hidden:
   anonymous_comment_links: true
   featured: true
   field_comments: true
-  field_file: true
   field_licence: true
   field_paragraphs_body: true
   field_shared_in: true
