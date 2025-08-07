@@ -72,6 +72,7 @@ Feature: Document moderation
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"
@@ -133,6 +134,7 @@ Feature: Document moderation
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document about life. |
       | field_body:format | content_editor                                      |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"
@@ -152,6 +154,7 @@ Feature: Document moderation
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" options from "Topic"

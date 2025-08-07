@@ -71,6 +71,7 @@ Feature: "Add document" visibility options.
     When I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "An amazing document"
