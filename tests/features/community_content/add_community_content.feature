@@ -112,7 +112,6 @@ Feature: Add community content
       | event        |
       | news         |
 
-  @javascript
   Scenario: Directly publishing community content sets the correct publication date.
     Given collection content:
       | title        | description                  | logo     |
