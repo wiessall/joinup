@@ -1,6 +1,7 @@
 /**
  * @file
  * Show the notification with counter in the link for private messages page.
+ * Also hides the inbox toggle button if the inbox container is empty.
  */
 ((Drupal, once, $) => {
   Drupal.behaviors.privateMessage = {
@@ -30,6 +31,22 @@
             }
           }
         });
+      });
+
+      // Hide toggle if .private-message-thread--full-container is empty.
+      once(
+        "hide-empty-inbox-toggle",
+        ".private-messages-inbox-wrapper",
+        context,
+      ).forEach((wrapper) => {
+        const toggle = wrapper.querySelector(".private-messages-toggle-inbox");
+        const threadContainer = wrapper.querySelector(
+          ".private-message-thread--full-container",
+        );
+
+        if (threadContainer && threadContainer.matches(":empty")) {
+          toggle?.classList.add("hidden-toggle");
+        }
       });
     },
   };
