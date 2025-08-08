@@ -405,7 +405,7 @@
                 "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
             },
             "drupal/file_visibility": {
-                "Move to kernel response @see https://www.drupal.org/i/3536831": "resources/patch/php/drupal/file_visibility/3536831.mr12-note566968.diff"
+                "Move to kernel response @see https://www.drupal.org/i/3536831": "resources/patch/php/drupal/file_visibility/3536831.mr12-note567288.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
