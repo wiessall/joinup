@@ -64,7 +64,9 @@ class ContactForm extends ContactInformationFormBase {
       $node instanceof GroupInterface &&
       $this->accessIsAllowed() &&
       !empty($node->getValidatedContactInformationEmails())
-    );
+    )
+      ->addCacheContexts(['user.roles:authenticated'])
+      ->addCacheableDependency($node);
   }
 
   /**
