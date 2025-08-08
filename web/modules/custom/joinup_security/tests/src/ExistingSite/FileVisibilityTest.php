@@ -12,8 +12,10 @@ use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\file_visibility\FileVisibility;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgRole;
+use Drupal\track_usage\Recorder;
 
 /**
  * Tests integration with the file_visibility module.
@@ -272,10 +274,11 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    *   (optional) The user account to be checked. Anonymous, if omitted.
    */
   protected function fileAccessibilityAssertionHelper(bool $expectAccessible, FileInterface $file, ?AccountInterface $account): void {
+    $this->container->get(Recorder::class)->registerUsageRecords();
+    $this->container->get(FileVisibility::class)->doUpdateFileVisibility();
+
     // In tests, the static cache becomes stale between some operation, because
     // we're running them in the same long request.
-    \Drupal::entityTypeManager()->getAccessControlHandler('node')->resetCache();
-    \Drupal::entityTypeManager()->getAccessControlHandler('comment')->resetCache();
     \Drupal::entityTypeManager()->getAccessControlHandler('file')->resetCache();
 
     // Make sure we're checking the latest file version.
