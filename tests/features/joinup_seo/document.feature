@@ -95,6 +95,6 @@ Feature: SEO for document content.
       | property      | value                                      |
       | @type         | http://schema.org/MediaObject              |
       | @id           | http://example.com/some-file-url.extension |
-      | name          | some-file-url.extension                    |
+      | name          | http://example.com/some-file-url.extension |
       | url           | http://example.com/some-file-url.extension |
       | datePublished | 2019-12-25T__timezone__:00:00+0000         |
