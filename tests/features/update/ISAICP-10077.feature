@@ -105,3 +105,28 @@ Feature: Assert that releases can be added after deploy.
       | collection/semantic-interoperability-community-semic/solution/core-criterion-and-core-evidence-vocabulary/release/add           | 200           |
       | solution/are3na-study-aaa-data-and-services/release/add                                                                         | 403           |
       | collection/semantic-interoperability-community-semic/solution/asset-description-metadata-schema-software/release/add            | 403           |
+
+  @update:joinup_core_deploy_200601
+  Scenario Outline: Ensure redirects all releases have been updated with the no-version suffix.
+    Given I am logged in as a moderator
+    And I go to "<node_path>"
+    Then the url should match "<expected_url>"
+
+    Examples:
+      | node_path    | expected_url    |
+      | /node/721280 | ^.*/no-version$ |
+      | /node/721199 | ^.*/no-version$ |
+      | /node/722388 | ^.*/no-version$ |
+      | /node/721193 | ^.*/no-version$ |
+      | /node/720482 | ^.*/no-version$ |
+      | /node/720331 | ^.*/1-0$        |
+      | /node/720476 | ^.*/no-version$ |
+      | /node/721169 | ^.*/no-version$ |
+      | /node/721172 | ^.*/no-version$ |
+      | /node/721213 | ^.*/no-version$ |
+      | /node/722388 | ^.*/no-version$ |
+      | /node/720437 | ^.*/101$        |
+      | /node/720476 | ^.*/no-version$ |
+      | /node/721222 | ^.*/no-version$ |
+      | /node/720425 | ^.*/no-version$ |
+      | /node/720485 | ^.*/no-version$ |
