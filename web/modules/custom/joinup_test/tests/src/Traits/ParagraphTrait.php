@@ -28,9 +28,11 @@ trait ParagraphTrait {
    *   The created paragraph.
    */
   public function createParagraph(array $values = []): ParagraphInterface {
-    $values += [
-      'type' => 'simple_paragraph',
-    ];
+    if (!isset($values['type'])) {
+      $values += [
+        'type' => 'simple_paragraph',
+      ];
+    }
     /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
     $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->create($values);
     $paragraph->save();
