@@ -404,6 +404,9 @@
                 "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
                 "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
             },
+            "drupal/file_visibility": {
+                "Move to kernel response @see https://www.drupal.org/i/3536831": "resources/patch/php/drupal/file_visibility/3536831.mr12-note566968.diff"
+            },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"
@@ -498,8 +501,7 @@
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
             },
             "drupal/track_usage": {
-                "Replace JSON column with normalized table structure @see https://www.drupal.org/i/3535768": "resources/patch/php/drupal/track_usage/3535768.mr10-note562620.diff",
-                "Saving configuration in a loaded site is slow @see https://www.drupal.org/project/track_usage/issues/3529760": "resources/patch/php/drupal/track_usage/3529760.diff"
+                "Track Usage module creates too many database queries @see https://www.drupal.org/i/3535772": "resources/patch/php/drupal/track_usage/3535772.mr9-note567234.diff"
             },
             "drupal/video_embed_field": {
                 "Add title attribute to YouTube, Vimeo, and Playlist embeds @see https://www.drupal.org/project/video_embed_field/issues/3200253": "resources/patch/php/drupal/video_embed_field/3200253-26.patch",

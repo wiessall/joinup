@@ -1,0 +1,734 @@
+diff --git a/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml b/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
+index 77279d852800b7c267d1fd64d51b31e8e6949bdf..0c50099763794e482ff4cac8f3c9aa6a6bf95d07 100644
+--- a/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
++++ b/.ddev/addon-metadata/ddev-drupal-contrib/manifest.yaml
+@@ -1,8 +1,9 @@
+ name: ddev-drupal-contrib
+ repository: ddev/ddev-drupal-contrib
+-version: 1.0.0-rc25
+-install_date: "2025-03-18T13:04:38+02:00"
++version: 1.1.1
++install_date: "2025-08-06T14:13:46+03:00"
+ project_files:
++    - commands/host/core-version
+     - commands/web/eslint
+     - commands/web/expand-composer-json
+     - commands/web/nightwatch
+diff --git a/.ddev/commands/host/core-version b/.ddev/commands/host/core-version
+new file mode 100755
+index 0000000000000000000000000000000000000000..e3e012246064d5b742ea36b3c9efd7ee1d65c2d8
+--- /dev/null
++++ b/.ddev/commands/host/core-version
+@@ -0,0 +1,22 @@
++#!/usr/bin/env bash
++
++#ddev-generated
++## Command provided by https://github.com/ddev/ddev-drupal-contrib
++## Description: Switch the core version and rebuild.
++## Usage: core-version [version]
++## Example: "ddev core-version ^11" or "ddev core-version ~11.1.0"
++
++set -eu -o pipefail
++
++# Handle default values.
++DRUPAL_CORE=${1:-default}
++if [ "$DRUPAL_CORE" == "default" ]; then
++  DRUPAL_CORE=""
++fi
++
++# Set/clear the env.
++ddev dotenv set .ddev/.env.web --drupal-core "${DRUPAL_CORE}"
++
++# Restart and rebuild.
++ddev restart
++ddev poser
+diff --git a/.ddev/commands/web/eslint b/.ddev/commands/web/eslint
+index fb663f663c1fa62a985892f1a8ec537f85813d83..6be295c6a311c37d34a0129503b227e5e3a068ba 100755
+--- a/.ddev/commands/web/eslint
++++ b/.ddev/commands/web/eslint
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -7,12 +7,14 @@
+ ## Example: "ddev eslint"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if "$DDEV_DOCROOT/core/node_modules/.bin/eslint" --version >/dev/null ; then
+   # Configure prettier
+   test -e .prettierrc.json || ln -s $DDEV_DOCROOT/core/.prettierrc.json .
+   test -e .prettierignore || echo '*.yml' > .prettierignore
+   # Change directory to the project root folder
+-  cd "$DDEV_DOCROOT/modules/custom/${DDEV_SITENAME//-/_}" || exit
++  cd "$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}" || exit
+   "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/node_modules/.bin/eslint" --config="../../../core/.eslintrc.passing.json" --no-error-on-unmatched-pattern --ignore-pattern="*.es6.js" --resolve-plugins-relative-to=$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core --ext=.js,.yml . "$@"
+ else
+   echo "eslint is not available. You may need to 'ddev exec \"cd $DDEV_DOCROOT/core && yarn install\"'"
+diff --git a/.ddev/commands/web/expand-composer-json b/.ddev/commands/web/expand-composer-json
+index 48a8840f6e46df7f3856df101b80924f8aeed400..509e414a98b84c493e392daa7d2891a11d4ab3cf 100755
+--- a/.ddev/commands/web/expand-composer-json
++++ b/.ddev/commands/web/expand-composer-json
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -6,10 +6,17 @@
+ ## Usage: expand-composer-json [flags] [PROJECT_NAME]
+ ## Example: "ddev expand-composer-json ctools"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
++
++# Set the default core version.
++export DRUPAL_CORE=${DRUPAL_CORE:-^11}
+ 
+ export _WEB_ROOT=$DDEV_DOCROOT
+ cd "$DDEV_COMPOSER_ROOT" || exit
+ curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/scripts/expand_composer_json.php
++_ddev_drupal_contrib_empty_composer=false
+ if [[ ! -f composer.json ]]; then
+   echo "{}" > composer.json
+   _ddev_drupal_contrib_empty_composer=true
+diff --git a/.ddev/commands/web/nightwatch b/.ddev/commands/web/nightwatch
+index 81d0bca223a63c62ec06e1bfcc3fbc914537df44..06b2ea261020dc5616bf251989d5eec963d80e3b 100755
+--- a/.ddev/commands/web/nightwatch
++++ b/.ddev/commands/web/nightwatch
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -7,4 +7,6 @@
+ ## Example: "ddev nightwatch"
+ ## ExecRaw: true
+ 
+-yarn --cwd "$DDEV_DOCROOT/core" test:nightwatch  "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/modules/custom/" "$@"
++set -eu -o pipefail
++
++yarn --cwd "$DDEV_DOCROOT/core" test:nightwatch  "$DDEV_APPROOT/$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/" "$@"
+diff --git a/.ddev/commands/web/phpcbf b/.ddev/commands/web/phpcbf
+index 756d2b4cbbec274a9913b30238c21f4dedb472dd..25393e07b9e0bc8c616bc467f78c1246041d9ac0 100755
+--- a/.ddev/commands/web/phpcbf
++++ b/.ddev/commands/web/phpcbf
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -7,9 +7,11 @@
+ ## Example: "ddev phpcbf" or "ddev phpcbf -n"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpcbf >/dev/null; then
+   echo "phpcbf is not available. You may need to 'ddev composer install'"
+   exit 1
+ fi
+ test -e phpcs.xml.dist || curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/assets/phpcs.xml.dist
+-phpcbf -s --report-full --report-summary --report-source $DDEV_DOCROOT/modules/custom "$@"
++phpcbf -s --report-full --report-summary --report-source $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH "$@"
+diff --git a/.ddev/commands/web/phpcs b/.ddev/commands/web/phpcs
+index 5df1fa9b147ff5fa225777ae519645a269a4eb3a..efcf54af3b58730e5e6fd9c5843f3c824afdd9e8 100755
+--- a/.ddev/commands/web/phpcs
++++ b/.ddev/commands/web/phpcs
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -7,9 +7,11 @@
+ ## Example: "ddev phpcs" or "ddev phpcs -n"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpcs >/dev/null; then
+   echo "phpcs is not available. You may need to 'ddev composer install'"
+   exit 1
+ fi
+ test -e phpcs.xml.dist || curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/assets/phpcs.xml.dist
+-phpcs -s --report-full --report-summary --report-source $DDEV_DOCROOT/modules/custom --ignore=*/.ddev/* "$@"
++phpcs -s --report-full --report-summary --report-source $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH --ignore=*/.ddev/* "$@"
+diff --git a/.ddev/commands/web/phpstan b/.ddev/commands/web/phpstan
+index 7c73132e7e9e7915494c44d18da0eb4b30839c8c..253ff6d4a4b928bd397ca092e4c8c6c8e14448c1 100755
+--- a/.ddev/commands/web/phpstan
++++ b/.ddev/commands/web/phpstan
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -6,6 +6,9 @@
+ ## Usage: phpstan [flags] [args]
+ ## Example: "ddev phpstan" or "ddev phpstan -n"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
+ 
+ if ! command -v phpstan >/dev/null; then
+   echo "phpstan is not available. You may need to 'ddev poser'"
+@@ -16,4 +19,10 @@ test -e phpstan.neon || curl -OL https://git.drupalcode.org/project/gitlab_templ
+ sed -i 's/BASELINE_PLACEHOLDER/phpstan-baseline.neon/g' phpstan.neon
+ # Add an empty baseline file to ensure it exists.
+ test -e phpstan-baseline.neon || touch phpstan-baseline.neon
+-phpstan analyse $DDEV_DOCROOT/modules/custom "$@"
++
++EXTENSION_DIRECTORY=$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}
++cd "$EXTENSION_DIRECTORY" || exit 1
++# Ensure PHPStan configuration is symlinked from project root.
++ln -s $DDEV_DOCROOT/phpstan.neon 2>/dev/null || true
++ln -s $DDEV_DOCROOT/phpstan-baseline.neon 2>/dev/null || true
++phpstan analyze . "$@"
+diff --git a/.ddev/commands/web/phpunit b/.ddev/commands/web/phpunit
+index 183544f1541e1f580c3ec5ec6299f80a64385f89..826d3886be922d74d5ab39fa9931419b30f27361 100755
+--- a/.ddev/commands/web/phpunit
++++ b/.ddev/commands/web/phpunit
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+@@ -7,6 +7,8 @@
+ ## Example: "ddev phpunit" or "ddev phpunit --stop-on-failure"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ if ! command -v phpunit >/dev/null; then
+   echo "phpunit is not available. You may need to 'ddev composer install'"
+   exit 1
+@@ -18,5 +20,5 @@ if [ -f "phpunit.xml" ]; then
+     phpunit "$@"
+ else
+     # Bootstrap Drupal tests and run all custom module tests.
+-    phpunit --bootstrap $PWD/$DDEV_DOCROOT/core/tests/bootstrap.php $DDEV_DOCROOT/modules/custom "$@"
++    phpunit --bootstrap $PWD/$DDEV_DOCROOT/core/tests/bootstrap.php $DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH "$@"
+ fi
+diff --git a/.ddev/commands/web/poser b/.ddev/commands/web/poser
+index 01df9e7da932e986258001f92aa45136c4116f64..e6d6617f81c233bb61fd3dc01b6f994f4e243358 100755
+--- a/.ddev/commands/web/poser
++++ b/.ddev/commands/web/poser
+@@ -1,15 +1,18 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+ ## Description: Expand composer.json and run composer install.
+ ## Usage: poser [flags] [args]
+-## Example: "ddev poser"
++## Example: "ddev poser" or "ddev poser --prefer-source"
+ ## ExecRaw: true
++## MutagenSync: true
++
++set -eu -o pipefail
+ 
+ export COMPOSER=composer.contrib.json
+-.ddev/commands/web/expand-composer-json "$DDEV_PROJECT_NAME"
+-composer install
++.ddev/commands/web/expand-composer-json
++composer install "$@"
+ # The -f flag suppresses errors if lock file does not exist.
+ rm -f composer.contrib.json composer.contrib.lock
+ touch $DDEV_DOCROOT/core/.env
+diff --git a/.ddev/commands/web/stylelint b/.ddev/commands/web/stylelint
+new file mode 100755
+index 0000000000000000000000000000000000000000..fe1dda39fa7ae4b863fb7ecbaba841114b208f87
+--- /dev/null
++++ b/.ddev/commands/web/stylelint
+@@ -0,0 +1,19 @@
++#!/usr/bin/env bash
++
++#ddev-generated
++## Command provided by https://github.com/ddev/ddev-drupal-contrib
++## Description: Run stylelint inside the web container
++## Usage: stylelint [flags] [args]
++## Example: "ddev stylelint"
++## ExecRaw: true
++
++set -eu -o pipefail
++
++if $DDEV_DOCROOT/core/node_modules/.bin/stylelint --version >/dev/null ; then
++  # Change directory to the project root folder
++  cd "$DDEV_DOCROOT/$DRUPAL_PROJECTS_PATH/${DDEV_SITENAME//-/_}" || exit
++  "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/node_modules/.bin/stylelint" --color --config "$DDEV_COMPOSER_ROOT/$DDEV_DOCROOT/core/.stylelintrc.json" "./**/*.css" "$@"
++else
++  echo "stylelint is not available. You may need to 'ddev exec \"cd $DDEV_DOCROOT/core && yarn install\"'"
++  exit 1
++fi
+diff --git a/.ddev/commands/web/symlink-project b/.ddev/commands/web/symlink-project
+index 4febc5862f174da21d7370b30c533c1992bd1c2e..4f2a02ae2e97bbcd2b2c81ab1eeef9e7aedce491 100755
+--- a/.ddev/commands/web/symlink-project
++++ b/.ddev/commands/web/symlink-project
+@@ -1,14 +1,15 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
+-## Description: Symlink all root files/dirs into web.modules/custom/[PROJECT_NAME]
++## Description: Symlink project files into the configured location (defaults to `web/modules/custom/[PROJECT_NAME]`)
+ ## Usage: symlink-project [flags] [args]
+ ## Example: "ddev symlink-project"
+ ## ExecRaw: true
+ 
++set -eu -o pipefail
++
+ export _WEB_ROOT=$DDEV_DOCROOT
+-export DRUPAL_PROJECTS_PATH=${DRUPAL_PROJECTS_PATH:-modules/custom}
+ #todo use more dynamic ref.
+ cd "$DDEV_COMPOSER_ROOT" || exit
+ curl -OL https://git.drupalcode.org/project/gitlab_templates/-/raw/default-ref/scripts/symlink_project.php
+diff --git a/.ddev/config.contrib.yaml b/.ddev/config.contrib.yaml
+index e9e7b24cb9605d6a65660c6ddd4036db96e22952..c6e897b7a759cdd1099adc8c6801f7c9873766d6 100644
+--- a/.ddev/config.contrib.yaml
++++ b/.ddev/config.contrib.yaml
+@@ -1,13 +1,15 @@
+ #ddev-generated
+ ## Command provided by https://github.com/ddev/ddev-drupal-contrib
++## To customize this configuration, see:
++## https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/
+ web_environment:
+   # To change the Drupal core version, see the README:
+   # https://github.com/ddev/ddev-drupal-contrib/blob/main/README.md#changing-the-drupal-core-version
+-  - DRUPAL_CORE=^11
+-  - SIMPLETEST_DB=mysql://db:db@db/db
+-  - SIMPLETEST_BASE_URL=http://web
+-  - BROWSERTEST_OUTPUT_DIRECTORY=/tmp
+-  - BROWSERTEST_OUTPUT_BASE_URL=${DDEV_PRIMARY_URL}
++  # https://git.drupalcode.org/project/gitlab_templates/-/blob/1.9.6/scripts/expand_composer_json.php?ref_type=tags#L15
++  - IGNORE_PROJECT_DRUPAL_CORE_VERSION=1
++  # To change the location of your project code, see the README:
++  # https://github.com/ddev/ddev-drupal-contrib/blob/main/README.md#changing-the-symlink-location
++  - DRUPAL_PROJECTS_PATH=modules/custom
+ hooks:
+   post-start:
+     - exec-host: |
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 15b5a8ecd56535e9d01a9160cb4f0b0a6e0ef502..cb00c4510ed6c0a0444ef95d703023b2d34e6c94 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -19,8 +19,20 @@ variables:
+   OPT_IN_TEST_MAX_PHP: 1
+   SKIP_NIGHTWATCH: 1
+ 
++phpunit:
++  allow_failure: false
++phpunit (max PHP version):
++  allow_failure: false
++phpunit (next minor):
++  allow_failure: false
++phpunit (previous major):
++  allow_failure: false
+ phpstan:
+   allow_failure: false
++phpstan (max PHP version):
++  allow_failure: false
++phpstan (next minor):
++  allow_failure: false
+ phpcs:
+   allow_failure: false
+ eslint:
+diff --git a/src/Recorder.php b/src/Recorder.php
+index b35adde8ddf8d164ea189a5e5b0c542755afced5..57089f41656f39f0b037a2ce623d0079c159875a 100644
+--- a/src/Recorder.php
++++ b/src/Recorder.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\track_usage;
+ 
++use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Database\Query\Condition;
+ use Drupal\Core\Database\Query\ConditionInterface;
+@@ -20,16 +21,37 @@ use Drupal\track_usage\Trait\BackwardsCompatibilityTrait;
+ use Drupal\track_usage\Trait\EntityUtilityTrait;
+ use Drupal\track_usage\Model\Operation;
+ use Drupal\track_usage\Trait\IdColumnTrait;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++use Symfony\Component\HttpKernel\KernelEvents;
+ 
+ /**
+  * Default implementation of the track_usage.recorder service.
+  */
+-class Recorder implements RecorderInterface {
++class Recorder implements RecorderInterface, EventSubscriberInterface {
+ 
+   use BackwardsCompatibilityTrait;
+   use EntityUtilityTrait;
+   use IdColumnTrait;
+ 
++  /**
++   * List of inserted/updated source entities to be processed later.
++   *
++   * @var array<non-empty-string, non-empty-string>
++   */
++  protected array $sources = [];
++
++  /**
++   * List of inserted/updated traversable entities to be processed later.
++   *
++   * @var array<non-empty-string, non-empty-string>
++   */
++  protected array $traversables = [];
++
++  /**
++   * Static cache for track usage config storage.
++   */
++  protected ConfigEntityStorageInterface $configStorage;
++
+   public function __construct(
+     protected readonly TrackerInterface $tracker,
+     protected readonly Connection $db,
+@@ -37,36 +59,60 @@ class Recorder implements RecorderInterface {
+     protected readonly EntityFieldManagerInterface $entityFieldManager,
+   ) {}
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    return [KernelEvents::RESPONSE => 'registerUsageRecords'];
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+   public function record(EntityInterface $entity, TrackConfigInterface $config): void {
+-    $entity = $this->loadEntity($entity->getEntityTypeId(), $entity->id(), $this->getRevisionId($entity));
+-    if (!$entity) {
+-      return;
++    if ($config->isSource($entity)) {
++      $key = $config->id() . ':' . $this->getKey($entity);
++      $this->sources[$key] = $key;
+     }
+-
+     if ($config->isTraversable($entity)) {
+-      assert($entity instanceof FieldableEntityInterface);
+-      // Re-queue all source entities where this entity is involved.
+-      $this->requeueSourceEntities($entity, $config);
+-      return;
++      $key = $this->getKey($entity);
++      $this->traversables[$key] = $key;
+     }
++  }
+ 
+-    if (!$config->isSource($entity)) {
+-      return;
++  /**
++   * Processes track usage once a response was created.
++   */
++  public function registerUsageRecords(): void {
++    if ($this->traversables) {
++      $this->processTraversables();
++      $this->traversables = [];
+     }
+-    assert($entity instanceof FieldableEntityInterface);
+ 
+-    // Cleanup first all records for this entity.
+-    $this->deleteUsageRecords($this->getCondition(entity: $entity, revision: TRUE));
++    foreach ($this->sources as $key) {
++      [$configId, $key] = explode(':', $key, 2);
++      [$entityTypeId, $entityId, $revisionId] = $this->destructKey($key);
++
++      $entity = $this->loadEntity($entityTypeId, $entityId, $revisionId);
++      if (!$entity instanceof FieldableEntityInterface) {
++        continue;
++      }
++
++      // Cleanup first all records for this entity and config.
++      $condition = $this->getCondition(entity: $entity, revision: TRUE)
++        ->condition('config', $configId);
++      $this->deleteUsageRecords($condition);
+ 
+-    // Insert usage records.
+-    foreach ($this->getTranslations($entity) as $translation) {
+-      foreach ($this->tracker->track($translation, $config) as $usage) {
+-        $this->createUsageRecord($config, $translation, $usage);
++      $config = $this->getConfigStorage()->load($configId);
++
++      // Insert usage records.
++      foreach ($this->getTranslations($entity) as $translation) {
++        foreach ($this->tracker->track($translation, $config) as $usage) {
++          $this->createUsageRecord($config, $translation, $usage);
++        }
+       }
+     }
++    $this->sources = [];
+   }
+ 
+   /**
+@@ -81,12 +127,10 @@ class Recorder implements RecorderInterface {
+ 
+     // The deleted entity might be a traversable entity, part of usage paths.
+     if ($entity instanceof FieldableEntityInterface) {
+-      $configs = $this->entityTypeManager->getStorage('track_usage_config')->loadMultiple();
+-      foreach ($configs as $config) {
++      foreach ($this->getConfigStorage()->loadMultiple() as $config) {
+         if ($config->isTraversable($entity)) {
+-          assert($entity instanceof FieldableEntityInterface);
+           // Re-queue all source entities where this entity is involved.
+-          $this->requeueSourceEntities($entity, $config);
++          $this->processTraversables([$this->getKey($entity)]);
+         }
+       }
+     }
+@@ -155,7 +199,7 @@ class Recorder implements RecorderInterface {
+     $entityId = $this->getIdColumnValueByEntity($entity);
+ 
+     $condition = new Condition('OR');
+-    // The Entity acts like a target entity.
++    // The entity acts like a target entity.
+     $condition->condition(
+       (new Condition('AND'))
+         ->condition('target_type', $entityTypeId)
+@@ -221,38 +265,56 @@ class Recorder implements RecorderInterface {
+    * usage path and re-queue the source entities where this traversable entity
+    * is involved.
+    *
+-   * @param \Drupal\Core\Entity\FieldableEntityInterface $traversableEntity
+-   *   The affected traversable entity.
+-   * @param \Drupal\track_usage\Entity\TrackConfigInterface $config
+-   *   The track config.
++   * @param list<string>|null $traversables
++   *   (optional) A list of traversable entities, each represented as string
++   *   having the same pattern as return of EntityUtilityTrait::getKey() method.
++   *   If omitted, the traversables collected during the request are used.
+    */
+-  protected function requeueSourceEntities(FieldableEntityInterface $traversableEntity, TrackConfigInterface $config): void {
++  protected function processTraversables(?array $traversables = NULL): void {
++    // If not explicitly passed, use the traversables collected during request.
++    $traversables ??= $this->traversables;
++
++    if (!$traversables) {
++      return;
++    }
++
++    // Create an 'OR' condition that would look like:
++    // @code
++    // (type = 'media' AND id = 123 AND revision = 123)
++    //   OR
++    // (type = 'media' AND id = 123 AND revision = 10099)
++    //   OR
++    // (type = 'paragraph' AND id = 999 AND revision = 10099)
++    // @endcode
++    $or = $this->db->condition('OR');
++    foreach ($traversables as $key) {
++      [$entityTypeId, $entityId, $revisionId] = $this->destructKey($key);
++      $or->condition(
++        $this->db->condition('AND')
++          ->condition('type', $entityTypeId)
++          ->condition('id', $entityId)
++          ->condition('revision', $revisionId)
++      );
++    }
++
++    // Get a list of sources where these traversables are involved.
+     $query = $this->db->select(self::TABLE_PATHS)
+       ->distinct()
+       ->fields(self::TABLE, ['config', 'source_type', 'source_id_string', 'source_revision'])
+-      ->condition('type', $traversableEntity->getEntityTypeId())
+-      ->condition('id', $traversableEntity->id())
+-      ->condition('revision', $this->getRevisionId($traversableEntity));
++      ->condition($or);
+     $query->innerJoin(table: self::TABLE, condition: self::TABLE_PATHS . '.tid = ' . self::TABLE . '.tid');
+-    $rows = $query->execute()->fetchAll($this->fetchMode(\PDO::FETCH_NUM));
++    $sources = $query->execute()->fetchAll($this->fetchMode(\PDO::FETCH_NUM));
+ 
+-    $configStorage = $this->entityTypeManager->getStorage('track_usage_config');
+-    foreach ($rows as $row) {
+-      [$configId, $entityTypeId, $entityIdAsString, $revisionId] = $row;
++    foreach ($sources as [$configId, $entityTypeId, $entityIdAsString, $revisionId]) {
++      $key = "$configId:$entityTypeId:$entityIdAsString:$revisionId";
+ 
+-      $entityIdColumn = $this->getIdColumnName($entityTypeId, EntityRole::Source);
+-      $entityId = $this->getIdColumnValue($entityTypeId, $entityIdAsString);
+-
+-      $condition = (new Condition('AND'))
+-        ->condition('config', $configId)
+-        ->condition('source_type', $entityTypeId)
+-        ->condition($entityIdColumn, $entityId)
+-        ->condition('source_revision', intval($revisionId));
+-      $this->deleteUsageRecords($condition);
+-
+-      // Re-queue this source entity.
+-      $entity = $this->loadEntity($entityTypeId, $entityIdAsString, $revisionId);
+-      $this->record($entity, $configStorage->load($configId));
++      // Schedule this source entity for processing if needed.
++      if (!isset($this->sources[$key])) {
++        $entity = $this->loadEntity($entityTypeId, $entityIdAsString, $revisionId);
++        if ($entity) {
++          $this->sources[$key] = $key;
++        }
++      }
+     }
+   }
+ 
+@@ -289,7 +351,7 @@ class Recorder implements RecorderInterface {
+ 
+     foreach ($usage->paths as $path => $keys) {
+       foreach ($keys as $delta => $key) {
+-        [$type, $id, $revision] = explode(':', $key, 3);
++        [$type, $id, $revision] = $this->destructKey($key);
+         $insert->values([
+           'tid' => $tid,
+           'path' => $path,
+@@ -324,7 +386,7 @@ class Recorder implements RecorderInterface {
+   }
+ 
+   /**
+-   * Returns a base condition to be used on revision and language deletion.
++   * Returns a database query condition to be used when deleting usage records.
+    *
+    * @param \Drupal\Core\Entity\EntityInterface $entity
+    *   The entity.
+@@ -355,4 +417,17 @@ class Recorder implements RecorderInterface {
+     return $condition;
+   }
+ 
++  /**
++   * Returns the track usage config entity storage.
++   *
++   * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
++   *   The track usage config entity storage.
++   */
++  protected function getConfigStorage(): ConfigEntityStorageInterface {
++    if (!isset($this->configStorage)) {
++      $this->configStorage = $this->entityTypeManager->getStorage('track_usage_config');
++    }
++    return $this->configStorage;
++  }
++
+ }
+diff --git a/src/Trait/EntityUtilityTrait.php b/src/Trait/EntityUtilityTrait.php
+index 791e7481e5140ac37331d01c83b4e18fa62fcbb2..fa71f9332c8eaa44e54e1c684b899ad0c6cefbee 100644
+--- a/src/Trait/EntityUtilityTrait.php
++++ b/src/Trait/EntityUtilityTrait.php
+@@ -33,6 +33,32 @@ trait EntityUtilityTrait {
+     return "{$entity->getEntityTypeId()}:{$entity->id()}:{$this->getRevisionId($entity)}";
+   }
+ 
++  /**
++   * Explodes an entity key into a triplet array.
++   *
++   * This method is needed because there are entity types where the ID is a
++   * string and the ID might contain one or many colons (:). In such cases
++   * `explode(':', $key, 3)` will not give the correct results.
++   *
++   * @param string $key
++   *   An entity key same as the one returned by self::getKey().
++   *
++   * @return array{string, string, int}
++   *   A triplet:
++   *   0: The entity type ID.
++   *   1: The entity ID.
++   *   2: The revision ID.
++   */
++  public function destructKey(string $key): array {
++    $parts = explode(':', $key);
++    assert(count($parts) >= 3);
++
++    $entityTypeId = array_shift($parts);
++    $revisionId = intval(array_pop($parts));
++
++    return [$entityTypeId, implode(':', $parts), $revisionId];
++  }
++
+   /**
+    * Checks whether an entity type is revisionable.
+    *
+diff --git a/tests/src/Kernel/EntityGuesserTest.php b/tests/src/Kernel/EntityGuesserTest.php
+index 30c6fb5eb4c281544ab8ae4f626e627af6c50eb2..fbd823b0b3d17d56002eda8e29adf58e3dfcc36c 100644
+--- a/tests/src/Kernel/EntityGuesserTest.php
++++ b/tests/src/Kernel/EntityGuesserTest.php
+@@ -101,9 +101,7 @@ class EntityGuesserTest extends KernelTestBase {
+         $this->assertNull($entity, $message);
+       }
+       else {
+-
+         $this->assertEquals($expectancy, [$entity->getEntityTypeId(), $entity->id()], $message);
+-        // $this->assertEquals($expectancy, $entity);
+       }
+     }
+   }
+diff --git a/tests/src/Kernel/RecorderTest.php b/tests/src/Kernel/RecorderTest.php
+index 7142e2b8b06a1d991db2d8b3ad49b8dcf5845a80..db83298a9df2406c6e15f3507658b3c695bd7a99 100644
+--- a/tests/src/Kernel/RecorderTest.php
++++ b/tests/src/Kernel/RecorderTest.php
+@@ -9,6 +9,7 @@ use Drupal\file\Entity\File;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\media\Entity\Media;
+ use Drupal\track_usage\Entity\TrackConfig;
++use Drupal\track_usage\Recorder;
+ use Drupal\track_usage\RecorderInterface;
+ use Drupal\track_usage\Trait\BackwardsCompatibilityTrait;
+ use Symfony\Component\Yaml\Yaml;
+@@ -109,7 +110,8 @@ class RecorderTest extends TrackUsageTestBase {
+    *   The expectation identifier according to recorder.yml test cases.
+    */
+   protected function assertRecordedUsage(string $expectation): void {
+-    // Check main usage records.
++    $this->container->get(Recorder::class)->registerUsageRecords();
++
+     $actualRecords = $this->container->get('database')
+       ->select(RecorderInterface::TABLE)
+       ->fields(RecorderInterface::TABLE)
+diff --git a/track_usage.install b/track_usage.install
+index 2675ebac467abe62f4ec34b7d4405904b381459a..79b2cc284b663cb6c835e1ec30f20f11d8ced931 100644
+--- a/track_usage.install
++++ b/track_usage.install
+@@ -9,6 +9,7 @@ declare(strict_types=1);
+ 
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\track_usage\RecorderInterface;
++use Drupal\track_usage\Trait\EntityUtilityTrait;
+ 
+ /**
+  * Implements hook_schema().
+@@ -291,6 +292,11 @@ function track_usage_update_8002(): void {
+ function track_usage_update_8003(array &$sandbox): string {
+   $db = \Drupal::database();
+ 
++  $helper = new class() {
++    use EntityUtilityTrait;
++
++  };
++
+   if (!isset($sandbox['data'])) {
+     // Get all records with non-empty meta-data.
+     $sandbox['data'] = $db->select(RecorderInterface::TABLE)
+@@ -319,7 +325,7 @@ function track_usage_update_8003(array &$sandbox): string {
+ 
+     foreach ($meta['paths'] as $path => $keys) {
+       foreach ($keys as $delta => $key) {
+-        [$type, $id, $revision] = explode(':', $key, 3);
++        [$type, $id, $revision] = $helper->destructKey($key);
+         $insert->values([
+           'tid' => $record->tid,
+           'path' => $path,
+diff --git a/track_usage.services.yml b/track_usage.services.yml
+index 703a31fc671963a51ee1f8f9795f2d58a6de16d2..495738b75be6d7feef3290f3a8d092899b85b438 100644
+--- a/track_usage.services.yml
++++ b/track_usage.services.yml
+@@ -19,6 +19,7 @@ services:
+   Drupal\track_usage\Recorder:
+     tags:
+       - { name: backend_overridable }
++      - { name: event_subscriber }
+   Drupal\track_usage\RecorderInterface: '@Drupal\track_usage\Recorder'
+ 
+   Drupal\track_usage\Updater: {}
