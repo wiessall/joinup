@@ -91,3 +91,33 @@ function joinup_core_deploy_200600(): string {
 
   return 'Added no-version suffix to invalid release aliases.';
 }
+
+/**
+ * Fix also the redirect paths that end with /release.
+ */
+function joinup_core_deploy_200601(): string {
+  $redirect_ids = [
+    '107464',
+    '124296',
+    '125182',
+    '125830',
+    '126062',
+    '126124',
+    '126239',
+    '126340',
+    '126658',
+    '126759',
+    '126814',
+    '128731',
+    '128734',
+    '132026',
+    '132241',
+    '132435',
+    '132506',
+  ];
+
+  $storage = \Drupal::entityTypeManager()->getStorage('redirect');
+  $storage->delete($storage->loadMultiple($redirect_ids));
+
+  return 'Added no-version suffix to invalid release aliases with /release.';
+}

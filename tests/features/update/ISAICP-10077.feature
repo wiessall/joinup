@@ -76,3 +76,32 @@ Feature: Assert that releases can be added after deploy.
       | /collection/portal/solution/joinup-archive/release/add                                                                                                     | 403           |
       | /collection/interoperability-test-bed-repository/solution/interoperability-test-bed/release/add                                                            | 200           |
       | /collection/ehealth/solution/pharmacy-duties-athens-region/release/add                                                                                     | 403           |
+
+  @update:joinup_core_deploy_200601
+  Scenario Outline:
+    Given I am logged in as a moderator
+    And I go to "<path>"
+    # Response code 200 is for non archived solutions where releases can be
+    # added. If the solution is archived, the response code will be 403. In any
+    # case, none of them should return a 404.
+    Then the response status code should be <response_code>
+
+    Examples:
+      | path                                                                                                                            | response_code |
+      | solution/interoperability-test-bed/release/add                                                                                  | 200           |
+      | solution/re3gistry/release/add                                                                                                  | 200           |
+      | solution/core-public-service-vocabulary-application-profile/release/add                                                         | 200           |
+      | solution/leos-open-source-software-editing-legislation/release/add                                                              | 200           |
+      | collection/registered-organization-vocabulary/solution/registered-organization-vocabulary/release/add                           | 200           |
+      | collection/elise-european-location-interoperability-solutions-e-government/solution/elise-action-semantic-resources/release/add | 200           |
+      | collection/semantic-interoperability-community-semic/solution/asset-description-metadata-schema-adms/release/add                | 200           |
+      | solution/eusurvey/release/add                                                                                                   | 200           |
+      | solution/pdf-over/release/add                                                                                                   | 200           |
+      | collection/semantic-interoperability-community-semic/solution/core-public-organisation-vocabulary/release/add                   | 200           |
+      | collection/semantic-interoperability-community-semic/solution/core-public-service-vocabulary-application-profile/release/add    | 200           |
+      | solution/european-single-procurement-document/release/add                                                                       | 200           |
+      | collection/eprocurement/solution/european-single-procurement-document/release/add                                               | 200           |
+      | collection/support-centre/solution/asset-description-metadata-schema-adms/release/add                                           | 200           |
+      | collection/semantic-interoperability-community-semic/solution/core-criterion-and-core-evidence-vocabulary/release/add           | 200           |
+      | solution/are3na-study-aaa-data-and-services/release/add                                                                         | 403           |
+      | collection/semantic-interoperability-community-semic/solution/asset-description-metadata-schema-software/release/add            | 403           |
