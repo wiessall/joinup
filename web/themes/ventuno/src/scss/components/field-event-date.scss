@@ -1,6 +1,6 @@
 @import "../partials/core";
 
-.event__date {
+.event--highlighted-date .event__date {
   border-top: 8px solid $joinup-info;
   border-radius: $border-radius-sm;
   .joinup-date-tile {
