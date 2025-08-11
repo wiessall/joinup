@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "339b1bceed2900e5b1b24869d3b8f5d2",
+    "content-hash": "afe96cdf168c2f7a06f463c8e4278280",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9852,17 +9852,17 @@
         },
         {
             "name": "drupal/track_usage",
-            "version": "1.0.0-alpha5",
+            "version": "1.0.0-alpha6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/track_usage.git",
-                "reference": "1.0.0-alpha5"
+                "reference": "1.0.0-alpha6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/track_usage-1.0.0-alpha5.zip",
-                "reference": "1.0.0-alpha5",
-                "shasum": "0c234f7a204a92cf7a38538f84f71597b5c0f6f5"
+                "url": "https://ftp.drupal.org/files/projects/track_usage-1.0.0-alpha6.zip",
+                "reference": "1.0.0-alpha6",
+                "shasum": "03c92f9d1d9f8be90243331cc7f662e446ad1c53"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11",
@@ -9882,8 +9882,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha5",
-                    "datestamp": "1749542999",
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1754571235",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9901,6 +9901,10 @@
                     "email": "clau.cristea@gmail.com"
                 },
                 {
+                    "name": "andras_szilagyi",
+                    "homepage": "https://www.drupal.org/user/1217938"
+                },
+                {
                     "name": "claudiu.cristea",
                     "homepage": "https://www.drupal.org/user/56348"
                 },
@@ -9911,6 +9915,10 @@
                 {
                     "name": "idimopoulos",
                     "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
                 }
             ],
             "description": "Track usages of a certain entity type by a source entity",

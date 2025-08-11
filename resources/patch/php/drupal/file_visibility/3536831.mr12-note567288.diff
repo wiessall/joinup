@@ -1,0 +1,331 @@
+diff --git a/composer.json b/composer.json
+index 94f4a8f2901b33d12797ea267399126ba3a20ac5..20b52b5eaeeb652f7ba176d85f3e36ac44135921 100644
+--- a/composer.json
++++ b/composer.json
+@@ -24,7 +24,7 @@
+     },
+     "require-dev": {
+         "drupal/paragraphs": "^1.18",
+-        "drush/drush": "^12.5 || ^13.5"
++        "drush/drush": "^12.5 || ^13.6"
+     },
+     "config": {
+         "sort-packages": true,
+diff --git a/file_visibility.services.yml b/file_visibility.services.yml
+index c33ea7414c76e4791f90cf0484c411dd7a4510da..158e2558cbbe2f94bba1da15a36f7915771a8373 100644
+--- a/file_visibility.services.yml
++++ b/file_visibility.services.yml
+@@ -4,7 +4,9 @@ services:
+     autoconfigure: true
+     autowire: true
+ 
+-  Drupal\file_visibility\FileVisibility: {}
++  Drupal\file_visibility\FileVisibility:
++    tags:
++      - { name: event_subscriber }
+   Drupal\file_visibility\FileVisibilityInterface: '@Drupal\file_visibility\FileVisibility'
+ 
+   Drupal\file_visibility\FileVisibilityPluginManager:
+diff --git a/modules/file_visibility_track_usage/src/DependencyInjection/EventSubscriberOrder.php b/modules/file_visibility_track_usage/src/DependencyInjection/EventSubscriberOrder.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..1baa03582acf2049a17064f6569a85bdd98f279f
+--- /dev/null
++++ b/modules/file_visibility_track_usage/src/DependencyInjection/EventSubscriberOrder.php
+@@ -0,0 +1,119 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\file_visibility_track_usage\DependencyInjection;
++
++use Drupal\Component\Utility\DeprecationHelper;
++use Drupal\file_visibility\FileVisibility;
++use Drupal\track_usage\Recorder;
++use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\HttpKernel\KernelEvents;
++
++/**
++ * Compiler pass to change event subscriber priorities.
++ *
++ * The logic of the TrackUsage file visibility plugin requires that the
++ * \Drupal\file_visibility\FileVisibility::doUpdateFileVisibility() event
++ * subscriber to act after \Drupal\track_usage\Recorder::registerUsageRecords().
++ */
++class EventSubscriberOrder implements CompilerPassInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function process(ContainerBuilder $container): void {
++    DeprecationHelper::backwardsCompatibleCall(
++      currentVersion: \Drupal::VERSION,
++      deprecatedVersion: '11.0',
++      currentCallable: $this->processDrupal11($container),
++      deprecatedCallable: $this->processDrupal10($container),
++    );
++  }
++
++  /**
++   * Process: Drupal >=11.
++   *
++   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
++   *   The Symfony container.
++   *
++   * @return callable
++   *   A process callable.
++   */
++  private function processDrupal11(ContainerBuilder $container): callable {
++    return function () use ($container): void {
++      $recorderPriority = $fileVisibilityDelta = NULL;
++
++      $definition = $container->getDefinition('event_dispatcher');
++      $calls = $definition->getMethodCalls();
++
++      foreach ($calls as $delta => $call) {
++        $serviceId = $call[1][1][0]->getValues()[0]->__toString();
++        $method = $call[1][1][1];
++        if ($serviceId === Recorder::class && $method === 'registerUsageRecords') {
++          // Record the Recorder service priority.
++          $recorderPriority = $call[1][2];
++        }
++        if ($serviceId === FileVisibility::class && $method === 'doUpdateFileVisibility') {
++          // Record the FileVisibility delta.
++          $fileVisibilityDelta = $delta;
++        }
++      }
++
++      if ($fileVisibilityDelta === NULL || $recorderPriority === NULL) {
++        return;
++      }
++
++      $calls[$fileVisibilityDelta][1][2] = $recorderPriority - 10;
++      $definition->setMethodCalls($calls);
++    };
++  }
++
++  /**
++   * Process: Drupal 10.
++   *
++   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
++   *   The Symfony container.
++   *
++   * @return callable
++   *   A process callable.
++   */
++  private function processDrupal10(ContainerBuilder $container): callable {
++    return function () use ($container): void {
++      $definition = $container->getDefinition('event_dispatcher');
++      $argument = $definition->getArgument(1);
++      $subscribersByPriority =& $argument[KernelEvents::RESPONSE];
++      $recorderPriority = NULL;
++
++      foreach ($subscribersByPriority as $priority => &$subscribers) {
++        foreach ($subscribers as $delta => $subscriber) {
++          if ($subscriber['service'] === [Recorder::class, 'registerUsageRecords']) {
++            // Record the Recorder service priority.
++            $recorderPriority = $priority;
++          }
++
++          // Unset the FileVisibility service from the current position.
++          if ($subscriber['service'] === [FileVisibility::class, 'doUpdateFileVisibility']) {
++            unset($subscribersByPriority[$priority][$delta]);
++            $subscribersByPriority[$priority] = array_values($subscribersByPriority[$priority]);
++          }
++        }
++      }
++
++      if ($recorderPriority === NULL) {
++        return;
++      }
++
++      // Add back FileVisibility service with a lower priority.
++      $fileVisibilityPriority = $recorderPriority - 10;
++      $subscribersByPriority[$fileVisibilityPriority] ??= [];
++      $subscribersByPriority[$fileVisibilityPriority][] = [
++        'service' => [FileVisibility::class, 'doUpdateFileVisibility'],
++      ];
++
++      $definition->setArgument(1, $argument);
++    };
++  }
++
++}
+diff --git a/modules/file_visibility_track_usage/src/FileVisibilityTrackUsageServiceProvider.php b/modules/file_visibility_track_usage/src/FileVisibilityTrackUsageServiceProvider.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..5ed148fd0577f5fbe9e891516dd09654929f0755
+--- /dev/null
++++ b/modules/file_visibility_track_usage/src/FileVisibilityTrackUsageServiceProvider.php
+@@ -0,0 +1,24 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\file_visibility_track_usage;
++
++use Drupal\Core\DependencyInjection\ServiceProviderInterface;
++use Drupal\file_visibility_track_usage\DependencyInjection\EventSubscriberOrder;
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Symfony\Component\DependencyInjection\Compiler\PassConfig;
++
++/**
++ * Add a compiler pass that alters the priorities for some event subscribers.
++ */
++class FileVisibilityTrackUsageServiceProvider implements ServiceProviderInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function register(ContainerBuilder $container): void {
++    $container->addCompilerPass(new EventSubscriberOrder(), PassConfig::TYPE_AFTER_REMOVING, -100);
++  }
++
++}
+diff --git a/src/FileVisibility.php b/src/FileVisibility.php
+index a9b871e8dbfe58ed6a16a3633a2248d9564e447b..dc925eea888957824cede4ccd885f67bd7b3bc03 100644
+--- a/src/FileVisibility.php
++++ b/src/FileVisibility.php
+@@ -19,6 +19,7 @@ use Drupal\Core\StreamWrapper\StreamWrapperManager;
+ use Drupal\file\FileInterface;
+ use Drupal\file\FileRepositoryInterface;
+ use Drupal\track_usage\Entity\TrackConfigInterface;
++use Symfony\Component\HttpKernel\KernelEvents;
+ 
+ /**
+  * Default implementation for the module's main service.
+@@ -34,6 +35,13 @@ class FileVisibility implements FileVisibilityInterface {
+    */
+   protected array $publicSchemes;
+ 
++  /**
++   * The entities to be processed.
++   *
++   * @var list<\Drupal\Core\Entity\FieldableEntityInterface>
++   */
++  protected array $entities = [];
++
+   /**
+    * Static cache of track usage config.
+    */
+@@ -51,49 +59,74 @@ class FileVisibility implements FileVisibilityInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function updateFilesVisibility(EntityInterface $entity): void {
+-    // The entity is limited to types that can determine the file usages. Source
+-    // entities are included (e.g., node), but also traversable entities, such
+-    // as media or paragraph; but not files.
+-    if (!$entity instanceof FieldableEntityInterface || $entity instanceof FileInterface) {
+-      return;
+-    }
++  public static function getSubscribedEvents(): array {
++    return [KernelEvents::RESPONSE => 'doUpdateFileVisibility'];
++  }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function updateFilesVisibility(EntityInterface $entity): void {
+     // Prevent any operation if no plugins are available.
+     if (!$this->manager->getPlugins()) {
+       return;
+     }
+ 
+-    // This entity is not using files.
+-    if (!$fids = $this->getEntityUsedFiles($entity)) {
+-      return;
++    if ($entity instanceof FieldableEntityInterface && !$entity instanceof FileInterface) {
++      // The entity is limited to types that can determine the file usages.
++      // Source entities are included (e.g., node), but also traversable
++      // entities, such as media or paragraph; but not files.
++      $this->entities[] = $entity;
+     }
++  }
+ 
+-    // Make sure the access control handler static cache is not stale.
+-    $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId())->resetCache();
++  /**
++   * Processes file visibility once a response was created.
++   */
++  public function doUpdateFileVisibility(): void {
++    if (!$this->entities) {
++      return;
++    }
+ 
+     $anonymous = new AnonymousUserSession();
+-    $fileStorage = $this->entityTypeManager->getStorage('file');
+-    foreach ($fileStorage->loadMultiple($fids) as $file) {
+-      if (!file_exists($file->getFileUri()) || $file->isTemporary()) {
+-        // The file might have been deleted or is temporary.
++
++    while ($this->entities) {
++      $entity = array_shift($this->entities);
++
++      // Make sure the access control handler static cache is not stale.
++      $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId())->resetCache();
++
++      // Other processes might have changed the files used by this source
++      // entity, so we need to re-check the files. Merge the initial files with
++      // the current ones because some files might have been added and others
++      // removed.
++      $fids = $this->getEntityUsedFiles($entity);
++      if (!$fids) {
+         continue;
+       }
+ 
+-      $access = $this->getFileAccess($file, $anonymous);
++      $fileStorage = $this->entityTypeManager->getStorage('file');
++      foreach ($fileStorage->loadMultiple($fids) as $file) {
++        if (!file_exists($file->getFileUri()) || $file->isTemporary()) {
++          // The file might have been deleted or is temporary.
++          continue;
++        }
++
++        $access = $this->getFileAccess($file, $anonymous);
+ 
+-      // No path to the file is accessible, and the file is public.
+-      if ($access->isForbidden() && $this->hasPublicScheme($file->getFileUri())) {
+-        $this->moveFile($file, static::PRIVATE_LOCATION . StreamWrapperManager::getTarget($file->getFileUri()));
+-      }
+-      // At least one path to the file is accessible, and the file is private.
+-      elseif ($access->isAllowed() && str_starts_with($file->getFileUri(), static::PRIVATE_LOCATION)) {
+-        [, $path] = explode('/', StreamWrapperManager::getTarget($file->getFileUri()), 2);
+-        $this->moveFile($file, $this->getOriginalPublicScheme($file) . "://$path");
+-      }
+-      // There are no paths to file. Restore the file location, if case.
+-      elseif ($access->isNeutral() && !$file->get('originalUri')->isEmpty() && $file->getFileUri() !== $file->get('originalUri')) {
+-        $this->moveFile($file, $file->get('originalUri'));
++        // No path to the file is accessible, and the file is public.
++        if ($access->isForbidden() && $this->hasPublicScheme($file->getFileUri())) {
++          $this->moveFile($file, static::PRIVATE_LOCATION . StreamWrapperManager::getTarget($file->getFileUri()));
++        }
++        // At least one path to the file is accessible, and the file is private.
++        elseif ($access->isAllowed() && str_starts_with($file->getFileUri(), static::PRIVATE_LOCATION)) {
++          [, $path] = explode('/', StreamWrapperManager::getTarget($file->getFileUri()), 2);
++          $this->moveFile($file, $this->getOriginalPublicScheme($file) . "://$path");
++        }
++        // There are no paths to file. Restore the file location, if case.
++        elseif ($access->isNeutral() && !$file->get('originalUri')->isEmpty() && $file->getFileUri() !== $file->get('originalUri')) {
++          $this->moveFile($file, $file->get('originalUri'));
++        }
+       }
+     }
+   }
+diff --git a/src/FileVisibilityInterface.php b/src/FileVisibilityInterface.php
+index 606f47a770a14b8c3ad96c33a3730b1fbcb2fa8b..e1bb5999a8622a613c9cc9759e8de4729c348c4b 100644
+--- a/src/FileVisibilityInterface.php
++++ b/src/FileVisibilityInterface.php
+@@ -9,11 +9,12 @@ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Session\AccountInterface;
+ use Drupal\file\FileInterface;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ 
+ /**
+  * Interface for file visibility service.
+  */
+-interface FileVisibilityInterface {
++interface FileVisibilityInterface extends EventSubscriberInterface {
+ 
+   /**
+    * Location of files in the private filesystem.
