@@ -59,13 +59,13 @@ Feature: User interface for the File URL field
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Document title" document
-    Then I should see the text "Upload a new file or enter a URL"
-    And I select the radio button "Remote file URL"
-    And I fill in "field_file[0][file_url_remote]" with "foo"
-    And I press "Add URL"
-    Then I should see the inline form error message "The URL foo is not valid"
-    And I select the radio button "Upload file"
-    And I attach the file "logo.png" to "files[field_file_0][]"
+    And I press "Add Resource link"
+    And I fill in "resources[0][subform][remote_file_url][0][uri]" with "foo"
+    And I press "Publish"
+    Then I should see the inline form error message "Manually entered paths should start with one of the following characters: / ? #"
+    And I fill in "resources[0][subform][remote_file_url][0][uri]" with "https://www.drupal.org/files/druplicon-small.png"
+    And I press "Add Resource file"
+    And I attach the file "logo.png" to "files[resources_1_subform_resource_file_0]"
     And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."
     And I press "Publish"
     Then I should see the heading "Document title"

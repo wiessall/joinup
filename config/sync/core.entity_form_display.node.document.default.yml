@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_file
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -22,7 +21,6 @@ dependencies:
     - node.type.document
   module:
     - comment
-    - file_url
     - joinup_workflow
     - layout_paragraphs
     - paragraphs
@@ -63,14 +61,6 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
-    third_party_settings: {  }
-  field_file:
-    type: file_url_generic
-    weight: 6
-    region: content
-    settings:
-      progress_indicator: throbber
-      add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
   field_licence:
     type: entity_reference_autocomplete

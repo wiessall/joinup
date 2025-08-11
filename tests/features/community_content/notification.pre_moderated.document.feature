@@ -44,6 +44,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" options from "Topic"
     And I press "Propose"
@@ -60,6 +61,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
