@@ -2,3 +2,5 @@ name: 'Ventuno Popover'
 type: module
 description: 'Generic Bootstrap popover component for reusable UI elements'
 core_version_requirement: ^10 || ^11
+dependencies:
+  - ui_patterns:ui_patterns
