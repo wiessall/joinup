@@ -42,9 +42,9 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                             |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                                                              |
-      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection".You can access the new content at the following link: http  |
+      | recipient | CC owner                                                                                                                                                            |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                             |
+      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection".You can access the new content at the following link: http |
 
     # Test 'update' operation.
     When I am logged in as "CC member"
