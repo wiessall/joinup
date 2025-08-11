@@ -42,7 +42,7 @@ class JoinupDocumentContext extends RawDrupalContext {
 
     if (!empty($node->resources)) {
       $type = $node->{'file type'} ?? 'remote';
-      if ($type != 'remote') {
+      if ($type !== 'remote') {
         // If the file is local we want to copy it from the fixtures into the
         // file system and register it in the DocumentSubContext so it can be
         // cleaned up after the scenario ends. Perform a small dance to get
