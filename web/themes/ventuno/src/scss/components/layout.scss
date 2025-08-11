@@ -39,17 +39,25 @@ div[data-drupal-messages] + .region-content-top {
 // ISAICP-9937 Make sure all elements are 100% on all layout scenarios.
 .layout--twocol-section--50-50 {
   .layout__region {
-    .contextual-region,
-    .layout-block,
     .view-content,
     .view,
-    .view-content > div,
+    .view-content article,
     .block-content > div,
-    .col {
+    .col article {
       height: 100%;
     }
-    .view-content article {
+    .view-content > div {
+      display: flex;
+      flex-direction: column;
       height: 100%;
+    }
+    .layout-block {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .col {
+        margin-bottom: $spacer * 1.5;
+      }
     }
   }
 }
