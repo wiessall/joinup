@@ -21,6 +21,7 @@ libraries-override:
   ventuno/carousel: false
 
 regions:
+  top_bar: 'Top bar'
   search_bar: 'Search bar'
   header: 'Header'
   featured: 'Featured'
