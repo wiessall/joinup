@@ -542,10 +542,10 @@ layout-paragraphs--builder:
 
 popover:
   js:
-    js/popover.js: {}
+    templates/patterns/popover/js/popover.js: {}
   css:
     theme:
-      css/popover.css: {}
+      templates/patterns/popover/css/popover.css: {}
   dependencies:
     - core/drupal
     - core/once
