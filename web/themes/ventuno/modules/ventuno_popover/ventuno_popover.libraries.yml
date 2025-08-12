@@ -1,9 +1,0 @@
-popover:
-  js:
-    js/popover.js: {}
-  css:
-    theme:
-      css/popover.css: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
