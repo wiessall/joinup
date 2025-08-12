@@ -43,4 +43,12 @@ popover:
       description: 'Additional attributes for the popover container.'
       preview: []
   libraries:
-    - ventuno/popover
+    - popover:
+        css:
+          theme:
+            css/popover.css: {}
+        js:
+          js/popover.js: {}
+        dependencies:
+          - core/drupal
+          - core/once

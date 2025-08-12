@@ -539,13 +539,3 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
-
-popover:
-  js:
-    templates/patterns/popover/js/popover.js: {}
-  css:
-    theme:
-      templates/patterns/popover/css/popover.css: {}
-  dependencies:
-    - core/drupal
-    - core/once
