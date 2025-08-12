@@ -33,6 +33,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
+    And I wait for CSS animations to finish
     And I should have the following images on the page in this order
       | logo.png   |
       | topic.png  |
