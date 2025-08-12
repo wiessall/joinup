@@ -74,9 +74,6 @@ class LanguagePickerBlock extends BlockBase implements ContainerFactoryPluginInt
   protected function buildLanguageLinks(LanguageInterface $current_language): array {
     $languages = $this->languageManager->getLanguages();
 
-    // Remove current language from dropdown list.
-    unset($languages[$current_language->getId()]);
-
     $language_links = [];
     foreach ($languages as $language) {
       $language_links[] = [
@@ -85,6 +82,7 @@ class LanguagePickerBlock extends BlockBase implements ContainerFactoryPluginInt
         'url' => Url::fromRoute('<current>', [], ['language' => $language])
           ->toString(),
         'weight' => $language->getWeight(),
+        'is_current' => $language->getId() === $current_language->getId(),
       ];
     }
 
