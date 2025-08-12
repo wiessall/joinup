@@ -19,18 +19,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 2 / 1;
+    width: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
     & picture {
       & img {
         width: 100%;
         margin-bottom: 0;
       }
-    }
-  }
-  &__default-img {
-    aspect-ratio: 4 / 3;
-    @include media-breakpoint-up(md) {
-      aspect-ratio: 1 / 1;
     }
   }
   &__standout-info {
@@ -142,8 +138,15 @@
     }
   }
   .field--name-oss-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: $spacer;
+    aspect-ratio: 1;
+    picture {
+      width: 100%;
+    }
   }
   &--horizontal {
     width: 100%;
