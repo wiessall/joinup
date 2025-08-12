@@ -42,6 +42,11 @@ popover:
       label: 'Popover attributes'
       description: 'Additional attributes for the popover container.'
       preview: []
+    show_close_button:
+      type: boolean
+      label: 'Show close button'
+      description: 'Display an X close button in the popover.'
+      preview: true
   libraries:
     - popover:
         css:
