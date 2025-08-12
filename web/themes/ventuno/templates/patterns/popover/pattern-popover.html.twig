@@ -12,6 +12,7 @@
     - popover_classes (array) (default: [])
     - trigger_attributes (array) (default: [])
     - popover_attributes (array) (default: [])
+    - show_close_button (boolean) (default: false)
 #}
 
 {% set _trigger_text = trigger_text|default('') %}
@@ -21,6 +22,7 @@
 {% set _popover_classes = popover_classes|default([]) %}
 {% set _trigger_attributes = trigger_attributes|default([]) %}
 {% set _popover_attributes = popover_attributes|default([]) %}
+{% set _show_close_button = show_close_button|default(false) %}
 
 {% set popover_id = 'ventuno-popover-' ~ random() %}
 {% set trigger_class_list = ['ventuno-popover__trigger']|merge(_trigger_classes) %}
@@ -43,6 +45,11 @@
   </button>
 
   <div id="{{ popover_id }}" class="ventuno-popover__content visually-hidden">
+    {% if _show_close_button %}
+      <div class="ventuno-popover__close-wrapper">
+        <a href="#" class="ventuno-popover__close close" onclick="return false;">&times;</a>
+      </div>
+    {% endif %}
     {{ _content }}
   </div>
 </div>
