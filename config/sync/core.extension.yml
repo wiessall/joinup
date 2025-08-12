@@ -274,7 +274,6 @@ module:
   ui_patterns_settings: 0
   user: 0
   ventuno_helper: 0
-  ventuno_popover: 0
   view_unpublished: 0
   views_block_area: 0
   views_bulk_operations: 0

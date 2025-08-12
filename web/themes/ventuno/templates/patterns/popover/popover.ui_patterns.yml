@@ -43,4 +43,4 @@ popover:
       description: 'Additional attributes for the popover container.'
       preview: []
   libraries:
-    - ventuno_popover/popover
+    - ventuno/popover
