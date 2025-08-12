@@ -21,7 +21,7 @@
       <ul class="language-picker__links">
         {% for language in languages %}
           <li class="language-picker__item">
-            <a href="{{ language.url }}" class="language-picker__link">
+            <a href="{{ language.url }}"{{ language.attributes }}>
               <span class="language-picker__code">{{ language.code|upper }}</span>
               <span class="language-picker__name">{{ language.name }}</span>
             </a>
