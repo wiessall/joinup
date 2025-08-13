@@ -4,112 +4,136 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_paragraphs\Migrate;
 
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
+use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drupal\paragraphs\Entity\Paragraph;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\paragraphs\ParagraphInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Service for migrating field data between different field types.
  */
 final class MigrateData implements ContainerInjectionInterface {
 
+  use AutowireTrait;
+
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly Connection $database,
+    #[Autowire('keyvalue')]
+    protected readonly KeyValueFactory $keyValue,
   ) {
   }
 
   /**
-   * {@inheritdoc}
+   * Migrates a node file_url field to paragraphs field.
    */
-  public static function create(ContainerInterface $container): self {
-    return new self(
-      $container->get('entity_type.manager'),
-    );
-  }
+  public function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
+    // Process all revision table records.
+    [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
+    $target_column = "{$src_field}_target_id";
 
-  /**
-   * Migrates field data from one field to another.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to migrate fields on.
-   * @param string $from_field
-   *   The source field name.
-   * @param string $to_field
-   *   The target field name.
-   *
-   * @throws \InvalidArgumentException
-   *   If the entity doesn't have the required fields.
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   If there are issues saving the entity or paragraphs.
-   */
-  protected function migrateField(EntityInterface $entity, string $from_field, string $to_field): void {
-    if (!$entity->hasField($from_field)) {
-      throw new \InvalidArgumentException("Entity does not have field '$from_field'");
-    }
-    if (!$entity->hasField($to_field)) {
-      throw new \InvalidArgumentException("Entity does not have field '$to_field'");
+    $result = $this->database->select($src_revision_table)
+      ->fields($src_revision_table)
+      ->orderBy('entity_id')
+      ->orderBy('revision_id')
+      ->orderBy('delta')
+      ->execute();
+
+    $dest_records = $lookup = [];
+    while ($record = $result->fetchAssoc()) {
+      // Did we already create a paragraph for this entity ID + target value?
+      // If not, create a new paragraph entity.
+      // Otherwise, create a new revision for that paragraph.
+      $paragraph = $lookup[$record['entity_id']][$record[$target_column]] ?? NULL;
+      if ($paragraph === NULL) {
+        $paragraph = $this->createParagraphFromFieldValue($record[$target_column], 'node', $record['entity_id'], $dest_field);
+      }
+      elseif ($paragraph instanceof ParagraphInterface) {
+        $paragraph->setNewRevision();
+        $paragraph->save();
+      }
+
+      // Skip record creation if the paragraph couldn't be created.
+      if (!$paragraph instanceof ParagraphInterface) {
+        continue;
+      }
+
+      // Update the lookup table.
+      $lookup[$record['entity_id']][$record[$target_column]] = $paragraph;
+
+      // Collect records to be inserted.
+      $dest_records[] = [
+        'bundle' => $record['bundle'],
+        'deleted' => $record['deleted'],
+        'entity_id' => $record['entity_id'],
+        'revision_id' => $record['revision_id'],
+        'langcode' => $record['langcode'],
+        'delta' => $record['delta'],
+        "{$dest_field}_target_id" => $paragraph->id(),
+        "{$dest_field}_target_revision_id" => $paragraph->getRevisionId(),
+      ];
     }
 
-    $source_values = $entity->get($from_field)->getValue();
-    if (empty($source_values)) {
+    if (!$dest_records) {
       return;
     }
 
-    $target_values = [];
-    foreach ($source_values as $source_value) {
-      $paragraph_created = $this->createParagraphFromFileValue($source_value);
-      if ($paragraph_created) {
-        $target_values[] = [
-          'target_id' => $paragraph_created->id(),
-          'target_revision_id' => $paragraph_created->getRevisionId(),
-        ];
-      }
+    // Fill destination field revision table records.
+    [$dest_data_table, $dest_revision_table] = array_keys($this->getFieldStorageSchema('node', $dest_field));
+    $insert_query = $this->database
+      ->insert($dest_revision_table)
+      ->fields(array_keys($dest_records[0]));
+    foreach ($dest_records as $dest_record) {
+      $insert_query->values($dest_record);
     }
-    $entity->set($to_field, $target_values);
+    $insert_query->execute();
 
-    $entity->skip_notification = TRUE;
-    $entity->setSyncing(TRUE);
-    $entity->save();
+    // Fill destination field data table records.
+    // Copy current revision records from revision table to data table.
+    $this->database
+      ->insert($dest_data_table)
+      ->from(
+        $this->database
+          ->select($dest_revision_table, 't')
+          ->fields('t')
+          ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
+      )
+      ->execute();
   }
 
   /**
-   * Creates a paragraph from a file field value.
-   *
-   * @param array $file_value
-   *   The file field value array.
-   *
-   * @return \Drupal\paragraphs\Entity\Paragraph|null
-   *   The created paragraph or NULL if creation failed.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   If there are issues creating or saving the paragraph.
+   * Returns the storage schema for the given field.
    */
-  protected function createParagraphFromFileValue(array $file_value): ?Paragraph {
-    if (!isset($file_value['target_id'])) {
+  protected function getFieldStorageSchema(string $entity_type, string $field_name): array {
+    return $this->keyValue->get('entity.storage_schema.sql')
+      ->get("$entity_type.field_schema_data.$field_name", []);
+  }
+
+  /**
+   * Creates a paragraph from file_url's target_id field value.
+   */
+  protected function createParagraphFromFieldValue(string $value, string $parent_type, int|string $parent_id, string $parent_field_name): ?Paragraph {
+    $file_id = $this->extractFileIdFromDereferenceUrl($value);
+    $paragraph = $file_id
+      ? $this->createResourceFileParagraph($file_id)
+      : $this->createResourceLinkParagraph($value);
+
+    if (!$paragraph) {
       return NULL;
     }
 
-    $target_value = $file_value['target_id'];
-    $file_id = $this->extractFileIdFromDereferenceUrl($target_value);
-
-    if ($file_id) {
-      return $this->createResourceFileParagraph($file_id);
-    }
-
-    return $this->createResourceLinkParagraph($target_value);
+    $paragraph->set('parent_type', $parent_type);
+    $paragraph->set('parent_id', $parent_id);
+    $paragraph->set('parent_field_name', $parent_field_name);
+    $paragraph->save();
+    return $paragraph;
   }
 
   /**
    * Extracts file ID from file-dereference URL.
-   *
-   * @param string $url
-   *   The file-dereference URL.
-   *
-   * @return int|null
-   *   The extracted file ID or NULL if not found.
    */
   protected function extractFileIdFromDereferenceUrl(string $url): ?int {
     if (preg_match('/\/file-dereference\/(\d+)/', $url, $matches)) {
@@ -120,124 +144,49 @@ final class MigrateData implements ContainerInjectionInterface {
 
   /**
    * Creates a resource_file paragraph.
-   *
-   * @param int $file_id
-   *   The file ID.
-   *
-   * @return \Drupal\paragraphs\Entity\Paragraph|null
-   *   The created paragraph or NULL if creation failed.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   If there are issues creating or saving the paragraph.
    */
   protected function createResourceFileParagraph(int $file_id): ?Paragraph {
-    $paragraph = Paragraph::create([
+    return Paragraph::create([
       'type' => 'resource_file',
       'resource_file' => $file_id,
     ]);
-    $paragraph->save();
-
-    return $paragraph;
   }
 
   /**
    * Creates a resource_link paragraph.
-   *
-   * @param string $url
-   *   The URL.
-   *
-   * @return \Drupal\paragraphs\Entity\Paragraph|null
-   *   The created paragraph or NULL if creation failed.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   If there are issues creating or saving the paragraph.
    */
   protected function createResourceLinkParagraph(string $url): ?Paragraph {
-    if (!$this->isValidUrl($url)) {
+    $normalized_url = $this->normalizeUrl($url);
+    if (!$normalized_url) {
       return NULL;
     }
 
-    $paragraph = Paragraph::create([
+    return Paragraph::create([
       'type' => 'resource_link',
-      'remote_file_url' => $url,
+      'remote_file_url' => $normalized_url,
     ]);
-    $paragraph->save();
-
-    return $paragraph;
   }
 
   /**
-   * Migrates fields for a specific node type using batch processing.
+   * Normalizes and validates the given URL, returns NULL on invalid.
    *
-   * @param array $sandbox
-   *   The batch sandbox array.
-   * @param string $node_type
-   *   The node type to migrate.
-   * @param string $field_from
-   *   The source field name.
-   * @param string $field_to
-   *   The target field name.
-   *
-   * @return string
-   *   Status message for the batch operation.
+   * @see \Drupal\link\Plugin\Validation\Constraint\LinkTypeConstraintValidator::validate
    */
-  public function migrateNodeTypeFields(array &$sandbox, string $node_type, string $field_from, string $field_to): string {
-    if (!isset($sandbox['progress'])) {
-      $sandbox['progress'] = 0;
-      $sandbox['current_index'] = 0;
+  protected function normalizeUrl(string $url): ?string {
+    $url = trim($url);
 
-      $sandbox['node_ids'] = $this->entityTypeManager->getStorage('node')
-        ->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('type', $node_type)
-        ->condition($field_from . '.target_id', NULL, 'IS NOT NULL')
-        ->sort('nid')
-        // @todo remove
-        ->range(0, 50)
-        ->execute();
-
-      $sandbox['max'] = count($sandbox['node_ids']);
-      $sandbox['message'] = "Starting migration of {$sandbox['max']} {$node_type} nodes...";
+    // Append missing scheme when missing, if the rest seems valid.
+    $parts = parse_url($url);
+    if (empty($parts['scheme'])) {
+      if (preg_match('/^[a-z0-9.-]+\.[a-z]{2,}(?:\/.*)?$/i', $url)) {
+        $url = 'https://' . ltrim($url, '/');
+      }
+      else {
+        return NULL;
+      }
     }
 
-    $node_ids = array_slice($sandbox['node_ids'], $sandbox['current_index'], 10);
-    if (empty($node_ids)) {
-      $sandbox['#finished'] = 1;
-      return "Migration completed. Processed {$sandbox['progress']} {$node_type} nodes.";
-    }
-
-    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($node_ids);
-
-    foreach ($nodes as $node) {
-      $sandbox['current_index']++;
-      $sandbox['progress']++;
-
-      $this->migrateField($node, $field_from, $field_to);
-    }
-
-    $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
-    $remaining = $sandbox['max'] - $sandbox['progress'];
-
-    return "Processed {$sandbox['progress']} of {$sandbox['max']} {$node_type} nodes. {$remaining} remaining...";
-  }
-
-  /**
-   * Validates if a URL has a proper format using Drupal's built-in validation.
-   *
-   * @param string $url
-   *   The URL to validate.
-   *
-   * @return bool
-   *   TRUE if URL is valid, FALSE otherwise.
-   */
-  protected function isValidUrl(string $url): bool {
-    try {
-      Url::fromUri($url);
-      return TRUE;
-    }
-    catch (\Exception $e) {
-      return FALSE;
-    }
+    return UrlHelper::isValid($url) && UrlHelper::isExternal($url) ? $url : NULL;
   }
 
 }

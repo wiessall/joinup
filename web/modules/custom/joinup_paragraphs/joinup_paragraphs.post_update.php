@@ -23,10 +23,10 @@ function joinup_paragraphs_post_update_200600(array &$sandbox): string {
 }
 
 /**
- * Migrate field_file data to resources field for document nodes.
+ * Migrate file_url fields to paragraph fields.
  */
-function joinup_paragraphs_post_update_200601(array &$sandbox): string {
+function joinup_paragraphs_post_update_200601(): void {
   /** @var \Drupal\joinup_paragraphs\Migrate\MigrateData $migration */
   $migration = \Drupal::classResolver(MigrateData::class);
-  return $migration->migrateNodeTypeFields($sandbox, 'document', 'field_file', 'resources');
+  $migration->migrateNodeFileUrlField('field_file', 'resources');
 }
