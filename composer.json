@@ -60,7 +60,7 @@
         "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
-        "drupal/iframe": "^2",
+        "drupal/iframe": "^3.0",
         "drupal/image_library_widget": "^2.0",
         "drupal/imagecache_external": "^3.0",
         "drupal/inline_entity_form": "^3.0",
