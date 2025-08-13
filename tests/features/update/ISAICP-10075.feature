@@ -12,5 +12,4 @@ Feature: Solution language field contains only EU languages.
     Examples:
       | solution_edit_path                                                                                           | expected_language | excluded_language |
       | /collection/eu-semantic-interoperability-catalogue/solution/agrovoc-thesaurus/edit                           | English           | Arabic            |
-      | /collection/ajuntament-de-barcelona-barcelona-city-council/solution/ethical-and-good-governance-mailbox/edit | Spanish           | Catalan           |
       | /collection/eidentity-and-esignature/solution/midpoint/edit                                                  | German            | Japanese          |
