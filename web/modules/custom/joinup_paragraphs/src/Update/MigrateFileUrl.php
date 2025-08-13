@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_paragraphs\Migrate;
+namespace Drupal\joinup_paragraphs\Update;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
@@ -16,11 +18,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Service for migrating field data between different field types.
  */
-final class MigrateData implements ContainerInjectionInterface {
+final class MigrateFileUrl implements ContainerInjectionInterface {
 
   use AutowireTrait;
 
   public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire('config.storage.sync')]
+    protected StorageInterface $syncStorage,
     protected readonly Connection $database,
     #[Autowire('keyvalue')]
     protected readonly KeyValueFactory $keyValue,
@@ -28,9 +33,72 @@ final class MigrateData implements ContainerInjectionInterface {
   }
 
   /**
+   * Main entrypoint.
+   */
+  public function run(): void {
+    $this->prepareParagraphs();
+    $this->prepareNodeFields();
+    $this->migrateNodeFileUrlField('field_file', 'resources');
+  }
+
+  /**
+   * Prepare paragraph's structure.
+   */
+  private function prepareParagraphs(): void {
+    $config_entities = [
+      'paragraphs_type' => [
+        'paragraphs.paragraphs_type.resource_file',
+        'paragraphs.paragraphs_type.resource_link',
+      ],
+      'field_storage_config' => [
+        'field.storage.paragraph.resource_file',
+        'field.storage.paragraph.remote_file_url',
+      ],
+      'field_config' => [
+        'field.field.paragraph.resource_file.resource_file',
+        'field.field.paragraph.resource_link.remote_file_url',
+      ],
+    ];
+
+    $this->createConfigEntities($config_entities);
+  }
+
+  /**
+   * Prepare node's structure.
+   */
+  private function prepareNodeFields(): void {
+    $config_entities = [
+      'field_storage_config' => [
+        'field.storage.node.resources',
+      ],
+      'field_config' => [
+        'field.field.node.document.resources',
+      ],
+    ];
+
+    $this->createConfigEntities($config_entities);
+  }
+
+  /**
+   * Creates configuration entities from sync storage.
+   *
+   * @param array $config_entities
+   *   Array of configuration entities keyed by storage type.
+   */
+  private function createConfigEntities(array $config_entities): void {
+    foreach ($config_entities as $storage => $keys) {
+      foreach ($keys as $key) {
+        $this->entityTypeManager->getStorage($storage)
+          ->create($this->syncStorage->read($key))
+          ->save();
+      }
+    }
+  }
+
+  /**
    * Migrates a node file_url field to paragraphs field.
    */
-  public function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
+  private function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
     // Process all revision table records.
     [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
     $target_column = "{$src_field}_target_id";
@@ -107,7 +175,7 @@ final class MigrateData implements ContainerInjectionInterface {
   /**
    * Returns the storage schema for the given field.
    */
-  protected function getFieldStorageSchema(string $entity_type, string $field_name): array {
+  private function getFieldStorageSchema(string $entity_type, string $field_name): array {
     return $this->keyValue->get('entity.storage_schema.sql')
       ->get("$entity_type.field_schema_data.$field_name", []);
   }
@@ -115,7 +183,7 @@ final class MigrateData implements ContainerInjectionInterface {
   /**
    * Creates a paragraph from file_url's target_id field value.
    */
-  protected function createParagraphFromFieldValue(string $value, string $parent_type, int|string $parent_id, string $parent_field_name): ?Paragraph {
+  private function createParagraphFromFieldValue(string $value, string $parent_type, int|string $parent_id, string $parent_field_name): ?Paragraph {
     $file_id = $this->extractFileIdFromDereferenceUrl($value);
     $paragraph = $file_id
       ? $this->createResourceFileParagraph($file_id)
@@ -135,7 +203,7 @@ final class MigrateData implements ContainerInjectionInterface {
   /**
    * Extracts file ID from file-dereference URL.
    */
-  protected function extractFileIdFromDereferenceUrl(string $url): ?int {
+  private function extractFileIdFromDereferenceUrl(string $url): ?int {
     if (preg_match('/\/file-dereference\/(\d+)/', $url, $matches)) {
       return (int) $matches[1];
     }
@@ -145,7 +213,7 @@ final class MigrateData implements ContainerInjectionInterface {
   /**
    * Creates a resource_file paragraph.
    */
-  protected function createResourceFileParagraph(int $file_id): ?Paragraph {
+  private function createResourceFileParagraph(int $file_id): ?Paragraph {
     return Paragraph::create([
       'type' => 'resource_file',
       'resource_file' => $file_id,
@@ -155,7 +223,7 @@ final class MigrateData implements ContainerInjectionInterface {
   /**
    * Creates a resource_link paragraph.
    */
-  protected function createResourceLinkParagraph(string $url): ?Paragraph {
+  private function createResourceLinkParagraph(string $url): ?Paragraph {
     $normalized_url = $this->normalizeUrl($url);
     if (!$normalized_url) {
       return NULL;
@@ -172,7 +240,7 @@ final class MigrateData implements ContainerInjectionInterface {
    *
    * @see \Drupal\link\Plugin\Validation\Constraint\LinkTypeConstraintValidator::validate
    */
-  protected function normalizeUrl(string $url): ?string {
+  private function normalizeUrl(string $url): ?string {
     $url = trim($url);
 
     // Append missing scheme when missing, if the rest seems valid.
