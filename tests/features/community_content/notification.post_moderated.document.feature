@@ -44,7 +44,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                            |
       | subject   | Interoperable Europe Portal: Content has been published                                                                                                             |
-      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection".You can access the new content at the following link: http |
+      | body      | Dear CC, CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: |
 
     # Test 'update' operation.
     When I am logged in as "CC member"
@@ -53,7 +53,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                |
       | subject   | Interoperable Europe Portal: Content has been published                                                 |
-      | body      | CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
+      | body      | Dear CC, CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify post request changes" document
