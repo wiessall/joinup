@@ -37,6 +37,17 @@
           fallbackPlacements: ["top", "left", "right"],
         });
 
+        trigger.addEventListener("shown.bs.popover", () => {
+          const closeButton = bsPopover.tip?.querySelector(
+            ".ventuno-popover__close",
+          );
+
+          closeButton?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            bsPopover.hide();
+          });
+        });
+
         // Close on outside click
         document.addEventListener("click", (event) => {
           if (
