@@ -29,10 +29,12 @@
 
 .popover.ventuno-popover-component {
   max-width: 500px;
+  z-index: 502;
+  background-color: white;
 }
 
 .popover.ventuno-popover-component .popover-body {
-  padding: 0.75rem;
+  padding: 1rem;
 }
 
 @media (max-width: 767.98px) {

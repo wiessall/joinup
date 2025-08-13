@@ -1,0 +1,14 @@
+@import "../partials/core";
+
+.language-picker {
+  .ventuno-popover__trigger {
+    &::before {
+      @include get-bootstrap-icon("globe");
+      margin-right: $spacer * 0.5; // 8px
+    }
+  }
+}
+
+.language-picker__grid {
+
+}
