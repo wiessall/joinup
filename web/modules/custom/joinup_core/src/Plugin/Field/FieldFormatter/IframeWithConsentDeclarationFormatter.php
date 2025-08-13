@@ -26,7 +26,7 @@ class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
 
     foreach ($elements as &$element) {
