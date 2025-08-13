@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee3d173f08b22743ab763b3d12ad95f5",
+    "content-hash": "860868bcf2533a26f9a196fd83ef35d9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7445,29 +7445,33 @@
         },
         {
             "name": "drupal/poll",
-            "version": "1.6.0",
+            "version": "2.0.0-alpha5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/poll.git",
-                "reference": "8.x-1.6"
+                "reference": "2.0.0-alpha5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/poll-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "e7ae83ed214a03e6ecf26a8ac7b500ba61d4dde5"
+                "url": "https://ftp.drupal.org/files/projects/poll-2.0.0-alpha5.zip",
+                "reference": "2.0.0-alpha5",
+                "shasum": "d29077800738cd4244aa45b456eb735bbfc391a9"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/devel": "^5.3",
+                "drupal/devel_generate-devel_generate": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1680209860",
+                    "version": "2.0.0-alpha5",
+                    "datestamp": "1744287698",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -7500,7 +7504,8 @@
             "description": "Allows your site to capture votes on different topics in the form of multiple choice questions.",
             "homepage": "https://www.drupal.org/project/poll",
             "support": {
-                "source": "https://git.drupalcode.org/project/poll"
+                "source": "https://git.drupalcode.org/project/poll.git",
+                "issues": "https://www.drupal.org/project/issues/poll"
             }
         },
         {
@@ -26228,6 +26233,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/poll": 15,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20

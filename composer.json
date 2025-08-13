@@ -89,7 +89,7 @@
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
-        "drupal/poll": "^1.6",
+        "drupal/poll": "^2.0@alpha",
         "drupal/private_message": "4.0.0-alpha4 as 3.0.6",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
@@ -447,10 +447,6 @@
             },
             "drupal/paragraphs": {
                 "Patch paragraphs to duplicate correctly nested paragraphs (remove when using Drupal 11.2). @see https://www.drupal.org/i/3510842": "resources/patch/php/drupal/paragraphs/3510842.patch"
-            },
-            "drupal/poll": {
-                "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
-                "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
             "drupal/private_message_flood": {
                 "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"
