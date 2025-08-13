@@ -10,6 +10,6 @@ Feature: Solution language field contains only EU languages.
     And the "Language availability" tagify field should contain "<expected_language>"
 
     Examples:
-      | solution_edit_path                                                                                           | expected_language | excluded_language |
-      | /collection/eu-semantic-interoperability-catalogue/solution/agrovoc-thesaurus/edit                           | English           | Arabic            |
-      | /collection/eidentity-and-esignature/solution/midpoint/edit                                                  | German            | Japanese          |
+      | solution_edit_path                                                                 | expected_language | excluded_language |
+      | /collection/eu-semantic-interoperability-catalogue/solution/agrovoc-thesaurus/edit | English           | Arabic            |
+      | /collection/eidentity-and-esignature/solution/midpoint/edit                        | German            | Japanese          |
