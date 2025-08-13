@@ -8,10 +8,12 @@
  * - languages: Array of language objects with 'code', 'name', and 'url'.
  */
 #}
+{{ attach_library('ventuno/language-picker') }}
+
 {% set popover_content %}
-  <div class="language-picker__grid">
+  <div class="language-picker__grid row">
     {% for language in languages %}
-    <div class="language-picker__item">
+    <div class="language-picker__item col-md-2 col-xl-4">
       <a href="{{ language.url }}"{{ language.attributes }}>
         <span class="language-picker__code">{{ language.code|upper }}</span>
         <span class="language-picker__name">{{ language.name }}</span>
@@ -25,6 +27,7 @@
   trigger_text: current_language.code|upper,
   content: popover_content,
   popover_classes: ['language-picker'],
+  trigger_classes: ['btn', 'btn-link'],
   placement: 'bottom',
   show_close_button: true,
 }) }}
