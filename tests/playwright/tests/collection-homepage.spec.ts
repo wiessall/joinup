@@ -16,7 +16,7 @@ test.describe("Collection homepage", () => {
       "group-header.png",
     );
     await expect(
-      page.locator(".block-field-blocknodecollectionlisting-content"),
+      page.locator(".collection__collection-settings .row"),
     ).toHaveScreenshot("collection-content-tiles.png");
     await expect(page.locator(".content .region-content-top")).toHaveScreenshot(
       "action-buttons-on-top.png",
