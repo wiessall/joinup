@@ -12,6 +12,7 @@ Feature: Language selector block and popover functionality
 
   Scenario Outline: Users without translator role cannot see top bar region
     Given I am <login_state>
+
     When I am on the homepage
     Then I should not see the "Top Bar" region
 
@@ -23,7 +24,16 @@ Feature: Language selector block and popover functionality
   @javascript
   Scenario: Language selector popover opens when clicked
     Given I am logged in as "Translator User"
+
     When I am on the homepage
     Then I should see "EN" in the "Top Bar" region
+
     When I press "EN" in the "Top Bar" region
     Then a popover should open
+    And I should see "FR" in the "Popover" region
+    And I should see "DE" in the "Popover" region
+    And I should see "ES" in the "Popover" region
+
+    When I click "FR" in the "Popover" region
+    Then I should be on "/fr"
+    And I should see "FR" in the "Top Bar" region
