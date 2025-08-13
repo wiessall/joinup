@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "860868bcf2533a26f9a196fd83ef35d9",
+    "content-hash": "a78bd6308f42f8868b8c4cddcc96d861",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7646,35 +7646,39 @@
         },
         {
             "name": "drupal/publication_date",
-            "version": "2.0.0-beta8",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/publication_date.git",
-                "reference": "8.x-2.0-beta8"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/publication_date-8.x-2.0-beta8.zip",
-                "reference": "8.x-2.0-beta8",
-                "shasum": "1e40fc97a4582c364a8971e16448775c30441fe7"
+                "url": "https://ftp.drupal.org/files/projects/publication_date-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "054788a5eb6b5230d6b2d2e58be08f98f44aeb83"
             },
             "require": {
-                "drupal/core": "^9.1 || ^10"
+                "drupal/core": "^10.3 || ^11"
+            },
+            "require-dev": {
+                "drupal/feeds": "^3.0",
+                "drupal/workbench_moderation": "^1.8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-beta8",
-                    "datestamp": "1715850299",
+                    "version": "3.0.0",
+                    "datestamp": "1738251745",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7711,9 +7715,10 @@
                 }
             ],
             "description": "Add a field containing the publication date.",
-            "homepage": "https://www.drupal.org/project/publication_date",
+            "homepage": "https://drupal.org/project/publication_date",
             "support": {
-                "source": "https://git.drupalcode.org/project/publication_date"
+                "source": "https://git.drupalcode.org/project/publication_date",
+                "issues": "https://drupal.org/project/issues/publication_date"
             }
         },
         {
