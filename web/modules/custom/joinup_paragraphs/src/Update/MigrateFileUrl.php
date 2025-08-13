@@ -196,6 +196,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $paragraph->set('parent_type', $parent_type);
     $paragraph->set('parent_id', $parent_id);
     $paragraph->set('parent_field_name', $parent_field_name);
+    $paragraph->search_api_skip_tracking = TRUE;
     $paragraph->save();
     return $paragraph;
   }
