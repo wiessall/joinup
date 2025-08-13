@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a78bd6308f42f8868b8c4cddcc96d861",
+    "content-hash": "7c5150e54c8de185129bd7b37d853699",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10266,29 +10266,29 @@
         },
         {
             "name": "drupal/views_block_area",
-            "version": "1.0.0-beta4",
+            "version": "2.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_block_area.git",
-                "reference": "8.x-1.0-beta4"
+                "reference": "2.0.0-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_block_area-8.x-1.0-beta4.zip",
-                "reference": "8.x-1.0-beta4",
-                "shasum": "8386f4946340d2284b3ab830e698ec0954b14de0"
+                "url": "https://ftp.drupal.org/files/projects/views_block_area-2.0.0-rc1.zip",
+                "reference": "2.0.0-rc1",
+                "shasum": "3a0b28d6c8bc7b59cf17dc0e1ebca4e38736e2c0"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta4",
-                    "datestamp": "1674121539",
+                    "version": "2.0.0-rc1",
+                    "datestamp": "1736872685",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -26240,7 +26240,6 @@
         "drupal/mimemail": 15,
         "drupal/poll": 15,
         "drupal/private_message_flood": 15,
-        "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
