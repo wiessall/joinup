@@ -16,22 +16,24 @@
     }
   }
   .page-item {
-    .page-link {
+    a {
       padding: $spacer * 0.5 $spacer * 0.875; // 8px 14px
+      border-radius: var(--bs-pagination-border-radius);
+      text-decoration: none;
       &:hover {
         background: $gray-300;
       }
     }
-    .page-link,
-    .page-link .bi,
-    &.active .page-link {
+    a,
+    a .bi,
+    &.active a {
       color: $link-color;
     }
-    &.active .page-link {
+    &.active a {
       background: rgba(16, 115, 222, 0.1);
       font-weight: $font-weight-normal;
     }
-    &.disabled .page-link {
+    &.disabled a {
       color: $gray-500;
     }
   }
