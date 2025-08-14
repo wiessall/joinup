@@ -24,7 +24,7 @@ class PopoverContext extends RawDrupalContext {
    */
   public function aPopoverShouldOpen(): void {
     $this->assertJavaScriptEnabledBrowser();
-    $this->waitForElementVisible('css', '.ventuno-popover-component');
+    $this->waitForElementVisible('region', 'Popover');
   }
 
 }
