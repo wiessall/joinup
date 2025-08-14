@@ -25,7 +25,7 @@ tips:
     label: Categories
     weight: 2
     position: bottom-start
-    selector: '.facet-region .nav-tabs a'
+    selector: '.tabs--content-type .nav-tabs a'
     body: 'By clicking on these icons, you can view specific content types in the content area.'
   search:
     id: search
