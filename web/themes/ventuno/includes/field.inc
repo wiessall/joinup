@@ -87,6 +87,9 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
   if (isset($variables['element']['#id'])) {
     $variables['attributes']['id'] = $variables['element']['#id'];
   }
+  if (isset($variables['element']['#field_name']) && $variables['element']['#field_name'] === 'resources') {
+    $variables['label'] = $variables['table']['#header'][0]['data']['title'] ?? $variables['element']['#title'];
+  }
 }
 
 /**
@@ -150,4 +153,13 @@ function ventuno_preprocess_field_group_accordion_item(array &$variables): void 
   $id = substr($group_name, 6);
   // Provide unique ID for the accordion item.
   $variables['accordion_item_id'] = Html::getUniqueId($id);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for field_multiple_value_form.
+ */
+function ventuno_theme_suggestions_field_multiple_value_form_alter(array &$suggestions, array $variables): void {
+  if (!empty($variables['element']['#field_name'])) {
+    $suggestions[] = 'field_multiple_value_form__' . strtr($variables['element']['#field_name'], '-', '_');
+  }
 }

@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_preprocess_HOOK() for table--file-formatter-table.html.twig.
  *
@@ -33,5 +35,34 @@ function ventuno_preprocess_table(array &$variables): void {
   if (array_key_exists('id', $variables['attributes']) && $variables['attributes']['id'] === 'items-values') {
     unset($variables['header']);
     $variables['attributes']['class'][] = 'form-table';
+  }
+
+  if (array_key_exists('id', $variables['attributes']) && str_contains($variables['attributes']['id'], 'resources-values')) {
+    unset($variables['header']);
+
+    foreach ($variables['rows'] as &$row) {
+      unset($row['cells'][2]);
+      foreach ($row['cells'] as &$cell) {
+        if (!empty($cell['content']) && isset($cell['content']['top'])) {
+          $cell['content']['top']['type']['#attributes']['class'][] = 'visually-hidden';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function ventuno_form_node_form_alter(array &$form, FormStateInterface $form_state): void {
+  if (empty($form['resources']['widget'])) {
+    return;
+  }
+
+  if (isset($form['resources']['widget']['add_more']['add_more_button_resource_file']['#value'])) {
+    $form['resources']['widget']['add_more']['add_more_button_resource_file']['#value'] = t('Upload file');
+  }
+  if (isset($form['resources']['widget']['add_more']['add_more_button_resource_link']['#value'])) {
+    $form['resources']['widget']['add_more']['add_more_button_resource_link']['#value'] = t('Add remote file URL');
   }
 }

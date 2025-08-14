@@ -36,3 +36,11 @@
     color: $gray-700;
   }
 }
+
+.paragraph-type--resource-link,
+.paragraph-type--resource-file {
+  .paragraph-top {
+    float: right;
+    width: max-content;
+  }
+}
