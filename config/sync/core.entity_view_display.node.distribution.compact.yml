@@ -14,11 +14,12 @@ dependencies:
     - field.field.node.distribution.process_status
     - field.field.node.distribution.release
     - field.field.node.distribution.representation_technique
+    - field.field.node.distribution.resources
     - node.type.distribution
   module:
     - digital_size_formatter
+    - entity_reference_revisions
     - field_group
-    - joinup_distribution
     - layout_builder
     - template_suggestion
     - user
@@ -32,7 +33,7 @@ third_party_settings:
       label: Categorisation
       parent_name: ''
       region: hidden
-      weight: 15
+      weight: 16
       format_type: html_element
       format_settings:
         classes: ''
@@ -53,18 +54,6 @@ targetEntityType: node
 bundle: distribution
 mode: compact
 content:
-  access_url:
-    type: tracked_hosted_file_download
-    label: hidden
-    settings:
-      hosted_files_title: Download
-      remote_files_title: External
-      show_remote_files: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 0
-    region: content
   field_licence:
     type: entity_reference_label
     label: hidden
@@ -82,7 +71,17 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
+  access_url: true
   description: true
   download_count: true
   field_state: true
