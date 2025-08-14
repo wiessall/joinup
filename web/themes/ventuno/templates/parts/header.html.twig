@@ -6,7 +6,12 @@
       </a>
     </div>
 
-    {{ top_bar }}
+    {% if top_bar %}
+      <div class="region-top-bar">
+        {{ top_bar }}
+      </div>
+    {% endif %}
+
   </nav>
 </div>
 {% set items = logged_in ? [{
