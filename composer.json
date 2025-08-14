@@ -498,6 +498,9 @@
                 "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "resources/patch/php/drupal/video_embed_field/3311063_42.patch",
                 "AssertionError: \"media\" must be defined in MODULE_NAME.field_type_categories.yml @see https://www.drupal.org/project/video_embed_field/issues/3469668": "resources/patch/php/drupal/video_embed_field/3469668.patch"
             },
+            "drupal/views_block_area": {
+                "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
+            },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",

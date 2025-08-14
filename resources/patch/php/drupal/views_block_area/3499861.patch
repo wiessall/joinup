@@ -1,0 +1,113 @@
+diff --git a/src/ViewsBlockCreationHelper.php b/src/ViewsBlockCreationHelper.php
+index 4e0b20a33c90bb46cdefbea779c8c709e12e441f..4ccd371294805c95f9749b064588a71d5fcce549 100644
+--- a/src/ViewsBlockCreationHelper.php
++++ b/src/ViewsBlockCreationHelper.php
+@@ -154,8 +154,7 @@ class ViewsBlockCreationHelper {
+   /**
+    * Renders selected block.
+    */
+-  public function render($block_options) {
+-
++    public function render($block_options) {
+     $block_instance = $this->getBlock($block_options['block_id']);
+
+     // Make sure the block exists and is accessible.
+@@ -165,52 +164,56 @@ class ViewsBlockCreationHelper {
+
+     $block_build = $block_instance->build();
+
+-    if (!empty($block_options['empty'])
+-      || !empty($block_build['#view']->result)
+-      || !empty($block_build['#markup'])) {
+-      // Set the block label visibility.
+-      // For custom blocks block labels should be always hidden.
+-      $block_instance->setConfigurationValue(
+-        'label_display',
+-        empty($block_build['#view']) ? FALSE : !$block_options['hide_label'],
+-      );
+-
+-      $base_id = $block_instance->getBaseId();
+-
+-      // @see \Drupal\block\BlockViewBuilder::buildPreRenderableBlock
+-      // @see template_preprocess_block()
+-      $element = [
+-        '#theme' => 'block',
+-        '#attributes' => [],
+-        '#configuration' => $block_instance->getConfiguration(),
+-        '#plugin_id' => $block_instance->getPluginId(),
+-        '#base_plugin_id' => $base_id,
+-        '#derivative_plugin_id' => $block_instance->getDerivativeId(),
+-        '#id' => $block_instance->getPluginId(),
+-        'content' => $block_build,
+-      ];
+-
+-      // Set block title.
+-      if (!$block_options['hide_label']
+-        && !empty($block_options['block_title'])) {
+-        if (!empty($element['content']['#title'])) {
+-          $element['content']['#title'] = $block_options['block_title'];
+-        }
+-        elseif (!empty($element['content']['#markup'])) {
+-          $element['content']['#markup'] = '<h2>' . $block_options['block_title'] . '</h2>' . $element['content']['#markup'];
+-        }
++    // Don't render when the empty option is not selected 0 results are found.
++    if ($block_options['empty'] === FALSE && empty($block_build['#view']->result)) {
++      // @todo Fix the IF condition issue here.
++      // return NULL;
++    }
++
++    // Set the block label visibility.
++    // For custom blocks block labels should be always hidden.
++    $block_instance->setConfigurationValue(
++      'label_display',
++      empty($block_build['#view']) ? FALSE : !$block_options['hide_label'],
++    );
++
++    $base_id = $block_instance->getBaseId();
++
++    // @see \Drupal\block\BlockViewBuilder::buildPreRenderableBlock
++    // @see template_preprocess_block()
++    $element = [
++      '#theme' => 'block',
++      '#attributes' => [],
++      '#configuration' => $block_instance->getConfiguration(),
++      '#plugin_id' => $block_instance->getPluginId(),
++      '#base_plugin_id' => $base_id,
++      '#derivative_plugin_id' => $block_instance->getDerivativeId(),
++      '#id' => $block_instance->getPluginId(),
++      'content' => $block_build,
++    ];
++
++    // Set block title.
++    if (!$block_options['hide_label']
++      && !empty($block_options['block_title'])
++    ) {
++      if (!empty($element['content']['#title'])) {
++        $element['content']['#title'] = $block_options['block_title'];
+       }
+-      elseif ($block_options['hide_label']) {
+-        unset($element['content']['#title']);
++      elseif (!empty($element['content']['#markup'])) {
++        $element['content']['#markup'] = '<h2>' . $block_options['block_title'] . '</h2>' . $element['content']['#markup'];
+       }
++    }
++    elseif ($block_options['hide_label']) {
++      unset($element['content']['#title']);
++    }
+
+-      // Allow alter hooks to modify the block contents.
+-      $this->moduleHandler->alter(['block_view', "block_view_$base_id"], $element, $block_instance);
++    // Allow alter hooks to modify the block contents.
++    $this->moduleHandler->alter(['block_view', "block_view_$base_id"], $element, $block_instance);
+
+-      $renderer = $this->renderer;
+-      $renderer->addCacheableDependency($element, $block_instance);
+-      return $element;
+-    }
++    $renderer = $this->renderer;
++    $renderer->addCacheableDependency($element, $block_instance);
++
++    return $element;
+   }
+
+   /**
