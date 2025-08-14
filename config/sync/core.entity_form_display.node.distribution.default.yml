@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.distribution.access_url
     - field.field.node.distribution.description
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
@@ -105,7 +104,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  access_url: true
   created: true
   file_size: true
   langcode: true
