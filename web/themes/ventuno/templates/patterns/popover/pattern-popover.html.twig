@@ -46,8 +46,8 @@
 
   <div id="{{ popover_id }}" class="ventuno-popover__content visually-hidden">
     {% if _show_close_button %}
-      <div class="ventuno-popover__close-wrapper">
-        <a href="#" class="ventuno-popover__close close" title="{{ 'Close'|t }}" onclick="return false;">&times;</a>
+      <div class="ventuno-popover__close-wrapper text-end">
+        <a href="#" class="ventuno-popover__close close" title="{{ 'Close'|t }}" onclick="return false;"><span class="visually-hidden" aria-hidden="true">{{ 'Close'|t }}</span></a>
       </div>
     {% endif %}
     {{ _content }}
