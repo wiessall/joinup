@@ -64,3 +64,21 @@ button#eTransButton.wt-ecl-button {
     margin-block: 0 5px;
   }
 }
+
+// #ISAICP-10055 Improve Babel translate form styles.
+.babel-translate {
+  .form-label {
+    font-size: var(--bs-body-font-size);
+    color: var(--bs-body-color);
+    font-weight: $font-weight-bold;
+  }
+  .form-item {
+    margin-bottom: $spacer !important;
+    margin-top: $spacer !important;
+  }
+  .form-select {
+    width: auto;
+    display: inline-block;
+  }
+}
+
