@@ -28,21 +28,19 @@
 }
 
 .popover.ventuno-popover-component {
-  max-width: 500px;
+  max-width: 450px;
   z-index: 502;
   background-color: white;
 }
 
 .popover.ventuno-popover-component .popover-body {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 .5rem .5rem;
+  box-shadow: 0 0.1rem 0.4rem 0.1rem rgba(0, 0, 0, .1);
 }
 
 @media (max-width: 767.98px) {
   .popover.ventuno-popover-component {
     max-width: calc(100vw - 2rem);
-  }
-
-  .popover.ventuno-popover-component .popover-body {
-    padding: 0.5rem;
   }
 }
