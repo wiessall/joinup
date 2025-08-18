@@ -13,7 +13,7 @@
 {% set popover_content %}
   <div class="language-picker__grid row">
     {% for language in languages %}
-    <div class="language-picker__item col-6 col-md-4 pb-1 d-inline-block">
+    <div class="language-picker__item col-6 col-sm-4 pb-1 d-inline-block">
       <a href="{{ language.url }}"{{ language.attributes }}>
         <span class="language-picker__code">{{ language.code|upper }}</span>
         <span class="language-picker__name">{{ language.name }}</span>
