@@ -23,9 +23,9 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   use AutowireTrait;
 
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
     #[Autowire('config.storage.sync')]
-    protected StorageInterface $syncStorage,
+    protected readonly StorageInterface $syncStorage,
     protected readonly Connection $database,
     #[Autowire('keyvalue')]
     protected readonly KeyValueFactory $keyValue,
