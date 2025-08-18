@@ -101,8 +101,6 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   private function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
     // Process all revision table records.
     [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
-    $target_column = "{$src_field}_target_id";
-
     $result = $this->database->select($src_revision_table)
       ->fields($src_revision_table)
       ->orderBy('entity_id')
@@ -113,18 +111,21 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $dest_records = $lookup = [];
     $current_entity_id = NULL;
     while ($record = $result->fetchAssoc()) {
+      $entity_id = $record['entity_id'];
+      $value = $record["{$src_field}_target_id"];
+
       // Reset lookup when we move to a new entity.
-      if ($record['entity_id'] !== $current_entity_id) {
+      if ($entity_id !== $current_entity_id) {
         $lookup = [];
-        $current_entity_id = $record['entity_id'];
+        $current_entity_id = $entity_id;
       }
 
       // Did we already create a paragraph for this entity ID + target value?
       // If not, create a new paragraph entity.
       // Otherwise, create a new revision for that paragraph.
-      $paragraph = $lookup[$record[$target_column]] ?? NULL;
+      $paragraph = $lookup[$value] ?? NULL;
       if ($paragraph === NULL) {
-        $paragraph = $this->createParagraphFromFieldValue($record[$target_column], 'node', $record['entity_id'], $dest_field);
+        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entity_id, $dest_field);
       }
       elseif ($paragraph instanceof ParagraphInterface) {
         $paragraph->setNewRevision();
@@ -137,7 +138,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       }
 
       // Update the lookup table.
-      $lookup[$record[$target_column]] = $paragraph;
+      $lookup[$value] = $paragraph;
 
       // Collect records to be inserted.
       $dest_records[] = [
