@@ -11,7 +11,7 @@ tags:
   schema_digital_document_date_modified: '[node:changed:html_datetime]'
   schema_digital_document_date_published: '[node:published:html_datetime]'
   schema_digital_document_description: '[node:summary]'
-  schema_digital_document_encoding_format: '[node:field_file:entity:mime][node:field_file:entity:filemime]'
+  schema_digital_document_encoding_format: '[node:resources:0:entity:resource_file:entity:filemime]'
   schema_digital_document_headline: '[node:title]'
   schema_digital_document_is_accessible_for_free: 'True'
   schema_digital_document_license: '[node:field_licence:entity:rdf-uri]'
