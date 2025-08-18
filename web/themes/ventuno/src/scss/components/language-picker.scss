@@ -9,10 +9,20 @@
     }
   }
 }
-.language-picker__code {
-  color: $gray-800;
+.language-picker__link {
+  &--active {
+    text-decoration: underline;
+    text-decoration-color: currentColor !important;
+  }
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+  .language-picker__code {
+    color: $gray-800;
+  }
 }
-
 .ventuno-popover__close {
   &::before {
     @include get-bootstrap-icon("x-lg", $gray-800, 1.4em);
