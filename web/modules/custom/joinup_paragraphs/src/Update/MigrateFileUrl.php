@@ -161,14 +161,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
 
     // Fill destination field data table records.
     // Copy current revision records from revision table to data table.
+    $insert_from = $this->database
+      ->select($dest_revision_table, 'r')
+      ->fields('r')
+      ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
+      ->notExists($this->database->select($dest_data_table, 't')->fields('t'));
     $this->database
       ->insert($dest_data_table)
-      ->from(
-        $this->database
-          ->select($dest_revision_table, 't')
-          ->fields('t')
-          ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
-      )
+      ->from($insert_from)
       ->execute();
   }
 
