@@ -207,10 +207,8 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
       'field_state' => 'draft',
       'uid' => $this->account['author']->id(),
     ]);
-    $this->markEntityForCleanup($discussion);
 
     $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
-
     $comment = Comment::create([
       'comment_type' => 'reply',
       'entity_type' => 'node',
