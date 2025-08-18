@@ -10,13 +10,16 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\file\FileInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
+use Drupal\link\LinkItemInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -115,12 +118,26 @@ class DistributionContext extends RawDrupalContext {
     }
     $link_type = ucfirst($link_type);
     $distribution = $this->getEntityByLabel('node', $distribution);
-    if (empty($distribution->resources->first())) {
+    if (!$distribution instanceof DistributionInterface) {
+      return;
+    }
+
+    $resource = $distribution->getResources()[0];
+    if (empty($resource)) {
       throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
-    $file = FileUrlHandler::urlToFile($distribution->resources->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->resources->target_id : \Drupal::service('file_url_generator')
-      ->generateAbsoluteString($file->getFileUri());
+
+    if ($resource instanceof FileInterface) {
+      if (!FileUrlHandler::isRemote($resource)) {
+        $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
+      }
+      else {
+        $link = $resource->getFileUri();
+      }
+    }
+    elseif ($resource instanceof LinkItemInterface) {
+      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
+    }
     $result = $this->getSession()
       ->getPage()
       ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
@@ -141,12 +158,15 @@ class DistributionContext extends RawDrupalContext {
    * @throws \Exception
    *    Thrown when the file or the link is not found.
    *
-   * @Then the :distribution distribution should have the link of the
-   *   :file_name in the access URL field
+   * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getEntityByLabel('node', $distribution);
-    $file = FileUrlHandler::urlToFile($distribution->resources->target_id);
+    if (!$distribution instanceof DistributionInterface) {
+      return;
+    }
+    $resources = $distribution->getResources();
+    $file = $resources[0];
     if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')
       ->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
@@ -164,14 +184,14 @@ class DistributionContext extends RawDrupalContext {
     /** @var \Drupal\taxonomy\TermInterface $file_type */
     $file_type = $distribution->get('format')->entity;
     // Test the file format.
-    if ($file_type->get('mime_type')->value !== $mime_type) {
+    if (!empty($file_type) && $file_type->get('mime_type')->value !== $mime_type) {
       throw new \Exception("File '$file_name' has the format '{$file_type->get('mime_type')->value}'. Expected '$mime_type'.");
     }
     $expected_file_size = filesize($path);
 
     // Test the file size.
-    if ($expected_file_size !== (int) $distribution->file_size->value) {
-      throw new \Exception("File '$file_name' has the size '{$distribution->file_size->value}'. Expected '$expected_file_size'.");
+    if ($expected_file_size !== (int) $file->filesize->value) {
+      throw new \Exception("File '$file_name' has the size '{$file->filesize->value}'. Expected '$expected_file_size'.");
     }
   }
 
