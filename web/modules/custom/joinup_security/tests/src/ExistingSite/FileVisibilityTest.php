@@ -199,11 +199,16 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * Tests discussion's comments.
    */
   protected function doTestDiscussionComments(): void {
-    $discussions = \Drupal::entityTypeManager()->getStorage('node')
-      ->loadByProperties(['type' => 'discussion']);
-    $discussion = reset($discussions);
-    $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
+    $discussion = $this->createNode([
+      'type' => 'discussion',
+      'og_audience' => \Drupal::service('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
+      'title' => $this->randomString(),
+      'field_state' => 'draft',
+      'uid' => $this->account['author']->id(),
+    ]);
 
+    $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
     $comment = Comment::create([
       'comment_type' => 'reply',
       'entity_type' => 'node',
