@@ -10,6 +10,7 @@ use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
+use Drupal\joinup_paragraphs\Traits\ParagraphResourcesTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
@@ -36,6 +37,7 @@ class Distribution extends Node implements DistributionInterface {
   use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
+  use ParagraphResourcesTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
@@ -48,7 +50,7 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
-    if (!empty($fileId = $this->access_url->target_id)) {
+    if (!empty($fileId = $this->resources->target_id)) {
       if ($file = FileUrlHandler::urlToFile($fileId)) {
         if (!FileUrlHandler::isRemote($file)) {
           // Set the file size field.
@@ -64,7 +66,7 @@ class Distribution extends Node implements DistributionInterface {
         }
         else {
           // Trim the value so that leading and trailing spaces are removed.
-          $this->set('access_url', trim($this->get('access_url')->target_id));
+          $this->set('resources', trim($this->get('resources')->target_id));
         }
       }
     }
