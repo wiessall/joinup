@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions for testing distributions.
@@ -44,10 +45,39 @@ class DistributionContext extends RawDrupalContext {
       return;
     }
 
-    // The Access URL field is either an external URI, or file upload. If it is
-    // a local file, translate the value to a URL.
-    if (!empty($node->{'access url'}) && (filter_var($node->{'access url'}, FILTER_VALIDATE_URL) === FALSE)) {
-      $node->{'access url'} = FileUrlHandler::fileToUrl($this->createFile($node->{'access url'}));
+    if (!empty($node->resources)) {
+      $type = $node->{'file type'} ?? 'remote';
+      if ($type !== 'remote') {
+        // If the file is local we want to copy it from the fixtures into the
+        // file system and register it in the DocumentSubContext so it can be
+        // cleaned up after the scenario ends. Perform a small dance to get
+        // access to the context class from inside this static callback.
+        /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
+        $environment = $event->getEnvironment();
+        /** @var \Drupal\joinup\Context\JoinupDocumentContext $context */
+        $context = $environment->getContext(self::class);
+        $file_id = $context->createFile($node->resources)->id();
+        $paragraph = Paragraph::create([
+          'type' => 'resource_file',
+          'resource_file' => [
+            [
+              'target_id' => $file_id,
+            ],
+          ],
+        ]);
+      }
+      else {
+        $paragraph = Paragraph::create([
+          'type' => 'resource_link',
+          'remote_file_url' => $node->resources,
+        ]);
+      }
+      $paragraph->save();
+      $node->{"resources:target_id"} = $paragraph->id();
+      $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
+      unset($node->resources);
+
+      unset($node->{'file type'});
     }
 
     // Downloads are stored in a meta entity.
@@ -85,14 +115,18 @@ class DistributionContext extends RawDrupalContext {
     }
     $link_type = ucfirst($link_type);
     $distribution = $this->getEntityByLabel('node', $distribution);
-    if (empty($distribution->access_url->first())) {
+    if (empty($distribution->resources->first())) {
       throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
-    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
+    $file = FileUrlHandler::urlToFile($distribution->resources->target_id);
+    $link = FileUrlHandler::isRemote($file) ? $distribution->resources->target_id : \Drupal::service('file_url_generator')
+      ->generateAbsoluteString($file->getFileUri());
+    $result = $this->getSession()
+      ->getPage()
+      ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
     if (empty($result)) {
-      throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
+      throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()
+        ->getCurrentUrl()));
     }
   }
 
@@ -107,12 +141,14 @@ class DistributionContext extends RawDrupalContext {
    * @throws \Exception
    *    Thrown when the file or the link is not found.
    *
-   * @Then the :distribution distribution should have the link of the :file_name in the access URL field
+   * @Then the :distribution distribution should have the link of the
+   *   :file_name in the access URL field
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getEntityByLabel('node', $distribution);
-    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
-    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
+    $file = FileUrlHandler::urlToFile($distribution->resources->target_id);
+    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')
+      ->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
     }
 
@@ -232,8 +268,9 @@ class DistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
-      $file = FileUrlHandler::urlToFile($distribution->get('access_url')->target_id);
-      $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
+      $file = FileUrlHandler::urlToFile($distribution->get('resources')->target_id);
+      $account = \Drupal::service('email.validator')
+        ->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();
 
       $parent = $distribution->getParent();
@@ -247,7 +284,6 @@ class DistributionContext extends RawDrupalContext {
       $entity->save();
       $this->entities['download_event'][$entity->id()] = $entity;
     }
-
   }
 
   /**
@@ -276,9 +312,14 @@ class DistributionContext extends RawDrupalContext {
       $count++;
       $selector = $base_selector . ":nth-child({$count})";
 
-      $this->assertSession()->elementTextContains('css', $selector, $entry['user']);
-      $this->assertSession()->elementTextContains('css', $selector, $entry['e-mail']);
-      $this->getSession()->getPage()->find('css', $selector)->hasLink($entry['distribution']);
+      $this->assertSession()
+        ->elementTextContains('css', $selector, $entry['user']);
+      $this->assertSession()
+        ->elementTextContains('css', $selector, $entry['e-mail']);
+      $this->getSession()
+        ->getPage()
+        ->find('css', $selector)
+        ->hasLink($entry['distribution']);
     }
   }
 
