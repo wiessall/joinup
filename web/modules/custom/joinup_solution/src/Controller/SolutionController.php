@@ -67,7 +67,6 @@ class SolutionController extends ControllerBase {
       return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
 
-    $cacheability->addCacheableDependency($user);
     if (
       !$node instanceof GroupInterface ||
       !$node->hasGroupPermission($user->id(), 'create solution content')
