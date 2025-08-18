@@ -111,11 +111,18 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->execute();
 
     $dest_records = $lookup = [];
+    $current_entity_id = NULL;
     while ($record = $result->fetchAssoc()) {
+      // Reset lookup when we move to a new entity.
+      if ($record['entity_id'] !== $current_entity_id) {
+        $lookup = [];
+        $current_entity_id = $record['entity_id'];
+      }
+
       // Did we already create a paragraph for this entity ID + target value?
       // If not, create a new paragraph entity.
       // Otherwise, create a new revision for that paragraph.
-      $paragraph = $lookup[$record['entity_id']][$record[$target_column]] ?? NULL;
+      $paragraph = $lookup[$record[$target_column]] ?? NULL;
       if ($paragraph === NULL) {
         $paragraph = $this->createParagraphFromFieldValue($record[$target_column], 'node', $record['entity_id'], $dest_field);
       }
@@ -130,7 +137,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       }
 
       // Update the lookup table.
-      $lookup[$record['entity_id']][$record[$target_column]] = $paragraph;
+      $lookup[$record[$target_column]] = $paragraph;
 
       // Collect records to be inserted.
       $dest_records[] = [
