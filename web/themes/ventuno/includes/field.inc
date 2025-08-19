@@ -88,7 +88,7 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
     $variables['attributes']['id'] = $variables['element']['#id'];
   }
   if (isset($variables['element']['#field_name']) && $variables['element']['#field_name'] === 'resources') {
-    $variables['label'] = $variables['table']['#header'][0]['data']['title'] ?? $variables['element']['#title'];
+    $variables['label'] = $variables['element']['#title'];
   }
 }
 
