@@ -37,10 +37,20 @@
   }
 }
 
-.paragraph-type--resource-link,
-.paragraph-type--resource-file {
-  .paragraph-top {
-    float: right;
-    width: max-content;
+// Alter the paragraphs widget for "resources" field.
+.field--name-resources {
+  .field-multiple-table {
+    // Align and move actions to the right.
+    .paragraph-top {
+      float: right;
+      width: max-content;
+    }
+
+    // Hides empty table headers/cells.
+    // @see template_preprocess_field_multiple_value_form.
+    tr th:empty,
+    tr td:empty {
+      display: none;
+    }
   }
 }
