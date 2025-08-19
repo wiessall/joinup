@@ -21,7 +21,7 @@
 #}
 {% if multiple %}
   <div{{ attributes.addClass(['js-form-item', 'form-item']) }}>
-    {{ label }}
+    <label class="h4 form-label">{{ label }}</label>
     {{ table }}
     {% if description.content %}
       <div{{ description.attributes.addClass(['description', 'form-text', 'text-muted']) }} >{{ description.content }}</div>
