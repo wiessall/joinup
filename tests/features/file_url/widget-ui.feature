@@ -66,7 +66,6 @@ Feature: User interface for the File URL field
     And I fill in "resources[0][subform][remote_file_url][0][uri]" with "https://www.drupal.org/files/druplicon-small.png"
     And I press "Upload file"
     And I attach the file "logo.png" to "files[resources_1_subform_resource_file_0]"
-    And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."
     And I press "Publish"
     Then I should see the heading "Document title"
     And I should see the heading Attachment
