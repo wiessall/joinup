@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
+    - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -29,6 +30,7 @@ dependencies:
     - image.style.thumbnail
     - node.type.solution
   module:
+    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
@@ -84,6 +86,7 @@ third_party_settings:
         - logo
         - short_id
         - documentation
+        - resources
         - related_solutions
         - process_status
         - landing_page
@@ -291,6 +294,15 @@ content:
       link: true
     third_party_settings: {  }
     weight: 4
+    region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 3
     region: content
   short_id:
     type: string
