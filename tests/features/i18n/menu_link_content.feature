@@ -16,6 +16,7 @@ Feature:  The translator is able to translate
 
     Given I select "Swedish" from "Language"
     And I fill in "Search" with "Homepage EN"
+    And I check "Show inactive"
     And I press "Filter"
 
     When I fill in "Singular form" with "Homepage SV" in the "Homepage EN" row

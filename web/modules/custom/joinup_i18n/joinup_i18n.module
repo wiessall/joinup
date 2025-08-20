@@ -16,3 +16,14 @@ function joinup_i18n_module_implements_alter(array &$implementations, string $ho
     unset($implementations['locale']);
   }
 }
+
+/**
+ * Implements hook_babel_translation_type_info_alter().
+ */
+function joinup_i18n_babel_translation_type_info_alter(array &$definitions): void {
+  foreach (['config', 'locale', 'menu_link_content'] as $pluginId) {
+    if (isset($definitions[$pluginId])) {
+      $definitions[$pluginId]['status'] = FALSE;
+    }
+  }
+}
