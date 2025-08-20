@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_distribution\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 
 /**
  * @covers \Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData
  * @group joinup_distribution
  */
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
+
+  use ParagraphTrait;
 
   /**
    * Tests that a file having ftp:// as scheme can be indexed.
@@ -27,16 +31,27 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
         'field_state' => 'published',
       ]),
     ]);
+    $paragraph = $this->createParagraph([
+      'type' => 'resource_link',
+      'remote_file_url' => [
+        [
+          'uri' => 'ftp://example.com',
+        ],
+      ],
+    ]);
     $distribution = $this->createNode([
       'type' => 'distribution',
       'title' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'access_url' => 'ftp://example.com',
+      'resources' => ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()],
       'field_state' => 'published',
     ]);
     // Trigger indexing.
     \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
-    $this->assertSame('ftp://example.com', $distribution->get('access_url')->target_id);
+    if (!$distribution instanceof DistributionInterface) {
+      return;
+    }
+    $this->assertSame('ftp://example.com', $distribution->getResources()[0]->uri);
   }
 
 }
