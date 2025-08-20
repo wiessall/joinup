@@ -1358,6 +1358,55 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Fills in a text field in a table row.
+   *
+   * @param string $field
+   *   The text field locator.
+   * @param string $text
+   *   The text to be filled in.
+   * @param string $rowText
+   *   Text contained in a row. Must be unique.
+   *
+   * @When I fill in :field with :text in the :rowText row
+   */
+  public function fillFieldInRow(string $field, string $text, string $rowText): void {
+    $row = $this->getRowByRowText($rowText);
+    $row->fillField($field, $text);
+  }
+
+  /**
+   * Presses a button in a table row.
+   *
+   * @param string $buttonIdentifier
+   *   Text of button.
+   * @param string $rowText
+   *   Text of row.
+   *
+   * @throws \Exception
+   *
+   * @When I press the button :button in the :text row
+   * @When I press the :button button in the :text row
+   */
+  public function pressButtonsInRow(string $buttonIdentifier, string $rowText): void {
+    $row = $this->getRowByRowText($rowText);
+
+    if (preg_match('/^(\d+)(st|nd|rd|th)$/', $buttonIdentifier, $found)) {
+      $index = (int) $found[1];
+      $button = $row->find('xpath', "//input[@type='submit'][$index]");
+    }
+    else {
+      $button = $row->findButton($buttonIdentifier);
+    }
+
+    if (!$button) {
+      throw new \Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonIdentifier, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
+    $button->press();
+  }
+
+  /**
    * Searches the page for a row that includes the given text.
    *
    * @param string $text
