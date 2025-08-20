@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -34,7 +33,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
-    - file_url
     - joinup_slick
     - layout_builder
     - link
@@ -153,26 +151,6 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
-    region: content
-  documentation:
-    type: file_url_default
-    label: inline
-    settings:
-      mode: link
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: inline
     weight: 2
     region: content
   domain:
