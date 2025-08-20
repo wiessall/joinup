@@ -143,7 +143,6 @@ function joinup_event_geocode_entity_field_address_string_alter(string &$address
   // Replace newlines with spaces since the address comes from field_location
   // which is a string_long field. The gisco API doesn't seem to support such
   // chars and returns a 403 response in such cases.
-  /* @see \OpenEuropa\Provider\GiscoGeocoding\GiscoGeocodingProvider::geocodeQuery */
   if ($field->getName() === 'field_event_coordinates') {
     $address_string = strtr($address_string, ["\r\n" => ' ']);
   }
