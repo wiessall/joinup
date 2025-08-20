@@ -140,7 +140,7 @@ class DistributionContext extends RawDrupalContext {
     }
     $result = $this->getSession()
       ->getPage()
-      ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
+      ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}']");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()
         ->getCurrentUrl()));

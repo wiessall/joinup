@@ -247,7 +247,7 @@ Feature: Global search
       | title         | release number | release notes                               | keywords | is version of  | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | published |
     And distribution content:
-      | title              | description                                    | release       | access url | state     |
+      | title              | description                                    | release       | resources  | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And licence content:
       | title         | description                         |
@@ -378,7 +378,7 @@ Feature: Global search
 
     # Add distribution, child of solution.
     Given distribution content:
-      | title       | solution  | description          | access url                      | licence    | format | representation technique | state     |
+      | title       | solution  | description          | resources                       | licence    | format | representation technique | state     |
       | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "zzoludistro" in the search bar and press enter
@@ -400,7 +400,8 @@ Feature: Global search
     And I fill in "Title" with "DistroZzolu"
     And I enter "Nietzsche's" in the "Description" wysiwyg editor
     And I press "Remove"
-    And I set a remote URL "http://example.com/guzzle" to "Access URL"
+    And I press "Add Resource link"
+    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
@@ -464,7 +465,7 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     Given distribution content:
-      | title         | release | description | access url                        | licence    | format | representation technique | state     |
+      | title         | release | description | resources                         | licence    | format | representation technique | state     |
       | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "releazzDistro" in the search bar and press enter
@@ -486,7 +487,8 @@ Feature: Global search
     And I fill in "Title" with "DistroReleazz"
     And I fill in "Description" with "Zorro"
     And I press "Remove"
-    And I set a remote URL "http://example.com/mishmash" to "Access URL"
+    And I press "Add Resource link"
+    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/mishmash"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
