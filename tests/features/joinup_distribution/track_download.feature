@@ -19,10 +19,10 @@ Feature: Asset distribution editing.
       | title        | release number | is version of |
       | Winter of 95 | 6.1            | OpenBSD       |
     And distribution content:
-      | title          | description                 | solution | release      | resources                                                   | licence          |
-      | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
-      | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence |
-      | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence |
+      | title          | description                 | solution | release      | resources                                                   | licence          | file type |
+      | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence | remote    |
+      | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence | upload    |
+      | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence | upload    |
     And users:
       | Username       | E-mail                     |
       | Bradley Emmett | bradley.emmett@example.com |
