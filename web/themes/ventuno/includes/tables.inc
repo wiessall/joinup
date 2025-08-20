@@ -34,8 +34,4 @@ function ventuno_preprocess_table(array &$variables): void {
     unset($variables['header']);
     $variables['attributes']['class'][] = 'form-table';
   }
-
-  if (array_key_exists('id', $variables['attributes']) && str_contains($variables['attributes']['id'], 'resources-values')) {
-    unset($variables['header']);
-  }
 }
