@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -32,7 +31,6 @@ dependencies:
     - node.type.solution
   module:
     - field_group
-    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_core
@@ -104,7 +102,6 @@ third_party_settings:
       children:
         - logo
         - short_id
-        - documentation
         - resources
         - keywords
         - related_solutions
@@ -231,14 +228,6 @@ content:
     settings:
       rows: 5
       placeholder: ''
-    third_party_settings: {  }
-  documentation:
-    type: file_url_generic
-    weight: 36
-    region: content
-    settings:
-      progress_indicator: throbber
-      add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
   domain:
     type: tagify_entity_reference_autocomplete_widget
@@ -385,7 +374,7 @@ content:
       closed_mode_threshold: 0
       add_mode: button
       form_display_mode: default
-      default_paragraph_type: resource_file
+      default_paragraph_type: _none
       features:
         add_above: '0'
         collapse_edit_all: '0'
