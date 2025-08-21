@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\file\FileInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -121,17 +122,13 @@ class IndexDistributionData extends ProcessorPluginBase {
         $sapiField->addValue(check_markup($distributionFieldItemList->value, $distributionFieldItemList->format));
       }
 
-      // Add the distribution URL.
-      /** @var \Drupal\file_url\Plugin\Field\FieldType\FileUrlFieldItemList $distributionFieldItemList */
-      $distributionFieldItemList = $distribution->get('access_url');
-      if (!$distributionFieldItemList->isEmpty()) {
-        foreach ($distributionFieldItemList->referencedEntities() as $file) {
-          $file_url = $file->getFileUri();
-          if (UrlHelper::isExternal($file_url) && !UrlHelper::externalIsLocal($file_url, $GLOBALS['base_url'])) {
-            $url = $file_url;
+      if (!empty($distribution->getResources())) {
+        foreach ($distribution->getResources() as $resource) {
+          if ($resource instanceof LinkItemInterface) {
+            $url = $resource->uri;
           }
-          else {
-            $url = $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
+          elseif ($resource instanceof FileInterface) {
+            $url = $this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri());
           }
           $sapiField->addValue($url);
         }

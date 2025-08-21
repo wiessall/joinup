@@ -39,6 +39,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $this->prepareParagraphs();
     $this->prepareNodeFields();
     $this->migrateNodeFileUrlField('field_file', 'resources');
+    $this->migrateNodeFileUrlField('access_url', 'resources');
     $this->migrateNodeFileUrlField('documentation', 'resources');
   }
 
@@ -74,6 +75,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ],
       'field_config' => [
         'field.field.node.document.resources',
+        'field.field.node.distribution.resources',
         'field.field.node.solution.resources',
       ],
     ];

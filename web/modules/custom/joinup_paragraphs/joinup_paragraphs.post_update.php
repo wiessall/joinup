@@ -12,7 +12,7 @@ use Drupal\joinup_paragraphs\Update\MigrateFileUrl;
 /**
  * Migrate file_url fields to paragraph fields.
  */
-function joinup_paragraphs_post_update_200600(): string {
+function joinup_paragraphs_post_update_200601(): string {
   $start_time = microtime(TRUE);
   /** @var \Drupal\joinup_paragraphs\Update\MigrateFileUrl $instance */
   $instance = \Drupal::classResolver(MigrateFileUrl::class);

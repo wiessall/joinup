@@ -29,7 +29,7 @@ Feature: Interoperable Europe Portal should be ADMS-AP compliant.
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:
-      | title      | description                    | creation date    | access url                        | release | downloads | licence     | format | status    | representation technique | state     |
+      | title      | description                    | creation date    | resources                         | release | downloads | licence     | format | status    | representation technique | state     |
       | Omega3.zip | The zipped version of Omega 3. | 2017-11-11T11:20 | http://www.example.org/omega3.zip | Omega3  | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
       | Omega3.rdf | The RDF version of Omega 3.    | 2017-11-11T11:20 | empty.rdf                         | Omega3  | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
     Then the ADMS-AP data of the published entities in Interoperable Europe Portal is valid

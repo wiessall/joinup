@@ -6,17 +6,19 @@ dependencies:
     - field.field.paragraph.resource_file.resource_file
     - paragraphs.paragraphs_type.resource_file
   module:
-    - file
+    - joinup_distribution
 id: paragraph.resource_file.default
 targetEntityType: paragraph
 bundle: resource_file
 mode: default
 content:
   resource_file:
-    type: file_default
+    type: tracked_hosted_file_download
     label: above
     settings:
-      use_description_as_link_text: true
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: false
     third_party_settings: {  }
     weight: 0
     region: content
