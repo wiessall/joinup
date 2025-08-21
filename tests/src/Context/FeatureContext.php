@@ -621,23 +621,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the radio button option should be selected.
-   *
-   * @param string $radio
-   *   The radio button title.
-   *
-   * @Then the :radio radio button should not be selected
-   */
-  public function assertRadioButtonNotChecked(string $radio): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-    $radio = $page->find('named', ['radio', $radio]);
-    if ($radio->isChecked()) {
-      throw new ExpectationException($session->getDriver(), 'The radio button is checked but it should not be.');
-    }
-  }
-
-  /**
    * Checks if a node of a certain type with a given title exists.
    *
    * @param string $type
