@@ -24,8 +24,8 @@ Feature:
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | draft     |
     And distribution content:
-      | title                | description           | release           | resources  | file type |
-      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | upload    |
+      | title                | description           | release           | resources  |
+      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   |
     And licence content:
       | title           | description |
       | Sitemap licence | Not allowed |

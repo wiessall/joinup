@@ -33,7 +33,7 @@ class JoinupDocumentContext extends RawDrupalContext {
    *   Thrown when an attached file cannot be found or cannot be saved in the
    *   Drupal public files folder.
    */
-  public static function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
+  public function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     if ($node->type !== 'document') {
@@ -41,39 +41,7 @@ class JoinupDocumentContext extends RawDrupalContext {
     }
 
     if (!empty($node->resources)) {
-      $type = $node->{'file type'} ?? 'remote';
-      if ($type !== 'remote') {
-        // If the file is local we want to copy it from the fixtures into the
-        // file system and register it in the DocumentSubContext so it can be
-        // cleaned up after the scenario ends. Perform a small dance to get
-        // access to the context class from inside this static callback.
-        /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
-        $environment = $scope->getEnvironment();
-        /** @var \Drupal\joinup\Context\JoinupDocumentContext $context */
-        $context = $environment->getContext(self::class);
-        $file_id = $context->createFile($node->resources)->id();
-        $paragraph = Paragraph::create([
-          'type' => 'resource_file',
-          'resource_file' => [
-            [
-              'target_id' => $file_id,
-            ],
-          ],
-        ]);
-      }
-      else {
-        $paragraph = Paragraph::create([
-          'type' => 'resource_link',
-          'remote_file_url' => $node->resources,
-        ]);
-
-      }
-      $paragraph->save();
-      $node->{"resources:target_id"} = $paragraph->id();
-      $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
-      unset($node->resources);
-
-      unset($node->{'file type'});
+      $this->createResourceFileParagraph($node);
     }
 
     // The document type is a required field and in normal usage a document
