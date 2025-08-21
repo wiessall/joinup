@@ -13,10 +13,9 @@ caused by hardware differences.
 
 ## Running Tests
 
-1. **Setup playwright and install a clean version of the site:**
+1. **Install a clean version of the site:**
 
    ```bash
-   ddev exec npx playwright install --with-deps chromium
    ddev install
    ```
 
