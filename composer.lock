@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8639a9f87e0a92e048e5881ff7c1046c",
+    "content-hash": "a22f354dceed1f358cd286d4d4dc5478",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7633,28 +7633,28 @@
         },
         {
             "name": "drupal/private_message_flood",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message_flood.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "098342c7017faa52966479a41615b172e3f15e58"
+                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "d3f73746adfe6571bcc20c29554a51f2f676b6b2"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "drupal/duration_field": "^2.",
-                "drupal/private_message": "^2. || ^3."
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/duration_field": "^2.0",
+                "drupal/private_message": "^3.0 || ^4.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1696324712",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1755708031",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7672,7 +7672,11 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "Jaypan",
+                    "name": "jaapjan",
+                    "homepage": "https://www.drupal.org/user/555428"
+                },
+                {
+                    "name": "jaypan",
                     "homepage": "https://www.drupal.org/user/324696"
                 }
             ],
@@ -26254,12 +26258,6 @@
             "version": "4.0.0.0",
             "alias": "3.6",
             "alias_normalized": "3.6.0.0"
-        },
-        {
-            "package": "drupal/private_message",
-            "version": "4.0.0.0-alpha4",
-            "alias": "3.0.6",
-            "alias_normalized": "3.0.6.0"
         }
     ],
     "minimum-stability": "dev",
@@ -26272,6 +26270,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
