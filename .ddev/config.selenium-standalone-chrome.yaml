@@ -27,6 +27,3 @@ web_environment:
   # DTT
   - DTT_BASE_URL=https://${DDEV_SITENAME}.${DDEV_TLD}
   - DTT_MINK_DRIVER_ARGS=[\"chrome\", {\"browserName\":\"chrome\",\"goog:chromeOptions\":{\"w3c\":false,\"args\":[\"--disable-gpu\",\"--headless\", \"--no-sandbox\", \"--disable-dev-shm-usage\"]}}, \"http://selenium-chrome:4444/wd/hub\"]
-  # Playwright.
-  - SELENIUM_REMOTE_URL=http://selenium-chrome:4444
-  - PLAYWRIGHT_HTML_HOST=0.0.0.0

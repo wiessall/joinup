@@ -65,11 +65,11 @@ export default defineConfig({
   projects: [
     {
       name: "desktop-chrome",
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], channel: "chromium" },
     },
     {
       name: "mobile-chrome",
-      use: { ...devices["Pixel 5"] },
+      use: { ...devices["Pixel 5"], channel: "chromium" },
       // Run mobile after desktop to avoid drush uli being called for the same
       // user concurrently, which results in one of them failing.
       dependencies: ["desktop-chrome"],
