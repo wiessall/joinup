@@ -21,7 +21,6 @@ use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\link\LinkItemInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions for testing distributions.
@@ -46,10 +45,6 @@ class DistributionContext extends RawDrupalContext {
     $node = $event->getEntity();
     if ($node->type !== 'distribution') {
       return;
-    }
-
-    if (!empty($node->resources)) {
-      $this->createResourceFileParagraph($node);
     }
 
     // Downloads are stored in a meta entity.

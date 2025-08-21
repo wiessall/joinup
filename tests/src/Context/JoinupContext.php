@@ -852,6 +852,10 @@ class JoinupContext extends RawDrupalContext {
       $file = $this->createFile($node->documentation);
       $node->documentation = $fileHandler::fileToUrl($file);
     }
+
+    if (!empty($node->resources)) {
+      $this->createResourceFileParagraph($node);
+    }
   }
 
   /**
