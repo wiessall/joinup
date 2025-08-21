@@ -3,7 +3,7 @@
  */
 
 import { execSync } from "child_process";
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 
 /**
  * Run drush command locally or remotely depending on the environment.
@@ -56,4 +56,19 @@ export async function waitForWebtools(page: Page): Promise<void> {
     () => typeof window.$wt === "undefined" || window.$wt.inProgress === false,
     30000,
   );
+}
+
+/**
+ * Log in a user via Drush ULI.
+ *
+ * @param {Page} page Playwright page instance.
+ * @param {string} username The username to log in with.
+ */
+export async function userLogin(page: Page, username: string) {
+  const loginUrl = execDrush(`uli --name="${username}"`).toString().trim();
+  await page.goto(loginUrl);
+  const message = page.locator(
+    "[data-drupal-messages] div.messages--status, [data-drupal-messages] div.alert-success",
+  );
+  await expect(message).toContainText("You have used a one-time login link.");
 }
