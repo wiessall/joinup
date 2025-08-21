@@ -4,7 +4,7 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { execDrush } from "../utils/functions";
+import { execDrush, waitForWebtools } from "../utils/functions";
 
 // Define your test cases
 const testCases = [
@@ -35,6 +35,7 @@ testCases.forEach(({ label, nameToLoginWith }) => {
       await page.goto(
         "/collection/portal/solution/information-sharing-protocols",
       );
+      await waitForWebtools(page);
 
       await expect(page.locator(".region-header")).toHaveScreenshot(
         `group-header-${label}.png`,
