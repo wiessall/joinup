@@ -38,7 +38,7 @@
           trigger: "click",
           customClass: "ventuno-popover-component",
           boundary: "viewport",
-          fallbackPlacements: ["top", "left", "right"],
+          fallbackPlacements: ["top", "right"],
         });
 
         // Focus trap handler
