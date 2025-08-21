@@ -35,7 +35,7 @@ Feature: Search inside groups
       | title     | release number | release notes              | is version of        |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations |
     And distribution content:
-      | title       | release   | access url |
+      | title       | release   | resources  |
       | Zip archive | Pre-alpha | test.zip   |
 
   @javascript

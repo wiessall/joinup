@@ -12,8 +12,8 @@ Feature:
       | title        | release number | release notes | is version of |
       | Tile release | 0.1            | Meh...        | Tile solution |
     And distribution content:
-      | title       | description | release      | access url |
-      | Tile distro | meh...      | Tile release | test.zip   |
+      | title       | description | release      | resources |
+      | Tile distro | meh...      | Tile release | test.zip  |
     And licence content:
       | title        | description |
       | Tile licence | Meh...      |
