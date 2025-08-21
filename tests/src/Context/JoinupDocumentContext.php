@@ -9,7 +9,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\TraversingTrait;
-use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions for testing documents.
@@ -38,10 +37,6 @@ class JoinupDocumentContext extends RawDrupalContext {
 
     if ($node->type !== 'document') {
       return;
-    }
-
-    if (!empty($node->resources)) {
-      $this->createResourceFileParagraph($node);
     }
 
     // The document type is a required field and in normal usage a document
