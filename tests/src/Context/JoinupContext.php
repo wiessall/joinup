@@ -1842,27 +1842,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the description of the field with given label is not present.
-   *
-   * @param string $label
-   *   The label of the field to check.
-   * @param string $description
-   *   The description that is expected to be absent.
-   *
-   * @throws \Exception
-   *   Thrown when the field does not have a description.
-   *
-   * @Then I should not see the description :description for (the ):label( field)
-   */
-  public function assertNoFieldDescription($label, $description): void {
-    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
-    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    foreach ($elements as $element) {
-      Assert::assertNotEquals($description, trim($element->getText()));
-    }
-  }
-
-  /**
    * Asserts that a logo exists in the header.
    *
    * @Then I should see a logo on the header

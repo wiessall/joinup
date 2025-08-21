@@ -8,7 +8,6 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use PHPUnit\Framework\Assert;
-use function PHPUnit\Framework\assertNotFalse;
 
 /**
  * Helper methods for dealing with files.
