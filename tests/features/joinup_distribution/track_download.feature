@@ -118,8 +118,8 @@ Feature: Asset distribution editing.
     And the file downloaded from the "here" link contains the following strings:
       | ID,User,Email,"File name",Distribution,Parent,Created                                  |
       # The %title% variable will translate the title to the entity ID since that is what is exported in the CSV file.
-      | ,"Anonymous (not verified)",visitor@example.com,text.pdf,"Distribution 1",%Release 1%, |
-      | ,user1,user1@example.com,text.pdf,"Distribution 1",%Release 1%,                        |
-      | ,user2,user2@example.com,test.zip,"Distribution 2",%Solution%,                         |
-      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3",%Solution%,    |
-      | ,user1,user1@example.com,test1.zip,"Distribution 3",%Solution%,                        |
+      | ,"Anonymous (not verified)",visitor@example.com,text.pdf,"Distribution 1 > Access URL",%Release 1%, |
+      | ,user1,user1@example.com,text.pdf,"Distribution 1 > Access URL",%Release 1%,                        |
+      | ,user2,user2@example.com,test.zip,"Distribution 2 > Access URL",%Solution%,                         |
+      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3 > Access URL",%Solution%,    |
+      | ,user1,user1@example.com,test1.zip,"Distribution 3 > Access URL",%Solution%,                        |
