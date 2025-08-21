@@ -19,10 +19,10 @@ Feature: Asset distribution editing.
       | title        | release number | is version of |
       | Winter of 95 | 6.1            | OpenBSD       |
     And distribution content:
-      | title          | description                 | solution | release      | resources                                                   | licence          | file type |
-      | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence | remote    |
-      | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence | upload    |
-      | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence | upload    |
+      | title          | description                 | solution | release      | resources                                                   | licence          |
+      | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
+      | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence |
+      | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence |
     And users:
       | Username       | E-mail                     |
       | Bradley Emmett | bradley.emmett@example.com |
@@ -95,10 +95,10 @@ Feature: Asset distribution editing.
       | title     | is version of |
       | Release 1 | Solution      |
     And distribution content:
-      | title          | solution | release   | resources  | file type |
-      | Distribution 1 |          | Release 1 | text.pdf   | upload    |
-      | Distribution 2 | Solution |           | test.zip   | upload    |
-      | Distribution 3 | Solution |           | test1.zip  | upload    |
+      | title          | solution | release   | resources  |
+      | Distribution 1 |          | Release 1 | text.pdf   |
+      | Distribution 2 | Solution |           | test.zip   |
+      | Distribution 3 | Solution |           | test1.zip  |
     And the following distribution download events:
       | distribution   | user                |
       | Distribution 1 | visitor@example.com |
