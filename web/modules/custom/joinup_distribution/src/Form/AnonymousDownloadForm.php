@@ -125,7 +125,8 @@ class AnonymousDownloadForm extends FormBase {
         throw new \RuntimeException('No node was found using the paragraph with ID ' . $paragraphId);
       }
 
-      $usages['file']['node'] = [$result];
+      // Add the file usage for the node and mock the usage count to 1.
+      $usages['file']['node'][$result] = 1;
     }
 
     // Normally, only one distribution is allowed to use a file and only
@@ -137,6 +138,9 @@ class AnonymousDownloadForm extends FormBase {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
     $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
+    if (empty($distribution)) {
+      throw new \RuntimeException('No distribution was found with the ID ' . key($usages['file']['node']));
+    }
     if (!$distribution instanceof DistributionInterface) {
       throw new \RuntimeException('The entity with ID ' . $distribution->id() . ' is not a distribution.');
     }
