@@ -288,7 +288,10 @@ class DistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
-      $file = FileUrlHandler::urlToFile($distribution->get('resources')->target_id);
+      $resources = $distribution->getResources();
+      $file = reset($resources);
+      assert($file instanceof FileInterface, 'The distribution must have at least one file resource.');
+
       $account = \Drupal::service('email.validator')
         ->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();

@@ -95,10 +95,10 @@ Feature: Asset distribution editing.
       | title     | is version of |
       | Release 1 | Solution      |
     And distribution content:
-      | title          | solution | release   | resources  |
-      | Distribution 1 |          | Release 1 | text.pdf   |
-      | Distribution 2 | Solution |           | test.zip   |
-      | Distribution 3 | Solution |           | test1.zip  |
+      | title          | solution | release   | resources  | file type |
+      | Distribution 1 |          | Release 1 | text.pdf   | upload    |
+      | Distribution 2 | Solution |           | test.zip   | upload    |
+      | Distribution 3 | Solution |           | test1.zip  | upload    |
     And the following distribution download events:
       | distribution   | user                |
       | Distribution 1 | visitor@example.com |
