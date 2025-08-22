@@ -7,7 +7,7 @@ dependencies:
     - private_message
   theme:
     - ventuno
-id: ventuno_privatemessage-inbox
+id: ventuno_privatemessage_inbox
 theme: ventuno
 region: sidebar
 weight: -25
