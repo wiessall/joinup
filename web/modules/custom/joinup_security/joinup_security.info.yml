@@ -4,5 +4,4 @@ type: module
 package: Joinup
 core_version_requirement: "^10.4 || ^11"
 dependencies:
-  - file_visibility:file_visibility
   - joinup:joinup_group
