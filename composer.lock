@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8639a9f87e0a92e048e5881ff7c1046c",
+    "content-hash": "a22f354dceed1f358cd286d4d4dc5478",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7633,28 +7633,28 @@
         },
         {
             "name": "drupal/private_message_flood",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message_flood.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "098342c7017faa52966479a41615b172e3f15e58"
+                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "d3f73746adfe6571bcc20c29554a51f2f676b6b2"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "drupal/duration_field": "^2.",
-                "drupal/private_message": "^2. || ^3."
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/duration_field": "^2.0",
+                "drupal/private_message": "^3.0 || ^4.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1696324712",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1755708031",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7672,7 +7672,11 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "Jaypan",
+                    "name": "jaapjan",
+                    "homepage": "https://www.drupal.org/user/555428"
+                },
+                {
+                    "name": "jaypan",
                     "homepage": "https://www.drupal.org/user/324696"
                 }
             ],
@@ -21505,16 +21509,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.20.0",
+            "version": "10.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "a77cb6d9711ec15d0237d555f88f51328ecbdb97"
+                "reference": "48599ebaece196c378e0ece0f1bda25bea5df184"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/a77cb6d9711ec15d0237d555f88f51328ecbdb97",
-                "reference": "a77cb6d9711ec15d0237d555f88f51328ecbdb97",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/48599ebaece196c378e0ece0f1bda25bea5df184",
+                "reference": "48599ebaece196c378e0ece0f1bda25bea5df184",
                 "shasum": ""
             },
             "require": {
@@ -21535,13 +21539,13 @@
                 "guzzlehttp/guzzle": "^6.3 || ^7.0",
                 "jakeasmith/http_build_url": "^1.0",
                 "league/container": "^4.1.1",
-                "mglaman/phpstan-drupal": "^1.3",
+                "mglaman/phpstan-drupal": "^1.3 || ^2.0",
                 "pear/archive_tar": "^1.4",
                 "php": ">=8.1",
                 "php-parallel-lint/php-parallel-lint": "^1.3",
                 "phpmd/phpmd": "^2.12",
                 "phpstan/phpstan": "^1.12.15 || ^2.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0 || ^2.0",
                 "phpunit/phpunit": "^9.5 || ^10.0 || ^11.0",
                 "squizlabs/php_codesniffer": "^3.7",
                 "vlucas/phpdotenv": "^5.6"
@@ -21572,7 +21576,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2025-06-27T13:15:01+00:00"
+            "time": "2025-08-06T16:06:39+00:00"
         },
         {
             "name": "ec-europa/toolkit-composer-plugin",
@@ -26254,12 +26258,6 @@
             "version": "4.0.0.0",
             "alias": "3.6",
             "alias_normalized": "3.6.0.0"
-        },
-        {
-            "package": "drupal/private_message",
-            "version": "4.0.0.0-alpha4",
-            "alias": "3.0.6",
-            "alias_normalized": "3.0.6.0"
         }
     ],
     "minimum-stability": "dev",
@@ -26272,6 +26270,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
