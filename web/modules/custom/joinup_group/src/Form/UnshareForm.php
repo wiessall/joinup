@@ -43,6 +43,8 @@ class UnshareForm extends ShareFormBase {
       !empty($this->getGroups())
     );
 
+    $accessResult->addCacheableDependency($node);
+
     if ($node instanceof ShareableContentInterface) {
       $sharingMeta = $node->getSharingMetaEntity();
       if (!$sharingMeta->isNew()) {

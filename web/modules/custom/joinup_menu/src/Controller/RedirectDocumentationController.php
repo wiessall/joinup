@@ -63,7 +63,7 @@ final class RedirectDocumentationController extends ControllerBase {
    *   The access result.
    */
   public static function documentationFileAccess(NodeInterface $node): AccessResultInterface {
-    return AccessResult::allowedIf(!$node->get('documentation')->isEmpty());
+    return AccessResult::allowedIf(!$node->get('documentation')->isEmpty())->addCacheableDependency($node);
   }
 
 }
