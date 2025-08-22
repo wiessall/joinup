@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\file_url\FileUrlHandler;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -115,6 +116,10 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     while ($record = $result->fetchAssoc()) {
       $entity_id = $record['entity_id'];
       $value = $record["{$src_field}_target_id"];
+
+      if ($value && ($file = FileUrlHandler::urlToFile($value)) && !FileUrlHandler::isRemote($file)) {
+        $this->deleteTrackUsages($entity_id, $file->id());
+      }
 
       // Reset lookup when we move to a new entity.
       if ($entity_id !== $current_entity_id) {
@@ -268,4 +273,30 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     return UrlHelper::isValid($url) && UrlHelper::isExternal($url) ? $url : NULL;
   }
 
+  /**
+   * Deletes track usages by entity and target.
+   *
+   * @param string $source_id
+   *   The source ID.
+   * @param string $target_id
+   *   The target ID.
+   */
+  private function deleteTrackUsages(string $source_id, string $target_id): void {
+    $result = $this->database->select('track_usage', 'tu')
+      ->fields('tu', ['tid'])
+      ->condition('source_id_string', $source_id)
+      ->condition('target_id_string', $target_id)
+      ->execute();
+
+    $this->database->delete('track_usage')
+      ->condition('source_id_string', $source_id)
+      ->condition('target_id_string', $target_id)
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $this->database->delete('track_usage_paths')
+        ->condition('tid', $record['tid'])
+        ->execute();
+    }
+  }
 }
