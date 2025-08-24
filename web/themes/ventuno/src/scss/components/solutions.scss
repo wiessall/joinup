@@ -1,0 +1,16 @@
+@import "../partials/core";
+
+// Overrides to make releases timeline more similar to previous component
+.node-solution-form,
+.node-solution-edit-form {
+  #edit-current-workflow-state,
+  #edit-duplicate-current-workflow-state {
+    div.form-item {
+      display: inline-block;
+      label,
+      div {
+        display: inline;
+      }
+    }
+  }
+}
