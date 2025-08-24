@@ -31,10 +31,14 @@ class SolutionMultistepController extends MultistepController {
       \array_unshift($form['actions']['next']['#submit'], [ElementSubmit::class, 'trigger'], 'inline_entity_form_close_all_forms');
       $form['actions']['next']['#ief_submit_trigger_all'] = TRUE;
     }
-
     // Preserve only specific form actions steps other than confirmation.
     if ($this->stepSettings->group_name !== 'group_confirmation') {
       $form['field_state']['widget']['#options'] = \array_intersect_key($form['field_state']['widget']['#options'], ['delete' => TRUE]);
+      if (isset($form['current_workflow_state'])) {
+        $form['duplicate_current_workflow_state'] = $form['current_workflow_state'];
+        unset($form['duplicate_current_workflow_state']['#parents']);
+        $this->moveChildToGroup($form, 'duplicate_current_workflow_state', 'group_main');
+      }
     }
 
     // Preserve all form state values between steps and mute validation errors
@@ -74,6 +78,27 @@ class SolutionMultistepController extends MultistepController {
     if ($form_state->getTriggeringElement()['#name'] === 'simple_multistep_back_button' && $form_state->getErrors()) {
       $form_state->clearErrors();
     }
+  }
+
+  /**
+   * Move a child form element to a different Field Group (form display group).
+   */
+  protected function moveChildToGroup(array &$form, string $child, string $target_group): void {
+    if (empty($form[$child]) || empty($form['#fieldgroups'][$target_group])) {
+      return;
+    }
+
+    $form['#group_children'][$child] = $target_group;
+
+    $target_children = $form['#fieldgroups'][$target_group]->children ?? [];
+    if (!in_array($child, $target_children, TRUE)) {
+      $target_children[] = $child;
+      $form['#fieldgroups'][$target_group]->children = $target_children;
+    }
+
+    $form[$child]['#access'] = TRUE;
+    $form[$child]['#disabled'] = TRUE;
+    $form[$child]['#group'] = $target_group;
   }
 
 }
