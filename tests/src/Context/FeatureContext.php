@@ -1358,8 +1358,11 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Fills in a text field in a table row.
+   * Fills in the given element in a row given its index.
    *
+   * @param string $index
+   *   The occurrence of the element with the text locator in the row. Ordinal
+   *   numbers are supported (1st, 2nd, 3rd, etc).
    * @param string $field
    *   The text field locator.
    * @param string $text
@@ -1367,11 +1370,17 @@ class FeatureContext extends RawDrupalContext {
    * @param string $rowText
    *   Text contained in a row. Must be unique.
    *
-   * @When I fill in :field with :text in the :rowText row
+   * @When I fill in the :index occurrence of the :field field with :text in the :rowText row
    */
-  public function fillFieldInRow(string $field, string $text, string $rowText): void {
+  public function fillFieldInRowByIndex(string $index, string $field, string $text, string $rowText): void {
+    $index = $this->convertOrdinalToNumber($index);
     $row = $this->getRowByRowText($rowText);
-    $row->fillField($field, $text);
+    $fields = $row->findAll('named', ['field', $field]);
+    if (empty($fields) || !isset($fields[$index - 1])) {
+      throw new \Exception("Cannot find the $index occurrence of field '$field' in the row containing '$rowText'.");
+    }
+
+    $fields[$index - 1]->setValue($text);
   }
 
   /**
