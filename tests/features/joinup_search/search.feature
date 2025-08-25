@@ -400,7 +400,7 @@ Feature: Global search
     And I fill in "Title" with "DistroZzolu"
     And I enter "Nietzsche's" in the "Description" wysiwyg editor
     And I press "Remove"
-    And I press "Add Resource link"
+    And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
@@ -487,7 +487,7 @@ Feature: Global search
     And I fill in "Title" with "DistroReleazz"
     And I fill in "Description" with "Zorro"
     And I press "Remove"
-    And I press "Add Resource link"
+    And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/mishmash"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"

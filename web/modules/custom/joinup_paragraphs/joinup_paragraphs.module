@@ -9,6 +9,11 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
@@ -177,23 +182,42 @@ function joinup_paragraphs_preprocess_paragraph__heading(&$variables): void {
 }
 
 /**
- * Implements hook_paragraphs_widget_actions_alter().
+ * Implements hook_field_widget_complete_WIDGET_TYPE_form_alter().
  */
-function joinup_paragraphs_paragraphs_widget_actions_alter(array &$widget_actions, array &$context): void {
-  $paragraph = $context['paragraphs_entity'];
-  if (!$paragraph instanceof ParagraphInterface ||
-    !in_array($paragraph->bundle(), ['resource_file', 'resource_link'], TRUE)) {
+function joinup_paragraphs_field_widget_complete_paragraphs_form_alter(&$widget_form, FormStateInterface $form_state, $context): void {
+  $field_definition = $context['items']->getFieldDefinition();
+  \assert($field_definition instanceof FieldDefinitionInterface);
+  if ($field_definition->getName() !== 'resources') {
     return;
   }
 
-  // Hide all actions for resource paragraphs.
-  $widget_actions['actions'] = [];
+  // Rename "add more" button labels.
+  $widget_form['widget']['add_more']['add_more_button_resource_file']['#value'] = t('Upload file');
+  $widget_form['widget']['add_more']['add_more_button_resource_link']['#value'] = t('Add remote file URL');
 
-  // Move remove button from dropdown to main actions to keep it visible.
-  if (isset($widget_actions['dropdown_actions']['remove_button'])) {
-    $widget_actions['actions']['remove_button'] = $widget_actions['dropdown_actions']['remove_button'];
+  // Remove header actions (Drag and drop).
+  unset($widget_form['widget']['header_actions']);
+
+  // Remove paragraph label column.
+  foreach (Element::children($widget_form['widget']) as $key) {
+    unset($widget_form['widget'][$key]['top']['type']);
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function joinup_paragraphs_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
+  if (!$entity instanceof ParagraphInterface) {
+    return;
   }
 
-  // Clear dropdown actions.
-  $widget_actions['dropdown_actions'] = [];
+  if (!$entity->hasField('resource_file') || $entity->get('resource_file')->isEmpty()) {
+    return;
+  }
+
+  $parent = $entity->getParentEntity();
+  if ($parent->bundle() === 'distribution') {
+    $build['resource_file'] = $entity->get('resource_file')->view('tracker');
+  }
 }
