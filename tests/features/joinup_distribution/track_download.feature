@@ -19,7 +19,7 @@ Feature: Asset distribution editing.
       | title        | release number | is version of |
       | Winter of 95 | 6.1            | OpenBSD       |
     And distribution content:
-      | title          | description                 | solution | release      | access url                                                  | licence          |
+      | title          | description                 | solution | release      | resources                                                   | licence          |
       | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
       | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence |
       | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence |
@@ -95,7 +95,7 @@ Feature: Asset distribution editing.
       | title     | is version of |
       | Release 1 | Solution      |
     And distribution content:
-      | title          | solution | release   | access url |
+      | title          | solution | release   | resources  |
       | Distribution 1 |          | Release 1 | text.pdf   |
       | Distribution 2 | Solution |           | test.zip   |
       | Distribution 3 | Solution |           | test1.zip  |
@@ -118,8 +118,8 @@ Feature: Asset distribution editing.
     And the file downloaded from the "here" link contains the following strings:
       | ID,User,Email,"File name",Distribution,Parent,Created                                  |
       # The %title% variable will translate the title to the entity ID since that is what is exported in the CSV file.
-      | ,"Anonymous (not verified)",visitor@example.com,text.pdf,"Distribution 1",%Release 1%, |
-      | ,user1,user1@example.com,text.pdf,"Distribution 1",%Release 1%,                        |
-      | ,user2,user2@example.com,test.zip,"Distribution 2",%Solution%,                         |
-      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3",%Solution%,    |
-      | ,user1,user1@example.com,test1.zip,"Distribution 3",%Solution%,                        |
+      | ,"Anonymous (not verified)",visitor@example.com,text.pdf,"Distribution 1 > Access URL",%Release 1%, |
+      | ,user1,user1@example.com,text.pdf,"Distribution 1 > Access URL",%Release 1%,                        |
+      | ,user2,user2@example.com,test.zip,"Distribution 2 > Access URL",%Solution%,                         |
+      | ,"Anonymous (not verified)",anon@example.com,test1.zip,"Distribution 3 > Access URL",%Solution%,    |
+      | ,user1,user1@example.com,test1.zip,"Distribution 3 > Access URL",%Solution%,                        |
