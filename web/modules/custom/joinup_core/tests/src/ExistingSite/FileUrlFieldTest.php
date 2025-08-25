@@ -92,7 +92,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $url = "/node/" . $distribution->id() . "/edit";
 
     $this->drupalGet($url);
-    $page->pressButton('Add Resource file');
+    $page->pressButton('Upload file');
     $this->addFileUrlItem($field_name . '_0', 'upload', $test_file->getFileUri());
     $this->submitForm(['title[0][value]' => 'Foo'], 'Update');
 
