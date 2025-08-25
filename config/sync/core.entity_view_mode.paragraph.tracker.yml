@@ -1,0 +1,11 @@
+uuid: d3860d65-cfd4-40d6-a511-45a78fb7faa1
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.tracker
+label: Tracker
+description: ''
+targetEntityType: paragraph
+cache: true
