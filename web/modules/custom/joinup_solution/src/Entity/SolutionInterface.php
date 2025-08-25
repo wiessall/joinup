@@ -64,4 +64,12 @@ interface SolutionInterface extends GroupInterface, CollectionContentInterface, 
    */
   public function getAffiliatedCollectionIds(): array;
 
+  /**
+   * Gets links and files from resources paragraphs.
+   *
+   * @return array
+   *   Returns array of paragraphs resources;
+   */
+  public function getResources(): array;
+
 }
