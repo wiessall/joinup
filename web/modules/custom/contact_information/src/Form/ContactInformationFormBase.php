@@ -293,7 +293,7 @@ abstract class ContactInformationFormBase extends ContactForm {
 
     $message = <<<MESSAGE
         Name: {$params['name']} <br/>
-        Organization: {$params['organization']} <br />
+        Organisation: {$params['organization']} <br />
         Email: $reply_to <br/>
         Type of support: {$params['type']} <br />
         Message:  {$form_state->getValue('message')} <br />
