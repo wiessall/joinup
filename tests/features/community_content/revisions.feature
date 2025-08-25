@@ -1,9 +1,10 @@
-@api @group-c
+@api
 Feature:
   In order to see how content evolved over time
   As a content author or facilitator
   I need to be able to see revisions of content
 
+  @group-c
   Scenario Outline: Community content revisions
     Given <group type> content:
       | title        | description                               | group_moderation |
