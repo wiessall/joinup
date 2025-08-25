@@ -11,7 +11,8 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
-use Drupal\file_url\FileUrlHandler;
+use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -117,7 +118,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       $entity_id = $record['entity_id'];
       $value = $record["{$src_field}_target_id"];
 
-      if ($value && ($file = FileUrlHandler::urlToFile($value)) && !FileUrlHandler::isRemote($file)) {
+      if ($value && ($file = self::urlToFile($value))) {
         $this->deleteTrackUsages($entity_id, $file->id());
       }
 
@@ -298,6 +299,33 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
         ->condition('tid', $record['tid'])
         ->execute();
     }
+  }
+
+  /**
+   * Get the right file object from an URL.
+   *
+   * @param string $url
+   *   URL.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   The file object.
+   *
+   * @see \Drupal\file_url\FileUrlHandler::urlToFile
+   */
+  private static function urlToFile($url): ?FileInterface {
+    // Not a url, but a normal file ID. This can occur when an object is
+    // created in code (not through a form).
+    if (is_numeric($url)) {
+      return File::load($url);
+    }
+    $matches = [];
+    preg_match('/\/file-dereference\/([0-9]+)/', $url, $matches);
+    if (!empty($matches)) {
+      return File::load($matches[1]);
+    }
+
+    // It's a remote file.
+    return NULL;
   }
 
 }
