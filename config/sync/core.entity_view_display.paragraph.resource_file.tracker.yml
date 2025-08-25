@@ -1,0 +1,32 @@
+uuid: 4eb95d43-0a04-4f03-b8bf-73971f298194
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.tracker
+    - field.field.paragraph.resource_file.resource_file
+    - paragraphs.paragraphs_type.resource_file
+  module:
+    - joinup_distribution
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: paragraph.resource_file.tracker
+targetEntityType: paragraph
+bundle: resource_file
+mode: tracker
+content:
+  resource_file:
+    type: tracked_hosted_file_download
+    label: above
+    settings:
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
