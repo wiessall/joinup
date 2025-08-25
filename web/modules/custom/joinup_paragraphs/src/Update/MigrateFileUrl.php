@@ -118,7 +118,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       $entity_id = $record['entity_id'];
       $value = $record["{$src_field}_target_id"];
 
-      if ($value && ($file = self::urlToFile($value))) {
+      if ($value && $file = self::urlToFile($value)) {
         $this->deleteTrackUsages($entity_id, $file->id());
       }
 
