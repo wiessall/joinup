@@ -144,7 +144,7 @@ abstract class ContactInformationFormBase extends ContactForm {
 
     $form['organization'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Organization'),
+      '#title' => $this->t('Organisation'),
       '#maxlength' => 255,
       '#weight' => 2,
     ];
