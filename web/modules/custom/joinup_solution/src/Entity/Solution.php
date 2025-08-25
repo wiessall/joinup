@@ -24,6 +24,7 @@ use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Entity\ShareableContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_paragraphs\Traits\ParagraphResourcesTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
@@ -52,6 +53,7 @@ class Solution extends Node implements SolutionInterface {
   use JoinupBundleClassFieldAccessTrait;
   use JoinupBundleClassMetaEntityTrait;
   use LogoTrait;
+  use ParagraphResourcesTrait;
   use PinnableGroupContentTrait;
   use RdfSyncEntityTrait;
   use ShortIdTrait;

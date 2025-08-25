@@ -12,6 +12,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\file\FileInterface;
 use Drupal\file_url\FileUrlHandler;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,14 +25,23 @@ final class RedirectDocumentationController extends ControllerBase {
   /**
    * Serves a file download.
    *
-   * @param \Drupal\node\NodeInterface $node
-   *   The RDF entity.
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $node
+   *   The solution entity.
    *
    * @return \Symfony\Component\HttpFoundation\Response
    *   The file response if the file URL is a file, or a redirect response to
    *   an external URL if the file URL is a URL.
    */
-  public function documentationFile(NodeInterface $node): Response {
+  public function documentationFile(SolutionInterface $node): Response {
+    $resource = $node->getResources()[0] ?? null;
+    if ($resource && !$node->get('documentation')->isEmpty()) {
+      // If there are resources, we do not allow downloading the documentation
+      // file.
+      return new RedirectResponse('/404');
+    }
+
+
+
     $fileId = $node->documentation->target_id;
     $file = FileUrlHandler::urlToFile($fileId);
     assert($file instanceof FileInterface);
