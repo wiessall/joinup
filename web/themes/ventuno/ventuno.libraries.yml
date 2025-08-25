@@ -539,8 +539,3 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
-
-solutions:
-  css:
-    theme:
-      assets/css/solutions.min.css: { minified: true }

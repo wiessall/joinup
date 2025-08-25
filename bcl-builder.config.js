@@ -412,10 +412,6 @@ module.exports = {
           entry: "editor.layout-paragraphs.scss",
           dest: "editor.layout-paragraphs.min.css",
         },
-        {
-          entry: "components/solutions.scss",
-          dest: "solutions.min.css",
-        },
       ],
     }),
     // IOP.

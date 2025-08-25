@@ -158,4 +158,16 @@
       ) !important;
     }
   }
+
+  // Inline current state.
+  #edit-current-workflow-state,
+  #edit-duplicate-current-workflow-state {
+    div.form-item {
+      display: inline-block;
+      label,
+      div {
+        display: inline;
+      }
+    }
+  }
 }

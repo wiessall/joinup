@@ -336,15 +336,6 @@ function joinup_core_get_etrans_block_config_for_current_page(array &$build = []
  * Implements hook_theme_suggestions_alter().
  */
 function joinup_core_theme_suggestions_alter(array &$suggestions, array $variables, string $hook): void {
-  // Handle field_multiple_value_form suggestions by content type.
-  if ($hook === 'field_multiple_value_form') {
-    $element = $variables['element'] ?? [];
-    if (isset($element['#entity_type']) && $element['#entity_type'] === 'node' && isset($element['#bundle'])) {
-      $suggestions[] = $hook . '__' . $element['#bundle'];
-    }
-    return;
-  }
-
   static $horizontal_tabs_access;
   if (!in_array($hook, ['menu_local_task', 'menu_local_tasks'], TRUE)) {
     return;
