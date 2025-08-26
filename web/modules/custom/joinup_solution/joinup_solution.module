@@ -836,4 +836,6 @@ function joinup_solution_preprocess_node(&$variables): void {
   // Show the title in the confirmation step.
   $variables['label']['#label_display'] = 'inline';
   $variables['content']['title'] = $variables['label'];
+  // Change state field label.
+  $variables['content']['field_state']['#title'] = t('Current workflow state');
 }
