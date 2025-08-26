@@ -1,0 +1,37 @@
+diff --git a/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php b/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
+index cd300f3d28f6e749a61335f43d01d4cc8a25b19e..9359afd2cad6320a4e55789ff266128e4a4f612f 100644
+--- a/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
++++ b/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
+@@ -84,9 +84,15 @@ class BabelMenuLinkContentService {
+     $menuLinkIdQuery = $this->entityTypeManager->getStorage('menu_link_content')
+       ->getQuery()
+       ->accessCheck(FALSE);
+-    if ($menuIds) {
+-      $menuLinkIdQuery->condition('menu_name', $menuIds, 'IN');
++
++    // Limit menus to the ones provided by System module (system.menu.*).
++    $allMenuIds = array_values($this->entityTypeManager->getStorage('menu')->getQuery()->execute());
++    $menuIds = $menuIds ? array_intersect($menuIds, $allMenuIds) : $allMenuIds;
++    if (!$menuIds) {
++      return;
+     }
++    $menuLinkIdQuery->condition('menu_name', $menuIds, 'IN');
++
+     $menuLinkIds = $menuLinkIdQuery->execute();
+     if (!$menuLinkIds) {
+       return;
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
+index 63e2ce9496c53ee1ac95c3cf08f32e1def3b4daf..f0cc7882c8af1e45d6532f9a536f7313e68521b1 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
+@@ -30,6 +30,10 @@ class BabelMenuLinkContentServiceInstallTest extends BabelKernelTestBase {
+    */
+   protected function setUp(): void {
+     parent::setUp();
++
++    $this->container->get('entity_type.manager')->getStorage('menu')
++      ->create(['id' => 'test', 'label' => 'Test'])
++      ->save();
+     $this->installEntitySchema('menu_link_content');
+   }
+ 
