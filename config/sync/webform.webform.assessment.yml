@@ -183,6 +183,7 @@ elements: |-
     initiative:
       '#type': textfield
       '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed:'
+      '#maxlength': 1024
       '#required': true
       '#admin_title': 'Initiative, project, action'
     initiative_link:
@@ -285,6 +286,7 @@ elements: |-
         description_1:
           '#type': textfield
           '#title': 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
+          '#maxlength': 1024
         relevant_1:
           '#type': webform_checkboxes_other
           '#options':

@@ -41,7 +41,7 @@ final class RedirectWebsiteLinkController extends ControllerBase {
    *   The access result.
    */
   public static function websiteLinkAccess(NodeInterface $node): AccessResultInterface {
-    return AccessResult::allowedIf(!empty($node->{$node->getWebsiteLinkFieldName()}->uri));
+    return AccessResult::allowedIf(!empty($node->{$node->getWebsiteLinkFieldName()}->uri))->addCacheableDependency($node);
   }
 
 }
