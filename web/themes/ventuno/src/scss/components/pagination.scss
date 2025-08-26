@@ -18,8 +18,8 @@
   .page-item {
     a {
       padding: $spacer * 0.5 $spacer * 0.875; // 8px 14px
-      border-radius: var(--bs-pagination-border-radius);
       text-decoration: none;
+      border-radius: var(--bs-pagination-border-radius);
       &:hover {
         background: $gray-300;
       }
