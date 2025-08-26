@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_paragraphs\Traits;
 
+use Drupal\Core\File\FileUrlGeneratorInterface;
+
 /**
  * Shared code for nodes including paragraph reference.
  */
 trait ParagraphResourcesTrait {
 
   /**
-   * Gets links and files from resources paragraphs.
+   * The file URL generator service.
    *
-   * @return array
-   *   Returns array of paragraphs resources;
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected FileUrlGeneratorInterface $fileUrlGenerator;
+
+  /**
+   * {@inheritdoc}
    */
   public function getResources(): array {
     if (!isset($this->resources)) {

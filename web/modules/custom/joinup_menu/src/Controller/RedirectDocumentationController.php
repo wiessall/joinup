@@ -11,8 +11,7 @@ use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\file\FileInterface;
-use Drupal\file_url\FileUrlHandler;
-use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,39 +24,39 @@ final class RedirectDocumentationController extends ControllerBase {
   /**
    * Serves a file download.
    *
-   * @param \Drupal\joinup_solution\Entity\SolutionInterface $node
+   * @param \Drupal\node\NodeInterface $node
    *   The solution entity.
    *
    * @return \Symfony\Component\HttpFoundation\Response
    *   The file response if the file URL is a file, or a redirect response to
    *   an external URL if the file URL is a URL.
    */
-  public function documentationFile(SolutionInterface $node): Response {
-    $resource = $node->getResources()[0] ?? null;
-    if ($resource && !$node->get('documentation')->isEmpty()) {
+  public function documentationFile(NodeInterface $node): Response {
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $node */
+    if ($node->get('resources')->isEmpty()) {
       // If there are resources, we do not allow downloading the documentation
       // file.
       return new RedirectResponse('/404');
     }
 
-
-
-    $fileId = $node->documentation->target_id;
-    $file = FileUrlHandler::urlToFile($fileId);
-    assert($file instanceof FileInterface);
-
-    if (FileUrlHandler::isRemote($file)) {
-      $url = $file->getFileUri();
-      return (new TrustedRedirectResponse($url))
+    $resources = $node->getResources();
+    // Solutions only have one documentation file.
+    $resource = reset($resources);
+    if ($resource instanceof LinkItemInterface) {
+      return (new TrustedRedirectResponse($resource->uri))
         ->addCacheableDependency($node);
     }
-    elseif (!$file) {
+
+    if (!$resource) {
+      // Handle the case that the file has been deleted but the paragraph
+      // reference still exists.
       return new RedirectResponse('/404');
     }
 
-    return (new CacheableRedirectResponse($file->createFileUrl()))
+    assert($resource instanceof FileInterface);
+    return (new CacheableRedirectResponse($resource->createFileUrl()))
       ->addCacheableDependency($node)
-      ->addCacheableDependency($file)
+      ->addCacheableDependency($resource)
       ->addCacheableDependency((new CacheableMetadata())
         ->addCacheContexts(['user.permissions', 'og_role'])
       );
@@ -73,7 +72,7 @@ final class RedirectDocumentationController extends ControllerBase {
    *   The access result.
    */
   public static function documentationFileAccess(NodeInterface $node): AccessResultInterface {
-    return AccessResult::allowedIf(!$node->get('documentation')->isEmpty());
+    return AccessResult::allowedIf(!$node->get('resources')->isEmpty());
   }
 
 }
