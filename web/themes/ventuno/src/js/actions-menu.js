@@ -6,54 +6,32 @@
 ((Drupal, once) => {
   Drupal.behaviors.dropdownPlacement = {
     attach(context) {
-      const triggers = once(
-        "dropdown-placement",
-        ".js-responsive-dropdown",
-        context,
-      );
-
-      if (!triggers.length) return;
-
-      function updateDropdownPlacement() {
-        triggers.forEach((trigger) => {
-          const isLargeScreen = window.innerWidth >= 992; // Same as Bootstrap media-breakpoint-up(lg)
-
-          // Destroy existing dropdown instance (if any).
-          const existing = bootstrap.Dropdown.getInstance(trigger);
-          if (existing) {
-            existing.dispose();
+      once("dropdown-placement", ".js-responsive-dropdown", context).forEach(
+        (trigger) => {
+          // Create new instance with forced placement and no flipping.
+          const instance = bootstrap.Dropdown.getInstance(trigger);
+          if (instance) {
+            instance.dispose();
           }
 
-          // Create new instance with forced placement and no flipping.
-          bootstrap.Dropdown.getOrCreateInstance(trigger, {
+          // eslint-disable-next-line no-new
+          new bootstrap.Dropdown(trigger, {
             popperConfig: () => {
+              // Same as Bootstrap media-breakpoint-up(lg).
+              const isLargeScreen = window.innerWidth >= 992;
               return {
                 placement: isLargeScreen ? "bottom-end" : "top-end",
                 modifiers: [
-                  {
-                    name: "flip",
-                    enabled: false, // completely disable flipping
-                  },
-                  {
-                    name: "preventOverflow",
-                    enabled: false, // optional: prevents repositioning
-                  },
+                  // Completely disable flipping.
+                  { name: "flip", enabled: false },
+                  // Optional: prevents repositioning.
+                  { name: "preventOverflow", enabled: false },
                 ],
               };
             },
           });
-        });
-      }
-
-      // Run once on load.
-      updateDropdownPlacement();
-
-      // Reapply on resize.
-      let resizeTimeout;
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(updateDropdownPlacement, 150);
-      });
+        },
+      );
     },
   };
 })(Drupal, once);
