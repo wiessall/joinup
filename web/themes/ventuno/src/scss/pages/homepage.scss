@@ -43,7 +43,7 @@
       background-color: $brand-darker;
       font-size: 0;
       &::before {
-        @include get-bootstrap-icon("arrow-up", $white);
+        @include get-bootstrap-icon("search", $white);
 
         margin: $spacer * 0.25 0; // 4px 0
         font-size: 1.4rem;
@@ -82,9 +82,9 @@
 
 // Latest News
 .block-views-blocklatest-news-block {
-  position: relative;
-  margin-bottom: $spacer * 3; // 48px
-  padding-bottom: $spacer * 3; // 48px
+  & > div {
+    padding-bottom: $spacer * 3; // 48px
+  }
   .more-link {
     margin-bottom: $spacer * 1.2;
     &::after {
@@ -93,12 +93,16 @@
       margin-left: $spacer * 0.5; // 8px
     }
   }
+  .block-content .view .view-content .col {
+    margin-bottom: 0;
+  }
 }
 
 // Upcoming event.
 .block-views-blockupcoming-event-block {
-  margin-bottom: $spacer * 3; // 48px
-  padding-bottom: $spacer * 3; // 48px;
+  & > div {
+    padding-bottom: $spacer * 3; // 48px
+  }
   .more-link {
     margin-bottom: $spacer * 1.2;
     &::after {

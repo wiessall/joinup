@@ -21,7 +21,7 @@
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
         "drupal/autologout": "^2.0",
-        "drupal/babel": "^1.0@dev",
+        "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
@@ -31,8 +31,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core-composer-scaffold": "^10.5.1",
-        "drupal/core-recommended": "^10.5.1",
+        "drupal/core-composer-scaffold": "^10.5.2",
+        "drupal/core-recommended": "^10.5.2",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "^1.8",
@@ -67,7 +67,6 @@
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
-        "drupal/l10n_client": "^3.0@alpha",
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
@@ -93,7 +92,7 @@
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
-        "drupal/private_message": "4.0.0-alpha4 as 3.0.6",
+        "drupal/private_message": "^4.0@alpha",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
         "drupal/purge_users": "^4.0",
@@ -125,6 +124,7 @@
         "drupal/theme_rule": "^1.0",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
+        "drupal/tour": "^1.0",
         "drupal/twig_field_value": "^2.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
@@ -327,6 +327,13 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note572659.diff",
+                "Exclude webforms @see https://www.drupal.org/i/3542257": "resources/patch/php/drupal/babel/3542257.mr41-note572893.diff",
+                "Readonly property cannot be initialized @see https://www.drupal.org/i/3542278": "resources/patch/php/drupal/babel/3542278.comment-16235365.mr42.diff",
+                "Error when updating a menu link @see https://www.drupal.org/i/3542349": "resources/patch/php/drupal/babel/3542349.comment-16235945.mr43.diff",
+                "Difficult to reuse the structure: @see https://www.drupal.org/i/3542354": "resources/patch/php/drupal/babel/3542354.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
@@ -343,14 +350,12 @@
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "resources/patch/php/drupal/core/2945928.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
-                "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/core/3012027.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-21-11.x.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-135.diff",
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
-                "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
@@ -438,9 +443,6 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch"
             },
-            "drupal/l10n_client": {
-                "Schema definition is missing for l10n_client_ui settings @see https://www.drupal.org/project/l10n_client/issues/3514049": "resources/patch/php/drupal/l10n_client/3514049.patch"
-            },
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff"
             },
@@ -468,9 +470,6 @@
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
-            },
-            "drupal/private_message_flood": {
-                "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
@@ -502,6 +501,9 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
+            },
+            "drupal/tour": {
+                "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/tour/3012027.patch"
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",

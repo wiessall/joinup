@@ -82,3 +82,10 @@ button#eTransButton.wt-ecl-button {
   }
 }
 
+// #ISAICP-10098 Reorganise z-index to have the toolbar on top of all other elements.
+.toolbar-oriented .toolbar-bar {
+  z-index: 503;
+  #toolbar-item-user {
+    z-index: 0;
+  }
+}
