@@ -7,15 +7,15 @@
   Drupal.behaviors.dropdownPlacement = {
     attach(context) {
       const triggers = once(
-        'dropdown-placement',
-        '.js-responsive-dropdown',
-        context
+        "dropdown-placement",
+        ".js-responsive-dropdown",
+        context,
       );
 
       if (!triggers.length) return;
 
       function updateDropdownPlacement() {
-        triggers.forEach(trigger => {
+        triggers.forEach((trigger) => {
           const isLargeScreen = window.innerWidth >= 992; // Same as Bootstrap media-breakpoint-up(lg)
 
           // Destroy existing dropdown instance (if any).
@@ -28,14 +28,14 @@
           bootstrap.Dropdown.getOrCreateInstance(trigger, {
             popperConfig: () => {
               return {
-                placement: isLargeScreen ? 'bottom-end' : 'top-end',
+                placement: isLargeScreen ? "bottom-end" : "top-end",
                 modifiers: [
                   {
-                    name: 'flip',
+                    name: "flip",
                     enabled: false, // completely disable flipping
                   },
                   {
-                    name: 'preventOverflow',
+                    name: "preventOverflow",
                     enabled: false, // optional: prevents repositioning
                   },
                 ],
@@ -50,7 +50,7 @@
 
       // Reapply on resize.
       let resizeTimeout;
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(updateDropdownPlacement, 150);
       });
