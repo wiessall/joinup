@@ -12,8 +12,10 @@ use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\file_visibility\FileVisibility;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgRole;
+use Drupal\track_usage\Recorder;
 
 /**
  * Tests integration with the file_visibility module.
@@ -197,11 +199,16 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * Tests discussion's comments.
    */
   protected function doTestDiscussionComments(): void {
-    $discussions = \Drupal::entityTypeManager()->getStorage('node')
-      ->loadByProperties(['type' => 'discussion']);
-    $discussion = reset($discussions);
-    $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
+    $discussion = $this->createNode([
+      'type' => 'discussion',
+      'og_audience' => \Drupal::service('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
+      'title' => $this->randomString(),
+      'field_state' => 'draft',
+      'uid' => $this->account['author']->id(),
+    ]);
 
+    $file = $this->createFieldFile('comment', 'reply', 'field_attachment');
     $comment = Comment::create([
       'comment_type' => 'reply',
       'entity_type' => 'node',
@@ -272,10 +279,11 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    *   (optional) The user account to be checked. Anonymous, if omitted.
    */
   protected function fileAccessibilityAssertionHelper(bool $expectAccessible, FileInterface $file, ?AccountInterface $account): void {
+    $this->container->get(Recorder::class)->registerUsageRecords();
+    $this->container->get(FileVisibility::class)->doUpdateFileVisibility();
+
     // In tests, the static cache becomes stale between some operation, because
     // we're running them in the same long request.
-    \Drupal::entityTypeManager()->getAccessControlHandler('node')->resetCache();
-    \Drupal::entityTypeManager()->getAccessControlHandler('comment')->resetCache();
     \Drupal::entityTypeManager()->getAccessControlHandler('file')->resetCache();
 
     // Make sure we're checking the latest file version.
