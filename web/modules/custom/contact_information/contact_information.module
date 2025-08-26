@@ -44,7 +44,7 @@ function contact_information_entity_bundle_info_alter(array &$bundles): void {
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function contact_information_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+function contact_information_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   if ($entity_type->id() === 'node' && $bundle === 'contact_information') {
     $fields['related_group'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Related group'))
