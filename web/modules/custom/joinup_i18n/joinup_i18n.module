@@ -46,7 +46,6 @@ function template_preprocess_language_picker(array &$variables): void {
   }
 }
 
-
 /**
  * Implements hook_babel_translation_type_info_alter().
  */
