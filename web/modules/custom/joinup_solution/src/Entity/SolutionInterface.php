@@ -9,12 +9,13 @@ use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Entity\ShareableContentInterface;
+use Drupal\joinup_paragraphs\ParagraphResourcesInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 
 /**
  * Interface for solution entities in Joinup.
  */
-interface SolutionInterface extends GroupInterface, CollectionContentInterface, PinnableGroupContentInterface, DistributionsParentInterface, ShareableContentInterface {
+interface SolutionInterface extends GroupInterface, CollectionContentInterface, PinnableGroupContentInterface, DistributionsParentInterface, ShareableContentInterface, ParagraphResourcesInterface {
 
   /**
    * Returns the child releases.
@@ -63,13 +64,5 @@ interface SolutionInterface extends GroupInterface, CollectionContentInterface, 
    *   The affiliated collection IDs.
    */
   public function getAffiliatedCollectionIds(): array;
-
-  /**
-   * Gets links and files from resources paragraphs.
-   *
-   * @return array
-   *   Returns array of paragraphs resources;
-   */
-  public function getResources(): array;
 
 }
