@@ -180,7 +180,6 @@ module:
   oe_authentication: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
-  oe_gisco_geocoding: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
