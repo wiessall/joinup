@@ -333,8 +333,10 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     }
     $group = $entity->getGroup();
     $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
-    return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
-      ->addCacheableDependency($membership);
+    $access = $membership
+      ? AccessResult::allowedIf($membership->hasPermission('view any unpublished content'))
+      : AccessResult::neutral();
+    return $access->addCacheContexts(['og_role']);
   }
 
   if (!$entity instanceof GroupInterface
@@ -342,7 +344,7 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
     || $operation !== 'view'
   ) {
-    return AccessResult::neutral();
+    return AccessResult::neutral()->cachePerPermissions();
   }
 
   // Allows users to view unpublished groups if they have the permission as part
@@ -352,7 +354,8 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     $membership
     && !$entity->isPublished()
     && $membership->hasPermission('view any unpublished content'))
-    ->addCacheableDependency($membership);
+    ->addCacheableDependency($membership)
+    ->addCacheContexts(['user.permissions', 'og_role']);
 }
 
 /**
@@ -1044,16 +1047,17 @@ function joinup_group_form_meta_entity_form_alter(array &$form, FormStateInterfa
  * Implements hook_entity_field_access().
  */
 function joinup_group_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
-  return AccessResult::forbiddenIf(
-    $operation === 'edit'
+  if ($operation === 'edit'
     && $field_definition->getName() === 'announcements_enabled'
     && $field_definition->getTargetEntityTypeId() === 'meta_entity'
     && in_array($field_definition->getTargetBundle(), [
       'collection_settings',
       'solution_settings',
-    ], TRUE)
-    && !$account->hasPermission('manage group announcements')
-  );
+    ], TRUE)) {
+    return AccessResult::forbiddenIf(!$account->hasPermission('manage group announcements'))
+      ->cachePerPermissions();
+  }
+  return AccessResult::neutral();
 }
 
 /**
