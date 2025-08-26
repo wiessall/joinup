@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Entity;
 
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
+use Drupal\joinup_paragraphs\Traits\ParagraphResourcesTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
@@ -36,6 +36,7 @@ class Distribution extends Node implements DistributionInterface {
   use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
+  use ParagraphResourcesTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
@@ -48,23 +49,18 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
-    if (!empty($fileId = $this->access_url->target_id)) {
-      if ($file = FileUrlHandler::urlToFile($fileId)) {
-        if (!FileUrlHandler::isRemote($file)) {
-          // Set the file size field.
-          $this->get('file_size')->setValue($file->getSize());
+    if (!$this->resources->isEmpty()) {
+      /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
+      $paragraph = $this->resources->entity;
+      if ($paragraph->bundle() === 'resource_file' && $file = $paragraph->get('resource_file')?->entity) {
+        $this->get('file_size')->setValue($file->getSize());
 
-          $tids = \Drupal::entityQuery('taxonomy_term')
-            ->accessCheck(FALSE)
-            ->condition('mime_type', $file->getMimeType())
-            ->execute();
-          if ($tids) {
-            $this->set('format', reset($tids));
-          }
-        }
-        else {
-          // Trim the value so that leading and trailing spaces are removed.
-          $this->set('access_url', trim($this->get('access_url')->target_id));
+        $tids = \Drupal::entityQuery('taxonomy_term')
+          ->accessCheck(FALSE)
+          ->condition('mime_type', $file->getMimeType())
+          ->execute();
+        if ($tids) {
+          $this->set('format', reset($tids));
         }
       }
     }

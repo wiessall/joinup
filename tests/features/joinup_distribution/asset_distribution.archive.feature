@@ -30,7 +30,7 @@ Feature: Asset distribution content archival.
     And I fill in the following:
       | Title       | Windows.zip      |
       | Description | Some description |
-    And I upload the file "test.zip" to "Access URL"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I select "WTFPLA" from "Licence"
     And I press "Publish"
     And I go to the "Some AD solution" solution
@@ -54,7 +54,7 @@ Feature: Asset distribution content archival.
       | Description | Some description |
     And I select "WTFPLA" from "Licence"
 
-    And I upload the file "test.zip" to "Access URL"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     And I go to the "Some AD solution" solution
     Then I should see the "Linux.zip" tile
