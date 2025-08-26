@@ -6,6 +6,7 @@ namespace Drupal\joinup_solution\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -50,27 +51,32 @@ class SolutionController extends ControllerBase {
    *   The access result object.
    */
   public function createSolutionAccess(CollectionInterface $node): AccessResultInterface {
+    $cacheability = new CacheableMetadata();
+
     // If the collection is archived, content creation is not allowed.
+    $cacheability->addCacheableDependency($node);
     if ($node->getWorkflowState() === 'archived') {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()->addCacheableDependency($cacheability);
     }
 
     // Users with 'administer organic groups' permission should have access
     // since this page can only be called from within a group.
     $user = $this->currentUser();
+    $cacheability->addCacheContexts(['user.permissions']);
     if ($user->hasPermission('administer organic groups')) {
-      return AccessResult::allowed();
+      return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
 
     if (
       !$node instanceof GroupInterface ||
       !$node->hasGroupPermission($user->id(), 'create solution content')
     ) {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()->addCacheableDependency($cacheability);
     }
 
     $solution = $this->createNewSolution($node);
-    return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)));
+    return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)))
+      ->addCacheableDependency($cacheability);
   }
 
   /**
