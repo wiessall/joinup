@@ -36,6 +36,7 @@ dependencies:
     - joinup_slick
     - layout_builder
     - link
+    - options
     - svg_image
     - template_suggestion
     - text
@@ -192,6 +193,15 @@ content:
         template_suggestion: inline
     weight: 4
     region: content
+  field_state:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: state_solution_confirmation
+    weight: 3
+    region: content
   field_topic:
     type: entity_reference_label
     label: inline
@@ -328,7 +338,6 @@ hidden:
   featured: true
   field_is_description: true
   field_shared_in: true
-  field_state: true
   flag_interoperability: true
   flag_like: true
   keywords: true

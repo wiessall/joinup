@@ -43,6 +43,7 @@ third_party_settings:
     group_main:
       children:
         - group_solution_tabs
+        - current_workflow_state
       label: Main
       region: content
       parent_name: ''
@@ -140,7 +141,6 @@ third_party_settings:
       children:
         - node_preview
         - field_state
-        - current_workflow_state
         - transition_motivation
         - tca
       label: Confirmation
@@ -224,10 +224,10 @@ content:
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 16
+    weight: 2
     region: content
     settings:
-      title: 'Current workflow state'
+      title: 'Current workflow state:'
       title_display: before
       show_for_new_entities: false
     third_party_settings: {  }
