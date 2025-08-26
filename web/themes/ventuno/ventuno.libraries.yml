@@ -108,7 +108,6 @@ actions-menu:
     assets/js/actions-menu.min.js: { minified: true }
   dependencies:
     - core/drupal
-    - core/jquery
     - core/once
 
 ajax-throbber:
@@ -432,7 +431,7 @@ paragraph__video:
 paragraph__events_calendar:
   css:
     theme:
-      assets/css/paragraph--events-calendar.min.css: { minified: true }      
+      assets/css/paragraph--events-calendar.min.css: { minified: true }
 
 private-message:
   css:
