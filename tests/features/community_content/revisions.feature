@@ -1,9 +1,10 @@
-@api @group-c
+@api
 Feature:
   In order to see how content evolved over time
   As a content author or facilitator
   I need to be able to see revisions of content
 
+  @group-c
   Scenario Outline: Community content revisions
     Given <group type> content:
       | title        | description                               | group_moderation |
@@ -96,3 +97,15 @@ Feature:
       | collection | document     | no         |
       | solution   | event        | no         |
       | solution   | news         | no         |
+
+  @group-clone
+  # Regression test for ISAICP-10122
+  Scenario: Revisions dont work on the Country Knowledge page.
+    Given I am logged in as a moderator
+    When I visit the "Country Knowledge" custom_page
+    Then I should see the link "Revisions" in the "Entity actions" region
+
+    When I click "Revisions" in the "Entity actions" region
+    Then I should see the heading "Revisions for Country Knowledge"
+    When I press "Compare selected revisions"
+    Then I should see the heading "Changes to Country Knowledge"
