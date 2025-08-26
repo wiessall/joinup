@@ -115,4 +115,7 @@ $spacers: (
 
 // Regenerate $gutters variables with new $spacers
 $gutters: $spacers;
-$dropdown-padding-y: 0;
+
+// Adjust dropdown styles
+$dropdown-min-width: 12rem;
+$nav-link-padding-y: 0.3rem;
