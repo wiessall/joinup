@@ -1,39 +1,39 @@
 diff --git a/src/Form/SitewideAlertForm.php b/src/Form/SitewideAlertForm.php
-index dd233fd..b2e8097 100644
+index dd233fd..7db8bfc 100644
 --- a/src/Form/SitewideAlertForm.php
 +++ b/src/Form/SitewideAlertForm.php
 @@ -5,6 +5,7 @@ declare(strict_types=1);
  namespace Drupal\sitewide_alert\Form;
- 
+
  use Drupal\Component\Datetime\TimeInterface;
 +use Drupal\Core\Cache\Cache;
  use Drupal\Core\Entity\ContentEntityForm;
  use Drupal\Core\Entity\EntityRepositoryInterface;
  use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-@@ -251,6 +252,11 @@ class SitewideAlertForm extends ContentEntityForm {
-         $this->messenger()->addMessage($this->t('Created the %label Sitewide Alert.', [
+@@ -258,6 +259,11 @@ class SitewideAlertForm extends ContentEntityForm {
            '%label' => $entity->label(),
          ]));
+     }
 +
-+        // Invalidate the render cache.
-+        // @see \Drupal\sitewide_alert\SitewideAlertRenderer::build()
-+        Cache::invalidateTags(['sitewide_alerts']);
++    // Invalidate the render cache.
++    // @see \Drupal\sitewide_alert\SitewideAlertRenderer::build()
++    Cache::invalidateTags(['sitewide_alert']);
 +
-         break;
- 
-       default:
+     $form_state->setRedirect('entity.sitewide_alert.collection');
+   }
+
 diff --git a/src/SitewideAlertRenderer.php b/src/SitewideAlertRenderer.php
-index 6c599b2..e08eb32 100644
+index 6c599b2..2ec4855 100644
 --- a/src/SitewideAlertRenderer.php
 +++ b/src/SitewideAlertRenderer.php
-@@ -47,40 +47,36 @@ class SitewideAlertRenderer implements SitewideAlertRendererInterface {
+@@ -47,38 +47,35 @@ class SitewideAlertRenderer implements SitewideAlertRendererInterface {
     */
    public function build(bool $adminAware = TRUE): array {
      $cacheMetadata = CacheableMetadata::createFromObject($this->config)
 -      ->addCacheContexts(['user.permissions']);
 +      ->addCacheContexts(['user.permissions'])
-+      ->addCacheTags(['sitewide_alerts']);
- 
++      ->addCacheTags(['sitewide_alert']);
+
      // Do not show alert on admin pages if we are not configured to do so
 -    // or when we don't have enough permissions.
 +    // or when the user doesn't have enough permissions
@@ -87,5 +87,3 @@ index 6c599b2..e08eb32 100644
      $cacheMetadata->applyTo($build);
      return $build;
    }
--
- }
