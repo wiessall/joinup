@@ -45,3 +45,14 @@ function template_preprocess_language_picker(array &$variables): void {
     }
   }
 }
+
+/**
+ * Implements hook_babel_translation_type_info_alter().
+ */
+function joinup_i18n_babel_translation_type_info_alter(array &$definitions): void {
+  // By default, disable all Babel plugins. They can be enabled on a
+  // case-by-case basis.
+  foreach ($definitions as $pluginId => $definition) {
+    $definitions[$pluginId]['status'] = FALSE;
+  }
+}
