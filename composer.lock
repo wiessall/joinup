@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fbaedc5f713f17fd7e3753311aac806",
+    "content-hash": "3da41994ce25995405db890ffac11c12",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3267,20 +3267,20 @@
         },
         {
             "name": "drupal/diff",
-            "version": "1.9.0",
+            "version": "2.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/diff.git",
-                "reference": "8.x-1.9"
+                "reference": "2.0.0-beta4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/diff-8.x-1.9.zip",
-                "reference": "8.x-1.9",
-                "shasum": "4ef0126e983e4935a41ad8131faa00a2e28bcec0"
+                "url": "https://ftp.drupal.org/files/projects/diff-2.0.0-beta4.zip",
+                "reference": "2.0.0-beta4",
+                "shasum": "31084265e0c597a1076636000e2f8eb90463da5e"
             },
             "require": {
-                "drupal/core": "^10 || ^11",
+                "drupal/core": "^10.2 || ^11",
                 "mkalkbrenner/php-htmldiff-advanced": "~0.0.8",
                 "php": "^8.1"
             },
@@ -3290,18 +3290,18 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.11",
                 "phpstan/phpstan-deprecation-rules": "*",
-                "phpstan/phpstan-phpunit": "1.4.x-dev",
-                "phpstan/phpstan-strict-rules": "^1@stable",
-                "previousnext/coding-standard": "1.0.1"
+                "phpstan/phpstan-phpunit": "1.4",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "previousnext/coding-standard": "1.1.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.9",
-                    "datestamp": "1748990194",
+                    "version": "2.0.0-beta4",
+                    "datestamp": "1748842102",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -7589,28 +7589,28 @@
         },
         {
             "name": "drupal/private_message_flood",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message_flood.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "098342c7017faa52966479a41615b172e3f15e58"
+                "url": "https://ftp.drupal.org/files/projects/private_message_flood-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "d3f73746adfe6571bcc20c29554a51f2f676b6b2"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "drupal/duration_field": "^2.",
-                "drupal/private_message": "^2. || ^3."
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/duration_field": "^2.0",
+                "drupal/private_message": "^3.0 || ^4.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1696324712",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1755708031",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7628,7 +7628,11 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "Jaypan",
+                    "name": "jaapjan",
+                    "homepage": "https://www.drupal.org/user/555428"
+                },
+                {
+                    "name": "jaypan",
                     "homepage": "https://www.drupal.org/user/324696"
                 }
             ],
@@ -26210,12 +26214,6 @@
             "version": "4.0.0.0",
             "alias": "3.6",
             "alias_normalized": "3.6.0.0"
-        },
-        {
-            "package": "drupal/private_message",
-            "version": "4.0.0.0-alpha4",
-            "alias": "3.0.6",
-            "alias_normalized": "3.0.6.0"
         }
     ],
     "minimum-stability": "dev",
@@ -26228,6 +26226,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
