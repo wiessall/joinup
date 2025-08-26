@@ -227,7 +227,7 @@ content:
     weight: 2
     region: content
     settings:
-      title: 'Current workflow state:'
+      title: 'Current workflow state'
       title_display: before
       show_for_new_entities: false
     third_party_settings: {  }

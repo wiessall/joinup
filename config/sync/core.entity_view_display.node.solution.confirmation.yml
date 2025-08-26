@@ -199,7 +199,7 @@ content:
     settings: {  }
     third_party_settings:
       template_suggestion:
-        template_suggestion: state_solution_confirmation
+        template_suggestion: ''
     weight: 3
     region: content
   field_topic:
