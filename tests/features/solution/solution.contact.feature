@@ -89,7 +89,7 @@ Feature: Contact form for solution
     Then I should see the inline form error message "You must enter a valid e-mail address."
 
     When I fill in "Your e-mail address" with "example@test.test"
-    And I fill in "Organization" with "My organization"
+    And I fill in "Organisation" with "My organization"
     And I select "Technical" from "Type of support"
     And I attach the file "logo.png" to "Attachment"
     And I press "Send e-mail" in the "Modal buttons" region
@@ -100,7 +100,7 @@ Feature: Contact form for solution
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains the text:
       | /collection/antibody-development/solution/six-exclusion-advantages |
       | Name: Jonny Example                                                |
-      | Organization: My organization                                      |
+      | Organisation: My organization                                      |
       | Email: example@test.test                                           |
       | Type of support: Technical                                         |
       | Message: This is reclamation test.                                 |
