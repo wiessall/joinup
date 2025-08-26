@@ -124,7 +124,7 @@ trait NameMappingsTrait {
         'author' => 'uid',
       ],
       'distribution' => [
-        'access url' => 'access_url',
+        'access url' => 'resources',
         'creation date' => 'created',
         'description' => 'description',
         'downloads' => 'downloads',

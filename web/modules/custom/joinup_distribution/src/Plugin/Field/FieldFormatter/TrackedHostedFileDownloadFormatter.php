@@ -26,6 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup('Tracked hosted file download'),
   field_types: [
     'file_url',
+    'file',
   ],
 )]
 class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements ContainerFactoryPluginInterface {

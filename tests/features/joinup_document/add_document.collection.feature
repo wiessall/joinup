@@ -92,8 +92,8 @@ Feature: "Add document" visibility options.
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
-      | title       | document type | short title | file type | resources              | abstract | field_paragraphs_body | licence               | collection    |
-      | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
+      | title       | document type | short title | resources              | abstract | field_paragraphs_body | licence               | collection    |
+      | Laser types | document      | L-Types     | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
     And I go to the edit form of the "Laser types" document
