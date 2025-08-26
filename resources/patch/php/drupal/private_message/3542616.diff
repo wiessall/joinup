@@ -8,7 +8,7 @@ index e3ed9edf5afe0380145b12778854751916a5f7b8..3d87aa0ded78fd582e4ade65aef2e413
  notify_by_default: true
  notify_when_using: 'no'
 diff --git a/private_message.install b/private_message.install
-index c84a9875ec2e582c487399195aee342349af79a1..c1e5e36426aa44fdb202f3b62ba9ae84934cf353 100644
+index c84a9875ec2e582c487399195aee342349af79a1..f152c13dc35325f87e196dddba86d02a412606ac 100644
 --- a/private_message.install
 +++ b/private_message.install
 @@ -428,3 +428,13 @@ function private_message_update_8014(): void {
@@ -19,7 +19,7 @@ index c84a9875ec2e582c487399195aee342349af79a1..c1e5e36426aa44fdb202f3b62ba9ae84
 +/**
 + * Add missing langcode to private_message.settings.
 + */
-+function private_message_update_8301(): void {
++function private_message_update_8015(): void {
 +  $config = \Drupal::configFactory()->getEditable('private_message.settings');
 +  if ($config && $config->get('langcode') === NULL) {
 +    $config->set('langcode', 'en')->save();
