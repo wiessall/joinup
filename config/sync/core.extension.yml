@@ -6,6 +6,8 @@ module:
   allowed_formats: 0
   antibot: 0
   autologout: 0
+  babel: 0
+  babel_menu_link_content: 0
   better_exposed_filters: 0
   blazy: 0
   block: 0
@@ -23,6 +25,7 @@ module:
   comment: 0
   config: 0
   config_ignore: 0
+  config_translation: 0
   contact_form: 0
   contact_information: 0
   contextual: 0
@@ -107,6 +110,7 @@ module:
   joinup_group: 0
   joinup_group_content_management: 0
   joinup_html_stripper: 0
+  joinup_i18n: 0
   joinup_invite: 0
   joinup_layout: 0
   joinup_legal: 0
@@ -148,6 +152,7 @@ module:
   jquery_ui_accordion: 0
   js_cookie: 0
   json_field: 0
+  l10n_pconfig: 0
   language: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
@@ -156,6 +161,7 @@ module:
   layout_paragraphs: 0
   link: 0
   linkit: 0
+  locale: 0
   mailsystem: 0
   markdown_easy: 0
   media: 0

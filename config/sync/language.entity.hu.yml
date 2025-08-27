@@ -1,0 +1,14 @@
+uuid: dbb2b818-4171-46f1-9200-dc0fd1cfe05d
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
+id: hu
+label: Hungarian
+direction: ltr
+weight: -1
+locked: false
