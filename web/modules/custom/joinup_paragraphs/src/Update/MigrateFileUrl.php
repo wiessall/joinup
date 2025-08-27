@@ -13,7 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
-use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\track_usage\RecorderInterface;
@@ -48,6 +47,9 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $this->migrateNodeFileUrlField('access_url', 'resources');
   }
 
+  /**
+   * Re-compute track_usages data for affected sources.
+   */
   public function deploy(): void {
     $config = $this->entityTypeManager->getStorage('track_usage_config')
       ->load('file_visibility');
@@ -58,7 +60,8 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->execute();
 
     while ($record = $result->fetchAssoc()) {
-      $source = Node::load($record['entity_id']);
+      $source = $this->entityTypeManager->getStorage('node')
+        ->load($record['entity_id']);
       $this->recorder->record($source, $config);
     }
 
