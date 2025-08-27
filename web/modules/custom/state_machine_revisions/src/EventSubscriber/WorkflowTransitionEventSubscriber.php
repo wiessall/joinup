@@ -60,13 +60,16 @@ readonly class WorkflowTransitionEventSubscriber implements EventSubscriberInter
     // Set revision as default when:
     // - the entity is new;
     // - the new state is a published one;
+    // - the new state is "unpublished";
     // - the current default revision is not published.
     // @todo Change this to $entity->setDefaultRevision() once issue 2706337 is
     //   in.
     // @see https://www.drupal.org/node/2706337
+    $toStateId = $event->getTransition()->getToState()->getId();
     $entity->isDefaultRevision(
       $entity->isNew()
-      || $this->workflowHelper->isWorkflowStatePublished($event->getTransition()->getToState()->getId(), $event->getWorkflow())
+      || $this->workflowHelper->isWorkflowStatePublished($toStateId, $event->getWorkflow())
+      || $toStateId === 'unpublished'
       || !$this->hasPublishedDefaultRevision($entity)
     );
   }
