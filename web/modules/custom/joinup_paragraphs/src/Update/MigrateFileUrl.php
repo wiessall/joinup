@@ -199,7 +199,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->select($dest_revision_table, 'r')
       ->fields('r')
       ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
-      ->notExists($this->database->select($dest_data_table, 't')->fields('t'));
+      ->notExists($this->database->select($dest_data_table, 't')->fields('t')->where('t.revision_id = r.revision_id'));
     $this->database
       ->insert($dest_data_table)
       ->from($insert_from)
