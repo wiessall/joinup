@@ -1,11 +1,22 @@
 /**
  * @file
  * Customize popper.js behavior for actions menu dropdowns.
+ *
+ * Force dropdowns to open above on lg screens and up; otherwise, open below.
+ * See also web/themes/ventuno/src/scss/components/actions-menu.scss
  */
 
 ((Drupal, once) => {
   Drupal.behaviors.actionsMenu = {
     attach(context) {
+      const isBreakpointUp = (breakpoint) => {
+        const value = getComputedStyle(
+          document.documentElement,
+        ).getPropertyValue(`--bs-breakpoint-${breakpoint}`);
+        if (!value) return false;
+        return window.matchMedia(`(min-width: ${value})`).matches;
+      };
+
       once(
         "actions-menu-dropdown",
         ".js-actions-menu-dropdown",
@@ -20,19 +31,10 @@
         // eslint-disable-next-line no-new
         new bootstrap.Dropdown(trigger, {
           popperConfig: () => {
-            // Same as Bootstrap media-breakpoint-up(lg).
-            // Get Bootstrap `lg` breakpoint value from CSS variables.
-            const lgBreakpoint = getComputedStyle(document.body)
-              .getPropertyValue("--bs-breakpoint-lg")
-              .trim();
-            // Convert e.g. "992px" to 992 (fallback 992 if parsing fails).
-            const bp = parseInt(lgBreakpoint, 10) || 992;
-            const isLargeScreen = window.innerWidth >= bp;
-
             return {
-              placement: isLargeScreen ? "bottom-end" : "top-end",
+              placement: isBreakpointUp("lg") ? "bottom-end" : "top-end",
               modifiers: [
-                // Completely disable flipping.
+                // Disable flipping.
                 { name: "flip", enabled: false },
                 // Optional: prevents repositioning.
                 { name: "preventOverflow", enabled: false },
