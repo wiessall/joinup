@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\Element;
 use Behat\Mink\Element\NodeElement;
 use Drupal;
 use Drupal\Core\Session\AccountInterface;
@@ -388,59 +387,6 @@ class PrivateMessageContext extends RawDrupalContext {
       throw new Exception('There is no message with text: ' . $messageText);
     }
     return reset($result);
-  }
-
-  /**
-   * Retrieve a table row containing specified text from a given element.
-   *
-   * @param \Behat\Mink\Element\Element $element
-   *   The element.
-   * @param string $search
-   *   The text to search for in the table row.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The searched element.
-   *
-   * @throws \Exception
-   *
-   * @see \Drupal\DrupalExtension\Context\DrupalContext::getTableRow
-   */
-  public function getTableRow(Element $element, string $search): NodeElement {
-    $rows = $element->findAll('css', 'tr');
-    if (empty($rows)) {
-      throw new Exception(sprintf('No rows found on the page %s', $this->getSession()
-        ->getCurrentUrl()));
-    }
-    foreach ($rows as $row) {
-      if (strpos($row->getText(), $search) !== FALSE) {
-        return $row;
-      }
-    }
-    throw new Exception(sprintf('Failed to find a row containing "%s" on the page %s', $search, $this->getSession()
-      ->getCurrentUrl()));
-  }
-
-  /**
-   * Press button in table row.
-   *
-   * @param string $buttonText
-   *   Text of button.
-   * @param string $rowText
-   *   Text of row.
-   *
-   * @throws \Exception
-   *
-   * @When I press the button :button in the :text row
-   */
-  public function iPressTheButtonInTheRowContaining(string $buttonText, string $rowText): void {
-    $page = $this->getSession()->getPage();
-    if ($button = $this->getTableRow($page, $rowText)
-      ->findButton($buttonText)) {
-      $button->click();
-      return;
-    }
-    throw new Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonText, $this->getSession()
-      ->getCurrentUrl()));
   }
 
   /**
