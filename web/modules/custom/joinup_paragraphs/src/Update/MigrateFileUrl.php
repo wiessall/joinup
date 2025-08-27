@@ -13,8 +13,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\track_usage\RecorderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -31,6 +33,8 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     protected readonly Connection $database,
     #[Autowire('keyvalue')]
     protected readonly KeyValueFactory $keyValue,
+    #[Autowire('Drupal\track_usage\Recorder')]
+    protected readonly RecorderInterface $recorder,
   ) {
   }
 
@@ -42,6 +46,23 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $this->prepareNodeFields();
     $this->migrateNodeFileUrlField('field_file', 'resources');
     $this->migrateNodeFileUrlField('access_url', 'resources');
+  }
+
+  public function deploy(): void {
+    $config = $this->entityTypeManager->getStorage('track_usage_config')
+      ->load('file_visibility');
+
+    $result = $this->database->select('node__resources', 'nr')
+      ->distinct()
+      ->fields('nr', ['entity_id'])
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $source = Node::load($record['entity_id']);
+      $this->recorder->record($source, $config);
+    }
+
+    $this->recorder->registerUsageRecords();
   }
 
   /**
