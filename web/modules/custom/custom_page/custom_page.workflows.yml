@@ -12,6 +12,7 @@ custom_page_workflow:
     unpublished:
       label: Unpublished
       published: false
+      force_default_revision: true
     archived:
       label: Archived
       published: true
