@@ -5,6 +5,7 @@ custom_page_workflow:
   states:
     draft:
       label: Draft
+      published: false
     published:
       label: Published
       published: true
