@@ -41,10 +41,10 @@ Feature: RDF synchronization of contents.
       | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | resources | content_creation | keywords        | landing page                    | language | metrics page                    | group_moderation | topic                    | related solutions | solution type                      | status    | featured |
       | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf  | registered users | Alphabet, games | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no               | EU and European Policies |                   | Networking Infrastructure Enablers | Completed | no       |
     And release content:
-      | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
-      | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | Alphabet | Atlantic |
+      | uri                         | title           | resources | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
+      | http://example.com/release1 | Syncing release | text.pdf  | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | Alphabet | Atlantic |
       # Draft release should not be synced.
-      | http://example.com/release2 | Draft release   | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | Alphabet | Atlantic |
+      | http://example.com/release2 | Draft release   | text.pdf  | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | Alphabet | Atlantic |
 
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
@@ -591,9 +591,9 @@ Feature: RDF synchronization of contents.
       | title       | state     | uri                          |
       | Early Omega | published | http://example.com/solution1 |
     And release content:
-      | uri                         | title    | documentation | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords       |
-      | http://example.com/release1 | Omega3   | text.pdf      | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | Alphabet       |
-      | http://example.com/release2 | Omega3.1 | text.pdf      | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | Alphabet,games |
+      | uri                         | title    | resources | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords       |
+      | http://example.com/release1 | Omega3   | text.pdf  | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | Alphabet       |
+      | http://example.com/release2 | Omega3.1 | text.pdf  | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | Alphabet,games |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Omega3                                |

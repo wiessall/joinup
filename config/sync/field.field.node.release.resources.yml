@@ -14,10 +14,6 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://xmlns.com/foaf/0.1/page'
-      type: resource
 id: node.release.resources
 field_name: resources
 entity_type: node
