@@ -17,7 +17,7 @@ use Drupal\joinup_event\Plugin\Field\FieldFormatter\WebtoolsMapFormatter;
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function joinup_event_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+function joinup_event_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   if ($entity_type->id() == 'node' && $bundle == 'event') {
     if (!empty($fields['field_short_title'])) {
       $fields['field_short_title']->addConstraint('UniqueField');
