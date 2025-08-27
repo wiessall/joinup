@@ -11,8 +11,10 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drush\Drush;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -21,6 +23,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class MigrateFileUrl implements ContainerInjectionInterface {
 
   use AutowireTrait;
+  use StringTranslationTrait;
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
@@ -47,7 +50,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
    * Prepare paragraph's structure.
    */
   private function prepareParagraphs(): void {
-    $config_entities = [
+    $configEntities = [
       'paragraphs_type' => [
         'paragraphs.paragraphs_type.resource_file',
         'paragraphs.paragraphs_type.resource_link',
@@ -62,14 +65,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ],
     ];
 
-    $this->createConfigEntities($config_entities);
+    $this->createConfigEntities($configEntities);
   }
 
   /**
    * Prepare node's structure.
    */
   private function prepareNodeFields(): void {
-    $config_entities = [
+    $configEntities = [
       'field_storage_config' => [
         'field.storage.node.resources',
       ],
@@ -80,17 +83,17 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ],
     ];
 
-    $this->createConfigEntities($config_entities);
+    $this->createConfigEntities($configEntities);
   }
 
   /**
    * Creates configuration entities from sync storage.
    *
-   * @param array $config_entities
+   * @param array $configEntities
    *   Array of configuration entities keyed by storage type.
    */
-  private function createConfigEntities(array $config_entities): void {
-    foreach ($config_entities as $storage => $keys) {
+  private function createConfigEntities(array $configEntities): void {
+    foreach ($configEntities as $storage => $keys) {
       foreach ($keys as $key) {
         $this->entityTypeManager->getStorage($storage)
           ->create($this->syncStorage->read($key))
@@ -102,26 +105,29 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Migrates a node file_url field to paragraphs field.
    */
-  private function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
+  private function migrateNodeFileUrlField(string $srcField, string $destField): void {
+    $startTime = microtime(TRUE);
     // Process all revision table records.
-    [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
-    $result = $this->database->select($src_revision_table)
-      ->fields($src_revision_table)
+    [, $srcRevisionTable] = array_keys($this->getFieldStorageSchema('node', $srcField));
+    $results = $this->database->select($srcRevisionTable)
+      ->fields($srcRevisionTable)
       ->orderBy('entity_id')
       ->orderBy('revision_id')
       ->orderBy('delta')
-      ->execute();
+      ->execute()
+      ->fetchAllAssoc('revision_id');
 
-    $dest_records = $lookup = [];
-    $current_entity_id = NULL;
-    while ($record = $result->fetchAssoc()) {
-      $entity_id = $record['entity_id'];
-      $value = $record["{$src_field}_target_id"];
+    $destRecords = $lookup = [];
+    $currentEntityId = NULL;
+    $sourceCount = count($results);
+    foreach ($results as $record) {
+      $entityId = $record->entity_id;
+      $value = $record->{"{$srcField}_target_id"};
 
       // Reset lookup when we move to a new entity.
-      if ($entity_id !== $current_entity_id) {
+      if ($entityId !== $currentEntityId) {
         $lookup = [];
-        $current_entity_id = $entity_id;
+        $currentEntityId = $entityId;
       }
 
       // Did we already create a paragraph for this entity ID + target value?
@@ -129,7 +135,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       // Otherwise, create a new revision for that paragraph.
       $paragraph = $lookup[$value] ?? NULL;
       if ($paragraph === NULL) {
-        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entity_id, $dest_field);
+        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entityId, $destField);
       }
       elseif ($paragraph instanceof ParagraphInterface) {
         $paragraph->setNewRevision();
@@ -145,43 +151,52 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       $lookup[$value] = $paragraph;
 
       // Collect records to be inserted.
-      $dest_records[] = [
-        'bundle' => $record['bundle'],
-        'deleted' => $record['deleted'],
-        'entity_id' => $record['entity_id'],
-        'revision_id' => $record['revision_id'],
-        'langcode' => $record['langcode'],
-        'delta' => $record['delta'],
-        "{$dest_field}_target_id" => $paragraph->id(),
-        "{$dest_field}_target_revision_id" => $paragraph->getRevisionId(),
+      $destRecords[] = [
+        'bundle' => $record->bundle,
+        'deleted' => $record->deleted,
+        'entity_id' => $record->entity_id,
+        'revision_id' => $record->revision_id,
+        'langcode' => $record->langcode,
+        'delta' => $record->delta,
+        "{$destField}_target_id" => $paragraph->id(),
+        "{$destField}_target_revision_id" => $paragraph->getRevisionId(),
       ];
     }
 
-    if (!$dest_records) {
+    if (!$destRecords) {
       return;
     }
 
     // Fill destination field revision table records.
-    [$dest_data_table, $dest_revision_table] = array_keys($this->getFieldStorageSchema('node', $dest_field));
-    $insert_query = $this->database
-      ->insert($dest_revision_table)
-      ->fields(array_keys($dest_records[0]));
-    foreach ($dest_records as $dest_record) {
-      $insert_query->values($dest_record);
+    [$destDataTable, $destRevisionTable] = array_keys($this->getFieldStorageSchema('node', $destField));
+    $insertQuery = $this->database
+      ->insert($destRevisionTable)
+      ->fields(array_keys($destRecords[0]));
+    foreach ($destRecords as $destRecord) {
+      $insertQuery->values($destRecord);
     }
-    $insert_query->execute();
+    $insertQuery->execute();
 
     // Fill destination field data table records.
     // Copy current revision records from revision table to data table.
-    $insert_from = $this->database
-      ->select($dest_revision_table, 'r')
+    $insertFrom = $this->database
+      ->select($destRevisionTable, 'r')
       ->fields('r')
       ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
-      ->notExists($this->database->select($dest_data_table, 't')->fields('t')->where('t.revision_id = r.revision_id'));
-    $this->database
-      ->insert($dest_data_table)
-      ->from($insert_from)
+      ->notExists($this->database->select($destDataTable, 't')->fields('t')->where('t.revision_id = r.revision_id'));
+    $rows = $this->database
+      ->insert($destDataTable)
+      ->from($insertFrom)
       ->execute();
+
+    $endTime = microtime(TRUE);
+    Drush::logger()->notice($this->t('Migrated @count records (@rows inserted in the data table) from %src to %dest field in @time seconds.', [
+      '@count' => $sourceCount,
+      '@rows' => $rows,
+      '%src' => $srcField,
+      '%dest' => $destField,
+      '@time' => round($endTime - $startTime, 2),
+    ]));
   }
 
   /**
