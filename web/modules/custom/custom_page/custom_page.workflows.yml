@@ -20,6 +20,10 @@ custom_page_workflow:
       label: 'Save as draft'
       from: [ draft ]
       to: draft
+    save_new_draft:
+      label: 'Save new draft'
+      from: [ published ]
+      to: draft
     publish:
       label: Publish
       from: [ draft, published, unpublished ]
