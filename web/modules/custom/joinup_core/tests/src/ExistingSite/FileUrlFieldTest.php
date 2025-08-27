@@ -43,11 +43,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-
     $this->fileSystem = $this->container->get('file_system');
-    // @todo This will no longer be needed once ISAICP-3392 is fixed.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
-    $this->nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
   }
 
   /**
@@ -95,8 +91,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $page->pressButton('Upload file');
     $this->addFileUrlItem($field_name . '_0', 'upload', $test_file->getFileUri());
     $this->submitForm(['title[0][value]' => 'Foo'], 'Update');
-
-    $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the file has been uploaded to the file URL field.
     $distribution = Node::load($distribution->id());
