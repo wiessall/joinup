@@ -6,8 +6,8 @@ Feature: "Add release" visibility options.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
     Given solution content:
-      | title                 | description         | documentation |
-      | Release solution test | My awesome solution | text.pdf      |
+      | title                 | description         | resources |
+      | Release solution test | My awesome solution | text.pdf  |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -104,8 +104,8 @@ Feature: "Add release" visibility options.
 
   Scenario: Check publish time release is present time and past.
     Given solution content:
-      | title          | description        | documentation |
-      | Release Test 2 | test description 2 | text.pdf      |
+      | title          | description        | resources |
+      | Release Test 2 | test description 2 | text.pdf  |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
     And I go to the homepage of the "Release Test 2" solution
     And I click "Add release" in the plus button menu
