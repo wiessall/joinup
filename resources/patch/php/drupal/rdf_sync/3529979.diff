@@ -1,0 +1,13 @@
+diff --git a/rdf_sync.module b/rdf_sync.module
+index 4cfb1405e40fbd26fa33df7f5438d3f9340dfd3c..c0836d9f23a74f75066d1338cee3f85176c58abe 100644
+--- a/rdf_sync.module
++++ b/rdf_sync.module
+@@ -109,7 +109,7 @@ function rdf_sync_check_column_mappings(array $columns, string $fieldName, array
+ /**
+  * Implements hook_entity_bundle_field_info().
+  */
+-function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle, array $baseFieldDefinitions): array {
++function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, ?string $bundle, array $baseFieldDefinitions): array {
+   $fields = [];
+   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+   if ($bundle && $mapper->isMappedBundle($entityType->id(), $bundle)) {
