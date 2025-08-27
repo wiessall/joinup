@@ -46,7 +46,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Prepare paragraph's structure.
    */
-  public function prepareParagraphs(): void {
+  private function prepareParagraphs(): void {
     $config_entities = [
       'paragraphs_type' => [
         'paragraphs.paragraphs_type.resource_file',
@@ -68,7 +68,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Prepare node's structure.
    */
-  public function prepareNodeFields(): void {
+  private function prepareNodeFields(): void {
     $config_entities = [
       'field_storage_config' => [
         'field.storage.node.resources',
@@ -100,45 +100,23 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   }
 
   /**
-   * Initializes the sandbox for the migration process.
-   */
-  protected function ensureInitSandbox(string $srcField, string $destField, array &$sandbox = []): void {
-    if (empty($sandbox['progress'])) {
-      [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $srcField));
-      $results = $this->database->select($src_revision_table)
-        ->fields($src_revision_table)
-        ->orderBy('entity_id')
-        ->orderBy('revision_id')
-        ->orderBy('delta')
-        ->execute()
-        ->fetchAllAssoc('revision_id');
-
-      $sandbox['progress'] = 0;
-      $sandbox['total'] = count($results);
-      $sandbox['src_field'] = $srcField;
-      $sandbox['dest_field'] = $destField;
-      $sandbox['results'] = $results;
-    }
-  }
-
-  /**
    * Migrates a node file_url field to paragraphs field.
    */
-  public function migrateNodeFileUrlField(string $srcField, string $destField, array &$sandbox = []): void {
-    $this->ensureInitSandbox($srcField, $destField, $sandbox);
-    $dest_records = [];
+  private function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
+    // Process all revision table records.
+    [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
+    $result = $this->database->select($src_revision_table)
+      ->fields($src_revision_table)
+      ->orderBy('entity_id')
+      ->orderBy('revision_id')
+      ->orderBy('delta')
+      ->execute();
+
+    $dest_records = $lookup = [];
     $current_entity_id = NULL;
-    $results = array_splice($sandbox['results'], 0, 50);
-
-    if (empty($results)) {
-      $sandbox['#finished'] = 1;
-      return;
-    }
-
-    $sandbox['progress'] += count($results);
-    foreach ($results as $record) {
-      $entity_id = $record->entity_id;
-      $value = $record->{"{$srcField}_target_id"};
+    while ($record = $result->fetchAssoc()) {
+      $entity_id = $record['entity_id'];
+      $value = $record["{$src_field}_target_id"];
 
       // Reset lookup when we move to a new entity.
       if ($entity_id !== $current_entity_id) {
@@ -151,7 +129,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       // Otherwise, create a new revision for that paragraph.
       $paragraph = $lookup[$value] ?? NULL;
       if ($paragraph === NULL) {
-        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entity_id, $destField);
+        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entity_id, $dest_field);
       }
       elseif ($paragraph instanceof ParagraphInterface) {
         $paragraph->setNewRevision();
@@ -168,14 +146,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
 
       // Collect records to be inserted.
       $dest_records[] = [
-        'bundle' => $record->bundle,
-        'deleted' => $record->deleted,
-        'entity_id' => $record->entity_id,
-        'revision_id' => $record->revision_id,
-        'langcode' => $record->langcode,
-        'delta' => $record->delta,
-        "{$destField}_target_id" => $paragraph->id(),
-        "{$destField}_target_revision_id" => $paragraph->getRevisionId(),
+        'bundle' => $record['bundle'],
+        'deleted' => $record['deleted'],
+        'entity_id' => $record['entity_id'],
+        'revision_id' => $record['revision_id'],
+        'langcode' => $record['langcode'],
+        'delta' => $record['delta'],
+        "{$dest_field}_target_id" => $paragraph->id(),
+        "{$dest_field}_target_revision_id" => $paragraph->getRevisionId(),
       ];
     }
 
@@ -184,7 +162,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     }
 
     // Fill destination field revision table records.
-    [$dest_data_table, $dest_revision_table] = array_keys($this->getFieldStorageSchema('node', $destField));
+    [$dest_data_table, $dest_revision_table] = array_keys($this->getFieldStorageSchema('node', $dest_field));
     $insert_query = $this->database
       ->insert($dest_revision_table)
       ->fields(array_keys($dest_records[0]));
@@ -204,8 +182,6 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->insert($dest_data_table)
       ->from($insert_from)
       ->execute();
-
-    $sandbox['#finished'] = $sandbox['total'] > 0 ? $sandbox['progress'] / $sandbox['total'] : 1;
   }
 
   /**
