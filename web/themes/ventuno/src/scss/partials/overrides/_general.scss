@@ -65,6 +65,23 @@ button#eTransButton.wt-ecl-button {
   }
 }
 
+// #ISAICP-10055 Improve Babel translate form styles.
+.babel-translate {
+  .form-label {
+    color: var(--bs-body-color);
+    font-size: var(--bs-body-font-size);
+    font-weight: $font-weight-bold;
+  }
+  .form-item {
+    margin-top: $spacer !important;
+    margin-bottom: $spacer !important;
+  }
+  .form-select {
+    display: inline-block;
+    width: auto;
+  }
+}
+
 // #ISAICP-10098 Reorganise z-index to have the toolbar on top of all other elements.
 .toolbar-oriented .toolbar-bar {
   z-index: 503;
