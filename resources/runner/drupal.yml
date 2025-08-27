@@ -52,7 +52,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
-        - OpenEuropa Webtools Geocoding Cache
+        - Geocoding Cache
         - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
@@ -75,7 +75,7 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
-        - OpenEuropa Webtools Geocoding Cache
+        - Geocoding Cache
         - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
@@ -99,7 +99,7 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
-        - OpenEuropa Webtools Geocoding Cache
+        - Geocoding Cache
         - GitHub Token Setup
         - Memcache
         - Custom queue services
@@ -121,7 +121,7 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
-        - OpenEuropa Webtools Geocoding Cache
+        - Geocoding Cache
         - GitHub Token Setup
         - Verbose error logging
         - Test mail collector
@@ -332,7 +332,7 @@ drupal:
         $config['oe_newsroom_newsletter.subscriber']['class'] = 'Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber';
       OpenEuropa Newsroom Newsletter Settings: |
         $settings['oe_newsroom_universe_keys'] = getenv('OE_NEWSROOM_UNIVERSE_KEYS');
-      OpenEuropa Webtools Geocoding Cache: |
+      Geocoding Cache: |
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
