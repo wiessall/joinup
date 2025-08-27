@@ -1,0 +1,14 @@
+uuid: 50e2afe8-22dc-41fc-be32-981551ec066c
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
+id: sv
+label: Swedish
+direction: ltr
+weight: 11
+locked: false
