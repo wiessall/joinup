@@ -155,7 +155,7 @@ function joinup_release_entity_bundle_info_alter(array &$bundles): void {
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
   // Make sure a release's title and version number is unique in its solution.
   if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['title'])) {
@@ -191,7 +191,7 @@ function joinup_release_node_access(EntityInterface $release, $operation, Accoun
     return AccessResult::neutral();
   }
 
-  // Allow access depending to the publication status and the corresponding
+  // Allow access depending on the publication status and the corresponding
   // permission in the group.
   return AccessResult::allowedIf(!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view any unpublished content'));
 }

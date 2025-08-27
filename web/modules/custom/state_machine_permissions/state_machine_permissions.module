@@ -110,7 +110,8 @@ function _state_machine_permissions_check_transition_access(EntityInterface $ent
   $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
   if ($operation === 'delete') {
     // If the operation is delete, there is no need to check for transitions.
-    return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
+    return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account))
+      ->addCacheTags(['og-group-content']);
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -120,6 +121,5 @@ function _state_machine_permissions_check_transition_access(EntityInterface $ent
     // delete permission.
     $access = AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
   }
-
   return $access;
 }

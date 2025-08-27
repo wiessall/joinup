@@ -12,7 +12,7 @@
           .querySelector("ul#main-navbar-list")
           ?.querySelector('a.dropdown-list-link[href="/user/messages"]');
         let myMessagesText = myMessagesLink?.innerHTML;
-        if (myMessagesText === "") {
+        if (!myMessagesText || myMessagesText === "") {
           return;
         }
         myMessagesText = myMessagesText.replace(/ \([0-9]+\)/g, "");
