@@ -22,7 +22,8 @@
             "js": "never"
           }
         ],
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "playwright/expect-expect": "off"
       }
     },
     // Empty mappings are allowed in the docker-compose file. This indicates
