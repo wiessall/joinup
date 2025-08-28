@@ -10,7 +10,7 @@ declare(strict_types=1);
 use Drupal\joinup_paragraphs\Update\MigrateFileUrl;
 
 /**
- * Add a no-version suffix to invalid release aliases.
+ * Re-generate track_usage data.
  */
 function joinup_paragraphs_deploy_200600(): string {
   $start_time = microtime(TRUE);
@@ -18,5 +18,5 @@ function joinup_paragraphs_deploy_200600(): string {
   $instance = \Drupal::classResolver(MigrateFileUrl::class);
   $instance->deploy();
   $end_time = microtime(TRUE);
-  return 'dubi dubi du ' . round($end_time - $start_time, 2) . ' seconds.';
+  return 'Re-generated track_usage data for affected document nodes successfully in ' . round($end_time - $start_time, 2) . ' seconds.';
 }
