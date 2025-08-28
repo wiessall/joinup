@@ -184,17 +184,16 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->fields('r')
       ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
       ->notExists($this->database->select($destDataTable, 't')->fields('t')->where('t.revision_id = r.revision_id'));
-    $rows = $this->database
+    $this->database
       ->insert($destDataTable)
       ->from($insertFrom)
       ->execute();
 
     $endTime = microtime(TRUE);
-    Drush::logger()->notice($this->t('Migrated @count records (@rows inserted in the data table) from %src to %dest field in @time seconds.', [
+    Drush::logger()->notice($this->t('Migrated @count records from @src to @dest field in @time seconds.', [
       '@count' => $sourceCount,
-      '@rows' => $rows,
-      '%src' => $srcField,
-      '%dest' => $destField,
+      '@src' => $srcField,
+      '@dest' => $destField,
       '@time' => round($endTime - $startTime, 2),
     ]));
   }
