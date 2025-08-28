@@ -337,6 +337,9 @@
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
+            "drupal/cas": {
+                "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
+            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.5.x-115.diff",
@@ -471,11 +474,15 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
+            "drupal/private_message": {
+                "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"
+            },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
             },
             "drupal/purge_users": {
-                "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff"
+                "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
+                "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
@@ -498,6 +505,9 @@
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
+            },
+            "drupal/stage_file_proxy": {
+                "Wrong regex constraint for origin in stage_file_proxy.settings @see https://www.drupal.org/i/3525876": "resources/patch/php/drupal/stage_file_proxy/3525876.diff"
             },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff",
@@ -534,6 +544,9 @@
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
                 "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
+            },
+            "openeuropa/oe_authentication": {
+                "Missing langcode in oe_authentication.settings @see https://github.com/openeuropa/oe_authentication/issues/229": "resources/patch/php/openeuropa/oe_authentication/230.diff"
             },
             "openeuropa/oe_webtools": {
                 "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"
