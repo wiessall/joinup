@@ -1,8 +1,8 @@
-This folder contains cached responses from the Webtools Geocoding service. We
-are using this service to perform the geolocation of event locations. The
-service has a limited monthly quota, so we should avoid doing unnecessary
-requests. While running tests we will use these cached responses rather than
-querying the live service.
+This folder contains cached responses from the GISCO Geocoding service. We
+are using this service to perform the geolocation of event locations. In order
+to avoid requests to the service during tests, we are caching the results of
+API calls. While running tests we will use these cached responses rather
+than querying the live service.
 
 This works by using the File Cache module and configuring it to store the cache
 for Geocoder as files. This can be activated by enabling the 'filecache' module
@@ -34,7 +34,3 @@ order to clean up any stray cache files, please execute this command:
 ```
 $ git clean -fd ./tests/fixtures/geocoding/cache
 ```
-
-Please note that in order to query the Webtools Geocoding service from outside
-of the EC buildings you will need to ask the Webtools team to whitelist your IP
-address.

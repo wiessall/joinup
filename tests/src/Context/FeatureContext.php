@@ -1341,6 +1341,64 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Fills in the given element in a row given its index.
+   *
+   * @param string $index
+   *   The occurrence of the element with the text locator in the row. Ordinal
+   *   numbers are supported (1st, 2nd, 3rd, etc).
+   * @param string $field
+   *   The text field locator.
+   * @param string $text
+   *   The text to be filled in.
+   * @param string $rowText
+   *   Text contained in a row. Must be unique.
+   *
+   * @When I fill in the :index occurrence of the :field field with :text in the :rowText row
+   */
+  public function fillFieldInRowByIndex(string $index, string $field, string $text, string $rowText): void {
+    $index = $this->convertOrdinalToNumber($index);
+    $row = $this->getRowByRowText($rowText);
+    $fields = $row->findAll('named', ['field', $field]);
+    if (empty($fields) || !isset($fields[$index - 1])) {
+      throw new \Exception("Cannot find the $index occurrence of field '$field' in the row containing '$rowText'.");
+    }
+
+    $fields[$index - 1]->setValue($text);
+  }
+
+  /**
+   * Presses a button in a table row.
+   *
+   * @param string $buttonIdentifier
+   *   Text of button.
+   * @param string $rowText
+   *   Text of row.
+   *
+   * @throws \Exception
+   *
+   * @When I press the button :button in the :text row
+   * @When I press the :button button in the :text row
+   */
+  public function pressButtonsInRow(string $buttonIdentifier, string $rowText): void {
+    $row = $this->getRowByRowText($rowText);
+
+    if (preg_match('/^(\d+)(st|nd|rd|th)$/', $buttonIdentifier, $found)) {
+      $index = (int) $found[1];
+      $button = $row->find('xpath', "//input[@type='submit'][$index]");
+    }
+    else {
+      $button = $row->findButton($buttonIdentifier);
+    }
+
+    if (!$button) {
+      throw new \Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonIdentifier, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
+    $button->press();
+  }
+
+  /**
    * Searches the page for a row that includes the given text.
    *
    * @param string $text
