@@ -204,6 +204,9 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $destEntityIds = $this->database->select($destDataTable, 'd')
       ->distinct()
       ->fields('d', ['entity_id'])
+      // Only care about entity IDs that are in the source table. That is
+      // because there are entity IDs from other sequences.
+      ->condition('d.entity_id', $sourceEntityIds, 'IN')
       ->execute()
       ->fetchCol();
     sort($destEntityIds);
