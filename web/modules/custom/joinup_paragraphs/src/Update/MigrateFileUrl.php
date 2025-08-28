@@ -196,7 +196,6 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $sourceEntityIds = $this->database->select($sourceDataTable, 's')
       ->distinct()
       ->fields('s', ['entity_id'])
-      ->condition('s.entity_id', $this->database->select($destDataTable, 'd')->fields('d', ['entity_id']), 'IN')
       ->execute()
       ->fetchCol();
     sort($sourceEntityIds);
@@ -205,7 +204,6 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $destEntityIds = $this->database->select($destDataTable, 'd')
       ->distinct()
       ->fields('d', ['entity_id'])
-      ->condition('d.entity_id', $sourceEntityIds, 'IN')
       ->execute()
       ->fetchCol();
     sort($destEntityIds);
