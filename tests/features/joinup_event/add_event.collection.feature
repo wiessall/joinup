@@ -80,7 +80,7 @@ Feature: "Add event" visibility options.
       | Topic field is required.                                 |
       | The duration of the event cannot be longer than 2 weeks. |
 
-    When I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
+    When I fill in "Physical location" with "DIGIT, Rue Belliard 28, Brussels, Belgium"
     And I enter the following for the "Virtual location" link field:
       | URL                                        | Title                                |
       | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
@@ -92,16 +92,16 @@ Feature: "Add event" visibility options.
     Then I should see the heading "An amazing event"
     But I should not see the text "National"
     And I should not see the text "Regional"
-    And I should see the text "Rue Belliard 28, Brussels, Belgium"
+    And I should see the text "DIGIT, Rue Belliard 28, Brussels, Belgium"
     But I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I should not see the text "Event date:"
     And I should see the text "29 to 30/08/2018"
     And I should see a map centered on latitude 4.370476 and longitude 50.842291
     And I should see the following marker on the map:
-      | name        | An amazing event                   |
-      | description | Rue Belliard 28, Brussels, Belgium |
-      | latitude    | 50.842291                          |
-      | longitude   | 4.370476                           |
+      | name        | An amazing event                          |
+      | description | DIGIT, Rue Belliard 28, Brussels, Belgium |
+      | latitude    | 50.842291                                 |
+      | longitude   | 4.370476                                  |
     And I should see the link "Interoperable Europe Portal homepage"
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
