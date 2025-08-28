@@ -189,6 +189,27 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->from($insertFrom)
       ->execute();
 
+    // Select the distinct entity IDs that were processed both from the source
+    // and destination data tables.
+    $sourceDataTable = $this->getFieldStorageSchema('node', $srcField);
+    [$sourceDataTable] = array_keys($sourceDataTable);
+    $sourceEntityIds = $this->database->select($sourceDataTable, 's')
+      ->distinct()
+      ->fields('s', ['entity_id'])
+      ->condition('s.entity_id', $this->database->select($destDataTable, 'd')->fields('d', ['entity_id']), 'IN')
+      ->execute()
+      ->fetchCol();
+    sort($sourceEntityIds);
+
+    // Select the distinct entity IDs that are in the destination data table.
+    $destEntityIds = $this->database->select($destDataTable, 'd')
+      ->distinct()
+      ->fields('d', ['entity_id'])
+      ->condition('d.entity_id', $sourceEntityIds, 'IN')
+      ->execute()
+      ->fetchCol();
+    sort($destEntityIds);
+
     $endTime = microtime(TRUE);
     Drush::logger()->notice($this->t('Migrated @count records from @src to @dest field in @time seconds.', [
       '@count' => $sourceCount,
@@ -196,32 +217,42 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       '@dest' => $destField,
       '@time' => round($endTime - $startTime, 2),
     ]));
+
+    if ($sourceEntityIds !== $destEntityIds) {
+      $missingInDest = array_diff($sourceEntityIds, $destEntityIds);
+      Drush::logger()->warning($this->t('The following entity IDs were missing in the destination field data table: @ids', [
+        '@ids' => implode(', ', $missingInDest),
+      ]));
+    }
+    else {
+      Drush::logger()->notice($this->t('All entity IDs were successfully migrated to the destination field data table.'));
+    }
   }
 
   /**
    * Returns the storage schema for the given field.
    */
-  private function getFieldStorageSchema(string $entity_type, string $field_name): array {
+  private function getFieldStorageSchema(string $entityType, string $fieldName): array {
     return $this->keyValue->get('entity.storage_schema.sql')
-      ->get("$entity_type.field_schema_data.$field_name", []);
+      ->get("$entityType.field_schema_data.$fieldName", []);
   }
 
   /**
    * Creates a paragraph from file_url's target_id field value.
    */
-  private function createParagraphFromFieldValue(string $value, string $parent_type, int|string $parent_id, string $parent_field_name): ?Paragraph {
-    $file_id = $this->extractFileIdFromDereferenceUrl($value);
-    $paragraph = $file_id
-      ? $this->createResourceFileParagraph($file_id)
+  private function createParagraphFromFieldValue(string $value, string $parentType, int|string $parentId, string $parentFieldName): ?Paragraph {
+    $fileId = $this->extractFileIdFromDereferenceUrl($value);
+    $paragraph = $fileId
+      ? $this->createResourceFileParagraph($fileId)
       : $this->createResourceLinkParagraph($value);
 
     if (!$paragraph) {
       return NULL;
     }
 
-    $paragraph->set('parent_type', $parent_type);
-    $paragraph->set('parent_id', $parent_id);
-    $paragraph->set('parent_field_name', $parent_field_name);
+    $paragraph->set('parent_type', $parentType);
+    $paragraph->set('parent_id', $parentId);
+    $paragraph->set('parent_field_name', $parentFieldName);
     $paragraph->search_api_skip_tracking = TRUE;
     $paragraph->save();
     return $paragraph;
@@ -240,10 +271,10 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Creates a resource_file paragraph.
    */
-  private function createResourceFileParagraph(int $file_id): ?Paragraph {
+  private function createResourceFileParagraph(int $fileId): ?Paragraph {
     return Paragraph::create([
       'type' => 'resource_file',
-      'resource_file' => $file_id,
+      'resource_file' => $fileId,
     ]);
   }
 
@@ -251,14 +282,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
    * Creates a resource_link paragraph.
    */
   private function createResourceLinkParagraph(string $url): ?Paragraph {
-    $normalized_url = $this->normalizeUrl($url);
-    if (!$normalized_url) {
+    $normalizedUrl = $this->normalizeUrl($url);
+    if (!$normalizedUrl) {
       return NULL;
     }
 
     return Paragraph::create([
       'type' => 'resource_link',
-      'remote_file_url' => $normalized_url,
+      'remote_file_url' => $normalizedUrl,
     ]);
   }
 
