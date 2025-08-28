@@ -8,6 +8,20 @@
 declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\sitewide_alert\Entity\SitewideAlertInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * @todo Remove this hook in ISAICP-10152.
+ */
+function joinup_sitewide_alert_sitewide_alert_insert(EntityInterface $entity): void {
+  assert($entity instanceof SitewideAlertInterface);
+  // Invalidate cache for this particular entity.
+  Cache::invalidateTags($entity->getCacheTags());
+}
 
 /**
  * Set dynamic allowed values for the icon field.
