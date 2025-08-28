@@ -17,6 +17,9 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function joinup_sitewide_alert_sitewide_alert_insert(EntityInterface $entity): void {
   \Drupal::cache('render')->deleteAll();
+  \Drupal::cache('data')->deleteAll();
+  \Drupal::cache()->deleteAll();
+  \Drupal::cache('entity')->deleteAll();
 }
 
 /**
