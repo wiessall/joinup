@@ -1,7 +1,7 @@
 @api @group-clone
 Feature: Test solution documentation migration.
 
-  @update:joinup_paragraphs_post_update_200604
+  @update:joinup_paragraphs_post_update_200600
   Scenario Outline:
     Given I am logged in as a moderator
     When I visit "/node/<node_id>"
