@@ -47,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "^3.0",
+        "drupal/facets": "3.0.0",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -145,7 +145,7 @@
         "npm-asset/jquery-jsonview": "^1.2.3",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
-        "npm-asset/yaireo--tagify": "^4.35.1",
+        "npm-asset/yaireo--tagify": "4.35.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
@@ -521,7 +521,6 @@
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "EntityAutocompleteTagify returns wrong value so Drupal tries to create entity without label @see https://drupal.org/i/3530799": "resources/patch/php/drupal/tagify/3530799-mr153-commit-1ff979ac70.diff",
                 "Remove 'Drag to re-order @entity_types' description @see https://www.drupal.org/project/tagify/issues/3531807": "resources/patch/php/drupal/tagify/3531807.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
