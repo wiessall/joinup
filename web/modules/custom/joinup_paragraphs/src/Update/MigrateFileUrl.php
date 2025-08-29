@@ -114,13 +114,11 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->orderBy('entity_id')
       ->orderBy('revision_id')
       ->orderBy('delta')
-      ->execute()
-      ->fetchAllAssoc('revision_id');
+      ->execute();
 
     $destRecords = $lookup = [];
     $currentEntityId = NULL;
-    $sourceCount = count($results);
-    foreach ($results as $record) {
+    while ($record = $results->fetch()) {
       $entityId = $record->entity_id;
       $value = $record->{"{$srcField}_target_id"};
 
@@ -194,16 +192,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $sourceDataTable = $this->getFieldStorageSchema('node', $srcField);
     [$sourceDataTable] = array_keys($sourceDataTable);
     $sourceEntityIds = $this->database->select($sourceDataTable, 's')
-      ->distinct()
-      ->fields('s', ['entity_id'])
+      ->fields('s', ['entity_id', 'revision_id', 'delta'])
       ->execute()
       ->fetchCol();
     sort($sourceEntityIds);
 
     // Select the distinct entity IDs that are in the destination data table.
     $destEntityIds = $this->database->select($destDataTable, 'd')
-      ->distinct()
-      ->fields('d', ['entity_id'])
+      ->fields('d', ['entity_id', 'revision_id', 'delta'])
       // Only care about entity IDs that are in the source table. That is
       // because there are entity IDs from other sequences.
       ->condition('d.entity_id', $sourceEntityIds, 'IN')
@@ -212,8 +208,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     sort($destEntityIds);
 
     $endTime = microtime(TRUE);
-    Drush::logger()->notice($this->t('Migrated @count records from @src to @dest field in @time seconds.', [
-      '@count' => $sourceCount,
+    Drush::logger()->notice($this->t('Migrated records from @src to @dest field in @time seconds.', [
       '@src' => $srcField,
       '@dest' => $destField,
       '@time' => round($endTime - $startTime, 2),
@@ -221,7 +216,9 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
 
     if ($sourceEntityIds !== $destEntityIds) {
       $missingInDest = array_diff($sourceEntityIds, $destEntityIds);
-      Drush::logger()->warning($this->t('The following entity IDs were missing in the destination field data table: @ids', [
+      Drush::logger()->warning($this->t('@countSource entries on the source table, but @countTarget to the target table. The following entity IDs were missing in the destination field data table: @ids', [
+        '@countSource' => count($sourceEntityIds),
+        '@countTarget' => count($destEntityIds),
         '@ids' => implode(', ', $missingInDest),
       ]));
     }
