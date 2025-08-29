@@ -35,7 +35,7 @@ condition.plugin.group_context:
       type: sequence
       label: Limit to groups
       sequence:
-        type: uri
+        type: string
         label: Group ID
 
 views.argument_validator.joinup_group_user_permission:
