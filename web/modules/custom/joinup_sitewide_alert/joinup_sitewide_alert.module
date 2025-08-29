@@ -8,19 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\EntityInterface;
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- *
- * @todo Remove this hook in ISAICP-10152.
- */
-function joinup_sitewide_alert_sitewide_alert_insert(EntityInterface $entity): void {
-  \Drupal::cache('render')->deleteAll();
-  \Drupal::cache('data')->deleteAll();
-  \Drupal::cache()->deleteAll();
-  \Drupal::cache('entity')->deleteAll();
-}
 
 /**
  * Set dynamic allowed values for the icon field.
