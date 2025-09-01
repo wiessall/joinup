@@ -12,7 +12,7 @@ use Drupal\joinup_paragraphs\Update\MigrateFileUrl;
 /**
  * Re-generate track_usage data.
  */
-function joinup_paragraphs_deploy_200600(): string {
+function joinup_paragraphs_deploy_200700(): string {
   $start_time = microtime(TRUE);
   /** @var \Drupal\joinup_paragraphs\Update\MigrateFileUrl $instance */
   $instance = \Drupal::classResolver(MigrateFileUrl::class);
