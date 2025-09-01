@@ -26,3 +26,15 @@ plugin.plugin_configuration.facets_processor.joinup_search_content_type_fixed_or
     sort:
       type: string
       label: 'Sort order'
+
+plugin.plugin_configuration.facets_processor.flag_entity_bundle_label:
+  type: mapping
+  label: 'Flag entity bundle label'
+
+plugin.plugin_configuration.facets_processor.list_item:
+  type: mapping
+  label: 'List item'
+
+plugin.plugin_configuration.facets_processor.oss_label_processor:
+  type: mapping
+  label: 'Oss label processor'
