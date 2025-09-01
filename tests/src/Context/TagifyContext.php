@@ -314,47 +314,4 @@ class TagifyContext extends RawDrupalContext {
     return array_column($currentValue, 'label');
   }
 
-  /**
-   * Checks if a tagify field contains a specific value.
-   *
-   * @param string $fieldName
-   *   The field name to check.
-   * @param string $expectedValue
-   *   The value that should be present in the field.
-   *
-   * @throws \Exception
-   *   Thrown when the field is empty or doesn't contain the expected value.
-   *
-   * @Then the :fieldName tagify field should contain :expectedValue
-   */
-  public function assertTagifyFieldContains(string $fieldName, string $expectedValue): void {
-    $values = $this->getTagifyFieldValues($fieldName);
-    if (empty($values)) {
-      throw new \Exception("Field '$fieldName' contains no values.");
-    }
-    if (!in_array($expectedValue, $values, TRUE)) {
-      throw new \Exception("Field '$fieldName' does not contain '$expectedValue'. Current values: " . implode(', ', $values));
-    }
-  }
-
-  /**
-   * Checks if a tagify field does not contain a specific value.
-   *
-   * @param string $fieldName
-   *   The field name to check.
-   * @param string $excludedValue
-   *   The value that should not be present in the field.
-   *
-   * @throws \Exception
-   *   Thrown when the field contains the excluded value.
-   *
-   * @Then the :fieldName tagify field should not contain :excludedValue
-   */
-  public function assertTagifyFieldNotContains(string $fieldName, string $excludedValue): void {
-    $values = $this->getTagifyFieldValues($fieldName);
-    if (in_array($excludedValue, $values, TRUE)) {
-      throw new \Exception("Field '$fieldName' should not contain '$excludedValue', but it was found. Current values: " . implode(', ', $values));
-    }
-  }
-
 }
