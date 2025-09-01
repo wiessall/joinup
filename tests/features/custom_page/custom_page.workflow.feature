@@ -1,8 +1,8 @@
 @api @group-c
-Feature: Custom page save new draft workflow transition.
-  In order to create draft revisions from published custom pages
+Feature: Custom page workflow transitions.
+  In order to manage custom page states
   As a facilitator
-  I need to test the save new draft button functionality.
+  I need to test workflow buttons functionality.
 
   Scenario: Test save new draft, save as draft, and publish buttons
     Given users:
@@ -31,3 +31,21 @@ Feature: Custom page save new draft workflow transition.
     Then the "Title" field should contain "Silent Echo Extended"
     And I press "Publish"
     Then I should see the heading "Silent Echo Extended"
+
+  Scenario: Test unpublish transition makes page unavailable to end users
+    Given custom_page content:
+      | title       | collection | state     |
+      | Help Center | The Portal | published |
+
+    When I am an anonymous user
+    And I go to the "Help Center" custom_page
+    Then I should see the heading "Help Center"
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Help Center" "custom page"
+    And I press "Unpublish"
+    Then the workflow state of the "Help Center" content should be "unpublished"
+
+    When I am logged in as an "authenticated user"
+    And I go to the "Help Center" custom_page
+    Then I should get an access denied error
