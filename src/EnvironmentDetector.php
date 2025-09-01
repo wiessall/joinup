@@ -64,14 +64,4 @@ class EnvironmentDetector {
     return $devPackageExist && !self::isAcceptance();
   }
 
-  /**
-   * Determines if the current environment is part of Behat tests.
-   *
-   * @return bool
-   *   TRUE if in the Production environment, FALSE otherwise.
-   */
-  public static function isBehatRunning(): bool {
-    return defined('BEHAT_TEST_ARE_RUNNING');
-  }
-
 }
