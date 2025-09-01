@@ -45,6 +45,8 @@ class ApprovalRegistrationTest extends JoinupExistingSiteTestBase {
     if ($account) {
       $account->delete();
     }
+
+    parent::tearDown();
   }
 
 }
