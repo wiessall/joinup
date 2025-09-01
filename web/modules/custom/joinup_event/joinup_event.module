@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\joinup_event\Entity\Event;
 use Drupal\joinup_event\Entity\EventInterface;
@@ -16,7 +17,7 @@ use Drupal\joinup_event\Plugin\Field\FieldFormatter\WebtoolsMapFormatter;
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function joinup_event_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+function joinup_event_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   if ($entity_type->id() == 'node' && $bundle == 'event') {
     if (!empty($fields['field_short_title'])) {
       $fields['field_short_title']->addConstraint('UniqueField');
@@ -133,4 +134,16 @@ function joinup_event_theme(): array {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_geocode_entity_field_address_string_alter().
+ */
+function joinup_event_geocode_entity_field_address_string_alter(string &$address_string, FieldItemListInterface $field): void {
+  // Replace newlines with spaces since the address comes from field_location
+  // which is a string_long field. The gisco API doesn't seem to support such
+  // chars and returns a 403 response in such cases.
+  if ($field->getName() === 'field_event_coordinates') {
+    $address_string = strtr($address_string, ["\r\n" => ' ']);
+  }
 }
