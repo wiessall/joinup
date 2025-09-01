@@ -1,0 +1,14 @@
+uuid: 3fe5cf19-d856-4063-9101-c4e99ecac3db
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;'
+id: ro
+label: Romanian
+direction: ltr
+weight: 7
+locked: false

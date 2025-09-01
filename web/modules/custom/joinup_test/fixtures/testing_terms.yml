@@ -1,8 +1,10 @@
 # The fist level is the vocabulary ID. Accepts only 2-level hierarchy.
 topic:
   - name: 'Economy and Welfare'
+    uuid: '6bd8d112-61e9-4e26-b0c1-786710c8f86b'
     children:
       - name: 'Finance in EU'
+        uuid: 'b7af08b1-c271-4d58-a5a7-ec3db533c3d2'
   - name: 'eGov'
     children:
       - name: 'Supplier exchange'
@@ -27,6 +29,7 @@ topic:
       - name: 'E-inclusion'
 solution_type:
   - name: 'Category 1'
+    uuid: '74a5c128-9353-4b81-b78f-127a50c78b2a'
     children:
       - name: 'Public Service Provider'
         uri: 'http://data.europa.eu/dr8/testing/PublicServiceProvider'
@@ -37,6 +40,7 @@ solution_type:
       - name: Business
         uri: 'http://data.europa.eu/dr8/testing/Business'
       - name: 'Innovation'
+        uuid: 'ebbcc55f-51c9-40b4-8eb6-21c9ff0b565d'
         uri: 'http://data.europa.eu/dr8/testing/Innovation'
       - name: 'Citizen'
         uri: 'http://data.europa.eu/dr8/testing/Citizen'

@@ -64,6 +64,7 @@ libraries-override:
         css/private_message_notification_block.css: false
 
 regions:
+  top_bar: 'Top bar'
   search_bar: 'Search bar'
   header: 'Header'
   featured: 'Featured'

@@ -1,0 +1,14 @@
+uuid: e8b44b0a-4f01-4cbb-9839-113b09e9baf0
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=2; plural=(n!=1);'
+id: bg
+label: Bulgarian
+direction: ltr
+weight: -12
+locked: false
