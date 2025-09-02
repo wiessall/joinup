@@ -4,9 +4,8 @@ Feature: Site alerts
   As a moderator
   I want to be able to display a site wide alert
 
-  @javascript @wip
+  @javascript
   Scenario: Show a site wide alert and hide it again
-    # Disabled until ISAICP-10152 is in.
     # Create a site wide alert as a moderator.
     Given I am logged in as a moderator
     When I click "Site alerts" in the "Administration toolbar" region
