@@ -1,0 +1,133 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: b21e753e-5708-4923-b554-a66af649eccf
+  bundle: event
+  default_langcode: en
+  depends:
+    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    df34e3a2-207b-4910-a804-344931654e20: node
+default:
+  revision_uid:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 0
+  title:
+    -
+      value: 'Big hobbit feast - fireworks at midnight'
+  created:
+    -
+      value: 1413534780
+  changed:
+    -
+      value: 1413534780
+  promote:
+    -
+      value: true
+  sticky:
+    -
+      value: false
+  report:
+    -
+      uri: 'internal:/contact'
+      title: 'Report abusive content'
+      options:
+        query:
+          category: report
+          uri: /collection/middle-earth-daily/event/big-hobbit-feast-fireworks-midnight
+          destination: collection/middle-earth-daily/event/big-hobbit-feast-fireworks-midnight
+  path:
+    -
+      alias: /collection/middle-earth-daily/event/big-hobbit-feast-fireworks-midnight
+      langcode: en
+      pathauto: 1
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  published_at:
+    -
+      value: 1413534780
+  abstract:
+    -
+      value: 'An abstract'
+  field_comments:
+    -
+      status: 2
+      cid: 0
+      last_comment_timestamp: 1413534780
+      last_comment_name: ''
+      last_comment_uid: 0
+      comment_count: 0
+  field_event_coordinates:
+    -
+      value: 'POINT(36.648193 -0.974040)'
+      geo_type: Point
+      lat: -0.97404
+      lon: 36.648193
+      left: 36.648193
+      top: -0.97404
+      right: 36.648193
+      bottom: -0.97404
+      geohash: kzf43ywmucc3
+      latlon: '-0.97404,36.648193'
+  field_event_date:
+    -
+      value: '2016-03-15T11:12:12'
+      end_value: '2016-03-15T11:12:12'
+  field_event_online_location:
+    -
+      uri: 'http://www.no-mans-land-meetup.com'
+      title: "No man's land"
+      options: {  }
+  field_location:
+    -
+      value: 'The physical location.'
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 124e3b32-c442-4dc7-88f0-27170614c795
+          bundle: simple_paragraph
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1413534780
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: null
+                  region: null
+          field_body:
+            -
+              value: 'Barbecue followed by dance and fireworks.'
+              format: content_editor
+  field_short_title:
+    -
+      value: 'Big hobbit feast'
+  field_site_featured:
+    -
+      value: false
+  field_state:
+    -
+      value: published
+  field_topic:
+    -
+      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+  og_audience:
+    -
+      entity: df34e3a2-207b-4910-a804-344931654e20
