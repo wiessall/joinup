@@ -45,7 +45,8 @@
   "globals": {
     "CKEDITOR": true,
     "Chart": true,
-    "L": true
+    "L": true,
+    "bootstrap": "readonly"
   },
   "plugins": [
     "jsdoc"
