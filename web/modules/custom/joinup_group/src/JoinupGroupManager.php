@@ -91,16 +91,12 @@ readonly class JoinupGroupManager implements JoinupGroupManagerInterface {
     $account ??= $this->currentUser;
 
     // Check the site-wide permission.
-    $site_access = AccessResult::allowedIf($site_permission);
-    if ($site_access->isAllowed()) {
-      $site_access = $site_access->andIf(AccessResult::allowedIfHasPermission($account, $site_permission));
-    }
+    $site_access = $site_permission ? AccessResult::allowedIfHasPermission($account, $site_permission) : AccessResult::neutral();
 
     return $site_access
       // Check the OG permission.
       ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
-      ->addCacheableDependency($group)
-      ->addCacheContexts(['og_role']);
+      ->addCacheableDependency($group);
   }
 
   /**

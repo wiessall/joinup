@@ -43,7 +43,7 @@
       background-color: $brand-darker;
       font-size: 0;
       &::before {
-        @include get-bootstrap-icon("arrow-up", $white);
+        @include get-bootstrap-icon("search", $white);
 
         margin: $spacer * 0.25 0; // 4px 0
         font-size: 1.4rem;

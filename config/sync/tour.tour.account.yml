@@ -17,7 +17,7 @@ tips:
     label: 'My account'
     weight: 1
     position: left-start
-    selector: '.listing .listing__item'
+    selector: '.user--full article.tile'
     body: 'In the "My account" page, the content area displays items that have been created by you, as well as content that belongs to the collections and solutions you are a member of.'
   filter_icons:
     id: filter_icons
@@ -25,7 +25,7 @@ tips:
     label: Categories
     weight: 2
     position: bottom-start
-    selector: '.facet-region .tab__container a'
+    selector: '.tabs--content-type .nav-tabs a'
     body: 'By clicking on these icons, you can view specific content types in the content area.'
   search:
     id: search
@@ -33,7 +33,7 @@ tips:
     label: Search
     weight: 3
     position: left-start
-    selector: .search-bar
+    selector: .dropdown-search
     body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'
   local_tasks:
     id: local_tasks

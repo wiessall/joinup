@@ -1,0 +1,17 @@
+diff --git a/src/Form/OgMenuInstanceForm.php b/src/Form/OgMenuInstanceForm.php
+index 874d622e48417e4efb1596d2e355d9c9f073db04..2cfb5f5ec784c89f6b13f8bd0b8651f8cc215ff7 100644
+--- a/src/Form/OgMenuInstanceForm.php
++++ b/src/Form/OgMenuInstanceForm.php
+@@ -343,10 +343,10 @@ class OgMenuInstanceForm extends ContentEntityForm {
+           $operations['delete']['query'] = $this->getDestinationArray();
+           $operations['delete']['title'] = $this->t('Delete');
+         }
+-        if ($link->isTranslatable()) {
++        if ($link->isTranslatable() && $translateRoute = $link->getTranslateRoute()) {
+           $operations['translate'] = [
+             'title' => $this->t('Translate'),
+-            'url' => $link->getTranslateRoute(),
++            'url' => $translateRoute,
+           ];
+         }
+ 

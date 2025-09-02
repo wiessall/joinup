@@ -1,0 +1,27 @@
+diff --git a/config/install/private_message.settings.yml b/config/install/private_message.settings.yml
+index e3ed9edf5afe0380145b12778854751916a5f7b8..3d87aa0ded78fd582e4ade65aef2e413b6e8c3bf 100644
+--- a/config/install/private_message.settings.yml
++++ b/config/install/private_message.settings.yml
+@@ -1,3 +1,4 @@
++langcode: en
+ enable_notifications: true
+ notify_by_default: true
+ notify_when_using: 'no'
+diff --git a/private_message.install b/private_message.install
+index c84a9875ec2e582c487399195aee342349af79a1..f152c13dc35325f87e196dddba86d02a412606ac 100644
+--- a/private_message.install
++++ b/private_message.install
+@@ -428,3 +428,13 @@ function private_message_update_8014(): void {
+   unset($rows["hide_form_filter_tips"]);
+   $config->setData($rows)->save();
+ }
++
++/**
++ * Add missing langcode to private_message.settings.
++ */
++function private_message_update_8015(): void {
++  $config = \Drupal::configFactory()->getEditable('private_message.settings');
++  if ($config && $config->get('langcode') === NULL) {
++    $config->set('langcode', 'en')->save();
++  }
++}

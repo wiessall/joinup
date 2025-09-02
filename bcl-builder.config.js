@@ -243,6 +243,10 @@ module.exports = {
           dest: "ief-entity-table.min.css",
         },
         {
+          entry: "components/language-picker.scss",
+          dest: "language-picker.min.css",
+        },
+        {
           entry: "components/layout-block.scss",
           dest: "layout-block.min.css",
         },

@@ -9,13 +9,13 @@ Feature: Asset release "delete" functionality.
       | title                  |
       | Yet another collection |
     And solution content:
-      | title                | description                | documentation | collection             |
-      | Yet another solution | Bored of finding new texts | text.pdf      | Yet another collection |
+      | title                | description                | resources | collection             |
+      | Yet another solution | Bored of finding new texts | text.pdf  | Yet another collection |
     And release content:
-      | title               | release notes    | documentation | release number | release notes   | is version of        |
-      | Yet another release | A sample release | text.pdf      | 1              | Changed release | Yet another solution |
-      | No release          | A sample release | text.pdf      | 1.2            | Changed release | Yet another solution |
-      | Jinks               | A sample release | text.pdf      | 3              | Changed release | Yet another solution |
+      | title               | release notes    | resources | release number | release notes   | is version of        |
+      | Yet another release | A sample release | text.pdf  | 1              | Changed release | Yet another solution |
+      | No release          | A sample release | text.pdf  | 1.2            | Changed release | Yet another solution |
+      | Jinks               | A sample release | text.pdf  | 3              | Changed release | Yet another solution |
     And users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |

@@ -16,6 +16,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldFilteredMarkup;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
@@ -394,7 +397,7 @@ function joinup_core_entity_base_field_info(EntityTypeInterface $entity_type): a
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle, array $base_field_definitions): array {
+function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, ?string $bundle, array $base_field_definitions): array {
   $fields = [];
   $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("thresholds.{$entity_type->id()}.$bundle");
   if ($threshold) {
@@ -515,4 +518,15 @@ function joinup_core_mail_alter(&$message): void {
   // in HTML mails.
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
+}
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ */
+function joinup_core_field_widget_single_element_tagify_entity_reference_autocomplete_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  // Remove the "Drag to re-order @entity_types." mention in description.
+  /* @see \Drupal\tagify\Plugin\Field\FieldWidget\TagifyEntityReferenceAutocompleteWidget::formElement */
+  $items = $context['items'];
+  \assert($items instanceof FieldItemListInterface);
+  $element['#description'] = FieldFilteredMarkup::create(\Drupal::token()->replace((string) $items->getFieldDefinition()->getDescription()));
 }

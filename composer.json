@@ -21,6 +21,7 @@
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
         "drupal/autologout": "^2.0",
+        "drupal/babel": "^1.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
@@ -34,7 +35,7 @@
         "drupal/core-recommended": "^10.5.2",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
-        "drupal/diff": "^1.8",
+        "drupal/diff": "^2.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
@@ -46,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "^3.0",
+        "drupal/facets": "^3.0.1",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -66,6 +67,7 @@
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
+        "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
@@ -90,7 +92,7 @@
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
-        "drupal/private_message": "4.0.0-alpha4 as 3.0.6",
+        "drupal/private_message": "^4.0@alpha",
         "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
         "drupal/purge_users": "^4.0",
@@ -133,6 +135,7 @@
         "drupal/webform": "^6.2",
         "drupal/webform_views": "^5.4",
         "drush/drush": "^13.3",
+        "geocoder-php/photon-provider": "^0.10.0",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
@@ -142,10 +145,9 @@
         "npm-asset/jquery-jsonview": "^1.2.3",
         "npm-asset/js-cookie": "^3.0.5",
         "npm-asset/slick-carousel": ">1.8.1 || <1.8.1",
-        "npm-asset/yaireo--tagify": "^4.35.1",
+        "npm-asset/yaireo--tagify": "4.35.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
-        "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_authentication": "^1.20",
         "openeuropa/oe_bootstrap_theme": "^1.21",
         "openeuropa/oe_dashboard_agent": "^1.0",
@@ -325,8 +327,18 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note572659.diff",
+                "Exclude webforms @see https://www.drupal.org/i/3542257": "resources/patch/php/drupal/babel/3542257.mr41-note572893.diff",
+                "Readonly property cannot be initialized @see https://www.drupal.org/i/3542278": "resources/patch/php/drupal/babel/3542278.comment-16235365.mr42.diff",
+                "Error when updating a menu link @see https://www.drupal.org/i/3542349": "resources/patch/php/drupal/babel/3542349.comment-16235945.mr43.diff",
+                "Difficult to reuse the structure: @see https://www.drupal.org/i/3542354": "resources/patch/php/drupal/babel/3542354.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
+            },
+            "drupal/cas": {
+                "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
@@ -421,6 +433,10 @@
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
                 "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff"
             },
+            "drupal/l10n_pconfig": {
+                "Update state var on language entity update (not only on form edit) @see https://www.drupal.org/i/3533900": "resources/patch/php/drupal/l10n_pconfig/3533900.diff",
+                "Add missing plural formulae @see https://www.drupal.org/i/3312406": "resources/patch/php/drupal/l10n_pconfig/3312406.diff"
+            },
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.diff",
                 "Uri processing fails for websites running in a subdirectory @see https://www.drupal.org/i/3472501": "resources/patch/php/drupal/linkit/3472501.patch"
@@ -436,11 +452,17 @@
             "drupal/message_digest": {
                 "Renderer::renderPlain() is deprecated @see https://www.drupal.org/i/3511648": "resources/patch/php/drupal/message_digest/3511648.diff"
             },
+            "drupal/meta_entity": {
+                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529976": "resources/patch/php/drupal/meta_entity/3529976.diff"
+            },
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
+            },
+            "drupal/og_menu": {
+                "Fix fatal error in OgMenuInstanceForm @see https://www.drupal.org/i/3528599": "resources/patch/php/drupal/og_menu/3528599.diff"
             },
             "drupal/page_manager": {
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
@@ -452,20 +474,22 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
-            "drupal/private_message_flood": {
-                "Make module compatible with Private Message 4 @see https://www.drupal.org/i/3501011": "resources/patch/php/drupal/private_message_flood/3501011.diff"
+            "drupal/private_message": {
+                "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
             },
             "drupal/purge_users": {
-                "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff"
+                "Users are deleted without prior notification when \"Notification User Before Deletion\" is enabled @see https://www.drupal.org/i/3521201": "resources/patch/php/drupal/purge_users/3521201.diff",
+                "Missing langcode in purge_users.settings and config/install missing @see https://www.drupal.org/i/3542620": "resources/patch/php/drupal/purge_users/3542620.diff"
             },
             "drupal/rdf_sync": {
                 "Allow to update the URI @see https://www.drupal.org/i/3507137": "resources/patch/php/drupal/rdf_sync/3507137.diff",
                 "Add attributes alternative for RdfUriGenerator @see https://www.drupal.org/i/3510908": "resources/patch/php/drupal/rdf_sync/3510908.diff",
                 "Warning on bundle entity form @see https://drupal.org/i/3518353": "resources/patch/php/drupal/rdf_sync/3518353-mr37-hash-6aab66c4.diff",
-                "Forms using entity builders of RDF Sync cannot be serialized @see https://drupal.org/i/3527977": "resources/patch/php/drupal/rdf_sync/3527977-mr38-hash-8dc503eb.diff"
+                "Forms using entity builders of RDF Sync cannot be serialized @see https://drupal.org/i/3527977": "resources/patch/php/drupal/rdf_sync/3527977-mr38-hash-8dc503eb.diff",
+                "Allow $bundle to be nullable @see https://www.drupal.org/i/3529979": "resources/patch/php/drupal/rdf_sync/3529979.diff"
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
@@ -479,8 +503,12 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
             },
+            "drupal/stage_file_proxy": {
+                "Wrong regex constraint for origin in stage_file_proxy.settings @see https://www.drupal.org/i/3525876": "resources/patch/php/drupal/stage_file_proxy/3525876.diff"
+            },
             "drupal/state_machine": {
-                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
+                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff",
+                "Fatal error and deprecated code: StateFieldBuilder. @see https://www.drupal.org/project/state_machine/issues/3542871": "resources/patch/php/drupal/state_machine/3542871.diff"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.mr20-note535548.diff"
@@ -489,9 +517,7 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/tour/3012027.patch"
             },
             "drupal/tagify": {
-                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "EntityAutocompleteTagify returns wrong value so Drupal tries to create entity without label @see https://drupal.org/i/3530799": "resources/patch/php/drupal/tagify/3530799-mr153-commit-1ff979ac70.diff",
-                "Remove 'Drag to re-order @entity_types' description @see https://www.drupal.org/project/tagify/issues/3531807": "resources/patch/php/drupal/tagify/3531807.diff"
+                "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
@@ -513,6 +539,9 @@
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
                 "Skip third party unsupported lines @see https://github.com/gitonomy/gitlib/pull/232.diff": "resources/patch/php/gitonomy/gitlib/232.diff"
+            },
+            "openeuropa/oe_authentication": {
+                "Missing langcode in oe_authentication.settings @see https://github.com/openeuropa/oe_authentication/issues/229": "resources/patch/php/openeuropa/oe_authentication/230.diff"
             },
             "openeuropa/oe_webtools": {
                 "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"

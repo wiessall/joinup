@@ -847,12 +847,6 @@ class JoinupContext extends RawDrupalContext {
     }
 
     // Handle file URL fields.
-    if (!empty($node->documentation)) {
-      $fileHandler = \Drupal::service('file_url.handler');
-      $file = $this->createFile($node->documentation);
-      $node->documentation = $fileHandler::fileToUrl($file);
-    }
-
     if (!empty($node->resources)) {
       $this->createResourceFileParagraph($node);
     }

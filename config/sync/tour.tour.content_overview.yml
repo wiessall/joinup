@@ -17,7 +17,7 @@ tips:
     label: Content
     weight: 1
     position: left-start
-    selector: '.listing .listing__item:first-of-type'
+    selector: '.view-content-overview article.tile'
     body: 'The content area displays Interoperable Europe Portal events, documents, news, and discussions that have been created or updated recently.'
   filters:
     id: filters
@@ -25,7 +25,7 @@ tips:
     label: Categories
     weight: 2
     position: bottom-start
-    selector: '.facet-region .tab__container a:first-of-type'
+    selector: '.nav-tabs a'
     body: 'By clicking on these icons, you can view specific content types in the content area.'
   search:
     id: search
@@ -33,5 +33,5 @@ tips:
     label: Search
     weight: 3
     position: left-start
-    selector: .search-bar
+    selector: .dropdown-search
     body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'

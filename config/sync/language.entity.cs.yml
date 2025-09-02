@@ -1,9 +1,14 @@
 uuid: e6c364a3-d870-4143-a39e-1930ef0dde94
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);'
 id: cs
 label: Czech
 direction: ltr
-weight: 0
+weight: -10
 locked: false
