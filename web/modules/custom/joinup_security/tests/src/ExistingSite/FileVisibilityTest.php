@@ -93,7 +93,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
   /**
    * Tests main content.
    *
-   * @todo Extend to all other nod types.
+   * @todo Extend to all other node types.
    */
   public function testMainContent(): void {
     $file = $this->createEmbedFile();
