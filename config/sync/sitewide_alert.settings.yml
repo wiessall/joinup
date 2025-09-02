@@ -5,3 +5,4 @@ alert_styles: "danger|High\r\nwarning|Medium\r\nbrand|Low"
 display_order: ascending
 automatic_refresh: false
 refresh_interval: null
+cache_max_age: 15
