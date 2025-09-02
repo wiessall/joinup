@@ -103,7 +103,7 @@ Feature: Test adding solutions.
     And I go to the homepage of the "Belgian barista's" collection
     And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
-    And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Abstract, Description, Related documents, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -132,7 +132,8 @@ Feature: Test adding solutions.
     And I click "Additional information"
     And I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Upload file"
+    And I attach the file "text.pdf" to "files[resources_0_subform_resource_file_0]"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Completed" from "Status"
@@ -162,8 +163,8 @@ Feature: Test adding solutions.
     And I should see the text "This is a test text"
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
-    And I should not see the link "Belgium"
-    And I should not see the link "Bulgarian"
+    And I should not see the link "Belgium" in the "Content" region
+    And I should not see the link "Bulgarian" in the "Content" region
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
@@ -194,7 +195,8 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Upload file"
+    And I attach the file "text.pdf" to "files[resources_0_subform_resource_file_0]"
     And I attach the file "logo.png" to "Logo"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"

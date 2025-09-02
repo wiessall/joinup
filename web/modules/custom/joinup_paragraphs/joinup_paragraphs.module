@@ -217,7 +217,7 @@ function joinup_paragraphs_entity_view(array &$build, EntityInterface $entity, E
   }
 
   $parent = $entity->getParentEntity();
-  if ($parent->bundle() === 'distribution') {
+  if ($parent && $parent->bundle() === 'distribution') {
     $build['resource_file'] = $entity->get('resource_file')->view('tracker');
   }
 }
