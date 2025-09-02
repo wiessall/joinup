@@ -11,8 +11,11 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\track_usage\RecorderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -29,6 +32,8 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     protected readonly Connection $database,
     #[Autowire('keyvalue')]
     protected readonly KeyValueFactory $keyValue,
+    #[Autowire('Drupal\track_usage\Recorder')]
+    protected readonly RecorderInterface $recorder,
   ) {
   }
 
@@ -40,6 +45,27 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $this->prepareNodeFields();
     $this->migrateNodeFileUrlField('field_file', 'resources');
     $this->migrateNodeFileUrlField('access_url', 'resources');
+  }
+
+  /**
+   * Re-compute track_usages data for affected sources.
+   */
+  public function deploy(): void {
+    $config = $this->entityTypeManager->getStorage('track_usage_config')
+      ->load('file_visibility');
+
+    $result = $this->database->select('node__resources', 'nr')
+      ->distinct()
+      ->fields('nr', ['entity_id'])
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $source = $this->entityTypeManager->getStorage('node')
+        ->load($record['entity_id']);
+      $this->recorder->record($source, $config);
+    }
+
+    $this->recorder->registerUsageRecords();
   }
 
   /**
@@ -115,6 +141,10 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     while ($record = $result->fetchAssoc()) {
       $entity_id = $record['entity_id'];
       $value = $record["{$src_field}_target_id"];
+
+      if ($value && $file = self::urlToFile($value)) {
+        $this->deleteTrackUsages($entity_id, $file->id());
+      }
 
       // Reset lookup when we move to a new entity.
       if ($entity_id !== $current_entity_id) {
@@ -266,6 +296,60 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     }
 
     return UrlHelper::isValid($url) && UrlHelper::isExternal($url) ? $url : NULL;
+  }
+
+  /**
+   * Deletes track usages by entity and target.
+   *
+   * @param string $source_id
+   *   The source ID.
+   * @param string $target_id
+   *   The target ID.
+   */
+  private function deleteTrackUsages(string $source_id, string $target_id): void {
+    $result = $this->database->select('track_usage', 'tu')
+      ->fields('tu', ['tid'])
+      ->condition('source_id_string', $source_id)
+      ->condition('target_id_string', $target_id)
+      ->execute();
+
+    $this->database->delete('track_usage')
+      ->condition('source_id_string', $source_id)
+      ->condition('target_id_string', $target_id)
+      ->execute();
+
+    while ($record = $result->fetchAssoc()) {
+      $this->database->delete('track_usage_paths')
+        ->condition('tid', $record['tid'])
+        ->execute();
+    }
+  }
+
+  /**
+   * Get the right file object from an URL.
+   *
+   * @param string $url
+   *   URL.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   The file object.
+   *
+   * @see \Drupal\file_url\FileUrlHandler::urlToFile
+   */
+  private static function urlToFile($url): ?FileInterface {
+    // Not a url, but a normal file ID. This can occur when an object is
+    // created in code (not through a form).
+    if (is_numeric($url)) {
+      return File::load($url);
+    }
+    $matches = [];
+    preg_match('/\/file-dereference\/([0-9]+)/', $url, $matches);
+    if (!empty($matches)) {
+      return File::load($matches[1]);
+    }
+
+    // It's a remote file.
+    return NULL;
   }
 
 }
