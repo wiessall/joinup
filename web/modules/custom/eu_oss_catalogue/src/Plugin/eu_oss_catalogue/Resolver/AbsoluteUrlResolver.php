@@ -79,8 +79,13 @@ class AbsoluteUrlResolver extends DefaultResolver {
     $urls = [];
     foreach ($value as $langcode => $paths) {
       foreach ($paths as $path) {
-        if ($absoluteUrl = $this->getAbsoluteUrl($project, $platform, $path)) {
+        if (is_string($path) && $absoluteUrl = $this->getAbsoluteUrl($project, $platform, $path)) {
           $urls[$langcode][] = $absoluteUrl;
+        }
+        else {
+          $this->logger->error('Path must be a string, {type} given.', [
+            'type' => gettype($path),
+          ]);
         }
       }
     }
