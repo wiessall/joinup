@@ -16,7 +16,9 @@ test.describe("Language picker", () => {
       `block-language-picker-closed.png`,
     );
 
-    const button = page.locator(".block-language-picker #language-picker__button");
+    const button = page.locator(
+      ".block-language-picker #language-picker__button",
+    );
     const dropdown = page.locator(".block-language-picker .dropdown-menu");
 
     await button.focus();
@@ -25,7 +27,9 @@ test.describe("Language picker", () => {
     await expect(button).toHaveAttribute("aria-expanded", "true");
     await expect(dropdown).toHaveClass(/show/);
     await expect(dropdown).toBeVisible();
-    await expect.soft(dropdown).toHaveScreenshot(`block-language-picker-open.png`);
+    await expect
+      .soft(dropdown)
+      .toHaveScreenshot(`block-language-picker-open.png`);
 
     await page.keyboard.press("Escape");
 
