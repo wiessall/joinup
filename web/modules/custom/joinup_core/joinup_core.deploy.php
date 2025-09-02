@@ -6,3 +6,101 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Fix webform configuration validation errors and clean control characters.
+ */
+function joinup_core_deploy_200700(): string {
+  $webform_config = \Drupal::configFactory()
+    ->getEditable('webform.webform.general_criteria_for_interoperab');
+
+  if ($webform_config->isNew()) {
+    return 'Webform configuration not found.';
+  }
+
+  $all_data = $webform_config->get();
+  $changes_made = [];
+
+  // Remove all problematic attribute sections that cause ValidKeys issues.
+  $sections_to_remove = [];
+  if (isset($all_data['settings']) && is_array($all_data['settings'])) {
+    foreach ($all_data['settings'] as $key => $value) {
+      if (str_ends_with($key, '_attributes') && is_array($value) && empty($value)) {
+        $sections_to_remove[] = "settings.{$key}";
+      }
+    }
+  }
+
+  foreach ($sections_to_remove as $path) {
+    $parts = explode('.', $path);
+    $current = &$all_data;
+    $found = TRUE;
+
+    for ($i = 0; $i < count($parts) - 1; $i++) {
+      if (!isset($current[$parts[$i]])) {
+        $found = FALSE;
+        break;
+      }
+      $current = &$current[$parts[$i]];
+    }
+
+    if ($found && isset($current[$parts[count($parts) - 1]])) {
+      unset($current[$parts[count($parts) - 1]]);
+      $changes_made[] = "removed $path";
+    }
+  }
+
+  if (isset($all_data['handlers']) && is_array($all_data['handlers'])) {
+    $all_data['handlers'] = array_values($all_data['handlers']);
+    $changes_made[] = 'converted handlers to sequence';
+  }
+
+  if (isset($all_data['access']) && is_array($all_data['access'])) {
+    $all_data['access'] = array_values($all_data['access']);
+    $changes_made[] = 'converted access to sequence';
+  }
+
+  if (isset($all_data['variants']) && is_array($all_data['variants'])) {
+    $all_data['variants'] = array_values($all_data['variants']);
+    $changes_made[] = 'converted variants to sequence';
+  }
+
+  // Function to recursively clean control characters from strings.
+  $clean_control_chars = function ($value) use (&$clean_control_chars) {
+    if (is_string($value)) {
+      $original = $value;
+      // Remove ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), BOM (U+FEFF).
+      $value = preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $value);
+      // Remove other control characters except
+      // newlines, tabs, and carriage returns.
+      $value = preg_replace('/[\x{00}-\x{08}\x{0B}\x{0C}\x{0E}-\x{1F}\x{7F}-\x{9F}]/u', '', $value);
+      return ['value' => $value, 'changed' => ($original !== $value)];
+    }
+    elseif (is_array($value)) {
+      $changed = FALSE;
+      foreach ($value as &$item) {
+        $result = $clean_control_chars($item);
+        $item = $result['value'];
+        if ($result['changed']) {
+          $changed = TRUE;
+        }
+      }
+      return ['value' => $value, 'changed' => $changed];
+    }
+    return ['value' => $value, 'changed' => FALSE];
+  };
+
+  $result = $clean_control_chars($all_data);
+  if ($result['changed']) {
+    $all_data = $result['value'];
+    $changes_made[] = 'removed control characters';
+  }
+
+  if ($changes_made) {
+    $webform_config->setData($all_data);
+    $webform_config->save();
+    return 'Fixed webform configuration: ' . implode(', ', $changes_made) . '.';
+  }
+
+  return 'Webform configuration already clean.';
+}

@@ -7,19 +7,38 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Joinup\EnvironmentDetector;
+use Joinup\TestMode;
+use Joinup\TestModeManager;
 
 /**
  * Implements hook_page_attachments().
  */
 function joinup_test_page_attachments(array &$attachments): void {
-  if (EnvironmentDetector::isBehatRunning()) {
+  // Add cache metadata for test_mode.
+  $settings = \Drupal::config(TestModeManager::CONFIG_NAME);
+  CacheableMetadata::createFromRenderArray($attachments)
+    ->addCacheableDependency($settings)
+    ->applyTo($attachments);
+
+  if (TestModeManager::current() === TestMode::Behat) {
     // Attach JS errors collector and disable CSS animations.
     $attachments['#attached']['library'][] = 'joinup_test/testing.js_errors_log';
     $attachments['#attached']['library'][] = 'joinup_test/testing.css_disable_transitions';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for image.
+ */
+function joinup_test_preprocess_image(&$variables): void {
+  // Force eager loading of images during tests to avoid flaky behavior.
+  if (TestModeManager::isActive()) {
+    $variables['attributes']['loading'] = 'eager';
   }
 }
 
