@@ -6,9 +6,12 @@ namespace Drupal\joinup_release\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
+use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\file\FileInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Exception\MissingSolutionException;
+use Drupal\link\LinkItemInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapperInterface;
@@ -19,12 +22,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Listens to normalization of release entities for RDF format encoding.
  */
-final readonly class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
+final readonly class ReleaseRdfSyncSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected RdfSyncMapperInterface $mapper,
     protected RdfSyncConnectionInterface $sparqlConnection,
     protected ConfigFactoryInterface $configFactory,
+    protected FileUrlGeneratorInterface $fileUrlGenerator,
   ) {}
 
   /**
@@ -34,6 +38,7 @@ final readonly class SolutionDataRdfSyncSubscriber implements EventSubscriberInt
     return [
       RdfSyncNormalizeEvent::class => [
         ['addSolutionDataToRelease'],
+        ['addResourcesToRelease', 20],
       ],
     ];
   }
@@ -90,6 +95,33 @@ final readonly class SolutionDataRdfSyncSubscriber implements EventSubscriberInt
     }
 
     $event->setNormalizedArray($normalizedArray);
+  }
+
+  /**
+   * Adds resources linked to the release to the exported data of the release.
+   *
+   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
+   *   The event object.
+   */
+  public function addResourcesToRelease(RdfSyncNormalizeEvent $event): void {
+    $entity = $event->getEntity();
+    if (!$entity instanceof ReleaseInterface) {
+      return;
+    }
+
+    if ($entity->get('resources')->isEmpty()) {
+      return;
+    }
+
+    $normalizedArray = $event->getNormalizedArray();
+    foreach ($entity->getResources() as $resource) {
+      if ($resource instanceof LinkItemInterface) {
+        $normalizedArray[$entity->getUri()]['http://xmlns.com/foaf/0.1/page'][] = (new Resource($resource->uri))->toRdfPhp();
+      }
+      elseif ($resource instanceof FileInterface) {
+        $normalizedArray[$entity->getUri()]['http://xmlns.com/foaf/0.1/page'][] = (new Resource($this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri())))->toRdfPhp();
+      }
+    }
   }
 
 }

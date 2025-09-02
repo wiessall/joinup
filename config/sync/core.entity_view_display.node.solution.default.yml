@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -21,6 +20,7 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
+    - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -29,6 +29,7 @@ dependencies:
     - og_menu.ogmenu.quick_links
   module:
     - custom_markup_block
+    - entity_reference_revisions
     - joinup_group
     - joinup_layout
     - layout_builder
@@ -734,6 +735,23 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 47
             additional: {  }
+          72b8da4c-b633-4952-82f9-0c4d44162faf:
+            uuid: 72b8da4c-b633-4952-82f9-0c4d44162faf
+            region: content
+            configuration:
+              id: 'field_block:node:solution:resources'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_revisions_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                  link: ''
+                third_party_settings: {  }
+            weight: 48
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -1316,13 +1334,21 @@ content:
     third_party_settings: {  }
     weight: 50
     region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 9
+    region: content
 hidden:
   abstract: true
   classification: true
   collections: true
   contact: true
   description: true
-  documentation: true
   domain: true
   download_total: true
   eif_perspective: true

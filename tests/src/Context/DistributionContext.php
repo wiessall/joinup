@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
@@ -156,53 +155,6 @@ class DistributionContext extends RawDrupalContext {
     // Test the file size.
     if ($expected_file_size !== (int) $file->filesize->value) {
       throw new \Exception("File '$file_name' has the size '{$file->filesize->value}'. Expected '$expected_file_size'.");
-    }
-  }
-
-  /**
-   * Uploads a file or sets a remote URL to a 'file_url' field.
-   *
-   * @param string $file_or_url
-   *   Either file name to be uploaded or a remote URL.
-   * @param string $file_url_field
-   *   The file URL field label.
-   *
-   * @throws \Exception
-   *   The file to be uploaded doesn't exists.
-   *
-   * @Given I upload the file :file_or_url to :file_url_field
-   * @Given I set a remote URL :file_or_url to :file_url_field
-   */
-  public function addFileUrlItem(string $file_or_url, string $file_url_field): void {
-    $type = UrlHelper::isExternal($file_or_url) ? 'remote' : 'upload';
-
-    $session = $this->getSession();
-    $page = $session->getPage();
-
-    // Locate the file URL field widget wrapper.
-    $wrapper = $page->find('xpath', "//label[text()='$file_url_field']/ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' field--type-file-url ')][1]");
-    if (!$wrapper) {
-      throw new \Exception("Cannot find the file URL field '$file_url_field'.");
-    }
-
-    /** @var \Behat\Mink\Element\NodeElement $radio */
-    $radio = $wrapper->find('xpath', "//input[@type='radio']");
-    if (!$radio) {
-      throw new \Exception("Malformed file URL field '$file_url_field': Can't find the inner radio option.");
-    }
-    $page->selectFieldOption($radio->getAttribute('name'), $type);
-
-    if ($type === 'upload') {
-      // Qualify the file path.
-      $files_path = $this->getMinkParameter('files_path');
-      $path = rtrim(realpath($files_path), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file_or_url;
-      if (!is_file($path)) {
-        throw new \Exception("File '$file_or_url' was not found in file path '$files_path'.");
-      }
-      $wrapper->attachFileToField('Choose a file', $path);
-    }
-    elseif ($type === 'remote') {
-      $wrapper->fillField('Remote URL', $file_or_url);
     }
   }
 

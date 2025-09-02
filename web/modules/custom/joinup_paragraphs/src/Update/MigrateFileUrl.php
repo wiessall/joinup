@@ -11,11 +11,13 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\track_usage\RecorderInterface;
+use Drush\Drush;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -24,6 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class MigrateFileUrl implements ContainerInjectionInterface {
 
   use AutowireTrait;
+  use StringTranslationTrait;
 
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
@@ -45,6 +48,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $this->prepareNodeFields();
     $this->migrateNodeFileUrlField('field_file', 'resources');
     $this->migrateNodeFileUrlField('access_url', 'resources');
+    $this->migrateNodeFileUrlField('documentation', 'resources');
   }
 
   /**
@@ -72,7 +76,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
    * Prepare paragraph's structure.
    */
   private function prepareParagraphs(): void {
-    $config_entities = [
+    $configEntities = [
       'paragraphs_type' => [
         'paragraphs.paragraphs_type.resource_file',
         'paragraphs.paragraphs_type.resource_link',
@@ -87,34 +91,35 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ],
     ];
 
-    $this->createConfigEntities($config_entities);
+    $this->createConfigEntities($configEntities);
   }
 
   /**
    * Prepare node's structure.
    */
   private function prepareNodeFields(): void {
-    $config_entities = [
+    $configEntities = [
       'field_storage_config' => [
         'field.storage.node.resources',
       ],
       'field_config' => [
         'field.field.node.document.resources',
         'field.field.node.distribution.resources',
+        'field.field.node.solution.resources',
       ],
     ];
 
-    $this->createConfigEntities($config_entities);
+    $this->createConfigEntities($configEntities);
   }
 
   /**
    * Creates configuration entities from sync storage.
    *
-   * @param array $config_entities
+   * @param array $configEntities
    *   Array of configuration entities keyed by storage type.
    */
-  private function createConfigEntities(array $config_entities): void {
-    foreach ($config_entities as $storage => $keys) {
+  private function createConfigEntities(array $configEntities): void {
+    foreach ($configEntities as $storage => $keys) {
       foreach ($keys as $key) {
         $this->entityTypeManager->getStorage($storage)
           ->create($this->syncStorage->read($key))
@@ -126,30 +131,31 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Migrates a node file_url field to paragraphs field.
    */
-  private function migrateNodeFileUrlField(string $src_field, string $dest_field): void {
+  private function migrateNodeFileUrlField(string $srcField, string $destField): void {
+    $startTime = microtime(TRUE);
     // Process all revision table records.
-    [, $src_revision_table] = array_keys($this->getFieldStorageSchema('node', $src_field));
-    $result = $this->database->select($src_revision_table)
-      ->fields($src_revision_table)
+    [, $srcRevisionTable] = array_keys($this->getFieldStorageSchema('node', $srcField));
+    $results = $this->database->select($srcRevisionTable)
+      ->fields($srcRevisionTable)
       ->orderBy('entity_id')
       ->orderBy('revision_id')
       ->orderBy('delta')
       ->execute();
 
-    $dest_records = $lookup = [];
-    $current_entity_id = NULL;
-    while ($record = $result->fetchAssoc()) {
-      $entity_id = $record['entity_id'];
-      $value = $record["{$src_field}_target_id"];
+    $destRecords = $lookup = [];
+    $currentEntityId = NULL;
+    while ($record = $results->fetch()) {
+      $entityId = $record->entity_id;
+      $value = $record->{"{$srcField}_target_id"};
 
       if ($value && $file = self::urlToFile($value)) {
-        $this->deleteTrackUsages($entity_id, $file->id());
+        $this->deleteTrackUsages($entityId, $file->id());
       }
 
       // Reset lookup when we move to a new entity.
-      if ($entity_id !== $current_entity_id) {
+      if ($entityId !== $currentEntityId) {
         $lookup = [];
-        $current_entity_id = $entity_id;
+        $currentEntityId = $entityId;
       }
 
       // Did we already create a paragraph for this entity ID + target value?
@@ -157,7 +163,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       // Otherwise, create a new revision for that paragraph.
       $paragraph = $lookup[$value] ?? NULL;
       if ($paragraph === NULL) {
-        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entity_id, $dest_field);
+        $paragraph = $this->createParagraphFromFieldValue($value, 'node', $entityId, $destField);
       }
       elseif ($paragraph instanceof ParagraphInterface) {
         $paragraph->setNewRevision();
@@ -173,69 +179,108 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       $lookup[$value] = $paragraph;
 
       // Collect records to be inserted.
-      $dest_records[] = [
-        'bundle' => $record['bundle'],
-        'deleted' => $record['deleted'],
-        'entity_id' => $record['entity_id'],
-        'revision_id' => $record['revision_id'],
-        'langcode' => $record['langcode'],
-        'delta' => $record['delta'],
-        "{$dest_field}_target_id" => $paragraph->id(),
-        "{$dest_field}_target_revision_id" => $paragraph->getRevisionId(),
+      $destRecords[] = [
+        'bundle' => $record->bundle,
+        'deleted' => $record->deleted,
+        'entity_id' => $record->entity_id,
+        'revision_id' => $record->revision_id,
+        'langcode' => $record->langcode,
+        'delta' => $record->delta,
+        "{$destField}_target_id" => $paragraph->id(),
+        "{$destField}_target_revision_id" => $paragraph->getRevisionId(),
       ];
     }
 
-    if (!$dest_records) {
+    if (!$destRecords) {
       return;
     }
 
     // Fill destination field revision table records.
-    [$dest_data_table, $dest_revision_table] = array_keys($this->getFieldStorageSchema('node', $dest_field));
-    $insert_query = $this->database
-      ->insert($dest_revision_table)
-      ->fields(array_keys($dest_records[0]));
-    foreach ($dest_records as $dest_record) {
-      $insert_query->values($dest_record);
+    [$destDataTable, $destRevisionTable] = array_keys($this->getFieldStorageSchema('node', $destField));
+    $insertQuery = $this->database
+      ->insert($destRevisionTable)
+      ->fields(array_keys($destRecords[0]));
+    foreach ($destRecords as $destRecord) {
+      $insertQuery->values($destRecord);
     }
-    $insert_query->execute();
+    $insertQuery->execute();
 
     // Fill destination field data table records.
     // Copy current revision records from revision table to data table.
-    $insert_from = $this->database
-      ->select($dest_revision_table, 'r')
+    $insertFrom = $this->database
+      ->select($destRevisionTable, 'r')
       ->fields('r')
       ->condition('revision_id', $this->database->select('node', 'n')->fields('n', ['vid']), 'IN')
-      ->notExists($this->database->select($dest_data_table, 't')->fields('t'));
+      ->notExists($this->database->select($destDataTable, 't')->fields('t')->where('t.revision_id = r.revision_id'));
     $this->database
-      ->insert($dest_data_table)
-      ->from($insert_from)
+      ->insert($destDataTable)
+      ->from($insertFrom)
       ->execute();
+
+    // Select the distinct entity IDs that were processed both from the source
+    // and destination data tables.
+    $sourceDataTable = $this->getFieldStorageSchema('node', $srcField);
+    [$sourceDataTable] = array_keys($sourceDataTable);
+    $sourceEntityIds = $this->database->select($sourceDataTable, 's')
+      ->fields('s', ['entity_id', 'revision_id', 'delta'])
+      ->execute()
+      ->fetchCol();
+    sort($sourceEntityIds);
+
+    // Select the distinct entity IDs that are in the destination data table.
+    $destEntityIds = $this->database->select($destDataTable, 'd')
+      ->fields('d', ['entity_id', 'revision_id', 'delta'])
+      // Only care about entity IDs that are in the source table. That is
+      // because there are entity IDs from other sequences.
+      ->condition('d.entity_id', $sourceEntityIds, 'IN')
+      ->execute()
+      ->fetchCol();
+    sort($destEntityIds);
+
+    $endTime = microtime(TRUE);
+    Drush::logger()->notice($this->t('Migrated records from @src to @dest field in @time seconds.', [
+      '@src' => $srcField,
+      '@dest' => $destField,
+      '@time' => round($endTime - $startTime, 2),
+    ]));
+
+    if ($sourceEntityIds !== $destEntityIds) {
+      $missingInDest = array_diff($sourceEntityIds, $destEntityIds);
+      Drush::logger()->warning($this->t('@countSource entries on the source table, but @countTarget to the target table. The following entity IDs were missing in the destination field data table: @ids', [
+        '@countSource' => count($sourceEntityIds),
+        '@countTarget' => count($destEntityIds),
+        '@ids' => implode(', ', $missingInDest),
+      ]));
+    }
+    else {
+      Drush::logger()->notice($this->t('All entity IDs were successfully migrated to the destination field data table.'));
+    }
   }
 
   /**
    * Returns the storage schema for the given field.
    */
-  private function getFieldStorageSchema(string $entity_type, string $field_name): array {
+  private function getFieldStorageSchema(string $entityType, string $fieldName): array {
     return $this->keyValue->get('entity.storage_schema.sql')
-      ->get("$entity_type.field_schema_data.$field_name", []);
+      ->get("$entityType.field_schema_data.$fieldName", []);
   }
 
   /**
    * Creates a paragraph from file_url's target_id field value.
    */
-  private function createParagraphFromFieldValue(string $value, string $parent_type, int|string $parent_id, string $parent_field_name): ?Paragraph {
-    $file_id = $this->extractFileIdFromDereferenceUrl($value);
-    $paragraph = $file_id
-      ? $this->createResourceFileParagraph($file_id)
+  private function createParagraphFromFieldValue(string $value, string $parentType, int|string $parentId, string $parentFieldName): ?Paragraph {
+    $fileId = $this->extractFileIdFromDereferenceUrl($value);
+    $paragraph = $fileId
+      ? $this->createResourceFileParagraph($fileId)
       : $this->createResourceLinkParagraph($value);
 
     if (!$paragraph) {
       return NULL;
     }
 
-    $paragraph->set('parent_type', $parent_type);
-    $paragraph->set('parent_id', $parent_id);
-    $paragraph->set('parent_field_name', $parent_field_name);
+    $paragraph->set('parent_type', $parentType);
+    $paragraph->set('parent_id', $parentId);
+    $paragraph->set('parent_field_name', $parentFieldName);
     $paragraph->search_api_skip_tracking = TRUE;
     $paragraph->save();
     return $paragraph;
@@ -254,10 +299,10 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   /**
    * Creates a resource_file paragraph.
    */
-  private function createResourceFileParagraph(int $file_id): ?Paragraph {
+  private function createResourceFileParagraph(int $fileId): ?Paragraph {
     return Paragraph::create([
       'type' => 'resource_file',
-      'resource_file' => $file_id,
+      'resource_file' => $fileId,
     ]);
   }
 
@@ -265,14 +310,14 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
    * Creates a resource_link paragraph.
    */
   private function createResourceLinkParagraph(string $url): ?Paragraph {
-    $normalized_url = $this->normalizeUrl($url);
-    if (!$normalized_url) {
+    $normalizedUrl = $this->normalizeUrl($url);
+    if (!$normalizedUrl) {
       return NULL;
     }
 
     return Paragraph::create([
       'type' => 'resource_link',
-      'remote_file_url' => $normalized_url,
+      'remote_file_url' => $normalizedUrl,
     ]);
   }
 
