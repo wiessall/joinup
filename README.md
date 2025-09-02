@@ -324,6 +324,10 @@ Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com
   site](https://gitlab.com/weitzman/drupal-test-traits) but also plain PHPUnit
   tests.
 
+#### Visual regression testing (Playwright)
+
+Refer to [tests/playwright/README.md](tests/playwright/README.md).
+
 #### Static code analysis
 
 Interoperable Europe Portal uses GrumPHP, which runs all tasks defined in [grumphp.yml.dist](grumphp.yml.dist).
