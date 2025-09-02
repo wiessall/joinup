@@ -10,7 +10,7 @@
 #}
 {{ attach_library('ventuno/language-picker') }}
 
-<button id="language-picker__button" class="btn btn-link icon-link d-inline-flex px-3" type="button" data-bs-toggle="dropdown" aria-label="{{ 'Toggle language picker'|t }}">{{ current_language.code|upper }}</button>
+<button id="language-picker__button" class="btn btn-link bg-white icon-link d-inline-flex px-3" type="button" data-bs-toggle="dropdown" aria-label="{{ 'Toggle language picker'|t }}">{{ current_language.code|upper }}</button>
 <div class="dropdown-menu dropdown-menu-end p-3" role="menu" aria-labelledby="language-picker__button">
   <ul class="list-unstyled mb-0 row row-cols-2 row-cols-md-3">
   {% for language in languages %}
