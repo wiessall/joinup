@@ -104,6 +104,11 @@ actions-menu:
   css:
     theme:
       assets/css/actions-menu.min.css: { minified: true }
+  js:
+    assets/js/actions-menu.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
 
 ajax-throbber:
   js:
