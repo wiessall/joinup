@@ -8,116 +8,99 @@
 declare(strict_types=1);
 
 /**
- * Add a no-version suffix to invalid release aliases.
+ * Fix webform configuration validation errors and clean control characters.
  */
-function joinup_core_deploy_200600(): string {
-  $paths = [
-    '/node/722200',
-    '/node/722202',
-    '/node/722204',
-    '/node/722206',
-    '/node/722210',
-    '/node/722212',
-    '/node/722214',
-    '/node/722217',
-    '/node/722220',
-    '/node/722222',
-    '/node/720451',
-    '/node/720455',
-    '/node/722225',
-    '/node/722226',
-    '/node/722228',
-    '/node/722230',
-    '/node/722232',
-    '/node/722234',
-    '/node/722236',
-    '/node/722238',
-    '/node/722240',
-    '/node/722242',
-    '/node/722244',
-    '/node/722246',
-    '/node/722248',
-    '/node/720466',
-    '/node/720471',
-    '/node/720473',
-    '/node/720477',
-    '/node/720485',
-    '/node/720487',
-    '/node/720491',
-    '/node/720151',
-    '/node/720153',
-    '/node/722379',
-    '/node/721057',
-    '/node/721154',
-    '/node/720160',
-    '/node/720163',
-    '/node/722390',
-    '/node/721181',
-    '/node/721182',
-    '/node/721189',
-    '/node/720398',
-    '/node/721192',
-    '/node/722399',
-    '/node/720400',
-    '/node/721198',
-    '/node/720410',
-    '/node/720418',
-    '/node/720423',
-    '/node/720429',
-    '/node/721215',
-    '/node/721217',
-    '/node/721225',
-    '/node/721239',
-    '/node/721257',
-    '/node/721259',
-    '/node/721267',
-    '/node/720012',
-    '/node/720014',
-    '/node/720017',
-    '/node/721281',
-    '/node/721311',
-  ];
+function joinup_core_deploy_200700(): string {
+  $webform_config = \Drupal::configFactory()
+    ->getEditable('webform.webform.general_criteria_for_interoperab');
 
-  $database = \Drupal::database();
-  foreach ($paths as $path) {
-    $alias = \Drupal::service('path_alias.manager')->getAliasByPath($path);
-    $alias .= '/no-version';
-    // Use direct database query to avoid creating redirects.
-    $database->update('path_alias')
-      ->fields(['alias' => $alias])
-      ->condition('path', $path)
-      ->execute();
+  if ($webform_config->isNew()) {
+    return 'Webform configuration not found.';
   }
 
-  return 'Added no-version suffix to invalid release aliases.';
-}
+  $all_data = $webform_config->get();
+  $changes_made = [];
 
-/**
- * Fix also the redirect paths that end with /release.
- */
-function joinup_core_deploy_200601(): string {
-  $redirect_ids = [
-    '107464',
-    '124296',
-    '125182',
-    '125830',
-    '126062',
-    '126124',
-    '126239',
-    '126340',
-    '126658',
-    '126759',
-    '126814',
-    '128731',
-    '128734',
-    '132026',
-    '132241',
-    '132435',
-    '132506',
-  ];
+  // Remove all problematic attribute sections that cause ValidKeys issues.
+  $sections_to_remove = [];
+  if (isset($all_data['settings']) && is_array($all_data['settings'])) {
+    foreach ($all_data['settings'] as $key => $value) {
+      if (str_ends_with($key, '_attributes') && is_array($value) && empty($value)) {
+        $sections_to_remove[] = "settings.{$key}";
+      }
+    }
+  }
 
-  $storage = \Drupal::entityTypeManager()->getStorage('redirect');
-  $storage->delete($storage->loadMultiple($redirect_ids));
+  foreach ($sections_to_remove as $path) {
+    $parts = explode('.', $path);
+    $current = &$all_data;
+    $found = TRUE;
 
-  return 'Added no-version suffix to invalid release aliases with /release.';
+    for ($i = 0; $i < count($parts) - 1; $i++) {
+      if (!isset($current[$parts[$i]])) {
+        $found = FALSE;
+        break;
+      }
+      $current = &$current[$parts[$i]];
+    }
+
+    if ($found && isset($current[$parts[count($parts) - 1]])) {
+      unset($current[$parts[count($parts) - 1]]);
+      $changes_made[] = "removed $path";
+    }
+  }
+
+  if (isset($all_data['handlers']) && is_array($all_data['handlers'])) {
+    $all_data['handlers'] = array_values($all_data['handlers']);
+    $changes_made[] = 'converted handlers to sequence';
+  }
+
+  if (isset($all_data['access']) && is_array($all_data['access'])) {
+    $all_data['access'] = array_values($all_data['access']);
+    $changes_made[] = 'converted access to sequence';
+  }
+
+  if (isset($all_data['variants']) && is_array($all_data['variants'])) {
+    $all_data['variants'] = array_values($all_data['variants']);
+    $changes_made[] = 'converted variants to sequence';
+  }
+
+  // Function to recursively clean control characters from strings.
+  $clean_control_chars = function ($value) use (&$clean_control_chars) {
+    if (is_string($value)) {
+      $original = $value;
+      // Remove ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), BOM (U+FEFF).
+      $value = preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $value);
+      // Remove other control characters except
+      // newlines, tabs, and carriage returns.
+      $value = preg_replace('/[\x{00}-\x{08}\x{0B}\x{0C}\x{0E}-\x{1F}\x{7F}-\x{9F}]/u', '', $value);
+      return ['value' => $value, 'changed' => ($original !== $value)];
+    }
+    elseif (is_array($value)) {
+      $changed = FALSE;
+      foreach ($value as &$item) {
+        $result = $clean_control_chars($item);
+        $item = $result['value'];
+        if ($result['changed']) {
+          $changed = TRUE;
+        }
+      }
+      return ['value' => $value, 'changed' => $changed];
+    }
+    return ['value' => $value, 'changed' => FALSE];
+  };
+
+  $result = $clean_control_chars($all_data);
+  if ($result['changed']) {
+    $all_data = $result['value'];
+    $changes_made[] = 'removed control characters';
+  }
+
+  if ($changes_made) {
+    $webform_config->setData($all_data);
+    $webform_config->save();
+    return 'Fixed webform configuration: ' . implode(', ', $changes_made) . '.';
+  }
+
+  return 'Webform configuration already clean.';
 }
