@@ -1,0 +1,107 @@
+diff --git a/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php b/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
+index 11c44963f5da13eb512aadee49e978ee5134af57..37576bbdb4db94d5dca324ba6ad2fbdc9e3ae4a2 100644
+--- a/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
++++ b/modules/babel_menu_link_content/src/BabelMenuLinkContentService.php
+@@ -8,6 +8,7 @@ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\Model\Source;
+ use Drupal\Core\Batch\BatchBuilder;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Language\LanguageManagerInterface;
+ use Drupal\menu_link_content\MenuLinkContentInterface;
+ 
+ /**
+@@ -35,6 +36,7 @@ class BabelMenuLinkContentService {
+   public function __construct(
+     protected readonly EntityTypeManagerInterface $entityTypeManager,
+     protected readonly BabelStorageInterface $babelStorage,
++    protected readonly LanguageManagerInterface $languageManager,
+   ) {}
+ 
+   /**
+@@ -44,6 +46,10 @@ class BabelMenuLinkContentService {
+    *   The menu link content entity to process.
+    */
+   public function updateSourcesForLink(MenuLinkContentInterface $link): void {
++    // Avoid duplicate sources created from translations of menu links.
++    if ($link->language()->getId() !== $this->languageManager->getDefaultLanguage()->getId()) {
++      return;
++    }
+     // Cleanup first.
+     $this->babelStorage->delete('menu_link_content', $link->getMenuName() . ':' . $link->id() . ':');
+     $this->babelStorage->update('menu_link_content', $this->getSourcesForLink($link));
+@@ -114,6 +120,7 @@ class BabelMenuLinkContentService {
+    *   The batch context.
+    */
+   public static function processMenuLinks(array $lids, int $total, array &$context): void {
++    $default_language = \Drupal::languageManager()->getDefaultLanguage();
+     $context['results']['progress'] ??= 0;
+ 
+     $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+@@ -121,6 +128,10 @@ class BabelMenuLinkContentService {
+ 
+     $sources = [];
+     foreach ($storage->loadMultiple($lids) as $link) {
++      // Avoid duplicate sources created from translations of menu links.
++      if ($link->language()->getId() !== $default_language->getId()) {
++        continue;
++      }
+       $sources = [...$sources, ...$service->getSourcesForLink($link)];
+     }
+     \Drupal::service(BabelStorageInterface::class)->update('menu_link_content', $sources);
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
+index 63e2ce9496c53ee1ac95c3cf08f32e1def3b4daf..524ddc6b6fef3a8cedd1d942d5c18b69853cd5ff 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceInstallTest.php
+@@ -114,9 +114,19 @@ class BabelMenuLinkContentServiceInstallTest extends BabelKernelTestBase {
+           ],
+           'langcode' => LanguageInterface::LANGCODE_NOT_APPLICABLE,
+         ],
+-        'expectedProperties' => [
+-          'test:1:title:0',
++        'expectedProperties' => [],
++      ],
++      'Test language' => [
++        'menuLinkValues' => [
++          'menu_name' => 'test',
++          'title' => '🤷‍♂️',
++          'link' => [
++            'title' => 'Link title',
++            'uri' => 'https://example.com/',
++          ],
++          'langcode' => static::LANGCODE,
+         ],
++        'expectedProperties' => [],
+       ],
+     ];
+   }
+diff --git a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceTest.php b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceTest.php
+index d82560b76c4fae75ae5520a74ace9468c6eeb061..ceb9da52703ff3c6d24450394da34a2e15dc6a66 100644
+--- a/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceTest.php
++++ b/modules/babel_menu_link_content/tests/src/Kernel/BabelMenuLinkContentServiceTest.php
+@@ -61,6 +61,15 @@ class BabelMenuLinkContentServiceTest extends BabelKernelTestBase {
+     ]));
+     $this->menuLinkContent->save();
+ 
++    // Menu links not in sites default language should not generate sources.
++    $storage->create($this->mergeRequiredLinkValues([
++      'title' => static::LANGCODE . 'menu link',
++      'description' => 'description',
++      'link' => ['uri' => 'http://example.com/' . static::LANGCODE . 'test/'],
++      'langcode' => static::LANGCODE,
++    ]))->save();
++
++    $this->assertTrue(TRUE);
+     $this->assertEquals(
+       [
+         'test:1:description:0' => new StringTranslation(
+@@ -81,6 +90,10 @@ class BabelMenuLinkContentServiceTest extends BabelKernelTestBase {
+    */
+   public function testUpdate(): void {
+     $this->testCreate();
++
++    // Translations should not register sources to avoid duplicates.
++    $this->menuLinkContent->addTranslation(static::LANGCODE, $this->menuLinkContent->toArray());
++
+     $this->menuLinkContent
+       ->set('title', 'New title')
+       ->set('description', NULL)
