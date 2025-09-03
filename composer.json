@@ -328,12 +328,7 @@
         },
         "patches": {
             "drupal/babel": {
-                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note572659.diff",
-                "Exclude webforms @see https://www.drupal.org/i/3542257": "resources/patch/php/drupal/babel/3542257.mr41-note572893.diff",
-                "Readonly property cannot be initialized @see https://www.drupal.org/i/3542278": "resources/patch/php/drupal/babel/3542278.comment-16235365.mr42.diff",
-                "Error when updating a menu link @see https://www.drupal.org/i/3542349": "resources/patch/php/drupal/babel/3542349.comment-16235945.mr43.diff",
-                "Difficult to reuse the structure: @see https://www.drupal.org/i/3542354": "resources/patch/php/drupal/babel/3542354.diff",
-                "TypeError in Config translation plugin when configuration is renamed: @see https://www.drupal.org/i/3544230": "resources/patch/php/drupal/babel/3544230.diff"
+                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note572659.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
