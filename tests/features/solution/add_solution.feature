@@ -162,8 +162,8 @@ Feature: Test adding solutions.
     And I should see the text "This is a test text"
     # Most solution fields are not shown in the overview but in the "about" page.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3224
-    And I should not see the link "Belgium"
-    And I should not see the link "Bulgarian"
+    And I should not see the link "Belgium" in the "Content" region
+    And I should not see the link "Bulgarian" in the "Content" region
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |

@@ -19,11 +19,11 @@ class JoinupEventContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
-   * Keeps track of the number of Webtools Geocoding cache results that exist.
+   * Keeps track of the number of Geocoding cache results that exist.
    *
    * @var int
    */
-  protected static $webtoolsGeocodingCacheCount;
+  protected static $geocodingCacheCount;
 
   /**
    * Converts relative dates into an accepted format.
@@ -60,14 +60,13 @@ class JoinupEventContext extends RawDrupalContext {
   /**
    * Ensures that the file cache for Geocoder results is enabled.
    *
-   * We are using the Webtools Geocoding service for geocoding event addresses
-   * so they can be displayed as maps. This service has a very limited monthly
-   * quota so we should avoid requesting results just for testing purposes. We
-   * are using the File Cache module to cache the results of the API calls to
-   * the service, and these are being stored in the fixtures folder.
+   * We are using the GISCO Geocoding service for geocoding event addresses
+   * so they can be displayed as maps. In order to avoid requests to the service
+   * during tests, we are using the File Cache module to cache the results of
+   * API calls. These are being stored in the fixtures folder.
    *
    * @throws \Exception
-   *   Thrown when the Webtools Geocoding results are not being cached.
+   *   Thrown when the Geocoding results are not being cached.
    *
    * @BeforeScenario @api
    */
@@ -75,56 +74,54 @@ class JoinupEventContext extends RawDrupalContext {
     $cache_settings = Settings::get('cache');
 
     $geocoder_cache_backend = $cache_settings['bins']['geocoder'] ?? '';
-    $geocoder_cache_directory = self::getWebtoolsGeocodingCacheDirectory();
+    $geocoder_cache_directory = self::getGeocodingCacheDirectory();
 
     if ($geocoder_cache_backend !== 'cache.backend.file_system' || empty($geocoder_cache_directory)) {
-      throw new \Exception('The Webtools Geocoding cache should be enabled. Please run ./vendor/bin/run drupal:settings site-clean');
+      throw new \Exception('The Geocoding cache should be enabled. Please run ./vendor/bin/run drupal:settings site-clean');
     }
 
     // Keep track of the number of files that are present in the file cache.
     // After the feature has been completely tested we can check that the number
     // of files remains the same. This will ensure that no new requests have
-    // been made to the Webtools Geocoding service without being saved in the
-    // file cache.
-    static::$webtoolsGeocodingCacheCount = self::getWebtoolsGeocodingCacheCount();
+    // been made to the Geocoding service without being saved in the file cache.
+    static::$geocodingCacheCount = self::getGeocodingCacheCount();
   }
 
   /**
-   * Verifies that all requests to Webtools Geocoding are cached.
+   * Verifies that all Geocoding requests are cached.
    *
    * @throws \Exception
-   *   Thrown when live requests were done to the Webtools Geocoding service
-   *   during the test.
+   *   Thrown when live requests were done to the service during the test.
    *
    * @AfterScenario @api
    */
   public static function checkCachedFiles(AfterScenarioScope $scope): void {
-    $expected_count = self::$webtoolsGeocodingCacheCount;
+    $expected_count = self::$geocodingCacheCount;
 
-    if ($expected_count !== NULL && $expected_count != self::getWebtoolsGeocodingCacheCount()) {
+    if ($expected_count !== NULL && $expected_count != self::getGeocodingCacheCount()) {
       $feature = $scope->getFeature()->getFile();
-      throw new \Exception("$feature is doing live requests to the Webtools Geocoding service. Please make sure to commit all cached requests in tests/fixtures/geocoding/cache.");
+      throw new \Exception("$feature is doing live requests to the Geocoding service. Please make sure to commit all cached requests in tests/fixtures/geocoding/cache.");
     }
   }
 
   /**
-   * Returns the number of Webtools Geocoding results that have been cached.
+   * Returns the number of Geocoding results that have been cached.
    *
    * @return int
    *   The number of cached results.
    */
-  protected static function getWebtoolsGeocodingCacheCount(): int {
-    $directory = self::getWebtoolsGeocodingCacheDirectory();
+  protected static function getGeocodingCacheCount(): int {
+    $directory = self::getGeocodingCacheDirectory();
     return iterator_count(new \FilesystemIterator($directory, \FilesystemIterator::SKIP_DOTS));
   }
 
   /**
-   * Returns the path to the Webtools Geocoding file cache.
+   * Returns the path to the Geocoding file cache.
    *
    * @return string
    *   The location of the treasure.
    */
-  protected static function getWebtoolsGeocodingCacheDirectory(): string {
+  protected static function getGeocodingCacheDirectory(): string {
     $filecache_settings = Settings::get('filecache');
     return $filecache_settings['directory']['bins']['geocoder'] ?? '';
   }

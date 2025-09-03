@@ -19,6 +19,7 @@ Feature: User role management
     And the "Roles" checkboxes should contain the following options:
       | Licence manager            |
       | Moderator                  |
+      | Translator                 |
       | Administrator              |
       | Developer                  |
       | Interoperability validator |
@@ -28,6 +29,7 @@ Feature: User role management
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
       | Licence manager |
+      | Translator      |
 
     Given I am logged in as "Awesome dev"
     And I go to "/admin/people"
@@ -38,6 +40,7 @@ Feature: User role management
       | Developer                  |
       | Licence manager            |
       | Moderator                  |
+      | Translator                 |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.

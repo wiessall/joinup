@@ -277,6 +277,11 @@ ief-entity-table:
     theme:
       assets/css/ief-entity-table.min.css: { minified: true }
 
+language-picker:
+  css:
+    theme:
+      assets/css/language-picker.min.css: { minified: true }
+
 layout-block:
   css:
     theme:

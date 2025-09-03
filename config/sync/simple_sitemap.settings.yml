@@ -14,15 +14,28 @@ custom_links_include_images: false
 disable_language_hreflang: false
 hide_branding: false
 excluded_languages:
+  bg: bg
+  hr: hr
   cs: cs
   da: da
   nl: nl
   et: et
+  fi: fi
   fr: fr
   de: de
   el: el
+  hu: hu
+  ga: ga
   it: it
+  lv: lv
+  lt: lt
+  mt: mt
+  pl: pl
+  pt: pt
+  ro: ro
+  sk: sk
   sl: sl
   es: es
+  sv: sv
 enabled_entity_types:
   - node

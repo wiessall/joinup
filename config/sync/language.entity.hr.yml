@@ -1,0 +1,14 @@
+uuid: 4659c443-ec00-4540-971e-1a7d465a0f46
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;'
+id: hr
+label: Croatian
+direction: ltr
+weight: -11
+locked: false
