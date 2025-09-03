@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78b0fcec8e66f28fa838d3c21ad44ba1",
+    "content-hash": "1dbdff01c586e6653b24bf235e5d7b65",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5417,35 +5417,32 @@
         },
         {
             "name": "drupal/iframe",
-            "version": "2.24.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/iframe.git",
-                "reference": "8.x-2.24"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/iframe-8.x-2.24.zip",
-                "reference": "8.x-2.24",
-                "shasum": "931b21dceed48d5c5acaff6eb7b69bf935563c38"
+                "url": "https://ftp.drupal.org/files/projects/iframe-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "5e2556a5b96d89b71c16464e260eecd01d21c03c"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
-                "drupal/token": "^1.0",
-                "mglaman/phpstan-drupal": "^1.1",
-                "palantirnet/drupal-rector": "^0.12",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpstan/phpstan": "^1.3",
-                "phpunit/phpunit": "^9.5",
-                "symfony/phpunit-bridge": "^6.0"
+                "drupal/feeds": "^3.0"
+            },
+            "suggest": {
+                "drupal/token": "When installed you can use token syntax for url of iframe."
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.24",
-                    "datestamp": "1699787492",
+                    "version": "3.0.0",
+                    "datestamp": "1725396265",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5469,7 +5466,7 @@
                 }
             ],
             "description": "Defines a simple iframe field type.",
-            "homepage": "http://drupal.org/project/iframe",
+            "homepage": "https://drupal.org/project/iframe",
             "support": {
                 "source": "https://git.drupalcode.org/project/iframe"
             }
@@ -7718,29 +7715,33 @@
         },
         {
             "name": "drupal/poll",
-            "version": "1.6.0",
+            "version": "2.0.0-alpha5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/poll.git",
-                "reference": "8.x-1.6"
+                "reference": "2.0.0-alpha5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/poll-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "e7ae83ed214a03e6ecf26a8ac7b500ba61d4dde5"
+                "url": "https://ftp.drupal.org/files/projects/poll-2.0.0-alpha5.zip",
+                "reference": "2.0.0-alpha5",
+                "shasum": "d29077800738cd4244aa45b456eb735bbfc391a9"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/devel": "^5.3",
+                "drupal/devel_generate-devel_generate": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1680209860",
+                    "version": "2.0.0-alpha5",
+                    "datestamp": "1744287698",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -7773,7 +7774,8 @@
             "description": "Allows your site to capture votes on different topics in the form of multiple choice questions.",
             "homepage": "https://www.drupal.org/project/poll",
             "support": {
-                "source": "https://git.drupalcode.org/project/poll"
+                "source": "https://git.drupalcode.org/project/poll.git",
+                "issues": "https://www.drupal.org/project/issues/poll"
             }
         },
         {
@@ -7918,35 +7920,39 @@
         },
         {
             "name": "drupal/publication_date",
-            "version": "2.0.0-beta8",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/publication_date.git",
-                "reference": "8.x-2.0-beta8"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/publication_date-8.x-2.0-beta8.zip",
-                "reference": "8.x-2.0-beta8",
-                "shasum": "1e40fc97a4582c364a8971e16448775c30441fe7"
+                "url": "https://ftp.drupal.org/files/projects/publication_date-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "054788a5eb6b5230d6b2d2e58be08f98f44aeb83"
             },
             "require": {
-                "drupal/core": "^9.1 || ^10"
+                "drupal/core": "^10.3 || ^11"
+            },
+            "require-dev": {
+                "drupal/feeds": "^3.0",
+                "drupal/workbench_moderation": "^1.8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-beta8",
-                    "datestamp": "1715850299",
+                    "version": "3.0.0",
+                    "datestamp": "1738251745",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7983,9 +7989,10 @@
                 }
             ],
             "description": "Add a field containing the publication date.",
-            "homepage": "https://www.drupal.org/project/publication_date",
+            "homepage": "https://drupal.org/project/publication_date",
             "support": {
-                "source": "https://git.drupalcode.org/project/publication_date"
+                "source": "https://git.drupalcode.org/project/publication_date",
+                "issues": "https://drupal.org/project/issues/publication_date"
             }
         },
         {
@@ -10564,29 +10571,29 @@
         },
         {
             "name": "drupal/views_block_area",
-            "version": "1.0.0-beta4",
+            "version": "2.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_block_area.git",
-                "reference": "8.x-1.0-beta4"
+                "reference": "2.0.0-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_block_area-8.x-1.0-beta4.zip",
-                "reference": "8.x-1.0-beta4",
-                "shasum": "8386f4946340d2284b3ab830e698ec0954b14de0"
+                "url": "https://ftp.drupal.org/files/projects/views_block_area-2.0.0-rc1.zip",
+                "reference": "2.0.0-rc1",
+                "shasum": "3a0b28d6c8bc7b59cf17dc0e1ebca4e38736e2c0"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta4",
-                    "datestamp": "1674121539",
+                    "version": "2.0.0-rc1",
+                    "datestamp": "1736872685",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -10823,48 +10830,43 @@
         },
         {
             "name": "drupal/webform",
-            "version": "6.2.9",
+            "version": "6.3.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webform.git",
-                "reference": "6.2.9"
+                "reference": "6.3.0-beta4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-6.2.9.zip",
-                "reference": "6.2.9",
-                "shasum": "650752c3cc6d0144c6f378b8d25d45c083e23600"
+                "url": "https://ftp.drupal.org/files/projects/webform-6.3.0-beta4.zip",
+                "reference": "6.3.0-beta4",
+                "shasum": "9f5390f1eb507cdc9b591595c12d91f7f51c7b81"
             },
             "require": {
-                "drupal/core": "^10.2",
-                "php": ">=8.1"
+                "drupal/core": "^10.3 || ^11.0"
             },
             "require-dev": {
-                "drupal/address": "1.x-dev",
-                "drupal/bootstrap": "3.x-dev",
-                "drupal/captcha": "^1 || ^2",
-                "drupal/chosen": "3.0.x-dev",
-                "drupal/ckeditor": "1.0.x-dev",
-                "drupal/clientside_validation": "^3 || ^4",
+                "drupal/address": "^2.0",
+                "drupal/captcha": "^2.0",
+                "drupal/chosen": "^4.0",
+                "drupal/clientside_validation": "*",
                 "drupal/clientside_validation_jquery": "*",
-                "drupal/devel": "5.x-dev",
-                "drupal/entity": "1.x-dev",
-                "drupal/entity_print": "2.x-dev",
-                "drupal/group": "1.x-dev",
-                "drupal/hal": "1 - 2",
-                "drupal/jquery_ui": "1.x-dev",
-                "drupal/jquery_ui_button": "2.x-dev",
-                "drupal/jquery_ui_checkboxradio": "2.x-dev",
-                "drupal/jquery_ui_datepicker": "2.x-dev",
-                "drupal/mailsystem": "4.x-dev",
-                "drupal/metatag": "1.x-dev",
-                "drupal/paragraphs": "1.x-dev",
+                "drupal/devel": "*",
+                "drupal/entity": "^1.5",
+                "drupal/entity_print": "*",
+                "drupal/hal": "^2.0",
+                "drupal/jquery_ui": "^1.7",
+                "drupal/jquery_ui_button": "*",
+                "drupal/jquery_ui_checkboxradio": "^2.1",
+                "drupal/jquery_ui_datepicker": "*",
+                "drupal/mailsystem": "^4.5",
+                "drupal/metatag": "^2.0",
+                "drupal/paragraphs": "^1.18",
                 "drupal/select2": "1.x-dev",
-                "drupal/smtp": "1.x-dev",
-                "drupal/styleguide": "^1 || ^2",
+                "drupal/smtp": "^1.4",
+                "drupal/styleguide": "^2.1",
                 "drupal/telephone_validation": "2.x-dev",
-                "drupal/token": "1.x-dev",
-                "drupal/variationcache": "1.x-dev",
+                "drupal/token": "*",
                 "drupal/webform_access": "*",
                 "drupal/webform_attachment": "*",
                 "drupal/webform_clientside_validation": "*",
@@ -10883,16 +10885,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "6.2.9",
-                    "datestamp": "1733851063",
+                    "version": "6.3.0-beta4",
+                    "datestamp": "1753796919",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": ">=9"
+                        "drush.services.yml": ">=11"
                     }
                 }
             },
@@ -26769,9 +26771,9 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/poll": 15,
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
-        "drupal/views_block_area": 10,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
