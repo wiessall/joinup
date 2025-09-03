@@ -1,11 +1,12 @@
 _core:
   default_config_hash: 1I9Yr9j6qiCxW8-YRWJHiSSaYLtu1uvyEBrMVT-qybg
+langcode: en
 protocol: eulogin
 register_path: eim/external/register.cgi
 validation_path: TicketValidationService
 assurance_level: LOW
 ticket_types: SERVICE
 force_2fa: true
-restrict_user_delete_cancel_methods: true
+restrict_user_delete_cancel_methods: false
 2fa_conditions: {  }
 message_login_2fa_required: 'Your account is required to log in using a two-factor authentication method. Please <a href=":login">log in again via this link</a>.'

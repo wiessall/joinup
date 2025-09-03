@@ -60,7 +60,7 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle): array {
+function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityType, ?string $bundle): array {
   $fields = [];
   if ($entityType->id() === 'node' && $bundle === 'oss_solution') {
     $fields['oss__description'] = BaseFieldDefinition::create('text_long')
@@ -83,7 +83,7 @@ function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityTy
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, string $bundle): void {
+function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, ?string $bundle): void {
   if ($entityType->id() !== 'node' || $bundle !== 'oss_solution') {
     return;
   }

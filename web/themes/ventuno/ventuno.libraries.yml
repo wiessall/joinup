@@ -104,6 +104,11 @@ actions-menu:
   css:
     theme:
       assets/css/actions-menu.min.css: { minified: true }
+  js:
+    assets/js/actions-menu.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
 
 ajax-throbber:
   js:
@@ -271,6 +276,11 @@ ief-entity-table:
   css:
     theme:
       assets/css/ief-entity-table.min.css: { minified: true }
+
+language-picker:
+  css:
+    theme:
+      assets/css/language-picker.min.css: { minified: true }
 
 layout-block:
   css:
