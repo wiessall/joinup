@@ -77,7 +77,7 @@ Feature: My subscriptions
     # The default collection The Portal is there.
     # @see \joinup_test_install().
     And I should see the text "The Portal" in the "Content" region
-    And I should see the heading "Solution"
+    And I should see the heading "Solutions"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
     And I should not see the text "Alpha Centauri"
 

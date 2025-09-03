@@ -76,6 +76,7 @@ module.exports = {
         "tour-first-balloon.js",
         "og-navigation.js",
         "sticky-groupheader.js",
+        "actions-menu.js",
       ].map((file) => ({
         entry: file,
         dest: file,
@@ -241,6 +242,10 @@ module.exports = {
         {
           entry: "components/ief-entity-table.scss",
           dest: "ief-entity-table.min.css",
+        },
+        {
+          entry: "components/language-picker.scss",
+          dest: "language-picker.min.css",
         },
         {
           entry: "components/layout-block.scss",
