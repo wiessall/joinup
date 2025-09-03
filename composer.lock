@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7077cffb4edc86c26585b5b93cec1d6",
+    "content-hash": "a6c25cb5aef445c9e1024ece91fa802e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13708,10 +13708,10 @@
         },
         {
             "name": "npm-asset/yaireo--tagify",
-            "version": "4.35.1",
+            "version": "4.35.4",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.1.tgz"
+                "url": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-4.35.4.tgz"
             },
             "type": "npm-asset",
             "license": [

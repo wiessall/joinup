@@ -1,0 +1,65 @@
+diff --git a/modules/tagify_facets/js/tagify-widget.js b/modules/tagify_facets/js/tagify-widget.js
+index cec36f5feed3a2f1efcb3a12beaddebd681f85f7..51886253e5b9b42229240b925dd5d9275a6bcd5a 100644
+--- a/modules/tagify_facets/js/tagify-widget.js
++++ b/modules/tagify_facets/js/tagify-widget.js
+@@ -153,7 +153,8 @@
+ 
+         // eslint-disable-next-line func-names
+         tagify.on('add', function (e) {
+-          const { value } = e.detail.data;
++          const value = e.detail?.data?.value;
++          if (!value) return;
+           e.preventDefault();
+           $widget.trigger('facets_filter', [value]);
+         });
+@@ -164,7 +165,8 @@
+ 
+         // eslint-disable-next-line func-names
+         tagify.on('remove', function (e) {
+-          const { value } = e.detail.data;
++          const value = e.detail?.data?.value;
++          if (!value) return;
+           e.preventDefault();
+           $widget.trigger('facets_filter', [value]);
+         });
+diff --git a/tagify.libraries.yml b/tagify.libraries.yml
+index 031b5d63a2628de40c844eac4941a59bcdbe169c..a1ba793a872c72a4fe19dd456618878d31651e95 100644
+--- a/tagify.libraries.yml
++++ b/tagify.libraries.yml
+@@ -27,17 +27,17 @@ claro:
+ 
+ tagify:
+   remote: https://github.com/yairEO/tagify
+-  version: 4.32.2
++  version: 4.35.4
+   license:
+     name: MIT
+     url: https://github.com/yairEO/tagify/blob/master/LICENSE
+     gpl-compatible: true
+   js:
+-    //cdnjs.cloudflare.com/ajax/libs/tagify/4.32.2/tagify.min.js:
++    //cdnjs.cloudflare.com/ajax/libs/tagify/4.35.4/tagify.min.js:
+       { type: external, minified: true }
+   css:
+     component:
+-      //cdnjs.cloudflare.com/ajax/libs/tagify/4.26.0/tagify.min.css:
++      //cdnjs.cloudflare.com/ajax/libs/tagify/4.35.4/tagify.min.css:
+         { type: external, minified: true }
+   dependencies:
+     - core/jquery
+@@ -48,13 +48,13 @@ tagify:
+ 
+ tagify_polyfils:
+   remote: https://github.com/yairEO/tagify
+-  version: 4.32.2
++  version: 4.35.4
+   license:
+     name: MIT
+     url: https://github.com/yairEO/tagify/blob/master/LICENSE
+     gpl-compatible: true
+   js:
+-    //cdnjs.cloudflare.com/ajax/libs/tagify/4.32.2/tagify.polyfills.min.js:
++    //cdnjs.cloudflare.com/ajax/libs/tagify/4.35.4/tagify.polyfills.min.js:
+       { type: external, minified: true }
+   dependencies:
+     - core/jquery
