@@ -1,6 +1,31 @@
 {
   "extends": "./web/core/.eslintrc.json",
   "overrides": [
+    {
+      "files": ["tests/playwright/**/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tests/playwright/tsconfig.json"
+      },
+      "plugins": ["playwright", "@typescript-eslint"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:playwright/recommended"
+      ],
+      "rules": {
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          {
+            "ts": "never",
+            "tsx": "never",
+            "js": "never"
+          }
+        ],
+        "import/prefer-default-export": "off",
+        "playwright/expect-expect": "off"
+      }
+    },
     // Empty mappings are allowed in the docker-compose file. This indicates
     // options that will inherit their value from the environment variables.
     {
@@ -20,7 +45,8 @@
   "globals": {
     "CKEDITOR": true,
     "Chart": true,
-    "L": true
+    "L": true,
+    "bootstrap": "readonly"
   },
   "plugins": [
     "jsdoc"
@@ -31,5 +57,12 @@
   "rules": {
     "jsdoc/require-file-overview": "error",
     "import/no-extraneous-dependencies": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
   }
 }
