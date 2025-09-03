@@ -1,0 +1,14 @@
+uuid: 397b380e-7fa2-417a-bd5e-08108cbf7d47
+langcode: en
+status: true
+dependencies:
+  module:
+    - l10n_pconfig
+third_party_settings:
+  l10n_pconfig:
+    formula: 'nplurals=4; plural=((n==1)?(0):(((n==0)||(((n%100)>1)&&((n%100)<11)))?(1):((((n%100)>10)&&((n%100)<20))?(2):3)));'
+id: mt
+label: Maltese
+direction: ltr
+weight: 4
+locked: false

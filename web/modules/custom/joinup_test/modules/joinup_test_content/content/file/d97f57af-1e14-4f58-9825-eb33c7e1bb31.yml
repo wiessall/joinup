@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: file
+  uuid: d97f57af-1e14-4f58-9825-eb33c7e1bb31
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 0
+  filename:
+    -
+      value: logo.png
+  uri:
+    -
+      value: 'public://joinup_test_content/logo.png'
+  filemime:
+    -
+      value: image/jpeg
+  filesize:
+    -
+      value: 31719
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1734685491
