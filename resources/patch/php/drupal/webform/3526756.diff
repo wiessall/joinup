@@ -1,18 +1,18 @@
 diff --git a/src/Element/WebformElementAttributes.php b/src/Element/WebformElementAttributes.php
-index 8fffae740..e0665788f 100644
+index 4950cfb888482149327c22effc87e76008e22134..070a8dd5d7622f3ce8e2fa6466c622f0676de4c9 100644
 --- a/src/Element/WebformElementAttributes.php
 +++ b/src/Element/WebformElementAttributes.php
 @@ -2,6 +2,7 @@
- 
+
  namespace Drupal\webform\Element;
- 
+
 +use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+ use Drupal\Component\Serialization\Yaml;
  use Drupal\Core\Form\FormStateInterface;
- use Drupal\Core\Render\Element\FormElement;
- use Drupal\Core\Serialization\Yaml;
-@@ -177,7 +178,20 @@ class WebformElementAttributes extends FormElement {
+ use Drupal\Core\Render\Element\FormElementBase;
+@@ -177,7 +178,20 @@ class WebformElementAttributes extends FormElementBase {
      }
- 
+
      if (!empty($values['attributes'])) {
 -      $attributes += Yaml::decode($values['attributes']);
 +      $decoded = [];
@@ -30,16 +30,16 @@ index 8fffae740..e0665788f 100644
 +        $attributes += $decoded;
 +      }
      }
- 
+
      $form_state->setValueForElement($element['class'], NULL);
 diff --git a/tests/src/Functional/Element/WebformElementAttributesTest.php b/tests/src/Functional/Element/WebformElementAttributesTest.php
-index 07937719f..551169729 100644
+index 07937719f18ebe32afb53f143f184cd1bf8e59cf..551169729d0079a3cdc14b435f9baf28116382fb 100644
 --- a/tests/src/Functional/Element/WebformElementAttributesTest.php
 +++ b/tests/src/Functional/Element/WebformElementAttributesTest.php
 @@ -2,6 +2,8 @@
- 
+
  namespace Drupal\Tests\webform\Functional\Element;
- 
+
 +use Drupal\Tests\user\Traits\UserCreationTrait;
 +
  /**
@@ -48,7 +48,7 @@ index 07937719f..551169729 100644
 @@ -9,6 +11,8 @@ namespace Drupal\Tests\webform\Functional\Element;
   */
  class WebformElementAttributesTest extends WebformElementBrowserTestBase {
- 
+
 +  use UserCreationTrait;
 +
    /**
@@ -57,7 +57,7 @@ index 07937719f..551169729 100644
 @@ -53,4 +57,69 @@ webform_element_attributes_no_classes:
      - five");
    }
- 
+
 +  /**
 +   * Test error message if the attributes YAML string is invalid.
 +   *
