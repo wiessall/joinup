@@ -17,6 +17,7 @@ Feature: Dashboard
       | Topics                   |
       | Files                    |
       | Manage webforms          |
+    And I should not see the button "Submit"
 
   Scenario Outline: Moderators should see proposed collections and solutions.
     Given I am logged in as a "moderator"
