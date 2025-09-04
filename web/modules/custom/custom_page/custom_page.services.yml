@@ -17,7 +17,6 @@ services:
 
   Drupal\custom_page\EventSubscriber\CustomPageGroupSubscriber: { }
 
-  Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition: { }
 
   Drupal\custom_page\Guard\CustomPageGuard:
     tags:
