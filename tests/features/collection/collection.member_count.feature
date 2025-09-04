@@ -69,7 +69,9 @@ Feature: Collection homepage
     # Approve the membership.
     Given I am logged in as "Thorin"
     And I am on the members page of "Exactly the same collection, but closed"
-    And I check the box "Update the member Some goblin"
+    Then I should not see the text "Bilbo"
+
+    When I check the box "Update the member Some goblin"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
     # Block Fili's membership
@@ -86,7 +88,6 @@ Feature: Collection homepage
     When I am on the members page of "Exactly the same collection, but closed"
     Then the "Roles" field should contain the "- Any - (3)" option
     Then I see the text "3 Members" in the "Header" region
-    And I should not see the text "Bilbo"
 
   Scenario: Blocked users are not counted towards total member count.
     # Cache the collection overview page.
