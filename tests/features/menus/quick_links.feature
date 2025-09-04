@@ -66,7 +66,6 @@ Feature: Test the visibility of the quick links menu.
     And I should not see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     And I should not see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     Given I am logged in as a moderator
@@ -75,7 +74,6 @@ Feature: Test the visibility of the quick links menu.
     And I should not see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     But I should see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     # Lets not test all links in a separate list of steps to save time.
@@ -94,7 +92,6 @@ Feature: Test the visibility of the quick links menu.
     And I should see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     But I should not see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
      # Test that facilitators can see the contextual links
@@ -110,7 +107,6 @@ Feature: Test the visibility of the quick links menu.
     And I should see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     And I should not see the contextual link "Edit menu" in the "Navigation menu" region
 
   @javascript
