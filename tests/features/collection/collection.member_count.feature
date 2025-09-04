@@ -86,6 +86,7 @@ Feature: Collection homepage
     When I am on the members page of "Exactly the same collection, but closed"
     Then the "Roles" field should contain the "- Any - (3)" option
     Then I see the text "3 Members" in the "Header" region
+    And I should not see the text "Bilbo"
 
   Scenario: Blocked users are not counted towards total member count.
     # Cache the collection overview page.
