@@ -1,6 +1,7 @@
 @import "../partials/core";
 
 .block-language-picker {
+  position: relative;
   z-index: 504;
   #language-picker__button {
     &::before {
