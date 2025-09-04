@@ -1185,6 +1185,70 @@ third_party_settings:
       -
         layout_id: layout_onecol
         layout_settings:
+          label: Documentation
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: mb-5
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: 'p-4 rounded-3 bg-light'
+              region_styles: null
+              region_data: null
+        components:
+          e5f578e8-e5ec-440d-9972-8ce816a6bc88:
+            uuid: e5f578e8-e5ec-440d-9972-8ce816a6bc88
+            region: content
+            configuration:
+              id: custom_markup
+              label: 'Custom Markup'
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h3>Documentation</h3>'
+                format: content_editor
+            weight: -1
+            additional: {  }
+          933fb805-fbbf-43b0-a9ce-c35e147fcc4d:
+            uuid: 933fb805-fbbf-43b0-a9ce-c35e147fcc4d
+            region: content
+            configuration:
+              id: 'field_block:node:solution:resources'
+              label: 'Related documents'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_revisions_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
           label: 'Moderation section'
           context_mapping: {  }
           custom_id: null
