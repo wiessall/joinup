@@ -1,3 +1,27 @@
+diff --git a/composer.libraries.json b/composer.libraries.json
+index 82af5a6918bfc250064849400bc3715e13b77d52..5c78171460cffd320d0ae6fa70f588b027fb3f47 100644
+--- a/composer.libraries.json
++++ b/composer.libraries.json
+@@ -9,16 +9,16 @@
+       "type": "package",
+       "package": {
+         "name": "yaireo/tagify",
+-        "version": "4.32.2",
++        "version": "4.35.4",
+         "type": "drupal-library",
+         "dist": {
+-          "url": "https://github.com/yaireo/tagify/archive/refs/tags/v4.32.2.zip",
++          "url": "https://github.com/yaireo/tagify/archive/refs/tags/v4.35.4.zip",
+           "type": "zip"
+         }
+       }
+     }
+   },
+   "require": {
+-    "yaireo/tagify": "^4.21"
++    "yaireo/tagify": "^4.35"
+   }
+ }
 diff --git a/js/tagify.js b/js/tagify.js
 index dfb3ed4a1477c1b8f5a75f310688bad73a64efc0..79dba71c8f7fc891457629a3befc928926673ab0 100644
 --- a/js/tagify.js
