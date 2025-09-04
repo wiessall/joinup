@@ -43,6 +43,7 @@ third_party_settings:
     group_main:
       children:
         - group_solution_tabs
+        - current_workflow_state
       label: Main
       region: content
       parent_name: ''
@@ -145,7 +146,7 @@ third_party_settings:
       label: Confirmation
       region: content
       parent_name: ''
-      weight: 2
+      weight: 1
       format_type: form_step
       format_settings:
         classes: ''
@@ -220,6 +221,15 @@ content:
       collapsed: false
       revision: false
       removed_reference: optional
+    third_party_settings: {  }
+  current_workflow_state:
+    type: current_workflow_state_widget
+    weight: 2
+    region: content
+    settings:
+      title: 'Current workflow state'
+      title_display: before
+      show_for_new_entities: false
     third_party_settings: {  }
   description:
     type: text_textarea
@@ -392,7 +402,7 @@ content:
       parent_selection: 0
     third_party_settings: {  }
   tca:
-    weight: 17
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -405,13 +415,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
-  current_workflow_state: true
   field_shared_in: true
   langcode: true
   metrics_page: true
