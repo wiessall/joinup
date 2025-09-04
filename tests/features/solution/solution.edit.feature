@@ -74,6 +74,7 @@ Feature: Solution editing.
       | Additional information                     |
       | Status: Completed                          |
     And I check "I have read and agreed to the Terms of Agreement"
+    And I should see the text "Current workflow state"
     And I press "Propose"
     Then I should see the heading "Solution A"
 
@@ -81,7 +82,10 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    And the following fields should be present "Title, Abstract, Description, Solution type, Language availability"
+    And the following fields should be present "Title, Abstract, Description, Solution type, Language availability, Current workflow state"
+    And the current workflow state should be "Proposed"
+    And I press "Confirm"
+    And I should see "Current workflow state: Proposed"
 
     # This user is an owner only of Solution A.
     When I go to the homepage of the "Another solution" solution
