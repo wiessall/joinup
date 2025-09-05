@@ -87,7 +87,25 @@ Feature: "Add release" visibility options.
     And I click "Add release"
     When I fill in "Name" with "Chasing flares"
     And I fill in "Release version" with "1.0"
+    And I press "Upload file"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
+    And I press "Add remote file URL"
+    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I press "Publish"
+    Then I should see "test.zip"
+    And I should see "http://example.com/guzzle"
+    When I go to the edit form of the "Chasing flares" release
+    And I press "resources_0_edit"
+    And I fill in "Description" with "My uploaded file"
+    And I press "resources_1_edit"
+    And I fill in "Link text" with "My remote file"
+    And I press "Update"
+    Then I should not see "test.zip"
+    And I should not see "http://example.com/guzzle"
+    And I should see "My uploaded file"
+    And I should see "My remote file"
+
+#    And I click "resources_1_edit"
 
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
