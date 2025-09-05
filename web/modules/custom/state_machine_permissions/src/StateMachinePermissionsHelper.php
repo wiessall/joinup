@@ -109,7 +109,7 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
   /**
    * {@inheritdoc}
    */
-  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  public function checkOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     if ($account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'any'))) {
       return AccessResult::allowed()->addCacheContexts(['user.permissions']);
     }

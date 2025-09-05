@@ -88,6 +88,6 @@ interface StateMachinePermissionsHelperInterface {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   An access result object.
    */
-  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface;
+  public function checkOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface;
 
 }
