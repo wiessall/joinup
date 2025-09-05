@@ -328,7 +328,7 @@
         },
         "patches": {
             "drupal/babel": {
-                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note572659.diff"
+                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note582184.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
