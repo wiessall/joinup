@@ -106,6 +106,13 @@ Feature: Add distribution through the UI
     And I select "WTFPL" from "Licence"
     And I select "Datalog" from "Representation technique"
     And I press "Publish"
+    And I should see "Download test.zip"
+    And I go to the edit form of the "Source tarball" distribution
+    And I press "Edit"
+    And I fill in "resources[0][subform][resource_file][0][description]" with "My uploaded file"
+    And I press "Update"
+    And I should not see "Download test.zip"
+    And I should see "Download My uploaded file"
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
