@@ -1,0 +1,69 @@
+_meta:
+  version: '1.0'
+  entity_type: user
+  uuid: 822d66ba-0910-414e-9330-bd702632eb5d
+  default_langcode: en
+default:
+  preferred_langcode:
+    -
+      value: en
+  name:
+    -
+      value: developer
+  pass:
+    -
+      value: $2y$10$qKeR9oYbwpndprMrVNQJ2OdKYv89qEFq3lhSzmgMMMOIEJsmdgig.
+      existing: ''
+      pre_hashed: false
+  mail:
+    -
+      value: developer@example.com
+  timezone:
+    -
+      value: Europe/Brussels
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1735686000
+  access:
+    -
+      value: 0
+  login:
+    -
+      value: 0
+  roles:
+    -
+      target_id: developer
+  eulogin_authname:
+    -
+      value: developer
+  type:
+    -
+      value: user
+  role_change:
+    -
+      target_id: __role_delegation_empty_field_value__
+  path:
+    -
+      alias: ''
+      langcode: en
+      pathauto: 1
+  field_user_content:
+    -
+      value:
+        fields:
+          user_content_bundle:
+            weight: 0
+            region: top
+          user_status:
+            weight: 1
+            region: top
+        enabled: 1
+        query_presets: entity_bundle|assessment_report|<>
+        limit: 12
+        show_archived: all
+  field_user_frequency:
+    -
+      value: weekly

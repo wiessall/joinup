@@ -110,14 +110,6 @@ write tests or run most of the tests.
 ddev install
 ```
 
-#### Add demo users (Optional)
-
-As the site doesn't have users, you might want to add some demo users:
-
-```shell
-ddev run dev:demo-users
-```
-
 ### Site rebuilt from production
 
 This installation type, referred also as a _clone installing_, rebuilds the site
