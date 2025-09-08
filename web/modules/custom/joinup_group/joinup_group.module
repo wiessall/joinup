@@ -782,7 +782,7 @@ function joinup_group_form_views_form_og_members_overview_default_alter(&$form, 
   $args = ['@label' => $group->get('type')->entity->getSingularLabel()];
   $form['header']['og_membership_bulk_form']['action']['#options']['joinup_transfer_group_ownership'] = t('Transfer the ownership of the @label to the selected member', $args);
   $form['#validate'][] = 'joinup_group_form_views_form_og_members_overview_default_validate';
-  $form['header']['og_membership_bulk_form']['action']['#required'] = FALSE;
+  $form['#attached']['library'][] = 'ventuno/form-og-membership-bulk-form';
   // Hide the second 'Apply to selected items' button so that only the one from
   // the bulk form header remains.
   unset($form['actions']['submit']);

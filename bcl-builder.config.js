@@ -224,6 +224,10 @@ module.exports = {
           dest: "form-simple-checkboxes.min.css",
         },
         {
+          entry: "components/form-og-membership-bulk-form.scss",
+          dest: "form-og-membership-bulk-form.min.css",
+        },
+        {
           entry: "components/forms.scss",
           dest: "forms.min.css",
         },

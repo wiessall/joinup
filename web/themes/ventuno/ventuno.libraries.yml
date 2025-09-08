@@ -231,6 +231,11 @@ footer:
     theme:
       assets/css/footer.min.css: { minified: true }
 
+form-og-membership-bulk-form:
+  css:
+    theme:
+      assets/css/form-og-membership-bulk-form.min.css: { minified: true }
+
 form-simple-checkboxes:
   css:
     theme:
