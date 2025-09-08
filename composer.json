@@ -328,7 +328,9 @@
         },
         "patches": {
             "drupal/babel": {
-                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note582184.diff"
+                "Limit links to menus provided by System module @see https://www.drupal.org/i/3542164": "resources/patch/php/drupal/babel/3542164.mr37-note582184.diff",
+                "Refreshing the page @see https://www.drupal.org/i/3541185": "resources/patch/php/drupal/babel/3541185.diff",
+                "Locale IDs are chaotically assigned @see https://www.drupal.org/i/3545152": "resources/patch/php/drupal/babel/3545152.mr56-note582940.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
