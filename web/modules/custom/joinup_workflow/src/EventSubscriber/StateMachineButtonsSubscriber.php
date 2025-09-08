@@ -50,7 +50,8 @@ final readonly class StateMachineButtonsSubscriber implements EventSubscriberInt
       if ($currentState === 'published' && $requestChangesTransition = $workflow->findTransition('published', 'proposed')) {
         $group = $entity->getGroup();
         $anyPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->getTransition('publish'), 'any');
-        if ($group->hasGroupPermission($this->currentUser->id(), $anyPermission)) {
+        $group_access = $group->hasGroupPermission($this->currentUser->id(), $anyPermission);
+        if ($group_access->isAllowed()) {
           // The 'Propose changes' button should be 'Request changes' when
           // user is a facilitator. Use the 'publish' 'any' permission to
           // identify if the user is a facilitator.
