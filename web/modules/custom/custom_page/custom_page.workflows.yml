@@ -12,6 +12,7 @@ custom_page_workflow:
     unpublished:
       label: Unpublished
       published: false
+      force_default_revision: true
     archived:
       label: Archived
       published: true
@@ -19,6 +20,10 @@ custom_page_workflow:
     save_as_draft:
       label: 'Save as draft'
       from: [ draft ]
+      to: draft
+    save_new_draft:
+      label: 'Save new draft'
+      from: [ published ]
       to: draft
     publish:
       label: Publish
