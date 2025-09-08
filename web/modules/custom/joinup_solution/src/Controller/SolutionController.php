@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgGroupAudienceHelper;
@@ -68,9 +69,10 @@ class SolutionController extends ControllerBase {
 
     $group_access = $node->hasGroupPermission($user->id(), 'create solution content');
     if (
-      $group_access->isForbidden()
+      !$node instanceof GroupInterface ||
+      !$group_access->isAllowed()
     ) {
-      return $group_access;
+      return AccessResult::forbidden()->addCacheableDependency($cacheability)->addCacheableDependency($group_access);
     }
 
     $solution = $this->createNewSolution($node);
