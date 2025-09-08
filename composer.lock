@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c384a95033059e5bd257704d7431438",
+    "content-hash": "d1abb9e97d3dd21963a22231eaee3501",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2129,17 +2129,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha3",
+            "version": "1.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha3"
+                "reference": "1.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha3.zip",
-                "reference": "1.0.0-alpha3",
-                "shasum": "64d20c85fe28d7da93433d68246fcaff0d077124"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha4.zip",
+                "reference": "1.0.0-alpha4",
+                "shasum": "6091ca7ea64cb6805413bf1dde5f5576a14370cd"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2152,8 +2152,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha3",
-                    "datestamp": "1757006510",
+                    "version": "1.0.0-alpha4",
+                    "datestamp": "1757321782",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
