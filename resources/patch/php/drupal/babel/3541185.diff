@@ -1,0 +1,313 @@
+diff --git a/.cspell-project-words.txt b/.cspell-project-words.txt
+index ac262de757b655c190055f0dc742101210c61c42..683228f173ee4619222952e6dd9088aa0e9c80b4 100644
+--- a/.cspell-project-words.txt
++++ b/.cspell-project-words.txt
+@@ -5,3 +5,4 @@ xhprof
+ # Code
+ webform
+ webforms
++bookmarkable
+diff --git a/babel.libraries.yml b/babel.libraries.yml
+index 310ab7d4c7eae944efaa1992fa6fad9b8a7631d1..73f1e0b5b3596324d2c49484e9743db1dc3c0ab9 100644
+--- a/babel.libraries.yml
++++ b/babel.libraries.yml
+@@ -15,3 +15,14 @@ textarea-height:
+     - core/drupal
+     - core/jquery
+     - core/once
++
++push_parameters:
++  js:
++    js/push-parameters.js: {}
++  dependencies:
++    - core/drupal
++    - core/drupal.ajax
++
++popstate_handler:
++  js:
++    js/popstate-handler.js: {}
+diff --git a/js/popstate-handler.js b/js/popstate-handler.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..49356b9b8d659f59236740b6d64e45fac32fa1d5
+--- /dev/null
++++ b/js/popstate-handler.js
+@@ -0,0 +1,27 @@
++(function () {
++  let blockPopstateEvent = document.readyState !== 'complete';
++
++  if (window.addEventListener) {
++    window.addEventListener(
++      'load',
++      () => {
++        setTimeout(() => {
++          blockPopstateEvent = false;
++        }, 0);
++      },
++      false,
++    );
++
++    window.addEventListener(
++      'popstate',
++      (evt) => {
++        if (blockPopstateEvent) {
++          return;
++        }
++
++        window.location.reload();
++      },
++      false,
++    );
++  }
++})();
+diff --git a/js/push-parameters.js b/js/push-parameters.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..6aae1041258db95b41ba276447d08bf428be9dfd
+--- /dev/null
++++ b/js/push-parameters.js
+@@ -0,0 +1,54 @@
++(function (Drupal) {
++  /**
++   * Build query string from parameters object.
++   */
++  function buildQueryString(params) {
++    return Object.entries(params)
++      .filter(([key, value]) => value !== '' && value != null)
++      .map(
++        ([key, value]) =>
++          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
++      )
++      .join('&');
++  }
++
++  /**
++   * Check if a modal is currently open using Drupal's built-in methods.
++   */
++  function isModalOpen() {
++    return !!(
++      document.querySelector('.ui-dialog-content') ||
++      document.querySelector('.ui-dialog') ||
++      document.querySelector('[role="dialog"]') ||
++      document.querySelector('[aria-modal="true"]')
++    );
++  }
++
++  /**
++   * AJAX command handler for pushParameters.
++   *
++   * This is a reusable command that can be used by any module
++   * to update URL parameters via AJAX without page reload.
++   */
++  Drupal.AjaxCommands.prototype.pushParameters = function (
++    ajax,
++    response,
++    status,
++  ) {
++    if (!window.history || !response.parameters) {
++      return;
++    }
++
++    // Skip URL updates if we're in a modal context
++    if (isModalOpen()) {
++      return;
++    }
++
++    const queryString = buildQueryString(response.parameters);
++    const url = `${window.location.pathname}${
++      queryString ? `?${queryString}` : ''
++    }`;
++
++    window.history.pushState(response.parameters, document.title, url);
++  };
++})(Drupal);
+diff --git a/src/Ajax/PushParametersCommand.php b/src/Ajax/PushParametersCommand.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..37d800cf6b1401ab41a1f696d3cb74b1030870fd
+--- /dev/null
++++ b/src/Ajax/PushParametersCommand.php
+@@ -0,0 +1,34 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel\Ajax;
++
++use Drupal\Core\Ajax\CommandInterface;
++
++/**
++ * AJAX command for updating browser URL parameters.
++ */
++class PushParametersCommand implements CommandInterface {
++
++  /**
++   * Constructs a PushParametersCommand object.
++   *
++   * @param array $parameters
++   *   Key-value pairs of parameters to include in URL.
++   */
++  public function __construct(
++    protected array $parameters = [],
++  ) {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public function render(): array {
++    return [
++      'command' => 'pushParameters',
++      'parameters' => $this->parameters,
++    ];
++  }
++
++}
+diff --git a/src/Controller/UiPager.php b/src/Controller/UiPager.php
+index 1834d324fbcc018c55e5e285ca0ff0912fcd1bd3..241362b9dbcb55baf39e53cec2ddb2a369572a07 100644
+--- a/src/Controller/UiPager.php
++++ b/src/Controller/UiPager.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel\Controller;
+ 
++use Drupal\babel\Ajax\PushParametersCommand;
+ use Drupal\babel\Form\BabelTranslateForm;
+ use Drupal\Core\Ajax\AjaxResponse;
+ use Drupal\Core\Ajax\ReplaceCommand;
+@@ -50,7 +51,17 @@ class UiPager implements ContainerInjectionInterface {
+       $response = new AjaxResponse();
+       $form = $this->formBuilder->getForm(BabelTranslateForm::class, $language);
+       $formSelector = 'form[data-babel-form-id="' . $form['#attributes']['data-babel-form-id'] . '"]';
++
++      $params = [
++        'langcode' => $request->query->get('langcode'),
++        'translated' => $request->query->get('translated'),
++        'search' => $request->query->get('search'),
++        'include_inactive' => $request->query->get('include_inactive'),
++        'page' => $request->query->get('page'),
++      ];
++
+       return $response
++        ->addCommand(new PushParametersCommand($params))
+         ->addCommand(new ReplaceCommand($formSelector, $form))
+         ->addCommand(new ScrollTopCommand($formSelector));
+     }
+diff --git a/src/Form/BabelTranslateForm.php b/src/Form/BabelTranslateForm.php
+index bc5573733a879c96858aaad41d8fc51fe1703ca0..a90bfe0ddab7baf479cbbb4f3a70bb567cc4eadd 100644
+--- a/src/Form/BabelTranslateForm.php
++++ b/src/Form/BabelTranslateForm.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel\Form;
+ 
++use Drupal\babel\Ajax\PushParametersCommand;
+ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel\Model\StringTranslation;
+@@ -87,6 +88,8 @@ class BabelTranslateForm extends FormBase {
+ 
+     $form['#attached']['library'][] = 'babel/translate-form';
+     $form['#attached']['library'][] = 'babel/textarea-height';
++    $form['#attached']['library'][] = 'babel/push_parameters';
++    $form['#attached']['library'][] = 'babel/popstate_handler';
+ 
+     $form['filters'] = [
+       '#type' => 'container',
+@@ -478,6 +481,13 @@ class BabelTranslateForm extends FormBase {
+   public static function ajaxFilterChange(array $form, FormStateInterface $formState): AjaxResponse {
+     $response = new AjaxResponse();
+     $formState->setRebuild();
++
++    $response->addCommand(new PushParametersCommand([
++      'langcode' => $formState->getValue('langcode'),
++      'translated' => $formState->getValue('translated'),
++      'search' => $formState->getValue('search'),
++      'include_inactive' => $formState->getValue('include_inactive'),
++    ]));
+     $response->addCommand(new ReplaceCommand('form[data-babel-form-id="' . $form['#attributes']['data-babel-form-id'] . '"]', $form));
+     return $response;
+   }
+diff --git a/tests/src/FunctionalJavascript/HistoryApiIntegrationTest.php b/tests/src/FunctionalJavascript/HistoryApiIntegrationTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..3f7c4fa47cfed434cc299cf61a29e004b3adb650
+--- /dev/null
++++ b/tests/src/FunctionalJavascript/HistoryApiIntegrationTest.php
+@@ -0,0 +1,81 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel\FunctionalJavascript;
++
++use Drupal\Core\Url;
++
++/**
++ * Tests the History API integration for bookmarkable URLs.
++ *
++ * @group babel
++ */
++class HistoryApiIntegrationTest extends BabelFunctionalJavascriptTestBase {
++
++  /**
++   * Tests URL updates when filters are applied.
++   */
++  public function testUrlUpdatesWithFilters(): void {
++    $this->drupalLogin($this->testAccount);
++    $this->drupalGet(Url::fromRoute('babel.ui'));
++
++    $page = $this->getSession()->getPage();
++    $assertSession = $this->assertSession();
++
++    // Apply search filter and verify URL is updated.
++    $page->fillField('Search', 'test');
++    $page->pressButton('Filter');
++    $assertSession->assertWaitOnAjaxRequest();
++
++    $currentUrl = $this->getSession()->getCurrentUrl();
++    $this->assertStringContainsString('search=test', $currentUrl);
++  }
++
++  /**
++   * Tests URL parameter persistence after page load.
++   */
++  public function testUrlParameterPersistence(): void {
++    $this->drupalLogin($this->testAccount);
++
++    // Visit URL with parameters.
++    $url = Url::fromRoute('babel.ui', [], [
++      'query' => [
++        'langcode' => 'de',
++        'search' => 'admin',
++      ],
++    ]);
++
++    $this->drupalGet($url);
++    $assertSession = $this->assertSession();
++
++    // Verify form fields are populated from URL parameters.
++    $assertSession->fieldValueEquals('Language', 'de');
++    $assertSession->fieldValueEquals('Search', 'admin');
++  }
++
++  /**
++   * Tests empty parameters are cleaned from URL.
++   */
++  public function testUrlParameterCleaning(): void {
++    $this->drupalLogin($this->testAccount);
++    $this->drupalGet(Url::fromRoute('babel.ui'));
++
++    $page = $this->getSession()->getPage();
++    $assertSession = $this->assertSession();
++
++    // Apply then clear search filter.
++    $page->fillField('Search', 'test');
++    $page->pressButton('Filter');
++    $assertSession->assertWaitOnAjaxRequest();
++
++    $page->fillField('Search', '');
++    $page->pressButton('Filter');
++    $assertSession->assertWaitOnAjaxRequest();
++
++    // Verify empty parameter is removed.
++    $currentUrl = $this->getSession()->getCurrentUrl();
++    $this->assertStringNotContainsString('search=', $currentUrl);
++  }
++
++}

@@ -31,7 +31,6 @@ class SolutionMultistepController extends MultistepController {
       \array_unshift($form['actions']['next']['#submit'], [ElementSubmit::class, 'trigger'], 'inline_entity_form_close_all_forms');
       $form['actions']['next']['#ief_submit_trigger_all'] = TRUE;
     }
-
     // Preserve only specific form actions steps other than confirmation.
     if ($this->stepSettings->group_name !== 'group_confirmation') {
       $form['field_state']['widget']['#options'] = \array_intersect_key($form['field_state']['widget']['#options'], ['delete' => TRUE]);
