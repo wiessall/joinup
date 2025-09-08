@@ -38,8 +38,8 @@ Feature: Asset distribution editing.
     And I should see the external link in the "i386" distribution
 
     # Clicking these links will track the download event.
-    Then I click "Download" in the "OpenBSD images" distribution
-    And I click "Download" in the "Changelog" distribution
+    Then I click "Download test.zip" in the "OpenBSD images" distribution
+    And I click "Download text.pdf" in the "Changelog" distribution
 
     When I am an anonymous user
     And I go to the "OpenBSD" solution
@@ -52,7 +52,7 @@ Feature: Asset distribution editing.
     And I should see the external link in the "i386" distribution
 
     # Anonymous users will be prompted with a modal to enter their e-mails.
-    When I click "Download" in the "OpenBSD images" distribution
+    When I click "Download test.zip" in the "OpenBSD images" distribution
     Then a modal should open
     And I should see the text "Download in progress"
     And I should see the text "If you do not have a Interoperable Europe Portal account, please take some time to create one, at this page. It will allow you to fully exploit the functionalities of Interoperable Europe Portal to create new content, contribute to existing one and collaborate with other users."
@@ -62,15 +62,15 @@ Feature: Asset distribution editing.
     Then the modal should be closed
 
     # Verify that users can opt-out from inserting their e-mail.
-    When I click "Download" in the "Changelog" distribution
+    When I click "Download text.pdf" in the "Changelog" distribution
     Then a modal should open
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
 
     # Verify that the modal also shows in the overview page.
     When I click "Changelog" in the "Changelog" distribution
-    Then I should see the link "Download"
-    When I click "Download"
+    Then I should see the link "Download text.pdf"
+    When I click "Download text.pdf"
     Then a modal should open
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
