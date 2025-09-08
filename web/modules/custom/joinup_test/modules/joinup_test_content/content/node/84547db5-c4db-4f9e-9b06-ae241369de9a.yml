@@ -1,0 +1,135 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: 84547db5-c4db-4f9e-9b06-ae241369de9a
+  bundle: news
+  default_langcode: en
+  depends:
+    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    df34e3a2-207b-4910-a804-344931654e20: node
+default:
+  revision_uid:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 1
+  title:
+    -
+      value: 'Rohirrim make extraordinary deal'
+  created:
+    -
+      value: 1413534840
+  changed:
+    -
+      value: 1413534840
+  promote:
+    -
+      value: true
+  sticky:
+    -
+      value: false
+  report:
+    -
+      uri: 'internal:/contact'
+      title: 'Report abusive content'
+      options:
+        query:
+          category: report
+          uri: /collection/middle-earth-daily/news/rohirrim-make-extraordinary-deal
+          destination: collection/middle-earth-daily/news/rohirrim-make-extraordinary-deal
+  path:
+    -
+      alias: /collection/middle-earth-daily/news/rohirrim-make-extraordinary-deal
+      langcode: en
+      pathauto: 1
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  published_at:
+    -
+      value: 1413534840
+  abstract:
+    -
+      value: 'An abstract'
+  field_comments:
+    -
+      status: 2
+      cid: 0
+      last_comment_timestamp: 1413534840
+      last_comment_name: ''
+      last_comment_uid: 1
+      comment_count: 0
+  field_news_headline:
+    -
+      value: 'Top 6028 interoperability tips. You will never believe what is on number 0!'
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 07ed87f3-02ef-4307-a19d-b96489ee7de6
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1413534840
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class: {  }
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 93cea67b-99c6-4a17-b703-8bb2c9ba008a
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1413534840
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 07ed87f3-02ef-4307-a19d-b96489ee7de6
+                  region: content
+          field_body:
+            -
+              value: '<p>Some body text.</p>'
+              format: text_html
+  field_site_featured:
+    -
+      value: false
+  field_state:
+    -
+      value: published
+  field_topic:
+    -
+      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+  og_audience:
+    -
+      entity: df34e3a2-207b-4910-a804-344931654e20

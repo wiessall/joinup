@@ -23,22 +23,20 @@ index 0000000..f556044
 +  $entity_types[] = 'taxonomy_term';
 +}
 diff --git a/publication_date.module b/publication_date.module
-index 9d9d15a..c7846fd 100755
+index 52a32b9..114395d 100755
 --- a/publication_date.module
 +++ b/publication_date.module
-@@ -5,8 +5,10 @@
+@@ -5,7 +5,9 @@
   * Add a field to nodes containing the publication date.
   */
 
--use Drupal\Core\Field\BaseFieldDefinition;
 +use Drupal\Core\Entity\EntityFormInterface;
  use Drupal\Core\Entity\EntityTypeInterface;
 +use Drupal\Core\Entity\FieldableEntityInterface;
-+use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\Field\BaseFieldDefinition;
  use Drupal\Core\Form\FormStateInterface;
 
- /**
-@@ -29,7 +31,7 @@ const PUBLICATION_DATE_DEFAULT = 2147483647;
+@@ -31,7 +33,7 @@ const PUBLICATION_DATE_DEFAULT = 2147483647;
  function publication_date_entity_base_field_info(EntityTypeInterface $entity_type) {
    $fields = [];
 
@@ -47,7 +45,7 @@ index 9d9d15a..c7846fd 100755
      $fields['published_at'] = BaseFieldDefinition::create('published_at')
        ->setLabel(t('Published on'))
        ->setDescription(t('Keep the publication timestamp for each node.'))
-@@ -50,21 +52,33 @@ function publication_date_entity_base_field_info(EntityTypeInterface $entity_typ
+@@ -52,21 +54,33 @@ function publication_date_entity_base_field_info(EntityTypeInterface $entity_typ
  }
 
  /**
@@ -74,11 +72,11 @@ index 9d9d15a..c7846fd 100755
 +  $form_object = $form_state->getFormObject();
 +  if (!$form_object instanceof EntityFormInterface) {
 +    return;
-   }
++  }
 +  $entity = $form_object->getEntity();
 +  if (!$entity instanceof FieldableEntityInterface) {
 +    return;
-+  }
+   }
 +  $entity_type_id = $entity->getEntityTypeId();
 +  if (!\Drupal::service('publication_date.enabled_entity_types')->isEnabled($entity_type_id)) {
 +    return;
@@ -189,7 +187,7 @@ index 6ac0ec2..2a4542e 100644
 +  }
  }
 diff --git a/src/EventSubscriber/PublicationDateSubscriber.php b/src/EventSubscriber/PublicationDateSubscriber.php
-index e3b8585..01370a6 100644
+index 6ca51b9..16ae3a2 100644
 --- a/src/EventSubscriber/PublicationDateSubscriber.php
 +++ b/src/EventSubscriber/PublicationDateSubscriber.php
 @@ -2,6 +2,7 @@
