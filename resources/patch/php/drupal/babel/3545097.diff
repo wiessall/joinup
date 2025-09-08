@@ -1,0 +1,19 @@
+diff --git a/modules/babel_menu_link_content/babel_menu_link_content.install b/modules/babel_menu_link_content/babel_menu_link_content.install
+index 03e71a8..c3cfb25 100644
+--- a/modules/babel_menu_link_content/babel_menu_link_content.install
++++ b/modules/babel_menu_link_content/babel_menu_link_content.install
+@@ -50,3 +50,14 @@ function babel_menu_link_content_update_8002(): void {
+   }
+ 
+ }
++
++/**
++ * Remove menu_link_content source duplicates.
++ */
++function babel_menu_link_content_update_8001(): void {
++  // After resolving the creation of duplicates
++  // in https://www.drupal.org/project/babel/issues/3544326 we still need to
++  // clean up the duplicate sources created till then.
++  \Drupal::service(BabelStorageInterface::class)->delete('menu_link_content');
++  \Drupal::service(BabelMenuLinkContentService::class)->batchAddSources();
++}

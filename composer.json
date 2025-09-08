@@ -328,7 +328,7 @@
         },
         "patches": {
             "drupal/babel": {
-                "Menu Link Content duplicates @see https://www.drupal.org/project/babel/issues/3544326": "resources/patch/php/drupal/babel/3544326.diff"
+                "Delete old Menu Link duplicates @see https://www.drupal.org/project/babel/issues/3545097": "resources/patch/php/drupal/babel/3545097.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
