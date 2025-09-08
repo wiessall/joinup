@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\dashboard\Form;
 
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
@@ -92,7 +90,7 @@ class DashboardForm extends FormBase {
 
     $form['actions'] = [
       '#type' => 'actions',
-      '#access' => $this->getFormElementsAccess($form),
+      '#access' => $this->currentUser()->hasPermission('administer log alerts'),
     ];
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -118,42 +116,6 @@ class DashboardForm extends FormBase {
    */
   public function getFormId(): string {
     return 'dashboard_form';
-  }
-
-  /**
-   * Returns true when at least one form element is accessible.
-   *
-   * @param array $element
-   *   The form element. This method is called recursively, but on the first
-   *   call, $element is always the whole form array.
-   *
-   * @return bool
-   *   Whether at least one form element is accessible.
-   */
-  protected function getFormElementsAccess(array $element): bool {
-    static $is_form = TRUE;
-
-    $keys = Element::children($element);
-
-    if ($is_form && empty($keys)) {
-      return FALSE;
-    }
-    elseif (!$is_form && array_key_exists('#access', $element)) {
-      return $element['#access'] instanceof AccessResultInterface ? $element['#access']->isAllowed() : $element['#access'];
-    }
-    elseif (empty($keys)) {
-      return TRUE;
-    }
-    $is_form = FALSE;
-
-    $access = FALSE;
-    foreach ($keys as $key) {
-      if ($this->getFormElementsAccess($element[$key])) {
-        $access = TRUE;
-        break;
-      }
-    }
-    return $access;
   }
 
   /**

@@ -76,6 +76,7 @@ module.exports = {
         "tour-first-balloon.js",
         "og-navigation.js",
         "sticky-groupheader.js",
+        "actions-menu.js",
       ].map((file) => ({
         entry: file,
         dest: file,
