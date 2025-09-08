@@ -1,5 +1,5 @@
 diff --git a/src/Plugin/Babel/DataTransfer/Spreadsheet.php b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
-index 6936271e43127fb6e0c92164f236470498459a98..270708789f4ac985cae7e7a0228293dfa30dc9e6 100644
+index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22def30596 100644
 --- a/src/Plugin/Babel/DataTransfer/Spreadsheet.php
 +++ b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
 @@ -4,17 +4,19 @@ declare(strict_types=1);
@@ -55,7 +55,7 @@ index 6936271e43127fb6e0c92164f236470498459a98..270708789f4ac985cae7e7a0228293df
  
      $spreadsheet = new PhpOfficeSpreadsheet();
      $sheet = $spreadsheet->getActiveSheet();
-@@ -66,36 +72,45 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+@@ -66,36 +72,47 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
          continue;
        }
  
@@ -97,7 +97,9 @@ index 6936271e43127fb6e0c92164f236470498459a98..270708789f4ac985cae7e7a0228293df
      $sheet->getColumnDimensionByColumn(1)->setWidth(40);
      $sheet->getColumnDimensionByColumn(2)->setWidth(40);
 +    $sheet->getColumnDimensionByColumn(3)->setWidth(15);
++    $sheet->getStyle("C")->getAlignment()->setWrapText(TRUE);
 +    $sheet->getColumnDimensionByColumn(4)->setWidth(10);
++    $sheet->getStyle("D")->getAlignment()->setWrapText(TRUE);
 +    $sheet->getColumnDimensionByColumn(5)->setWidth(40);
 +    $sheet->getColumnDimensionByColumn(6)->setCollapsed(TRUE);
 +    $sheet->getColumnDimensionByColumn(6)->setVisible(FALSE);
@@ -114,7 +116,7 @@ index 6936271e43127fb6e0c92164f236470498459a98..270708789f4ac985cae7e7a0228293df
  
      $writer = IOFactory::createWriter($spreadsheet, self::WRITER[$extension]);
      $file = $this->fileSystem->tempnam('temporary://', '');
-@@ -180,4 +195,25 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+@@ -180,4 +197,25 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
      };
    }
  
