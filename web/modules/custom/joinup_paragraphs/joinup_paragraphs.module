@@ -103,7 +103,11 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   }
 
   $group_access = $group->hasGroupPermission($account->id(), $permission);
-  return $group_access->isAllowed() ? $group_access : $access_result;
+  if ($group_access->isAllowed()) {
+    return $group_access->cachePerPermissions();
+  }
+
+  return $access_result;
 }
 
 /**
