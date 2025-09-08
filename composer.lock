@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa140d48c11e51cc0bbee61f737251ba",
+    "content-hash": "fec95efd7d5565d4a5dbc95a21ab56c0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2129,17 +2129,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha2",
+            "version": "1.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha2"
+                "reference": "1.0.0-alpha3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha2.zip",
-                "reference": "1.0.0-alpha2",
-                "shasum": "96e0446e68953c4d119725e0797a3a634e979653"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha3.zip",
+                "reference": "1.0.0-alpha3",
+                "shasum": "64d20c85fe28d7da93433d68246fcaff0d077124"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2152,8 +2152,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha2",
-                    "datestamp": "1756883935",
+                    "version": "1.0.0-alpha3",
+                    "datestamp": "1757006510",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -2179,12 +2179,12 @@
                     "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
-                    "name": "huzooka",
-                    "homepage": "https://www.drupal.org/user/281301"
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
                 },
                 {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
+                    "name": "huzooka",
+                    "homepage": "https://www.drupal.org/user/281301"
                 },
                 {
                     "name": "saidatom",
