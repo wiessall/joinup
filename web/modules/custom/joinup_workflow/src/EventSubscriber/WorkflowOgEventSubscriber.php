@@ -148,8 +148,8 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $hasOwnAccess = $entity->getOwnerId() === $user->id() && $group->hasGroupPermission($user->id(), $ownPermission);
-    $hasAnyAccess = $group->hasGroupPermission($user->id(), $anyPermission);
+    $hasOwnAccess = $entity->getOwnerId() === $user->id() && $group->hasGroupPermission($user->id(), $ownPermission)->isAllowed();
+    $hasAnyAccess = $group->hasGroupPermission($user->id(), $anyPermission)->isAllowed();
 
     // We only need to check pre-moderated groups as for post-moderated groups
     // the user can delete the content depending only on the permission. If the
