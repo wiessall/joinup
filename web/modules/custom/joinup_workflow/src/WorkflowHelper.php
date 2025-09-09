@@ -88,12 +88,12 @@ class WorkflowHelper implements WorkflowHelperInterface {
    */
   public function checkTransitionAccess(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): AccessResultInterface {
     $transitions = $this->getAvailableTransitions($entity, $account);
-    if (!empty($transitions)) {
-      return AccessResult::allowed()
-        ->addCacheContexts(['user.permissions', 'user'])
-        ->addCacheableDependency($entity);
-    }
-    return AccessResult::forbidden('No available transitions for the entity.')
+
+    $access = !empty($transitions)
+      ? AccessResult::allowed()
+      : AccessResult::forbidden('No available transitions for the entity.');
+
+    return $access
       ->addCacheContexts(['user.permissions', 'user'])
       ->addCacheableDependency($entity);
   }
