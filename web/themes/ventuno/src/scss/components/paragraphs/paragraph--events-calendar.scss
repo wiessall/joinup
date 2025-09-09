@@ -39,7 +39,6 @@
   }
   .calendar-view-day__number {
     @extend .badge;
-
     float: right;
     margin-left: $spacer * 0.2;
     color: $white;
@@ -92,7 +91,11 @@
       border: 2px solid $primary;
     }
     &.is-past {
-      opacity: 0.75;
+      color: $gray-600;
+      .calendar-view-day__number {
+        background-color: $secondary;
+        color: $primary;
+      }
     }
     &.saturday,
     &.sunday {
