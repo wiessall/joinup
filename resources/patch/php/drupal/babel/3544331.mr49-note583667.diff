@@ -1,5 +1,37 @@
+diff --git a/src/Form/BabelExportForm.php b/src/Form/BabelExportForm.php
+index 768c8be36b260d081417908382b09796464cb27a..3b14fc9b4111318af34d82f6c9631669996201ee 100644
+--- a/src/Form/BabelExportForm.php
++++ b/src/Form/BabelExportForm.php
+@@ -5,6 +5,7 @@ namespace Drupal\babel\Form;
+ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel\Plugin\Babel\DataTransferPluginManager;
++use Drupal\babel\Plugin\Babel\ExporterPluginInterface;
+ use Drupal\Component\Utility\Html;
+ use Drupal\Core\Ajax\AjaxHelperTrait;
+ use Drupal\Core\Ajax\AjaxResponse;
+@@ -69,6 +70,8 @@ class BabelExportForm extends FormBase {
+     $pluginId = $form_state->getValue('plugin') ?? $form_state->getUserInput()['plugin'] ?? NULL;
+ 
+     if ($pluginId) {
++      $plugin = $this->dataTransferManager->createInstance($pluginId);
++      assert($plugin instanceof ExporterPluginInterface);
+       $definition = $this->dataTransferManager->getDefinition($pluginId);
+ 
+       $form['extension'] = [
+@@ -80,6 +83,10 @@ class BabelExportForm extends FormBase {
+         ),
+         '#required' => TRUE,
+       ];
++
++      if ($guidelines = $plugin->getExportGuidelines()) {
++        $form['guidelines'] = $guidelines;
++      }
+     }
+     $form['actions'] = [
+       '#type' => 'actions',
 diff --git a/src/Plugin/Babel/DataTransfer/Spreadsheet.php b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
-index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22def30596 100644
+index 6936271e43127fb6e0c92164f236470498459a98..f17fb9442dae7d501ade0d6c09033c5fafff64fc 100644
 --- a/src/Plugin/Babel/DataTransfer/Spreadsheet.php
 +++ b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
 @@ -4,17 +4,19 @@ declare(strict_types=1);
@@ -55,7 +87,7 @@ index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22
  
      $spreadsheet = new PhpOfficeSpreadsheet();
      $sheet = $spreadsheet->getActiveSheet();
-@@ -66,36 +72,47 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+@@ -66,36 +72,48 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
          continue;
        }
  
@@ -94,8 +126,11 @@ index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22
 +    $sheet->getStyle("A1:E1")->getAlignment()->setWrapText(TRUE);
 +    $sheet->getStyle("A1:E1")->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
      $sheet->freezePane('A2');
-     $sheet->getColumnDimensionByColumn(1)->setWidth(40);
-     $sheet->getColumnDimensionByColumn(2)->setWidth(40);
+-    $sheet->getColumnDimensionByColumn(1)->setWidth(40);
+-    $sheet->getColumnDimensionByColumn(2)->setWidth(40);
++    $sheet->getColumnDimensionByColumn(1)->setWidth(50);
++    $sheet->getColumnDimensionByColumn(2)->setWidth(50);
++    $sheet->getStyle("B")->getAlignment()->setWrapText(TRUE);
 +    $sheet->getColumnDimensionByColumn(3)->setWidth(15);
 +    $sheet->getStyle("C")->getAlignment()->setWrapText(TRUE);
 +    $sheet->getColumnDimensionByColumn(4)->setWidth(10);
@@ -116,7 +151,7 @@ index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22
  
      $writer = IOFactory::createWriter($spreadsheet, self::WRITER[$extension]);
      $file = $this->fileSystem->tempnam('temporary://', '');
-@@ -180,4 +197,25 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+@@ -180,4 +198,35 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
      };
    }
  
@@ -140,6 +175,35 @@ index 6936271e43127fb6e0c92164f236470498459a98..0d5a3244678b025dfd2b51b3c114eb22
 +      default => Utility::getOrdinal($pluralVariantIndex) . ' plural',
 +    };
 +  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getExportGuidelines(): array {
++    return [
++      '#type' => 'markup',
++      '#markup' => $this->t('XLS and XLSX format provide minor protection in relevant columns, rows and cells.'),
++    ];
++  }
++
+ }
+diff --git a/src/Plugin/Babel/ExporterPluginInterface.php b/src/Plugin/Babel/ExporterPluginInterface.php
+index 3f658c6557299972018550586c256578654be756..11e3b81611a6abab84b6823b517d6baa5a5de2df 100644
+--- a/src/Plugin/Babel/ExporterPluginInterface.php
++++ b/src/Plugin/Babel/ExporterPluginInterface.php
+@@ -24,4 +24,14 @@ interface ExporterPluginInterface extends DataTransferPluginInterface {
+    */
+   public function createExportedFileContent(array $strings, string $langcode, string $extension): string;
+ 
++  /**
++   * Returns guidelines for the exported file.
++   *
++   * The guidelines will be added along with the extension selection element.
++   *
++   * @return array
++   *   A renderable array containing the guidelines.
++   */
++  public function getExportGuidelines(): array;
 +
  }
 diff --git a/tests/src/FunctionalJavascript/ExportImportTest.php b/tests/src/FunctionalJavascript/ExportImportTest.php
