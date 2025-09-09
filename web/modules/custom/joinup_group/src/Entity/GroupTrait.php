@@ -155,8 +155,7 @@ trait GroupTrait {
         ->addCacheableDependency($membership)
         ->addCacheableDependency($this);
     }
-    return AccessResult::forbidden()
-      ->addCacheableDependency($this);
+    return AccessResult::neutral();
   }
 
   /**

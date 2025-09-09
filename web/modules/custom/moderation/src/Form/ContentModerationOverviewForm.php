@@ -107,7 +107,7 @@ class ContentModerationOverviewForm extends FormBase {
     // If the user doesn't have global permission, check if they have permission
     // inside the group.
     if (!$access) {
-      return $node->hasGroupPermission($user->id(), 'access content moderation overview');
+      return $node->hasGroupPermission($user->id(), 'access content moderation overview')->addCacheableDependency($cache_metadata);
     }
 
     return AccessResult::allowedIf($access)->addCacheableDependency($cache_metadata);
