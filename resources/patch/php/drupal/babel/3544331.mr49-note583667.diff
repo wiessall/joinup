@@ -1,0 +1,234 @@
+diff --git a/src/Form/BabelExportForm.php b/src/Form/BabelExportForm.php
+index 768c8be36b260d081417908382b09796464cb27a..3b14fc9b4111318af34d82f6c9631669996201ee 100644
+--- a/src/Form/BabelExportForm.php
++++ b/src/Form/BabelExportForm.php
+@@ -5,6 +5,7 @@ namespace Drupal\babel\Form;
+ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\BabelStringsRepositoryInterface;
+ use Drupal\babel\Plugin\Babel\DataTransferPluginManager;
++use Drupal\babel\Plugin\Babel\ExporterPluginInterface;
+ use Drupal\Component\Utility\Html;
+ use Drupal\Core\Ajax\AjaxHelperTrait;
+ use Drupal\Core\Ajax\AjaxResponse;
+@@ -69,6 +70,8 @@ class BabelExportForm extends FormBase {
+     $pluginId = $form_state->getValue('plugin') ?? $form_state->getUserInput()['plugin'] ?? NULL;
+ 
+     if ($pluginId) {
++      $plugin = $this->dataTransferManager->createInstance($pluginId);
++      assert($plugin instanceof ExporterPluginInterface);
+       $definition = $this->dataTransferManager->getDefinition($pluginId);
+ 
+       $form['extension'] = [
+@@ -80,6 +83,10 @@ class BabelExportForm extends FormBase {
+         ),
+         '#required' => TRUE,
+       ];
++
++      if ($guidelines = $plugin->getExportGuidelines()) {
++        $form['guidelines'] = $guidelines;
++      }
+     }
+     $form['actions'] = [
+       '#type' => 'actions',
+diff --git a/src/Plugin/Babel/DataTransfer/Spreadsheet.php b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
+index 6936271e43127fb6e0c92164f236470498459a98..f17fb9442dae7d501ade0d6c09033c5fafff64fc 100644
+--- a/src/Plugin/Babel/DataTransfer/Spreadsheet.php
++++ b/src/Plugin/Babel/DataTransfer/Spreadsheet.php
+@@ -4,17 +4,19 @@ declare(strict_types=1);
+ 
+ namespace Drupal\babel\Plugin\Babel\DataTransfer;
+ 
++use Drupal\Component\Utility\Variable;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\babel\Plugin\Babel\DataTransfer;
+ use Drupal\babel\Plugin\Babel\DataTransferPluginBase;
+ use Drupal\babel\Plugin\Babel\ExporterPluginInterface;
+ use Drupal\babel\Plugin\Babel\ImporterPluginInterface;
+ use Drupal\babel\Plugin\Babel\ImporterPluginTrait;
+ use Drupal\babel\Utility;
+-use Drupal\Component\Utility\Variable;
+-use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use PhpOffice\PhpSpreadsheet\Cell\Cell;
+ use PhpOffice\PhpSpreadsheet\IOFactory;
+ use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpOfficeSpreadsheet;
++use PhpOffice\PhpSpreadsheet\Style\Alignment;
++use PhpOffice\PhpSpreadsheet\Style\Protection;
+ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+ 
+ /**
+@@ -30,14 +32,18 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+   use ImporterPluginTrait;
+ 
+   private const HEADER = [
+-    'A1' => 'Source string',
++    'A1' => 'Source string (do not edit)',
+     'B1' => 'Translated string',
+-    'C1' => 'Context',
+-    'D1' => 'Notes',
++    'C1' => 'Context (do not edit)',
++    'D1' => 'Plural variant (do not edit)',
+     'E1' => 'URL',
+     'F1' => 'ID (do not edit)',
+   ];
+ 
++  private const PROTECTED = ['C', 'D', 'F', 'A1:F1'];
++
++  private const EDITABLE = ['A', 'B', 'E'];
++
+   private const WRITER = [
+     'xls' => IOFactory::WRITER_XLS,
+     'xlsx' => IOFactory::WRITER_XLSX,
+@@ -51,7 +57,7 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+   public function createExportedFileContent(array $strings, string $langcode, string $extension): string {
+     assert(isset(self::WRITER[$extension]));
+ 
+-    $numberOfPlurals = $this->getNumberOfPlurals($langcode);
++    $languagePluralVariantsCount = (int) $this->getNumberOfPlurals($langcode);
+ 
+     $spreadsheet = new PhpOfficeSpreadsheet();
+     $sheet = $spreadsheet->getActiveSheet();
+@@ -66,36 +72,48 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+         continue;
+       }
+ 
+-      $iterations = $string->isPlural() ? $numberOfPlurals : 1;
++      $pluralVariantsCount = $string->isPlural() ? $languagePluralVariantsCount : 1;
+ 
+       $sourceVariants = $string->getSourcePluralVariants();
+       $translatedVariants = $string->getTranslatedPluralVariants();
+ 
+       $sheet->setCellValue("C$row", $string->source->context);
+-      for ($i = 0; $i < $iterations; $i++) {
++      for ($index = 0; $index < $pluralVariantsCount; $index++) {
+         $sheet
+-          ->setCellValue("A$row", $sourceVariants[$i] ?? '')
+-          ->setCellValue("B$row", $translatedVariants[$i] ?? '')
++          ->setCellValue("A$row", $sourceVariants[$index] ?? '')
++          ->setCellValue("B$row", $translatedVariants[$index] ?? '')
++          ->setCellValue("D$row", $this->getPluralVariantLabel($pluralVariantsCount, $index))
+           ->setCellValue("F$row", $hash);
+ 
+-        $note = match(TRUE) {
+-          $iterations === 1 => '',
+-          $i === 0 => 'singular',
+-          $iterations === 2 && $i === 1 => 'plural',
+-          $iterations > 2 && $i === 1 => 'first plural',
+-          default => Utility::getOrdinal($i) . ' plural',
+-        };
+-        $sheet->setCellValue("D$row", $note);
+-
+         $sheet->getStyle("A$row")->getAlignment()->setWrapText(TRUE);
+         $row++;
+       }
+     }
+ 
+     // Cosmetics.
++    $sheet->getStyle("A1:E1")->getAlignment()->setWrapText(TRUE);
++    $sheet->getStyle("A1:E1")->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+     $sheet->freezePane('A2');
+-    $sheet->getColumnDimensionByColumn(1)->setWidth(40);
+-    $sheet->getColumnDimensionByColumn(2)->setWidth(40);
++    $sheet->getColumnDimensionByColumn(1)->setWidth(50);
++    $sheet->getColumnDimensionByColumn(2)->setWidth(50);
++    $sheet->getStyle("B")->getAlignment()->setWrapText(TRUE);
++    $sheet->getColumnDimensionByColumn(3)->setWidth(15);
++    $sheet->getStyle("C")->getAlignment()->setWrapText(TRUE);
++    $sheet->getColumnDimensionByColumn(4)->setWidth(10);
++    $sheet->getStyle("D")->getAlignment()->setWrapText(TRUE);
++    $sheet->getColumnDimensionByColumn(5)->setWidth(40);
++    $sheet->getColumnDimensionByColumn(6)->setCollapsed(TRUE);
++    $sheet->getColumnDimensionByColumn(6)->setVisible(FALSE);
++
++    // Protection.
++    $sheet->getProtection()->setSheet(TRUE);
++    $spreadsheet->getDefaultStyle()->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
++    foreach (self::EDITABLE as $range) {
++      $sheet->getStyle($range)->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
++    }
++    foreach (self::PROTECTED as $range) {
++      $sheet->getStyle($range)->getProtection()->setLocked(Protection::PROTECTION_PROTECTED);
++    }
+ 
+     $writer = IOFactory::createWriter($spreadsheet, self::WRITER[$extension]);
+     $file = $this->fileSystem->tempnam('temporary://', '');
+@@ -180,4 +198,35 @@ class Spreadsheet extends DataTransferPluginBase implements ExporterPluginInterf
+     };
+   }
+ 
++  /**
++   * Returns the label of plural variant.
++   *
++   * @param int $pluralVariantsCount
++   *   Number of plural variants.
++   * @param int $pluralVariantIndex
++   *   The index of the current plural variant.
++   *
++   * @return string
++   *   A human-readable plural variant label.
++   */
++  protected function getPluralVariantLabel(int $pluralVariantsCount, int $pluralVariantIndex): string {
++    return match(TRUE) {
++      $pluralVariantsCount === 1 => '',
++      $pluralVariantIndex === 0 => 'singular',
++      $pluralVariantsCount === 2 && $pluralVariantIndex === 1 => 'plural',
++      $pluralVariantsCount > 2 && $pluralVariantIndex === 1 => 'first plural',
++      default => Utility::getOrdinal($pluralVariantIndex) . ' plural',
++    };
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getExportGuidelines(): array {
++    return [
++      '#type' => 'markup',
++      '#markup' => $this->t('XLS and XLSX format provide minor protection in relevant columns, rows and cells.'),
++    ];
++  }
++
+ }
+diff --git a/src/Plugin/Babel/ExporterPluginInterface.php b/src/Plugin/Babel/ExporterPluginInterface.php
+index 3f658c6557299972018550586c256578654be756..11e3b81611a6abab84b6823b517d6baa5a5de2df 100644
+--- a/src/Plugin/Babel/ExporterPluginInterface.php
++++ b/src/Plugin/Babel/ExporterPluginInterface.php
+@@ -24,4 +24,14 @@ interface ExporterPluginInterface extends DataTransferPluginInterface {
+    */
+   public function createExportedFileContent(array $strings, string $langcode, string $extension): string;
+ 
++  /**
++   * Returns guidelines for the exported file.
++   *
++   * The guidelines will be added along with the extension selection element.
++   *
++   * @return array
++   *   A renderable array containing the guidelines.
++   */
++  public function getExportGuidelines(): array;
++
+ }
+diff --git a/tests/src/FunctionalJavascript/ExportImportTest.php b/tests/src/FunctionalJavascript/ExportImportTest.php
+index c95793ce719260127c5bd47c149e79f28be47c90..06eb0eed73e2f9d0dbdba2df0623a92720452d92 100644
+--- a/tests/src/FunctionalJavascript/ExportImportTest.php
++++ b/tests/src/FunctionalJavascript/ExportImportTest.php
+@@ -55,7 +55,7 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
+       'An error occurred during the execution of the Ajax response: !error',
+     ];
+ 
+-    $csv = ['"Source string","Translated string","Context","Notes","URL","ID (do not edit)"'];
++    $csv = ['"Source string (do not edit)","Translated string","Context (do not edit)","Plural variant (do not edit)","URL","ID (do not edit)"'];
+     foreach ($sources as $source) {
+       $csv[] = '"' . $source . '","","","","","' . (new Source($source, ''))->getHash() . '"';
+     }
+diff --git a/tests/src/Kernel/Plugin/Babel/DataTransfer/SpreadsheetTest.php b/tests/src/Kernel/Plugin/Babel/DataTransfer/SpreadsheetTest.php
+index 9c93ea0f31a0d14f3029d6432fcc42f9b82d23e3..5d358ffa505177f12b892889a130774a2eb188e3 100644
+--- a/tests/src/Kernel/Plugin/Babel/DataTransfer/SpreadsheetTest.php
++++ b/tests/src/Kernel/Plugin/Babel/DataTransfer/SpreadsheetTest.php
+@@ -198,7 +198,7 @@ class SpreadsheetTest extends BabelKernelTestBase {
+     return [
+       'Invalid headers' => [
+         'csvContent' => <<<EOS
+-          "Source string",TRANSLATED,Context,"Notes","URL"
++          "Source string (do not edit)",TRANSLATED,Context (do not edit),"Plural variant (do not edit)","URL"
+           "Duplicated","ID","","","","config:a"
+           "is","OK","","","","config:a"
+           EOS,
