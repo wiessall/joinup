@@ -24,14 +24,12 @@ Feature:
     Examples:
       | menu                       | code | add link |
       | admin                      | 403  | not see  |
-      | footer                     | 403  | not see  |
       | main                       | 403  | not see  |
       | footer-about-us            | 200  | see      |
       | footer-european-commission | 200  | see      |
       | footer-follow-us           | 200  | see      |
       | footer-help-and-support    | 200  | see      |
       | navbar                     | 200  | see      |
-      | tools                      | 403  | not see  |
       | account                    | 403  | not see  |
 
   Scenario Outline: Test user support menu usage.

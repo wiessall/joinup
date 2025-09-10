@@ -122,7 +122,7 @@ permissions:
   - 'delete paragraph content tile'
   - 'delete paragraph content tiles'
   - 'delete paragraph content video'
-  - 'edit any pools'
+  - 'edit any polls'
   - 'edit behavior plugin settings'
   - 'edit own comments'
   - 'edit own contact_information content'
