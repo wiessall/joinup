@@ -1,8 +1,8 @@
 diff --git a/src/Form/BabelImportForm.php b/src/Form/BabelImportForm.php
-index 61dc633ec994e423c96c83a0585e1494be57699a..0aabeccc06781dfaca042972c9fe5be39bf17c4b 100644
+index 61dc633ec994e423c96c83a0585e1494be57699a..e1db6a884844ad86b05a46551ad91ec4f57b2076 100644
 --- a/src/Form/BabelImportForm.php
 +++ b/src/Form/BabelImportForm.php
-@@ -144,19 +144,14 @@ class BabelImportForm extends FormBase {
+@@ -144,17 +144,14 @@ class BabelImportForm extends FormBase {
 
      $translations = array_map(
        function (array $translation): string {
@@ -20,12 +20,11 @@ index 61dc633ec994e423c96c83a0585e1494be57699a..0aabeccc06781dfaca042972c9fe5be3
        },
        $translations,
      );
-
--    $translations = array_filter($translations);
 -
++    // Ignore empty translations (instead of deleting them).
+     $translations = array_filter($translations);
+
      $batch = (new BatchBuilder())
-       ->addOperation([static::class, 'initImportTranslation'], [$langcode, $plugin->getImportWarnings(), $arguments])
-       ->setFinishCallback([static::class, 'finishImportTranslation'])
 diff --git a/src/Form/BabelTranslateForm.php b/src/Form/BabelTranslateForm.php
 index a90bfe0ddab7baf479cbbb4f3a70bb567cc4eadd..97df151934d25e4f0aff5243f84630d01fb41bf8 100644
 --- a/src/Form/BabelTranslateForm.php
@@ -251,7 +250,7 @@ index 2e7d86dc9280873287254a5dfa106988e6394bb9..cc56f15216d6e63112c5745bf3f6b712
 
  }
 diff --git a/tests/src/FunctionalJavascript/ExportImportTest.php b/tests/src/FunctionalJavascript/ExportImportTest.php
-index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..4bf741b53c3ee70ff1d7115f8a06b5d8de5db31d 100644
+index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..75be94940e08414ab5900821534c12a9a2a9e492 100644
 --- a/tests/src/FunctionalJavascript/ExportImportTest.php
 +++ b/tests/src/FunctionalJavascript/ExportImportTest.php
 @@ -6,7 +6,11 @@ namespace Drupal\Tests\babel\FunctionalJavascript;
@@ -351,7 +350,7 @@ index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..4bf741b53c3ee70ff1d7115f8a06b5d8
      );
 
      $csvToImport = str_replace(
-@@ -109,6 +143,97 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
+@@ -109,6 +143,99 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
      );
    }
 
@@ -425,7 +424,7 @@ index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..4bf741b53c3ee70ff1d7115f8a06b5d8
 +    $assertSession->fieldValueEquals('Singular form', '', $translation_cell);
 +    $assertSession->fieldValueEquals('Plural form', '[TRANSLATED] @count hellos', $translation_cell);
 +
-+    // 3. Test deleting plural.
++    // 3. Test sending empty singular and plural (empty translations are ignored).
 +    $sources = [
 +      [
 +        '1 hello' => ['', 'singular'],
@@ -443,13 +442,15 @@ index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..4bf741b53c3ee70ff1d7115f8a06b5d8
 +    $page->selectFieldOption('Type', 'translated');
 +    $page->pressButton('Filter');
 +    $assertSession->assertWaitOnAjaxRequest();
-+    $assertSession->pageTextContains('0 items match the criteria');
++    $translation_cell = $page->find('css', 'tr.babel-translate-row > td[data-babel-translation]');
++    $assertSession->fieldValueEquals('Singular form', '', $translation_cell);
++    $assertSession->fieldValueEquals('Plural form', '[TRANSLATED] @count hellos', $translation_cell);
 +  }
 +
    /**
     * Verifies that CSV export works as expected.
     *
-@@ -166,9 +291,6 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
+@@ -166,9 +293,6 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
    ): void {
      $assertSession = $this->assertSession();
 
@@ -459,7 +460,7 @@ index 06eb0eed73e2f9d0dbdba2df0623a92720452d92..4bf741b53c3ee70ff1d7115f8a06b5d8
      $this->assertCsvImport($csvToImport, count($translationsToVerify));
 
      $this->drupalLogout();
-@@ -226,6 +348,74 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
+@@ -226,6 +350,74 @@ class ExportImportTest extends BabelFunctionalJavascriptTestBase {
      }
    }
 
