@@ -84,7 +84,7 @@ class JoinupI18nTranslator implements TranslatorInterface, DestructableInterface
       return;
     }
 
-    $path = $this->requestStack->getCurrentRequest()->getRequestUri();
+    $path = (string) $this->requestStack->getCurrentRequest()?->getRequestUri();
 
     $sources = [];
     foreach ($additions as [$source, $context]) {
