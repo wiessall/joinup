@@ -121,7 +121,7 @@
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/tagify": "^1.2",
-        "drupal/theme_rule": "^1.0",
+        "drupal/theme_rule": "^1.2",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
         "drupal/tour": "^1.0",
@@ -327,6 +327,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Better spreadsheet protection @see https://www.drupal.org/i/3544331": "resources/patch/php/drupal/babel/3544331.mr49-note583667.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
