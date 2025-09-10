@@ -170,3 +170,9 @@
     }
   }
 }
+
+[data-drupal-selector="edit-og-membership-bulk-form"] {
+  label[for="edit-action"].form-required::after {
+    content: none !important;
+  }
+}
