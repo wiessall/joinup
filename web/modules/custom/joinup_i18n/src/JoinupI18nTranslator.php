@@ -98,6 +98,8 @@ class JoinupI18nTranslator implements TranslatorInterface, DestructableInterface
 
     // Update Babel backend.
     $this->babelStorage->update('locale', $sources);
+
+    $this->strings = [];
   }
 
   /**
