@@ -114,10 +114,6 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
       $account,
       $this->getGlobalPermissionString($entity, $operation, 'any')
     );
-    // Early return for performance - stop processing if access is granted.
-    if ($accessResult->isAllowed()) {
-      return $accessResult;
-    }
 
     $isOwner = ($entity instanceof EntityOwnerInterface) && $entity->getOwnerId() === $account->id();
     $accessResult->orIf(
@@ -127,9 +123,6 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
           $this->getGlobalPermissionString($entity, $operation, 'own')
         ))
     );
-    if ($accessResult->isAllowed()) {
-      return $accessResult;
-    }
 
     $group = $this->getEntityRelatedGroup($entity);
     $isGroup = $group instanceof GroupInterface;
@@ -137,6 +130,8 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
       $accessResult->addCacheableDependency($group);
     }
 
+    // The TRUE in the end is so that the custom hooks are not fired - for
+    // performance reasons.
     $accessResult->orIf(
       AccessResult::allowedIf($isGroup)
         ->andIf(
@@ -148,9 +143,6 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
           )
         )
     );
-    if ($accessResult->isAllowed()) {
-      return $accessResult;
-    }
 
     $accessResult->orIf(
       AccessResult::allowedIf($isGroup && $isOwner)
