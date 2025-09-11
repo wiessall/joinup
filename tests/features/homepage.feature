@@ -58,17 +58,17 @@ Feature: Homepage
       | title         |
       | Mice in space |
     And news content:
-      | title       | headline       | collection    | logo       | field_paragraphs_body |
-      | New muscles | Muscle atrophy | Mice in space | blaise.jpg | <news body>           |
+      | title       | headline       | collection    | topic                                                 | logo       | field_paragraphs_body |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | blaise.jpg | <news body>           |
     And discussion content:
-      | title     | collection    | logo    | body                                                                                                                                                                                       |
-      | Influence | Mice in space | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | title     | collection    | topic                            | logo    | body                                                                                                                                                                                       |
+      | Influence | Mice in space | Employment and Support Allowance | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
-      | title        | collection    | logo     | abstract                                                                                                                                                                                        |
-      | Microgravity | Mice in space | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | collection    | topic                                  | logo     | abstract                                                                                                                                                                                        |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
-      | title           | collection    | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
-      | Stay at the ISS | Mice in space | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | title           | collection    | topic                    | logo        | abstract                                                                                                                                                                                        | field_paragraphs_body                                                                                                                                                                 |
+      | Stay at the ISS | Mice in space | EU and European Policies | charles.jpg | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
       | type    | label           |
       | content | New muscles     |
@@ -78,11 +78,11 @@ Feature: Homepage
 
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
-      | number | title           | type       | body                                                                                                                                                                                            |
-      | 1      | New muscles     | news       | default abstract                                                                                                                                                                                |
-      | 2      | Stay at the ISS | event      | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
-      | 3      | Microgravity    | document   | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | 4      | Influence       | discussion | Space exploration has brought about many scientific and technological advances                                                                                                                  |
+      | number | topics                                      | title           | type       | body                                                                                                                                                                                            |
+      | 1      | Finance in EU, Supplier exchange, +2 topics | New muscles     | news       | default abstract                                                                                                                                                                                |
+      | 2      | EU and European Policies                    | Stay at the ISS | event      | Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | 3      | HR, Statistics and Analysis, E-justice      | Microgravity    | document   | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | 4      | Employment and Support Allowance            | Influence       | discussion | Space exploration has brought about many scientific and technological advances                                                                                                                  |
 
     When I click "Stay at the ISS"
     Then I should not see the text "Abstract: Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity."
