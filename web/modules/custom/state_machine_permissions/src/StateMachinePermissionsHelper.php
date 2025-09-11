@@ -132,37 +132,30 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
     }
 
     $group = $this->getEntityRelatedGroup($entity);
-    $isGroup = $group instanceof GroupInterface;
-    if ($isGroup) {
-      $accessResult->addCacheableDependency($group);
-    }
-
-    $accessResult->orIf(
-      AccessResult::allowedIf($isGroup)
-        ->andIf(
-          $this->ogAccess->userAccess(
-            $group,
-            $this->getGroupPermission($entity, $operation, 'any'),
-            $account,
-            TRUE
-          )
+    if ($group) {
+      $accessResult->orIf(
+        $this->ogAccess->userAccess(
+          $group,
+          $this->getGroupPermission($entity, $operation, 'any'),
+          $account,
+          TRUE
         )
-    );
-    if ($accessResult->isAllowed()) {
-      return $accessResult;
-    }
+      );
+      if ($accessResult->isAllowed()) {
+        return $accessResult;
+      }
 
-    $accessResult->orIf(
-      AccessResult::allowedIf($isGroup && $isOwner)
-        ->andIf(
+      if ($isOwner) {
+        $accessResult->orIf(
           $this->ogAccess->userAccess(
             $group,
             $this->getGroupPermission($entity, $operation, 'own'),
             $account,
             TRUE
           )
-        )
-    );
+        );
+      }
+    }
 
     return $accessResult;
   }
