@@ -61,11 +61,11 @@ trait TransitionGuardTrait {
       throw new \InvalidArgumentException('The group must be provided when checking group permissions.');
     }
 
-    if ($group->hasGroupPermission($this->currentUser->id(), $anyPermission)->isAllowed()) {
+    if ($group->hasGroupPermission($this->currentUser->id(), $anyPermission)) {
       return TRUE;
     }
 
-    return $checkOwnerPermission && $entity instanceof EntityOwnerInterface && $this->currentUser->id() === $entity->getOwnerId() && $group->hasGroupPermission($this->currentUser->id(), $ownPermission)->isAllowed();
+    return $checkOwnerPermission && $entity instanceof EntityOwnerInterface && $this->currentUser->id() === $entity->getOwnerId() && $group->hasGroupPermission($this->currentUser->id(), $ownPermission);
   }
 
 }

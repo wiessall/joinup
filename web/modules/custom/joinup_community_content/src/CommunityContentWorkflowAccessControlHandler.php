@@ -116,11 +116,11 @@ readonly class CommunityContentWorkflowAccessControlHandler {
     }
 
     if ($group = $content->getGroup()) {
-      $view_any_access = $group->hasGroupPermission($account->id(), 'view any unpublished content');
+      $view_any_access = $group->getGroupPermissionAccess($account->id(), 'view any unpublished content');
       if ($view_any_access->isAllowed()) {
         return $view_any_access;
       }
-      $view_own_access = $group->hasGroupPermission($account->id(), 'view own unpublished content');
+      $view_own_access = $group->getGroupPermissionAccess($account->id(), 'view own unpublished content');
       if ($isOwner && $view_own_access->isAllowed()) {
         return $view_own_access;
       }
