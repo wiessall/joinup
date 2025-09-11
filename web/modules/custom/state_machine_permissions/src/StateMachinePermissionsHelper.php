@@ -134,7 +134,8 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
       return $groupAnyAccess;
     }
 
-    return AccessResult::forbidden()->addCacheContexts(['user.permissions', 'user']);
+    return AccessResult::forbidden()->addCacheContexts(['user.permissions', 'user'])
+      ->addCacheableDependency($entity);
   }
 
   /**
