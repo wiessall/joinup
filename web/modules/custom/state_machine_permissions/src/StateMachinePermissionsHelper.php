@@ -110,31 +110,53 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
    * {@inheritdoc}
    */
   public function checkOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-    if ($account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'any'))) {
-      return AccessResult::allowed()->addCacheContexts(['user.permissions']);
-    }
+    $accessResult = AccessResult::allowedIfHasPermission(
+      $account,
+      $this->getGlobalPermissionString($entity, $operation, 'any')
+    );
 
     $isOwner = ($entity instanceof EntityOwnerInterface) && $entity->getOwnerId() === $account->id();
-    if ($isOwner && $account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'own'))) {
-      return AccessResult::allowed()
-        ->addCacheContexts(['user.permissions', 'user'])
-        ->addCacheableDependency($entity);
+    $accessResult->orIf(
+      AccessResult::allowedIf($isOwner)
+        ->andIf(AccessResult::allowedIfHasPermission(
+          $account,
+          $this->getGlobalPermissionString($entity, $operation, 'own')
+        ))
+    );
+
+    $group = $this->getEntityRelatedGroup($entity);
+    $isGroup = $group instanceof GroupInterface;
+    if ($isGroup) {
+      $accessResult->addCacheableDependency($group);
     }
 
-    if ($group = $this->getEntityRelatedGroup($entity)) {
-      // The TRUE in the end is so that the custom hooks are not fired - for
-      // performance reasons.
-      $groupAnyAccess = $this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'any'), $account, TRUE);
-      if ($groupAnyAccess->isAllowed()) {
-        return $groupAnyAccess;
-      }
-      if ($isOwner) {
-        return $this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'own'), $account, TRUE);
-      }
-      return $groupAnyAccess;
-    }
+    // The TRUE in the end is so that the custom hooks are not fired - for
+    // performance reasons.
+    $accessResult->orIf(
+      AccessResult::allowedIf($isGroup)
+        ->andIf(
+          $this->ogAccess->userAccess(
+            $group,
+            $this->getGroupPermission($entity, $operation, 'any'),
+            $account,
+            TRUE
+          )
+        )
+    );
 
-    return AccessResult::forbidden()->addCacheContexts(['user.permissions', 'user']);
+    $accessResult->orIf(
+      AccessResult::allowedIf($isGroup && $isOwner)
+        ->andIf(
+          $this->ogAccess->userAccess(
+            $group,
+            $this->getGroupPermission($entity, $operation, 'own'),
+            $account,
+            TRUE
+          )
+        )
+    );
+
+    return $accessResult;
   }
 
   /**
