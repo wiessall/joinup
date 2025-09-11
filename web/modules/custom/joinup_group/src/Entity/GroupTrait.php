@@ -147,7 +147,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function hasGroupPermission(int|string $uid, string $permission): AccessResultInterface {
+  public function getGroupPermissionAccess(int|string $uid, string $permission): AccessResultInterface {
     $membership_manager = $this->getMembershipManager();
     if ($membership = $membership_manager->getMembership($this, $uid)) {
       $has_permission = $membership->hasPermission($permission);
@@ -156,6 +156,13 @@ trait GroupTrait {
         ->addCacheableDependency($this);
     }
     return AccessResult::neutral();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasGroupPermission(int|string $uid, string $permission): bool {
+    return $this->getGroupPermissionAccess($uid, $permission)->isAllowed();
   }
 
   /**

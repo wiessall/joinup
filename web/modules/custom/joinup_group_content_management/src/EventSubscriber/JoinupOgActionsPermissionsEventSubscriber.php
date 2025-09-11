@@ -60,8 +60,7 @@ final class JoinupOgActionsPermissionsEventSubscriber implements EventSubscriber
     foreach ($event->definitions as $action_id => $definition) {
       if (array_key_exists($definition['id'], self::PERMISSIONS) && $group instanceof GroupInterface) {
         $permission_id = self::PERMISSIONS[$definition['id']];
-        $group_access = $group->hasGroupPermission($this->currentUser->id(), $permission_id);
-        if (!$this->currentUser->hasPermission($permission_id) && !$group_access->isAllowed()) {
+        if (!$this->currentUser->hasPermission($permission_id) && !$group->hasGroupPermission($this->currentUser->id(), $permission_id)) {
           unset($event->definitions[$action_id]);
         }
       }

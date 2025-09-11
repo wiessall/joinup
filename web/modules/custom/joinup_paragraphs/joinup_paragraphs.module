@@ -102,9 +102,10 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
     }
   }
 
-  $group_access = $group->hasGroupPermission($account->id(), $permission);
-  if ($group_access->isAllowed()) {
-    return $group_access->cachePerPermissions();
+  if ($group->hasGroupPermission($account->id(), $permission)) {
+    $access_result = AccessResult::neutral()
+      ->addCacheableDependency($group->getMembership($account->id()))
+      ->cachePerPermissions();
   }
 
   return $access_result;
