@@ -1,4 +1,4 @@
-@wip @api @group-e
+@api @group-e
 Feature: OSS catalogue search
   As a user of the site I can find solutions through the OSS catalogue search.
 
