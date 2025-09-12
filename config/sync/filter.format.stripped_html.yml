@@ -109,6 +109,12 @@ filters:
     weight: -42
     settings:
       filter_url_length: 72
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
+    status: true
+    weight: -38
+    settings: {  }
   linkit:
     id: linkit
     provider: linkit
@@ -116,12 +122,6 @@ filters:
     weight: -43
     settings:
       title: true
-  joinup_accessibility_filter:
-    id: joinup_accessibility_filter
-    provider: joinup_html_stripper
-    status: true
-    weight: -38
-    settings: {  }
   markdown_easy:
     id: markdown_easy
     provider: markdown_easy

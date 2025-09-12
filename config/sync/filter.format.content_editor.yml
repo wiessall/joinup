@@ -57,12 +57,6 @@ filters:
     status: true
     weight: 9
     settings: {  }
-  joinup_accessibility_filter:
-    id: joinup_accessibility_filter
-    provider: joinup_html_stripper
-    status: true
-    weight: 11
-    settings: {  }
   filter_align:
     id: filter_align
     provider: filter
@@ -131,6 +125,12 @@ filters:
     weight: -44
     settings:
       filter_url_length: 72
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
+    status: true
+    weight: 11
+    settings: {  }
   joinup_iframe:
     id: joinup_iframe
     provider: joinup_core
