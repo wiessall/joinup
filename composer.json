@@ -119,7 +119,7 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/symfony_mailer_lite": "^2",
+        "drupal/symfony_mailer_lite": "^2.0",
         "drupal/tagify": "^1.2",
         "drupal/theme_rule": "^1.2",
         "drupal/tmgmt_ec_etranslation": "^1.1",
@@ -265,8 +265,7 @@
         "drupal-lenient": {
             "allowed-list": [
                 "drupal/file_url",
-                "drupal/other_view_filter",
-                "drupal/symfony_mailer_lite"
+                "drupal/other_view_filter"
             ]
         },
         "installer-types": [
