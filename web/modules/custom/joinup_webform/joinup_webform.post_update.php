@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Remove display custom attribute from general_criteria_for_interoperab.
  */
-function joinup_webform_post_update_300005(): void {
+function joinup_webform_post_update_200700(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('webform');
 
   if ($webform = $storage->load('general_criteria_for_interoperab')) {
