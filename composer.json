@@ -262,6 +262,13 @@
         ]
     },
     "extra": {
+        "drupal-lenient": {
+            "allowed-list": [
+                "drupal/file_url",
+                "drupal/other_view_filter",
+                "drupal/symfony_mailer_lite"
+            ]
+        },
         "installer-types": [
             "bower-asset",
             "npm-asset"
