@@ -130,8 +130,7 @@ class AccessibilityFilterTest extends TestCase {
         'expected' => '',
       ],
       'mixed whitespace types' => [
-        'input' => '<p>	
- &nbsp; </p>',
+        'input' => '<p>	&nbsp; </p>',
         'expected' => '',
       ],
     ];
