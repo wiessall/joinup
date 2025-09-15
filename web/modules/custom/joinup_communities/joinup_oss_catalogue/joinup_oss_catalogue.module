@@ -88,11 +88,7 @@ function joinup_oss_catalogue_block_access(BlockInterface $block, string $operat
     ) {
       /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
       $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-      $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
-      return AccessResult::forbiddenIf(empty($allowed_transitions))
-        ->addCacheableDependency($group)
-        ->cachePerPermissions()
-        ->cachePerUser();
+      return $workflow_helper->checkTransitionAccess($group, $account);
     }
   }
 

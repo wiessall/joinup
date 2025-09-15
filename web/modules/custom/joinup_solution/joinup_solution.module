@@ -198,12 +198,9 @@ function joinup_solution_node_access(EntityInterface $entity, $operation, Accoun
   if ($operation == 'update') {
     /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
     $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-    $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
-    if (empty($allowed_transitions)) {
-      return AccessResult::forbidden()
-        ->addCacheableDependency($entity)
-        ->cachePerPermissions()
-        ->cachePerUser();
+    $transitionAccess = $workflow_helper->checkTransitionAccess($entity, $account);
+    if ($transitionAccess->isForbidden()) {
+      return $transitionAccess;
     }
   }
 
