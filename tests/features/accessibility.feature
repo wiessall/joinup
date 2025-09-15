@@ -29,6 +29,11 @@ Feature: Accessibility
       | /collection/digital-skills-public-sector/solution/iop-bdti                                                                      |
       | /interoperable-europe/event/register-biggest-2023-open-source-conference-brussels                                               |
       | /interoperable-europe/news/govtech-incubator-launched-2023-digital-government-summit                                            |
+      | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
+      | /collection/european-interoperability-reference-architecture-eira/solution/egovera-business-agnostic-0/release/610              |
+      | /eu-oss-catalogue                                                                                                               |
+      | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
+      | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
       | /search                                                                                                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23content-and-knowledge-management                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23egovernment                                                              |
