@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
@@ -84,9 +85,9 @@ interface StateMachinePermissionsHelperInterface {
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user to check.
    *
-   * @return bool
-   *   TRUE if the user has the own or the any permission, FALSE otherwise.
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   An access result object.
    */
-  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): bool;
+  public function checkOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface;
 
 }
