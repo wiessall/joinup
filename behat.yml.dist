@@ -12,11 +12,14 @@
       # Todo The list of tags should be expanded in ISAICP-8256.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8256
       standardTags:
+        wcag2a: WCAG 2.0 A
+        wcag2aa: WCAG 2.0 AA
         wcag21a: WCAG 2.1 A
         wcag21aa: WCAG 2.1 AA
         wcag141: Criterion 1.4.1
         wcag143: Criterion 1.4.3
         wcag411: Criterion 4.1.1
+        EN-301-549: Rule required under EN 301 549
         'cat.text-alternatives': Image text alternative
       excludeElements:
         # Third-party code injected in page with Javascript.
