@@ -37,6 +37,7 @@ Feature: Accessibility
       | /search                                                                                                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23content-and-knowledge-management                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23egovernment                                                              |
+      | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23ict                                                                      |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23open-source-software                                                     |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23standardisation                                                          |
