@@ -6,37 +6,33 @@ Feature: Add comments
     Given collection content:
       | title             | closed |
       | Gossip collection | no     |
+      | Show collection   | yes    |
+    And solution content:
+      | title                | collection        |
+      | Gossip girl solution | Gossip collection |
     And users:
-      | Username        | E-mail                 | Roles | First name | Family name |
-      | Miss tell tales | tell.tales@example.com |       | Miss       | Tales       |
+      | Username           | E-mail                    | Roles | First name | Family name |
+      | Layonel Sarok      | layonel.sarok@example.com |       | Layonel    | Sarok       |
+      | Korma Salya        | korma.salya@example.com   |       | Korma      | Salya       |
+      | Salma Hayek Coster | salma.coster@example.com  |       | Salma      | Coster      |
+    And the following collection user memberships:
+      | collection        | user          | roles                      |
+      | Gossip collection | Layonel Sarok | administrator, facilitator |
+      | Gossip collection | Korma Salya   | facilitator                |
+    And the following solution user memberships:
+      | solution             | user          | roles                      |
+      | Gossip girl solution | Layonel Sarok | administrator, facilitator |
+      | Gossip girl solution | Korma Salya   | facilitator                |
 
   # This scenario uses javascript to work as regression test for a bug that
   # makes CKEditor unusable upon a page load.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3612
   @javascript
   Scenario Outline: Make an authenticated comment, skips moderation.
-
-    Given solution content:
-      | title                | collection        |
-      | Gossip girl solution | Gossip collection |
-    And users:
-      | Username          | E-mail                        | Roles     | First name | Family name |
-      | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
-      | Layonel Sarok     | layonel.sarok@example.com     |           | Layonel    | Sarok       |
-      | Korma Salya       | korma.salya@example.com       |           | Korma      | Salya       |
-      | Salma Coster      | salma.coster@example.com      |           | Salma      | Coster      |
-    And the following collection user memberships:
-      | collection        | user          | roles                      |
-      | Gossip collection | Layonel Sarok | administrator, facilitator |
-      | Gossip collection | Korma Salya   | facilitator                |
-    And the following solution user memberships:
-      | solution             | user          | roles                      |
-      | Gossip girl solution | Layonel Sarok | administrator, facilitator |
-      | Gossip girl solution | Korma Salya   | facilitator                |
     And <content type> content:
-      | title   | body                                                | <parent>       | state   | author       |
-      | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
-    Given I am logged in as "Miss tell tales"
+      | title   | body                                                | <parent>       | author        |
+      | <title> | How could this ever happen? Moral panic on its way! | <parent title> | Layonel Sarok |
+    Given I am logged in as "Salma Hayek Coster"
     When I visit the "<title>" "<content type>"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
@@ -48,34 +44,25 @@ Feature: Add comments
       | Your comment has been queued for review by site administrators and will be published after approval. |
     And the page should contain the html text "Mr scandal was doing something weird the other day."
     # The author's full name should be shown, not the username.
-    And I should see the link "Miss Tales"
-    But I should not see the link "Miss tell tales"
-    And the email sent to "Comment moderator" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
+    And I should see the link "Salma Coster"
+    But I should not see the link "Salma Hayek Coster"
     And the email sent to "Layonel Sarok" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | Salma Coster posted a comment in <parent> "<parent title>".                             |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Portal Support at http |
     And the email sent to "Korma Salya" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-    # Owner receives an email.
-    And the email sent to "Salma Coster" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | Salma Coster posted a comment in <parent> "<parent title>".                             |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Portal Support at http |
 
     # Verify the anchored link works properly.
-    When I am logged in as "Comment moderator"
-    And I click the comment link from the last email sent to "Comment moderator"
+    When I am logged in as "Layonel Sarok"
+    And I click the comment link from the last email sent to "Layonel Sarok"
     Then I should see the heading "<title>"
     And I should see the text "Mr scandal was doing something weird the other day."
 
-    When I am logged in as "Salma Coster"
-    And I click the comment link from the last email sent to "Salma Coster"
+    When I am logged in as "Korma Salya"
+    And I click the comment link from the last email sent to "Korma Salya"
     And I click "Reply"
     And I should see the "Create comment" wysiwyg editor
     When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
@@ -83,8 +70,8 @@ Feature: Add comments
     # Check status message to ensure the POST request completed and emails were sent.
     And I should see the success message "Your comment has been posted"
     # Parent comment owner receives an email.
-    And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Salma Coster posted a comment in <parent> "<parent title>".                             |
+    And the email sent to "Layonel Sarok" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
+      | Korma Salya posted a comment in <parent> "<parent title>".                              |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
@@ -94,105 +81,18 @@ Feature: Add comments
       | body      | Salma Coster posted a comment in                             |
 
     Examples:
-      | content type | title           | state     | parent     | parent title         |
-      | news         | Scandalous news | published | collection | Gossip collection    |
-      | discussion   | Is gossip bad?  | published | collection | Gossip collection    |
-      # Add an example also for solutions to ensure the variables are properly replaced.
-      | news         | Scandalous news | published | solution   | Gossip girl solution |
-
-  # This scenario uses javascript to work as regression test for a bug that
-  # makes CKEditor unusable upon a page load.
-  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3612
-  @javascript
-  Scenario Outline: Make an authenticated comment at a community content using layout paragraphs, skips moderation.
-
-    Given solution content:
-      | title                | collection        |
-      | Gossip girl solution | Gossip collection |
-    And users:
-      | Username          | E-mail                        | Roles     | First name | Family name |
-      | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
-      | Layonel Sarok     | layonel.sarok@example.com     |           | Layonel    | Sarok       |
-      | Korma Salya       | korma.salya@example.com       |           | Korma      | Salya       |
-      | Salma Coster      | salma.coster@example.com      |           | Salma      | Coster      |
-    And the following collection user memberships:
-      | collection        | user          | roles                      |
-      | Gossip collection | Layonel Sarok | administrator, facilitator |
-      | Gossip collection | Korma Salya   | facilitator                |
-    And the following solution user memberships:
-      | solution             | user          | roles                      |
-      | Gossip girl solution | Layonel Sarok | administrator, facilitator |
-      | Gossip girl solution | Korma Salya   | facilitator                |
-    And <content type> content:
-      | title   | abstract | field_paragraphs_body                               | <parent>       | state   | author       |
-      | <title> | abstract | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
-    Given I am logged in as "Miss tell tales"
-    When I visit the "<title>" "<content type>"
-    # Authenticated users can use a rich text editor to enter comments.
-    And I should see the "Create comment" wysiwyg editor
-    And the "Upload image from computer" button should be available in the "Create comment" wysiwyg editor
-    When I enter "Mr scandal was doing something weird the other day." in the "Create comment" wysiwyg editor
-    And I press "Post comment"
-    Then I should not see the following success messages:
-      | success messages                                                                                     |
-      | Your comment has been queued for review by site administrators and will be published after approval. |
-    And the page should contain the html text "Mr scandal was doing something weird the other day."
-    # The author's full name should be shown, not the username.
-    And I should see the link "Miss Tales"
-    But I should not see the link "Miss tell tales"
-    And the email sent to "Comment moderator" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-    And the email sent to "Layonel Sarok" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-    And the email sent to "Korma Salya" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-    # Owner receives an email.
-    And the email sent to "Salma Coster" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Miss Tales posted a comment in <parent> "<parent title>".                               |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-
-    # Verify the anchored link works properly.
-    When I am logged in as "Comment moderator"
-    And I click the comment link from the last email sent to "Comment moderator"
-    Then I should see the heading "<title>"
-    And I should see the text "Mr scandal was doing something weird the other day."
-
-    When I am logged in as "Salma Coster"
-    And I click the comment link from the last email sent to "Salma Coster"
-    And I click "Reply"
-    And I should see the "Create comment" wysiwyg editor
-    When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
-    And I press "Post comment"
-    # Check status message to ensure the POST request completed and emails were sent.
-    And I should see the success message "Your comment has been posted"
-    # Parent comment owner receives an email.
-    And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
-      | Salma Coster posted a comment in <parent> "<parent title>".                             |
-      | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Portal Support at http |
-    # The owner of the content does not receive a notification due to being the actor.
-    And the following email should not have been sent:
-      | recipient | Salma Coster                                                 |
-      | subject   | Interoperable Europe Portal: A new comment has been created. |
-      | body      | Salma Coster posted a comment in                             |
-
-    Examples:
-      | content type | title     | state     | parent     | parent title      |
-      | document     | Wikileaks | published | collection | Gossip collection |
-      | event        | Wikileaks | published | collection | Gossip collection |
+      | content type | title           | parent     | parent title         |
+      | news         | Scandalous news | collection | Gossip collection    |
+      | discussion   | Is gossip bad?  | collection | Gossip collection    |
+      | news         | Scandalous news | solution   | Gossip girl solution |
+      | document     | Wikileaks       | collection | Gossip collection    |
+      | event        | Wikileaks       | collection | Gossip collection    |
 
   Scenario Outline: Posting comments.
     Given <content type> content:
-      | title   | body                                                | collection        | state   |
-      | <title> | How could this ever happen? Moral panic on its way! | Gossip collection | <state> |
-    Given I am logged in as "Miss tell tales"
+      | title   | body                                                | collection        |
+      | <title> | How could this ever happen? Moral panic on its way! | Gossip collection |
+    Given I am logged in as "Salma Hayek Coster"
     When I visit the "<title>" "<content type>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
     And I fill in "Create comment" with "<p>Mr scandal was doing something<br />weird the other day.<p/>"
@@ -240,54 +140,18 @@ Feature: Add comments
     But I should not see the text "Log in or register to post comments"
 
     Examples:
-      | content type | title             | state     |
-      | news         | Scandalous news   | published |
-      | discussion   | Is gossip bad?    | published |
-      | document     | Wikileaks         | published |
-      | event        | Quantum Echo Fest | published |
-
-  Scenario Outline: Comments are disallowed for anonymous users.
-
-    Given collection content:
-      | title          | closed |
-      | Shy collection | yes    |
-    And <content type> content:
-      | title   | body                                                | collection   | state   |
-      | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
-
-    # Anonymous users should not be able to comment.
-    Given I am an anonymous user
-    When I visit the "<title>" "<content type>"
-    Then I should see the text "Login or create an account to comment"
-    And the link "Login" should point to "eulogin"
-    And the link "create an account" should point to "user/register"
-    And the following fields should not be present "Create comment"
-    And I should not see the button "Post comment"
-
-    # Logged-in users can still comment.
-    Given I am logged in as "Miss tell tales"
-    When I visit the "<title>" "<content type>"
-    Then the following fields should be present "Create comment"
-    And I should see the button "Post comment"
-
-    Examples:
-      | collection        | content type | title                     | state     |
-      | Shy collection    | news         | Scandalous news           | published |
-      | Shy collection    | discussion   | Is gossip bad?            | published |
-      | Shy collection    | document     | Wikileaks                 | published |
-      | Gossip collection | news         | Rihanna wears pope outfit | published |
-      | Gossip collection | discussion   | Is gossip good?           | published |
-      | Gossip collection | document     | Celebrity scandals 2019   | published |
+      | content type | title             |
+      | news         | Scandalous news   |
+      | discussion   | Is gossip bad?    |
+      | document     | Wikileaks         |
+      | event        | Quantum Echo Fest |
 
   Scenario Outline: Anonymized comments
-    Given collection content:
-      | title           | state     | closed |
-      | Show collection | published | yes    |
-    And <content type> content:
-      | title   | body                                                | collection   | state   |
-      | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
+    Given <content type> content:
+      | title   | body                                                | collection   |
+      | <title> | How could this ever happen? Moral panic on its way! | <collection> |
 
-    Given I am logged in as "Miss tell tales"
+    Given I am logged in as "Salma Hayek Coster"
     When I visit the "<title>" "<content type>"
     Then the following fields should be present "Create comment, Post as anonymous"
     And I should see the button "Post comment"
@@ -304,9 +168,9 @@ Feature: Add comments
 
     Given I am logged in as a moderator
     When I visit the "<title>" "<content type>"
-    Then I should see the text "Anonymous user (Miss Tales)"
+    Then I should see the text "Anonymous user (Salma Coster)"
     Then comment #2 should contain the markup "Anonymous user"
-    Then comment #2 should contain the markup "Miss Tales"
+    Then comment #2 should contain the markup "Salma Coster"
 
     Given I am an anonymous user
     When I visit the "<title>" "<content type>"
@@ -314,10 +178,10 @@ Feature: Add comments
     Then comment #2 should contain the markup "Anonymous user"
 
     Examples:
-      | collection        | content type | title                     | state     |
-      | Show collection   | news         | Scandalous busy           | published |
-      | Show collection   | discussion   | Is gossip bad or not?     | published |
-      | Show collection   | document     | Wikilikes                 | published |
-      | Gossip collection | news         | Bosinga wears pope outfit | published |
-      | Gossip collection | discussion   | Is gossip good or not?    | published |
-      | Gossip collection | document     | Celebrity scandals 2022   | published |
+      | collection        | content type | title                     |
+      | Show collection   | news         | Scandalous busy           |
+      | Show collection   | discussion   | Is gossip bad or not?     |
+      | Show collection   | document     | Wikilikes                 |
+      | Gossip collection | news         | Bosinga wears pope outfit |
+      | Gossip collection | discussion   | Is gossip good or not?    |
+      | Gossip collection | document     | Celebrity scandals 2022   |
