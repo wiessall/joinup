@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -107,26 +109,33 @@ readonly class StateMachinePermissionsHelper implements StateMachinePermissionsH
   /**
    * {@inheritdoc}
    */
-  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): bool {
+  public function checkOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
     if ($account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'any'))) {
-      return TRUE;
+      return AccessResult::allowed()->addCacheContexts(['user.permissions']);
     }
 
     $isOwner = ($entity instanceof EntityOwnerInterface) && $entity->getOwnerId() === $account->id();
     if ($isOwner && $account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'own'))) {
-      return TRUE;
+      return AccessResult::allowed()
+        ->addCacheContexts(['user.permissions', 'user'])
+        ->addCacheableDependency($entity);
     }
 
     if ($group = $this->getEntityRelatedGroup($entity)) {
       // The TRUE in the end is so that the custom hooks are not fired - for
       // performance reasons.
-      if ($this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'any'), $account, TRUE)->isAllowed()) {
-        return TRUE;
+      $groupAnyAccess = $this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'any'), $account, TRUE);
+      if ($groupAnyAccess->isAllowed()) {
+        return $groupAnyAccess;
       }
-      return $isOwner && $this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'own'), $account, TRUE)->isAllowed();
+      if ($isOwner) {
+        return $this->ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'own'), $account, TRUE);
+      }
+      return $groupAnyAccess;
     }
 
-    return FALSE;
+    return AccessResult::forbidden()->addCacheContexts(['user.permissions', 'user'])
+      ->addCacheableDependency($entity);
   }
 
   /**

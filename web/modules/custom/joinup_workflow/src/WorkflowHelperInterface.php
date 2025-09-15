@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_workflow;
 
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -66,6 +67,23 @@ interface WorkflowHelperInterface {
    *   An array of transition objects.
    */
   public function getAvailableTransitions(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array;
+
+  /**
+   * Checks if the user has access to any transitions for the given entity.
+   *
+   * This method provides proper cache metadata and should be used for access
+   * checking instead of checking if getAvailableTransitions() is empty.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to check transition access for.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   The user account for which to check access. If omitted the currently
+   *   logged in user will be checked.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   An access result object.
+   */
+  public function checkTransitionAccess(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): AccessResultInterface;
 
   /**
    * Returns the state field definitions of an entity.
