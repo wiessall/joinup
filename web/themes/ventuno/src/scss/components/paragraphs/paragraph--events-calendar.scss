@@ -92,7 +92,11 @@
       border: 2px solid $primary;
     }
     &.is-past {
-      opacity: 0.75;
+      color: $gray-600;
+      .calendar-view-day__number {
+        color: $primary;
+        background-color: $secondary;
+      }
     }
     &.saturday,
     &.sunday {
