@@ -10,7 +10,6 @@ use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file\FileInterface;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -91,12 +90,7 @@ class DistributionContext extends RawDrupalContext {
     }
 
     if ($resource instanceof FileInterface) {
-      if (!FileUrlHandler::isRemote($resource)) {
-        $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
-      }
-      else {
-        $link = $resource->getFileUri();
-      }
+      $link = $resource->getFileUri();
     }
     elseif ($resource instanceof LinkItemInterface) {
       $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
