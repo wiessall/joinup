@@ -45,3 +45,9 @@ mark {
   padding: $mark-padding;
   background-color: $mark-bg;
 }
+
+// ISAICP-10219: Sticky elements don't work inside elements with overflow: hidden or auto.
+// We override @openeuropa/bcl-theme-default rule on _reset.scss from overflow-x: hidden to clip.
+body {
+  overflow-x: clip;
+}

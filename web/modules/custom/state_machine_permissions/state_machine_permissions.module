@@ -37,10 +37,7 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
 
     $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
     $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
-    return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.')
-      ->addCacheableDependency($entity)
-      ->cachePerPermissions()
-      ->cachePerUser();
+    return $workflow_helper->checkTransitionAccess($entity, $account);
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -48,11 +45,9 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
   $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
   $entity->setGroup($context['group']);
   $entity->setOwnerId($account->id());
-  if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
-    return AccessResult::forbidden('No available transitions for the entity.')
-      ->addCacheableDependency($entity)
-      ->cachePerPermissions()
-      ->cachePerUser();
+  $transitionAccess = $workflow_helper->checkTransitionAccess($entity, $account);
+  if ($transitionAccess->isForbidden()) {
+    return $transitionAccess;
   }
 
   // OG does not check for a create permission properly, because the
@@ -110,16 +105,16 @@ function _state_machine_permissions_check_transition_access(EntityInterface $ent
   $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
   if ($operation === 'delete') {
     // If the operation is delete, there is no need to check for transitions.
-    return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account))
+    return $permission_helper->checkOwnAnyPermission($entity, 'delete', $account)
       ->addCacheTags(['og-group-content']);
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
-  $access = AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account));
+  $access = $workflow_helper->checkTransitionAccess($entity, $account);
   if (!$access instanceof AccessResultAllowed) {
     // In case there are no transitions available, check if the user has the
     // delete permission.
-    $access = AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
+    $access = $permission_helper->checkOwnAnyPermission($entity, 'delete', $account);
   }
   return $access;
 }
