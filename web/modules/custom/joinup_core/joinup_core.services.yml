@@ -38,3 +38,7 @@ services:
     class: Drupal\joinup_core\TwigExtension\DummyTextTwigExtension
     tags:
       - { name: twig.extension }
+
+  Drupal\joinup_core\Archiver:
+    calls:
+      - [setWorkflowHelper, ['@?joinup_workflow.workflow_helper']]
