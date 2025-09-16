@@ -1,6 +1,6 @@
 diff --git a/core/lib/Drupal/Core/Entity/DependencyRemovalTrait.php b/core/lib/Drupal/Core/Entity/DependencyRemovalTrait.php
 new file mode 100644
-index 0000000000..e4e8162b84
+index 0000000000000000000000000000000000000000..e4e8162b842d02941063cfd8b617cba3ac9ba9da
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Entity/DependencyRemovalTrait.php
 @@ -0,0 +1,56 @@
@@ -61,7 +61,7 @@ index 0000000000..e4e8162b84
 +
 +}
 diff --git a/core/lib/Drupal/Core/Entity/EntityDisplayBase.php b/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
-index 4951ef32d7..06429f7c8a 100644
+index a23a97a570d4b828e6adf8f0caa53fcef6a90c2a..69a2a7697201bd43c68e5fd732dfec8fa008e25c 100644
 --- a/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
 +++ b/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
 @@ -14,6 +14,8 @@
@@ -73,7 +73,7 @@ index 4951ef32d7..06429f7c8a 100644
    /**
     * The mode used to render entities with arbitrary display options.
     *
-@@ -492,48 +494,6 @@ public function onDependencyRemoval(array $dependencies) {
+@@ -503,48 +505,6 @@ public function onDependencyRemoval(array $dependencies) {
      return $changed;
    }
  
@@ -123,22 +123,22 @@ index 4951ef32d7..06429f7c8a 100644
     * Gets the default region.
     *
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 5eda566e2f..d067e2d0a9 100644
+index 24999a781acbe62a4ea7287b2919b76f61d235ba..f607e76b1ac4a595494dbd51154baf1df2d846e1 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -208,6 +208,7 @@ drupalelementstyleediting
- drupalelementstyleui
- drupalhtmlbuilder
- drupalimage
-+drupalimagestyle
- drupalism
- drupalisms
- drupallink
+@@ -154,6 +154,7 @@ dragtable
+ drillable
+ dropbutton
+ dropbuttons
++drupalimagecaption
+ editables
+ egulias
+ elbonia
 diff --git a/core/modules/filter/filter.module b/core/modules/filter/filter.module
-index e0adbc1620..31b1c48477 100644
+index 38da47a437edc0d099bd2efa776100b0eab8b7b5..070ff3cb7c4974481d7721030bf5c5f49422aef6 100644
 --- a/core/modules/filter/filter.module
 +++ b/core/modules/filter/filter.module
-@@ -323,7 +323,7 @@ function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to
+@@ -255,7 +255,7 @@ function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to
   * @return array
   *   An associative array of filtering tips, keyed by filter name. Each
   *   filtering tip is an associative array with elements:
@@ -146,8 +146,8 @@ index e0adbc1620..31b1c48477 100644
 + *   - tip: Tip text as render array, translated markup object or string.
   *   - id: Filter ID.
   */
- function _filter_tips($format_id, $long = FALSE) {
-@@ -341,8 +341,9 @@ function _filter_tips($format_id, $long = FALSE) {
+ function _filter_tips($format_id, $long = FALSE): array {
+@@ -273,8 +273,9 @@ function _filter_tips($format_id, $long = FALSE): array {
        if ($filter->status) {
          $tip = $filter->tips($long);
          if (isset($tip)) {
@@ -159,19 +159,19 @@ index e0adbc1620..31b1c48477 100644
            ];
          }
 diff --git a/core/modules/filter/src/Entity/FilterFormat.php b/core/modules/filter/src/Entity/FilterFormat.php
-index 699b6a99d4..b1f45f28ec 100644
+index 8b785122dc490fad1e2cd2fc3fed810d584ba743..4999d50568eb51f1b681f31de53dfc8c84df49ff 100644
 --- a/core/modules/filter/src/Entity/FilterFormat.php
 +++ b/core/modules/filter/src/Entity/FilterFormat.php
-@@ -5,6 +5,7 @@
- use Drupal\Component\Plugin\PluginInspectionInterface;
+@@ -6,6 +6,7 @@
  use Drupal\Core\Config\Action\Attribute\ActionMethod;
  use Drupal\Core\Config\Entity\ConfigEntityBase;
+ use Drupal\Core\Entity\Attribute\ConfigEntityType;
 +use Drupal\Core\Entity\DependencyRemovalTrait;
  use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
  use Drupal\Core\Entity\EntityStorageInterface;
  use Drupal\Core\StringTranslation\TranslatableMarkup;
-@@ -58,6 +59,8 @@
-  */
+@@ -66,6 +67,8 @@
+ )]
  class FilterFormat extends ConfigEntityBase implements FilterFormatInterface, EntityWithPluginCollectionInterface {
  
 +  use DependencyRemovalTrait;
@@ -179,7 +179,7 @@ index 699b6a99d4..b1f45f28ec 100644
    /**
     * Unique machine name of the format.
     *
-@@ -403,7 +406,27 @@ public function removeFilter($instance_id) {
+@@ -412,7 +415,28 @@ public function removeFilter($instance_id) {
    public function onDependencyRemoval(array $dependencies) {
      $changed = parent::onDependencyRemoval($dependencies);
      $filters = $this->filters();
@@ -204,11 +204,12 @@ index 699b6a99d4..b1f45f28ec 100644
 +        ]);
 +        $changed = TRUE;
 +      }
++
        // Remove disabled filters, so that this FilterFormat config entity can
        // continue to exist.
        if (!$filter->status && in_array($filter->provider, $dependencies['module'])) {
-@@ -414,6 +437,16 @@ public function onDependencyRemoval(array $dependencies) {
-     return $changed;
+@@ -436,4 +460,14 @@ protected function calculatePluginDependencies(PluginInspectionInterface $instan
+     }
    }
  
 +  /**
@@ -221,11 +222,9 @@ index 699b6a99d4..b1f45f28ec 100644
 +    return \Drupal::logger('filter');
 +  }
 +
-   /**
-    * {@inheritdoc}
-    */
+ }
 diff --git a/core/modules/filter/src/Plugin/FilterBase.php b/core/modules/filter/src/Plugin/FilterBase.php
-index 11e385f27a..9c93eaea9c 100644
+index 11e385f27ad2483e00016295ffa64f2c99306b27..9c93eaea9c6852fb286da36e3ef28e44d8869bf6 100644
 --- a/core/modules/filter/src/Plugin/FilterBase.php
 +++ b/core/modules/filter/src/Plugin/FilterBase.php
 @@ -153,4 +153,11 @@ public function getHTMLRestrictions() {
@@ -241,10 +240,10 @@ index 11e385f27a..9c93eaea9c 100644
 +
  }
 diff --git a/core/modules/filter/src/Plugin/FilterInterface.php b/core/modules/filter/src/Plugin/FilterInterface.php
-index f03a94b125..c0ec54d722 100644
+index 3e51e7c47b3dde295613ea58ce06a66f53c62db9..764eb3423e756bff9271cda4c6f1885aede85474 100644
 --- a/core/modules/filter/src/Plugin/FilterInterface.php
 +++ b/core/modules/filter/src/Plugin/FilterInterface.php
-@@ -262,11 +262,25 @@ public function getHTMLRestrictions();
+@@ -264,11 +264,25 @@ public function getHTMLRestrictions();
     *   (FALSE), or whether a more elaborate filter tips should be returned for
     *   template_preprocess_filter_tips() (TRUE).
     *
@@ -273,10 +272,10 @@ index f03a94b125..c0ec54d722 100644
 +
  }
 diff --git a/core/modules/image/config/schema/image.schema.yml b/core/modules/image/config/schema/image.schema.yml
-index 428ba96648..e9ff3b64cd 100644
+index f805caa378ca822067e3fb36ddf1f9fe43a412b6..e30d3494354e11f0684b7c014af80dae9f785761 100644
 --- a/core/modules/image/config/schema/image.schema.yml
 +++ b/core/modules/image/config/schema/image.schema.yml
-@@ -180,3 +180,15 @@ field.widget.settings.image_image:
+@@ -185,3 +185,15 @@ field.widget.settings.image_image:
      preview_image_style:
        type: string
        label: 'Preview image style'
@@ -293,26 +292,20 @@ index 428ba96648..e9ff3b64cd 100644
 +        type: string
 +        label: 'Image style ID'
 diff --git a/core/modules/image/image.module b/core/modules/image/image.module
-index 0d8bd4b1f2..b0611bd933 100644
+index 27cc1e0e2a40561c6dc2684b5b3a7c586b157039..6d605139ce24b1d7013f7e79fe67e6c2f90d7130 100644
 --- a/core/modules/image/image.module
 +++ b/core/modules/image/image.module
-@@ -6,12 +6,14 @@
+@@ -4,6 +4,8 @@
+  * @file
   */
  
- use Drupal\Core\Entity\EntityInterface;
 +use Drupal\Core\Form\FormStateInterface;
- use Drupal\Core\File\FileSystemInterface;
- use Drupal\Core\Routing\RouteMatchInterface;
- use Drupal\Core\StreamWrapper\StreamWrapperManager;
- use Drupal\Core\Url;
- use Drupal\field\FieldConfigInterface;
- use Drupal\field\FieldStorageConfigInterface;
 +use Drupal\file\Entity\File;
- use Drupal\file\FileInterface;
- use Drupal\image\Controller\ImageStyleDownloadController;
  use Drupal\image\Entity\ImageStyle;
-@@ -507,3 +509,108 @@ function image_field_config_delete(FieldConfigInterface $field) {
-     \Drupal::service('file.usage')->delete($file, 'image', 'default_image', $field->uuid());
+ 
+ /**
+@@ -159,3 +161,108 @@ function image_filter_keyword($anchor, $current_size, $new_size) {
+       return $anchor;
    }
  }
 +
@@ -325,35 +318,35 @@ index 0d8bd4b1f2..b0611bd933 100644
 + * @see \Drupal\editor\Form\EditorImageDialog::buildForm()
 + */
 +function image_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state): void {
-+ /** @var \Drupal\editor\EditorInterface $editor */
-+ $editor = $form_state->getBuildInfo()['args'][0];
++  /** @var \Drupal\editor\EditorInterface $editor */
++  $editor = $form_state->getBuildInfo()['args'][0];
 +
-+ /** @var \Drupal\image\Plugin\Filter\FilterImageStyle $filter */
-+ $filter = $editor->getFilterFormat()->filters('filter_image_style');
++  /** @var \Drupal\image\Plugin\Filter\FilterImageStyle $filter */
++  $filter = $editor->getFilterFormat()->filters('filter_image_style');
 +
-+ if (!$filter->status) {
-+   // The 'filter_image_style' filter is not enabled for this text format.
-+   return;
-+ }
++  if (!$filter->status) {
++    // The 'filter_image_style' filter is not enabled for this text format.
++    return;
++  }
 +
-+ // Get the image (<img>) that is being edited on the client.
-+ $image_element = $form_state->get('image_element');
++  // Get the image (<img>) that is being edited on the client.
++  $image_element = $form_state->get('image_element');
 +
-+ // Add a select element to choose an image style.
-+ $form['image_style']['selection'] = [
-+   '#title' => t('Use image style'),
-+   '#type' => 'select',
-+   '#default_value' => isset($image_element['data-image-style']) ? $image_element['data-image-style'] : '',
-+   '#options' => $filter->getAllowedImageStylesAsOptions(),
-+   '#empty_value' => '',
-+   // Set #parents in order to make the selected value an image attribute,
-+   // named 'data-image-style', in the same way as other image attributes, such as
-+   // 'data-align' or 'hasCaption', are added to the form.
-+   // @see \Drupal\editor\Form\EditorImageDialog::buildForm()
-+   '#parents' => ['attributes', 'data-image-style'],
-+ ];
++  // Add a select element to choose an image style.
++  $form['image_style']['selection'] = [
++    '#title' => t('Use image style'),
++    '#type' => 'select',
++    '#default_value' => isset($image_element['data-image-style']) ? $image_element['data-image-style'] : '',
++    '#options' => $filter->getAllowedImageStylesAsOptions(),
++    '#empty_value' => '',
++    // Set #parents in order to make the selected value an image attribute,
++    // named 'data-image-style', in the same way as other image attributes, such as
++    // 'data-align' or 'hasCaption', are added to the form.
++    // @see \Drupal\editor\Form\EditorImageDialog::buildForm()
++    '#parents' => ['attributes', 'data-image-style'],
++  ];
 +
-+ $form['actions']['save_modal']['#validate'][] = 'image_form_editor_image_dialog_validate';
++  $form['actions']['save_modal']['#validate'][] = 'image_form_editor_image_dialog_validate';
 +}
 +
 +/**
@@ -391,7 +384,7 @@ index 0d8bd4b1f2..b0611bd933 100644
 +  // Set the 'src' attribute to the image style URL. FilterImageStyle will
 +  // look at the 'data-editor-file-uuid' attribute, not the 'src' attribute
 +  // to render the appropriate output.
-+  $attributes['src'] = $image_style ? \Drupal::service('file_url_generator')->transformRelative($image_style->buildUrl($uri)) : '';
++  $attributes['src'] = $image_style ? file_url_transform_relative($image_style->buildUrl($uri)) : '';
 +
 +  /** @var \Drupal\Core\Image\ImageInterface $image */
 +  $image = \Drupal::service('image.factory')->get($uri);
@@ -399,8 +392,8 @@ index 0d8bd4b1f2..b0611bd933 100644
 +  if ($image->isValid()) {
 +    // Get the original width and height of the image.
 +    $dimensions = [
-+    'width' => $image->getWidth(),
-+    'height' => $image->getHeight(),
++      'width' => $image->getWidth(),
++      'height' => $image->getHeight(),
 +    ];
 +
 +    // Transform the 'width' and 'height' dimensions of the image based on
@@ -420,9 +413,8 @@ index 0d8bd4b1f2..b0611bd933 100644
 +  }
 +  $form_state->setValue('attributes', $attributes);
 +}
-\ No newline at end of file
 diff --git a/core/modules/image/image.post_update.php b/core/modules/image/image.post_update.php
-index 9046ce55a7..43b65accd0 100644
+index 28182fec0d8f0ef76f2d8cbaff6bd136cc13a055..335cfa1f356bf3187e6a5d7724a9aecb2672e5d6 100644
 --- a/core/modules/image/image.post_update.php
 +++ b/core/modules/image/image.post_update.php
 @@ -5,6 +5,9 @@
@@ -435,7 +427,7 @@ index 9046ce55a7..43b65accd0 100644
  /**
   * Implements hook_removed_post_updates().
   */
-@@ -15,3 +18,27 @@ function image_removed_post_updates() {
+@@ -15,3 +18,27 @@ function image_removed_post_updates(): array {
      'image_post_update_image_loading_attribute' => '10.0.0',
    ];
  }
@@ -463,11 +455,11 @@ index 9046ce55a7..43b65accd0 100644
 +    return FALSE;
 +  });
 +}
-diff --git a/core/modules/image/js/plugins/drupalimagestyle/plugin.js b/core/modules/image/js/plugins/drupalimagestyle/plugin.js
+diff --git a/core/modules/image/js/plugins/drupalimagestyle/plugin.es6.js b/core/modules/image/js/plugins/drupalimagestyle/plugin.es6.js
 new file mode 100644
-index 0000000000..8177a1e167
+index 0000000000000000000000000000000000000000..8177a1e1677c920a05a9f0d123c4a4d92b2eac11
 --- /dev/null
-+++ b/core/modules/image/js/plugins/drupalimagestyle/plugin.js
++++ b/core/modules/image/js/plugins/drupalimagestyle/plugin.es6.js
 @@ -0,0 +1,128 @@
 +/**
 + * @file
@@ -597,9 +589,93 @@ index 0000000000..8177a1e167
 +    },
 +  });
 +})(CKEDITOR);
+diff --git a/core/modules/image/js/plugins/drupalimagestyle/plugin.js b/core/modules/image/js/plugins/drupalimagestyle/plugin.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..6cfae17f185c0340bf2ed12a0b6c95cdcb6ff74c
+--- /dev/null
++++ b/core/modules/image/js/plugins/drupalimagestyle/plugin.js
+@@ -0,0 +1,77 @@
++/**
++* DO NOT EDIT THIS FILE.
++* See the following change record for more information,
++* https://www.drupal.org/node/2815083
++* @preserve
++**/
++
++(function (CKEDITOR) {
++  function findElementByName(element, name) {
++    if (element.name === name) {
++      return element;
++    }
++
++    var found = null;
++    element.forEach(function (el) {
++      if (el.name === name) {
++        found = el;
++        return false;
++      }
++    }, CKEDITOR.NODE_ELEMENT);
++    return found;
++  }
++
++  CKEDITOR.plugins.add('drupalimagestyle', {
++    requires: 'drupalimage',
++    beforeInit: function beforeInit(editor) {
++      editor.on('widgetDefinition', function (event) {
++        var widgetDefinition = event.data;
++
++        if (widgetDefinition.name !== 'image') {
++          return;
++        }
++
++        CKEDITOR.tools.extend(widgetDefinition.features, {
++          drupalimagestyle: {
++            requiredContent: 'img[data-image-style]'
++          }
++        }, true);
++        var requiredContent = widgetDefinition.requiredContent.getDefinition();
++        requiredContent.attributes['data-image-style'] = '';
++        widgetDefinition.requiredContent = new CKEDITOR.style(requiredContent);
++        widgetDefinition.allowedContent.img.attributes['!data-image-style'] = true;
++        var originalDowncast = widgetDefinition.downcast;
++
++        widgetDefinition.downcast = function (element) {
++          var img = originalDowncast.call(this, element);
++
++          if (!img) {
++            img = findElementByName(element, 'img');
++          }
++
++          if (this.data.hasOwnProperty('data-image-style') && this.data['data-image-style'] !== '') {
++            img.attributes['data-image-style'] = this.data['data-image-style'];
++          }
++
++          return img;
++        };
++
++        var originalUpcast = widgetDefinition.upcast;
++
++        widgetDefinition.upcast = function (element, data) {
++          if (element.name !== 'img' || !element.attributes['data-entity-type'] || !element.attributes['data-entity-uuid'] || element.attributes['data-cke-realelement']) {
++            return;
++          }
++
++          data['data-image-style'] = element.attributes['data-image-style'];
++          element = originalUpcast.call(this, element, data);
++          return element;
++        };
++
++        CKEDITOR.tools.extend(widgetDefinition._mapDataToDialog, {
++          'data-image-style': 'data-image-style'
++        });
++      }, null, null, 20);
++    }
++  });
++})(CKEDITOR);
+\ No newline at end of file
 diff --git a/core/modules/image/src/Plugin/CKEditorPlugin/DrupalImageStyle.php b/core/modules/image/src/Plugin/CKEditorPlugin/DrupalImageStyle.php
 new file mode 100644
-index 0000000000..87831d91b2
+index 0000000000000000000000000000000000000000..87831d91b2218e16066b8e08d9982a2b41a7f11c
 --- /dev/null
 +++ b/core/modules/image/src/Plugin/CKEditorPlugin/DrupalImageStyle.php
 @@ -0,0 +1,64 @@
@@ -669,7 +745,7 @@ index 0000000000..87831d91b2
 +}
 diff --git a/core/modules/image/src/Plugin/Filter/FilterImageStyle.php b/core/modules/image/src/Plugin/Filter/FilterImageStyle.php
 new file mode 100644
-index 0000000000..56e4057f26
+index 0000000000000000000000000000000000000000..56e4057f26d3a064dc1e2dbdd1dc7887d5945562
 --- /dev/null
 +++ b/core/modules/image/src/Plugin/Filter/FilterImageStyle.php
 @@ -0,0 +1,363 @@
@@ -1038,7 +1114,7 @@ index 0000000000..56e4057f26
 +}
 diff --git a/core/modules/image/tests/fixtures/update/test_enable_filter_image_style.php b/core/modules/image/tests/fixtures/update/test_enable_filter_image_style.php
 new file mode 100644
-index 0000000000..29e717a125
+index 0000000000000000000000000000000000000000..29e717a125e4b0cb841e12a1a6436f86ad4da7b6
 --- /dev/null
 +++ b/core/modules/image/tests/fixtures/update/test_enable_filter_image_style.php
 @@ -0,0 +1,35 @@
@@ -1079,7 +1155,7 @@ index 0000000000..29e717a125
 +  ->execute();
 diff --git a/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.info.yml b/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.info.yml
 new file mode 100644
-index 0000000000..60adccce7d
+index 0000000000000000000000000000000000000000..60adccce7dc5fad28917caaa5adfa4274fe78622
 --- /dev/null
 +++ b/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.info.yml
 @@ -0,0 +1,5 @@
@@ -1090,7 +1166,7 @@ index 0000000000..60adccce7d
 +version: VERSION
 diff --git a/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.module b/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.module
 new file mode 100644
-index 0000000000..c3935884d9
+index 0000000000000000000000000000000000000000..c3935884d92b437089016e80e50a409dff76826a
 --- /dev/null
 +++ b/core/modules/image/tests/modules/image_style_filter_test/image_style_filter_test.module
 @@ -0,0 +1,15 @@
@@ -1111,7 +1187,7 @@ index 0000000000..c3935884d9
 +}
 diff --git a/core/modules/image/tests/modules/image_style_filter_test/src/FilterTestImageStyle.php b/core/modules/image/tests/modules/image_style_filter_test/src/FilterTestImageStyle.php
 new file mode 100644
-index 0000000000..6956c86c08
+index 0000000000000000000000000000000000000000..6956c86c08b6c8c693767b6426ef96d6b0c3d0b1
 --- /dev/null
 +++ b/core/modules/image/tests/modules/image_style_filter_test/src/FilterTestImageStyle.php
 @@ -0,0 +1,37 @@
@@ -1154,7 +1230,7 @@ index 0000000000..6956c86c08
 +}
 diff --git a/core/modules/image/tests/src/Functional/FilterImageStyleTest.php b/core/modules/image/tests/src/Functional/FilterImageStyleTest.php
 new file mode 100644
-index 0000000000..7415eac6cb
+index 0000000000000000000000000000000000000000..7415eac6cbdf15309684041b0aa4ae00796bab72
 --- /dev/null
 +++ b/core/modules/image/tests/src/Functional/FilterImageStyleTest.php
 @@ -0,0 +1,129 @@
@@ -1289,7 +1365,7 @@ index 0000000000..7415eac6cb
 +}
 diff --git a/core/modules/image/tests/src/Functional/Update/FilterImageStylePostUpdateTest.php b/core/modules/image/tests/src/Functional/Update/FilterImageStylePostUpdateTest.php
 new file mode 100644
-index 0000000000..cc2b95dcdb
+index 0000000000000000000000000000000000000000..cc2b95dcdb93b8e5afe40ef28ead6693eb330159
 --- /dev/null
 +++ b/core/modules/image/tests/src/Functional/Update/FilterImageStylePostUpdateTest.php
 @@ -0,0 +1,74 @@
@@ -1369,7 +1445,7 @@ index 0000000000..cc2b95dcdb
 +}
 diff --git a/core/modules/image/tests/src/FunctionalJavascript/AddImageTest.php b/core/modules/image/tests/src/FunctionalJavascript/AddImageTest.php
 new file mode 100644
-index 0000000000..6b65edafcc
+index 0000000000000000000000000000000000000000..6b65edafcc99e6fb6ab958537efb449749b1856e
 --- /dev/null
 +++ b/core/modules/image/tests/src/FunctionalJavascript/AddImageTest.php
 @@ -0,0 +1,109 @@
@@ -1484,7 +1560,7 @@ index 0000000000..6b65edafcc
 +}
 diff --git a/core/modules/image/tests/src/Kernel/EditorImageStyleDialogTest.php b/core/modules/image/tests/src/Kernel/EditorImageStyleDialogTest.php
 new file mode 100644
-index 0000000000..a726400377
+index 0000000000000000000000000000000000000000..89803b6bde180e18cd0631cc992797f830ccb135
 --- /dev/null
 +++ b/core/modules/image/tests/src/Kernel/EditorImageStyleDialogTest.php
 @@ -0,0 +1,169 @@
@@ -1589,11 +1665,11 @@ index 0000000000..a726400377
 +    $editor->save();
 +
 +    /** @var \Drupal\file\FileInterface $file */
-+    $file = \Drupal::service('file.repository')->writeData(file_get_contents($this->root . '/core/modules/image/sample.png'), 'public://');
++    $file = file_save_data(file_get_contents($this->root . '/core/modules/image/sample.png'), 'public://');
 +
 +    $input = [
 +      'editor_object' => [
-+        'src' => \Drupal::service('file_url_generator')->transformRelative($file->getFileUri()),
++        'src' => file_url_transform_relative($file->getFileUri()),
 +        'alt' => 'Balloons floating above a field.',
 +        'data-entity-type' => 'file',
 +        'data-entity-uuid' => $file->uuid(),
@@ -1659,7 +1735,7 @@ index 0000000000..a726400377
 +}
 diff --git a/core/modules/image/tests/src/Kernel/FilterDependencyTest.php b/core/modules/image/tests/src/Kernel/FilterDependencyTest.php
 new file mode 100644
-index 0000000000..9d14f8581e
+index 0000000000000000000000000000000000000000..9d14f8581edbc13290a2bee936d051a92734a9c0
 --- /dev/null
 +++ b/core/modules/image/tests/src/Kernel/FilterDependencyTest.php
 @@ -0,0 +1,147 @@
@@ -1810,26 +1886,8 @@ index 0000000000..9d14f8581e
 +  }
 +
 +}
-diff --git a/core/modules/views/src/Plugin/views/PluginBase.php b/core/modules/views/src/Plugin/views/PluginBase.php
-index 57c8589281..8a6defb5db 100644
---- a/core/modules/views/src/Plugin/views/PluginBase.php
-+++ b/core/modules/views/src/Plugin/views/PluginBase.php
-@@ -357,12 +357,9 @@ public function globalTokenReplace($string = '', array $options = []) {
-    */
-   protected function viewsTokenReplace($text, $tokens) {
-     if (!strlen($text)) {
--      // No need to run filterAdmin on an empty string.
-+      // No need to run on an empty string.
-       return '';
-     }
--    if (empty($tokens)) {
--      return Xss::filterAdmin($text);
--    }
- 
-     $twig_tokens = [];
-     foreach ($tokens as $token => $replacement) {
 diff --git a/core/profiles/demo_umami/config/install/filter.format.basic_html.yml b/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
-index b57e2a67a7..1cfc83f98c 100644
+index b57e2a67a7950fe32b2a422be14c9154f510ae97..1cfc83f98ca3c071820c366c03e244918418ac07 100644
 --- a/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
 +++ b/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
 @@ -5,6 +5,7 @@ dependencies:
@@ -1861,7 +1919,7 @@ index b57e2a67a7..1cfc83f98c 100644
 +    settings:
 +      allowed_styles: {  }
 diff --git a/core/profiles/demo_umami/config/install/filter.format.full_html.yml b/core/profiles/demo_umami/config/install/filter.format.full_html.yml
-index 44a1d1ab59..5ecd5b9729 100644
+index 44a1d1ab590b2a92290db538287ff78138e01413..a9f5dde18223aacb23f0e86824408327a292ba2d 100644
 --- a/core/profiles/demo_umami/config/install/filter.format.full_html.yml
 +++ b/core/profiles/demo_umami/config/install/filter.format.full_html.yml
 @@ -5,6 +5,7 @@ dependencies:
@@ -1872,20 +1930,8 @@ index 44a1d1ab59..5ecd5b9729 100644
      - media
  name: 'Full HTML'
  format: full_html
-@@ -63,4 +64,11 @@ filters:
-         document: document
-         image: image
-         remote_video: remote_video
-+  filter_image_style:
-+    id: filter_image_style
-+    provider: image
-+    status: true
-+    weight: 12
-+    settings:
-+      allowed_styles: {  }
-         video: video
 diff --git a/core/profiles/standard/config/install/filter.format.basic_html.yml b/core/profiles/standard/config/install/filter.format.basic_html.yml
-index d81fc17303..87fc32e052 100644
+index d81fc17303f258cdc486754a03e9b2cd706bf2f1..80bf817399550276dcc8b443a9f68859a12942eb 100644
 --- a/core/profiles/standard/config/install/filter.format.basic_html.yml
 +++ b/core/profiles/standard/config/install/filter.format.basic_html.yml
 @@ -3,6 +3,7 @@ status: true
@@ -1896,21 +1942,12 @@ index d81fc17303..87fc32e052 100644
  name: 'Basic HTML'
  format: basic_html
  weight: 0
-@@ -13,7 +14,7 @@ filters:
-     id: editor_file_reference
-     provider: editor
-     status: true
--    weight: 11
-+    weight: 10
-     settings: {  }
-   filter_align:
-     id: filter_align
 @@ -33,7 +34,7 @@ filters:
      status: true
      weight: -10
      settings:
 -      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <cite> <dl> <dt> <dd> <a hreflang href> <blockquote cite> <ul type> <ol start type> <strong> <em> <code> <li> <img src alt data-entity-uuid data-entity-type height width data-caption data-align>'
-+      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <cite> <dl> <dt> <dd> <a hreflang href> <blockquote cite> <ul type> <ol start type> <strong> <em> <code> <li> <img src alt data-entity-uuid data-entity-type height width data-caption data-align data-image-style>'
++      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <cite> <dl> <dt> <dd> <a hreflang href> <blockquote cite> <ul type> <ol start type> <strong> <em> <code> <li> <img src alt data-entity-uuid data-entity-type height width data-caption data-image-style data-align>'
        filter_html_help: false
        filter_html_nofollow: false
    filter_html_image_secure:
@@ -1922,11 +1959,11 @@ index d81fc17303..87fc32e052 100644
 +    id: filter_image_style
 +    provider: image
 +    status: true
-+    weight: 11
++    weight: 12
 +    settings:
 +      allowed_styles: {  }
 diff --git a/core/profiles/standard/config/install/filter.format.full_html.yml b/core/profiles/standard/config/install/filter.format.full_html.yml
-index a0e616a498..b12a3c0e02 100644
+index a0e616a4989feaa028a3496ffd73357454191807..b12a3c0e020f1837134163300865ba4676a7ba95 100644
 --- a/core/profiles/standard/config/install/filter.format.full_html.yml
 +++ b/core/profiles/standard/config/install/filter.format.full_html.yml
 @@ -3,6 +3,7 @@ status: true
