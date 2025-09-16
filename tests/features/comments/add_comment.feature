@@ -10,6 +10,20 @@ Feature: Add comments
     And solution content:
       | title                | collection        |
       | Gossip girl solution | Gossip collection |
+    And news content:
+      | title             | collection        | solution             | author        | body                                                |
+      | Scandalous news   | Gossip collection |                      | Layonel Sarok | How could this ever happen? Moral panic on its way! |
+      | Scandalous news 2 |                   | Gossip girl solution | Layonel Sarok | How could this ever happen? Moral panic on its way! |
+    And discussion content:
+      | title          | collection        | author        | body                                                |
+      | Is gossip bad? | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
+    And document content:
+      | title     | collection        | author        | body                                                |
+      | Wikileaks | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
+    And event content:
+      | title             | collection        | author        | body                                                |
+      | Wikileaks         | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
+      | Quantum Echo Fest | Gossip collection | Layonel Sarok | How could this ever happen? Moral panic on its way! |
     And users:
       | Username           | E-mail                    | Roles | First name | Family name |
       | Layonel Sarok      | layonel.sarok@example.com |       | Layonel    | Sarok       |
@@ -29,9 +43,6 @@ Feature: Add comments
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3612
   @javascript
   Scenario Outline: Make an authenticated comment, skips moderation.
-    And <content type> content:
-      | title   | body                                                | <parent>       | author        |
-      | <title> | How could this ever happen? Moral panic on its way! | <parent title> | Layonel Sarok |
     Given I am logged in as "Salma Hayek Coster"
     When I visit the "<title>" "<content type>"
     # Authenticated users can use a rich text editor to enter comments.
@@ -81,17 +92,14 @@ Feature: Add comments
       | body      | Salma Coster posted a comment in                             |
 
     Examples:
-      | content type | title           | parent     | parent title         |
-      | news         | Scandalous news | collection | Gossip collection    |
-      | discussion   | Is gossip bad?  | collection | Gossip collection    |
-      | news         | Scandalous news | solution   | Gossip girl solution |
-      | document     | Wikileaks       | collection | Gossip collection    |
-      | event        | Wikileaks       | collection | Gossip collection    |
+      | content type | title             | parent     | parent title         |
+      | news         | Scandalous news   | collection | Gossip collection    |
+      | discussion   | Is gossip bad?    | collection | Gossip collection    |
+      | news         | Scandalous news 2 | solution   | Gossip girl solution |
+      | document     | Wikileaks         | collection | Gossip collection    |
+      | event        | Wikileaks         | collection | Gossip collection    |
 
   Scenario Outline: Posting comments.
-    Given <content type> content:
-      | title   | body                                                | collection        |
-      | <title> | How could this ever happen? Moral panic on its way! | Gossip collection |
     Given I am logged in as "Salma Hayek Coster"
     When I visit the "<title>" "<content type>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
@@ -146,14 +154,68 @@ Feature: Add comments
       | document     | Wikileaks         |
       | event        | Quantum Echo Fest |
 
-  Scenario Outline: Anonymized comments
-    Given <content type> content:
-      | title   | body                                                | collection   |
-      | <title> | How could this ever happen? Moral panic on its way! | <collection> |
+  Scenario: Anonymized comments
+    Given news content:
+      | title                     | body                                                | collection      |
+      | Bosinga wears pope outfit | How could this ever happen? Moral panic on its way! | Show collection |
+    And discussion content:
+      | title                  | body                                           | collection      |
+      | Is gossip good or not? | How could this ever happen? Moral panic on its | Show collection |
+    And document content:
+      | title                   | body                                                | collection      |
+      | Celebrity scandals 2022 | How could this ever happen? Moral panic on its way! | Show collection |
 
+  # Perform all actions as anonymous.
     Given I am logged in as "Salma Hayek Coster"
-    When I visit the "<title>" "<content type>"
-    Then the following fields should be present "Create comment, Post as anonymous"
+    When I visit the "Scandalous news" news
+    And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then I should see the text "Anonymous user"
+
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    When I visit the "Bosinga wears pope outfit" news
+    And I fill in "Create comment" with "<p>Mr anonymize was doing something <br />weird the other day.<p/>"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then I should see the text "Anonymous user"
+
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    When I visit the "Is gossip bad?" discussion
+    And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then I should see the text "Anonymous user"
+
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    When I visit the "Wikileaks" document
+    And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then I should see the text "Anonymous user"
+
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    When I visit the "Celebrity scandals 2022" document
     And I should see the button "Post comment"
     And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
     And I check the box "Post as anonymous"
@@ -166,22 +228,42 @@ Feature: Add comments
     When I press "Post comment"
     Then comment #2 should contain the markup "Anonymous user"
 
+  # Verify data as moderator. The comment template is generic across Joinup so
+  # we only need to verify 1 entity per group to verify the name appearing.
     Given I am logged in as a moderator
-    When I visit the "<title>" "<content type>"
+    When I visit the "Scandalous news" news
     Then I should see the text "Anonymous user (Salma Coster)"
     Then comment #2 should contain the markup "Anonymous user"
     Then comment #2 should contain the markup "Salma Coster"
 
+    When I visit the "Bosinga wears pope outfit" news
+    Then I should see the text "Anonymous user (Salma Coster)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Salma Coster"
+
+    When I visit the "Is gossip bad?" discussion
+    Then I should see the text "Anonymous user (Salma Coster)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Salma Coster"
+
+    When I visit the "Wikileaks" document
+    Then I should see the text "Anonymous user (Salma Coster)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Salma Coster"
+
+    When I visit the "Celebrity scandals 2022" document
+    Then I should see the text "Anonymous user (Salma Coster)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Salma Coster"
+
+  # Revisit the entities as anonymous to ensure proper caching. Cacheability is
+  # inherited in a generic way across the website so we only check 1 entity per
+  # group in the test.
     Given I am an anonymous user
-    When I visit the "<title>" "<content type>"
+    When I visit the "Scandalous news" news
     Then I should see the text "Anonymous user"
     Then comment #2 should contain the markup "Anonymous user"
 
-    Examples:
-      | collection        | content type | title                     |
-      | Show collection   | news         | Scandalous busy           |
-      | Show collection   | discussion   | Is gossip bad or not?     |
-      | Show collection   | document     | Wikilikes                 |
-      | Gossip collection | news         | Bosinga wears pope outfit |
-      | Gossip collection | discussion   | Is gossip good or not?    |
-      | Gossip collection | document     | Celebrity scandals 2022   |
+    When I visit the "Celebrity scandals 2022" document
+    Then I should see the text "Anonymous user"
+    Then comment #2 should contain the markup "Anonymous user"
