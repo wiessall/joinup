@@ -9,7 +9,6 @@ dependencies:
   - 'drupal:link'
   - 'drupal:options'
   - 'drupal:text'
-  - 'file_url:file_url'
   - 'inline_entity_form:inline_entity_form'
   - 'joinup:joinup_release'
   - 'joinup:contact_information'
