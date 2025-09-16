@@ -327,9 +327,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/babel": {
-                "Better spreadsheet protection @see https://www.drupal.org/i/3544331": "resources/patch/php/drupal/babel/3544331.mr49-note583667.diff"
-            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
@@ -368,7 +365,8 @@
                 "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
+                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
+                "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -531,7 +529,8 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
-                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff"
+                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff",
+                "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
             },
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",
