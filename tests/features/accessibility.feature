@@ -46,3 +46,5 @@ Feature: Accessibility
       | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
       | /topic/ict/open-source-software                                                                                                 |
+      | /interoperable-europe/events                                                                                                    |
+      | /interoperable-europe/latest-news                                                                                               |
