@@ -11,7 +11,7 @@ index e85f216de1c0cbf607cb7f4ad87ed5e5800fd697..9c1fec42d534c6fb980c74bc7167a6ea
        'uri_scheme' => 'public',
        'handler' => 'default:file',
 diff --git a/core/modules/file/config/schema/file.schema.yml b/core/modules/file/config/schema/file.schema.yml
-index d8b098d50fc2b990a26701f7412f41bd152d0421..455c1548a1b624a8845cc3b174652becf4018b86 100644
+index f00ab3d23d7181a859cef8a9ae7e53c6187f5814..a489d0fb55db653f756a3bc5a0d64dc4238a686b 100644
 --- a/core/modules/file/config/schema/file.schema.yml
 +++ b/core/modules/file/config/schema/file.schema.yml
 @@ -87,10 +87,15 @@ base_file_field_field_settings:
@@ -31,34 +31,32 @@ index d8b098d50fc2b990a26701f7412f41bd152d0421..455c1548a1b624a8845cc3b174652bec
  file.formatter.media:
    type: mapping
 diff --git a/core/modules/file/file.post_update.php b/core/modules/file/file.post_update.php
-index 73c815b1cc0233c03d950cf278ff024527b06d79..1571850ca34c27a849569902006dd2ca3d3e97b9 100644
+index b7ecaabff8ae4e744e4f09eb45dc8177e76dd3fc..904d53dd950daaef1f01afc16702e719aa23245c 100644
 --- a/core/modules/file/file.post_update.php
 +++ b/core/modules/file/file.post_update.php
-@@ -6,6 +6,7 @@
-  */
- 
+@@ -8,6 +8,7 @@
  use Drupal\Core\Config\Entity\ConfigEntityUpdater;
-+use Drupal\Core\Field\FieldConfigInterface;
- use Drupal\user\RoleInterface;
+ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\field\FieldConfigInterface;
  
  /**
-@@ -43,3 +44,14 @@ function file_post_update_add_default_filename_sanitization_configuration() {
-   $config->set('filename_sanitization.replacement_character', '-');
-   $config->save();
+  * Implements hook_removed_post_updates().
+@@ -39,3 +40,12 @@ function file_post_update_add_playsinline(array &$sandbox = []): ?TranslatableMa
+     return $needs_update;
+   });
  }
 +
 +/**
 + * Add the 'require description' file field setting.
 + */
 +function file_post_update_description_required(array &$sandbox): void {
-+  \Drupal::classResolver(ConfigEntityUpdater::class)->update(
-+    $sandbox,
-+    'field_config',
-+    fn(FieldConfigInterface $field_config): bool => $field_config->getType() === 'file',
-+  );
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'field_config', function (FieldConfigInterface $field_config): bool {
++    return $field_config->getType() === 'file';
++  });
 +}
 diff --git a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
-index 87d1d01a46986b212ad13ce242f23e464149be10..db02f8eed79fe2b62f1a18a244cc11ba2cc6deed 100644
+index f09740667e32b5521babd5db3cf9b9ea8cb95547..3310ccc92b4e443936fc99bd36f8ee14edc0bea1 100644
 --- a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
 +++ b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
 @@ -33,7 +33,7 @@
@@ -99,6 +97,16 @@ index 87d1d01a46986b212ad13ce242f23e464149be10..db02f8eed79fe2b62f1a18a244cc11ba
      return $element;
    }
  
+@@ -253,8 +266,7 @@ public static function validateDirectory($element, FormStateInterface $form_stat
+    *
+    * This doubles as a convenience clean-up function and a validation routine.
+    * Commas are allowed by the end-user, but ultimately the value will be stored
+-   * as a space-separated list for compatibility with the 'FileExtension'
+-   * constraint.
++   * as a space-separated list for compatibility with file_validate_extensions().
+    */
+   public static function validateExtensions($element, FormStateInterface $form_state) {
+     if (!empty($element['#value'])) {
 diff --git a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
 index a38e64ab53ccdbc3e92dce7bb39177cf77f9b10b..3a1d952fbd0a0f4c503756dec31b4b5bf238fed5 100644
 --- a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
@@ -187,21 +195,6 @@ index a38e64ab53ccdbc3e92dce7bb39177cf77f9b10b..3a1d952fbd0a0f4c503756dec31b4b5b
 +  }
 +
  }
-diff --git a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php.rej b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php.rej
-new file mode 100644
-index 0000000000000000000000000000000000000000..7e634454ee354634b632e307a6a76be279d0773a
---- /dev/null
-+++ b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php.rej
-@@ -0,0 +1,9 @@
-+diff a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php	(rejected hunks)
-+@@ -12,6 +12,7 @@
-+ use Drupal\Core\Render\Element;
-+ use Drupal\Core\Render\ElementInfoManagerInterface;
-+ use Drupal\Core\StringTranslation\TranslatableMarkup;
-++use Drupal\Core\Validation\ConstraintManager;
-+ use Drupal\file\Element\ManagedFile;
-+ use Drupal\file\Entity\File;
-+ use Symfony\Component\DependencyInjection\ContainerInterface;
 diff --git a/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php
 new file mode 100644
 index 0000000000000000000000000000000000000000..ac978ac9bc4855f65c789aece21a2f7f8c3c3e35
@@ -272,7 +265,7 @@ index 0000000000000000000000000000000000000000..9fff895c7b3b4de3063e3d538d1ab1e0
 +
 +}
 diff --git a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
-index 7566930e379a5758ec8f86e80a924fbc896446fd..90e06839eb800879d6d8d6b4476fe91625344872 100644
+index 895803fbdeba8f7f4a73b3c6ab54f50f5d30bec4..ae4bee7d99ffa6446b1dcfb2bb6cbd501d53c050 100644
 --- a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
 +++ b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
 @@ -173,7 +173,7 @@ public function testDescToggle(): void {
@@ -354,7 +347,7 @@ index 0000000000000000000000000000000000000000..87bdb084497d540e58a66486319b86c1
 +
 +}
 diff --git a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
-index 2a065392179015c7188bf6f951b66302987cf57c..3e269454642f9041d808cd0e3ae75c7c66e842a2 100644
+index 7ed6b0d3371cd656866af05c1f4e9814b71291c4..8452659ff09f89d804ecaed49635fb5911d08b68 100644
 --- a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
 +++ b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
 @@ -98,6 +98,7 @@ public static function defaultFieldSettings() {
@@ -377,10 +370,10 @@ index 2a065392179015c7188bf6f951b66302987cf57c..3e269454642f9041d808cd0e3ae75c7c
      // Add title and alt configuration options.
      $element['alt_field'] = [
 diff --git a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
-index 6fc5002eb3fb37ad0c50e7943efaea4e9cc7d342..e8ccf42fd81946d4bfbdb93f1e581ab97e4f8e3e 100644
+index 22f8f7f57d1b854c34c32eafb0d2351131af21f0..8813f685ef490f38782afe51975aa7c89655d0ba 100644
 --- a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
-@@ -243,6 +243,15 @@ public function testPostFileUpload(): void {
+@@ -244,6 +244,15 @@ public function testPostFileUpload(): void {
          'description' => "The most fascinating file ever!",
        ],
      ], EntityTest::load(2)->get('field_rest_file_test')->getValue());
