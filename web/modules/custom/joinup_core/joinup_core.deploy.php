@@ -50,21 +50,6 @@ function joinup_core_deploy_200700(): string {
     }
   }
 
-  if (isset($all_data['handlers']) && is_array($all_data['handlers'])) {
-    $all_data['handlers'] = array_values($all_data['handlers']);
-    $changes_made[] = 'converted handlers to sequence';
-  }
-
-  if (isset($all_data['access']) && is_array($all_data['access'])) {
-    $all_data['access'] = array_values($all_data['access']);
-    $changes_made[] = 'converted access to sequence';
-  }
-
-  if (isset($all_data['variants']) && is_array($all_data['variants'])) {
-    $all_data['variants'] = array_values($all_data['variants']);
-    $changes_made[] = 'converted variants to sequence';
-  }
-
   // Function to recursively clean control characters from strings.
   $clean_control_chars = function ($value) use (&$clean_control_chars) {
     if (is_string($value)) {
