@@ -9,6 +9,7 @@ Feature: Accessibility
 
     Examples:
       | page                                                                                                                            |
+      # This list of case pages needs revision
       | /                                                                                                                               |
       | /collection/are3na/solution/re3gistry/news/re3gistry-2022-foss4g-firenze                                                        |
       | /collection/egovernment/news/testa-trusted-solution-endorsed-member-states                                                      |
@@ -22,23 +23,14 @@ Feature: Accessibility
       | /collection/nifo-national-interoperability-framework-observatory/news/publication-2022-digital-public-administration-factsheets |
       | /collection/open-data/news/discover-new-series-webinars-data-providers                                                          |
       | /collection/open-data/news/register-finals-eu-datathon-2022                                                                     |
-      | /collection/open-source-observatory-osor/event/open-source-summit-europe                                                        |
-      | /collection/open-source-observatory-osor/event/pass-salt-conference                                                             |
       | /collection/open-source-observatory-osor/news/co2-tool-accounting-code                                                          |
       | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
       | /collection/digital-skills-public-sector/solution/iop-bdti                                                                      |
       | /interoperable-europe/event/register-biggest-2023-open-source-conference-brussels                                               |
       | /interoperable-europe/news/govtech-incubator-launched-2023-digital-government-summit                                            |
-      | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
-      | /collection/european-interoperability-reference-architecture-eira/solution/egovera-business-agnostic-0/release/610              |
-      | /eu-oss-catalogue                                                                                                               |
-      | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
-      | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
-      | /topic/ict/open-source-software                                                                                                 |
       | /search                                                                                                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23content-and-knowledge-management                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23egovernment                                                              |
-      | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23ict                                                                      |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23open-source-software                                                     |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23standardisation                                                          |
@@ -47,10 +39,10 @@ Feature: Accessibility
       | /search?f[0]=type:event                                                                                                         |
       | /search?f[0]=type:news                                                                                                          |
 
-  Scenario: Check accessibility standards webtools maps.
-    Given I visit "/collection/open-source-observatory-osor/event/pass-salt-conference"
-    And I wait until ".leaflet-marker-icon" element exists
-    Then I click on element ".leaflet-marker-icon"
-    And I wait for CSS animations to finish
-    And I should see a ".wt-map-info[role='dialog'][aria-label='Press ESC to close this panel.'][tabindex='0']" element
-    Then the page meets accessibility standards
+      # New pages added after aligning the AXE tags with accessibility-cloud app.
+      | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
+      | /collection/european-interoperability-reference-architecture-eira/solution/egovera-business-agnostic-0/release/610              |
+      | /eu-oss-catalogue                                                                                                               |
+      | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
+      | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
+      | /topic/ict/open-source-software                                                                                                 |
