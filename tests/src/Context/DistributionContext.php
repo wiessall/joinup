@@ -90,7 +90,7 @@ class DistributionContext extends RawDrupalContext {
     }
 
     if ($resource instanceof FileInterface) {
-      $link = $resource->getFileUri();
+      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
     }
     elseif ($resource instanceof LinkItemInterface) {
       $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
