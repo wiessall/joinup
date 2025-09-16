@@ -1,8 +1,8 @@
 diff --git a/core/config/schema/core.entity.schema.yml b/core/config/schema/core.entity.schema.yml
-index 2934ca7fee..d591f3d2db 100644
+index 47f9674785f..dd9be34c905 100644
 --- a/core/config/schema/core.entity.schema.yml
 +++ b/core/config/schema/core.entity.schema.yml
-@@ -436,6 +436,27 @@ field.formatter.settings.entity_reference_label:
+@@ -453,6 +453,29 @@ field.formatter.settings.entity_reference_label:
        type: boolean
        label: 'Link label to the referenced entity'
  
@@ -12,10 +12,12 @@ index 2934ca7fee..d591f3d2db 100644
 +  mapping:
 +    label_singular:
 +      type: label
++      nullable: true
 +      label: 'Indefinite singular name'
 +      translation context: 'Bundle singular label'
 +    label_plural:
 +      type: label
++      nullable: true
 +      label: 'Indefinite plural name'
 +      translation context: 'Bundle plural label'
 +    label_count:
@@ -32,7 +34,7 @@ index 2934ca7fee..d591f3d2db 100644
    mapping:
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 new file mode 100644
-index 0000000000..b200111cb0
+index 00000000000..b200111cb05
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 @@ -0,0 +1,64 @@
@@ -102,7 +104,7 @@ index 0000000000..b200111cb0
 +}
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
 new file mode 100644
-index 0000000000..2805c43eeb
+index 00000000000..867797f362e
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
 @@ -0,0 +1,105 @@
@@ -134,6 +136,8 @@ index 0000000000..2805c43eeb
 +  /**
 +   * A list of definite singular/plural count label variants.
 +   *
++   * @var string[]|null
++   *
 +   * Unlimited definite singular/plural count labels can be defined in order to
 +   * cover various contexts where they are used. The array keys are strings or
 +   * integers, identifying the count label variant. For instance, a site might
@@ -157,8 +161,6 @@ index 0000000000..2805c43eeb
 +   * @endcode
 +   * Each value is a definite singular/plural count label with the plural
 +   * variants separated by ETX (PoItem::DELIMITER).
-+   *
-+   * @var string[]|null
 +   *
 +   * @see \Drupal\Component\Gettext\PoItem::DELIMITER
 +   */
@@ -212,7 +214,7 @@ index 0000000000..2805c43eeb
 +
 +}
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
-index 8aef5ee039..a242b46886 100644
+index 93a7bc6e270..a5ee00a0837 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 @@ -2,9 +2,12 @@
@@ -242,7 +244,7 @@ index 8aef5ee039..a242b46886 100644
              }
            }
            // If entity type bundles are not supported and
-@@ -125,4 +135,62 @@ public function clearCachedBundles() {
+@@ -128,4 +138,62 @@ public function clearCachedBundles() {
      $this->typedDataManager->clearCachedDefinitions();
    }
  
@@ -306,7 +308,7 @@ index 8aef5ee039..a242b46886 100644
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
-index 2789b651e5..7baea06b5e 100644
+index 2789b651e56..7baea06b5e9 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 @@ -37,4 +37,30 @@ public function getBundleInfo($entity_type_id);
@@ -341,10 +343,10 @@ index 2789b651e5..7baea06b5e 100644
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/entity.api.php b/core/lib/Drupal/Core/Entity/entity.api.php
-index 4af6932e45..1ebc583aff 100644
+index 666a6a7814e..ffa34d363e1 100644
 --- a/core/lib/Drupal/Core/Entity/entity.api.php
 +++ b/core/lib/Drupal/Core/Entity/entity.api.php
-@@ -869,6 +869,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+@@ -872,6 +872,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
   *   An associative array of all entity bundles, keyed by the entity
   *   type name, and then the bundle name, with the following keys:
   *   - label: The human-readable name of the bundle.
@@ -376,9 +378,9 @@ index 4af6932e45..1ebc583aff 100644
   *   - uri_callback: (optional) The same as the 'uri_callback' key defined for
   *     the entity type in the EntityTypeManager, but for the bundle only. When
   *     determining the URI of an entity, if a 'uri_callback' is defined for both
-@@ -886,6 +911,16 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+@@ -889,6 +914,16 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
   */
- function hook_entity_bundle_info() {
+ function hook_entity_bundle_info(): array {
    $bundles['user']['user']['label'] = t('User');
 +  $bundles['user']['user']['label_singular'] = t('user');
 +  $bundles['user']['user']['label_plural'] = t('users');
@@ -393,7 +395,7 @@ index 4af6932e45..1ebc583aff 100644
    return $bundles;
  }
  
-@@ -893,7 +928,9 @@ function hook_entity_bundle_info() {
+@@ -896,7 +931,9 @@ function hook_entity_bundle_info(): array {
   * Alter the bundles for entity types.
   *
   * @param array $bundles
@@ -404,7 +406,7 @@ index 4af6932e45..1ebc583aff 100644
   *
   * @see Drupal\Core\Entity\EntityTypeBundleInfo::getBundleInfo()
   * @see hook_entity_bundle_info()
-@@ -902,6 +939,8 @@ function hook_entity_bundle_info_alter(&$bundles) {
+@@ -905,6 +942,8 @@ function hook_entity_bundle_info_alter(&$bundles) {
    $bundles['user']['user']['label'] = t('Full account');
    // Override the bundle class for the "article" node type in a custom module.
    $bundles['node']['article']['class'] = 'Drupal\my_module\Entity\Article';
@@ -413,23 +415,105 @@ index 4af6932e45..1ebc583aff 100644
  }
  
  /**
+@@ -2337,81 +2376,6 @@ function hook_entity_extra_field_info_alter(&$info) {
+   }
+ }
+ 
+-/**
+- * Alter an entity query.
+- *
+- * @param \Drupal\Core\Entity\Query\QueryInterface $query
+- *   The entity query.
+- *
+- * @see hook_entity_query_ENTITY_TYPE_alter()
+- * @see hook_entity_query_tag__TAG_alter()
+- * @see \Drupal\Core\Entity\Query\QueryInterface
+- */
+-function hook_entity_query_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
+-  if ($query->hasTag('entity_reference')) {
+-    $entityType = \Drupal::entityTypeManager()->getDefinition($query->getEntityTypeId());
+-    $query->sort($entityType->getKey('id'), 'desc');
+-  }
+-}
+-
+-/**
+- * Alter an entity query for a specific entity type.
+- *
+- * @param \Drupal\Core\Entity\Query\QueryInterface $query
+- *   The entity query.
+- *
+- * @see hook_entity_query_alter()
+- * @see \Drupal\Core\Entity\Query\QueryInterface
+- */
+-function hook_entity_query_ENTITY_TYPE_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
+-  $query->condition('id', '1', '<>');
+-}
+-
+-/**
+- * Alter an entity query that has a specific tag.
+- *
+- * @param \Drupal\Core\Entity\Query\QueryInterface $query
+- *   The entity query.
+- *
+- * @see hook_entity_query_alter()
+- * @see hook_entity_query_tag__ENTITY_TYPE__TAG_alter()
+- * @see \Drupal\Core\Entity\Query\QueryInterface
+- */
+-function hook_entity_query_tag__TAG_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
+-  $entityType = \Drupal::entityTypeManager()->getDefinition($query->getEntityTypeId());
+-  $query->sort($entityType->getKey('id'), 'desc');
+-}
+-
+-/**
+- * Alter an entity query for a specific entity type that has a specific tag.
+- *
+- * @param \Drupal\Core\Entity\Query\QueryInterface $query
+- *   The entity query.
+- *
+- * @see hook_entity_query_ENTITY_TYPE_alter()
+- * @see hook_entity_query_tag__TAG_alter()
+- * @see \Drupal\Core\Entity\Query\QueryInterface
+- */
+-function hook_entity_query_tag__ENTITY_TYPE__TAG_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
+-  $query->condition('id', '1', '<>');
+-}
+-
+-/**
+- * Modify the list of available entity reference plugins.
+- *
+- * This hook may be used to modify plugin properties after they have been
+- * specified by other modules.
+- *
+- * @param array $plugins
+- *   An array of all the existing plugin definitions, passed by reference.
+- *
+- * @see \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManager
+- */
+-function hook_entity_reference_selection_alter(array &$plugins): void {
+-  // Remove a plugin.
+-  unset($plugins['broken']);
+-}
+-
+ /**
+  * @} End of "addtogroup hooks".
+  */
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 0caf62d735..ec280b9778 100644
+index 69b32dfa718..c8f00e07f1c 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -422,6 +422,7 @@ nyan
- nyancat
- nyans
+@@ -337,6 +337,7 @@ nourriture
+ nplurals
+ ntfs
  nyholm
 +obst
  oembed
- omittable
  onecol
+ oneplusfourgrid
 diff --git a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-index 8848121372..a8eee9fcfb 100644
+index 303879625c3..4710a1ed0ba 100644
 --- a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-@@ -93,6 +93,9 @@ protected function getExpectedDocument() {
+@@ -94,6 +94,9 @@ protected function getExpectedDocument(): array {
            'display_submitted' => TRUE,
            'help' => NULL,
            'langcode' => 'en',
@@ -440,7 +524,7 @@ index 8848121372..a8eee9fcfb 100644
            'new_revision' => TRUE,
            'preview_mode' => 1,
 diff --git a/core/modules/node/config/schema/node.schema.yml b/core/modules/node/config/schema/node.schema.yml
-index 08fe92cc40..fe09764f10 100644
+index 8c81f68ae60..b5b56b14844 100644
 --- a/core/modules/node/config/schema/node.schema.yml
 +++ b/core/modules/node/config/schema/node.schema.yml
 @@ -11,7 +11,7 @@ node.settings:
@@ -453,7 +537,7 @@ index 08fe92cc40..fe09764f10 100644
    constraints:
      FullyValidatable: ~
 diff --git a/core/modules/node/migrations/d6_node_type.yml b/core/modules/node/migrations/d6_node_type.yml
-index 5c138c4683..2ceb9ffedf 100644
+index 5c138c4683f..2ceb9ffedf3 100644
 --- a/core/modules/node/migrations/d6_node_type.yml
 +++ b/core/modules/node/migrations/d6_node_type.yml
 @@ -8,6 +8,7 @@ source:
@@ -474,18 +558,10 @@ index 5c138c4683..2ceb9ffedf 100644
  destination:
    plugin: entity:node_type
 diff --git a/core/modules/node/migrations/d7_node_type.yml b/core/modules/node/migrations/d7_node_type.yml
-index bd9c727f43..8142314ec7 100644
+index bd9c727f435..122089b6c60 100644
 --- a/core/modules/node/migrations/d7_node_type.yml
 +++ b/core/modules/node/migrations/d7_node_type.yml
-@@ -7,6 +7,7 @@ source:
-   plugin: d7_node_type
-   constants:
-     preview: 1 # DRUPAL_OPTIONAL
-+    null_value: null
- process:
-   type: type
-   name: name
-@@ -36,5 +37,8 @@ process:
+@@ -36,5 +36,8 @@ process:
        'management:0:': 'admin:'
        'navigation:0:': 'tools:'
        'user-menu:0:': 'account:'
@@ -495,13 +571,48 @@ index bd9c727f43..8142314ec7 100644
  destination:
    plugin: entity:node_type
 diff --git a/core/modules/node/node.post_update.php b/core/modules/node/node.post_update.php
-index 47894ee83a..74fe1bbe62 100644
+index e10f39e9ee4..5ab17c38dc7 100644
 --- a/core/modules/node/node.post_update.php
 +++ b/core/modules/node/node.post_update.php
-@@ -19,6 +19,15 @@ function node_post_update_set_node_type_description_and_help_to_null(array &$san
-     });
- }
+@@ -5,6 +5,10 @@
+  * Post update functions for Node.
+  */
  
++use Drupal\Core\Config\Entity\ConfigEntityUpdater;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\node\NodeTypeInterface;
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
+@@ -18,3 +22,35 @@ function node_removed_post_updates(): array {
+     'node_post_update_set_node_type_description_and_help_to_null' => '11.0.0',
+   ];
+ }
++
++/**
++ * Creates base field override config for the promote base field on node types.
++ */
++function node_post_update_create_promote_base_field_overrides(&$sandbox = []): void {
++  /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager */
++  $entityFieldManager = \Drupal::service(EntityFieldManagerInterface::class);
++  $promoteFieldDefinition = $entityFieldManager->getBaseFieldDefinitions('node')['promote'];
++  \Drupal::classResolver(ConfigEntityUpdater::class)
++    ->update($sandbox, 'node_type', function (NodeTypeInterface $node_type) use ($promoteFieldDefinition): bool {
++      $config = $promoteFieldDefinition->getConfig($node_type->id());
++      $changed = FALSE;
++      if ($config->isNew()) {
++        // Prior to this update, the "Promoted to front page" configuration for
++        // node types defaulted to TRUE. Therefore, set the default value for
++        // existing node types that didn't already have a base_field_override to
++        // TRUE, which will maintain their previous default.
++        $config->setDefaultValue(TRUE)->save();
++        $changed = TRUE;
++      }
++      return $changed;
++    });
++}
++
 +/**
 + * Add plural label variants to node-type entities.
 + */
@@ -510,32 +621,34 @@ index 47894ee83a..74fe1bbe62 100644
 +    return TRUE;
 +  });
 +}
-+
- /**
-  * Implements hook_removed_post_updates().
-  */
 diff --git a/core/modules/node/src/Entity/NodeType.php b/core/modules/node/src/Entity/NodeType.php
-index 934b4a2c38..a7071d8c39 100644
+index 48d295635f3..1de785136a9 100644
 --- a/core/modules/node/src/Entity/NodeType.php
 +++ b/core/modules/node/src/Entity/NodeType.php
-@@ -4,6 +4,7 @@
+@@ -4,12 +4,13 @@
  
  use Drupal\Core\Config\Action\Attribute\ActionMethod;
  use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 +use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
+ use Drupal\Core\Entity\Attribute\ConfigEntityType;
  use Drupal\Core\Entity\EntityStorageInterface;
  use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\node\Form\NodeTypeDeleteConfirm;
+-use Drupal\node\NodeTypeAccessControlHandler;
+ use Drupal\node\Form\NodeTypeForm;
++use Drupal\node\NodeTypeAccessControlHandler;
  use Drupal\node\NodeTypeInterface;
-@@ -54,11 +55,16 @@
-  *     "new_revision",
-  *     "preview_mode",
-  *     "display_submitted",
-+ *     "label_singular",
-+ *     "label_plural",
-+ *     "label_count",
-  *   }
-  * )
-  */
+ use Drupal\node\NodeTypeListBuilder;
+ use Drupal\user\Entity\EntityPermissionsRouteProvider;
+@@ -60,10 +61,15 @@
+     'new_revision',
+     'preview_mode',
+     'display_submitted',
++    'label_singular',
++    'label_plural',
++    'label_count',
+   ],
+ )]
  class NodeType extends ConfigEntityBundleBase implements NodeTypeInterface {
  
 +  use EntityBundleWithPluralLabelsTrait;
@@ -544,7 +657,7 @@ index 934b4a2c38..a7071d8c39 100644
     * The machine name of this node type.
     *
 diff --git a/core/modules/node/src/NodeTypeInterface.php b/core/modules/node/src/NodeTypeInterface.php
-index 941be20c84..e0789e2a26 100644
+index 941be20c849..e0789e2a26d 100644
 --- a/core/modules/node/src/NodeTypeInterface.php
 +++ b/core/modules/node/src/NodeTypeInterface.php
 @@ -3,12 +3,13 @@
@@ -563,7 +676,7 @@ index 941be20c84..e0789e2a26 100644
    /**
     * Determines whether the node type is locked.
 diff --git a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
-index f3df9ee07b..3fde5d377f 100644
+index 2fce1ebd8a4..9133a6c61c8 100644
 --- a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 +++ b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 @@ -61,6 +61,9 @@ protected function getExpectedNormalizedEntity() {
@@ -578,7 +691,7 @@ index f3df9ee07b..3fde5d377f 100644
        'new_revision' => TRUE,
 diff --git a/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
 new file mode 100644
-index 0000000000..88b43d61ff
+index 00000000000..88b43d61ff9
 --- /dev/null
 +++ b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
 @@ -0,0 +1,46 @@
@@ -628,9 +741,23 @@ index 0000000000..88b43d61ff
 +  }
 +
 +}
+diff --git a/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php b/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
+index 0761342277a..108c66ea929 100644
+--- a/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
++++ b/core/modules/node/tests/src/Kernel/NodeTypeValidationTest.php
+@@ -28,6 +28,9 @@ class NodeTypeValidationTest extends ConfigEntityValidationTestBase {
+   protected static array $propertiesWithOptionalValues = [
+     'description',
+     'help',
++    'label_singular',
++    'label_plural',
++    'label_count',
+   ];
+ 
+   /**
 diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 new file mode 100644
-index 0000000000..660bf0c41e
+index 00000000000..660bf0c41ea
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 @@ -0,0 +1,4 @@
@@ -638,77 +765,91 @@ index 0000000000..660bf0c41e
 +type: module
 +description: 'Provides support for testing entity bundles.'
 +package: Testing
-diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
+diff --git a/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php b/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php
 new file mode 100644
-index 0000000000..39d4df32a9
+index 00000000000..45d142e8d23
 --- /dev/null
-+++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
-@@ -0,0 +1,60 @@
++++ b/core/modules/system/tests/modules/entity_bundle_test/src/Hook/EntityBundleTestHooks.php
+@@ -0,0 +1,74 @@
 +<?php
 +
-+/**
-+ * @file
-+ * Hook implementations for the Entity Bundle Test module.
-+ */
++declare(strict_types=1);
++
++namespace Drupal\entity_bundle_test\Hook;
++
++use Drupal\Core\Hook\Attribute\Hook;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
 +
 +/**
-+ * Implements hook_entity_type_alter().
++ * Module hook implementations.
 + */
-+function entity_bundle_test_entity_type_alter(array &$entity_types): void {
-+  // Use 'entity_test_bundle_plural_labels' as bundle entity for
-+  // 'entity_test_with_bundle' in order to test bundle plural labels.
-+  // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
-+  $entity_types['entity_test_with_bundle']->set('bundle_entity_type', 'entity_test_bundle_plural_labels');
-+}
++class EntityBundleTestHooks {
 +
-+/**
-+ * Implements hook_entity_bundle_info().
-+ */
-+function entity_bundle_test_entity_bundle_info(): array {
-+  return [
-+    'entity_test' => [
-+      'artist' => [
-+        'label' => t('Artist'),
-+        'label_singular' => t('artist'),
-+        'label_plural' => t('artists'),
-+        'label_count' => [
-+          "1 artist\x03@count artists",
-+          'search results' => "1 artist was awarded\x03@count artists were awarded",
++  use StringTranslationTrait;
++
++  /**
++   * Implements hook_entity_type_alter().
++   */
++  #[Hook('entity_type_alter')]
++  public function setBundleEntityType(array &$entity_types): void {
++    // Use 'entity_test_bundle_plural_labels' as bundle entity for
++    // 'entity_test_with_bundle' in order to test bundle plural labels.
++    // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
++    $entity_types['entity_test_with_bundle']->set('bundle_entity_type', 'entity_test_bundle_plural_labels');
++  }
++
++  /**
++   * Implements hook_entity_bundle_info().
++   */
++  #[Hook('entity_bundle_info')]
++  public function bundleInfo(): array {
++    return [
++      'entity_test' => [
++        'artist' => [
++          'label' => $this->t('Artist'),
++          'label_singular' => $this->t('artist'),
++          'label_plural' => $this->t('artists'),
++          'label_count' => [
++            "1 artist\x03@count artists",
++            'search results' => "1 artist was awarded\x03@count artists were awarded",
++          ],
 +        ],
 +      ],
-+    ],
-+  ];
-+}
-+
-+/**
-+ * Implements hook_entity_bundle_info_alter().
-+ */
-+function entity_bundle_test_entity_bundle_info_alter(array &$bundles): void {
-+  // Allow the test to trigger altering.
-+  // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
-+  if (\Drupal::state()->get('entity_bundle_test.allow_alter', FALSE)) {
-+    // Bundle defined via config entity.
-+    $bundles['entity_test_with_bundle']['article']['label_singular'] = 'article item';
-+    $bundles['entity_test_with_bundle']['article']['label_plural'] = 'article items';
-+    $bundles['entity_test_with_bundle']['article']['label_count'] = [
-+      "1 article item\x03@count article items",
-+      'search results' => "1 article item was found\x03@count article items were found",
-+    ];
-+
-+    // Bundle defined via hook_entity_bundle_info().
-+    $bundles['entity_test']['artist']['label_singular'] = 'creator';
-+    $bundles['entity_test']['artist']['label_plural'] = 'creators';
-+    $bundles['entity_test']['artist']['label_count'] = [
-+      "1 creator\x03@count creators",
-+      'search results' => "1 creator was awarded\x03@count creators were awarded",
 +    ];
 +  }
++
++  /**
++   * Implements hook_entity_bundle_info_alter().
++   */
++  #[Hook('entity_bundle_info_alter')]
++  public function alterBundleInfo(array &$bundles): void {
++    // Allow the test to trigger altering.
++    // @see \Drupal\KernelTests\Core\Entity\EntityTypeBundleInfoPluralLabelTest
++    if (\Drupal::state()->get('entity_bundle_test.allow_alter', FALSE)) {
++      // Bundle defined via config entity.
++      $bundles['entity_test_with_bundle']['article']['label_singular'] = 'article item';
++      $bundles['entity_test_with_bundle']['article']['label_plural'] = 'article items';
++      $bundles['entity_test_with_bundle']['article']['label_count'] = [
++        "1 article item\x03@count article items",
++        'search results' => "1 article item was found\x03@count article items were found",
++      ];
++
++      // Bundle defined via hook_entity_bundle_info().
++      $bundles['entity_test']['artist']['label_singular'] = 'creator';
++      $bundles['entity_test']['artist']['label_plural'] = 'creators';
++      $bundles['entity_test']['artist']['label_count'] = [
++        "1 creator\x03@count creators",
++        'search results' => "1 creator was awarded\x03@count creators were awarded",
++      ];
++    }
++  }
++
 +}
 diff --git a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
-index 31aa1d614c..54311bba09 100644
+index eaf57abec3b..a18487ca704 100644
 --- a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
 +++ b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
-@@ -31,3 +31,13 @@ entity_test.entity_test_bundle.*:
+@@ -37,3 +37,13 @@ entity_test.entity_test_bundle.*:
  entity_test.entity_test_mul_bundle.*:
    type: entity_test.entity_test_bundle.*
    label: 'Entity test mul bundle'
@@ -724,44 +865,48 @@ index 31aa1d614c..54311bba09 100644
 +      label: 'Machine-readable name'
 diff --git a/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
 new file mode 100644
-index 0000000000..d5b0d1d3f5
+index 00000000000..a96885356aa
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
-@@ -0,0 +1,32 @@
+@@ -0,0 +1,36 @@
 +<?php
++
++declare(strict_types=1);
 +
 +namespace Drupal\entity_test\Entity;
 +
 +use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
 +use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
++use Drupal\Core\Entity\Attribute\ConfigEntityType;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
 +
 +/**
 + * Defines the Test entity bundle with plural labels configuration entity.
-+ *
-+ * @ConfigEntityType(
-+ *   id = "entity_test_bundle_plural_labels",
-+ *   bundle_of = "entity_test_with_bundle",
-+ *   config_prefix = "entity_test_bundle_plural_labels",
-+ *   entity_keys = {
-+ *     "id" = "id",
-+ *     "label" = "label",
-+ *   },
-+ *   config_export = {
-+ *     "id",
-+ *     "label",
-+ *     "label_singular",
-+ *     "label_plural",
-+ *     "label_count",
-+ *   },
-+ * )
 + */
++#[ConfigEntityType(
++  id: 'entity_test_bundle_plural_labels',
++  label: new TranslatableMarkup('Test entity bundle with plural labels'),
++  config_prefix: 'entity_test_bundle_plural_labels',
++  entity_keys: [
++    'id' => 'id',
++    'label' => 'label',
++  ],
++  bundle_of: 'entity_test_with_bundle',
++  config_export: [
++    'id',
++    'label',
++    'label_singular',
++    'label_plural',
++    'label_count',
++  ],
++)]
 +class EntityTestBundleWithPluralLabels extends EntityTestBundle implements EntityBundleWithPluralLabelsInterface {
 +
 +  use EntityBundleWithPluralLabelsTrait;
 +
 +}
 diff --git a/core/profiles/demo_umami/config/install/node.type.article.yml b/core/profiles/demo_umami/config/install/node.type.article.yml
-index ae8e9d1258..f88d2219e3 100644
+index ae8e9d12580..f88d2219e34 100644
 --- a/core/profiles/demo_umami/config/install/node.type.article.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: null
@@ -773,7 +918,7 @@ index ae8e9d1258..f88d2219e3 100644
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/demo_umami/config/install/node.type.page.yml b/core/profiles/demo_umami/config/install/node.type.page.yml
-index 176315b582..d79b97a12d 100644
+index 176315b5824..d79b97a12d6 100644
 --- a/core/profiles/demo_umami/config/install/node.type.page.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: null
@@ -785,7 +930,7 @@ index 176315b582..d79b97a12d 100644
 +label_count:
 +  - "1 page\x03@count pages"
 diff --git a/core/profiles/demo_umami/config/install/node.type.recipe.yml b/core/profiles/demo_umami/config/install/node.type.recipe.yml
-index 1810e77bcf..a07f30888b 100644
+index 1810e77bcf2..a07f30888b4 100644
 --- a/core/profiles/demo_umami/config/install/node.type.recipe.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.recipe.yml
 @@ -14,3 +14,7 @@ help: null
@@ -797,7 +942,7 @@ index 1810e77bcf..a07f30888b 100644
 +label_count:
 +  - "1 recipe\x03@count recipes"
 diff --git a/core/profiles/standard/config/install/node.type.article.yml b/core/profiles/standard/config/install/node.type.article.yml
-index ae8e9d1258..f88d2219e3 100644
+index ae8e9d12580..f88d2219e34 100644
 --- a/core/profiles/standard/config/install/node.type.article.yml
 +++ b/core/profiles/standard/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: null
@@ -809,7 +954,7 @@ index ae8e9d1258..f88d2219e3 100644
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/standard/config/install/node.type.page.yml b/core/profiles/standard/config/install/node.type.page.yml
-index 176315b582..d79b97a12d 100644
+index 176315b5824..d79b97a12d6 100644
 --- a/core/profiles/standard/config/install/node.type.page.yml
 +++ b/core/profiles/standard/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: null
@@ -820,12 +965,36 @@ index 176315b582..d79b97a12d 100644
 +label_plural: pages
 +label_count:
 +  - "1 page\x03@count pages"
+diff --git a/core/recipes/article_content_type/config/node.type.article.yml b/core/recipes/article_content_type/config/node.type.article.yml
+index ae8e9d12580..f88d2219e34 100644
+--- a/core/recipes/article_content_type/config/node.type.article.yml
++++ b/core/recipes/article_content_type/config/node.type.article.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: article
++label_plural: articles
++label_count:
++  - "1 article\x03@count articles"
+diff --git a/core/recipes/page_content_type/config/node.type.page.yml b/core/recipes/page_content_type/config/node.type.page.yml
+index 755e8ed8ce5..c86385625f3 100644
+--- a/core/recipes/page_content_type/config/node.type.page.yml
++++ b/core/recipes/page_content_type/config/node.type.page.yml
+@@ -8,3 +8,7 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: false
++label_singular: page
++label_plural: pages
++label_count:
++  - "1 page\x03@count pages"
 diff --git a/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
 new file mode 100644
-index 0000000000..2a3fd15f2c
+index 00000000000..8c6dbdbe03c
 --- /dev/null
 +++ b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
-@@ -0,0 +1,254 @@
+@@ -0,0 +1,255 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -849,6 +1018,7 @@ index 0000000000..2a3fd15f2c
 +  protected static $modules = [
 +    'entity_bundle_test',
 +    'entity_test',
++    'user',
 +  ];
 +
 +  /**
@@ -1080,3 +1250,27 @@ index 0000000000..2a3fd15f2c
 +  }
 +
 +}
+diff --git a/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php b/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
+index ed213b40931..05867aebc52 100644
+--- a/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
++++ b/core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php
+@@ -92,7 +92,7 @@ public function testModuleConfigurationOverride(): void {
+     $node_type_data = $this->config('node.type.test')->get();
+     $this->assertGreaterThan(0, strlen($node_type_data['uuid']), 'The node type configuration has been assigned a UUID.');
+     // cSpell:disable-next-line
+-    $this->assertSame('8Jlq8CmNXHVtNIHBHgFGpnAKthlUz0XoW_D0g56QXqY', $node_type_data['_core']['default_config_hash']);
++    $this->assertSame('JpzAh72kX-G39SvXWAgTnuLBTdEvOnHQysAzQMQ4HqI', $node_type_data['_core']['default_config_hash']);
+   }
+ 
+   /**
+diff --git a/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml b/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
+index adffa484d4b..050d6cfa576 100644
+--- a/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
++++ b/core/tests/fixtures/recipes/install_node_with_config/config/node.type.test.yml
+@@ -7,3 +7,6 @@ help: null
+ new_revision: true
+ preview_mode: 1
+ display_submitted: true
++label_singular: null
++label_plural: null
++label_count: null
