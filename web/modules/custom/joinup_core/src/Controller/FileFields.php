@@ -22,7 +22,6 @@ class FileFields extends ControllerBase {
   public function listing(): array {
     $fields_structure = [];
     $fields_structure = array_merge_recursive($fields_structure, $this->entityFieldManager->getFieldMapByFieldType('file'));
-    $fields_structure = array_merge_recursive($fields_structure, $this->entityFieldManager->getFieldMapByFieldType('file_url'));
     $fields_structure = array_merge_recursive($fields_structure, $this->entityFieldManager->getFieldMapByFieldType('image'));
 
     $build['table'] = [
