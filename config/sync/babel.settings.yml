@@ -12,6 +12,11 @@ translation_type:
         - footer-follow-us
         - footer-help-and-support
         - navbar
+    'content_entity:taxonomy_term':
+      bundle:
+        - domain
+        - owner_type
+        - solution_classification
 data_transfer:
   plugin:
     spreadsheet: {  }
