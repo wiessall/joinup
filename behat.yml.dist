@@ -21,9 +21,12 @@
         wcag411: Criterion 4.1.1
         EN-301-549: Rule required under EN 301 549
         'cat.text-alternatives': Image text alternative
+        'cat.name-role-value': Empty heading elements
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
+        # Links without proper names that should be ignored
+        - .skip-link-name-check
   - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
