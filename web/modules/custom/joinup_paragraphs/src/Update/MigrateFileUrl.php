@@ -58,15 +58,11 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     $config = $this->entityTypeManager->getStorage('track_usage_config')
       ->load('file_visibility');
 
-    $result = $this->database->select('node__resources', 'nr')
-      ->distinct()
-      ->fields('nr', ['entity_id'])
-      ->execute();
+    $nids = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(TRUE)->exists('resources')->execute();
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
-    while ($record = $result->fetchAssoc()) {
-      $source = $this->entityTypeManager->getStorage('node')
-        ->load($record['entity_id']);
-      $this->recorder->record($source, $config);
+    foreach ($nodes as $node) {
+      $this->recorder->record($node, $config);
     }
 
     $this->recorder->registerUsageRecords();
@@ -141,16 +137,12 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
       ->orderBy('revision_id')
       ->orderBy('delta')
       ->execute();
-
+    $this->deleteTrackUsages($srcField);
     $destRecords = $lookup = [];
     $currentEntityId = NULL;
     while ($record = $results->fetch()) {
       $entityId = $record->entity_id;
       $value = $record->{"{$srcField}_target_id"};
-
-      if ($value && $file = self::urlToFile($value)) {
-        $this->deleteTrackUsages($entityId, $file->id());
-      }
 
       // Reset lookup when we move to a new entity.
       if ($entityId !== $currentEntityId) {
@@ -344,28 +336,28 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
   }
 
   /**
-   * Deletes track usages by entity and target.
+   * Deletes track usages by srcField.
    *
-   * @param string $source_id
-   *   The source ID.
-   * @param string $target_id
-   *   The target ID.
+   * @param string $srcField
+   *   The source field.
    */
-  private function deleteTrackUsages(string $source_id, string $target_id): void {
-    $result = $this->database->select('track_usage', 'tu')
-      ->fields('tu', ['tid'])
-      ->condition('source_id_string', $source_id)
-      ->condition('target_id_string', $target_id)
-      ->execute();
+  private function deleteTrackUsages(string $srcField): void {
+    $query = $this->database->select('track_usage', 'tu');
+    $query->addField('tu', 'tid');
+    $query->innerJoin('node__' . $srcField, 'src', 'src.entity_id = tu.source_id_int');
+    $query->innerJoin('track_usage_paths', 'tup', 'tup.tid = tu.tid');
+    $query->condition('src.' . $srcField . '_target_id', '%/file-dereference/%', 'LIKE');
+    $query->where("tu.target_id_int = CAST(SUBSTRING_INDEX(src." . $srcField . "_target_id, '/', -1) AS UNSIGNED)");
 
-    $this->database->delete('track_usage')
-      ->condition('source_id_string', $source_id)
-      ->condition('target_id_string', $target_id)
-      ->execute();
+    $tids = $query->execute()->fetchCol();
 
-    while ($record = $result->fetchAssoc()) {
+    if (!empty($tids)) {
       $this->database->delete('track_usage_paths')
-        ->condition('tid', $record['tid'])
+        ->condition('tid', $tids, 'IN')
+        ->execute();
+
+      $this->database->delete('track_usage')
+        ->condition('tid', $tids, 'IN')
         ->execute();
     }
   }
