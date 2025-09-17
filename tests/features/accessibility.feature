@@ -46,3 +46,9 @@ Feature: Accessibility
       | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
       | /topic/ict/open-source-software                                                                                                 |
+
+      # Do not render empty Carousel Headings.
+      | /collection/iopeu-monitoring/policy-context                                                                                     |
+      | /collection/interoperable-europe-academy/seasonal-school                                                                        |
+      | /interoperable-europe/news/new-record-number-participants-semic-2024                                                            |
+      | /collection/interoperable-europe-academy/event/seasonal-school-2025                                                             |
