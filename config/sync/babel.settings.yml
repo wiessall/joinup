@@ -17,6 +17,7 @@ translation_type:
         - domain
         - owner_type
         - solution_classification
+        - topic
 data_transfer:
   plugin:
     spreadsheet: {  }
