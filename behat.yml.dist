@@ -20,8 +20,7 @@
         wcag143: Criterion 1.4.3
         wcag411: Criterion 4.1.1
         EN-301-549: Rule required under EN 301 549
-        'cat.text-alternatives': Image text alternative
-        'cat.name-role-value': Empty heading elements
+        'best-practice': Best Practices
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
