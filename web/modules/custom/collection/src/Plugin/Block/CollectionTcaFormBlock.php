@@ -49,12 +49,7 @@ class CollectionTcaFormBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account): AccessResult {
-    // Only show to authenticated users who can create collections.
-    if ($account->isAuthenticated() && $account->hasPermission('create collection content')) {
-      return AccessResult::allowed()
-        ->addCacheContexts(['user.permissions']);
-    }
-    return AccessResult::forbidden();
+    return AccessResult::allowedIfHasPermission($account, 'propose collection content');
   }
 
   /**
