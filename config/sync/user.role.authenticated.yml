@@ -154,7 +154,6 @@ permissions:
   - 'perform owner_workflow workflow update_needs_changes transition on own entity'
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
-  - 'propose collection content'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'

@@ -1,7 +1,3 @@
-# Implement a permissions callback if more node types are needed.
-propose collection content:
-  title: 'Propose new Collection'
-
 bypass code of conduct:
   title: 'Bypass code of conduct'
   description: 'The user does not need to accept the CoC to perform actions on a collection.'
