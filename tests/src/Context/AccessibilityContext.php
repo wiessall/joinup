@@ -69,6 +69,7 @@ class AccessibilityContext extends RawDrupalContext {
   public function __construct(
     protected readonly array $standardTags,
     protected readonly array $excludeElements,
+    protected readonly array $disableRules,
   ) {}
 
   /**
@@ -103,7 +104,7 @@ class AccessibilityContext extends RawDrupalContext {
     $axeJsSrc = $this->ensureAxeJsScript();
 
     // Trigger the Axe check (is asynchronous).
-    $this->getSession()->executeScript($this->getJsTriggeringScript($axeJsSrc, $limitToTags));
+    $this->getSession()->executeScript($this->getJsTriggeringScript($axeJsSrc, $limitToTags, $this->disableRules));
 
     // Axe runs asynchronously, we have to wait until the results are gathered.
     $result = $this->getSession()->getPage()->waitFor(
@@ -182,16 +183,25 @@ class AccessibilityContext extends RawDrupalContext {
    *   The path to axe.min.js.
    * @param array $limitToTags
    *   A list of accessibility tags to limit on.
+   * @param array $disableRules
+   *   (optional) An array of axe-core rule IDs to disable for this run.
+   *   Example: ['link-name', 'color-contrast'].
    *
    * @return string
    *   The JS script.
    */
-  protected function getJsTriggeringScript(string $axeJsSrc, array $limitToTags): string {
+  protected function getJsTriggeringScript(string $axeJsSrc, array $limitToTags, array $disableRules = []): string {
+    // Build the rules array dynamically.
+    $rules = [];
+    foreach ($disableRules as $rule) {
+      $rules[$rule] = ['enabled' => FALSE];
+    }
     $options = Json::encode([
       'runOnly' => [
         'type' => 'tag',
         'values' => $limitToTags,
       ],
+      'rules' => $rules,
     ]);
     $context = $this->excludeElements ? Json::encode([
       'exclude' => implode(',', $this->excludeElements),
