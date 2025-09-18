@@ -25,8 +25,8 @@
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
-        # Links without proper names that should be ignored
-        - .skip-link-name-check
+      disableRules:
+        - link-name
   - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
