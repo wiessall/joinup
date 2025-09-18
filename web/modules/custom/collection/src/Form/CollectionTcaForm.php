@@ -2,25 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_group;
+namespace Drupal\collection\Form;
 
-use Drupal\Core\Block\BlockManagerInterface;
-use Drupal\Core\Block\Plugin\Block\Broken;
-use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * A base form for a TCA submission.
+ * A collection TCA form.
  */
-abstract class TcaFormBase extends FormBase {
-
-  use AutowireTrait;
-
-  public function __construct(
-    protected readonly BlockManagerInterface $blockManager,
-  ) {}
+class CollectionTcaForm extends FormBase {
 
   /**
    * Returns the bundle of the type the user is trying to create.
@@ -28,25 +19,21 @@ abstract class TcaFormBase extends FormBase {
    * @return string
    *   The bundle in a human-readable format.
    */
-  abstract protected function getEntityBundle(): string;
+  protected function getEntityBundle(): string {
+    return 'collection';
+  }
 
   /**
-   * The simple block ID to load.
-   *
-   * @return string
-   *   The simple block ID including the "simple_block:" prefix.
+   * {@inheritdoc}
    */
-  abstract protected function getTcaBlockId(): string;
+  public function getFormId(): string {
+    return 'collection_tca_form';
+  }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $block = $this->blockManager->createInstance($this->getTcaBlockId());
-    if (!($block instanceof Broken)) {
-      $form['tca'] = $block->build();
-    }
-
     $form['warning'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
@@ -58,7 +45,8 @@ abstract class TcaFormBase extends FormBase {
     $form['tca_agreement'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('I have read and accept <a href=":legal_notice_url">the legal notice</a> and I commit to manage my :bundle on a regular basis.', [
-        ':legal_notice_url' => Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])->toString(),
+        ':legal_notice_url' => Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])
+          ->toString(),
         ':bundle' => $this->getEntityBundle(),
       ]),
     ];
@@ -101,6 +89,18 @@ abstract class TcaFormBase extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  abstract public function cancelSubmit(array &$form, FormStateInterface $form_state): void;
+  public function cancelSubmit(array &$form, FormStateInterface $form_state): void {
+    $form_state->setRedirect(Url::fromUri('internal:/collections')
+      ->getRouteName());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $form_state->setRedirect('node.propose_form', [
+      'node_type' => 'collection',
+    ]);
+  }
 
 }
