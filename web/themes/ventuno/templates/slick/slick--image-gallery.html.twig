@@ -43,7 +43,9 @@
 
   {% block slick_arrow %}
     <nav{{ arrow_attributes.addClass(arrow_nav_classes) }}>
-      {% if joinup_slick_field_label|field_value %}
+      {% set label_item = joinup_slick_field_label|field_value|first %}
+      {% set label = label_item['#context']['value']|default('')|trim %}
+      {% if label %}
         <h2 class="carousel__title mb-3">{{ joinup_slick_field_label }}</h2>
       {% endif %}
       {% if not settings.unslick %}
