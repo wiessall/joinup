@@ -404,11 +404,6 @@
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
             },
-            "drupal/file_url": {
-                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
-                "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
-            },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch"

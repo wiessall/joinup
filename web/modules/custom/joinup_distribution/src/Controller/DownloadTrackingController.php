@@ -11,7 +11,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Form\AnonymousDownloadForm;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,8 +24,6 @@ class DownloadTrackingController extends ControllerBase {
   public function __construct(
     #[Autowire(service: 'entity_type.manager')]
     protected $entityTypeManager,
-    #[Autowire(service: 'file_url.handler')]
-    protected readonly FileUrlHandler $fileUrlHandler,
     #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
