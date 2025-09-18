@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: solution_terms_of_agreement
-label: 'Solution Terms of Agreement'
+label: 'Terms of Agreement'
 description: ''
 use_admin_theme: false
 path: /solution-terms-of-agreement
