@@ -398,8 +398,8 @@ Feature: Moderate community content
 
     And I select "Statistics and Analysis" options from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Alternative text" with "The event logo"
     And I press "Upload"
+    And I fill in "Alternative text" with "The event logo"
     When I press "Propose"
     Then I should see the success message "Event Alice in Wonderland has been created."
 
