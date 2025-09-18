@@ -50,7 +50,7 @@ Feature: Creation of news through the UI.
       | Short title          | Ytterbium has won the ultimate heavy metal of the year award of 2020! |
       | Headline             | Strong request for this rare metal that is on the mouth of everybody  |
       | Abstract             | Abstract of Strong request for... news                                |
-      | Alternative text     | Logo of the Ytterbium award                                           |      
+      | Alternative text     | Logo of the Ytterbium award                                           |
       | File description     | Comparison materials                                                  |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
