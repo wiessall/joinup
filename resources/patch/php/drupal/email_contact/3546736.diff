@@ -28,10 +28,10 @@ index 4d03d14bf53ed089a9f700ce43f60fd4813b0f3d..8940560270608171a0910cd9a9005a71
        // Allow modules to alter or replace the Ajax command.
        $event = new AjaxEmailContactCommandEvent(new OpenModalDialogCommand(
 diff --git a/tests/src/Functional/EmailContactLinkFormatterTest.php b/tests/src/Functional/EmailContactLinkFormatterTest.php
-index 19c82db778352e984aa59ca5f8eab8e3fd655c70..7b1bd11551ac1a1b286bba406253852303df290c 100644
+index 19c82db778352e984aa59ca5f8eab8e3fd655c70..3b84bf97f6e0d2b39add401075b558826b5ccf72 100644
 --- a/tests/src/Functional/EmailContactLinkFormatterTest.php
 +++ b/tests/src/Functional/EmailContactLinkFormatterTest.php
-@@ -34,6 +34,35 @@ class EmailContactLinkFormatterTest extends BrowserTestBase {
+@@ -34,6 +34,36 @@ class EmailContactLinkFormatterTest extends BrowserTestBase {
     */
    protected $modal = FALSE;
  
@@ -51,7 +51,7 @@ index 19c82db778352e984aa59ca5f8eab8e3fd655c70..7b1bd11551ac1a1b286bba4062538523
 +    // Visit the entity page.
 +    $this->drupalGet($this->entity->toUrl());
 +
-+    // Click the contact link (this should display the form as a page since it's not Ajax).
++    // Click the contact link (displays as page, not Ajax).
 +    $this->clickLink('Contact person by email');
 +
 +    // Assert that we're on the contact form page.
@@ -61,7 +61,8 @@ index 19c82db778352e984aa59ca5f8eab8e3fd655c70..7b1bd11551ac1a1b286bba4062538523
 +
 +    // Verify the form is displayed as a regular page (not in a modal).
 +    $assert->elementExists('css', 'form');
-+    $assert->elementNotExists('css', '.ui-dialog'); // Modal dialog should not exist.
++    // Modal dialog should not exist.
++    $assert->elementNotExists('css', '.ui-dialog');
 +  }
 +
    /**
