@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
@@ -37,6 +38,7 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
     protected readonly KeyValueFactory $keyValue,
     #[Autowire('Drupal\track_usage\Recorder')]
     protected readonly RecorderInterface $recorder,
+    protected readonly QueueFactory $queue,
   ) {
   }
 
@@ -55,17 +57,19 @@ final class MigrateFileUrl implements ContainerInjectionInterface {
    * Re-compute track_usages data for affected sources.
    */
   public function deploy(): void {
-    $config = $this->entityTypeManager->getStorage('track_usage_config')
-      ->load('file_visibility');
-
     $nids = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(TRUE)->exists('resources')->execute();
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
     foreach ($nodes as $node) {
-      $this->recorder->record($node, $config);
+      $this->queue->get('track_usage')->createItem(
+        [
+          'type' => $node->getType(),
+          'ids' => $node->id(),
+          'revision' => $node->getRevisionId(),
+          'config' => 'file_visibility',
+        ]
+      );
     }
-
-    $this->recorder->registerUsageRecords();
   }
 
   /**
