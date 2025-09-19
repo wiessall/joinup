@@ -15,14 +15,6 @@ node.propose_form:
         type: entity:node_type
         with_config_overrides: TRUE
 
-joinup.collection_tca_form:
-  path: '/joinup/tca/collection'
-  defaults:
-    _form: '\Drupal\joinup\Form\TcaForm'
-    _title: 'Why create a Collection?'
-  requirements:
-    _permission: 'propose collection content'
-
 joinup.eligibility_criteria:
   path: '/joinup/eligibility-criteria'
   defaults:

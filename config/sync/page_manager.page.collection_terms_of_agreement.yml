@@ -1,0 +1,21 @@
+uuid: b61eae8f-ebac-451d-96d6-2582160836bc
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: collection_terms_of_agreement
+label: 'Why create a Collection?'
+description: ''
+use_admin_theme: false
+path: /joinup/tca/collection
+access_logic: and
+access_conditions:
+  -
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+parameters: {  }
