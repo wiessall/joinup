@@ -52,12 +52,6 @@
     &::before {
       background-color: $light;
     }
-    a:not(.btn) {
-      &:link,
-      &:visited {
-        color: $secondary-darker;
-      }
-    }
   }
   &--secondary {
     &::before {
