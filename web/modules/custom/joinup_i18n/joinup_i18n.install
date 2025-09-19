@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Batch\BatchBuilder;
 use Drupal\babel\BabelBatchProcessor;
 use Drupal\babel\BabelConfigHelper;
-use Drupal\Core\Batch\BatchBuilder;
 
 /**
  * Rescan the config strings for translation.
