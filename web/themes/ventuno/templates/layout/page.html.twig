@@ -71,7 +71,7 @@
   <div class="content container">
     {% block page_featured %}
       {% if page.featured|render|trim is not empty %}
-        <div class="region-featured" role="complementary" aria-label="{{ 'Featured region'|t}}">
+        <div class="region-featured" role="complementary" aria-label="{{ 'Featured region'|t }}">
           {{ page.featured }}
         </div>
       {% endif %}
@@ -85,14 +85,14 @@
 
     {% block page_content_top %}
       {% if page.content_top %}
-        <div class="region-content-top float-lg-end position-relative d-flex col-gap-2 my-3 ms-lg-3" role="complementary" aria-label="{{ 'Content top region'|t}}">
+        <div class="region-content-top float-lg-end position-relative d-flex col-gap-2 my-3 ms-lg-3" role="complementary" aria-label="{{ 'Content top region'|t }}">
           {{ page.content_top }}
         </div>
       {% endif %}
     {% endblock %}
 
     <div{{ create_attribute({class: main_wrapper_classes}) }}>
-      <main id="main-content" aria-label="{{ 'Main content region'|t}}">
+      <main id="main-content" aria-label="{{ 'Main content region'|t }}">
         {% block page_content %}
           <div class="layout-content">
             {{ page.content }}
