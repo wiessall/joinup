@@ -1,0 +1,12 @@
+uuid: 1af7f44d-7614-43d1-870d-20b76ab0c428
+langcode: en
+status: true
+dependencies: {  }
+id: solution_terms_of_agreement
+label: 'Terms of Agreement'
+description: ''
+use_admin_theme: false
+path: /solution-terms-of-agreement
+access_logic: and
+access_conditions: {  }
+parameters: {  }
