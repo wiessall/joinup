@@ -405,8 +405,6 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
 
-  @api
-  Feature: Messaging group announcements
   @group-clone
   Scenario: Sending mass-mailing announcements.
     Given I am logged in as a moderator
