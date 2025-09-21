@@ -9,5 +9,5 @@ field.formatter.third_party.joinup_slick:
       type: boolean
       label: 'Use the field label as carousel title'
     custom_label:
-      type: string
+      type: label
       label: 'Custom label to use if not using field label'
