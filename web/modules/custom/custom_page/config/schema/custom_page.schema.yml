@@ -30,10 +30,10 @@ custom_page_search_api_widget:
                 type: integer
                 label: 'Enabled'
               show_archived:
-                type: string
+                type: label
                 label: 'Show archived'
               query_presets:
-                type: string
+                type: label
                 label: 'Query presets'
               limit:
                 type: integer
