@@ -4421,7 +4421,7 @@ display:
           expose:
             operator_id: timestamp_1_op
             label: 'Date from'
-            description: ' A date in any machine readable format.'
+            description: 'A date in any machine readable format.'
             use_operator: false
             operator: timestamp_1_op
             operator_limit_selection: false
@@ -4474,7 +4474,7 @@ display:
           expose:
             operator_id: timestamp_2_op
             label: 'Date to'
-            description: ' A date in any machine readable format.'
+            description: 'A date in any machine readable format.'
             use_operator: false
             operator: timestamp_2_op
             operator_limit_selection: false

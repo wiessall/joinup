@@ -1,0 +1,70 @@
+diff --git a/src/Controller/ContactController.php b/src/Controller/ContactController.php
+index 4d03d14bf53ed089a9f700ce43f60fd4813b0f3d..8940560270608171a0910cd9a9005a717cf777ee 100644
+--- a/src/Controller/ContactController.php
++++ b/src/Controller/ContactController.php
+@@ -4,6 +4,7 @@ declare(strict_types = 1);
+ 
+ namespace Drupal\email_contact\Controller;
+ 
++use Drupal\Core\Ajax\AjaxHelperTrait;
+ use Drupal\Core\Ajax\AjaxResponse;
+ use Drupal\Core\Ajax\OpenModalDialogCommand;
+ use Drupal\Core\Controller\ControllerBase;
+@@ -28,6 +29,7 @@ use Drupal\Core\Session\AccountInterface;
+  */
+ class ContactController extends ControllerBase {
+ 
++  use AjaxHelperTrait;
+   use ViewModeTrait;
+ 
+   /**
+@@ -156,7 +158,7 @@ class ContactController extends ControllerBase {
+ 
+     $form = $this->getForm($entity, $field_name, $field_settings);
+ 
+-    if (!empty($field_settings['modal'])) {
++    if (!empty($field_settings['modal']) && $this->isAjax()) {
+       $response = new AjaxResponse();
+       // Allow modules to alter or replace the Ajax command.
+       $event = new AjaxEmailContactCommandEvent(new OpenModalDialogCommand(
+diff --git a/tests/src/Functional/EmailContactLinkFormatterTest.php b/tests/src/Functional/EmailContactLinkFormatterTest.php
+index 19c82db778352e984aa59ca5f8eab8e3fd655c70..3b84bf97f6e0d2b39add401075b558826b5ccf72 100644
+--- a/tests/src/Functional/EmailContactLinkFormatterTest.php
++++ b/tests/src/Functional/EmailContactLinkFormatterTest.php
+@@ -34,6 +34,36 @@ class EmailContactLinkFormatterTest extends BrowserTestBase {
+    */
+   protected $modal = FALSE;
+ 
++  /**
++   * Tests modal redirect when not Ajax.
++   */
++  public function testModalRedirectWhenNotAjax(): void {
++    // Set modal to TRUE for this test.
++    EntityViewDisplay::load('entity_test.entity_test.full')
++      ->setComponent('email', [
++        'type' => 'email_contact_link',
++        'settings' => [
++          'modal' => TRUE,
++        ],
++      ])->save();
++
++    // Visit the entity page.
++    $this->drupalGet($this->entity->toUrl());
++
++    // Click the contact link (displays as page, not Ajax).
++    $this->clickLink('Contact person by email');
++
++    // Assert that we're on the contact form page.
++    $assert = $this->assertSession();
++    $assert->addressMatches('/\/email-contact\/entity_test\/' . $this->entity->id() . '\/email(\/full)?$/');
++    $assert->elementTextEquals('css', 'h1', "{$this->entity->label()} - Email Contact");
++
++    // Verify the form is displayed as a regular page (not in a modal).
++    $assert->elementExists('css', 'form');
++    // Modal dialog should not exist.
++    $assert->elementNotExists('css', '.ui-dialog');
++  }
++
+   /**
+    * Tests the formatter.
+    */
