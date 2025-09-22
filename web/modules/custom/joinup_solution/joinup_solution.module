@@ -805,7 +805,7 @@ function joinup_solution_form_alter(array &$form, FormStateInterface $form_state
         '#type' => 'checkbox',
         '#required' => TRUE,
         '#title' => t('I have read and agreed to the <a href=":tca" class="use-ajax" data-dialog-type="modal" data-dialog-options = "@json" target="_blank">Terms of Agreement</a>', [
-          ':tca' => Url::fromRoute('joinup_solution.collection_solution.tca')
+          ':tca' => Url::fromRoute('page_manager.page_view_solution_terms_of_agreement_solution_terms_of_agreement-block_display')
             ->toString(),
           '@json' => Json::encode(['width' => 800]),
         ]),
