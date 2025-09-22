@@ -91,7 +91,7 @@ class UnshareForm extends ShareFormBase {
 
     $form['groups'] = [
       '#type' => 'checkboxes',
-      '#title' => 'Groups',
+      '#title' => $this->t('Groups'),
       '#options' => $options,
       '#default_value' => [],
     ];
@@ -120,7 +120,9 @@ class UnshareForm extends ShareFormBase {
     );
     $this->removeFromGroups($groups);
     if (!empty($groupLabels)) {
-      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groupLabels) . '.');
+      $this->messenger()->addStatus(
+        $this->t('Item was unshared from the following groups: @groups.', ['@groups' => implode(', ', $groupLabels)])
+      );
     }
 
     $form_state->setRedirectUrl($this->entity->toUrl());
