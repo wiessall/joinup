@@ -15,7 +15,6 @@
 {% set _title_suffix = title_suffix|default('') %}
 {% set _text = text|default({}) %}
 {% set _action = action|default({}) %}
-{% set _badges = badges|default([]) %}
 {% set _extra_data = extra_data|default([]) %}
 {% set _bundle = bundle|default({}) %}
 {% set _indicators = indicators|default([]) %}
@@ -29,6 +28,7 @@
   'tile',
   'tile--spotlight',
   'rounded',
+  'shadow-hover',
   _horizontal ? 'tile--horizontal',
   'd-flex',
   'mb-3',
@@ -44,7 +44,7 @@
 
     <div class="tile__body d-flex flex-column justify-content-between">
       {%- if _info -%}
-        <div class="fs-sm d-flex align-items-center justify-content-start mb-3 mt-2 text-dark">
+        <div class="fs-sm d-flex align-items-center justify-content-start my-2 text-dark">
           <svg class="tile__info-icon bi icon--xs me-1">
             <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
           </svg>
@@ -71,20 +71,6 @@
       {%- if _action -%}
         <div class="tile__action">
           {{- _action -}}
-        </div>
-      {%- endif -%}
-
-      {%- if _badges is not empty and _badges is iterable -%}
-        <div class="my-2">
-          {{- attach_library('ventuno/badge') -}}
-          {%- for _badge in _badges -%}
-            {{- include('@oe-bcl/badge', {
-              label: _badge.label,
-              background: 'light',
-              rounded_pill: true,
-              attributes: create_attribute().addClass(['fs-xs', 'me-1', 'mb-1', 'bg-white']),
-            }, false) -}}
-          {%- endfor -%}
         </div>
       {%- endif -%}
 

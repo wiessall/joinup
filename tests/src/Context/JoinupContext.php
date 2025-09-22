@@ -2052,42 +2052,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a certain link points to a specific path.
-   *
-   * Example: Then the link "Login" should point to "user/login"
-   *
-   * @param string $link
-   *   The text of the link.
-   * @param string $expected_href
-   *   The expected path the link should point to, without trailing slashes.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not found.
-   *
-   * @Then the link :link should point to :expected_href
-   */
-  public function assertLinkHref(string $link, string $expected_href): void {
-    $element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$element) {
-      throw new \Exception("The link '$link' was not found in the page.");
-    }
-
-    $expected_href = trim($expected_href, '/');
-    $actual_href = $element->getAttribute('href');
-
-    // Remove the leading base URL or base path from the link href.
-    $base_url = rtrim($this->getMinkParameter('base_url') ?? '', '/');
-    if (str_starts_with($actual_href, $base_url)) {
-      // Strip the URL base, the leading slash, the query string and the
-      // fragment.
-      $actual_href = ltrim(parse_url($actual_href, PHP_URL_PATH), '/');
-    }
-
-    Assert::assertSame($expected_href, $actual_href, "The link '$link' doesn't point to the expected path '$expected_href'.");
-  }
-
-  /**
    * Simulates picking of an autosuggestion value from a field.
    *
    * @param string $value
