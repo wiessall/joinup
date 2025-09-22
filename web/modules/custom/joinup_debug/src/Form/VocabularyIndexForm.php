@@ -178,10 +178,14 @@ final class VocabularyIndexForm extends FormBase {
    */
   public static function batchFinished(bool $success, array $results, array $operations): void {
     if ($success) {
-      \Drupal::messenger()->addStatus('The batch has been processed successfully.');
+      \Drupal::messenger()->addStatus(
+        t('The batch has been processed successfully.')
+      );
     }
     else {
-      \Drupal::messenger()->addError('An error occurred. Please check the logs for more information.');
+      \Drupal::messenger()->addError(
+        t('An error occurred. Please check the logs for more information.')
+      );
     }
   }
 
