@@ -127,7 +127,6 @@ function joinup_theme($existing, $type, $theme, $path): array {
     'path' => \Drupal::service('extension.list.profile')->getPath('joinup') . '/templates',
   ];
   return [
-    'joinup_eligibility_criteria' => $page_template,
     'joinup_legal_notice' => $page_template,
     'joinup_modal_close_button' => [
       'variables' => [
