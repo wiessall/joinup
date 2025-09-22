@@ -3,7 +3,7 @@ block.settings.entityqueue_block:
   label: 'Entityqueue block settings'
   mapping:
     entityqueue:
-      type: label
+      type: string
       label: 'The machine name of the entityqueue shown in the block.'
     view_mode:
       type: string

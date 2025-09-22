@@ -33,7 +33,7 @@ custom_page_search_api_widget:
                 type: label
                 label: 'Show archived'
               query_presets:
-                type: label
+                type: string
                 label: 'Query presets'
               limit:
                 type: integer

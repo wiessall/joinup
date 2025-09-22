@@ -7,7 +7,7 @@ action.configuration.change_state:*:*:
   label: 'State change action plugin config'
   mapping:
     target_state:
-      type: label
+      type: string
       label: 'Target state of the entity action'
       nullable: true
 
