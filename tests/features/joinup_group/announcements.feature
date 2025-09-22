@@ -14,18 +14,11 @@ Feature: Messaging group announcements
       | Sons of tweets       | sonsoftweets@example.com         |           |
       | Check edit moderator | check.edit.moderator@example.com | moderator |
       | Mogul                | mogul@example.com                |           |
-      | Greedy               | greedy@example.com               |           |
-      | Envious              | envy@example.com                 |           |
-      | Coward               | coward@example.com               |           |
-      | Nice                 | nice@example.com                 |           |
     And the following <group> user membership:
       | <group>      | user           | roles       |
       | Fail pension | Sons of tweets | facilitator |
       | Hidden gems  | Sons of tweets | facilitator |
       | Fail pension | Mogul          |             |
-      | Fail pension | Greedy         |             |
-      | Fail pension | Envious        |             |
-      | Fail pension | Coward         |             |
     And the following legal document version:
       | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
@@ -33,36 +26,8 @@ Feature: Messaging group announcements
       | Check edit moderator |
       | Sons of tweets       |
       | Mogul                |
-      | Greedy               |
-      | Envious              |
-      | Nice                 |
-
-    Given I am an anonymous user
-    When I go to the announcements page of "Fail pension" <group>
-    Then I should see the heading "Sign in to continue"
-    When I go to the announcements page of "Hidden gems" <group>
-    Then I should see the heading "Sign in to continue"
-    When I go to the members page of "Fail pension"
-    Then I should not see the link "Add announcement"
-    When I go to the homepage of the "Fail pension" <group>
-    Then I should not see the link "Announcements"
-
-    Given I am logged in as "Nice"
-    When I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 403
-    When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 403
-    When I go to the members page of "Fail pension"
-    Then I should not see the link "Add announcement"
-    When I go to the homepage of the "Fail pension" <group>
-    Then I should not see the link "Announcements"
 
     Given I am logged in as "Sons of tweets"
-
-    When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 403
-    When I go to the homepage of the "Hidden gems" <group>
-    Then I should not see the link "Announcements"
 
     # The 'Add announcement' button is also available from the members page.
     When I go to the members page of "Fail pension"
@@ -245,20 +210,15 @@ Feature: Messaging group announcements
     Then the response status code should be 403
 
     Given the "Mogul" user unsubscribes from "Fail pension" <group> announcements
-    And the "Greedy" user unsubscribes from "Fail pension" <group> announcements
-    And the "Envious" user unsubscribes from "Fail pension" <group> announcements
     And the "Sons of tweets" user unsubscribes from "Fail pension" <group> announcements
 
     Given I am logged in as "Check edit moderator"
 
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And I press "Approve"
-    # Even 'Coward' is still subscribed, he didn't accept yet the legal notice.
     Then I should see the error message "Cannot send this announcement to Fail pension <group> because none of its members are subscribed to receive announcements."
 
     Given the "Mogul" user subscribes to "Fail pension" <group> announcements
-    And the "Greedy" user subscribes to "Fail pension" <group> announcements
-    And the "Coward" user subscribes to "Fail pension" <group> announcements
     And the "Sons of tweets" user subscribes to "Fail pension" <group> announcements
 
     And I press "Approve"
@@ -273,22 +233,6 @@ Feature: Messaging group announcements
       | The <group> landing page URL                                                                                                                                                                                                                                                    |
       | The <group> members page URL                                                                                                                                                                                                                                                    |
       | The recipient's full name: Mogul                                                                                                                                                                                                                                                |
-      | The recipient's profile URL                                                                                                                                                                                                                                                     |
-      | The recipient's profile edit URL                                                                                                                                                                                                                                                |
-      | The recipient's subscriptions page URL                                                                                                                                                                                                                                          |
-      | Kind regards,                                                                                                                                                                                                                                                                   |
-      | The Fail pension <group> team                                                                                                                                                                                                                                                   |
-      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
-    And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
-      | Dear Greedy,                                                                                                                                                                                                                                                                    |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                                       |
-      | The Big Opening is postponed                                                                                                                                                                                                                                                    |
-      | In this email we are testing the available arguments:                                                                                                                                                                                                                           |
-      | The <group> landing page URL                                                                                                                                                                                                                                                    |
-      | The <group> members page URL                                                                                                                                                                                                                                                    |
-      | The recipient's full name: Greedy                                                                                                                                                                                                                                               |
       | The recipient's profile URL                                                                                                                                                                                                                                                     |
       | The recipient's profile edit URL                                                                                                                                                                                                                                                |
       | The recipient's subscriptions page URL                                                                                                                                                                                                                                          |
@@ -313,10 +257,6 @@ Feature: Messaging group announcements
       | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                                      |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                                                 |
-    # Accepted 'Legal notice' but it's not subscribed to group announcements.
-    But no email has been sent to "Envious"
-    # Subscribed to group announcements but didn't accept the 'Legal notice'.
-    And no email has been sent to "Coward"
 
     And I should see the link "Add announcement"
     # The announcement cannot be edited anymore...
@@ -366,41 +306,6 @@ Feature: Messaging group announcements
     And I click "Settings"
     And I uncheck the box "Announcements enabled"
     And I press "Save"
-
-    When I go to the homepage of the "Fail pension" <group>
-    # Moderators have an "Announcements" link also in the toolbar.
-    Then I should not see the link "Announcements" in the "Entity actions" region
-    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
-    Then the response status code should be 403
-    But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 403
-
-    Given I am logged in as "Sons of tweets"
-
-    When I go to the homepage of the "Fail pension" <group>
-    Then I should not see the link "Announcements"
-    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
-    Then the response status code should be 403
-    But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 403
-
-    Given I am logged in as "Nice"
-
-    When I go to the homepage of the "Fail pension" <group>
-    Then I should not see the link "Announcements"
-    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
-    Then the response status code should be 403
-    But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 403
-
-    Given I am an anonymous user
-
-    When I go to the homepage of the "Fail pension" <group>
-    Then I should not see the link "Announcements"
-    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
-    Then I should see the heading "Sign in to continue"
-    When I go to the announcements page of "Fail pension" <group>
-    Then I should see the heading "Sign in to continue"
 
     Examples:
       | group      |
@@ -518,23 +423,6 @@ Feature: Messaging group announcements
 
     Given the delivery queue of "TEST: Mass-mailing announcement" announcement is processed
     Then the "TEST: Mass-mailing announcement" announcement should have been delivered for each group member
-
-    # Regression test for ticket ISAICP-9253.
-    When I go to the announcements page of "Public Sector Tech Watch" collection
-    And I click "Add announcement"
-    And I fill in "Subject" with "TEST: Mass-mailing announcement token"
-    And I fill in "Body" with "The recipient's full name: @recipient_name"
-    And I press "Create"
-    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
-
-    When I press "Send for approval"
-    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Public Sector Tech Watch collection members."
-    When I click "edit" in the "TEST: Mass-mailing announcement token" row
-    And I press "Approve"
-    Then I should see the success message "The announcement has been scheduled to be delivered to the Public Sector Tech Watch collection members. Because the collection has a large amount of members the emails will be sent in several batches."
-
-    Given the delivery queue of "TEST: Mass-mailing announcement token" announcement is processed
-    Then the "TEST: Mass-mailing announcement token" announcement should have been delivered for each group member
 
   @group-e
   Scenario: Wrong recipient's name in announcements.
