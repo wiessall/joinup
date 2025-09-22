@@ -4,14 +4,32 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - node_revision_delete
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  node_revision_delete:
+    amount:
+      status: false
+      settings:
+        amount: 0
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
 label_singular: 'open source software contact'
 label_plural: 'open source software contacts'
 label_count:
-  - '1 open source software contact\x03@count open source software contacts'
+  - !!binary MSBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0A0Bjb3VudCBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0cw==
 name: 'Open Source Software Contact'
 type: oss_contact
 description: 'An open source software contact'

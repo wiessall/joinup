@@ -65,7 +65,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
     $is_oss_solution_tile ||
     $variables['view_mode'] === 'view_mode_tile_horizontal' ||
-    // @todo Align or remove in ISAICP-9497.
     $variables['view_mode'] === 'spotlight' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
