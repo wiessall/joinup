@@ -25,8 +25,8 @@ class NotFoundController extends ControllerBase {
 
     return [
       '#theme' => '404_not_found',
-      '#search' => $search->toRenderable(),
-      '#front' => $front->toRenderable(),
+      '#search' => $search->toString(),
+      '#front' => $front->toString(),
     ];
   }
 
