@@ -71,6 +71,13 @@ class AccessibilityFilter extends FilterBase {
       $inner_html .= $dom->saveHTML($child);
     }
 
+    // Check if the element contains anchor tags with attributes.
+    // Anchor tags with attributes (like id, href) should preserve the parent
+    // element.
+    if (preg_match('/<a\s+[^>]*\w+[^>]*>/i', $inner_html)) {
+      return FALSE;
+    }
+
     return $this->normalizeContent(strip_tags($inner_html)) === '';
   }
 
