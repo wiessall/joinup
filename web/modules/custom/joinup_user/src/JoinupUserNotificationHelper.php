@@ -13,14 +13,14 @@ use Drupal\user\UserInterface;
 /**
  * Service to assist with sending notifications about actions taken on users.
  */
-readonly class JoinupUserNotificationHelper implements JoinupUserNotificationHelperInterface {
+class JoinupUserNotificationHelper implements JoinupUserNotificationHelperInterface {
 
   use StringTranslationTrait;
 
   public function __construct(
-    protected AccountInterface $currentUser,
-    protected MessengerInterface $messenger,
-    protected MailManagerInterface $mailManager,
+    protected readonly AccountInterface $currentUser,
+    protected readonly MessengerInterface $messenger,
+    protected readonly MailManagerInterface $mailManager,
   ) {}
 
   /**
