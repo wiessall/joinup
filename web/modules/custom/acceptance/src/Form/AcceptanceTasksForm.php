@@ -58,7 +58,10 @@ class AcceptanceTasksForm extends FormBase {
         return;
       }
     } while ($this->countAllUndeliveredDigestMessages());
-    $this->messenger()->addStatus('Successfully delivered all digest messages. Note that the messages might have been spooled, meaning it could take some time to receive them.');
+
+    $this->messenger()->addStatus(
+      $this->t('Successfully delivered all digest messages. Note that the messages might have been spooled, meaning it could take some time to receive them.')
+    );
   }
 
   /**
