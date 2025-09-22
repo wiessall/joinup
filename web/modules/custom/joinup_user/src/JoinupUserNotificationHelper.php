@@ -7,12 +7,15 @@ namespace Drupal\joinup_user;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
 
 /**
  * Service to assist with sending notifications about actions taken on users.
  */
 readonly class JoinupUserNotificationHelper implements JoinupUserNotificationHelperInterface {
+
+  use StringTranslationTrait;
 
   public function __construct(
     protected AccountInterface $currentUser,
@@ -45,7 +48,7 @@ readonly class JoinupUserNotificationHelper implements JoinupUserNotificationHel
       ['account' => $user]
     );
 
-    $this->messenger->addStatus('The user has been notified that their account has been updated.');
+    $this->messenger->addStatus($this->t('The user has been notified that their account has been updated.'));
   }
 
 }
