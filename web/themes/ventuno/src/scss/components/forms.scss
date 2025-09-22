@@ -1,5 +1,7 @@
 @import "../partials/core";
 @import "@openeuropa/bcl-bootstrap/scss/forms";
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+@import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
 .form-wrapper {
   margin-bottom: 1rem;
@@ -175,4 +177,8 @@
   label[for="edit-action"].form-required::after {
     content: none !important;
   }
+  .form-actions {
+    @extend .my-4;
+  }
 }
+
