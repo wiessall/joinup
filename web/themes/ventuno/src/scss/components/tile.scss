@@ -184,11 +184,6 @@
     }
   }
   &--spotlight {
-    // color.adjust needs to be outside of the linear gradient for lint validation.
-    $spotlight-bg: color.adjust($joinup-gray, $lightness: 40%);
-
-    background: $gray-100;
-    background: linear-gradient(165deg, $gray-200 60%, $spotlight-bg);
     .tile__title {
       -webkit-line-clamp: 4;
     }
