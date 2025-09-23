@@ -1,0 +1,68 @@
+uuid: d519f7fe-a754-4ab1-aa04-a965c1cb8e85
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.collection_terms_of_agreement
+  module:
+    - collection
+    - custom_markup_block
+    - layout_discovery
+id: collection_terms_of_agreement-layout_builder
+label: 'Layout Builder'
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: 0462e716-8c92-406c-862e-2f04b252b01d
+  sections:
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: ''
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        e8d4da80-e225-435c-afbd-26d49e589aa9:
+          uuid: e8d4da80-e225-435c-afbd-26d49e589aa9
+          region: content
+          configuration:
+            id: collection_tca_form_block
+            label: 'Do you want to create your own Collection?'
+            label_display: visible
+            provider: collection
+            context_mapping: {  }
+          weight: 1
+          additional: {  }
+        b867ee5b-c001-45e7-9af5-9ce5c3d79690:
+          uuid: b867ee5b-c001-45e7-9af5-9ce5c3d79690
+          region: content
+          configuration:
+            id: custom_markup
+            label: 'Custom Markup'
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: '<p>Interoperable Europe Portal Collections are spaces where you can collaborate with others sharing your same interests around a certain domain, and contain all the contents of any kind related to that domain (solutions, news, newsletters and announcements of events and documents of various kinds).</p><h2>How Collections work</h2><p>Actions you can take as a collection owner:</p><ul><li>Choose who can see and join your Collection, if you create it with restricted membership conditions;</li><li>Add other people as moderators and owners of the Collection;</li><li>Accept or reject users'' proposal to add their solution your collection, based on relevance and <a href="/joinup/eligibility-criteria">eligibility criteria</a>;</li><li>Remove members from your Collection;</li><li>Moderate posts and comments in your Collection;</li><li>Delete your Collection</li></ul><p>What others can do when they join your Collection:</p><ul><li>See what other people have posted to that Collection</li><li>Comment on posts in that Collection</li><li>Leave that Collection at any time</li></ul><p>Please note that the creation of Collections is subject to moderation by the Interoperable Europe Portal team, and the following criteria will be checked:</p><ul><li>If there are existing collections pertaining to the same domains as yours;</li><li>If there is already a collection with content similar to that which you intend to include;</li></ul>'
+              format: content_editor
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+page: collection_terms_of_agreement
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }
