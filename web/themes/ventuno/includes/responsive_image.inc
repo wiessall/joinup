@@ -21,7 +21,7 @@ function ventuno_preprocess_responsive_image_formatter(array &$variables): void 
     else {
       $title = $options['entity']->label();
     }
-    $variables['aria_label'] = 'Read more about \'' . $title . '\'.';
+    $variables['aria_label'] = t('Read more about @title.', ['@title' => $title]);
   }
 }
 
