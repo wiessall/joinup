@@ -59,29 +59,53 @@
           ':actor': item.actor.login
         }) }}
       {% elseif item.type == 'WatchEvent' %}
-        {{ 'User'|t }} {{ item.actor.login }} {{ 'starred the repository'|t }}.
+        {{ 'User :username starred the repository.'|t({':username': item.actor.login}) }}
       {% elseif item.type == 'ForkEvent' %}
-        {{ 'User'|t }} {{ item.actor.login }} {{ 'forked the repository'|t }}.
+        {{ 'User :username forked the repository.'|t({':username': item.actor.login}) }}
       {% elseif item.type == 'CreateEvent' %}
-        {{ item.payload.ref_type }} created: {{ item.payload.ref }}
+        {{ ':ref_type created: :ref'|t({
+          ':ref_type': item.payload.ref_type,
+          ':ref': item.payload.ref
+        }) }}
       {% elseif item.type == 'DeleteEvent' %}
-        {{ item.payload.ref_type }} deleted: {{ item.payload.ref }}
+        {{ ':ref_type deleted: :ref'|t({
+          ':ref_type': item.payload.ref_type,
+          ':ref': item.payload.ref
+        }) }}
       {% elseif item.type == 'PullRequestReviewCommentEvent' %}
-        {{ item.payload.action }} comment on pull request {{ 'on'|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action comment on pull request on <a href=":pr_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':pr_url': item.payload.pull_request.html_url,
+          ':title': item.payload.pull_request.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'CommitCommentEvent' %}
-        {{ item.payload.action }} comment on commit {{ item.payload.comment.commit_id|slice(0, 7) }} {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action comment on commit :commit_id by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':commit_id': item.payload.comment.commit_id|slice(0, 7),
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'ReleaseEvent' %}
-        {{ item.payload.action }} release {{ item.payload.release.tag_name }} {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action release :tag_name by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':tag_name': item.payload.release.tag_name,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'MemberEvent' %}
-        {{ item.payload.action }} {{ 'user'|t }} {{ item.payload.member.login }} {{ 'was added to the repository'|t }}.
+        {{ ':action user :username was added to the repository.'|t({
+          ':action': item.payload.action,
+          ':username': item.payload.member.login
+        }) }}
       {% elseif item.type == 'PublicEvent' %}
-        Repository made public.
+        {{ 'Repository made public.'|t }}
       {% elseif item.type == 'GollumEvent' %}
-        {{ item.payload.pages|length }} wiki page(s) {{ item.payload.pages.0.action }} on the repository.
+        {{ ':count wiki page(s) :action on the repository.'|t({
+          ':count': item.payload.pages|length,
+          ':action': item.payload.pages.0.action
+        }) }}
       {% else %}
         {{ 'Unrecognized event type'|t }}
       {% endif %}
