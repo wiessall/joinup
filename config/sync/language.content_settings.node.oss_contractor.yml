@@ -1,0 +1,11 @@
+uuid: f8e9fd0f-ff46-4f17-8c71-bc236d1e4b7b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+id: node.oss_contractor
+target_entity_type_id: node
+target_bundle: oss_contractor
+default_langcode: site_default
+language_alterable: false

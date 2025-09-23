@@ -150,7 +150,9 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public function blockedUserMessage(CasPostValidateEvent $event): void {
     $uid = $this->authmap->getUid($event->getCasPropertyBag()->getUsername(), 'cas');
     if ($uid && ($user = $this->entityTypeManager->getStorage('user')->load($uid)) && $user->isBlocked()) {
-      $this->messenger->addError('You cannot sign in yet. Your Interoperable Europe Portal account is currently being verified. You will be notified by email once it is activated.');
+      $this->messenger->addError(
+        $this->t('You cannot sign in yet. Your Interoperable Europe Portal account is currently being verified. You will be notified by email once it is activated.')
+      );
     }
   }
 
@@ -272,7 +274,9 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     if ($event->getCasPropertyBag()->hasAttribute('newAccountRegistered')) {
       $url = $event->getAccount()->toUrl('edit-form');
       $this->currentRequest->query->set('destination', $url->toString());
-      $this->messenger->addStatus('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!');
+      $this->messenger->addStatus(
+        $this->t('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!')
+      );
     }
   }
 

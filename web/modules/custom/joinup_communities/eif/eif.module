@@ -99,7 +99,10 @@ function _eif_form_meta_entity_no_empty_field_validate(array &$form, FormStateIn
     && empty($form_state->getValue('eif_principle'))
     && empty($form_state->getValue('eif_recommendation')['entities'])
   ) {
-    $form_state->setError($form, 'An EIF perspective cannot be created without any information. Please, fill in at least one field.');
+    $form_state->setError(
+      $form,
+      t('An EIF perspective cannot be created without any information. Please, fill in at least one field.')
+    );
   }
 }
 
