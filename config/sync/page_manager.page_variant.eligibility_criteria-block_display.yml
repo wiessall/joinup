@@ -6,7 +6,7 @@ dependencies:
     - page_manager.page.eligibility_criteria
   module:
     - custom_markup_block
-id: eligibility_criteria-block_display-0
+id: eligibility_criteria-block_display
 label: 'Eligibility criteria'
 weight: 0
 variant: block_display
