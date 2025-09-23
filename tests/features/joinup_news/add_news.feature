@@ -42,14 +42,16 @@ Feature: Creation of news through the UI.
       | Headline field is required.                    |
       | Short title field is required.                 |
       | Abstract field is required.                    |
-      | The Attachments field description is required. |
+      | Alternative text field is required.            |
       | This value should not be null.                 |
+      | The Attachments field description is required. |
 
     When I fill in the following:
-      | Short title      | Ytterbium has won the ultimate heavy metal of the year award of 2020! |
-      | Headline         | Strong request for this rare metal that is on the mouth of everybody  |
-      | Abstract         | Abstract of Strong request for... news                                |
-      | File description | Comparison materials                                                  |
+      | Short title          | Ytterbium has won the ultimate heavy metal of the year award of 2020! |
+      | Headline             | Strong request for this rare metal that is on the mouth of everybody  |
+      | Abstract             | Abstract of Strong request for... news                                |
+      | Alternative text     | Logo of the Ytterbium award                                           |
+      | File description     | Comparison materials                                                  |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
       | field_body:format | content_editor                                                                                |
@@ -109,10 +111,11 @@ Feature: Creation of news through the UI.
     # Upload works.
     When I go to the edit form of the "The Great Opening" news
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Opening event logo"
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
-
     And I select image #6 as news logo
+    And I fill in "Alternative text" with "Opening event logo"
     And I press "Update"
     And the "The Great Opening" news logo is image #6
