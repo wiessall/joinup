@@ -53,6 +53,11 @@ function joinup_i18n_babel_translation_type_info_alter(array &$definitions): voi
   // By default, disable all Babel plugins. They can be enabled on a
   // case-by-case basis.
   foreach ($definitions as $pluginId => $definition) {
+    if ($pluginId === 'content_entity:taxonomy_term') {
+      // Keep the taxonomy terms as declared so that taxonomy terms are enabled
+      // if set.
+      continue;
+    }
     $definitions[$pluginId]['status'] = FALSE;
   }
 }

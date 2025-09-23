@@ -137,7 +137,9 @@ class ShareForm extends ShareFormBase {
 
     // Show a message if the content was shared on at least one group.
     if (!empty($groups)) {
-      $this->messenger()->addStatus('Item was shared on the following groups: ' . implode(', ', $group_labels) . '.');
+      $this->messenger()->addStatus(
+        $this->t('Item was shared on the following groups: @groups.', ['@groups' => implode(', ', $group_labels)])
+      );
     }
 
     $form_state->setRedirectUrl($this->entity->toUrl());
