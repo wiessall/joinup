@@ -69,7 +69,7 @@
         </tr>
         <tr>
           <td class="p-3 pt-0">
-            <p class="fw-bold">Dear {{ message.recipient_name }},</p>
+            <p class="fw-bold">{{ 'Dear @recipient_name,'|t({'@recipient_name': message.recipient_name}) }}</p>
             <p class="mb-3">{{ '<a href=":group_url" target="_blank">:group_title</a> :group_type has an announcement for its members:'|t({
               ':group_url': message.group_landing_page,
               ':group_title': message.group_title,
