@@ -28,25 +28,16 @@ Feature: Cloning of entities
       | title        |
       | Test licence |
     Given users:
-      | Username               | Roles     |
-      | Authenticated          |           |
-      | Moderator              | moderator |
-      | Collection Owner       |           |
-      | Collection Member      |           |
-      | Collection Facilitator |           |
-      | Solution Member        |           |
-      | Solution Owner         |           |
-      | Solution Facilitator   |           |
+      | Username         | Roles |
+      | Collection Owner |       |
+      | Solution Owner   |       |
+
     And the following collection user memberships:
-      | collection | user                   | roles       |
-      | The Portal | Collection Member      |             |
-      | The Portal | Collection Facilitator | facilitator |
-      | The Portal | Collection Owner       | owner       |
+      | collection | user             | roles |
+      | The Portal | Collection Owner | owner |
     And the following solution user memberships:
-      | solution | user                 | roles       |
-      | Solution | Solution Member      |             |
-      | Solution | Solution Facilitator | facilitator |
-      | Solution | Solution Owner       | owner       |
+      | solution | user           | roles |
+      | Solution | Solution Owner | owner |
 
   Scenario Outline: Only moderators, owners and facilitators can clone content.
     Given I am <user>
@@ -68,11 +59,11 @@ Feature: Cloning of entities
     Then I should not see the link "Clone content"
 
     Examples:
-      | user                             |
-      | an anonymous user                |
-      | logged in as "Authenticated"     |
-      | logged in as "Collection Member" |
-      | logged in as "Solution Member"   |
+      | user                                                   |
+      | an anonymous user                                      |
+      | logged in as an "authenticated user"                   |
+      | logged in as a "member" of the "The Portal" collection |
+      | logged in as a "member" of the "Solution" solution     |
 
   Scenario: Only custom page, document, event and news nodes should have the "Clone content" link
     When I am logged in as a moderator
@@ -82,7 +73,7 @@ Feature: Cloning of entities
     Then I should not see the link "Clone content" in the "Entity actions" region
 
   Scenario Outline: User clones event, news, document.
-    Given I am logged in as "<user>"
+    Given I am <role>
     And I go to the "<node title>" <content type>
     Then I should see the link "Clone content"
     And I go to the replicate form of the "<node title>" <content type>
@@ -97,20 +88,20 @@ Feature: Cloning of entities
     And the "Cloned <node title>" <content type> should not have a publication date
 
     Examples:
-      | user                   | node title             | content type |
-      | Moderator              | Collection custom page | custom_page  |
-      | Moderator              | Solution custom page   | custom_page  |
-      | Collection Facilitator | Collection custom page | custom_page  |
-      | Solution Facilitator   | Solution custom page   | custom_page  |
-      | Collection Owner       | Collection custom page | custom_page  |
-      | Solution Owner         | Solution custom page   | custom_page  |
+      | role                                                      | node title             | content type |
+      | logged in as a moderator                                  | Collection custom page | custom_page  |
+      | logged in as a moderator                                  | Solution custom page   | custom_page  |
+      | logged in as a facilitator of the "The Portal" collection | Collection custom page | custom_page  |
+      | logged in as a facilitator of the "Solution" solution     | Solution custom page   | custom_page  |
+      | logged in as "Collection Owner"                           | Collection custom page | custom_page  |
+      | logged in as "Solution Owner"                             | Solution custom page   | custom_page  |
       # Testing events, news, and documents for collections only, they behave the same in solutions.
-      | Moderator              | Collection event       | event        |
-      | Collection Facilitator | Collection event       | event        |
-      | Collection Owner       | Collection event       | event        |
-      | Moderator              | Collection news        | news         |
-      | Collection Facilitator | Collection news        | news         |
-      | Collection Owner       | Collection news        | news         |
-      | Moderator              | Collection document    | document     |
-      | Collection Facilitator | Collection document    | document     |
-      | Collection Owner       | Collection document    | document     |
+      | logged in as a moderator                                  | Collection event       | event        |
+      | logged in as a facilitator of the "The Portal" collection | Collection event       | event        |
+      | logged in as "Collection Owner"                           | Collection event       | event        |
+      | logged in as a moderator                                  | Collection news        | news         |
+      | logged in as a facilitator of the "The Portal" collection | Collection news        | news         |
+      | logged in as "Collection Owner"                           | Collection news        | news         |
+      | logged in as a moderator                                  | Collection document    | document     |
+      | logged in as a facilitator of the "The Portal" collection | Collection document    | document     |
+      | logged in as "Collection Owner"                           | Collection document    | document     |
