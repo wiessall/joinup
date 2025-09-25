@@ -38,10 +38,13 @@ Feature: Accessibility
       | /search?f[0]=type:collection                                                                                                    |
       | /search?f[0]=type:event                                                                                                         |
       | /search?f[0]=type:news                                                                                                          |
+
       # New pages added after aligning the AXE tags with accessibility-cloud app.
       | /collection/european-interoperability-reference-architecture-eira/solution/egovera-business-agnostic-0/release/610              |
       | /eu-oss-catalogue                                                                                                               |
       | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
       | /topic/ict/open-source-software                                                                                                 |
+      | /interoperable-europe                                                                                                           |
+      | /licence/bsd-2-clause-simplified-license                                                                                        |
       | /collection/interoperable-europe-academy/courses-curriculum                                                                     |
