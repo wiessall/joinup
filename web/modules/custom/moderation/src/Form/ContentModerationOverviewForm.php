@@ -235,7 +235,7 @@ class ContentModerationOverviewForm extends FormBase {
           '#attributes' => ['class' => 'filter'],
           'type' => [
             '#type' => 'select',
-            '#title' => 'Content of type',
+            '#title' => $this->t('Content of type'),
             '#options' => $this->getTypeFilterOptions($count),
             '#ajax' => [
               'callback' => '::updateForm',
@@ -245,7 +245,7 @@ class ContentModerationOverviewForm extends FormBase {
           ],
           'state' => [
             '#type' => 'select',
-            '#title' => 'in state',
+            '#title' => $this->t('in state'),
             '#options' => $this->getStateFilterOptions($count, $type_filter),
             '#ajax' => [
               'callback' => '::updateForm',
