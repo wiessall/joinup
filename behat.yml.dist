@@ -23,7 +23,7 @@
         'cat.text-alternatives': Image text alternative
       excludeElements:
         # Third-party code injected in page with Javascript.
-        - .globan
+        - #globan
   - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
