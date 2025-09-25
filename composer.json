@@ -327,6 +327,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Translate terms @see https://www.drupal.org/i/3546969": "resources/patch/php/drupal/babel/3546969.mr59-note590145.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
@@ -366,7 +369,8 @@
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
                 "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
-                "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff"
+                "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
+                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -511,7 +515,8 @@
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff"
+                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff",
+                "Tagify placeholder is not translatable @see https://www.drupal.org/i/3547609": "resources/patch/php/drupal/tagify/3547609.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
