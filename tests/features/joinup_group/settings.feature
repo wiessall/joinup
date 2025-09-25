@@ -82,7 +82,7 @@ Feature: Collections/Solutions settings
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
     Then I go to the homepage of the "Klop mirubes" solution
-    And I should not see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
 
     Given I am logged in as "Lope Facilitator"
     When I go to the "Rally fanatics" collection
