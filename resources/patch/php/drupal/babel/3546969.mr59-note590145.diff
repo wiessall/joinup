@@ -1,0 +1,1809 @@
+diff --git a/.ddev/commands/web/install b/.ddev/commands/web/install
+index 0eeaca57696dd27a315fddcb6582c944d0681e4b..e59bb171328bba0f4e626b113df0056f2ad53a09 100755
+--- a/.ddev/commands/web/install
++++ b/.ddev/commands/web/install
+@@ -5,5 +5,5 @@
+ ## Example: "ddev install"
+ 
+ vendor/bin/drush site:install --yes
+-vendor/bin/drush pm:install babel_menu_link_content --yes
++vendor/bin/drush pm:install babel_content_entity,babel_menu_link_content --yes
+ vendor/bin/drush php:eval 'Drupal\language\Entity\ConfigurableLanguage::createFromLangcode("it")->save();'
+diff --git a/README.md b/README.md
+index 46a060c4a52ede736532b23c8420896664220773..92eabdb3b653a8ae36d94867dd92c4af592b9f3d 100644
+--- a/README.md
++++ b/README.md
+@@ -14,7 +14,7 @@ The Babel module aims to centralize all translatable strings, providing translat
+ 
+ ### What it is not
+ 
+-* It doesn't store any translations. Babel only connects the dots, acting as a hub for different translation types: code strings, configuration strings, or even menu link content strings.
++* It doesn't store any translations. Babel only connects the dots, acting as a hub for different translation types: code strings, configuration strings. Because of its open architecture, Babel is able even to translate simple content entities such as menu link content, shortcut, or taxonomy terms.
+ * Babel doesn't communicate with [https://localize.drupal.org](https://localize.drupal.org). However, as it handles Locale module translations, it allows other modules to do so (e.g., `l10n_client`).
+ 
+ ### Features
+@@ -25,7 +25,7 @@ The Babel module aims to centralize all translatable strings, providing translat
+ 
+ ## Architecture
+ 
+-Babel doesn't store translations. It only brings together different translation types and exposes their source strings in a unified UI or in exported files. It does this using a plugin system that allows defining a plugin for each type of translation. Babel ships with two plugins that cover most Drupal UI translations: **Locale**, which bridges to the Locale module, and **Config**, which bridges to the configuration system. Additionally, the `babel_menu_link_content` submodule allows the translation of menu links that are content entities. Even though these menu links are content, they appear as UI strings to a non-technical translator. Third-party modules can add their own plugins to handle the translation of other UI source strings.
++Babel doesn't store translations. It only brings together different translation types and exposes their source strings in a unified UI or in exported files. It does this using a plugin system that allows defining a plugin for each type of translation. Babel ships with two plugins that cover most Drupal UI translations: **Locale**, which bridges to the Locale module, and **Config**, which bridges to the configuration system. Additionally, the `babel_content_entity` submodule allows the translation of simple content entities such as menu link content, shortcut, or taxonomy terms. Even these entities are content, they appear as UI strings to a non-technical translator. Third-party modules can add their own plugins to handle the translation of other UI source strings.
+ 
+ Each translation-type plugin knows how to extract strings from its backend and how to save translated strings back. For instance, the Locale plugin reads the source and translated strings from the `locale` module tables and saves them in the same place. The Config plugin reads the strings from configuration objects and saves the translations to configuration storage. For content menu links, translations are stored in `menu_link_content`. Nothing is stored in the Babel module itself, either as a source or a translated strings.
+ 
+diff --git a/babel.links.task.yml b/babel.links.task.yml
+index b4dda34cbb887195c13d94ef26cbd3646b10fa0d..e2f16d4bff5de385c50f28e5c7dd3195c02a5464 100644
+--- a/babel.links.task.yml
++++ b/babel.links.task.yml
+@@ -20,3 +20,8 @@ babel.settings:
+   base_route: babel.ui
+   title: Settings
+   weight: 100
++
++babel.settings.secondary:
++  route_name: babel.settings
++  title: Settings
++  parent_id: babel.settings
+diff --git a/modules/babel_content_entity/babel_content_entity.info.yml b/modules/babel_content_entity/babel_content_entity.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..9efdf58339d4f230545c63e326b7c7063b697205
+--- /dev/null
++++ b/modules/babel_content_entity/babel_content_entity.info.yml
+@@ -0,0 +1,6 @@
++type: module
++name: Babel Content Entities
++description: Support for content entities
++core_version_requirement: '^10.4 || ^11.1'
++dependencies:
++  - babel:babel
+diff --git a/modules/babel_content_entity/babel_content_entity.links.task.yml b/modules/babel_content_entity/babel_content_entity.links.task.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..c7fa75bca585dbca1efcd8904c604c11962ca798
+--- /dev/null
++++ b/modules/babel_content_entity/babel_content_entity.links.task.yml
+@@ -0,0 +1,4 @@
++babel_content_entity.settings:
++  route_name: babel_content_entity.settings
++  title: Content Entity
++  parent_id: babel.settings
+diff --git a/modules/babel_content_entity/babel_content_entity.module b/modules/babel_content_entity/babel_content_entity.module
+new file mode 100644
+index 0000000000000000000000000000000000000000..ee069f20387b4edc0d80465b615e300c4e31cb3b
+--- /dev/null
++++ b/modules/babel_content_entity/babel_content_entity.module
+@@ -0,0 +1,52 @@
++<?php
++
++/**
++ * @file
++ * Hook implementations for Babel Content Entity module.
++ */
++
++declare(strict_types=1);
++
++use Drupal\babel_content_entity\Hook\BabelContentEntityHook;
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Hook\Attribute\LegacyHook;
++
++/**
++ * Implements hook_entity_insert().
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_content_entity_entity_insert(EntityInterface $entity): void {
++  \Drupal::service(BabelContentEntityHook::class)->onEntityInsert($entity);
++}
++
++/**
++ * Implements hook_entity_update().
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_content_entity_entity_update(EntityInterface $entity): void {
++  \Drupal::service(BabelContentEntityHook::class)->onEntityUpdate($entity);
++}
++
++/**
++ * Implements hook_entity_delete().
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_content_entity_entity_delete(EntityInterface $entity): void {
++  \Drupal::service(BabelContentEntityHook::class)->onEntityDelete($entity);
++}
++
++/**
++ * Implements hook_entity_bundle_delete().
++ *
++ * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
++ */
++#[LegacyHook]
++function babel_content_entity_entity_bundle_delete(string $entityTypeId, string $bundle): void {
++  \Drupal::service(BabelContentEntityHook::class)->onBundleDelete($entityTypeId, $bundle);
++}
+diff --git a/modules/babel_content_entity/babel_content_entity.routing.yml b/modules/babel_content_entity/babel_content_entity.routing.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..10160faa4067f69c32f0d8c9e1db3b659a899224
+--- /dev/null
++++ b/modules/babel_content_entity/babel_content_entity.routing.yml
+@@ -0,0 +1,7 @@
++babel_content_entity.settings:
++  path: /admin/config/regional/babel/settings/content-entity
++  defaults:
++    _form: Drupal\babel_content_entity\Form\BabelContentEntitySettingsForm
++    _title: Content Entity Settings
++  requirements:
++    _permission: language manager
+diff --git a/modules/babel_content_entity/babel_content_entity.services.yml b/modules/babel_content_entity/babel_content_entity.services.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..84a7ebcfa541509e85bddbc5c9279246859cae20
+--- /dev/null
++++ b/modules/babel_content_entity/babel_content_entity.services.yml
+@@ -0,0 +1,10 @@
++services:
++  _defaults:
++    autoconfigure: true
++    autowire: true
++
++  Drupal\babel_content_entity\BabelContentEntityService: {}
++  Drupal\babel_content_entity\EventSubscriber\BabelContentEntityConfigSubscriber: {}
++
++  # TODO: Remove when Drupal 10 support is discontinued.
++  Drupal\babel_content_entity\Hook\BabelContentEntityHook: {}
+diff --git a/modules/babel_content_entity/config/install/babel_content_entity.settings.yml b/modules/babel_content_entity/config/install/babel_content_entity.settings.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..99069be0e2c4eaf5459475c142f2c99f89f225a5
+--- /dev/null
++++ b/modules/babel_content_entity/config/install/babel_content_entity.settings.yml
+@@ -0,0 +1 @@
++entity_type: []
+diff --git a/modules/babel_content_entity/config/schema/babel_content_entity.schema.yml b/modules/babel_content_entity/config/schema/babel_content_entity.schema.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..a528c0578908eb17face2e627327d09c94cd405e
+--- /dev/null
++++ b/modules/babel_content_entity/config/schema/babel_content_entity.schema.yml
+@@ -0,0 +1,27 @@
++babel_content_entity.settings:
++  type: config_object
++  label: Babel Content Entity settings
++  mapping:
++    entity_type:
++      type: sequence
++      label: Entity types
++      sequence:
++        type: string
++        label: Entity type ID
++        constraints:
++          PluginExists:
++            manager: entity_type.manager
++            interface: Drupal\Core\Entity\ContentEntityInterface
++
++translation_type.content_entity:*:
++  type: translation_type_default
++  label: Content Entity
++  mapping:
++    bundle:
++      type: sequence
++      label: Limit to bundles
++      sequence:
++        type: string
++        label: Bundle
++#        constraints:
++#          EntityBundleExists: # TODO
+diff --git a/modules/babel_content_entity/src/BabelContentEntityService.php b/modules/babel_content_entity/src/BabelContentEntityService.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..4d05a3fd5068501792657002e8c9c54c35bc7ab8
+--- /dev/null
++++ b/modules/babel_content_entity/src/BabelContentEntityService.php
+@@ -0,0 +1,255 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\Component\Plugin\PluginBase;
++use Drupal\Core\Batch\BatchBuilder;
++use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\Core\Entity\ContentEntityTypeInterface;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Field\Plugin\Field\FieldType\StringItemBase;
++use Drupal\Core\Language\LanguageManagerInterface;
++use Drupal\text\Plugin\Field\FieldType\TextItemBase;
++
++/**
++ * Installation helper.
++ */
++class BabelContentEntityService {
++
++  /**
++   * List of the entity fields which aren't translated.
++   *
++   * @const string[]
++   */
++  public const EXCLUDED_FIELDS = [
++    'content_translation_created',
++    'content_translation_outdated',
++    'content_translation_source',
++    'content_translation_status',
++    'content_translation_uid',
++    'default_langcode',
++    'langcode',
++    'revision_translation_affected',
++  ];
++
++  public function __construct(
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
++    protected readonly BabelStorageInterface $babelStorage,
++    protected readonly LanguageManagerInterface $languageManager,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
++    protected readonly EntityFieldManagerInterface $fieldManager,
++  ) {}
++
++  /**
++   * Updates the source objects for the entity.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The content entity to process.
++   */
++  public function updateSourcesForLink(EntityInterface $entity): void {
++    if ($this->isEntityAllowed($entity)) {
++      $pluginId = ContentEntity::id($entity->getEntityTypeId());
++      assert($entity instanceof ContentEntityInterface);
++
++      // Cleanup first to handle delta changes.
++      $this->babelStorage->delete($pluginId, "{$entity->bundle()}:{$entity->id()}:");
++      $this->babelStorage->update($pluginId, $this->getSourcesForEntity($entity));
++    }
++  }
++
++  /**
++   * Instantiates source objects from the properties of the given entity.
++   *
++   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
++   *   The content entity to process.
++   *
++   * @return list<\Drupal\babel\Model\Source>
++   *   List of source objects.
++   */
++  public function getSourcesForEntity(ContentEntityInterface $entity): array {
++    $sources = [];
++
++    if (!$this->isEntityAllowed($entity)) {
++      return $sources;
++    }
++
++    $definitions = $this->getBundleTranslatableStringFields($entity->getEntityTypeId(), $entity->bundle());
++    foreach ($definitions as $fieldName => $definition) {
++      if (!$entity->hasField($fieldName) || ($field = $entity->get($fieldName))->isEmpty()) {
++        continue;
++      }
++
++      $property = $definition->getFieldStorageDefinition()->getMainPropertyName();
++      foreach ($field as $delta => $item) {
++        $value = (string) $item->{$property};
++        if (!trim($value)) {
++          continue;
++        }
++
++        $id = $this->buildSourceInstanceId($entity, $fieldName, $delta);
++        $sources[$id] = new Source(string: $value, context: '');
++      }
++    }
++
++    return $sources;
++  }
++
++  /**
++   * Creates a batch process to process preexisting content entities.
++   *
++   * @param string $entityTypeId
++   *   The entity type ID.
++   * @param array $bundles
++   *   (optional) Bundles to be processed. If omitted all bundles are processed.
++   */
++  public function batchAddSources(string $entityTypeId, array $bundles = []): void {
++    $query = $this->entityTypeManager->getStorage($entityTypeId)
++      ->getQuery()
++      ->accessCheck(FALSE);
++
++    $entityType = $this->entityTypeManager->getDefinition($entityTypeId);
++
++    if ($entityType->hasKey('bundle')) {
++      $allBundles = array_keys($this->bundleInfo->getBundleInfo($entityTypeId));
++      if ($bundles = ($bundles ? array_intersect($bundles, $allBundles) : $allBundles)) {
++        $query->condition($entityType->getKey('bundle'), $bundles, 'IN');
++      }
++    }
++    if (!$ids = $query->execute()) {
++      return;
++    }
++    $total = count($ids);
++
++    $batch = new BatchBuilder();
++    foreach (array_chunk($ids, 10) as $chunk) {
++      $batch->addOperation([BatchHelper::class, 'processContentEntities'], [$entityTypeId, $chunk, $total]);
++    }
++
++    batch_set($batch->toArray());
++  }
++
++  /**
++   * Returns the bundle translatable string fields.
++   *
++   * @param string $entityTypeId
++   *   The entity type ID.
++   * @param string $bundle
++   *   The bundle.
++   *
++   * @return array<non-empty-string, \Drupal\Core\Field\FieldDefinitionInterface>
++   *   Bundle translatable string fields definitions keyed by field name.
++   */
++  public function getBundleTranslatableStringFields(string $entityTypeId, string $bundle): array {
++    $translatable = [];
++
++    $entityType = $this->entityTypeManager->getDefinition($entityTypeId);
++    if (!$entityType instanceof ContentEntityTypeInterface || !$entityType->isTranslatable()) {
++      return $translatable;
++    }
++
++    $fields = array_diff_key(
++      $this->fieldManager->getFieldDefinitions($entityTypeId, $bundle),
++      array_flip(BabelContentEntityService::EXCLUDED_FIELDS),
++    );
++
++    if (!$fields) {
++      return $translatable;
++    }
++
++    foreach ($fields as $fieldName => $field) {
++      if (!$field->isTranslatable()) {
++        continue;
++      }
++
++      $class = $field->getItemDefinition()->getClass();
++
++      if (
++        is_a($class, StringItemBase::class, TRUE) ||
++        is_a($class, TextItemBase::class, TRUE)
++      ) {
++        // Only string fields are accepted.
++        $translatable[$fieldName] = $field;
++      }
++    }
++
++    return $translatable;
++  }
++
++  /**
++   * Builds a source instance ID.
++   *
++   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
++   *   The content entity.
++   * @param string $fieldName
++   *   The field name.
++   * @param int|string $delta
++   *   The field item delta.
++   *
++   * @return string
++   *   The source instance ID.
++   */
++  public function buildSourceInstanceId(ContentEntityInterface $entity, string $fieldName, int|string $delta): string {
++    return "{$entity->bundle()}:{$entity->id()}:$fieldName:$delta";
++  }
++
++  /**
++   * Destructs a source instance ID.
++   *
++   * @param string $pluginId
++   *   The plugin ID.
++   * @param string $id
++   *   The source instance ID.
++   *
++   * @return array{\Drupal\Core\Entity\ContentEntityInterface, string, int}
++   *   Triplet: entity, field name, delta.
++   */
++  public function destructSourceInstanceId(string $pluginId, string $id): array {
++    [, $entityTypeId] = explode(PluginBase::DERIVATIVE_SEPARATOR, $pluginId, 2);
++    [, $entityId, $fieldName, $delta] = explode(':', $id);
++    $entity = $this->entityTypeManager->getStorage($entityTypeId)->load($entityId);
++    return [$entity, $fieldName, (int) $delta];
++  }
++
++  /**
++   * Check whether the passed entity is handled by Babel.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The content entity.
++   *
++   * @return bool
++   *   Whether the passed entity is handled by Babel.
++   */
++  protected function isEntityAllowed(EntityInterface $entity): bool {
++    if (!$entity instanceof ContentEntityInterface) {
++      return FALSE;
++    }
++
++    $defaultLangcode = $this->languageManager->getDefaultLanguage()->getId();
++    if ($entity->language()->getId() !== $defaultLangcode) {
++      return FALSE;
++    }
++
++    $entityTypeId = $entity->getEntityTypeId();
++    $pluginId = ContentEntity::id($entityTypeId);
++
++    if (!$this->translationTypeManager->hasDefinition($pluginId)) {
++      return FALSE;
++    }
++
++    $plugin = $this->translationTypeManager->createInstance($pluginId);
++    $bundles = $plugin->getConfiguration()['bundle'] ?: array_keys($this->bundleInfo->getBundleInfo($entityTypeId));
++
++    return in_array($entity->bundle(), $bundles, TRUE);
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/BatchHelper.php b/modules/babel_content_entity/src/BatchHelper.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..2761cb17fcff49c1f47ed552e6d6936393e3651e
+--- /dev/null
++++ b/modules/babel_content_entity/src/BatchHelper.php
+@@ -0,0 +1,52 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++
++/**
++ * Batch operations callbacks.
++ */
++class BatchHelper {
++
++  /**
++   * Batch callback to process content entities.
++   *
++   * @param string $entityTypeId
++   *   The entity type ID.
++   * @param list<string|int> $ids
++   *   Entity IDs.
++   * @param int $total
++   *   Total number of items to process. Used to for the interactive message.
++   * @param array $context
++   *   The batch context.
++   */
++  public static function processContentEntities(string $entityTypeId, array $ids, int $total, array &$context): void {
++    $defaultLanguage = \Drupal::languageManager()->getDefaultLanguage();
++    $context['results']['progress'] ??= 0;
++
++    $storage = \Drupal::entityTypeManager()->getStorage($entityTypeId);
++    $service = \Drupal::service(BabelContentEntityService::class);
++    $entityType = \Drupal::entityTypeManager()->getDefinition($entityTypeId);
++
++    $sources = [];
++    foreach ($storage->loadMultiple($ids) as $entity) {
++      // Avoid duplicate sources created from translations of entity.
++      if ($entity->language()->getId() === $defaultLanguage->getId()) {
++        $sources = [...$sources, ...$service->getSourcesForEntity($entity)];
++      }
++    }
++    \Drupal::service(BabelStorageInterface::class)->update(ContentEntity::id($entityTypeId), $sources);
++
++    $context['results']['progress'] += count($ids);
++    $context['message'] = t('Processed @progress out of @total @type entities', [
++      '@progress' => $context['results']['progress'],
++      '@total' => $total,
++      '@type' => $entityType->getSingularLabel(),
++    ]);
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/EventSubscriber/BabelContentEntityConfigSubscriber.php b/modules/babel_content_entity/src/EventSubscriber/BabelContentEntityConfigSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..faa39f9ee3528a04bbc382aa4fadfced9a66c273
+--- /dev/null
++++ b/modules/babel_content_entity/src/EventSubscriber/BabelContentEntityConfigSubscriber.php
+@@ -0,0 +1,98 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity\EventSubscriber;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_content_entity\BabelContentEntityService;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\Core\Config\ConfigCrudEvent;
++use Drupal\Core\Config\ConfigEvents;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++/**
++ * Listens to changes to configuration.
++ */
++class BabelContentEntityConfigSubscriber implements EventSubscriberInterface {
++
++  public function __construct(
++    protected readonly BabelStorageInterface $babelStorage,
++    protected readonly BabelContentEntityService $service,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
++    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
++  ) {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    return [
++      ConfigEvents::SAVE => [['onSettingsSave'], ['onPluginConfigChange']],
++    ];
++  }
++
++  /**
++   * Updates the Babel storage when the list of entity types is changing.
++   */
++  public function onSettingsSave(ConfigCrudEvent $event): void {
++    $config = $event->getConfig();
++    if ($config->getName() !== 'babel_content_entity.settings' || !$event->isChanged('entity_type')) {
++      return;
++    }
++
++    $original = $config->getOriginal('entity_type') ?? [];
++    $actual = $config->get('entity_type');
++
++    foreach (array_diff($original, $actual) as $entityTypeId) {
++      $this->babelStorage->delete(ContentEntity::id($entityTypeId));
++    }
++
++    foreach (array_diff($actual, $original) as $entityTypeId) {
++      $this->service->batchAddSources($entityTypeId);
++    }
++
++    // Make sure translation type plugin definitions are fetched again.
++    $this->translationTypeManager->clearCachedDefinitions();
++  }
++
++  /**
++   * Updates the Babel storage when the plugin configuration changes.
++   */
++  public function onPluginConfigChange(ConfigCrudEvent $event): void {
++    $config = $event->getConfig();
++    if ($config->getName() !== 'babel.settings') {
++      return;
++    }
++
++    $plugins = $config->get('translation_type.plugin') ?? [];
++    foreach ($plugins as $pluginId => $settings) {
++      if (!str_starts_with($pluginId, ContentEntity::id('')) || !$event->isChanged("translation_type.plugin.$pluginId")) {
++        continue;
++      }
++
++      [, $entityTypeId] = explode(':', $pluginId, 2);
++
++      $allBundles = array_keys($this->bundleInfo->getBundleInfo($entityTypeId));
++      $initialBundles = $config->getOriginal("translation_type.plugin.$pluginId.bundle") ?: $allBundles;
++      $actualBundles = $settings['bundle'];
++
++      // If no bundle is configured, all bundles are in play.
++      $newBundles = $actualBundles ?: $allBundles;
++
++      if ($added = array_diff($newBundles, $initialBundles)) {
++        $this->service->batchAddSources($entityTypeId, $added);
++      }
++
++      foreach (array_diff($initialBundles, $newBundles) as $bundle) {
++        $this->babelStorage->delete($pluginId, "$bundle:");
++      }
++    }
++
++    // Make sure translation type plugin definitions are fetched again.
++    $this->translationTypeManager->clearCachedDefinitions();
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/Form/BabelContentEntitySettingsForm.php b/modules/babel_content_entity/src/Form/BabelContentEntitySettingsForm.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..b612829070e48cc4c8b4ba3a45c5949b6303231a
+--- /dev/null
++++ b/modules/babel_content_entity/src/Form/BabelContentEntitySettingsForm.php
+@@ -0,0 +1,189 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity\Form;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel_content_entity\BabelContentEntityService;
++use Drupal\Component\Render\MarkupInterface;
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Config\TypedConfigManagerInterface;
++use Drupal\Core\DependencyInjection\AutowireTrait;
++use Drupal\Core\Entity\ContentEntityTypeInterface;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Form\ConfigFormBase;
++use Drupal\Core\Form\ConfigTarget;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Url;
++
++/**
++ * Babel Content Entity settings form.
++ */
++class BabelContentEntitySettingsForm extends ConfigFormBase {
++
++  use AutowireTrait;
++
++  public function __construct(
++    ConfigFactoryInterface $config_factory,
++    TypedConfigManagerInterface $typedConfigManager,
++    protected EntityTypeManagerInterface $entityTypeManager,
++    protected BabelStorageInterface $babelStorage,
++    protected BabelContentEntityService $service,
++    protected EntityFieldManagerInterface $fieldManager,
++    protected EntityTypeBundleInfoInterface $bundleInfo,
++  ) {
++    parent::__construct($config_factory, $typedConfigManager);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildForm(array $form, FormStateInterface $form_state): array {
++    $form = parent::buildForm($form, $form_state);
++
++    $form_state->set('entity_type', $this->config('babel_content_entity.settings')->get('entity_type'));
++
++    $form['entity_type'] = [
++      '#type' => 'select',
++      '#title' => $this->t('Entity types'),
++      '#options' => $this->getContentEntityOptions(),
++      '#multiple' => TRUE,
++      '#size' => 12,
++      '#config_target' => new ConfigTarget(
++        configName: 'babel_content_entity.settings',
++        propertyPath: 'entity_type',
++        toConfig: [static::class, 'normalize'],
++      ),
++      '#description' => [
++        [
++          '#markup' => $this->t('IMPORTANT: Beware that selecting some entity types, with a lot of entities, could bring a huge amount of strings with a high impact on performance.'),
++        ],
++        [
++          '#prefix' => ' ',
++          '#markup' => $this->t('Limit your selection to entity types with a predictable and controlled amount of entities.'),
++        ],
++      ],
++    ];
++    return $form;
++  }
++
++  /**
++   * Returns a list of eligible entity types to be used as form API options.
++   *
++   * @return array<non-empty-string, MarkupInterface|string>
++   *   List of eligible entity types to be used as form API options.
++   */
++  protected function getContentEntityOptions(): array {
++    $options = [];
++    foreach ($this->entityTypeManager->getDefinitions() as $entityTypeId => $entityType) {
++      if (!$entityType instanceof ContentEntityTypeInterface || !$entityType->isTranslatable()) {
++        continue;
++      }
++
++      foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $bundleInfo) {
++        if ($this->service->getBundleTranslatableStringFields($entityTypeId, $bundle)) {
++          $options[$entityTypeId] = $entityType->getLabel();
++          // Jump to next entity type.
++          break;
++        }
++      }
++    }
++
++    // Temporarily, the menu_link_content entity type is handled by the
++    // babel_menu_link_content module. In https://www.drupal.org/i/3547227, it
++    // will be converted to use this plugin and babel_menu_link_content module
++    // will be deprecated.
++    // @see https://www.drupal.org/i/3547227
++    unset($options['menu_link_content']);
++
++    // Sort by label.
++    asort($options);
++
++    return $options;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitForm(array &$form, FormStateInterface $form_state): void {
++    parent::submitForm($form, $form_state);
++
++    $initial = $form_state->get('entity_type');
++    $final = $this->config('babel_content_entity.settings')->get('entity_type');
++
++    if ($removed = array_diff($initial, $final)) {
++      $this->messenger()->addStatus($this->formatPlural(
++        count($removed),
++        'Strings belonging to %types entity type are no more translatable.',
++        'Strings belonging to %types entity types are no more translatable.',
++        ['%types' => implode(', ', $this->getAffectedEntityTypeLabels($removed))]
++      ));
++    }
++
++    if ($added = array_diff($final, $initial)) {
++      $this->messenger()->addStatus([
++        [
++          '#markup' => $this->formatPlural(
++            count($added),
++            'Strings belonging to %types entity are now exposed for translation.',
++            'Strings belonging to %types entity types are now exposed for translation.',
++            ['%types' => implode(', ', $this->getAffectedEntityTypeLabels($added))],
++          ),
++        ],
++        [
++          '#prefix' => ' ',
++          '#markup' => $this->t('It is strongly recommended to visit the <a href=":url">settings page</a> to narrow down the bundles that need translation for each entity type.', [
++            ':url' => Url::fromRoute('babel.settings')->toString(),
++          ]),
++        ],
++      ]);
++    }
++  }
++
++  /**
++   * Normalizes the form entity_type value.
++   *
++   * @param array<non-empty-string, non-empty-string> $value
++   *   Submitted value.
++   *
++   * @return list<non-empty-string>
++   *   Config stored value.
++   */
++  public static function normalize(array $value): array {
++    return array_keys(array_filter($value));
++  }
++
++  /**
++   * Returns a list of affected entity type labels.
++   *
++   * @param array $entityTypeIds
++   *   Entity type IDs.
++   *
++   * @return array<non-empty-string, MarkupInterface|string>
++   *   A list of affected entity type labels.
++   */
++  protected function getAffectedEntityTypeLabels(array $entityTypeIds): array {
++    return array_map(
++      fn(ContentEntityTypeInterface $entityType): string|MarkupInterface => $entityType->getLabel(),
++      array_intersect_key($this->entityTypeManager->getDefinitions(), array_flip($entityTypeIds)),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getEditableConfigNames(): array {
++    return ['babel_content_entity.settings'];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormId(): string {
++    return 'babel_content_entity_settings_form';
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php b/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..e15079b2cd602f4075b0f3b94dfc4c6656149c3a
+--- /dev/null
++++ b/modules/babel_content_entity/src/Hook/BabelContentEntityHook.php
+@@ -0,0 +1,75 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity\Hook;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_content_entity\BabelContentEntityService;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Hook\Attribute\Hook;
++
++/**
++ * Babel Content Entity CRUD operations hooks.
++ */
++class BabelContentEntityHook {
++
++  public function __construct(
++    private readonly TranslationTypePluginManager $translationTypePluginManager,
++    private readonly BabelContentEntityService $service,
++    protected readonly BabelStorageInterface $storage,
++  ) {}
++
++  /**
++   * Implements hook_entity_insert().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('entity_insert')]
++  public function onEntityInsert(EntityInterface $entity): void {
++    $this->service->updateSourcesForLink($entity);
++  }
++
++  /**
++   * Implements hook_entity_update()
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('entity_update')]
++  public function onEntityUpdate(EntityInterface $entity): void {
++    $this->service->updateSourcesForLink($entity);
++  }
++
++  /**
++   * Implements hook_entity_delete().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('entity_delete')]
++  public function onEntityDelete(EntityInterface $entity): void {
++    $this->storage->delete(ContentEntity::id($entity->getEntityTypeId()), "{$entity->bundle()}:{$entity->id()}:");
++  }
++
++  /**
++   * Implements hook_entity_bundle_delete().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('entity_bundle_delete')]
++  public function onBundleDelete(string $entityTypeId, string $bundle): void {
++    $pluginId = ContentEntity::id($entityTypeId);
++    if (!$this->translationTypePluginManager->hasDefinition($pluginId)) {
++      return;
++    }
++
++    $plugin = $this->translationTypePluginManager->createInstance($pluginId);
++    $bundles = $plugin->getConfiguration()['bundle'];
++
++    if (!$bundles || in_array($bundle, $bundles, TRUE)) {
++      $this->storage->delete($pluginId, "$bundle:");
++    }
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/BabelContentEntityDeriver.php b/modules/babel_content_entity/src/Plugin/Babel/BabelContentEntityDeriver.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..b26f9d38b3788776fe8730191d49e02002ef21b5
+--- /dev/null
++++ b/modules/babel_content_entity/src/Plugin/Babel/BabelContentEntityDeriver.php
+@@ -0,0 +1,48 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity\Plugin\Babel;
++
++use Drupal\Component\Plugin\Derivative\DeriverBase;
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Derives the 'content_entity' plugin over configured content entity types.
++ */
++class BabelContentEntityDeriver extends DeriverBase implements ContainerDeriverInterface {
++
++  public function __construct(
++    protected readonly ConfigFactoryInterface $configFactory,
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++  ) {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, $base_plugin_id): self {
++    return new static(
++      $container->get('config.factory'),
++      $container->get('entity_type.manager'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getDerivativeDefinitions($base_plugin_definition): array {
++    $entityTypeIds = $this->configFactory->get('babel_content_entity.settings')->get('entity_type');
++    $entityTypes = array_intersect_key($this->entityTypeManager->getDefinitions(), array_flip($entityTypeIds));
++
++    foreach ($entityTypes as $entityTypeId => $entityType) {
++      $this->derivatives[$entityTypeId] = $base_plugin_definition;
++      $this->derivatives[$entityTypeId]['label'] = $entityType->getLabel();
++    }
++
++    return $this->derivatives;
++  }
++
++}
+diff --git a/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..41569892a15c7ebaa38ea4045051b65bdae9e7b9
+--- /dev/null
++++ b/modules/babel_content_entity/src/Plugin/Babel/TranslationType/ContentEntity.php
+@@ -0,0 +1,244 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\babel_content_entity\Plugin\Babel\TranslationType;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Model\Translation;
++use Drupal\babel\Plugin\Babel\TranslationType;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginBase;
++use Drupal\babel_content_entity\BabelContentEntityService;
++use Drupal\babel_content_entity\Plugin\Babel\BabelContentEntityDeriver;
++use Drupal\Component\Plugin\PluginBase;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Plugin\PluginFormInterface;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Handles content entities translatable strings.
++ */
++#[TranslationType(
++  id: self::PLUGIN_ID,
++  label: new TranslatableMarkup('Content Entity'),
++  deriver: BabelContentEntityDeriver::class,
++)]
++class ContentEntity extends TranslationTypePluginBase implements PluginFormInterface {
++
++  protected const PLUGIN_ID = 'content_entity';
++
++  public function __construct(
++    array $configuration,
++    string $pluginId,
++    array $pluginDefinition,
++    BabelStorageInterface $babelStorage,
++    protected EntityTypeManagerInterface $entityTypeManager,
++    protected BabelContentEntityService $service,
++    protected EntityTypeBundleInfoInterface $bundleInfo,
++    protected EntityFieldManagerInterface $fieldManager,
++  ) {
++    parent::__construct($configuration, $pluginId, $pluginDefinition, $babelStorage);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get(BabelStorageInterface::class),
++      $container->get('entity_type.manager'),
++      $container->get(BabelContentEntityService::class),
++      $container->get('entity_type.bundle.info'),
++      $container->get('entity_field.manager'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function defaultConfiguration(): array {
++    return ['bundle' => []] + parent::defaultConfiguration();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getStrings(string $langcode, array $ids = []): array {
++    if (!$ids) {
++      $ids = array_keys(
++        $this->babelStorage->getBaseQuery(
++          pluginId: $this->getPluginId(),
++          includeSortKey: FALSE,
++        )->execute()->fetchAllAssoc('id', \PDO::FETCH_ASSOC)
++      );
++    }
++
++    $entityIds = [];
++    foreach ($ids as $id) {
++      [$entity, $fieldName, $delta] = $this->service->destructSourceInstanceId($this->getPluginId(), $id);
++      if ($entity) {
++        $entityIds[$entity->id()][] = [$fieldName, $delta];
++      }
++    }
++
++    if (!$entityIds) {
++      return [];
++    }
++
++    $storage = $this->entityTypeManager->getStorage($this->getDerivativeId());
++
++    $strings = [];
++    foreach ($storage->loadMultiple(array_keys($entityIds)) as $entityId => $entity) {
++      $hasTranslation = $entity->hasTranslation($langcode);
++      if ($hasTranslation) {
++        $translated = $entity->getTranslation($langcode);
++      }
++
++      foreach ($entityIds[$entityId] as [$fieldName, $delta]) {
++        $source = $entity?->get($fieldName)?->get($delta)->getString();
++
++        if (!$source) {
++          continue;
++        }
++
++        $translatedString = $hasTranslation
++          ? $translated?->get($fieldName)?->get($delta)?->getString()
++          : NULL;
++        $translation = $translatedString ? new Translation(
++          language: $langcode,
++          string: $translatedString,
++        ) : NULL;
++        $id = $this->service->buildSourceInstanceId($entity, $fieldName, $delta);
++        $strings[$id] = new StringTranslation(
++          source: new Source(string: $source, context: '', status: TRUE),
++          translation: $translation,
++        );
++      }
++    }
++
++    return $strings;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getString(string $langcode, string $id): ?StringTranslation {
++    return current($this->getStrings($langcode, [$id])) ?: NULL;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function updateTranslation(StringTranslation $string, string $id, string $langcode, string $translation): void {
++    [$entity, $fieldName, $delta] = $this->service->destructSourceInstanceId($this->getPluginId(), $id);
++
++    if ($entity) {
++      if ($entity->hasTranslation($langcode)) {
++        $translated = $entity->getTranslation($langcode);
++      }
++      else {
++        $translated = $entity->addTranslation($langcode, $entity->toArray());
++      }
++
++      $translated->get($fieldName)->setValue([$delta => $translation]);
++      $translated->save();
++    }
++
++    parent::updateTranslation($string, $id, $langcode, $translation);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
++    $entityType = $this->entityTypeManager->getDefinition($this->getDerivativeId());
++
++    $bundles = $this->getBundlesWithTranslatableStringFields();
++
++    if (count($bundles) > 1) {
++      $form['bundle'] = [
++        '#type' => 'select',
++        '#title' => $entityType->getBundleLabel(),
++        '#description' => $this->t('No selection means "all"'),
++        '#options' => $bundles,
++        '#default_value' => $this->getConfiguration()['bundle'],
++        '#multiple' => TRUE,
++      ];
++    }
++    else {
++      if ($entityType->hasKey('bundle')) {
++        $bundle = reset($bundles);
++        $form['help'] = [
++          '#markup' => $this->t('The %label entity type has only one @name (%bundle) which will be used', [
++            '%label' => $entityType->getSingularLabel(),
++            '%bundle' => $bundle,
++            '@name' => strtolower($entityType->getBundleLabel()),
++          ]),
++        ];
++      }
++      $form['bundle'] = [
++        '#type' => 'value',
++        '#value' => [],
++      ];
++    }
++
++    return $form;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {}
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
++    $configuration = $form_state->getValues();
++    // Cleanup the result of the form element values.
++    $configuration['bundle'] = array_keys(array_filter($configuration['bundle']));
++    $this->setConfiguration($configuration);
++  }
++
++  /**
++   * Utility method to build a derivative plugin ID given the entity type.
++   *
++   * @param string|null $entityTypeId
++   *   The entity type ID. If omitted, only the plugin base ID is returned.
++   *
++   * @return string
++   *   A full or base plugin ID.
++   */
++  public static function id(?string $entityTypeId = NULL): string {
++    return static::PLUGIN_ID . ($entityTypeId !== NULL ? PluginBase::DERIVATIVE_SEPARATOR . $entityTypeId : '');
++  }
++
++  /**
++   * Returns the bundles with translatable string fields.
++   *
++   * @return array<non-empty-string, string|\Stringable>
++   *   Bundle labels keyed by bundle.
++   */
++  protected function getBundlesWithTranslatableStringFields(): array {
++    $entityTypeId = $this->getDerivativeId();
++
++    $bundles = [];
++    foreach ($this->bundleInfo->getBundleInfo($entityTypeId) as $bundle => $info) {
++      if ($this->service->getBundleTranslatableStringFields($entityTypeId, $bundle)) {
++        $bundles[$bundle] = $info['label'] ?? $bundle;
++      }
++    }
++
++    return $bundles;
++  }
++
++}
+diff --git a/modules/babel_content_entity/tests/src/Kernel/BabelContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/BabelContentEntityTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..212c931ea1d27a21f69813a45403213da92b5541
+--- /dev/null
++++ b/modules/babel_content_entity/tests/src/Kernel/BabelContentEntityTest.php
+@@ -0,0 +1,228 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_content_entity\Kernel;
++
++use Drupal\babel\Model\Source;
++use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\taxonomy\Entity\Vocabulary;
++use Drupal\Tests\babel\Kernel\BabelKernelTestBase;
++use Drupal\Tests\babel\Traits\BatchTrait;
++
++/**
++ * Tests the Babel backend update.
++ *
++ * @group babel
++ */
++class BabelContentEntityTest extends BabelKernelTestBase {
++
++  use BatchTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'filter',
++    'taxonomy',
++    'text',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->container->get('module_installer')->install(['babel_content_entity']);
++
++    $this->installEntitySchema('taxonomy_term');
++    Vocabulary::create(['vid' => 'tags', 'name' => 'Tags'])->save();
++    Vocabulary::create(['vid' => 'category', 'name' => 'Category'])->save();
++  }
++
++  /**
++   * @covers \Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity
++   * @covers \Drupal\babel_content_entity\BabelContentEntityService
++   * @covers \Drupal\babel_content_entity\BatchHelper
++   */
++  public function testBackendUpdate(): void {
++    $manager = $this->container->get(TranslationTypePluginManager::class);
++    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
++
++    $pluginId = ContentEntity::id('taxonomy_term');
++
++    // No entity type has been yet configured.
++    $this->assertNull($manager->getDefinition($pluginId, FALSE));
++
++    // Create 2 terms in different vocabularies.
++    $storage->create(['vid' => 'tags', 'name' => 'Tag 1', 'tid' => 1])->save();
++    $storage->create(['vid' => 'category', 'name' => 'Category 1', 'tid' => 2])->save();
++
++    // Configure taxonomy_term entity.
++    $this->config('babel_content_entity.settings')
++      ->set('entity_type', ['taxonomy_term'])
++      ->save();
++
++    // Updates are process in batch operation.
++    $this->runPendingBatches();
++
++    $plugin = $manager->createInstance($pluginId);
++    $key = "translation_type.plugin.$pluginId.bundle";
++
++    // Check that, on enabling the entity type, all content has been processed.
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Disable the 'category' bundle.
++    $this->config('babel.settings')->set($key, ['tags'])->save();
++    $this->runPendingBatches();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Create more terms in both vocabularies.
++    $storage->create(['vid' => 'tags', 'name' => 'Tag 2', 'tid' => 3])->save();
++    $storage->create(['vid' => 'category', 'name' => 'Category 2', 'tid' => 4])->save();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'tags:3:name:0' => new StringTranslation(
++        source: new Source('Tag 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Re-enable the 'category' bundle.
++    $this->config('babel.settings')->set($key, [])->save();
++    $this->runPendingBatches();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'tags:3:name:0' => new StringTranslation(
++        source: new Source('Tag 2', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1', '', TRUE)
++      ),
++      'category:4:name:0' => new StringTranslation(
++        source: new Source('Category 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Delete an entity.
++    $storage->load(3)->delete();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1', '', TRUE)
++      ),
++      'category:4:name:0' => new StringTranslation(
++        source: new Source('Category 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Change the name and add a description.
++    $storage->load(2)
++      ->set('name', 'Category 1 (changed)')
++      ->set('description', 'Nice category')
++      ->save();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1 (changed)', '', TRUE)
++      ),
++      'category:2:description:0' => new StringTranslation(
++        source: new Source('Nice category', '', TRUE)
++      ),
++      'category:4:name:0' => new StringTranslation(
++        source: new Source('Category 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Cannot add a source string for entities in a different language.
++    $storage->create([
++      'vid' => 'tags',
++      'name' => 'Tag 3',
++      'tid' => 5,
++      'langcode' => static::LANGCODE,
++    ])->save();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1 (changed)', '', TRUE)
++      ),
++      'category:2:description:0' => new StringTranslation(
++        source: new Source('Nice category', '', TRUE)
++      ),
++      'category:4:name:0' => new StringTranslation(
++        source: new Source('Category 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('fr'));
++
++    // Translations should not register sources.
++    $term = $storage->load(2);
++    $term->addTranslation(static::LANGCODE, $term->toArray())
++      ->set('name', static::LANGCODE . ' Category 1')
++      ->set('description', static::LANGCODE . ' Nice category')
++      ->save();
++
++    $this->assertEquals([
++      'tags:1:name:0' => new StringTranslation(
++        source: new Source('Tag 1', '', TRUE)
++      ),
++      'category:2:name:0' => new StringTranslation(
++        source: new Source('Category 1 (changed)', '', TRUE)
++      ),
++      'category:2:description:0' => new StringTranslation(
++        source: new Source('Nice category', '', TRUE)
++      ),
++      'category:4:name:0' => new StringTranslation(
++        source: new Source('Category 2', '', TRUE)
++      ),
++    ], $plugin->getStrings('cz'));
++
++    // Delete all.
++    $storage->delete($storage->loadMultiple());
++
++    // Remove the taxonomy_term entity type.
++    $this->config('babel_content_entity.settings')
++      ->set('entity_type', [])
++      ->save();
++
++    $this->assertNull($manager->getDefinition('content_entity:taxonomy_term', FALSE));
++
++    // At this point the plugin is gone. Perform direct query for assertion.
++    $instances = $this->container->get('database')
++      ->select('babel_source_instance', 'bsi')
++      ->condition('bsi.plugin', 'content_entity:taxonomy_term')
++      ->countQuery()
++      ->execute()
++      ->fetchField();
++    $this->assertEquals(0, $instances);
++  }
++
++}
+diff --git a/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..ae5f20b46ca9a44fa84f03593568f0fb28dabd66
+--- /dev/null
++++ b/modules/babel_content_entity/tests/src/Kernel/Plugin/Babel/TranslationType/ContentEntityTest.php
+@@ -0,0 +1,243 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel_content_entity\Kernel\Plugin\Babel\TranslationType;
++
++use Drupal\babel\Model\Source;
++use Drupal\babel\Model\StringTranslation;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
++use Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity;
++use Drupal\taxonomy\Entity\Vocabulary;
++use Drupal\taxonomy\TermInterface;
++use Drupal\Tests\babel\Kernel\Plugin\Babel\TranslationType\TranslationTypePluginTestBase;
++
++/**
++ * Tests the 'content_entity' translation type plugin.
++ *
++ * @group babel
++ *
++ * @coversDefaultClass \Drupal\babel_content_entity\Plugin\Babel\TranslationType\ContentEntity
++ */
++class ContentEntityTest extends TranslationTypePluginTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'content_translation',
++    'filter',
++    'taxonomy',
++    'text',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installEntitySchema('taxonomy_term');
++
++    $this->container->get('module_installer')->install(['babel_content_entity']);
++    $this->config('babel_content_entity.settings')
++      ->set('entity_type', ['taxonomy_term'])
++      ->save();
++
++    $this->plugin = $this->container
++      ->get(TranslationTypePluginManager::class)
++      ->createInstance(ContentEntity::id('taxonomy_term'));
++
++    Vocabulary::create(['vid' => 'tags', 'name' => 'Tags'])->save();
++
++    $this->container->get('content_translation.manager')
++      ->setEnabled('taxonomy_term', 'tags', TRUE);
++  }
++
++  /**
++   * {@inheritdoc}
++   *
++   * @param int $termsCount
++   *   Number of the preexisting terms.
++   * @param string $langcode
++   *   The language code to test the loading with.
++   * @param array $stringIds
++   *   The string IDs to load.
++   * @param array $expected
++   *   The expected result.
++   *
++   * @dataProvider providerTestGetMultiple
++   */
++  public function testGetStrings(
++    int $termsCount = 0,
++    string $langcode = '',
++    array $stringIds = [],
++    array $expected = [],
++  ): void {
++    if ($termsCount) {
++      while ($termsCount > 0) {
++        $this->createRandomTerm();
++        $termsCount--;
++      }
++    }
++    $this->assertEquals(
++      $expected,
++      array_keys($this->plugin->getStrings($langcode, $stringIds))
++    );
++  }
++
++  /**
++   * Test data provider for ::testGetStrings.
++   *
++   * @return array[]
++   *   The test cases.
++   */
++  public static function providerTestGetMultiple(): array {
++    return [
++      'Load everything, no term' => [
++        'termsCount' => 0,
++        'langcode' => 'fi',
++        'stringIds' => [],
++        'expected' => [],
++      ],
++      'Load everything, some links' => [
++        'termsCount' => 1,
++        'langcode' => 'fi',
++        'stringIds' => [],
++        'expected' => ['tags:1:name:0'],
++      ],
++      'Load specific' => [
++        'termsCount' => 4,
++        'langcode' => 'be',
++        'stringIds' => [
++          'tags:2:name:0',
++          'tags:4:name:0',
++        ],
++        'expected' => [
++          'tags:2:name:0',
++          'tags:4:name:0',
++        ],
++      ],
++    ];
++  }
++
++  /**
++   * {@inheritdoc}
++   *
++   * @param int $termsCount
++   *   Number of the preexisting terms.
++   * @param string $langcode
++   *   The language code to test the loading with.
++   * @param array $stringId
++   *   The string ID to load.
++   * @param \Drupal\babel\Model\StringTranslation|null $expected
++   *   The expected result.
++   *
++   * @dataProvider providerTestGetSingle
++   */
++  public function testGetString(
++    int $termsCount = 0,
++    string $langcode = '',
++    string $stringId = '',
++    ?StringTranslation $expected = NULL,
++  ): void {
++    if ($termsCount > 0) {
++      while ($termsCount > 0) {
++        $this->createRandomTerm();
++        $termsCount--;
++      }
++    }
++
++    $this->assertEquals(
++      $expected,
++      $this->plugin->getString($langcode, $stringId)
++    );
++  }
++
++  /**
++   * Test data provider for ::testGetString.
++   *
++   * @return array[]
++   *   The test cases.
++   */
++  public static function providerTestGetSingle(): array {
++    return [
++      'Load specific ID' => [
++        'termsCount' => 2,
++        'langcode' => 'fi',
++        'stringId' => 'tags:2:name:0',
++        'expected' => new StringTranslation(
++          source: new Source('Tag 2', '', TRUE),
++        ),
++      ],
++      'Missing ID' => [
++        'termsCount' => 0,
++        'langcode' => 'fi',
++        'stringId' => 'tags:2:name:0',
++        'expected' => NULL,
++      ],
++    ];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function testUpdateTranslation(): void {
++    $term = $this->createRandomTerm('Test term name', 'Some description');
++
++    $this->assertTrue($term->isTranslatable());
++    $this->assertFalse($term->hasTranslation($this->language->getId()));
++
++    // Add translation.
++    $this->plugin->updateTranslation(
++      $this->plugin->getString(
++        $this->language->getId(),
++        'tags:1:name:0',
++      ),
++      'tags:1:name:0',
++      $this->language->getId(),
++      '[TRANSLATED] Test term name',
++    );
++    $this->plugin->updateTranslation(
++      $this->plugin->getString(
++        $this->language->getId(),
++        'tags:1:description:0',
++      ),
++      'tags:1:description:0',
++      $this->language->getId(),
++      '[TRANSLATED] Some description',
++    );
++
++    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term->id());
++
++    $this->assertTrue($term->hasTranslation($this->language->getId()));
++    $this->assertEquals('[TRANSLATED] Test term name', $term->getTranslation($this->language->getId())->label());
++    $this->assertEquals('[TRANSLATED] Some description', $term->getTranslation($this->language->getId())->getDescription());
++  }
++
++  /**
++   * Creates a random taxonomy term.
++   *
++   * @param string|null $name
++   *   (optional) The term name. Defaults to "Tag <TID>".
++   * @param string|null $description
++   *   (optional) The term description.
++   */
++  protected function createRandomTerm(?string $name = NULL, ?string $description = NULL): TermInterface {
++    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
++    $nextId = 1;
++    $highestIdResult = $storage->getQuery()->accessCheck(FALSE)->sort('tid', 'DESC')->range(0, 1)->execute();
++    $nextId += current($highestIdResult) ?: 0;
++
++    $term = $storage->create(array_filter([
++      'vid' => 'tags',
++      'name' => $name ?: "Tag $nextId",
++      'langcode' => 'en',
++      'description' => $description,
++    ]));
++    $term->save();
++
++    return $term;
++  }
++
++}
+diff --git a/src/Hook/BabelHooks.php b/src/Hook/BabelHooks.php
+index b0588f2619c510912feeb1f281b5bdf60bf66d93..52c2debeb3dcb649190eb5e253d62cef275e04c0 100644
+--- a/src/Hook/BabelHooks.php
++++ b/src/Hook/BabelHooks.php
+@@ -7,6 +7,8 @@ namespace Drupal\babel\Hook;
+ use Drupal\babel\BabelLocaleTranslation;
+ use Drupal\babel\BabelStorageInterface;
+ use Drupal\babel\Cache\Context\BabelTranslateFormRoute;
++use Drupal\babel\Plugin\Babel\DataTransferPluginManager;
++use Drupal\babel\Plugin\Babel\TranslationTypePluginManager;
+ use Drupal\Component\Serialization\Json;
+ use Drupal\Core\Asset\AttachedAssetsInterface;
+ use Drupal\Core\Database\Connection;
+@@ -31,6 +33,8 @@ class BabelHooks {
+     protected readonly AccountInterface $currentUser,
+     #[Autowire(service: 'cache_context.babel_translate_form_route')]
+     protected readonly BabelTranslateFormRoute $babelTranslateFormRoute,
++    protected readonly TranslationTypePluginManager $translationTypeManager,
++    protected readonly DataTransferPluginManager $dataTransferManager,
+   ) {}
+ 
+   /**
+@@ -145,4 +149,28 @@ class BabelHooks {
+     ];
+   }
+ 
++  /**
++   * Implements hook_modules_installed().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('modules_installed')]
++  public function onModulesInstalled(): void {
++    // New installed modules might bring new plugins.
++    $this->translationTypeManager->clearCachedDefinitions();
++    $this->dataTransferManager->clearCachedDefinitions();
++  }
++
++  /**
++   * Implements hook_modules_uninstalled().
++   *
++   * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\Hook does not exist.
++   */
++  #[Hook('modules_uninstalled')]
++  public function onModulesUninstalled(): void {
++    // Uninstalled modules might contain plugins.
++    $this->translationTypeManager->clearCachedDefinitions();
++    $this->dataTransferManager->clearCachedDefinitions();
++  }
++
+ }
+diff --git a/src/Plugin/Babel/TranslationType.php b/src/Plugin/Babel/TranslationType.php
+index a38b7818c3a790f23c1e296198944779bff2012e..ca4ebb9624ef226b65d77e1dd82d4de4c8f98141 100644
+--- a/src/Plugin/Babel/TranslationType.php
++++ b/src/Plugin/Babel/TranslationType.php
+@@ -28,11 +28,14 @@ class TranslationType extends Plugin {
+    *   The plugin label.
+    * @param bool $status
+    *   (optional) The source string status suggested by this plugin.
++   * @param string|null $deriver
++   *   (optional) A deriver class.
+    */
+   public function __construct(
+     public readonly string $id,
+     public readonly TranslatableMarkup $label,
+     public readonly bool $status = TRUE,
++    public readonly ?string $deriver = NULL,
+   ) {}
+ 
+ }
+diff --git a/tests/src/Traits/BabelFunctionalSetupTrait.php b/tests/src/Traits/BabelFunctionalSetupTrait.php
+index 3c10aef483ae3f9367016a9edd22791450f1451c..e620ae9771c87584449e68458c2fd3085b3d9f7c 100644
+--- a/tests/src/Traits/BabelFunctionalSetupTrait.php
++++ b/tests/src/Traits/BabelFunctionalSetupTrait.php
+@@ -14,6 +14,8 @@ use Drupal\language\Entity\ConfigurableLanguage;
+  */
+ trait BabelFunctionalSetupTrait {
+ 
++  use BatchTrait;
++
+   /**
+    * The language used for testing.
+    *
+@@ -58,16 +60,6 @@ trait BabelFunctionalSetupTrait {
+     $this->testAccount = $this->drupalCreateUser(static::TEST_USER_PERMISSIONS);
+   }
+ 
+-  /**
+-   * Executes the pending batches.
+-   */
+-  protected function runPendingBatches(): void {
+-    while ($batch = &batch_get()) {
+-      $batch['progressive'] = FALSE;
+-      batch_process();
+-    }
+-  }
+-
+   /**
+    * Creates a configurable language and rebuild Drupal cache.
+    *
+diff --git a/tests/src/Traits/BatchTrait.php b/tests/src/Traits/BatchTrait.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..12164889d5c191e6d1da1b5628be159254601e43
+--- /dev/null
++++ b/tests/src/Traits/BatchTrait.php
+@@ -0,0 +1,22 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel\Traits;
++
++/**
++ * Runs pending batch operations.
++ */
++trait BatchTrait {
++
++  /**
++   * Executes the pending batches.
++   */
++  protected function runPendingBatches(): void {
++    while ($batch = &batch_get()) {
++      $batch['progressive'] = FALSE;
++      batch_process();
++    }
++  }
++
++}
