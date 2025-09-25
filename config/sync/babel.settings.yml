@@ -6,12 +6,19 @@ translation_type:
     locale: {  }
     menu_link_content:
       menu:
-        - account
         - footer-about-us
         - footer-european-commission
         - footer-follow-us
         - footer-help-and-support
+        - account
         - navbar
+    'content_entity:taxonomy_term':
+      bundle:
+        - domain
+        - owner_type
+        - solution_classification
+        - status
+        - topic
 data_transfer:
   plugin:
     spreadsheet: {  }
