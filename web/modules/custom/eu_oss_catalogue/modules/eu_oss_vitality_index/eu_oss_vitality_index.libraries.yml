@@ -1,8 +1,8 @@
 chart.js:
+  version: "v2.9.4"
   js:
-    # TODO: Move this in our codebase with NPM.
-    https://cdn.jsdelivr.net/npm/chart.js@2.9.4:
-      type: external
+    /libraries/chart.js/dist/Chart.min.js: { minified: true }
+
 vitality-index-chart:
   js:
     js/vitality_index_chart.js: {}
