@@ -122,6 +122,7 @@ permissions:
   - 'update paragraph content events_calendar'
   - 'update paragraph content github_feed'
   - 'update paragraph content json_map'
+  - 'update solution_settings meta-entity'
   - 'vbo joinup archive action'
   - 'view all revisions'
   - 'view any unpublished content'
