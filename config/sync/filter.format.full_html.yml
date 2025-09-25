@@ -5,6 +5,7 @@ dependencies:
   module:
     - blazy
     - editor
+    - joinup_html_stripper
     - markdown_easy
     - slick
 _core:
@@ -57,6 +58,12 @@ filters:
     provider: filter
     status: true
     weight: 12
+    settings: {  }
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
+    status: true
+    weight: 13
     settings: {  }
   markdown_easy:
     id: markdown_easy
