@@ -161,24 +161,25 @@ Feature:
       | title  | headline |
       | News 1 | News 1   |
     And the following topics are enabled in the homepage:
+      | Economy and Welfare     |
       | Info                    |
       | Statistics and Analysis |
-      | Economy and Welfare     |
+      | E-justice               |
     And I am logged in as a moderator
     And I go to the homepage
-    And I click "Economy and Welfare"
+    And I click "E-justice"
     And I click "Edit"
-    Then I should see the heading "Edit Economy and Welfare"
+    Then I should see the heading "Edit E-justice"
 
     When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
     And I press "Save"
-    Then I should see the heading "Economy and Welfare"
+    Then I should see the heading "E-justice"
     And I should see the text "This now has to be shown both in the inner page and in the homepage."
 
     When I go to the homepage
     Then I should see the text "This now has to be shown both in the inner page and in the homepage."
 
-    When I click "Economy and Welfare"
+    When I click "E-justice"
     And I click "Edit"
     And I fill in "Summary" with "This will be shown in the homepage."
     And I fill in "Description" with "This will be shown in the inner page."
@@ -196,14 +197,14 @@ Feature:
     And custom_page content:
       | title          | collection |
       | Popular quotes | The Portal |
-    Given the following topics are enabled in the homepage:
-      | Info                    |
-      | Statistics and Analysis |
-      | Economy and Welfare     |
-      | E-justice |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                           |
+    And the following topics are enabled in the homepage:
+      | Economy and Welfare     |
+      | Info                    |
+      | Statistics and Analysis |
+      | E-justice               |
     When I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
@@ -269,7 +270,7 @@ Feature:
     Given the following topics are enabled in the homepage:
       | Info                    |
       | Statistics and Analysis |
-      | E-justice |
+      | E-justice               |
     And I am logged in as a moderator
     And I go to the homepage
     And I click "E-justice"
