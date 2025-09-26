@@ -21,17 +21,10 @@ Feature: Cloning of entities
       | title               | collection | published at     |
       | Collection document | The Portal | 2017-10-13T13:00 |
       | Solution document   | Solution   | 2017-09-13T13:00 |
-    And "discussion" content:
-      | title           | collection |
-      | Test discussion | The Portal |
-    And "licence" content:
-      | title        |
-      | Test licence |
     Given users:
       | Username         | Roles |
       | Collection Owner |       |
       | Solution Owner   |       |
-
     And the following collection user memberships:
       | collection | user             | roles |
       | The Portal | Collection Owner | owner |
@@ -66,6 +59,12 @@ Feature: Cloning of entities
       | logged in as a "member" of the "Solution" solution     |
 
   Scenario: Only custom page, document, event and news nodes should have the "Clone content" link
+    Given "discussion" content:
+      | title           | collection |
+      | Test discussion | The Portal |
+    And "licence" content:
+      | title        |
+      | Test licence |
     When I am logged in as a moderator
     And I go to the "Test discussion" discussion
     Then I should not see the link "Clone content" in the "Entity actions" region
