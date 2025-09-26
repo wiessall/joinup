@@ -18,6 +18,8 @@ Feature: Site alerts
 
     # Anonymous users should see the alert.
     Given I am not logged in
+    # Validate the need for this step in ISAICP-9742.
+    And I have a new browser session
     And I am on the homepage
     Then I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     Then I click "advanced search"
