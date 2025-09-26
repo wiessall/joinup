@@ -189,7 +189,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
-      $status = $variables['elements']['process_status'][0]['#plain_text'] ?? 'No status';
+      // Get the raw term name instead of translated display text to support
+      // multilingual sites.
+      $status = t('No status');
+      if (!empty($variables['elements']['process_status'][0]['#entity'])) {
+        $status = $variables['elements']['process_status'][0]['#entity']->getName();
+      }
       switch ($status) {
 
         case 'Completed':
