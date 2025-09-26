@@ -48,3 +48,14 @@ Feature: Accessibility
       | /interoperable-europe                                                                                                           |
       | /licence/bsd-2-clause-simplified-license                                                                                        |
       | /collection/interoperable-europe-academy/courses-curriculum                                                                     |
+
+  Scenario Outline: Empty carousel headings
+    Given I visit "<page>"
+    Then the page meets "Empty heading elements" accessibility standards
+
+    Examples:
+      | page                                                                 |
+      | /collection/iopeu-monitoring/policy-context                          |
+      | /collection/interoperable-europe-academy/seasonal-school             |
+      | /interoperable-europe/news/new-record-number-participants-semic-2024 |
+      | /collection/interoperable-europe-academy/event/seasonal-school-2025  |
