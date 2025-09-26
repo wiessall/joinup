@@ -453,7 +453,6 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
-
   @javascript
   Scenario: Configurable listing for solutions
     And solution content:
