@@ -66,7 +66,7 @@
         "drupal/imagecache_external": "^3.0",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
-        "drupal/json_field": "^1.0",
+        "drupal/json_field": "^1.5",
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
