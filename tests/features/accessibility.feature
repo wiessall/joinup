@@ -9,7 +9,7 @@ Feature: Accessibility
 
     Examples:
       | page                                                                                                                            |
-      # This list of case pages needs revision
+      # This list of case pages needs revision.
       | /                                                                                                                               |
       | /collection/are3na/solution/re3gistry/news/re3gistry-2022-foss4g-firenze                                                        |
       | /collection/egovernment/news/testa-trusted-solution-endorsed-member-states                                                      |
@@ -40,12 +40,14 @@ Feature: Accessibility
       | /search?f[0]=type:news                                                                                                          |
 
       # New pages added after aligning the AXE tags with accessibility-cloud app.
-      | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
       | /collection/european-interoperability-reference-architecture-eira/solution/egovera-business-agnostic-0/release/610              |
       | /eu-oss-catalogue                                                                                                               |
       | /eu-oss-catalogue/solutions/bundid-keycloak-adapter-mhkbd-nrw                                                                   |
       | /collection/invest-interoperability-vision-europe-strategy-timeplan/event/invest-project-initial-knowledge-event                |
       | /topic/ict/open-source-software                                                                                                 |
+      | /interoperable-europe                                                                                                           |
+      | /licence/bsd-2-clause-simplified-license                                                                                        |
+      | /collection/interoperable-europe-academy/courses-curriculum                                                                     |
 
   Scenario Outline: Empty carousel headings
     Given I visit "<page>"
