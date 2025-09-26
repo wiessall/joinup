@@ -307,7 +307,8 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         && $field_definition->getTargetEntityTypeId() === 'meta_entity'
         && !$account->hasPermission('manage custom landing pages')
       )
-        ->addCacheableDependency($field_definition);
+        ->addCacheableDependency($field_definition)
+        ->cachePerPermissions();
 
     default:
       return AccessResult::neutral();
