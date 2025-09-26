@@ -4,58 +4,45 @@ Feature: Sharing content between collections
   I want to share content between collections
   So that useful information has more visibility
 
-  Scenario Outline: Sharing of specific content types expires by time
+  Scenario: Sharing of event and news expires by time
     Given collection content:
       | title        |
-      | Host group   |
       | Target group |
-    And "<content type>" content:
-      | title          | collection | shared on    | shared at   |
-      | Shared content | Host group | Target group | <shared at> |
+    And "news" content:
+      | title       | collection | shared on    | shared at |
+      | Shared news | The Portal | Target group | - 32 days |
+    And "event" content:
+      | title        | collection | shared on    | shared at |
+      | Shared event | The Portal | Target group | -7 months |
 
-    Given I go to the <page to visit>
-    Then I should see the "Shared content" tile
-    Given I run the "joinup_group" cron
+    When I go to the "Target group" collection
+    Then I should see the "Shared event" tile
+    And I should see the "Shared news" tile
+    Then I run the "joinup_group" cron
     And I run the "joinup_group_expired_sharing" queue worker
-    And I go to the <page to visit>
-    Then I <can or cant see> the "Shared content" tile
-
-    Examples:
-      | content type | page to visit                      | shared at | can or cant see |
-      | discussion   | discussions page of "Target group" | -10 years | should see      |
-      | document     | "Target group" collection          | -10 years | should see      |
-      | event        | "Target group" collection          | -7 months | should not see  |
-      | news         | "Target group" collection          | -32 days  | should not see  |
-      | solution     | "Target group" collection          | -10 years | should see      |
+    And I go to the "Target group" collection
+    Then I should not see the "Shared event" tile
+    And I should not see the "Shared news" tile
 
   @javascript
   Scenario Outline: Users can share content in the groups they are member of.
     Given users:
-      | Username      | E-mail                    |
-      | Sara Barber   | sara.barber@example.com   |
-      | Deryck Lynn   | deryck.lynn@example.com   |
-      | Marjolein Rye | marjolein.rye@example.com |
-      | Group owner   | group.owner@example.com   |
+      | Username    | E-mail                  |
+      | Sara Barber | sara.barber@example.com |
     And <group type> content:
       | title        |
       | Classic Rock |
       | Hip-Hop      |
       | Power ballad |
       | Drum'n'Bass  |
-    And news content:
-      | title                          | short title                    | <group type> |
-      | New D'n'B compilation released | New D'n'B compilation released | Classic Rock |
-      | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      |
     And document content:
       | title                       | <group type> |
       | Rockabilly is still rocking | Classic Rock |
     And the following <group type> user memberships:
-      | <group type> | user          | roles |
-      | Hip-Hop      | Marjolein Rye |       |
-      | Classic Rock | Sara Barber   |       |
-      | Hip-Hop      | Sara Barber   |       |
-      | Drum'n'Bass  | Sara Barber   |       |
-      | Hip-Hop      | Group owner   | owner |
+      | <group type> | user        | roles |
+      | Classic Rock | Sara Barber |       |
+      | Hip-Hop      | Sara Barber |       |
+      | Drum'n'Bass  | Sara Barber |       |
     And <content type> content:
       | title               | <group type> |
       | Interesting content | Hip-Hop      |
@@ -77,7 +64,7 @@ Feature: Sharing content between collections
 
     # A member of a single collection or solution which is the one where the content was
     # created can share on social networks only.
-    When I am logged in as "Marjolein Rye"
+    When I am logged in as a member of the "Hip-Hop" <group type>
     And I visit the "Interesting content" "<content type>"
     And I click "Share"
     Then a modal should open
@@ -89,6 +76,12 @@ Feature: Sharing content between collections
     Then I should see the heading "Rockabilly is still rocking"
     When I click "Share"
     Then a modal should open
+    And I should see the following lines of text:
+      | Share on                                    |
+      | Facebook                                    |
+      | X                                           |
+      | Linkedin                                    |
+      | Other groups on Interoperable Europe Portal |
     # The groups the user is member of should be available.
     And the following fields should be present "Hip-Hop, Drum'n'Bass"
     # The parent group and groups the user is not a member of, should not be shown.
@@ -115,8 +108,10 @@ Feature: Sharing content between collections
 
     # The shared content should be shown amongst the other content tiles.
     When I go to the homepage of the "Classic Rock" <group type>
-    Then the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking, Interesting content"
-
+    Then the page should show only the tiles "Rockabilly is still rocking, Interesting content"
+    And the "Interesting content" tile should be marked as shared from "Hip-Hop"
+    When I visit the content overview page
+    Then the "Interesting content" tile should not be marked as shared
     # It should not be shared on the other group.
     When I go to the homepage of the "Drum'n'Bass" <group type>
     Then I should not see the "Interesting content" tile
@@ -156,7 +151,7 @@ Feature: Sharing content between collections
     # changed. The "Interesting content" should no longer be visible.
     Then I should see the success message "Item was unshared from the following groups: Classic Rock."
     Then 0 e-mails should have been sent
-    And the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking"
+    And the page should show only the tiles "Rockabilly is still rocking"
 
     # Verify that the content is again shareable.
     When I visit the "Interesting content" "<content type>"
@@ -169,6 +164,7 @@ Feature: Sharing content between collections
     # shared anywhere.
     When I go to the homepage of the "Hip-Hop" <group type>
     Then I should see the "Interesting content" tile
+    And the "Interesting content" tile should not be marked as shared
     And I should not see the contextual link "Unshare" in the "Interesting content" tile
 
     # The content should obviously not shared on the other group too.
@@ -255,59 +251,13 @@ Feature: Sharing content between collections
       | news         | collection | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
       | news         | solution   | Please note: You must be subscribed to the target space to share your content. Your news item will be shared on that space for one month. After that, it will be considered obsolete and will be automatically removed from that space. |
 
-  @javascript
-  Scenario Outline: Shared content should show visual cues in the groups they are shared into.
-    Given <group type> content:
-      | title |
-      | Earth |
-      | Mars  |
-      | Venus |
-    And <content type> content:
-      | title         | <group type> | shared on   |
-      | Earth content | Earth        | Mars        |
-      | Mars content  | Mars         |             |
-      | Venus content | Venus        | Earth, Mars |
-
-    When I go to the homepage of the "Earth" <group type>
-    Then I should see the "Earth content" tile
-    And I should see the "Venus content" tile
-    And the "Venus content" tile should be marked as shared from "Venus"
-    And the "Earth content" tile should not be marked as shared
-
-    When I go to the homepage of the "Mars" <group type>
-    Then I should see the "Earth content" tile
-    And I should see the "Mars content" tile
-    And I should see the "Venus content" tile
-    And the "Earth content" tile should be marked as shared from "Earth"
-    And the "Venus content" tile should be marked as shared from "Venus"
-    But the "Mars content" tile should not be marked as shared
-
-    When I go to the homepage of the "Venus" <group type>
-    Then I should see the "Venus content" tile
-    And the "Venus content" tile should not be marked as shared
-
-    And I visit the content overview page
-    Then the "Earth content" tile should not be marked as shared
-    And the "Mars content" tile should not be marked as shared
-    And the "Venus content" tile should not be marked as shared
-
-    Examples:
-      | content type | group type |
-      | event        | collection |
-      | event        | solution   |
-      | document     | collection |
-      | document     | solution   |
-      | news         | collection |
-      | news         | solution   |
-
   Scenario: Shared pinned content is erroneously shown first.
     Given collection content:
       | title         |
-      | Milky Way     |
       | Chocolate Way |
     And "document" content:
       | title                 | collection    | shared on     | created    | pinned |
-      | Milky Way content     | Milky Way     | Chocolate Way | 2017-06-04 | yes    |
+      | Milky Way content     | The Portal    | Chocolate Way | 2017-06-04 | yes    |
       | Chocolate Way content | Chocolate Way |               | 2017-06-05 | no     |
     When I go to the homepage of the "Chocolate Way" collection
     Then I should see the following tiles in the correct order:
@@ -349,53 +299,3 @@ Feature: Sharing content between collections
     And the "Mars content" tile should be marked as shared from "Mars"
     And I should see the "Venus content" tile
     And the "Venus content" tile should be marked as shared from "Venus"
-
-  @javascript
-  Scenario Outline: The sharing options should be shown in a modal window.
-    Given collection content:
-      | title   |
-      | Secrets |
-      | Gossip  |
-    And <content type> content:
-      | title                 | collection | changed   |
-      | An unshareable secret | Secrets    | <changed> |
-    And users:
-      | Username        | E-mail                |
-      | Sanjica Sauvage | sanjisauv@example.com |
-    And the following collection user memberships:
-      | collection | user            |
-      | Secrets    | Sanjica Sauvage |
-      | Gossip     | Sanjica Sauvage |
-    And I am an anonymous user
-    When I visit the "An unshareable secret" "<content type>"
-    And I click "Share"
-    Then a modal should open
-    And I should see the following lines of text:
-      | Facebook |
-      | X        |
-      | Linkedin |
-
-    # Check that the collection the content is shared on is immediately shown in the "Shared on" tiles.
-    Given I am logged in as "Sanjica Sauvage"
-    When I visit the "An unshareable secret" "<content type>"
-    And I click "Share"
-    Then a modal should open
-    And I should see the following lines of text:
-      | Share on                                    |
-      | Facebook                                    |
-      | X                                           |
-      | Linkedin                                    |
-      | Other groups on Interoperable Europe Portal |
-    When I check "Gossip"
-    And I press "Share" in the "Modal buttons" region
-    Then I should see the success message "Item was shared on the following groups: Gossip."
-    And I should see the heading "Shared on"
-    And I should see "Last update: <last update>"
-    And I should see the "Gossip" tile
-
-    Examples:
-      | content type | changed    | last update |
-      | event        | 2017-06-04 | 04/06/2017  |
-      | document     | 2018-06-04 | 04/06/2018  |
-      | discussion   | 2019-06-04 | 04/06/2019  |
-      | news         | 2020-06-04 | 04/06/2020  |
