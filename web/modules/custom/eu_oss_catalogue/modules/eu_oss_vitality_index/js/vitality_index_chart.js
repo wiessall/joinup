@@ -19,14 +19,13 @@
 
         // eslint-disable-next-line no-new
         new Chart(ctx, {
-          responsive: false,
           type: "line",
           data: {
             labels,
             datasets: [
               {
                 fill: false,
-                lineTension: 0.1,
+                tension: 0.1, // lineTension → tension
                 data,
                 borderWidth: 3,
                 borderColor: "#06c06c",
@@ -34,25 +33,25 @@
             ],
           },
           options: {
+            responsive: false,
             scales: {
-              xAxes: [
-                {
-                  display: false,
-                  stacked: true,
-                },
-              ],
-              yAxes: [
-                {
-                  display: false,
-                  stacked: true,
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                },
-              ],
+              x: {
+                display: false,
+                stacked: true,
+              },
+              y: {
+                display: false,
+                stacked: true,
+                beginAtZero: true,
+              },
             },
-            legend: {
-              display: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                enabled: false,
+              },
             },
             elements: {
               point: {
@@ -68,9 +67,6 @@
                 top: 5,
                 bottom: 5,
               },
-            },
-            tooltips: {
-              enabled: false,
             },
           },
         });
