@@ -2,12 +2,6 @@
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
-  Background:
-    Given the following topics are enabled in the homepage:
-      | Info                    |
-      | Statistics and Analysis |
-      | Economy and Welfare     |
-
   Scenario: Show list of topics meta entity type and check a given parent and published field.
     Given I am logged in as a moderator
     When I go to "/dashboard"
@@ -166,6 +160,10 @@ Feature:
     Given news content:
       | title  | headline |
       | News 1 | News 1   |
+    And the following topics are enabled in the homepage:
+      | Info                    |
+      | Statistics and Analysis |
+      | Economy and Welfare     |
     And I am logged in as a moderator
     And I go to the homepage
     And I click "Economy and Welfare"
@@ -198,7 +196,10 @@ Feature:
     And custom_page content:
       | title          | collection |
       | Popular quotes | The Portal |
-    And the following topics are enabled in the homepage:
+    Given the following topics are enabled in the homepage:
+      | Info                    |
+      | Statistics and Analysis |
+      | Economy and Welfare     |
       | E-justice |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
@@ -266,6 +267,8 @@ Feature:
   @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given the following topics are enabled in the homepage:
+      | Info                    |
+      | Statistics and Analysis |
       | E-justice |
     And I am logged in as a moderator
     And I go to the homepage
