@@ -3,30 +3,7 @@ Feature:
   Ensure curated list of topics on the homepage behave properly.
 
   Background:
-    Given collection content:
-      | title      | abstract       |
-      | Collection | Magic abstract |
-    And custom_page content:
-      | title       | collection | logo       |
-      | Custom tile | Collection | linus.jpeg |
-    And news content:
-      | title       | headline    | body              | created    | changed    | topic               | collection | logo       |
-      | News 1      | News 1      | Test              | 01-01-2023 | 03-02-2023 | E-justice           | Collection |            |
-      | News 2      | News 2      | Test              | 02-01-2023 | 02-02-2023 | E-justice           |            |            |
-      | News 3      | News 3      | Test              | 03-01-2023 | 01-02-2023 | E-justice           |            |            |
-      | Custom tile | Custom tile | Should not appear | 04-01-2023 | 01-01-2023 | Economy and Welfare |            | linus.jpeg |
-    And event content:
-      | title       | field_paragraphs_body | start date   | end date    | created    | topic     | logo       |
-      | Event 1     | Test                  | now -8 days  | now -9 days | now -4 day | E-justice |            |
-      | Event 2     | Test                  | now -9 days  | now -8 days | now -3 day | E-justice |            |
-      | Custom tile | Test                  | now -10 days | now -7 days | now -5 day | E-justice | linus.jpeg |
-    And discussion content:
-      | title       | collection | logo       |
-      | Custom tile | Collection | linus.jpeg |
-    And document content:
-      | title       | collection | logo       |
-      | Custom tile | Collection | linus.jpeg |
-    And the following topics are enabled in the homepage:
+    Given the following topics are enabled in the homepage:
       | Info                    |
       | Statistics and Analysis |
       | Economy and Welfare     |
@@ -186,6 +163,9 @@ Feature:
     And I should not see the heading "Hello world"
 
   Scenario: Description and summary are displayed accordingly.
+    Given news content:
+      | title  | headline |
+      | News 1 | News 1   |
     And I am logged in as a moderator
     And I go to the homepage
     And I click "Economy and Welfare"
@@ -212,9 +192,15 @@ Feature:
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
-    Given the following topics are enabled in the homepage:
+    Given news content:
+      | title  | headline | collection |
+      | News 1 | News 1   | The Portal |
+    And custom_page content:
+      | title          | collection |
+      | Popular quotes | The Portal |
+    And the following topics are enabled in the homepage:
       | E-justice |
-    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Custom tile" title:
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                           |
     When I am logged in as a moderator
@@ -234,7 +220,7 @@ Feature:
 
     And I press "Save"
     Then I should see the "News 1" tile
-    And I should see the "Custom tile" tile
+    And I should see the "Popular quotes" tile
     # Regression test that text is trimmed properly.
     Then the response should contain "default abstract"
     And the url should match "/topic/law-and-justice/e-justice"
@@ -308,8 +294,20 @@ Feature:
 
   @javascript
   Scenario: Regression test to ensure order of entities.
-    Given the following topics are enabled in the homepage:
-      | E-justice |
+    Given news content:
+      | title  | headline | body              | created    | changed    | topic     |
+      | News 1 | News 1   | Test              | 01-01-2023 | 03-02-2023 | E-justice |
+      | News 2 | News 2   | Test              | 02-01-2023 | 02-02-2023 | E-justice |
+      | News 3 | News 3   | Test              | 03-01-2023 | 01-02-2023 | E-justice |
+      | News 4 | News 4   | Should not appear | 04-01-2023 | 01-01-2023 | E-health  |
+    And event content:
+      | title   | field_paragraphs_body | start date   | end date    | created    | topic     |
+      | Event 1 | Test                  | now -8 days  | now -9 days | now -4 day | E-justice |
+      | Event 2 | Test                  | now -9 days  | now -8 days | now -3 day | E-justice |
+      | Event 3 | Test                  | now -10 days | now -7 days | now -5 day | E-justice |
+    And the following topics are enabled in the homepage:
+      | Economy and Welfare |
+      | E-justice           |
     When I am logged in as a moderator
 
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
@@ -327,10 +325,10 @@ Feature:
       | Query presets   | type: text - value: entity_bundle\|news |
     And I press "Save"
     Then I should see the following tiles in the correct order:
-      | Custom tile |
-      | News 3      |
-      | News 2      |
-      | News 1      |
+      | News 4 |
+      | News 3 |
+      | News 2 |
+      | News 1 |
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
@@ -348,10 +346,10 @@ Feature:
       | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health\|IN |
     And I press "Save"
     Then I should see the following tiles in the correct order:
-      | Custom tile |
-      | News 3      |
-      | News 2      |
-      | News 1      |
+      | News 4 |
+      | News 3 |
+      | News 2 |
+      | News 1 |
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
@@ -401,22 +399,27 @@ Feature:
 
     # Events are shown by the event date sorted by the most recent first.
     Then I should see the following tiles in the correct order:
-      | Event 1     |
-      | Event 2     |
-      | Custom tile |
+      | Event 1 |
+      | Event 2 |
+      | Event 3 |
 
-    When I go to the edit form of the "Custom tile" event
+    When I go to the edit form of the "Event 3" event
     And I press "Save"
     And I go to the homepage
     # The change should not affect the order as the event start date is the same.
     And I click "E-justice" in the "Homepage topics" region
     Then I should see the following tiles in the correct order:
-      | Event 1     |
-      | Event 2     |
-      | Custom tile |
+      | Event 1 |
+      | Event 2 |
+      | Event 3 |
 
   @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
+    Given <type> content:
+      | title       | headline    | short title | logo       |
+      | Custom tile | Custom tile | Custom tile | linus.jpeg |
+    And the following topics are enabled in the homepage:
+      | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
@@ -450,12 +453,13 @@ Feature:
       | discussion  | 1           | list       |
       | discussion  | 1           | grid       |
 
+
   @javascript
   Scenario: Configurable listing for solutions
     And solution content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
-      | Another rough day       | Lorem description issum  | Collection |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
-      | Just another day & solt | Second description issum | Collection | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
+      | Another rough day       | Lorem description issum  | The Portal |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
+      | Just another day & solt | Second description issum | The Portal | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     And I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
@@ -479,7 +483,7 @@ Feature:
     And I should not see the text "Just another day amp solt" in the "Just another day & solt" tile
 
     # Show abstract instead of description in Collection/Solution tiles.
-    And I should see the text "Magic abstract" in the "Collection" tile
+    And I should see the text "The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme." in the "The Portal" tile
     And I should see the text "Lorem description issum" in the "Another rough day" tile
     And I should see the text "This is an solution with abstract" in the "Just another day & solt" tile
 
