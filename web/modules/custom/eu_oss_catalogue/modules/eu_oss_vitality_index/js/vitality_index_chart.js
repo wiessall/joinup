@@ -13,8 +13,8 @@
       ).forEach((canvas) => {
         const data = JSON.parse(canvas.dataset.vitalityIndexRange);
         const ctx = canvas.getContext("2d");
-        ctx.canvas.width = 230;
-        ctx.canvas.height = 38;
+        ctx.canvas.width = 490;
+        ctx.canvas.height = 80;
         const labels = [...Array(60)].map((x, i) => i.toString());
 
         // eslint-disable-next-line no-new
@@ -25,7 +25,7 @@
             datasets: [
               {
                 fill: false,
-                tension: 0.1, // lineTension → tension
+                tension: 0.1,
                 data,
                 borderWidth: 3,
                 borderColor: "#06c06c",
@@ -33,7 +33,8 @@
             ],
           },
           options: {
-            responsive: false,
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
               x: {
                 display: false,
