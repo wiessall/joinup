@@ -459,13 +459,13 @@ Feature:
 
   @javascript
   Scenario: Configurable listing for solutions
-    And solution content:
+    Given solution content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
       | Another rough day       | Lorem description issum  | The Portal |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
       | Just another day & solt | Second description issum | The Portal | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
-    And I am logged in as a moderator
+    When I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
@@ -479,7 +479,7 @@ Feature:
       | Show content    | type: select - value: All                                  |
       | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
     And I press "Save"
-    And the url should match "/topic/law-and-justice/e-justice"
+    Then the url should match "/topic/law-and-justice/e-justice"
 
     #  Ampersand character is not decoded properly under a topic page.
     And I should see the text "Just another day & solt" in the "Just another day & solt" tile
