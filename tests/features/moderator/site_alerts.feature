@@ -1,13 +1,10 @@
-@api @group-h
+@api @javascript @group-h
 Feature: Site alerts
   In order to announce scheduled downtime
   As a moderator
   I want to be able to display a site wide alert
 
-  @javascript @wip
   Scenario: Show a site wide alert and hide it again
-    # Disabled until ISAICP-10152 is in.
-    # Create a site wide alert as a moderator.
     Given I am logged in as a moderator
     When I click "Site alerts" in the "Administration toolbar" region
     Then I should see the text "There are no Sitewide Alerts yet."
@@ -21,6 +18,8 @@ Feature: Site alerts
 
     # Anonymous users should see the alert.
     Given I am not logged in
+    # Validate the need for this step in ISAICP-9742.
+    And I have a new browser session
     And I am on the homepage
     Then I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     Then I click "advanced search"
