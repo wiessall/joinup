@@ -123,6 +123,7 @@ Feature: Joining and leaving collections through the web interface
     And I click "Settings" in the "Entity actions" region
     And I fill in "Join label" with "Join this community"
     And I fill in "Leave label" with "Leave this community"
+    Then the following field should not be present "Code of Conduct"
     And I press "Save"
     And I click "Leave this community"
 
@@ -145,16 +146,3 @@ Feature: Joining and leaving collections through the web interface
     Then I should not see the link "Add members"
     When I go to the homepage of the "Open collection 2" collection
     Then I should see the "Join this community" button
-
-  Scenario Outline: Only moderators are able to edit the Code of Conduct setting
-    Given I am logged in as <user>
-    And I go to the homepage of the "The Portal" collection
-    And I click "Settings" in the "Entity actions" region
-    Then the following field <Code of Conduct field> present "Code of Conduct"
-
-    # Access to Settings is implicitly tested in
-    # metadata_banner_disabled.feature, so we only test with these roles.
-    Examples:
-      | user                                         | Code of Conduct field |
-      | a facilitator of the "The Portal" collection | should not be         |
-      | a moderator                                  | should be             |
