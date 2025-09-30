@@ -169,9 +169,9 @@ Feature: Joining and leaving collections through the web interface
   Scenario: Close the modal dialogs with the cancel button.
     # Anonymous users can cancel the "Authenticate to join" modal.
     Given I am an anonymous user
-    And I go to the homepage of the "The Portal" collection
+    And I go to the homepage of the "Open collection" collection
     # This is actually a link which is styled as a button.
-    When I click "Join this community"
+    When I click "Join this collection"
     Then a modal should open
     And I should see the text "Sign in to join"
 
@@ -179,7 +179,7 @@ Feature: Joining and leaving collections through the web interface
     And I wait for AJAX to finish
     # Since this is a modal, the dialog simply closes instead of redirecting to
     # another page. This is why the collection title is still displayed.
-    Then I should see the heading "The Portal"
+    Then I should see the heading "Open collection"
 
     # Members can cancel the "Leave collection" modal.
     Given I am logged in as "Stewe Griffin"
