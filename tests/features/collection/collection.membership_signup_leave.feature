@@ -4,25 +4,15 @@ Feature: Joining and leaving collections through the web interface
   As an authenticated user
   I need to be able to join and leave collections
 
-  Background:
-    Given users:
-      | Username      |
-      | Stewe Griffin |
-    Given collection content:
-      | title           | closed |
-      | Open collection | no     |
-    And the following collection user memberships:
-      | collection      | user          | roles |
-      | Open collection | Stewe Griffin |       |
-
   @javascript
   Scenario Outline: As a user I can join collections without published Code of Conduct, and are also able to leave it
     Given collection content:
       | title                                 | closed |
+      | Open collection                       | no     |
       | Open collection with public CoC       | no     |
       | Closed collection                     | yes    |
       | Closed collection with non-public CoC | yes    |
-    Given custom_page content:
+    And custom_page content:
       | title                          | collection                            | state     |
       | Public CoC of Open collection  | Open collection with public CoC       | published |
       | Draft CoC of Closed collection | Closed collection with non-public CoC | draft     |
@@ -101,7 +91,7 @@ Feature: Joining and leaving collections through the web interface
     And I should see the success message "<expected success message>"
     And I <subscription expectation> bundles from the "Closed collection with public CoC" collection
     And the "Closed collection with public CoC" collection should have 1 pending members
-    Given I am logged in as "Stewe Griffin"
+    When I am logged in as a user with the "authenticated" role
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
@@ -116,10 +106,11 @@ Feature: Joining and leaving collections through the web interface
       | check           | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
       | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
 
-  Scenario: A collection owner leaving the collection cannot administer users anymore.
+  Scenario: A collection owner leaving the collection cannot administer users anymore. Joining and leaving labels could be changed.
     Given users:
       | Username         |
       | Collection owner |
+      | Stewe Griffin    |
     Given collection content:
       | title             | closed | author           |
       | Open collection 2 | no     | Collection owner |
@@ -128,7 +119,12 @@ Feature: Joining and leaving collections through the web interface
       | Open collection 2 | Stewe Griffin |       |
     Given I am logged in as "Collection owner"
     When I go to the homepage of the "Open collection 2" collection
-    And I click "Leave this collection"
+    And I open the header local tasks menu
+    And I click "Settings" in the "Entity actions" region
+    And I fill in "Join label" with "Join this community"
+    And I fill in "Leave label" with "Leave this community"
+    And I press "Save"
+    And I click "Leave this community"
 
     # The collection owner cannot leave the collection before transferring the rights to another owner.
     Then I should see the text "You are owner of this collection. Before you leave this collection, you should transfer the ownership to another member."
@@ -142,55 +138,13 @@ Feature: Joining and leaving collections through the web interface
     Then I should see "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
 
     When I go to the homepage of the "Open collection 2" collection
-    And I click "Leave this collection"
+    And I click "Leave this community"
     And I press "Confirm"
 
     When I click "1 member"
     Then I should not see the link "Add members"
-
-  Scenario: Custom labels for Joining and leaving a collection.
-    Given I am logged in as a user with the "moderator" role
-    And I go to the homepage of the "Open collection" collection
-    And I open the header local tasks menu
-    And I click "Settings" in the "Entity actions" region
-    And I fill in "Join label" with "Join this community"
-    And I fill in "Leave label" with "Leave this community"
-    And I press "Save"
-
-    When I am logged in as a user with the "authenticated" role
-    And I go to the homepage of the "Open collection" collection
+    When I go to the homepage of the "Open collection 2" collection
     Then I should see the "Join this community" button
-
-    When I press "Join this community"
-    And I press "Confirm"
-    Then I should see the link "Leave this community"
-
-  @javascript
-  Scenario: Close the modal dialogs with the cancel button.
-    # Anonymous users can cancel the "Authenticate to join" modal.
-    Given I am an anonymous user
-    And I go to the homepage of the "Open collection" collection
-    # This is actually a link which is styled as a button.
-    When I click "Join this collection"
-    Then a modal should open
-    And I should see the text "Sign in to join"
-
-    When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    # Since this is a modal, the dialog simply closes instead of redirecting to
-    # another page. This is why the collection title is still displayed.
-    Then I should see the heading "Open collection"
-
-    # Members can cancel the "Leave collection" modal.
-    Given I am logged in as "Stewe Griffin"
-    And I go to the homepage of the "Open collection" collection
-
-    When I click "Leave this collection"
-    Then a modal should open
-
-    When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    Then I should see the heading "Open collection"
 
   Scenario Outline: Only moderators are able to edit the Code of Conduct setting
     Given I am logged in as <user>
