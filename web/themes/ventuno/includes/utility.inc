@@ -189,27 +189,22 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
-      // Get the raw term name instead of translated display text to support
-      // multilingual sites.
-      $name = $status = t('No status');
-      if (!empty($variables['elements']['process_status'][0]['#plain_text'])) {
-        $name = $variables['elements']['process_status'][0]['#entity']->getName();
-        $status = $variables['elements']['process_status'][0]['#plain_text'];
+      $untranslated_status = 'No status';
+      $status = t($untranslated_status);
+      if (!empty($variables['elements']['process_status'][0]['#entity'])) {
+        $untranslated_status = $variables['elements']['process_status'][0]['#entity']->getUntranslated()->getName();
+        $status = $variables['elements']['process_status'][0]['#entity']->getName();
       }
-      switch ($name) {
-
+      switch ($untranslated_status) {
         case 'Completed':
           $icon_id = 'check-circle';
           break;
-
         case 'Deprecated':
           $icon_id = 'file-x';
           break;
-
         case 'Under development':
           $icon_id = 'clock-history';
           break;
-
         case 'Withdrawn':
           $icon_id = 'patch-exclamation';
           break;
