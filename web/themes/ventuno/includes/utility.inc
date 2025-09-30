@@ -190,7 +190,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         ]);
       }
       $untranslated_status = 'No status';
-      $status = t($untranslated_status);
+      $status = t('No status');
       if (!empty($variables['elements']['process_status'][0]['#entity'])) {
         $untranslated_status = $variables['elements']['process_status'][0]['#entity']->getUntranslated()->getName();
         $status = $variables['elements']['process_status'][0]['#entity']->getName();
@@ -199,15 +199,19 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         case 'Completed':
           $icon_id = 'check-circle';
           break;
+
         case 'Deprecated':
           $icon_id = 'file-x';
           break;
+
         case 'Under development':
           $icon_id = 'clock-history';
           break;
+
         case 'Withdrawn':
           $icon_id = 'patch-exclamation';
           break;
+
       }
       $variables['extra_data'][] = [
         'icon' => $icon_id ?? 'question-lg',
