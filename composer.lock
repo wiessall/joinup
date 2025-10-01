@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6738d508570830f257758580f825b833",
+    "content-hash": "4504118ab229f2b1a335f51aee750acc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2129,17 +2129,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha5",
+            "version": "1.0.0-alpha6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha5"
+                "reference": "1.0.0-alpha6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha5.zip",
-                "reference": "1.0.0-alpha5",
-                "shasum": "d89161b3bd73e465503ee8ee1a75fbe67e93047a"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha6.zip",
+                "reference": "1.0.0-alpha6",
+                "shasum": "7ec1e402122698c9d14e04f4e979b78c3896a217"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2152,8 +2152,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha5",
-                    "datestamp": "1757515912",
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1759248213",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -5882,17 +5882,17 @@
         },
         {
             "name": "drupal/json_field",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/json_field.git",
-                "reference": "8.x-1.4"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/json_field-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "422ec5a48bb0a36d6c506bc51a38e0b85ceba69d"
+                "url": "https://ftp.drupal.org/files/projects/json_field-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "ea1fa6c9a516ede9ea381489aaeaa50d65c5317c"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
@@ -5910,8 +5910,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1729185545",
+                    "version": "8.x-1.5",
+                    "datestamp": "1758734220",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

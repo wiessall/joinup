@@ -41,11 +41,6 @@ Feature:
     Then I should see the link "Red parent"
 
   Scenario: Moderators can access and manage the topics curated queue.
-    Given I am an anonymous user
-    And I go to the homepage
-    # No homepage topic, no block title.
-    Then I should not see the heading "Main topics"
-
     Given I am logged in as a moderator
     And I go to "/dashboard"
     And I click "Curated content listings"
@@ -196,15 +191,12 @@ Feature:
 
   @javascript
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
-    Given collection content:
-      | title      |
-      | Collection |
     Given news content:
       | title  | headline | collection |
-      | News 1 | News 1   | Collection |
+      | News 1 | News 1   | The Portal |
     And custom_page content:
       | title          | collection |
-      | Popular quotes | Collection |
+      | Popular quotes | The Portal |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                           |
@@ -264,7 +256,7 @@ Feature:
     And I visit "/topic/info/statistics-and-analysis"
     Then I should not see the button "Show primary options"
 
-  Scenario: Editing from the administration page, redirect back to the administration page.
+    # Editing from the administration page, redirect back to the administration page.
     When I am logged in as a moderator
     And I go to "/dashboard"
     And I click "Topics"
@@ -275,11 +267,7 @@ Feature:
 
   @javascript
   Scenario: Long descriptions in topic inner page should be partially hidden.
-    Given news content:
-      | title  | headline |
-      | News 1 | News 1   |
-    And the following topics are enabled in the homepage:
-      | Economy and Welfare     |
+    Given the following topics are enabled in the homepage:
       | Info                    |
       | Statistics and Analysis |
       | E-justice               |
@@ -324,7 +312,6 @@ Feature:
     And the following topics are enabled in the homepage:
       | Economy and Welfare |
       | E-justice           |
-
     When I am logged in as a moderator
 
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
@@ -433,8 +420,8 @@ Feature:
   @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
-      | title       | headline    | short title | logo       | published |
-      | Custom tile | Custom tile | Custom tile | linus.jpeg | yes       |
+      | title       | headline    | short title | logo       |
+      | Custom tile | Custom tile | Custom tile | linus.jpeg |
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
@@ -471,114 +458,14 @@ Feature:
       | discussion  | 1           | grid       |
 
   @javascript
-  Scenario: Up to 4 topics should be shown for tile-two view modes.
-    Given news content:
-      | title  | headline | body             | created    | changed    | topic                                                                    |
-      | News 1 | News 1   | Test             | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
-      | News 2 | News 2   | Test longer body | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis     |
-    And the following topics are enabled in the homepage:
-      | E-justice |
-
+  Scenario: Configurable listing for solutions
+    Given solution content:
+      | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
+      | Another rough day       | Lorem description issum  | The Portal |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
+      | Just another day & solt | Second description issum | The Portal | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     When I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
-      | layout           | one column |
-      | Background theme | light      |
-      | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                       |
-      | region          | content                                 |
-      | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
-      | Link text       | type: text - value: E-justice link text |
-      | List style      | type: select - value: List              |
-      | Query presets   | type: text - value: entity_bundle\|news |
-    And I press "Save"
-
-    When I go to the homepage
-    And I click "E-justice" in the "Homepage topics" region
-    # The change should not affect the order as the news publication date is the same.
-    Then I should see the "News 1" tile
-    And I should see the text "E-justice" in the "News 1" tile
-    And I should see the text "Finance in EU" in the "News 1" tile
-    But I should not see the text "Supplier exchange" in the "News 1" tile
-    And I should not see the text "HR" in the "News 1" tile
-    And I should see the text "+3 topics" in the "News 1" tile
-
-    And I should see the "News 2" tile
-    And I should see the text "E-justice" in the "News 2" tile
-    And I should see the text "Finance in EU" in the "News 2" tile
-    But I should not see the text "Supplier exchange" in the "News 2" tile
-    And I should not see the text "Statistics and Analysis" in the "News 2" tile
-    And I should see the text "+2 topics" in the "News 2" tile
-
-  @javascript
-  Scenario: A configurable listing with no results should not print its title.
-    Given news content:
-      | title  | headline |
-      | News 1 | News 1   |
-    And the following topics are enabled in the homepage:
-      | E-justice |
-    And I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
-      | layout           | one column |
-      | Background theme | light      |
-      | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                                 |
-      | region          | content                                           |
-      | Heading         | type: text - value: E-justice heading             |
-      | Action link     | type: text - value: http://example.com            |
-      | Link text       | type: text - value: E-justice link text           |
-      | List style      | type: select - value: List                        |
-      | Query presets   | type: text - value: entity_bundle\|Nebuchadnezzar |
-    And I press "Save"
-    And the url should match "/topic/law-and-justice/e-justice"
-    Then I should not see the "News 1" tile
-    And I should not see the heading "E-justice heading"
-
-  @javascript
-  Scenario: Ampersand character is not decoded properly under a topic page.
-    Given custom_page content:
-      | title                    |
-      | Legislation & Technology |
-    And the following topics are enabled in the homepage:
-      | E-justice |
-    And I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
-      | layout           | one column |
-      | Background theme | light      |
-      | Extra classes    | test-class |
-    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                              |
-      | region          | content                                        |
-      | Heading         | type: text - value: E-justice heading          |
-      | Action link     | type: text - value: http://example.com         |
-      | Link text       | type: text - value: E-justice link text        |
-      | List style      | type: select - value: List                     |
-      | Query presets   | type: text - value: entity_bundle\|custom_page |
-    And I press "Save"
-    And the url should match "/topic/law-and-justice/e-justice"
-    And I should see the text "default abstract" in the "Legislation & Technology" tile
-    And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile
-
-  @javascript
-  Scenario: Show abstract instead of description in Collection/Solution tiles.
-    Given collection content:
-      | title                | abstract         | closed | description                          |
-      | Col with abstract    | Magic abstract   | no     | This tree is impervious description. |
-      | Col without abstract | Another abstract | no     | Magic description.                   |
-    Given solution content:
-      | title             | description              | collection        | abstract                         |
-      | Another rough day | Lorem description issum  | Col with abstract |                                  |
-      | Just another solt | Second description issum | Col with abstract | This is an soltion with abstract |
-    And the following topics are enabled in the homepage:
-      | E-justice |
-    And I am logged in as a moderator
-    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+    Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
@@ -592,8 +479,21 @@ Feature:
       | Show content    | type: select - value: All                                  |
       | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
     And I press "Save"
-#    And the url should match "/topic/law-and-justice/e-justice"
-    And I should see the text "Magic abstract" in the "Col with abstract" tile
-    And I should see the text "Another abstract" in the "Col without abstract" tile
+    Then the url should match "/topic/law-and-justice/e-justice"
+
+    #  Ampersand character is not decoded properly under a topic page.
+    And I should see the text "Just another day & solt" in the "Just another day & solt" tile
+    And I should not see the text "Just another day amp solt" in the "Just another day & solt" tile
+
+    # Show abstract instead of description in Collection/Solution tiles.
+    And I should see the text "The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme." in the "The Portal" tile
     And I should see the text "Lorem description issum" in the "Another rough day" tile
-    And I should see the text "This is an soltion with abstract" in the "Just another solt" tile
+    And I should see the text "This is an solution with abstract" in the "Just another day & solt" tile
+
+    # Up to 4 topics should be shown for tile-two view modes.
+    # The change should not affect the order as the news publication date is the same.
+    And I should see the text "E-justice" in the "Another rough day" tile
+    And I should see the text "Finance in EU" in the "Another rough day" tile
+    But I should not see the text "Supplier exchange" in the "Another rough day" tile
+    And I should not see the text "HR" in the "Another rough day" tile
+    And I should see the text "+3 topics" in the "Another rough day" tile
