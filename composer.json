@@ -328,7 +328,7 @@
         },
         "patches": {
             "drupal/babel": {
-                "Translate terms @see https://www.drupal.org/i/3546969": "resources/patch/php/drupal/babel/3546969.mr59-note590145.diff"
+                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
