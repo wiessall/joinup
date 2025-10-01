@@ -199,31 +199,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes a solution document's files.
-   *
-   * @param string $solution
-   *   The name of the solution.
-   *
-   * @When I delete documents from :solution solution
-   */
-  public function deleteDocumentsFromSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('node', $solution);
-
-    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
-    $fileHandler = \Drupal::service('file_url.handler');
-
-    $values = $solution->get('documentation')->getValue();
-    foreach ($values as $value) {
-      $file = $fileHandler::urlToFile($value['target_id']);
-      if (!$file || $fileHandler::isRemote($file)) {
-        continue;
-      }
-
-      $file->delete();
-    }
-  }
-
-  /**
    * Subscribes the given users to the given solution.
    *
    * The role Id of organic group roles are consisting of 3 parts, the entity

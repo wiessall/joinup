@@ -20,7 +20,7 @@ Feature: Test for a 'facets' regression on the solution overview page.
       | Solution 9           |
       | Solution 10          |
     And distribution content:
-      | title    | access url | solution |
+      | title    | resources  | solution |
       | test.zip | test.zip   | Apache   |
     And I go to the homepage of the "Apache" solution
     Then I should not see the "Pager" region

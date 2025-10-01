@@ -4,20 +4,20 @@ status: true
 dependencies:
   config:
     - field.field.node.release.description
-    - field.field.node.release.documentation
     - field.field.node.release.field_state
     - field.field.node.release.keywords
     - field.field.node.release.language
     - field.field.node.release.og_audience
     - field.field.node.release.process_status
     - field.field.node.release.release_number
+    - field.field.node.release.resources
     - field.field.node.release.solution_data
     - field.field.node.release.spatial_coverage
     - node.type.release
   module:
     - allowed_formats
-    - file_url
     - joinup_workflow
+    - paragraphs
     - publication_date
     - tagify
     - text
@@ -52,14 +52,6 @@ content:
       allowed_formats:
         hide_help: '0'
         hide_guidelines: '1'
-  documentation:
-    type: file_url_generic
-    weight: 3
-    region: content
-    settings:
-      progress_indicator: throbber
-      add_new_label: 'Upload a new file or enter a URL'
-    third_party_settings: {  }
   field_state:
     type: state_machine_buttons
     weight: 13
@@ -97,7 +89,7 @@ content:
     third_party_settings: {  }
   process_status:
     type: options_select
-    weight: 7
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -115,6 +107,26 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  resources:
+    type: paragraphs
+    weight: 4
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: button
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        convert: '0'
+        duplicate: '0'
+    third_party_settings: {  }
   simple_sitemap:
     weight: 12
     region: content
@@ -122,7 +134,7 @@ content:
     third_party_settings: {  }
   spatial_coverage:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 4
+    weight: 5
     region: content
     settings:
       match_operator: CONTAINS
