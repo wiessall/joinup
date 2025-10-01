@@ -89,3 +89,13 @@ function joinup_core_deploy_200700(): string {
 
   return 'Webform configuration already clean.';
 }
+
+/**
+ * Clean up leftover queue item.
+ */
+function joinup_core_deploy_200701(): string {
+  $item = new stdClass();
+  $item->item_id = '190201475';
+  \Drupal::service('queue')->get('eu_oss_catalogue')->deleteItem($item);
+  return 'Deleted leftover queue item 190201475 from eu_oss_catalogue queue.';
+}

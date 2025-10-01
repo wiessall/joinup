@@ -105,7 +105,7 @@ field.formatter.settings.joinup_core_link_custom_title:
   type: field.formatter.settings.link
   mapping:
     link_title:
-      type: string
+      type: label
       label: 'Title to use to create the link'
 
 field.formatter.settings.joinup_core_more_in_modal:
