@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\babel\BabelBatchProcessor;
-use Drupal\babel\BabelConfigHelper;
+use Drupal\babel\BabelConfigTranslatables;
 
 /**
  * Rescan the config strings for translation.
@@ -23,7 +23,7 @@ function joinup_i18n_update_200700(): void {
   ]);
 
   $names = \Drupal::configFactory()->listAll();
-  BabelConfigHelper::excludeWebformConfigurations($names);
+  BabelConfigTranslatables::excludeWebformConfigurations($names);
 
   $total = count($names);
   foreach (array_chunk($names, 50) as $chunk) {
