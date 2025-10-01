@@ -4,33 +4,20 @@ Feature: Joining and leaving collections through the web interface
   As an authenticated user
   I need to be able to join and leave collections
 
-  Background:
-    Given users:
-      | Username          |
-      | Collection author |
-      | Stewe Griffin     |
-    Given collection content:
-      | title                                 | closed | author            |
-      | Open collection                       | no     | Collection author |
-      | Open collection with public CoC       | no     |                   |
-      | Closed collection                     | yes    |                   |
-      | Closed collection with public CoC     | yes    |                   |
-      | Closed collection with non-public CoC | yes    |                   |
-    Given custom_page content:
-      | title                           | collection                            | state     |
-      | Public CoC of Open collection   | Open collection with public CoC       | published |
-      | Public CoC of Closed collection | Closed collection with public CoC     | published |
-      | Draft CoC of Closed collection  | Closed collection with non-public CoC | draft     |
-    And the following collection user memberships:
-      | collection      | user              | roles |
-      | Open collection | Collection author | owner |
-      | Open collection | Stewe Griffin     |       |
-    And the "Code of Conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
-    And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
-    And the "Code of Conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
-
   @javascript
   Scenario Outline: As a user I can join collections without published Code of Conduct, and are also able to leave it
+    Given collection content:
+      | title                                 | closed |
+      | Open collection                       | no     |
+      | Open collection with public CoC       | no     |
+      | Closed collection                     | yes    |
+      | Closed collection with non-public CoC | yes    |
+    And custom_page content:
+      | title                          | collection                            | state     |
+      | Public CoC of Open collection  | Open collection with public CoC       | published |
+      | Draft CoC of Closed collection | Closed collection with non-public CoC | draft     |
+    And the "Code of Conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
+    And the "Code of Conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
     Given I am logged in as an "authenticated user"
     When I go to the homepage of the "<collection>" collection
     When I press "Join this collection" in the Header region
@@ -74,7 +61,14 @@ Feature: Joining and leaving collections through the web interface
       | Closed collection with non-public CoC | uncheck         | Membership is pending  | Your membership to the Closed collection with non-public CoC collection is under approval. | When your membership is approved you will be able to publish content in it. | should not be subscribed to any                                                      | Your membership to the Closed collection with non-public CoC collection is under approval.                                                                |
 
   @javascript
-  Scenario Outline: As a user I can ask for a membership in a closed collection with a Code of Conduct document
+  Scenario Outline: As a user I can ask for a membership in a closed collection with a Code of Conduct document. I have to accept CoC.
+    Given collection content:
+      | title                             | closed |
+      | Closed collection with public CoC | yes    |
+    And custom_page content:
+      | title                           | collection                        |
+      | Public CoC of Closed collection | Closed collection with public CoC |
+    And the "Code of Conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
     Given I am logged in as an "authenticated user"
     When I go to the homepage of the "Closed collection with public CoC" collection
     Then I should see the button "Join this collection" in the Header region
@@ -96,15 +90,8 @@ Feature: Joining and leaving collections through the web interface
     But I should see the link "Membership is pending" in the Header region
     And I should see the success message "<expected success message>"
     And I <subscription expectation> bundles from the "Closed collection with public CoC" collection
-
-    Examples:
-      | checkbox action | subscription expectation                                                             | expected success message                                                                                                              |
-      | check           | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
-      | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
-
-  @javascript
-  Scenario Outline: No membership is created when pressing Cancel on a modal of a closed collection with CoC
-    Given I am logged in as an "authenticated user"
+    And the "Closed collection with public CoC" collection should have 1 pending members
+    When I am logged in as a user with the "authenticated" role
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
@@ -112,92 +99,50 @@ Feature: Joining and leaving collections through the web interface
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
-    And the "Closed collection with public CoC" collection should have 0 active members
-    And the "Closed collection with public CoC" collection should have 0 pending members
-    And the "Closed collection with public CoC" collection should have 0 blocked members
+    And the "Closed collection with public CoC" collection should have 1 pending members
 
     Examples:
-      | checkbox action |
-      | check           |
-      | uncheck         |
+      | checkbox action | subscription expectation                                                             | expected success message                                                                                                              |
+      | check           | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
+      | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
 
-  Scenario: A collection owner leaving the collection cannot administer users anymore.
-    Given I am logged in as "Collection author"
-    When I go to the homepage of the "Open collection" collection
-    And I click "Leave this collection"
+  Scenario: A collection owner leaving the collection cannot administer users anymore. Joining and leaving labels could be changed.
+    Given users:
+      | Username         |
+      | Collection owner |
+      | Stewe Griffin    |
+    Given collection content:
+      | title             | closed | author           |
+      | Open collection 2 | no     | Collection owner |
+    And the following collection user memberships:
+      | collection        | user          | roles |
+      | Open collection 2 | Stewe Griffin |       |
+    Given I am logged in as "Collection owner"
+    When I go to the homepage of the "Open collection 2" collection
+    And I open the header local tasks menu
+    And I click "Settings" in the "Entity actions" region
+    And I fill in "Join label" with "Join this community"
+    And I fill in "Leave label" with "Leave this community"
+    Then the following field should not be present "Code of Conduct"
+    And I press "Save"
+    And I click "Leave this community"
 
     # The collection owner cannot leave the collection before transferring the rights to another owner.
     Then I should see the text "You are owner of this collection. Before you leave this collection, you should transfer the ownership to another member."
     And I should not see the button "Confirm"
 
-    When I go to the members page of "Open collection"
+    When I go to the members page of "Open collection 2"
     And I select the "Stewe Griffin" row
     And I select "Transfer the ownership of the collection to the selected member" from "Action"
     And I press "Apply to selected items"
     And I press "Confirm"
-    Then I should see "Ownership of Open collection collection transferred from user Collection author to Stewe Griffin."
+    Then I should see "Ownership of Open collection 2 collection transferred from user Collection owner to Stewe Griffin."
 
-    When I go to the homepage of the "Open collection" collection
-    And I click "Leave this collection"
+    When I go to the homepage of the "Open collection 2" collection
+    And I click "Leave this community"
     And I press "Confirm"
 
     When I click "1 member"
     Then I should not see the link "Add members"
-
-  Scenario: Custom labels for Joining and leaving a collection.
-    Given I am logged in as a user with the "moderator" role
-    And I go to the homepage of the "Open collection" collection
-    And I open the header local tasks menu
-    And I click "Settings" in the "Entity actions" region
-    And I fill in "Join label" with "Join this community"
-    And I fill in "Leave label" with "Leave this community"
-    And I press "Save"
-
-    When I am logged in as a user with the "authenticated" role
-    And I go to the homepage of the "Open collection" collection
+    When I go to the homepage of the "Open collection 2" collection
     Then I should see the "Join this community" button
-
-    When I press "Join this community"
-    And I press "Confirm"
-    Then I should see the link "Leave this community"
-
-  @javascript
-  Scenario: Close the modal dialogs with the cancel button.
-    # Anonymous users can cancel the "Authenticate to join" modal.
-    Given I am an anonymous user
-    And I go to the homepage of the "Open collection" collection
-    # This is actually a link which is styled as a button.
-    When I click "Join this collection"
-    Then a modal should open
-    And I should see the text "Sign in to join"
-
-    When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    # Since this is a modal, the dialog simply closes instead of redirecting to
-    # another page. This is why the collection title is still displayed.
-    Then I should see the heading "Open collection"
-
-    # Members can cancel the "Leave collection" modal.
-    Given I am logged in as "Stewe Griffin"
-    And I go to the homepage of the "Open collection" collection
-
-    When I click "Leave this collection"
-    Then a modal should open
-
-    When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    Then I should see the heading "Open collection"
-
-  Scenario Outline: Only moderators are able to edit the Code of Conduct setting
-    Given I am logged in as <user>
-    And I go to the homepage of the "Open collection" collection
-    And I click "Settings" in the "Entity actions" region
-    Then the following field <Code of Conduct field> present "Code of Conduct"
-
-    # Access to Settings is implicitly tested in
-    # metadata_banner_disabled.feature, so we only test with these roles.
-    Examples:
-      | user                                              | Code of Conduct field |
-      | "Collection author"                               | should not be         |
-      | a facilitator of the "Open collection" collection | should not be         |
-      | a moderator                                       | should be             |

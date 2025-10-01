@@ -115,7 +115,8 @@ class CustomCatalogueDeriver extends DeriverBase implements ContainerDeriverInte
       'label' => $this->t($data['label']),
       'parser' => 'publiccode_yml',
       'type' => isset($data['type']) ? CatalogueType::from($data['type']) : CatalogueType::Local,
-      'description' => $data['description'] ?? NULL,
+      // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
+      'description' => isset($data['description']) ? $this->t($data['description']) : NULL,
       'weblinks' => [],
       'country' => NULL,
       'json_file' => $json_file,
