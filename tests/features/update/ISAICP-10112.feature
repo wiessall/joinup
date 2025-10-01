@@ -23,7 +23,6 @@ Feature: Test documentation migration.
       | 731269  | see     | https://diia-engine.github.io/diia-engine-documentation/en/platform/1.9.8/index… |
       # releases
       | 731316  | see     | https://wiki.sorm.as/                                                            |
-      | 731408  | see     | ldt-toolbox_eu_ldt_user-s_manual_identity_manager.pdf                            |
       | 719985  | see     | IDPSIO_v2.1.0_Release_notes.docx                                                 |
       | 719987  | see     | https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/releases… |
       | 719999  | see     | https://grass.osgeo.org/grass-stable/manuals/                                    |
