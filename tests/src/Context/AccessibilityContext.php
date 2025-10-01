@@ -208,7 +208,7 @@ class AccessibilityContext extends RawDrupalContext {
     if (!empty($this->excludeRules)) {
       $options['rules'] = [];
       foreach ($this->excludeRules as $rule) {
-        $options['rules'][$rule] = ['enabled' => false];
+        $options['rules'][$rule] = ['enabled' => FALSE];
       }
     }
 
