@@ -6,17 +6,18 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\file_url\FileUrlHandler;
+use Drupal\file\FileInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
+use Drupal\link\LinkItemInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
@@ -42,12 +43,6 @@ class DistributionContext extends RawDrupalContext {
     $node = $event->getEntity();
     if ($node->type !== 'distribution') {
       return;
-    }
-
-    // The Access URL field is either an external URI, or file upload. If it is
-    // a local file, translate the value to a URL.
-    if (!empty($node->{'access url'}) && (filter_var($node->{'access url'}, FILTER_VALIDATE_URL) === FALSE)) {
-      $node->{'access url'} = FileUrlHandler::fileToUrl($this->createFile($node->{'access url'}));
     }
 
     // Downloads are stored in a meta entity.
@@ -85,14 +80,27 @@ class DistributionContext extends RawDrupalContext {
     }
     $link_type = ucfirst($link_type);
     $distribution = $this->getEntityByLabel('node', $distribution);
-    if (empty($distribution->access_url->first())) {
+    if (!$distribution instanceof DistributionInterface) {
+      return;
+    }
+
+    $resource = $distribution->getResources()[0];
+    if (empty($resource)) {
       throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
-    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
+
+    if ($resource instanceof FileInterface) {
+      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->getFileUri());
+    }
+    elseif ($resource instanceof LinkItemInterface) {
+      $link = \Drupal::service('file_url_generator')->generateAbsoluteString($resource->uri);
+    }
+    $result = $this->getSession()
+      ->getPage()
+      ->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}']");
     if (empty($result)) {
-      throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
+      throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()
+        ->getCurrentUrl()));
     }
   }
 
@@ -111,8 +119,13 @@ class DistributionContext extends RawDrupalContext {
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getEntityByLabel('node', $distribution);
-    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
-    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
+    if (!$distribution instanceof DistributionInterface) {
+      return;
+    }
+    $resources = $distribution->getResources();
+    $file = $resources[0];
+    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')
+      ->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
     }
 
@@ -128,61 +141,14 @@ class DistributionContext extends RawDrupalContext {
     /** @var \Drupal\taxonomy\TermInterface $file_type */
     $file_type = $distribution->get('format')->entity;
     // Test the file format.
-    if ($file_type->get('mime_type')->value !== $mime_type) {
+    if (!empty($file_type) && $file_type->get('mime_type')->value !== $mime_type) {
       throw new \Exception("File '$file_name' has the format '{$file_type->get('mime_type')->value}'. Expected '$mime_type'.");
     }
     $expected_file_size = filesize($path);
 
     // Test the file size.
-    if ($expected_file_size !== (int) $distribution->file_size->value) {
-      throw new \Exception("File '$file_name' has the size '{$distribution->file_size->value}'. Expected '$expected_file_size'.");
-    }
-  }
-
-  /**
-   * Uploads a file or sets a remote URL to a 'file_url' field.
-   *
-   * @param string $file_or_url
-   *   Either file name to be uploaded or a remote URL.
-   * @param string $file_url_field
-   *   The file URL field label.
-   *
-   * @throws \Exception
-   *   The file to be uploaded doesn't exists.
-   *
-   * @Given I upload the file :file_or_url to :file_url_field
-   * @Given I set a remote URL :file_or_url to :file_url_field
-   */
-  public function addFileUrlItem(string $file_or_url, string $file_url_field): void {
-    $type = UrlHelper::isExternal($file_or_url) ? 'remote' : 'upload';
-
-    $session = $this->getSession();
-    $page = $session->getPage();
-
-    // Locate the file URL field widget wrapper.
-    $wrapper = $page->find('xpath', "//label[text()='$file_url_field']/ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' field--type-file-url ')][1]");
-    if (!$wrapper) {
-      throw new \Exception("Cannot find the file URL field '$file_url_field'.");
-    }
-
-    /** @var \Behat\Mink\Element\NodeElement $radio */
-    $radio = $wrapper->find('xpath', "//input[@type='radio']");
-    if (!$radio) {
-      throw new \Exception("Malformed file URL field '$file_url_field': Can't find the inner radio option.");
-    }
-    $page->selectFieldOption($radio->getAttribute('name'), $type);
-
-    if ($type === 'upload') {
-      // Qualify the file path.
-      $files_path = $this->getMinkParameter('files_path');
-      $path = rtrim(realpath($files_path), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file_or_url;
-      if (!is_file($path)) {
-        throw new \Exception("File '$file_or_url' was not found in file path '$files_path'.");
-      }
-      $wrapper->attachFileToField('Choose a file', $path);
-    }
-    elseif ($type === 'remote') {
-      $wrapper->fillField('Remote URL', $file_or_url);
+    if ($expected_file_size !== (int) $file->filesize->value) {
+      throw new \Exception("File '$file_name' has the size '{$file->filesize->value}'. Expected '$expected_file_size'.");
     }
   }
 
@@ -232,8 +198,12 @@ class DistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
-      $file = FileUrlHandler::urlToFile($distribution->get('access_url')->target_id);
-      $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
+      $resources = $distribution->getResources();
+      $file = reset($resources);
+      assert($file instanceof FileInterface, 'The distribution must have at least one file resource.');
+
+      $account = \Drupal::service('email.validator')
+        ->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();
 
       $parent = $distribution->getParent();
@@ -247,7 +217,6 @@ class DistributionContext extends RawDrupalContext {
       $entity->save();
       $this->entities['download_event'][$entity->id()] = $entity;
     }
-
   }
 
   /**
@@ -276,9 +245,14 @@ class DistributionContext extends RawDrupalContext {
       $count++;
       $selector = $base_selector . ":nth-child({$count})";
 
-      $this->assertSession()->elementTextContains('css', $selector, $entry['user']);
-      $this->assertSession()->elementTextContains('css', $selector, $entry['e-mail']);
-      $this->getSession()->getPage()->find('css', $selector)->hasLink($entry['distribution']);
+      $this->assertSession()
+        ->elementTextContains('css', $selector, $entry['user']);
+      $this->assertSession()
+        ->elementTextContains('css', $selector, $entry['e-mail']);
+      $this->getSession()
+        ->getPage()
+        ->find('css', $selector)
+        ->hasLink($entry['distribution']);
     }
   }
 

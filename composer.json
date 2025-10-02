@@ -119,7 +119,7 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/symfony_mailer_lite": "^1.0",
+        "drupal/symfony_mailer_lite": "^2",
         "drupal/tagify": "^1.2",
         "drupal/theme_rule": "^1.2",
         "drupal/tmgmt_ec_etranslation": "^1.1",
@@ -328,7 +328,7 @@
         },
         "patches": {
             "drupal/babel": {
-                "Translate terms @see https://www.drupal.org/i/3546969": "resources/patch/php/drupal/babel/3546969.mr59-note590145.diff"
+                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
@@ -407,11 +407,6 @@
             },
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
-            },
-            "drupal/file_url": {
-                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
-                "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",

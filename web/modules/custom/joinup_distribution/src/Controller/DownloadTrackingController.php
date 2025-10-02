@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
-use Drupal\file_url\FileUrlHandler;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Form\AnonymousDownloadForm;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +24,6 @@ class DownloadTrackingController extends ControllerBase {
   public function __construct(
     #[Autowire(service: 'entity_type.manager')]
     protected $entityTypeManager,
-    #[Autowire(service: 'file_url.handler')]
-    protected readonly FileUrlHandler $fileUrlHandler,
     #[Autowire(service: 'file.usage')]
     protected readonly FileUsageInterface $fileUsage,
   ) {}
@@ -72,14 +70,15 @@ class DownloadTrackingController extends ControllerBase {
 
     // Normally, only one distribution is allowed to use a file and only
     // distributions call this code.
-    if (empty($usages['file']['node'])) {
+    if (empty($usages['file']['paragraph'])) {
       throw new \RuntimeException('No distributions were found using the file with ID ' . $file->id());
     }
-    if (count($usages['file']['node']) > 1) {
+    if (count($usages['file']['paragraph']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $file->id());
     }
-    $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
 
+    $paragraph_id = key($usages['file']['paragraph']);
+    $distribution = $this->getDistributionByParagraphId($paragraph_id);
     $parent = $distribution->getParent();
 
     $event = $this->entityTypeManager->getStorage('download_event')->create([
@@ -108,21 +107,40 @@ class DownloadTrackingController extends ControllerBase {
    *   Allowed when the file exists, neutral otherwise.
    */
   public function isDistributionFile(FileInterface $file, AccountInterface $account): AccessResultInterface {
-    $query = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(FALSE);
-    $file_url_handler = $this->fileUrlHandler;
+    $paragraph = $this->entityTypeManager
+      ->getStorage('paragraph')
+      ->loadByProperties([
+        'type' => 'resource_file',
+        'resource_file' => [
+          'target_id' => $file->id(),
+        ],
+      ]);
+    $paragraph_id = array_key_first($paragraph);
+    $distribution = $this->getDistributionByParagraphId($paragraph_id);
 
-    // Verify that the file exists and it's attached to a solution.
-    $query->condition($this->entityTypeManager->getStorage('node')->getEntityType()->getKey('bundle'), 'distribution')
-      ->condition('access_url', $file_url_handler::fileToUrl($file));
-    $results = $query->execute();
-
-    if (empty($results)) {
+    if (empty($distribution)) {
       return AccessResult::forbidden();
     }
 
-    $entity = $this->entityTypeManager->getStorage('node')->load(array_pop($results));
+    return $distribution->access('view', $account, TRUE);
+  }
 
-    return $entity->access('view', $account, TRUE);
+  /**
+   * Gets distribution by id of paragraph from resources field.
+   *
+   * @param int $paragraph_id
+   *   Id of paragraph from resources field.
+   */
+  protected function getDistributionByParagraphId(int $paragraph_id): DistributionInterface {
+    $distribution = $this->entityTypeManager
+      ->getStorage('node')
+      ->loadByProperties([
+        'type' => 'distribution',
+        'resources' => [
+          'target_id' => $paragraph_id,
+        ],
+      ]);
+    return reset($distribution);
   }
 
 }

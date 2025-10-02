@@ -3,10 +3,10 @@ field.formatter.settings.tracked_hosted_file_download:
   label: 'Tracked hosted file download formatter settings'
   mapping:
     hosted_files_title:
-      type: string
+      type: label
       label: 'The link title for hosted files'
     remote_files_title:
-      type: string
+      type: label
       label: 'The link title for remote files'
     show_remote_files:
       type: boolean

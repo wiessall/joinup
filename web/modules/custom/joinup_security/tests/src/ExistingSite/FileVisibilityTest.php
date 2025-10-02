@@ -93,7 +93,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
   /**
    * Tests main content.
    *
-   * @todo Extend to all other nod types.
+   * @todo Extend to all other node types.
    */
   public function testMainContent(): void {
     $file = $this->createEmbedFile();
@@ -145,7 +145,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * Tests file protection for community content.
    */
   public function testCommunityContent(): void {
-    $this->doTestCommunityContent('document', 'field_file');
+    $this->doTestCommunityContent('document', 'resources');
     $this->doTestCommunityContent('event', 'field_attachment');
     $this->doTestCommunityContent('news', 'field_attachment');
     $this->doTestCommunityContent('discussion', 'field_attachment');
@@ -156,16 +156,38 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
    * Tests file uploads on community content.
    */
   protected function doTestCommunityContent(string $type, string $fieldName): void {
-    $file = $this->createFieldFile('node', $type, $fieldName);
+    if ($type == 'document') {
+      $file = $this->createFieldFile('paragraph', 'resource_file', 'resource_file');
+      $paragraph = $this->createParagraph([
+        'type' => 'resource_file',
+        'resource_file' => [
+            [
+              'target_id' => $file->id(),
+            ],
+        ],
+      ]);
+      $nodeValues = [
+        'type' => $type,
+        'og_audience' => \Drupal::service('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
+        'title' => $this->randomString(),
+        'field_state' => 'draft',
+        'resources' => ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()],
+        'uid' => $this->account['author']->id(),
+      ];
+    }
+    else {
+      $file = $this->createFieldFile('node', $type, $fieldName);
+      $nodeValues = [
+        'type' => $type,
+        'og_audience' => \Drupal::service('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
+        'title' => $this->randomString(),
+        'field_state' => 'draft',
+        $fieldName => ['target_id' => $file->id(), 'description' => $this->randomString()],
+        'uid' => $this->account['author']->id(),
+      ];
+    }
 
-    $node = $this->createNode([
-      'type' => $type,
-      'og_audience' => \Drupal::service('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI),
-      'title' => $this->randomString(),
-      'field_state' => 'draft',
-      $fieldName => ['target_id' => $file->id(), 'description' => $this->randomString()],
-      'uid' => $this->account['author']->id(),
-    ]);
+    $node = $this->createNode($nodeValues);
 
     // The file is accessible by the author and privileged users.
     $this->assertFileAccessible($file, $this->account['author']);
@@ -285,6 +307,7 @@ class FileVisibilityTest extends JoinupExistingSiteTestBase {
     // In tests, the static cache becomes stale between some operation, because
     // we're running them in the same long request.
     \Drupal::entityTypeManager()->getAccessControlHandler('file')->resetCache();
+    \Drupal::entityTypeManager()->getAccessControlHandler('paragraph')->resetCache();
 
     // Make sure we're checking the latest file version.
     $file = File::load($file->id());
