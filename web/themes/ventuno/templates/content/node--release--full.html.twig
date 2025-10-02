@@ -5,5 +5,9 @@
  */
 #}
 {{ content.description }}
-{{ content.documentation }}
+{% if content.group_attachment %}
+  <div class="pb-5 border-bottom my-5">
+    {{ content.group_attachment }}
+  </div>
+{% endif %}
 {{ content.distributions }}

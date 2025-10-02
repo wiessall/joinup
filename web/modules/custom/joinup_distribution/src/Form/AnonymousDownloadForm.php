@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\Form;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -14,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -32,6 +34,8 @@ class AnonymousDownloadForm extends FormBase {
   protected FileInterface $file;
 
   public function __construct(
+    #[Autowire(service: 'database')]
+    protected readonly Connection $database,
     #[Autowire(service: 'entity_type.manager')]
     protected $entityTypeManager,
     #[Autowire(service: 'file.usage')]
@@ -104,6 +108,26 @@ class AnonymousDownloadForm extends FormBase {
     }
 
     $usages = $this->fileUsage->listUsage($this->file);
+    if (!empty($usages['file']['paragraph'])) {
+      if (count($usages['file']['paragraph']) > 1) {
+        throw new \RuntimeException('More than one paragraphs were found for the file with ID ' . $this->file->id());
+      }
+
+      // Get the node that uses the paragraph. Distributions use the
+      // 'resources' field.
+      $paragraphId = key($usages['file']['paragraph']);
+      $query = $this->database->select('node__resources', 'n');
+      $query->fields('n', ['entity_id']);
+      $query->condition('n.resources_target_id', $paragraphId);
+      $result = $query->execute()->fetchField();
+
+      if (!$result) {
+        throw new \RuntimeException('No node was found using the paragraph with ID ' . $paragraphId);
+      }
+
+      // Add the file usage for the node and mock the usage count to 1.
+      $usages['file']['node'][$result] = 1;
+    }
 
     // Normally, only one distribution is allowed to use a file and only
     // distributions call this code.
@@ -114,6 +138,12 @@ class AnonymousDownloadForm extends FormBase {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
     $distribution = $this->entityTypeManager->getStorage('node')->load(key($usages['file']['node']));
+    if (empty($distribution)) {
+      throw new \RuntimeException('No distribution was found with the ID ' . key($usages['file']['node']));
+    }
+    if (!$distribution instanceof DistributionInterface) {
+      throw new \RuntimeException('The entity with ID ' . $distribution->id() . ' is not a distribution.');
+    }
 
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();

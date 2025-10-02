@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae21f005b33c4d22e7d4813a8df857cd",
+    "content-hash": "274ca1d074d9fdeea2191eb9aaf6e848",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2129,17 +2129,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha5",
+            "version": "1.0.0-alpha6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha5"
+                "reference": "1.0.0-alpha6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha5.zip",
-                "reference": "1.0.0-alpha5",
-                "shasum": "d89161b3bd73e465503ee8ee1a75fbe67e93047a"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha6.zip",
+                "reference": "1.0.0-alpha6",
+                "shasum": "7ec1e402122698c9d14e04f4e979b78c3896a217"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2152,8 +2152,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha5",
-                    "datestamp": "1757515912",
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1759248213",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9776,30 +9776,30 @@
         },
         {
             "name": "drupal/symfony_mailer_lite",
-            "version": "1.0.7",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/symfony_mailer_lite.git",
-                "reference": "1.0.7"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/symfony_mailer_lite-1.0.7.zip",
-                "reference": "1.0.7",
-                "shasum": "8c0e9846353568f93601eb67e35f5e74458f9f48"
+                "url": "https://ftp.drupal.org/files/projects/symfony_mailer_lite-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "50f1b02fcad01c902818a0df02cba59cc6b8f47a"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
+                "drupal/core": "^10.1 || ^11",
                 "drupal/mailsystem": "^4.4",
                 "html2text/html2text": "^4.0.1",
-                "symfony/mailer": "^5.3 || ^6.0",
+                "symfony/mailer": "^6.4 || ^7.1",
                 "tijsverkoyen/css-to-inline-styles": "^2.2"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.7",
-                    "datestamp": "1720800748",
+                    "version": "2.0.3",
+                    "datestamp": "1750948870",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

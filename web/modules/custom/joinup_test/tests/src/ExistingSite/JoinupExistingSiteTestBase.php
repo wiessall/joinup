@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
+use Drupal\Tests\joinup_test\Traits\ParagraphTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup_user\JoinupUserDeletedInterface;
 use Drupal\taxonomy\VocabularyInterface;
@@ -19,6 +20,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
   use NodeTrait;
+  use ParagraphTrait;
 
   /**
    * A list of users to clean from the cas mock server.

@@ -140,6 +140,7 @@ Feature: Add community content
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Published community document body |
       | field_body:format | content_editor                    |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     Then I should see the heading "Published community document"
     And the publication date of the "Published community document" document should be equal to the created date
@@ -157,10 +158,6 @@ Feature: Add community content
       | field_body:format | content_editor            |
     And I select "Supplier exchange" options from "Topic"
     And I press "Add another item" at the "Virtual location" field
-    And I fill the start date of the Date widget with "2018-08-29"
-    And I fill the start time of the Date widget with "23:59:59"
-    And I fill the end date of the Date widget with "2018-08-30"
-    And I fill the end time of the Date widget with "12:57:00"
     And I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
     And I press "Publish"
     Then I should see the heading "Published community event"

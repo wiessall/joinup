@@ -60,6 +60,7 @@ module.exports = {
         "ajax-throbber.js",
         "alert.js",
         "checkbox.js",
+        "duplicate-id-fixer.js",
         "navbar-hover-dropdown.js",
         "mmenu-nav.js",
         "explore-block.js",
