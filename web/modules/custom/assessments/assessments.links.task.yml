@@ -1,0 +1,37 @@
+entity.assessments_agent.view:
+  title: 'View'
+  route_name: entity.assessments_agent.canonical
+  base_route: entity.assessments_agent.canonical
+entity.assessments_agent.edit_form:
+  title: 'Edit'
+  route_name: entity.assessments_agent.edit_form
+  base_route: entity.assessments_agent.canonical
+entity.assessments_agent.delete_form:
+  title: 'Delete'
+  route_name: entity.assessments_agent.delete_form
+  base_route: entity.assessments_agent.canonical
+  weight: 10
+entity.assessments_agent.collection:
+  title: 'Agents'
+  route_name: entity.assessments_agent.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.assessments_participation.view:
+  title: 'View'
+  route_name: entity.assessments_participation.canonical
+  base_route: entity.assessments_participation.canonical
+entity.assessments_participation.edit_form:
+  title: 'Edit'
+  route_name: entity.assessments_participation.edit_form
+  base_route: entity.assessments_participation.canonical
+entity.assessments_participation.delete_form:
+  title: 'Delete'
+  route_name: entity.assessments_participation.delete_form
+  base_route: entity.assessments_participation.canonical
+  weight: 10
+entity.assessments_participation.collection:
+  title: 'Participations'
+  route_name: entity.assessments_participation.collection
+  base_route: system.admin_content
+  weight: 10

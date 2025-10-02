@@ -1,0 +1,7 @@
+administer assessments_agent:
+  title: 'Administer agents'
+  restrict access: true
+
+administer assessments_participation:
+  title: 'Administer participations'
+  restrict access: true
