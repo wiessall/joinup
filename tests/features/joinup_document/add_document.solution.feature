@@ -44,7 +44,7 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Winter of Beginning" solution
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Documentation"
     And the following fields should not be present "Shared on, Motivation"
 
     When I fill in the following:
@@ -52,7 +52,6 @@ Feature: "Add document" visibility options.
       | Short title | Amazing document            |
       | Abstract    | Amazing document            |
     And I select "Document" from "Type"
-    Then I upload the file "test1.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
     Then I should see the following inline form error messages:
       | error messages                 |
@@ -62,6 +61,7 @@ Feature: "Add document" visibility options.
     When I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
+    And I attach the file "test1.zip" to "files[resources_0_subform_resource_file_0]"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "The Sparks of the Butterfly"

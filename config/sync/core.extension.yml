@@ -73,7 +73,6 @@ module:
   field_permissions: 0
   field_ui: 0
   file: 0
-  file_url: 0
   file_visibility: 0
   file_visibility_track_usage: 0
   filter: 0
