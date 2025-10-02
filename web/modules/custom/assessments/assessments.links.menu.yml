@@ -9,3 +9,9 @@ entity.assessments_participation.collection:
   description: 'List of participations.'
   route_name: entity.assessments_participation.collection
   parent: system.admin_content
+
+entity.assessments_asset.collection:
+  title: 'Assets'
+  description: 'List of assets.'
+  route_name: entity.assessments_asset.collection
+  parent: system.admin_content

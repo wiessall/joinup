@@ -5,3 +5,7 @@ administer assessments_agent:
 administer assessments_participation:
   title: 'Administer participations'
   restrict access: true
+
+administer assessments_asset:
+  title: 'Administer assets'
+  restrict access: true

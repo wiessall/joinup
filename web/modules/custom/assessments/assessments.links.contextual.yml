@@ -19,3 +19,14 @@ entity.assessments_participation.delete_form:
   group: assessments_participation
   title: 'Delete'
   weight: 10
+
+entity.assessments_asset.edit_form:
+  route_name: entity.assessments_asset.edit_form
+  group: assessments_asset
+  title: 'Edit'
+
+entity.assessments_asset.delete_form:
+  route_name: entity.assessments_asset.delete_form
+  group: assessments_asset
+  title: 'Delete'
+  weight: 10
