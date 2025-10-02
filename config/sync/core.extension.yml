@@ -5,6 +5,7 @@ module:
   adms_validator: 0
   allowed_formats: 0
   antibot: 0
+  assessments: 0
   autologout: 0
   babel: 0
   babel_content_entity: 0
