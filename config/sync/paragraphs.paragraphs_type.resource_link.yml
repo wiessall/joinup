@@ -1,0 +1,10 @@
+uuid: 4b9461ae-eb8e-4d71-810a-c13dc8c69c08
+langcode: en
+status: true
+dependencies: {  }
+id: resource_link
+label: 'Resource link'
+icon_uuid: null
+icon_default: null
+description: 'For external URLs'
+behavior_plugins: {  }
