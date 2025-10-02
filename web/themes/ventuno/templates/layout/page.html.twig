@@ -60,7 +60,7 @@
 
   {% block page_header %}
     {% if page.header %}
-      <div class="region-header">
+      <div class="region-header" role="complementary" aria-label="{{ 'Header region'|t }}">
         <div class="region-header__inner">
           {{ page.header }}
         </div>
