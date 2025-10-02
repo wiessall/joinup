@@ -1,0 +1,11 @@
+assessments_agent.add_form:
+  title: 'Add agent'
+  route_name: entity.assessments_agent.add_form
+  appears_on:
+    - entity.assessments_agent.collection
+
+assessments_participation.add_form:
+  title: 'Add participation'
+  route_name: entity.assessments_participation.add_form
+  appears_on:
+    - entity.assessments_participation.collection

@@ -1,0 +1,11 @@
+entity.assessments_agent.collection:
+  title: 'Agents'
+  description: 'List of agents.'
+  route_name: entity.assessments_agent.collection
+  parent: system.admin_content
+
+entity.assessments_participation.collection:
+  title: 'Participations'
+  description: 'List of participations.'
+  route_name: entity.assessments_participation.collection
+  parent: system.admin_content

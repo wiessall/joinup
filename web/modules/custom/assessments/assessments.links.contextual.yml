@@ -1,0 +1,21 @@
+entity.assessments_agent.edit_form:
+  route_name: entity.assessments_agent.edit_form
+  group: assessments_agent
+  title: 'Edit'
+
+entity.assessments_agent.delete_form:
+  route_name: entity.assessments_agent.delete_form
+  group: assessments_agent
+  title: 'Delete'
+  weight: 10
+
+entity.assessments_participation.edit_form:
+  route_name: entity.assessments_participation.edit_form
+  group: assessments_participation
+  title: 'Edit'
+
+entity.assessments_participation.delete_form:
+  route_name: entity.assessments_participation.delete_form
+  group: assessments_participation
+  title: 'Delete'
+  weight: 10
