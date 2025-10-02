@@ -24,7 +24,6 @@
       # Exclude specific rules globally
       exclude:
         - heading-order
-        - region
       excludeElements:
         # Third-party code injected in page with Javascript.
         - '.wt-globan--container'
