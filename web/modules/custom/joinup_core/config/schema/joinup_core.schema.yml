@@ -24,17 +24,6 @@ field.formatter.third_party.joinup:
     template_suggestion:
       type: string
 
-field.formatter.settings.image_url_formatter:
-  type: mapping
-  label: 'Image field display format settings'
-  mapping:
-    image_link:
-      type: string
-      label: 'Link image to'
-    image_style:
-      type: string
-      label: 'Image style'
-
 field.formatter.settings.daterange_condensed:
   type: field.formatter.settings.datetime_base
   label: 'Condensed date range formatter settings'
@@ -116,7 +105,7 @@ field.formatter.settings.joinup_core_link_custom_title:
   type: field.formatter.settings.link
   mapping:
     link_title:
-      type: string
+      type: label
       label: 'Title to use to create the link'
 
 field.formatter.settings.joinup_core_more_in_modal:

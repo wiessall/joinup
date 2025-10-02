@@ -51,7 +51,7 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Hunter in the Swords" collection
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Documentation"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -61,7 +61,6 @@ Feature: "Add document" visibility options.
       | Short title | Amazing document    |
       | Abstract    | Amazing document    |
     And I select "Document" from "Type"
-    Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
     Then I should see the following inline form error messages:
       | error messages                 |
@@ -71,6 +70,7 @@ Feature: "Add document" visibility options.
     When I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | This is going to be an amazing document. |
       | field_body:format | content_editor                           |
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I select "EU and European Policies" options from "Topic"
     And I press "Save as draft"
     Then I should see the heading "An amazing document"
@@ -80,6 +80,13 @@ Feature: "Add document" visibility options.
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
+    When I click "Edit"
+    And I press "Edit"
+    And I should see "Description"
+    And I fill in "Description" with "My document"
+    And I press "Save as draft"
+    And I should not see "test.zip"
+    And I should see "My document"
 
   # Regression test to ensure that no critical errors are thrown when a new
   # revision is created for a document that has a remote file attached.
@@ -92,13 +99,20 @@ Feature: "Add document" visibility options.
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
-      | title       | document type | short title | file type | file                   | abstract | field_paragraphs_body | licence               | collection    |
-      | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
+      | title       | document type | short title | resources              | abstract | field_paragraphs_body | licence               | collection    |
+      | Laser types | document      | L-Types     | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
     And I go to the edit form of the "Laser types" document
     And I press "Update"
     Then I should see the success message "Document Laser types has been updated"
+    And I go to the edit form of the "Laser types" document
+    And I press "Edit"
+    And I should see "Link text"
+    And I fill in "Link text" with "My document"
+    And I press "Update"
+    And I should not see "http://www.example.com "
+    And I should see "My document"
 
   Scenario: Increase attachment file size limit in Documents.
     Given collection content:
@@ -113,6 +127,3 @@ Feature: "Add document" visibility options.
 
     When I am logged in as a facilitator of the "Red blaser" collection
     And I go to the edit form of the "Red blaser types" document
-    And the "Remote file URL" radio button should not be selected
-    And I should see the text "Unlimited number of files can be uploaded to this field."
-    And I should see the text "32 MB limit."
