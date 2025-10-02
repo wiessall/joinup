@@ -45,7 +45,7 @@
 {% block page_header %}
   {{ attach_library('ventuno/header-topic') }}
   {{ attach_library('ventuno/see-more') }}
-  <div class="container region-header">
+  <div class="container region-header" role="complementary" aria-label="{{ 'Header region'|t }}">
     <div class="header-topic">
       {{ title_prefix }}
       <h1 class="header-topic__title">
