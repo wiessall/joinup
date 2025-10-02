@@ -14,8 +14,9 @@ use Drupal\cached_computed_field\Event\RefreshExpiredFieldsEventInterface;
 use Drupal\cached_computed_field\EventSubscriber\RefreshExpiredFieldsSubscriberBase;
 use Drupal\cached_computed_field\ExpiredItemCollection;
 use Drupal\cached_computed_field\ExpiredItemInterface;
-use Drupal\file_url\Entity\RemoteFile;
+use Drupal\file\FileInterface;
 use Drupal\joinup_stats\Entity\StatisticInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\matomo_reporting_api\MatomoQueryFactoryInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Matomo\ReportingApi\QueryInterface;
@@ -178,16 +179,19 @@ class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberB
       throw new \InvalidArgumentException('Retrieving files from entities other than distributions has not been implemented yet.');
     }
 
-    /** @var \Drupal\file\FileInterface $file */
-    foreach ($distribution->access_url->referencedEntities() as $file) {
-      if ($file !== NULL) {
-        return ($file instanceof RemoteFile) ?
-          $file->getFileUri() :
-          $this->fileUrlGenerator->generate($file->getFileUri())->setAbsolute()->toString();
+    if (!empty($distribution->getResources())) {
+      foreach ($distribution->getResources() as $resource) {
+        if ($resource instanceof LinkItemInterface) {
+          $url = $resource->uri;
+        }
+        elseif ($resource instanceof FileInterface) {
+          $url = $this->fileUrlGenerator->generate($resource->getFileUri())
+            ->setAbsolute()
+            ->toString();
+        }
+        return $url;
       }
     }
-
-    // For distributions without attached files.
     return '';
   }
 

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\EventSubscriber;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\file\FileInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapperInterface;
 use EasyRdf\Resource;
@@ -48,14 +49,13 @@ final readonly class DistributionParentRdfSyncSubscriber implements EventSubscri
       // Export all `access_url` values that are external URLs because RDF sync
       // normalizer handles the `target_id` generically assuming that all entity
       // reference fields are handled the same.
-      if (!$entity->get('access_url')->isEmpty()) {
-        foreach ($entity->get('access_url')->referencedEntities() as $file) {
-          $file_url = $file->getFileUri();
-          if (UrlHelper::isExternal($file_url) && !UrlHelper::externalIsLocal($file_url, $GLOBALS['base_url'])) {
-            $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#accessURL'][] = (new Resource($file_url))->toRdfPhp();
+      if (!empty($entity->getResources())) {
+        foreach ($entity->getResources() as $resource) {
+          if ($resource instanceof LinkItemInterface) {
+            $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#accessURL'][] = (new Resource($resource->uri))->toRdfPhp();
           }
-          else {
-            $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#accessURL'][] = (new Resource($this->fileUrlGenerator->generateAbsoluteString($file_url)))->toRdfPhp();
+          elseif ($resource instanceof FileInterface) {
+            $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#accessURL'][] = (new Resource($this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri())))->toRdfPhp();
           }
         }
       }

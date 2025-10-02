@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.digest_message
-    - field.field.node.distribution.access_url
     - field.field.node.distribution.description
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
@@ -14,6 +13,7 @@ dependencies:
     - field.field.node.distribution.process_status
     - field.field.node.distribution.release
     - field.field.node.distribution.representation_technique
+    - field.field.node.distribution.resources
     - node.type.distribution
   module:
     - field_group
@@ -79,7 +79,6 @@ content:
     weight: 0
     region: content
 hidden:
-  access_url: true
   download_count: true
   field_licence: true
   field_state: true
@@ -94,5 +93,6 @@ hidden:
   release: true
   report: true
   representation_technique: true
+  resources: true
   search_api_excerpt: true
   uri: true

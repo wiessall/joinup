@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -14,8 +15,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
-use Drupal\file_url\Entity\RemoteFile;
-use Drupal\file_url\FileUrlHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: 'tracked_hosted_file_download',
   label: new TranslatableMarkup('Tracked hosted file download'),
   field_types: [
-    'file_url',
+    'file',
   ],
 )]
 class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements ContainerFactoryPluginInterface {
@@ -38,8 +37,8 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
     string $label,
     string $view_mode,
     array $third_party_settings,
-    protected readonly FileUrlHandler $fileUrlHandler,
     protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
@@ -56,8 +55,8 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('file_url.handler'),
-      $container->get('file_url_generator')
+      $container->get('file_url_generator'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -128,47 +127,30 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
     $elements = [];
 
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $file) {
-      /** @var \Drupal\file\FileInterface $file */
-      if ($file instanceof RemoteFile) {
-        // Render the remote files only when the formatter is configured to do
-        // so.
-        if ($this->getSetting('show_remote_files')) {
-          $elements[$delta] = [
-            '#type' => 'link',
-            '#title' => $this->getSetting('remote_files_title'),
-            '#attributes' => [
-              'data-joinup-tracking' => NULL,
-              'class' => ['btn btn-outline-primary'],
-            ],
-            '#url' => Url::fromUri($file->getFileUri()),
-          ];
-        }
-      }
-      else {
-        $elements[$delta] = [
-          '#type' => 'link',
-          '#title' => $this->getSetting('hosted_files_title'),
-          '#url' => Url::fromUri($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri())),
-          '#attributes' => [
-            'id' => Html::getUniqueId('tracked-file-download'),
-            'class' => ['track-download'],
-            'data-joinup-tracking' => Url::fromRoute('joinup_distribution.track_download', [
-              'file' => $file->id(),
-            ])->toString(),
-            // Force the download of the file in HTML5 compatible browsers.
-            'download' => $file->getFilename(),
-          ],
-        ];
+      $label = (!empty($items->description)) ? $items->description : $file->getFilename();
+      $elements[$delta] = [
+        '#type' => 'link',
+        '#title' => $this->getSetting('hosted_files_title') . ' ' . $label,
+        '#url' => Url::fromUri($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri())),
+        '#attributes' => [
+          'id' => Html::getUniqueId('tracked-file-download'),
+          'class' => ['track-download'],
+          'data-joinup-tracking' => Url::fromRoute('joinup_distribution.track_download', [
+            'file' => $file->id(),
+          ])->toString(),
+          // Force the download of the file in HTML5 compatible browsers.
+          'download' => $file->getFilename(),
+        ],
+      ];
 
-        // Pass field item attributes to the theme function.
-        $item = $file->_referringItem;
-        if (isset($item->_attributes)) {
-          $elements[$delta] += ['#attributes' => []];
-          $elements[$delta]['#attributes'] += $item->_attributes;
-          // Unset field item attributes since they have been included in the
-          // formatter output and should not be rendered in the field template.
-          unset($item->_attributes);
-        }
+      // Pass field item attributes to the theme function.
+      $item = $file->_referringItem;
+      if (isset($item->_attributes)) {
+        $elements[$delta] += ['#attributes' => []];
+        $elements[$delta]['#attributes'] += $item->_attributes;
+        // Unset field item attributes since they have been included in the
+        // formatter output and should not be rendered in the field template.
+        unset($item->_attributes);
       }
     }
 
@@ -190,6 +172,9 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
     // "multiple entity load" to load all the entities for the multiple
     // "entity reference item lists" being displayed. We thus cannot use
     // \Drupal\Core\Field\EntityReferenceFieldItemList::referencedEntities().
+    $entities = [];
+    $file_storage = $this->entityTypeManager->getStorage('file');
+
     foreach ($entities_items as $items) {
       foreach ($items as $item) {
         // To avoid trying to reload non-existent entities in
@@ -198,8 +183,11 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
         // at FALSE.
         $item->_loaded = FALSE;
         if ($this->needsEntityLoad($item)) {
-          $file = $this->fileUrlHandler::urlToFile($item->target_id);
-          $entities[$item->target_id] = $file;
+          // Load file entity directly since file_url module is being removed.
+          $file = $file_storage->load($item->target_id);
+          if ($file) {
+            $entities[$item->target_id] = $file;
+          }
         }
       }
     }

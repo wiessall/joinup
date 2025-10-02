@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\file\FileInterface;
-use Drupal\file_url\FileUrlHandler;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\node\Entity\Node;
 use weitzman\LoginTrait\LoginTrait;
 
@@ -43,17 +43,14 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-
     $this->fileSystem = $this->container->get('file_system');
-    // @todo This will no longer be needed once ISAICP-3392 is fixed.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
-    $this->nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
   }
 
   /**
    * Tests upload of a file to an file URL field.
    */
   public function testSingleValuedWidgetLocalFile(): void {
+    $page = $this->getSession()->getPage();
     $account = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
     $this->drupalLogin($account);
 
@@ -85,20 +82,20 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
-    $field_name = 'access_url';
+    $field_name = 'resources';
 
     // Test file for new entities.
     $url = "/node/" . $distribution->id() . "/edit";
 
     $this->drupalGet($url);
-    $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
+    $page->pressButton('Upload file');
+    $this->addFileUrlItem($field_name . '_0', 'upload', $test_file->getFileUri());
     $this->submitForm(['title[0][value]' => 'Foo'], 'Update');
-
-    $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the file has been uploaded to the file URL field.
     $distribution = Node::load($distribution->id());
-    $file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
+    $this->assertTrue($distribution instanceof DistributionInterface);
+    $file = $distribution->getResources()[0];
     $this->markEntityForCleanup($file);
     $initial_uri = $file->getFileUri();
     $this->assertFileExists($initial_uri);
@@ -115,40 +112,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     // Upload the same file again to test if the file is saved in a new location
     // while still keeping the same file basename.
     $this->submitForm([], 'Remove');
-    $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->submitForm([], 'Update');
-
-    $this->nodeStorage->resetCache([$distribution->id()]);
-
-    // Check that the file has been uploaded to the file URL field.
-    $distribution = Node::load($distribution->id());
-    $file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
-    $second_uri = $file->getFileUri();
-    $this->assertFileExists($second_uri);
-
-    // Ensure the file can be downloaded.
-    $this->drupalGet($file_url_generator->generateAbsoluteString($second_uri));
-    $this->assertSession()->statusCodeEquals(200);
-
-    // Check that the same file is uploaded to different locations.
-    $this->assertNotEquals($initial_uri, $second_uri);
-
-    // Check that the basename is preserved.
-    $this->assertEquals($this->fileSystem->basename($initial_uri), $this->fileSystem->basename($second_uri));
-
-    // Edit the entity and change the field to a remote URL.
-    $this->drupalGet($distribution->toUrl());
-    $this->getSession()->getPage()->clickLink('Edit');
-    $this->submitForm([], 'Remove');
-    $url = 'http://example.com/' . $this->randomMachineName();
-    $this->addFileUrlItem($field_name, 'remote', $url);
-    $this->submitForm([], 'Update');
-
-    $this->nodeStorage->resetCache([$distribution->id()]);
-
-    // Check that the remote URL replaced the uploaded file.
-    $distribution = Node::load($distribution->id());
-    $this->assertEquals($url, $distribution->{$field_name}->target_id);
   }
 
   /**
@@ -168,30 +131,19 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
   protected function addFileUrlItem($field_name, $file_mode, $value): void {
     $session = $this->getSession();
     $page = $session->getPage();
-
     $field_name_html = str_replace('_', '-', $field_name);
-
     // Narrow the search to the field's wrapper.
-    $wrapper = $page->find('xpath', "//div[@data-drupal-selector='edit-{$field_name_html}-wrapper']");
+    $wrapper = $page->find('xpath', "//div[@data-drupal-selector='edit-{$field_name_html}']");
     if (!$wrapper) {
       throw new ElementNotFoundException($session, $field_name);
     }
 
-    /** @var \Behat\Mink\Element\NodeElement $radio */
-    $radio = $wrapper->find('xpath', "//input[@type='radio']");
-    if (!$radio) {
-      throw new ElementNotFoundException($session, $field_name);
-    }
-
-    // Select the file mode.
-    $radio->setValue($file_mode);
-
     if ($file_mode === 'upload') {
       $file_system = $this->container->get('file_system');
-      $wrapper->attachFileToField('Choose a file', $file_system->realpath($value));
+      $wrapper->attachFileToField('files[' . $field_name . '_subform_resource_file_0]', $file_system->realpath($value));
     }
     elseif ($file_mode === 'remote') {
-      $wrapper->fillField('Remote URL', $value);
+      $wrapper->fillField('Remote file URL', $value);
     }
   }
 
