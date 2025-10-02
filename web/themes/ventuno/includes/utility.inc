@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractInterface;
@@ -189,32 +190,26 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
+      // Map process status to icons.
+      $status_icon_map = [
+        'Completed' => 'check-circle',
+        'Deprecated' => 'file-x',
+        'Under development' => 'clock-history',
+        'Withdrawn' => 'patch-exclamation',
+      ];
+
       $untranslated_status = 'No status';
       $status = t('No status');
-      if (!empty($variables['elements']['process_status'][0]['#entity'])) {
-        $untranslated_status = $variables['elements']['process_status'][0]['#entity']->getUntranslated()->getName();
-        $status = $variables['elements']['process_status'][0]['#entity']->getName();
+      if (Element::getVisibleChildren($variables['elements']['process_status'])) {
+        $entity = $variables['elements']['process_status'][0]['#entity'];
+        $untranslated_status = $entity->getUntranslated()->getName();
+        $status = $entity->getName();
       }
-      switch ($untranslated_status) {
-        case 'Completed':
-          $icon_id = 'check-circle';
-          break;
 
-        case 'Deprecated':
-          $icon_id = 'file-x';
-          break;
+      $icon_id = $status_icon_map[$untranslated_status] ?? 'question-lg';
 
-        case 'Under development':
-          $icon_id = 'clock-history';
-          break;
-
-        case 'Withdrawn':
-          $icon_id = 'patch-exclamation';
-          break;
-
-      }
       $variables['extra_data'][] = [
-        'icon' => $icon_id ?? 'question-lg',
+        'icon' => $icon_id,
         'label' => $status,
       ];
       break;
