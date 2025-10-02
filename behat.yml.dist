@@ -25,6 +25,8 @@
       exclude:
         - heading-order
       excludeElements:
+        # Drupal toolbal.
+        - '.toolbar'
         # Third-party code injected in page with Javascript.
         - '.wt-globan--container'
   - Drupal\joinup\Context\AssessmentContext
