@@ -9,3 +9,9 @@ assessments_participation.add_form:
   route_name: entity.assessments_participation.add_form
   appears_on:
     - entity.assessments_participation.collection
+
+assessments_asset.add_form:
+  title: 'Add asset'
+  route_name: entity.assessments_asset.add_form
+  appears_on:
+    - entity.assessments_asset.collection

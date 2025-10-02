@@ -35,3 +35,22 @@ entity.assessments_participation.collection:
   route_name: entity.assessments_participation.collection
   base_route: system.admin_content
   weight: 10
+
+entity.assessments_asset.view:
+  title: 'View'
+  route_name: entity.assessments_asset.canonical
+  base_route: entity.assessments_asset.canonical
+entity.assessments_asset.edit_form:
+  title: 'Edit'
+  route_name: entity.assessments_asset.edit_form
+  base_route: entity.assessments_asset.canonical
+entity.assessments_asset.delete_form:
+  title: 'Delete'
+  route_name: entity.assessments_asset.delete_form
+  base_route: entity.assessments_asset.canonical
+  weight: 10
+entity.assessments_asset.collection:
+  title: 'Assets'
+  route_name: entity.assessments_asset.collection
+  base_route: system.admin_content
+  weight: 10
