@@ -103,69 +103,30 @@ function joinup_core_deploy_200701(): string {
 /**
  * Disable "Show solutions related by EIRA terms" for pre-wizard solutions.
  */
-function joinup_core_deploy_200702(array &$sandbox): string {
+function joinup_core_deploy_200702(): string {
   // Get all solution nodes created before July 14, 2025.
   // This is when the Solution Wizard was implemented.
   $cutoff_date = strtotime('2025-07-14 00:00:00 UTC');
 
-  if (!isset($sandbox['progress'])) {
-    $nids = \Drupal::entityQuery('node')
-      ->accessCheck(FALSE)
-      ->condition('type', 'solution')
-      ->condition('created', $cutoff_date, '<')
-      ->execute();
+  $nids = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'solution')
+    ->condition('created', $cutoff_date, '<')
+    ->execute();
 
-    if (empty($nids)) {
-      $sandbox['#finished'] = 1;
-      return 'No solutions found created before July 14, 2025.';
-    }
-
-    $sandbox['nids'] = array_values($nids);
-    $sandbox['total'] = count($nids);
-    $sandbox['progress'] = 0;
-    $sandbox['updated_count'] = 0;
+  if (empty($nids)) {
+    return 'No solutions found created before July 14, 2025.';
   }
 
-  $batch_size = 50;
-  $meta_entity_repository = \Drupal::getContainer()->get('meta_entity.repository');
-  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-
-  $nids_to_process = array_slice($sandbox['nids'], $sandbox['progress'], $batch_size);
-
-  foreach ($nids_to_process as $nid) {
-    $solution = $node_storage->load($nid);
-    if (!$solution) {
-      $sandbox['progress']++;
-      continue;
-    }
-
-    $meta_entity = $meta_entity_repository->getMetaEntityForEntity($solution, 'solution_settings');
-
-    if ($meta_entity && $meta_entity->hasField('list_related_entities')) {
-      // Only update if the field is currently set to 1 (enabled).
-      if ($meta_entity->get('list_related_entities')->value === '1') {
-        $meta_entity->set('list_related_entities', '0');
-        $meta_entity->save();
-        $sandbox['updated_count']++;
-      }
-    }
-
-    $sandbox['progress']++;
+  // Queue all solutions for processing.
+  $queue = \Drupal::queue('joinup_core_disable_eira_terms');
+  foreach ($nids as $nid) {
+    $queue->createItem(['nid' => $nid]);
   }
 
-  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-
-  if ($sandbox['#finished'] >= 1) {
-    return sprintf(
-      'Processed %d solutions created before July 14, 2025. Disabled "Show solutions related by EIRA terms" for %d solutions.',
-      $sandbox['total'],
-      $sandbox['updated_count']
-    );
-  }
-
+  $count = count($nids);
   return sprintf(
-    'Processing solutions... %d/%d',
-    $sandbox['progress'],
-    $sandbox['total']
+    'Queued %d solution(s) created before July 14, 2025 for processing. The queue will be processed by cron.',
+    $count
   );
 }
