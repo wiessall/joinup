@@ -1,0 +1,14 @@
+diff --git a/src/ConfigInspectorManager.php b/src/ConfigInspectorManager.php
+index 2fedcfe54e9ac09823bdfb5fa41026b7f6a6123d..fd3f26c2806d4bc0f77749e7a88133d8c0cadca0 100644
+--- a/src/ConfigInspectorManager.php
++++ b/src/ConfigInspectorManager.php
+@@ -176,6 +176,9 @@ class ConfigInspectorManager {
+    * @see \Drupal\Core\Config\Schema\SchemaCheckTrait::checkValue
+    */
+   public function checkValues($config_name) {
++    // Disable caches to not allow inspection of other configs and alterations
++    // of definitions to persist between checks.
++    $this->typedConfigManager->useCaches();
+     $config_data = $this->configFactory->get($config_name)->get();
+     return $this->checkConfigSchema($this->typedConfigManager, $config_name, $config_data);
+   }
