@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56098bd27b764ba6a9de1a8ff6e3bb6b",
+    "content-hash": "510c6cc69a1e1bd265592d87e298c19f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13625,6 +13625,21 @@
             "time": "2025-08-13T20:13:15+00:00"
         },
         {
+            "name": "npm-asset/chart.js",
+            "version": "4.5.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.0.tgz"
+            },
+            "require": {
+                "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/dompurify",
             "version": "3.2.6",
             "dist": {
@@ -13684,6 +13699,18 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/kurkle--color",
+            "version": "0.3.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
             },
             "type": "npm-asset",
             "license": [
