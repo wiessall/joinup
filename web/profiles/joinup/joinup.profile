@@ -119,27 +119,6 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
 }
 
 /**
- * Implements hook_theme().
- */
-function joinup_theme($existing, $type, $theme, $path): array {
-  $page_template = [
-    'variables' => [],
-    'path' => \Drupal::service('extension.list.profile')->getPath('joinup') . '/templates',
-  ];
-  return [
-    'joinup_eligibility_criteria' => $page_template,
-    'joinup_legal_notice' => $page_template,
-    'joinup_modal_close_button' => [
-      'variables' => [
-        'label' => t('Got it'),
-        'url' => '',
-        'attributes' => [],
-      ],
-    ] + $page_template,
-  ];
-}
-
-/**
  * Implements hook_entity_view_alter().
  *
  * Adds metadata needed to show relevant contextual links whenever entities are
