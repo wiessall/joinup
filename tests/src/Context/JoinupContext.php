@@ -847,10 +847,8 @@ class JoinupContext extends RawDrupalContext {
     }
 
     // Handle file URL fields.
-    if (!empty($node->documentation)) {
-      $fileHandler = \Drupal::service('file_url.handler');
-      $file = $this->createFile($node->documentation);
-      $node->documentation = $fileHandler::fileToUrl($file);
+    if (!empty($node->resources)) {
+      $this->createResourceFileParagraph($node);
     }
   }
 
@@ -1835,27 +1833,6 @@ class JoinupContext extends RawDrupalContext {
       }
     }
     throw new ExpectationFailedException("The description $description was not found for the $label field.");
-  }
-
-  /**
-   * Checks that the description of the field with given label is not present.
-   *
-   * @param string $label
-   *   The label of the field to check.
-   * @param string $description
-   *   The description that is expected to be absent.
-   *
-   * @throws \Exception
-   *   Thrown when the field does not have a description.
-   *
-   * @Then I should not see the description :description for (the ):label( field)
-   */
-  public function assertNoFieldDescription($label, $description): void {
-    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
-    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    foreach ($elements as $element) {
-      Assert::assertNotEquals($description, trim($element->getText()));
-    }
   }
 
   /**

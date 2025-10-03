@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -22,6 +21,7 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
+    - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -41,7 +41,6 @@ hidden:
   contact: true
   description: true
   distributions: true
-  documentation: true
   domain: true
   download_total: true
   eif_perspective: true
@@ -74,6 +73,7 @@ hidden:
   release_number: true
   releases_overview: true
   report: true
+  resources: true
   search_api_excerpt: true
   share_link: true
   shared_in: true

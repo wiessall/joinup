@@ -6,8 +6,8 @@ Feature: "Add release" visibility options.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
     Given solution content:
-      | title                 | description         | documentation |
-      | Release solution test | My awesome solution | text.pdf      |
+      | title                 | description         | resources |
+      | Release solution test | My awesome solution | text.pdf  |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -26,8 +26,8 @@ Feature: "Add release" visibility options.
   Scenario: Add release as a solution facilitator.
 
     Given solution content:
-      | title          | description        | documentation |
-      | Release Test 1 | test description 1 | text.pdf      |
+      | title          | description        | resources |
+      | Release Test 1 | test description 1 | text.pdf  |
     And release content:
       | title           | is version of  | release number | status    | creation date       | published at        |
       | Chasing shadows | Release Test 1 | 1.0            | Completed | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
@@ -47,7 +47,7 @@ Feature: "Add release" visibility options.
     And I click "Add release"
     Then I should see the heading "Release Test 1" in the "Header" region
     And I should see the heading "Add Release"
-    And the following fields should be present "Name, Release version, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
+    And the following fields should be present "Name, Release version, Release notes, Documentation, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
 
@@ -87,7 +87,25 @@ Feature: "Add release" visibility options.
     And I click "Add release"
     When I fill in "Name" with "Chasing flares"
     And I fill in "Release version" with "1.0"
+    And I press "Upload file"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
+    And I press "Add remote file URL"
+    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I press "Publish"
+    Then I should see "test.zip"
+    And I should see "http://example.com/guzzle"
+    When I go to the edit form of the "Chasing flares" release
+    And I press "resources_0_edit"
+    And I fill in "Description" with "My uploaded file"
+    And I press "resources_1_edit"
+    And I fill in "Link text" with "My remote file"
+    And I press "Update"
+    Then I should not see "test.zip"
+    And I should not see "http://example.com/guzzle"
+    And I should see "My uploaded file"
+    And I should see "My remote file"
+
+#    And I click "resources_1_edit"
 
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
@@ -104,8 +122,8 @@ Feature: "Add release" visibility options.
 
   Scenario: Check publish time release is present time and past.
     Given solution content:
-      | title          | description        | documentation |
-      | Release Test 2 | test description 2 | text.pdf      |
+      | title          | description        | resources |
+      | Release Test 2 | test description 2 | text.pdf  |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
     And I go to the homepage of the "Release Test 2" solution
     And I click "Add release" in the plus button menu
