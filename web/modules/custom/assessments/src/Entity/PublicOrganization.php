@@ -179,6 +179,31 @@ final class PublicOrganization extends ContentEntityBase implements PublicOrgani
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the publicorganization was last edited.'));
 
+    $fields['classification'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Classification'))
+      ->setDescription(t('The classification of the public organization.'))
+      // @todo This is a Code field. Convert to vocabulary reference.
+      ->setSettings([
+        'allowed_values' => [
+          'government' => 'Government',
+          'non_profit' => 'Non-Profit',
+          'private_sector' => 'Private Sector',
+          'other' => 'Other',
+        ],
+      ])
+      ->setDefaultValue('other')
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'list_default',
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     return $fields;
   }
 
