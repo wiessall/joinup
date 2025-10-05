@@ -39,3 +39,15 @@ assessment_statement.add_form:
   route_name: entity.assessment_statement.add_form
   appears_on:
     - entity.assessment_statement.collection
+
+assessment_requirement.add_form:
+  title: 'Add binding requirement'
+  route_name: entity.assessment_requirement.add_form
+  appears_on:
+    - entity.assessment_requirement.collection
+
+assessment.add_form:
+  title: 'Add assessment'
+  route_name: entity.assessment.add_form
+  appears_on:
+    - entity.assessment.collection

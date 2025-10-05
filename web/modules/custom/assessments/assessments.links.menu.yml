@@ -39,3 +39,15 @@ entity.assessment_statement.collection:
   description: 'List of statements.'
   route_name: entity.assessment_statement.collection
   parent: system.admin_content
+
+entity.assessment_requirement.collection:
+  title: 'Binding Requirements'
+  description: 'List of binding requirements.'
+  route_name: entity.assessment_requirement.collection
+  parent: system.admin_content
+
+entity.assessment.collection:
+  title: 'Assessments'
+  description: 'List of assessments.'
+  route_name: entity.assessment.collection
+  parent: system.admin_content

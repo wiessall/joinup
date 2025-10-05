@@ -74,3 +74,25 @@ entity.assessment_statement.delete_form:
   group: assessment_statement
   title: 'Delete'
   weight: 10
+
+entity.assessment_requirement.edit_form:
+  route_name: entity.assessment_requirement.edit_form
+  group: assessment_requirement
+  title: 'Edit'
+
+entity.assessment_requirement.delete_form:
+  route_name: entity.assessment_requirement.delete_form
+  group: assessment_requirement
+  title: 'Delete'
+  weight: 10
+
+entity.assessment.edit_form:
+  route_name: entity.assessment.edit_form
+  group: assessment
+  title: 'Edit'
+
+entity.assessment.delete_form:
+  route_name: entity.assessment.delete_form
+  group: assessment
+  title: 'Delete'
+  weight: 10

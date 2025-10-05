@@ -130,3 +130,41 @@ entity.assessment_statement.collection:
   route_name: entity.assessment_statement.collection
   base_route: system.admin_content
   weight: 10
+
+entity.assessment_requirement.view:
+  title: 'View'
+  route_name: entity.assessment_requirement.canonical
+  base_route: entity.assessment_requirement.canonical
+entity.assessment_requirement.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment_requirement.edit_form
+  base_route: entity.assessment_requirement.canonical
+entity.assessment_requirement.delete_form:
+  title: 'Delete'
+  route_name: entity.assessment_requirement.delete_form
+  base_route: entity.assessment_requirement.canonical
+  weight: 10
+entity.assessment_requirement.collection:
+  title: 'Binding Requirements'
+  route_name: entity.assessment_requirement.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.assessment.view:
+  title: 'View'
+  route_name: entity.assessment.canonical
+  base_route: entity.assessment.canonical
+entity.assessment.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment.edit_form
+  base_route: entity.assessment.canonical
+entity.assessment.delete_form:
+  title: 'Delete'
+  route_name: entity.assessment.delete_form
+  base_route: entity.assessment.canonical
+  weight: 10
+entity.assessment.collection:
+  title: 'Assessments'
+  route_name: entity.assessment.collection
+  base_route: system.admin_content
+  weight: 10

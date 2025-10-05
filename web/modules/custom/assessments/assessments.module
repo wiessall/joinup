@@ -22,6 +22,8 @@ function assessments_theme(): array {
     'assessment_service' => ['render element' => 'elements'],
     'assessment_expression' => ['render element' => 'elements'],
     'assessment_statement' => ['render element' => 'elements'],
+    'assessment_requirement' => ['render element' => 'elements'],
+    'assessment' => ['render element' => 'elements'],
   ];
 }
 
@@ -148,6 +150,21 @@ function template_preprocess_assessment_statement(array &$variables): void {
 }
 
 /**
+ * Prepares variables for binding requirement templates.
+ *
+ * Default template: assessment-requirement.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the binding requirement information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment_requirement(array &$variables): void {
+  _assessments_template_preprocess($variables);
+}
+
+/**
  * Implements hook_user_cancel().
  */
 function assessments_user_cancel($edit, UserInterface $account, $method): void {
@@ -222,6 +239,26 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
       foreach ($storage->loadMultiple($assessment_statement_ids) as $assessment_statement) {
         $assessment_statement->setOwnerId(0)->save();
       }
+
+      // Anonymize binding requirements.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
+      $assessment_requirement_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_requirement_ids) as $assessment_requirement) {
+        $assessment_requirement->setOwnerId(0)->save();
+      }
+
+      // Anonymize assessments.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+      $assessment_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
+        $assessment->setOwnerId(0)->save();
+      }
       break;
 
     case 'user_cancel_block_unpublish':
@@ -279,7 +316,48 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
       foreach ($storage->loadMultiple($assessment_statement_ids) as $assessment_statement) {
         $assessment_statement->set('status', FALSE)->save();
       }
+
+      // Unpublish binding requirements.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
+      $assessment_requirement_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_requirement_ids) as $assessment_requirement) {
+        $assessment_requirement->set('status', FALSE)->save();
+      }
+
+      // Unpublish assessments.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+      $assessment_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
+        $assessment->set('status', FALSE)->save();
+      }
       break;
+
+      // Delete assessments that belong to this account.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+      $assessment_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      $storage->delete(
+        $storage->loadMultiple($assessment_ids)
+      );
+      // Delete old revisions.
+      $assessment_ids = $storage->getQuery()
+        ->allRevisions()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach (array_keys($assessment_ids) as $revision_id) {
+        $storage->deleteRevision($revision_id);
+      }
   }
 }
 
@@ -355,5 +433,15 @@ function assessments_user_predelete(UserInterface $account): void {
     ->execute();
   $storage->delete(
     $storage->loadMultiple($assessment_statement_ids)
+  );
+
+  // Delete binding requirements that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
+  $assessment_requirement_ids = $storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $storage->delete(
+    $storage->loadMultiple($assessment_requirement_ids)
   );
 }
