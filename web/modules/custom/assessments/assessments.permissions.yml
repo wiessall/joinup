@@ -17,3 +17,7 @@ administer assessment_organization:
 administer assessment_service:
   title: 'Administer public services'
   restrict access: true
+
+administer assessment_expression:
+  title: 'Administer legal expressions'
+  restrict access: true

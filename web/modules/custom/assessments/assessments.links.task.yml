@@ -92,3 +92,22 @@ entity.assessment_service.collection:
   route_name: entity.assessment_service.collection
   base_route: system.admin_content
   weight: 10
+
+entity.assessment_expression.view:
+  title: 'View'
+  route_name: entity.assessment_expression.canonical
+  base_route: entity.assessment_expression.canonical
+entity.assessment_expression.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment_expression.edit_form
+  base_route: entity.assessment_expression.canonical
+entity.assessment_expression.delete_form:
+  title: 'Delete'
+  route_name: entity.assessment_expression.delete_form
+  base_route: entity.assessment_expression.canonical
+  weight: 10
+entity.assessment_expression.collection:
+  title: 'Legal Expressions'
+  route_name: entity.assessment_expression.collection
+  base_route: system.admin_content
+  weight: 10

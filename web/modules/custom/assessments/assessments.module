@@ -20,7 +20,24 @@ function assessments_theme(): array {
     'assessment_asset' => ['render element' => 'elements'],
     'assessment_organization' => ['render element' => 'elements'],
     'assessment_service' => ['render element' => 'elements'],
+    'assessment_expression' => ['render element' => 'elements'],
   ];
+}
+
+/**
+ * Prepares variables for assessment templates.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the assessment information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function _assessments_template_preprocess(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
 }
 
 /**
@@ -35,10 +52,8 @@ function assessments_theme(): array {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_assessments_agent(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
+  _assessments_template_preprocess($variables);
+
 }
 
 /**
@@ -53,10 +68,7 @@ function template_preprocess_assessments_agent(array &$variables): void {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_assessments_participation(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
+  _assessments_template_preprocess($variables);
 }
 
 /**
@@ -71,10 +83,7 @@ function template_preprocess_assessments_participation(array &$variables): void 
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_assessments_asset(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
+  _assessments_template_preprocess($variables);
 }
 
 /**
@@ -89,10 +98,7 @@ function template_preprocess_assessments_asset(array &$variables): void {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_assessment_organization(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
+  _assessments_template_preprocess($variables);
 }
 
 /**
@@ -107,10 +113,22 @@ function template_preprocess_assessment_organization(array &$variables): void {
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_assessment_service(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
+  _assessments_template_preprocess($variables);
+}
+
+/**
+ * Prepares variables for legal expression templates.
+ *
+ * Default template: assessment-expression.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the legal expression information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment_expression(array &$variables): void {
+  _assessments_template_preprocess($variables);
 }
 
 /**
@@ -169,6 +187,15 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
         $assessment_service->setOwnerId(0)->save();
       }
 
+      // Anonymize legal expressions.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
+      $assessment_expression_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_expression_ids) as $assessment_expression) {
+        $assessment_expression->setOwnerId(0)->save();
+      }
       break;
 
     case 'user_cancel_block_unpublish':
@@ -205,6 +232,16 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
         $assessment_service->set('status', FALSE)->save();
       }
 
+      // Unpublish legal expressions.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
+      $assessment_expression_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_expression_ids) as $assessment_expression) {
+        $assessment_expression->set('status', FALSE)->save();
+      }
       break;
   }
 }
@@ -261,5 +298,15 @@ function assessments_user_predelete(UserInterface $account): void {
     ->execute();
   $storage->delete(
     $storage->loadMultiple($assessment_service_ids)
+  );
+
+  // Delete legal expressions that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
+  $assessment_expression_ids = $storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $storage->delete(
+    $storage->loadMultiple($assessment_expression_ids)
   );
 }
