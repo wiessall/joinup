@@ -25,3 +25,25 @@ administer assessment_expression:
 administer assessment_statement:
   title: 'Administer statements'
   restrict access: true
+
+administer assessment_requirement:
+  title: 'Administer binding requirements'
+  restrict access: true
+
+administer assessment:
+  title: 'Administer assessments'
+  restrict access: true
+view assessment:
+  title: 'View assessment'
+edit assessment:
+  title: 'Edit assessment'
+delete assessment:
+  title: 'Delete assessment'
+create assessment:
+  title: 'Create assessment'
+view assessment revision:
+  title: 'View assessment revision'
+revert assessment revision:
+  title: 'Revert assessment revision'
+delete assessment revision:
+  title: 'Delete assessment revision'
