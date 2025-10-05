@@ -15,3 +15,9 @@ entity.assessments_asset.collection:
   description: 'List of assets.'
   route_name: entity.assessments_asset.collection
   parent: system.admin_content
+
+entity.assessment_organization.collection:
+  title: 'PublicOrganizations'
+  description: 'List of publicorganizations.'
+  route_name: entity.assessment_organization.collection
+  parent: system.admin_content

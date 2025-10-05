@@ -30,3 +30,14 @@ entity.assessments_asset.delete_form:
   group: assessments_asset
   title: 'Delete'
   weight: 10
+
+entity.assessment_organization.edit_form:
+  route_name: entity.assessment_organization.edit_form
+  group: assessment_organization
+  title: 'Edit'
+
+entity.assessment_organization.delete_form:
+  route_name: entity.assessment_organization.delete_form
+  group: assessment_organization
+  title: 'Delete'
+  weight: 10

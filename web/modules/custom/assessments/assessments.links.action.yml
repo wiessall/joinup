@@ -15,3 +15,9 @@ assessments_asset.add_form:
   route_name: entity.assessments_asset.add_form
   appears_on:
     - entity.assessments_asset.collection
+
+assessment_organization.add_form:
+  title: 'Add publicorganization'
+  route_name: entity.assessment_organization.add_form
+  appears_on:
+    - entity.assessment_organization.collection
