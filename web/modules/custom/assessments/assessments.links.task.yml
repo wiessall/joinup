@@ -73,3 +73,22 @@ entity.assessment_organization.collection:
   route_name: entity.assessment_organization.collection
   base_route: system.admin_content
   weight: 10
+
+entity.assessment_service.view:
+  title: 'View'
+  route_name: entity.assessment_service.canonical
+  base_route: entity.assessment_service.canonical
+entity.assessment_service.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment_service.edit_form
+  base_route: entity.assessment_service.canonical
+entity.assessment_service.delete_form:
+  title: 'Delete'
+  route_name: entity.assessment_service.delete_form
+  base_route: entity.assessment_service.canonical
+  weight: 10
+entity.assessment_service.collection:
+  title: 'Public Services'
+  route_name: entity.assessment_service.collection
+  base_route: system.admin_content
+  weight: 10

@@ -21,3 +21,9 @@ entity.assessment_organization.collection:
   description: 'List of publicorganizations.'
   route_name: entity.assessment_organization.collection
   parent: system.admin_content
+
+entity.assessment_service.collection:
+  title: 'Public Services'
+  description: 'List of public services.'
+  route_name: entity.assessment_service.collection
+  parent: system.admin_content

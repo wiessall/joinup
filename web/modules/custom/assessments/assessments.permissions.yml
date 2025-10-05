@@ -13,3 +13,7 @@ administer assessments_asset:
 administer assessment_organization:
   title: 'Administer publicorganizations'
   restrict access: true
+
+administer assessment_service:
+  title: 'Administer public services'
+  restrict access: true
