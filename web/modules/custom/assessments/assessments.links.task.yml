@@ -111,3 +111,22 @@ entity.assessment_expression.collection:
   route_name: entity.assessment_expression.collection
   base_route: system.admin_content
   weight: 10
+
+entity.assessment_statement.view:
+  title: 'View'
+  route_name: entity.assessment_statement.canonical
+  base_route: entity.assessment_statement.canonical
+entity.assessment_statement.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment_statement.edit_form
+  base_route: entity.assessment_statement.canonical
+entity.assessment_statement.delete_form:
+  title: 'Delete'
+  route_name: entity.assessment_statement.delete_form
+  base_route: entity.assessment_statement.canonical
+  weight: 10
+entity.assessment_statement.collection:
+  title: 'Statements'
+  route_name: entity.assessment_statement.collection
+  base_route: system.admin_content
+  weight: 10
