@@ -135,7 +135,7 @@ final class Participation extends ContentEntityBase implements ParticipationInte
     $fields['agent'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Agent'))
       ->setDescription(t('The agent involved in this participation.'))
-      ->setSetting('target_type', 'agent')
+      ->setSetting('target_type', 'assessments_agent')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',

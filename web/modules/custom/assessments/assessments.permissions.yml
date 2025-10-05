@@ -9,3 +9,7 @@ administer assessments_participation:
 administer assessments_asset:
   title: 'Administer assets'
   restrict access: true
+
+administer assessment_organization:
+  title: 'Administer publicorganizations'
+  restrict access: true
