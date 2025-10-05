@@ -27,3 +27,9 @@ assessment_service.add_form:
   route_name: entity.assessment_service.add_form
   appears_on:
     - entity.assessment_service.collection
+
+assessment_expression.add_form:
+  title: 'Add legal expression'
+  route_name: entity.assessment_expression.add_form
+  appears_on:
+    - entity.assessment_expression.collection

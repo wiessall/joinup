@@ -52,3 +52,14 @@ entity.assessment_service.delete_form:
   group: assessment_service
   title: 'Delete'
   weight: 10
+
+entity.assessment_expression.edit_form:
+  route_name: entity.assessment_expression.edit_form
+  group: assessment_expression
+  title: 'Edit'
+
+entity.assessment_expression.delete_form:
+  route_name: entity.assessment_expression.delete_form
+  group: assessment_expression
+  title: 'Delete'
+  weight: 10
