@@ -21,3 +21,9 @@ assessment_organization.add_form:
   route_name: entity.assessment_organization.add_form
   appears_on:
     - entity.assessment_organization.collection
+
+assessment_service.add_form:
+  title: 'Add public service'
+  route_name: entity.assessment_service.add_form
+  appears_on:
+    - entity.assessment_service.collection

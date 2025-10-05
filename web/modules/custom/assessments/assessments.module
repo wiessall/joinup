@@ -19,6 +19,7 @@ function assessments_theme(): array {
     'assessment_participation' => ['render element' => 'elements'],
     'assessment_asset' => ['render element' => 'elements'],
     'assessment_organization' => ['render element' => 'elements'],
+    'assessment_service' => ['render element' => 'elements'],
   ];
 }
 
@@ -95,6 +96,24 @@ function template_preprocess_assessment_organization(array &$variables): void {
 }
 
 /**
+ * Prepares variables for public service templates.
+ *
+ * Default template: assessment-service.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the public service information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment_service(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
  * Implements hook_user_cancel().
  */
 function assessments_user_cancel($edit, UserInterface $account, $method): void {
@@ -139,6 +158,17 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
       foreach ($storage->loadMultiple($assessment_organization_ids) as $assessment_organization) {
         $assessment_organization->setOwnerId(0)->save();
       }
+
+      // Anonymize public services.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
+      $assessment_service_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_service_ids) as $assessment_service) {
+        $assessment_service->setOwnerId(0)->save();
+      }
+
       break;
 
     case 'user_cancel_block_unpublish':
@@ -163,6 +193,18 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
       foreach ($storage->loadMultiple($assessment_organization_ids) as $assessment_organization) {
         $assessment_organization->set('status', FALSE)->save();
       }
+
+      // Unpublish public services.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
+      $assessment_service_ids = $storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($storage->loadMultiple($assessment_service_ids) as $assessment_service) {
+        $assessment_service->set('status', FALSE)->save();
+      }
+
       break;
   }
 }
@@ -209,5 +251,15 @@ function assessments_user_predelete(UserInterface $account): void {
     ->execute();
   $storage->delete(
     $storage->loadMultiple($assessment_organization_ids)
+  );
+
+  // Delete public services that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
+  $assessment_service_ids = $storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $storage->delete(
+    $storage->loadMultiple($assessment_service_ids)
   );
 }
