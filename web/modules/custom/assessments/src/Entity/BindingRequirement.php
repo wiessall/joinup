@@ -203,7 +203,7 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
     $fields['participant'] = BaseFieldDefinition::create('entity_reference')
       ->setTranslatable(TRUE)
       ->setLabel(t('Participant'))
-      ->setSetting('target_type', 'assessment_participation')
+      ->setSetting('target_type', 'assessments_participation')
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
