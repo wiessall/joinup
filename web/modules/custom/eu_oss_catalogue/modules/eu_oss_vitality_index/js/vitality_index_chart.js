@@ -13,20 +13,19 @@
       ).forEach((canvas) => {
         const data = JSON.parse(canvas.dataset.vitalityIndexRange);
         const ctx = canvas.getContext("2d");
-        ctx.canvas.width = 230;
-        ctx.canvas.height = 38;
+        ctx.canvas.width = 490;
+        ctx.canvas.height = 80;
         const labels = [...Array(60)].map((x, i) => i.toString());
 
         // eslint-disable-next-line no-new
         new Chart(ctx, {
-          responsive: false,
           type: "line",
           data: {
             labels,
             datasets: [
               {
                 fill: false,
-                lineTension: 0.1,
+                tension: 0.1,
                 data,
                 borderWidth: 3,
                 borderColor: "#06c06c",
@@ -34,25 +33,26 @@
             ],
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
-              xAxes: [
-                {
-                  display: false,
-                  stacked: true,
-                },
-              ],
-              yAxes: [
-                {
-                  display: false,
-                  stacked: true,
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                },
-              ],
+              x: {
+                display: false,
+                stacked: true,
+              },
+              y: {
+                display: false,
+                stacked: true,
+                beginAtZero: true,
+              },
             },
-            legend: {
-              display: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                enabled: false,
+              },
             },
             elements: {
               point: {
@@ -68,9 +68,6 @@
                 top: 5,
                 bottom: 5,
               },
-            },
-            tooltips: {
-              enabled: false,
             },
           },
         });

@@ -1196,7 +1196,7 @@ third_party_settings:
             content:
               region_id: null
               region_class_choose: null
-              region_classes: 'p-4 rounded-3 bg-light'
+              region_classes: ''
               region_styles: null
               region_data: null
         components:
