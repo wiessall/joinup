@@ -10,8 +10,8 @@ dependencies:
     - iop
 id: openeuropawebtoolsetrans
 theme: iop
-region: content
-weight: -7
+region: content_top
+weight: -8
 provider: null
 plugin: oe_webtools_etrans
 settings:
