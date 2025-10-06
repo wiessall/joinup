@@ -1,0 +1,13 @@
+field.value.assessment_provider:
+  type: mapping
+  label: Default value
+  mapping:
+    type:
+      type: string
+      label: Provider type
+    country:
+      type: string
+      label: Country code
+    value:
+      type: label
+      label: Value
