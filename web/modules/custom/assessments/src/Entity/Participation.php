@@ -138,14 +138,9 @@ final class Participation extends ContentEntityBase implements ParticipationInte
       ->setSetting('target_type', 'assessments_agent')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 3,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);

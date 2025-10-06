@@ -159,14 +159,9 @@ final class Statement extends ContentEntityBase implements StatementInterface {
       ->setSetting('target_type', 'file')
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 10,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
