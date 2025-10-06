@@ -165,6 +165,21 @@ function template_preprocess_assessment_requirement(array &$variables): void {
 }
 
 /**
+ * Prepares variables for binding requirement templates.
+ *
+ * Default template: assessment-requirement.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the binding requirement information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment(array &$variables): void {
+  _assessments_template_preprocess($variables);
+}
+
+/**
  * Implements hook_user_cancel().
  */
 function assessments_user_cancel($edit, UserInterface $account, $method): void {
@@ -339,25 +354,6 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
         $assessment->set('status', FALSE)->save();
       }
       break;
-
-      // Delete assessments that belong to this account.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      $storage->delete(
-        $storage->loadMultiple($assessment_ids)
-      );
-      // Delete old revisions.
-      $assessment_ids = $storage->getQuery()
-        ->allRevisions()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach (array_keys($assessment_ids) as $revision_id) {
-        $storage->deleteRevision($revision_id);
-      }
   }
 }
 
@@ -444,4 +440,23 @@ function assessments_user_predelete(UserInterface $account): void {
   $storage->delete(
     $storage->loadMultiple($assessment_requirement_ids)
   );
+
+  // Delete assessments that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+  $assessment_ids = $storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $storage->delete(
+    $storage->loadMultiple($assessment_ids)
+  );
+  // Delete old revisions.
+  $assessment_ids = $storage->getQuery()
+    ->allRevisions()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  foreach (array_keys($assessment_ids) as $revision_id) {
+    $storage->deleteRevision($revision_id);
+  }
 }

@@ -107,18 +107,14 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
         'weight' => -10,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'entity_reference_label',
+        'label' => 'hidden',
+        'type' => 'entity_reference_entity_view',
         'weight' => -10,
       ])
       ->setDisplayConfigurable('view', TRUE);
@@ -131,18 +127,14 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
         'weight' => -5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'entity_reference_label',
+        'label' => 'hidden',
+        'type' => 'entity_reference_entity_view',
         'weight' => -5,
       ])
       ->setDisplayConfigurable('view', TRUE);
@@ -155,23 +147,15 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
-        'type' => 'entity_reference_label',
-        'label' => 'above',
-        'weight' => 0,
-        'settings' => [
-          'link' => TRUE,
-        ],
+        'label' => 'hidden',
+        'type' => 'entity_reference_entity_view',
+        'weight' => -5,
       ])
       ->setDisplayConfigurable('view', TRUE);
 

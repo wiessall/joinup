@@ -100,7 +100,7 @@ final class LegalExpression extends ContentEntityBase implements LegalExpression
       ->setDisplayConfigurable('view', TRUE);
 
     // Type field. Either 'eli::LegalExpression' or 'frbr::Expression'.
-    $fields['type'] = BaseFieldDefinition::create('list_string')
+    $fields['expression_type'] = BaseFieldDefinition::create('list_string')
       ->setTranslatable(TRUE)
       ->setLabel(t('Type'))
       ->setRequired(TRUE)

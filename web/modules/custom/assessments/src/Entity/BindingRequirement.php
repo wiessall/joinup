@@ -107,13 +107,9 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => -2,
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
@@ -131,13 +127,9 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => -1,
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
@@ -154,14 +146,9 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('target_type', 'file')
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 10,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
@@ -183,13 +170,9 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => -4,
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
@@ -207,13 +190,9 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => -5,
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
