@@ -44,7 +44,7 @@ class GitHubFeedWidget extends WidgetBase {
     $element['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type'),
-      '#options' => ['' => $this->t('- Select a value -')] + GitHubFeedInterface::KEYS,
+      '#options' => $this->getAllowedOptions(),
       '#required' => TRUE,
       '#default_value' => $items[$delta]->type ?? 'issue',
     ];
@@ -106,6 +106,27 @@ class GitHubFeedWidget extends WidgetBase {
       $return[$delta]['comment_num'] = $value['type'] === 'events' ? 0 : $value['comment_num'];
     }
     return $return;
+  }
+
+  /**
+   * Returns the allowed options for this widget.
+   *
+   * @return array
+   *   An associative array of allowed options.
+   */
+  protected function getAllowedOptions(): array {
+    // We cannot call the constant directly here, because we cannot pass the
+    // value as a string variable to the t() function.
+    $options = [
+      'issue' => $this->t('issues'),
+      'pull_request' => $this->t('pulls'),
+      'events' => $this->t('events'),
+    ];
+
+    // Ensure that no accidental changes are made to either this or the const
+    // without updating each other.
+    assert(array_keys($options) === array_keys(GitHubFeedInterface::KEYS), 'The options in getAllowedOptions() must match the KEYS constant in GitHubFeedInterface.');
+    return ['' => $this->t('- Select a value -')] + $options;
   }
 
 }
