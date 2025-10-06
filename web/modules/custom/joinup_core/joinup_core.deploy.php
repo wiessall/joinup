@@ -99,3 +99,34 @@ function joinup_core_deploy_200701(): string {
   \Drupal::service('queue')->get('eu_oss_catalogue')->deleteItem($item);
   return 'Deleted leftover queue item 190201475 from eu_oss_catalogue queue.';
 }
+
+/**
+ * Disable "Show solutions related by EIRA terms" for pre-wizard solutions.
+ */
+function joinup_core_deploy_200702(): string {
+  // Get all solution nodes created before July 14, 2025.
+  // This is when the Solution Wizard was implemented.
+  $cutoff_date = strtotime('2025-07-14 00:00:00 UTC');
+
+  $nids = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'solution')
+    ->condition('created', $cutoff_date, '<')
+    ->execute();
+
+  if (empty($nids)) {
+    return 'No solutions found created before July 14, 2025.';
+  }
+
+  // Queue all solutions for processing.
+  $queue = \Drupal::queue('joinup_core_disable_eira_terms');
+  foreach ($nids as $nid) {
+    $queue->createItem(['nid' => $nid]);
+  }
+
+  $count = count($nids);
+  return sprintf(
+    'Queued %d solution(s) created before July 14, 2025 for processing. The queue will be processed by cron.',
+    $count
+  );
+}
