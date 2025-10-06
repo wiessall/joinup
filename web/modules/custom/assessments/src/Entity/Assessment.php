@@ -100,21 +100,21 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
     $fields = parent::baseFieldDefinitions($entity_type);
 
     // Provided by field. Reference to assessment_organization.
-    $fields['organization'] = BaseFieldDefinition::create('entity_reference')
+    $fields['organization'] = BaseFieldDefinition::create('assessment_provider')
       ->setLabel(t('Public Organization'))
-      ->setDescription(t('The public organization this assessment is for.'))
+      ->setDescription(t('Union entity or public sector body which is providing the report.'))
       ->setSetting('target_type', 'assessment_organization')
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
+        'type' => 'assessment_provider',
         'settings' => [],
         'weight' => -10,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'entity_reference_entity_view',
+        'type' => 'assessment_provider',
         'weight' => -10,
       ])
       ->setDisplayConfigurable('view', TRUE);
