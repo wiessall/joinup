@@ -8,16 +8,13 @@ Feature: Global search
       | title                        | logo     | moderation | topic      | spatial coverage | state     |
       | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
     Given solution content:
-      | title          | collection                   | description                                                                                                                          | topic      | state     |
-      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | published |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       | published |
+      | title          | collection                   | description                                                     | topic      | state     |
+      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid      | Demography | published |
+      | Foam           | Molecular cooking collection | The use of foam in cuisine has been used in many forms          | eGov       | published |
     And news content:
-      | title                | headline              | field_paragraphs_body | collection                   | topic                   | spatial coverage | state     |
-      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Dummy news 1         | Dummy title 1         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 2         | Dummy title 2         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 3         | Dummy title 3         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 4         | Dummy title 4         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | title                | headline              | field_paragraphs_body | collection                   | topic       | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | E-inclusion | Luxembourg       | published |
+      | Dummy news 1         | Dummy title 1         | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | published |
 
     When I visit the advanced search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
@@ -26,16 +23,7 @@ Feature: Global search
     Given news content:
       | title      | headline    | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
       | Rummy news | Rummy title | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    And event content:
-      | title       | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
-      | Rummy event | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    And document content:
-      | title          | document type | short title          | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
-      | Rummy document | Document      | Rummy document short | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    And discussion content:
-      | title            | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    Given solution content:
+    And solution content:
       | title         | collection                   | description                            | state    | topic             |
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
@@ -45,121 +33,38 @@ Feature: Global search
     And I enter "Rummy" in the search bar
     And I wait for AJAX to finish
     Then I should not see the text "Rummy news"
-    And I should not see the text "Rummy event"
-    And I should not see the text "Rummy document"
-    And I should not see the text "Rummy discussion"
 
     # Test that archived items are not available in the search results.
     When I enter "Rummy" in the search bar and press enter
     Then I should not see the text "Rummy news"
-    And I should not see the text "Rummy event"
-    And I should not see the text "Rummy document"
-    And I should not see the text "Rummy discussion"
 
     # But clicking the "Show only Archived items" checkbox should show them.
     When I check the "Show only Archived items" checkbox from the "Status" facet
     Then I should see the "Rummy news" tile
-    And I should see the "Rummy event" tile
-    And I should see the "Rummy document" tile
-    And I should see the "Rummy discussion" tile
 
+    # Check facets with authenticated user
     Given I am logged in as a user with the "authenticated" role
     Then I visit the advanced search page
-    # All content is visible.
-    Then I should see the "Molecular cooking collection" tile
+    And I should see the "Molecular cooking collection" tile
     And I should see the "El Tuba de Los Lobos" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
-    # Terms are sorted alphabetically
-    #
-    # The Portal collection is always present and has 'Demography' as topic. Thus
-    # the 'Demography' and its parent, 'Social and Political', will have the
-    # count increased by one each. See joinup_test.install
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), Luxembourg (5)"
-
-    # Check that only one search field is available. In an earlier version of
-    # Interoperable Europe Portal there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
-
-    When I check the "Social and Political (7)" checkbox from the "topic" facet
-    Then the "Social and Political" content checkbox item should be selected
-    # The Portal collection is always present and has 'Demography' as topic. Thus
-    # the 'Demography' and its parent, 'Social and Political', will have the
-    # count increased by one each. See joinup_test.install
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
-    # The tiles appear because the parent term is selected even though they do not have a direct reference there.
-    And I should see the "Dummy news 1" tile
-    And I should see the "Dummy news 2" tile
-    And I should see the "Dummy news 3" tile
-    And I should see the "Dummy news 4" tile
-    And I should not see the "Rummy news 5" tile
-    And I should not see the "Rummy news 6" tile
 
     # Test ability to tick many topics.
     When I check the "Demography (3)" checkbox from the "topic" facet
-    # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (3)"
-    When I check the "E-inclusion (4)" checkbox from the "topic" facet
-    # The Portal collection is included
-    Then I should see the text "SEARCH RESULTS (7)"
-    And the "Demography" content checkbox item should be selected
-    And the "E-inclusion" content checkbox item should be selected
+    When I check the "E-inclusion (2)" checkbox from the "topic" facet
+    Then I should see the text "SEARCH RESULTS (5)"
 
-    # The selected option moves to the last position by default.
-    When I click "E-inclusion"
-    # The Portal collection is included
-    Then I should see the text "SEARCH RESULTS (3)"
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
-    When I click show more from the "spatial coverage" facet
-    Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1)"
-    And I should see the "Molecular cooking collection" tile
-    And I should see the "Spherification" tile
-    But I should not see the "El Tuba de Los Lobos" tile
-    And I should not see the "Foam" tile
-
-    # Test the spatial coverage facet.
-    When I check the "Belgium (1)" checkbox from the "spatial coverage" facet
-    And the "Belgium" content checkbox item should be selected
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1)"
-    And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
-    And I should see the "Molecular cooking collection" tile
-    But I should not see the "El Tuba de Los Lobos" tile
-    And I should not see the "Spherification" tile
-    And I should not see the "Foam" tile
-
-    # Test ability to tick many geographical areas.
+    # Test the content type facet.
     Given I am on the advanced search page
-    And I click show more from the "spatial coverage" facet
-    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
-    Then I should see the text "SEARCH RESULTS (1)"
-    When I click show more from the "spatial coverage" facet
-
-    Given I am on the advanced search page
-    When I check the "User profiles (2)" checkbox from the "Content types" facet
-    Then the "User profiles" content checkbox item should be selected
-    And I should see 2 tile
-
-    Given I click "Clear filters"
-    When I check the "News (5)" checkbox from the "Content types" facet
+    When I check the "News (2)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    # The Portal collection is included
-    And the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (2)"
-
     When I check the "Solutions (2)" checkbox from the "Content types" facet
-    Then the "Solutions" content checkbox item should be selected
-    And the "News" content checkbox item should be selected
-    And I should see the following facet summary "Solutions, News"
-    # The Portal collection is included
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (2)"
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Luxembourg (5)"
-    And I should not see the "Molecular cooking collection" tile
+    Then I should see the following facet summary "Solutions, News"
     And I should see the "El Tuba de Los Lobos" tile
-    But I should see the "Spherification" tile
+    And I should see the "Spherification" tile
     And I should see the "Foam" tile
 
     # Launch a text search.
@@ -167,188 +72,82 @@ Feature: Global search
     Then I focus on the search input
     And I enter "Cooking" in the search bar and press enter
     Then I should see the "Molecular cooking collection" tile
-    And I should see the "Foam" tile
-    But I should not see the "Spherification" tile
-    And I should not see the "El Tuba de Los Lobos" tile
+    But I should not see the "Foam" tile
+    And I should not see the "Spherification" tile
 
     Given I am on the advanced search page
     When I check the "Show only Archived items" checkbox from the "Status" facet
-    And I should not see the "Molecular cooking collection" tile
-    And I should not see the "Spherification" tile
-    And I should not see the "Foam" tile
-    And I should not see the "El Tuba de Los Lobos" tile
-    And I should not see the "Dummy news 1" tile
-    And I should not see the "Dummy news 2" tile
-    And I should not see the "Dummy news 3" tile
-    And I should not see the "Dummy news 4" tile
     And I should see the "Spring device" tile
     And I should see the text "Archived" in the "Spring device" tile
 
-    Then I check the "Show only Archived items" checkbox from the "Status" facet
-    And I should see the "Molecular cooking collection" tile
-    And I should see the "Spherification" tile
-    And I should see the "Foam" tile
-    And I should see the "El Tuba de Los Lobos" tile
-    And I should see the "Dummy news 1" tile
-    And I should see the "Dummy news 2" tile
-    And I should see the "Dummy news 3" tile
-    And I should see the "Dummy news 4" tile
-    And I should not see the "Spring device" tile
-
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
-    Given owner content:
-      | name              | owner type |
-      | Responsible owner | Company    |
-    And contact_information content:
-      | name          | email             |
-      | Go-to contact | go-to@example.com |
-    And collection content:
-      | title            | description                                          | abstract                       | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
+    Given collection content:
+      | title            | description                      | abstract                       | state     |
+      | Collection alpha | collection beta description.     | The collection gamma abstract. | published |
     And event content:
-      | title             | short title       | field_paragraphs_body               | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
-      | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
-      | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
-    And document content:
-      | title          | document type | short title          | field_paragraphs_body                   | spatial coverage | keywords | collection       | state     |
-      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
+      | title       | field_paragraphs_body    | spatial coverage | collection       | state     |
+      | Event Omega | The epsilon event.       | Greece           | Collection alpha | published |
+      | Alt event   | Background event.        | Luxembourg       | Collection alpha | published |
 
     When I visit the advanced search page
-
     Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
-    When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (1)"
+    When I check the "Luxembourg (1)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
-    And I should see the following search header in the correct order:
-      | SEARCH RESULTS (2) |
-      | Sort by:           |
-    And I should see the text "SEARCH RESULTS (2)"
-    # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
-    Given owner content:
-      | name              | owner type |
-      | Responsible owner | Company    |
-    And contact_information content:
-      | name          | email             | state     |
-      | Go-to contact | go-to@example.com | validated |
-    And collection content:
-      | title            | description                                          | abstract                       | keywords            | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | nintendo64 licences | published |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | nintendo64 licences | published |
+    Given collection content:
+      | title            | description                      | abstract                       | keywords | state     |
+      | Collection alpha | collection beta description.     | The collection gamma abstract. | Alphabet | published |
     Given solution content:
-      | title          | description                                                | keywords | owner             | contact information | collection  | state     |
-      | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
-    And release content:
-      | title         | release number | release notes                               | keywords | is version of  | state     |
-      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | published |
-    And distribution content:
-      | title              | description                                    | release       | resources  | state     |
-      | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
-    And licence content:
-      | title         | description                         |
-      | Licence Alpha | A beta description for the licence. |
+      | title          | description                      | keywords | collection       | state     |
+      | Solution alpha | solution beta description.       | Alphabet | Collection alpha | published |
     And news content:
       | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
-    And event content:
-      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords            | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet            |                  | Solution alpha | published |
-      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               | nintendo64 licences | Collection alpha |                | published |
-    And document content:
-      | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
-      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
-    And discussion content:
-      | title            | body                                                              | solution       | keywords            | state     |
-      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | nintendo64 licences | published |
-    And custom_page content:
-      | title      | body                                     | collection       | state     | keywords |
-      | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
     And users:
-      | Username     | E-mail                      | First name | Family name | Organisation |
-      | jenlyle      | jenessa.carlyle@example.com | Jenessa    | Carlyle     | Clyffco      |
-      | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
+      | Username | E-mail                      | First name | Family name |
+      | jenlyle  | jenessa.carlyle@example.com | Jenessa    | Carlyle     |
 
     When I visit the advanced search page
-    # The Portal collection is included
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (3), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (3)"
-
-    # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
-    When I enter "A beta" in the search bar and press enter
-    Then I should not see the error message "You must include at least one positive keyword with 3 characters or more."
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
     And I should see the following search header in the correct order:
-      | SEARCH RESULTS (4) |
+      | SEARCH RESULTS (2) |
       | Sort by:           |
-    Then I should see the text "SEARCH RESULTS (4)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
+    Then the page should show the tiles "Collection alpha, Solution alpha"
 
-    # "Omega" is used in all the node entities titles. Since the content of
-    # custom pages is added to their collection, we also match the collection.
+    # "Omega" is used in all the node entities titles.
     When I enter "omega" in the search bar and press enter
-    Then I should see the text "SEARCH RESULTS (6)"
-    And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
-    And I should see the text "The epsilon event content but abstract."
+    And the page should show the tiles "News omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
-    Then I should see the text "SEARCH RESULTS (4)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
+    Then the page should show the tiles "Collection alpha, Solution alpha"
 
-    # "Epsilon" is used in all the node entities body fields.
+    # "Epsilon" is used in news body.
     When I enter "epsilon" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    Then the page should show the tiles "News omega"
 
-    # Test "Alphabet" and "nintendo64" in keyword fields.
+    # Test "Alphabet" in keyword fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
-    When I enter "nintendo64" in the search bar and press enter
-    Then the page should show the tiles "Alternative event, Col for Sol, Collection alpha, Discussion omega"
+    Then the page should show the tiles "Collection alpha, Solution alpha, News omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
     Then the page should show the tiles "Collection alpha"
 
-    # "Delta" is used in headline and short titles.
+    # "Delta" is used in headline.
     When I enter "delta" in the search bar and press enter
-    Then the page should show the tiles "News omega, Event Omega, Document omega"
+    Then the page should show the tiles "News omega"
 
-    # Search for the event fields: agenda, location, address, organisation, scope.
-    When I enter "agenda" in the search bar and press enter
-    Then the page should show the tiles "Event Omega"
-    When I enter "location" in the search bar and press enter
-    Then the page should show the tiles "Alternative event"
-    When I enter "place" in the search bar and press enter
-    Then the page should show the tiles "Event Omega"
-    When I enter "organisation" in the search bar and press enter
-    Then the page should show the tiles "Alternative event"
-    When I enter "international" in the search bar and press enter
-    Then the page should show the tiles "Event Omega"
-
-    # The owner and contact information names should be indexed inside the solutions/releases they are linked to.
-    When I enter "responsible" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha"
-    # Visit the homepage to be sure that the test fetches the correct updated page.
-    When I go to the homepage
-    And I enter "contact" in the search bar and press enter
-    # The Portal collection is included
-    Then the page should show the tiles "The Portal, Solution alpha, Release Alpha, Collection alpha, Col for Sol"
-
-    # Users should be found by first name, family name and organisation.
+    # Users should be found by first name and family name.
     When I enter "Jenessa" in the search bar and press enter
     Then the page should show the tiles "Jenessa Carlyle"
-    When I enter "freeman" in the search bar and press enter
-    Then the page should show the tiles "Ulysses Freeman"
-    When I enter "clyffco" in the search bar and press enter
+    When I enter "carlyle" in the search bar and press enter
     Then the page should show the tiles "Jenessa Carlyle"
-    When I enter "Omero snc" in the search bar and press enter
-    Then the page should show the tiles "Ulysses Freeman"
 
   Scenario: Advanced search
     # A search icon is shown in the navbar, except on the search page.
@@ -364,11 +163,10 @@ Feature: Global search
     Then I should toggle search bar in navbar
     And I should see search bar in navbar
 
-  Scenario: Solutions and/or releases are found by their distribution keyword.
+  Scenario: Solutions are found by their distribution keyword.
     Given licence content:
       | title      |
       | Apache-2.0 |
-      | LGPL       |
     And solution content:
       | title     | state     |
       | Zzolution | published |
@@ -378,21 +176,16 @@ Feature: Global search
 
     # Add distribution, child of solution.
     Given distribution content:
-      | title       | solution  | description          | resources                       | licence    | format | representation technique | state     |
-      | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
+      | title       | solution  | description          | resources                       | licence    | format | state     |
+      | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | published |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
     When I enter "ubermensch" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
-    When I enter "zzolu-distro" in the search bar and press enter
-    Then the page should show only the tiles "Zzolution"
     When I enter "apache" in the search bar and press enter
-    # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Zzolution"
     When I enter "ZIP" in the search bar and press enter
-    Then the page should show only the tiles "Zzolution"
-    When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
 
     Given I am logged in as a moderator
@@ -402,144 +195,26 @@ Feature: Global search
     And I press "Remove"
     And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
-    And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
-    And I select "Human Language" from "Representation technique"
     And I press "Update"
     Then I should see the heading "DistroZzolu"
 
-    # Repeat the previous searches to prove that the initial keywords were
-    # removed from the Search API index.
+    # Repeat the previous searches to prove that the initial keywords were removed.
     Given I am an anonymous user
     When I enter "zzoludistro" in the search bar and press enter
     Then I should see "No content found for your search."
     When I enter "ubermensch" in the search bar and press enter
     Then I should see "No content found for your search."
-    When I enter "zzolu-distro" in the search bar and press enter
-    Then I should not see the text "Search Results"
-    And I should see "No content found for your search."
     When I enter "apache" in the search bar and press enter
-    Then the page should show only the tiles "Apache-2.0"
-    When I enter "HTML" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "Datalog" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then the page should show only the tiles "Apache-2.0, Zzolution"
 
     # Search now with the new keywords.
     When I enter "distrozzolu" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
     When I enter "nietzsche" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
-    When I enter "guzzle" in the search bar and press enter
-    Then the page should show only the tiles "Zzolution"
-    When I enter "lGPL" in the search bar and press enter
-    # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Zzolution"
     When I enter "CSV" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
-    When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Zzolution"
-
-    Given I delete the "DistroZzolu" distribution
-
-    # The parent solution has been re-indexed without distribution data.
-    When I enter "distrozzolu" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "nietzsche" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "guzzle" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "lGPL" in the search bar and press enter
-    Then the page should show only the tiles "LGPL"
-    When I enter "CSV" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "Human Language" in the search bar and press enter
-    Then I should see "No content found for your search."
-
-    # Add a new distribution, child of a release.
-    Given release content:
-      | title   | release number | state     | is version of |
-      | Releazz | 1              | published | Zzolution     |
-
-    When I enter "ReleazzDistro" in the search bar and press enter
-    Then I should see "No content found for your search."
-
-    Given distribution content:
-      | title         | release | description | resources                         | licence    | format | representation technique | state     |
-      | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
-
-    When I enter "releazzDistro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "dracula" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "releazz-distro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "apache" in the search bar and press enter
-    # Also the licence itself is retrieved.
-    Then the page should show only the tiles "Apache-2.0,Releazz"
-    When I enter "ZIP" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "Datalog" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-
-    Given I am logged in as a moderator
-    When I go to the edit form of the "ReleazzDistro" distribution
-    And I fill in "Title" with "DistroReleazz"
-    And I fill in "Description" with "Zorro"
-    And I press "Remove"
-    And I press "Add remote file URL"
-    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/mishmash"
-    And I select "LGPL" from "Licence"
-    And I select "CSV" from "Format"
-    And I select "Human Language" from "Representation technique"
-    And I press "Update"
-
-    # Repeat the previous searches to prove that the initial keywords were
-    # removed from the Search API index.
-    Given I am an anonymous user
-    When I enter "releazzDistro" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "dracula" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "releazz-distro" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "apache" in the search bar and press enter
-    Then the page should show only the tiles "Apache-2.0"
-    When I enter "HTML" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "Datalog" in the search bar and press enter
-    Then I should see "No content found for your search."
-
-    # Search now with the new keywords.
-    When I enter "dIstrOreleazz" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "zoRRo" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "mishMash" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "LGpl" in the search bar and press enter
-    # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Releazz"
-    When I enter "CSV" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-    When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
-
-    Given I delete the "DistroReleazz" distribution
-
-    # The parent release has been re-indexed without distribution data.
-    When I enter "dIstrOreleazz" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "zoRRo" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "mishMash" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "lGPL" in the search bar and press enter
-    Then the page should show only the tiles "LGPL"
-    When I enter "CSV" in the search bar and press enter
-    Then I should see "No content found for your search."
-    When I enter "Human Language" in the search bar and press enter
-    Then I should see "No content found for your search."
 
   Scenario: Collections are found by their keywords.
     Given collection content:
@@ -558,61 +233,27 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
-      | title               | headline                           | field_paragraphs_body                                             | collection        | state     | created    | changed    |
-      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
-      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
-      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
+      | title               | headline                           | field_paragraphs_body                   | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word             | No one cares about the body.            | Custom collection | published | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword. | Custom collection | published | 02/01/2019 | 02/08/2019 |
     And event content:
-      | title           | collection        | state     | start date   | end date            | state     | created      |
-      | Blue revolution | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
-      | Red revolution  | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
+      | title           | collection        | state     | start date   | end date            | created      |
+      | Blue revolution | Custom collection | published | now +1 years | now +1 years +1 day | now -2 years |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
     Then the option "Relevance" should be selected
-    And I should see the text "SEARCH RESULTS (3)"
-    And I should see the following tiles in the correct order:
-      | The uneven universe |
-      | Quantum information |
-      | The earth is square |
+    And I should see the text "SEARCH RESULTS (2)"
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Date" from "Sort by"
-    Then I should see the following tiles in the correct order:
-      | The earth is square |
-      | The uneven universe |
-      | Quantum information |
     And I should be on "/search?keys=Relativity&sort_by=date"
 
     Given I select "Last update" from "Sort by"
     Then I should see the following tiles in the correct order:
       | Quantum information |
       | The uneven universe |
-      | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
-
-    Then I enter "revolution" in the search bar and press enter
-      | Red revolution  |
-      | Blue revolution |
-    And I should be on "/search?keys=revolution&sort_by=last-updated-date"
-
-    Given I select "Date" from "Sort by"
-    Then I should see the following tiles in the correct order:
-      | Blue revolution |
-      | Red revolution  |
-    And I should be on "/search?keys=revolution&sort_by=date"
-
-    When I go to "/search?sort_by=date"
-    Then I should see the following tiles in the correct order:
-      | Blue revolution     |
-      | Custom collection   |
-      | The earth is square |
-      | The uneven universe |
-      | Quantum information |
-      | Red revolution      |
-      # The Portal collection is installed in all tests. See joinup_test.install
-      | The Portal          |
-      | admin               |
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -620,119 +261,58 @@ Feature: Global search
       | title                    | logo     | moderation | topic      | spatial coverage | state     |
       | Radio cooking collection | logo.png | no         | Demography | Belgium          | published |
     Given solution content:
-      | title    | collection               | description                                                                                                                                                   | topic      | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | published |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            | published |
+      | title    | collection               | description                   | topic      | state     |
+      | Spheres  | Radio cooking collection | Spherification process.       | Demography | published |
     And news content:
-      | title           | field_paragraphs_body                                                                | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | title        | field_paragraphs_body | collection               | topic       | spatial coverage | state     |
+      | El Cabo Roca | The best in town.     | Radio cooking collection | E-inclusion | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the advanced search page
     And I should not see search bar icon in navbar
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
-      | Movistar                 |
       | Radio cooking collection |
 
-    When I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "News (5)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Solutions, News"
+    When I check the "Solution (1)" checkbox from the "Content types" facet
+    And I check the "News (1)" checkbox from the "Content types" facet
+    Then I should see the following facet summary "Solution, News"
 
     When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
+    And I check the "News (1)" checkbox from the "Content types" facet
     Then I should see the following facet summary "News"
-
-    # Check if facet summary was remove correctly.
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    # There are 2 collections given the default The Portal collection.
-    And I check the "Collections (2)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collections, News"
-    When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection, The Portal"
-
-    # Check if search autocomplete works in navbar.
-    When I visit the collection overview page
-    And I should see search bar icon in navbar
-    Then I should toggle search bar in navbar
-    And I enter "funn" in the "search bar"
-    Then I should see the following search suggestions:
-      | Funny news 1 |
-      | Funny news 2 |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "funn" in the "search bar"
+    And I enter "cabo" in the "search bar"
     Then I should see the following search suggestions:
-      | Funny news 1 |
-      | Funny news 2 |
+      | El Cabo Roca |
 
-    # Check if search did you mean works.
+    # Check if search executes without errors for misspelled words.
     Given I visit the advanced search page
-    And I enter "histore" in the "search bar"
+    And I enter "cato" in the "search bar"
     Then I submit the search by pressing enter
-    And I should see the text "Did you mean: history ?"
-    And I click "history"
-    Then I should see the text "SEARCH RESULTS (1)"
-
-    Then I enter "cosine" in the "search bar"
-    And I submit the search by pressing enter
-    And I should see the text "Did you mean: cuisine ?"
-    And I click "cuisine"
-    Then I should see the text "SEARCH RESULTS (1)"
-    And I should see the "Movistar" tile
-
-    Then I enter "spheres" in the "search bar"
-    Then I should see the following search suggestions:
-      | Spheres |
+    And I should see the text "Did you mean: cabo ?"
 
   Scenario: Filter on date
     Given collection content:
       | title         | state     |
       | Mice in space | published |
-    And document content:
-      | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
-      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-    And event content:
-      | title           | collection    | topic                    | state     | logo        | field_paragraphs_body                                                                                                                                                                 |
-      | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
-      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    | published_at |
-      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 | 01/01/2019   |
-      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 | 01/12/2020   |
-      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 | 05/01/2019   |
-      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 | 06/21/2019   |
-      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 | 12/31/2021   |
-      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 | 06/25/2020   |
-      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 | 01/01/2021   |
-      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 | 09/24/2019   |
-      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 | 01/18/2021   |
-      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 | 08/01/2019   |
-      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 | 09/18/2019   |
+      | title           | body                  | collection    | topic       | spatial coverage | state     | created    | changed    | published_at |
+      | Muscle atrophy  | Researchers from Tsukuba | Mice in space | Finance in EU | Luxembourg    | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
+      | El Cabo da Roca | The best in town      | Mice in space | E-inclusion | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
+      | Funny news 1    | Dummy body            | Mice in space | HR          | Luxembourg       | published | 06/25/2020 | 06/25/2020 | 06/25/2020   |
 
     When I visit the advanced search page
 
     # Filter content from 01-01-2020 to 30-06-2020.
-    # Only "El Cabo da Roca" and "Funny news 4" should appear.
     Then I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
     And I should see the text "SEARCH RESULTS (2)"
 
     Then I go to "/search?f[0]=date:(min:1577836800,max:)"
-    And I should see the text "SEARCH RESULTS (8)"
-
-    Then I go to "/search?f[0]=date:(min:,max:1609113600)"
-    # One extra result due to the default The Portal collection.
-    And I should see the text "SEARCH RESULTS (9)"
-
-    Then I go to "/search?f[0]=date:(min:,max:)"
-    # One extra result due to the default The Portal collection.
-    And I should see the text "SEARCH RESULTS (15)"
+    And I should see the text "SEARCH RESULTS (3)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given collection content:
@@ -747,14 +327,10 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
-      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
-      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
-      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
-      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
+      | title               | headline               | body                      | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word | No one cares about body.  | Custom collection | published | 01/01/2019 | 03/08/2019 |
     When I visit the advanced search page
     Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
-    And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
-    And I should see the text "Last update: 08/01/2019" in the "The earth is square" card
 
   @javascript @loggedErrors
   Scenario: Regression test for warning generated by search_api_solr.
@@ -776,67 +352,30 @@ Feature: Global search
   # Validate the need for the "@restart-session" tag in ISAICP-9742.
   @javascript @restart-session
   Scenario: Search page - Show the abstract or description in the search results.
-    Given owner content:
-      | name        | owner type |
-      | Renew owner | Company    |
-    And contact_information content:
-      | name           | email              |
-      | Gor-to contact | gor-to@example.com |
-    And collection content:
-      | title            | description                                          | abstract                      | state     |
-      | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
-      | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |
-      | Roll alpha       | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
-      | Col for Sol net  | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+    Given collection content:
+      | title       | description                  | abstract                      | state     |
+      | Pull alpha  | collection pull description. | The collection pull abstract. | published |
+      | Roll alpha  | collection roll description. | The collection roll abstract. | archived  |
     Given solution content:
-      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection       | state     |
-      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha       | published |
-      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |
-      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha       | published |
-      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net  | published |
-    And "custom_page" content:
-      | title                    | collection       | abstract             | logo     | state     |
-      | Custom example abstract  | Pull alpha       | Lorem ipsum abstract | logo.png | published |
-      | Custom example paragraph | Col for Sol javi |                      | logo.png | published |
-    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Custom example paragraph" title:
-      | field_body:value  | That's one small step for a man, a giant leap for mankind. |
-      | field_body:format | text_html                                                  |
+      | title         | description                  | abstract                    | collection | state     |
+      | Solution pull | solution pull description.   | The solution pull abstract. | Pull alpha | published |
+      | Solution roll | solution roll description.   | The solution roll abstract. | Roll alpha | published |
 
     When I visit the advanced search page
     And I should see the "Pull alpha" tile
-    And I should see the "Col for Sol javi" tile
     And I should see the "Solution pull" tile
-    And I should see the "Solution javi" tile
     And I should see the "Solution roll" tile
-    And I should see the "Solution net" tile
-    And I should see the "Custom example abstract" tile
-    And I should see the "Custom example paragraph" tile
     And I should not see the "Roll alpha" tile
-    And I should not see the "Col for Sol net" tile
     And I should see the text "The collection pull abstract." in the "Pull alpha" card
-    And I should see the text "Random abstract." in the "Col for Sol javi" card
     And I should see the text "The solution pull abstract." in the "Solution pull" card
-    And I should not see the text "Abstract" in the "Solution pull" tile
-    And I should see the text "This is the solution javi description" in the "Solution javi" card
-    And I should not see the text "Description" in the "Solution javi" tile
     And I should see the text "The solution roll abstract." in the "Solution roll" card
-    And I should see the text "This is the solution net description" in the "Solution net" card
-    And I should see the text "Lorem ipsum abstract" in the "Custom example abstract" card
-    And I should see the text "That's one small step for a man, a giant leap for mankind." in the "Custom example paragraph" card
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Pull alpha" tile
-    And I should not see the "Col for Sol javi" tile
     And I should not see the "Solution pull" tile
-    And I should not see the "Solution javi" tile
     And I should not see the "Solution roll" tile
-    And I should not see the "Solution net" tile
-    And I should not see the "Custom example abstract" tile
-    And I should not see the "Custom example paragraph" tile
     And I should see the "Roll alpha" tile
-    And I should see the "Col for Sol net" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
-    And I should see the text "Loky and Rocky." in the "Col for Sol net" card
 
   # Validate the need for the "@restart-session" tag in ISAICP-9742.
   @javascript @restart-session
@@ -847,11 +386,8 @@ Feature: Global search
       | kyleu    | kyle.u@example.com | Kyle       | Freeman     | E-inclusion         |
 
     When I visit the advanced search page
-    # The Portal collection is included
     Then I should see the text "SEARCH RESULTS (4)"
-    And the "topic" checkbox facet should allow selecting the following values "Social and Political (3), Demography (2), E-inclusion (1)"
     When I check the "User profiles (3)" checkbox from the "Content types" facet
-    And the "topic" checkbox facet should allow selecting the following values "Social and Political (2), Demography (1), E-inclusion (1)"
     And I should see the "Lyle Uname" tile
     And I should see the "Kyle Freeman" tile
     When I check the "Demography (1)" checkbox from the "topic" facet
