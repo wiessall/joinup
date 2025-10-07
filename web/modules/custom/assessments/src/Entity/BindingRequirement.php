@@ -125,6 +125,7 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setLabel(t('Asset'))
       ->setSetting('target_type', 'assessments_asset')
       ->setSetting('handler', 'default')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
@@ -143,7 +144,14 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
     $fields['documents'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Documents'))
       ->setTranslatable(TRUE)
-      ->setSetting('target_type', 'file')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setSetting('target_type', 'media')
+      ->setSetting('handler', 'default:media')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'file' => 'file',
+        ],
+      ])
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
@@ -168,6 +176,7 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setLabel(t('Affected Party'))
       ->setSetting('target_type', 'assessment_service')
       ->setSetting('handler', 'default')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
