@@ -5,7 +5,8 @@
  */
 #}
 {{ attach_library('ventuno/group-banner') }}
-<header{{ attributes.addClass(['group-banner', 'bg-light', 'py-2']) }}>
+<div{{ attributes.addClass(['group-banner', 'bg-light', 'py-2']).setAttribute('role', 'complementary').setAttribute('aria-label', 'OSS Catalogue header'|t) }}>
+
   <div class="container py-2 d-flex flex-column flex-lg-row align-items-center align-items-lg-start">
     <div data-drupal-group-logo class="group-banner__logo me-lg-2">
       {{ content.field_ar_logo }}
@@ -29,4 +30,4 @@
       </div>
     </div>
   </div>
-</header>
+</div>
