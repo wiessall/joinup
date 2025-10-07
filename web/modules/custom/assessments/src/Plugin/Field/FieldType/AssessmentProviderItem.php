@@ -56,7 +56,6 @@ final class AssessmentProviderItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition): array {
-
     $columns = [
       'type' => [
         'type' => 'varchar',
