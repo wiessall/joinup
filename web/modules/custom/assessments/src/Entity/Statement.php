@@ -156,7 +156,13 @@ final class Statement extends ContentEntityBase implements StatementInterface {
     $fields['documents'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Documents'))
       ->setTranslatable(TRUE)
-      ->setSetting('target_type', 'file')
+      ->setSetting('target_type', 'media')
+      ->setSetting('handler', 'default:media')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'file' => 'file',
+        ],
+      ])
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
@@ -174,6 +180,27 @@ final class Statement extends ContentEntityBase implements StatementInterface {
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDescription(t('Reference to supporting documents for the statement.'));
+
+
+    // Services referenced by the statement.
+    $fields['services'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Services'))
+      ->setTranslatable(TRUE)
+      ->setSetting('target_type', 'assessment_service')
+      ->setSetting('handler', 'default')
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'inline_entity_form_complex',
+        'settings' => [],
+        'weight' => 6,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'entity_reference_label',
+        'weight' => 6,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Status'))
