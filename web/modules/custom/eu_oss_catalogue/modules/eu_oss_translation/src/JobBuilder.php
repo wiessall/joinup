@@ -147,7 +147,6 @@ class JobBuilder implements JobBuilderInterface {
    * Compare exception message with the translated template. Both go through
    * translation, ensuring language-safe comparison.
    *
-   *
    * @param \Drupal\tmgmt\TMGMTException $exception
    *   The exception to check.
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
