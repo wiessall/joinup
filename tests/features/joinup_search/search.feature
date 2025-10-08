@@ -80,6 +80,20 @@ Feature: Global search
     And I should see the "Spring device" tile
     And I should see the text "Archived" in the "Spring device" tile
 
+    # Test date filtering.
+    Given news content:
+      | title           | field_paragraphs_body    | collection                   | topic         | spatial coverage | state     | created    | changed    | published_at |
+      | Muscle atrophy  | Researchers from Tsukuba | Molecular cooking collection | Demography    | Luxembourg       | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
+      | El Cabo da Roca | The best in town         | Molecular cooking collection | E-inclusion   | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
+      | Funny news 1    | Dummy body               | Molecular cooking collection | Demography    | Luxembourg       | published | 06/25/2020 | 06/25/2020 | 06/25/2020   |
+
+    # Filter content from 01-01-2020 to 30-06-2020.
+    When I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
+    Then I should see the text "SEARCH RESULTS (2)"
+
+    When I go to "/search?f[0]=date:(min:1577836800,max:)"
+    Then I should see the text "SEARCH RESULTS (7)"
+
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
     Given collection content:
@@ -258,8 +272,8 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given collection content:
-      | title                    | logo     | moderation | topic      | spatial coverage | state     |
-      | Radio cooking collection | logo.png | no         | Demography | Belgium          | published |
+      | title                    | moderation | topic      | spatial coverage | state     |
+      | Radio cooking collection | no         | Demography | Belgium          | published |
     Given solution content:
       | title    | collection               | description                   | topic      | state     |
       | Spheres  | Radio cooking collection | Spherification process.       | Demography | published |
@@ -295,25 +309,7 @@ Feature: Global search
     Then I submit the search by pressing enter
     And I should see the text "Did you mean: cabo ?"
 
-  Scenario: Filter on date
-    Given collection content:
-      | title         | state     |
-      | Mice in space | published |
-    And news content:
-      | title           | body                  | collection    | topic       | spatial coverage | state     | created    | changed    | published_at |
-      | Muscle atrophy  | Researchers from Tsukuba | Mice in space | Finance in EU | Luxembourg    | published | 01/01/2019 | 01/01/2019 | 01/01/2019   |
-      | El Cabo da Roca | The best in town      | Mice in space | E-inclusion | Luxembourg       | published | 01/12/2020 | 01/12/2020 | 01/12/2020   |
-      | Funny news 1    | Dummy body            | Mice in space | HR          | Luxembourg       | published | 06/25/2020 | 06/25/2020 | 06/25/2020   |
-
-    When I visit the advanced search page
-
     # Filter content from 01-01-2020 to 30-06-2020.
-    Then I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
-    And I should see the text "SEARCH RESULTS (2)"
-
-    Then I go to "/search?f[0]=date:(min:1577836800,max:)"
-    And I should see the text "SEARCH RESULTS (3)"
-
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given collection content:
       | title                  | moderation | topic                                                                              | state     |
