@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -15,12 +16,58 @@ use Drupal\Component\Utility\NestedArray;
  */
 final class AssessmentForm extends ContentEntityForm {
 
-  private const STEP_GENERAL = 1;
+  /**
+   * Copy only current-step values from form to entity on partial saves.
+   */
+  protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
+    // If we are in a wizard partial save context, only copy current step fields.
+    $is_partial = (bool) $form_state->get('wizard_skip_validation');
+    if ($is_partial) {
+      $current_step = $this->getCurrentStep($form_state);
+      $allowed = $this->getFieldsForStep($current_step);
+
+      // Get submitted values and filter by allowed field machine names.
+      $submitted = $form_state->getValues();
+      $filtered = [];
+      foreach ($allowed as $field_name) {
+        if (array_key_exists($field_name, $submitted)) {
+          $filtered[$field_name] = $submitted[$field_name];
+        }
+      }
+
+      // Temporarily replace form_state values with the filtered subset so that
+      // parent::copyFormValuesToEntity only maps those values. Avoids clearing
+      // unrelated fields and prevents unintended changes.
+      $original = $submitted;
+      foreach (array_keys($original) as $key) {
+        $form_state->unsetValue($key);
+      }
+      foreach ($filtered as $k => $v) {
+        $form_state->setValue($k, $v);
+      }
+
+      // Delegate to core for actual mapping of filtered values.
+      parent::copyFormValuesToEntity($entity, $form, $form_state);
+
+      // Restore original values to the form state for downstream handlers.
+      foreach (array_keys($filtered) as $key) {
+        $form_state->unsetValue($key);
+      }
+      foreach ($original as $k => $v) {
+        $form_state->setValue($k, $v);
+      }
+      return;
+    }
+
+    // Default behavior for full submits.
+    parent::copyFormValuesToEntity($entity, $form, $form_state);
+  }
+
+  private const STEP_ORGANIZATION = 1;
   private const STEP_REQUIREMENTS = 2;
-  private const STEP_RESULTS = 3;
-  private const STEP_SUPPORTING_DOCS = 4;
-  private const STEP_REVIEW = 5;
-  private const STEP_COMPLETE = 6;
+  private const STEP_STATEMENTS = 3;
+  private const STEP_REVIEW = 4;
+  private const STEP_COMPLETE = 5;
 
   /**
    * {@inheritdoc}
@@ -30,7 +77,7 @@ final class AssessmentForm extends ContentEntityForm {
     // Note: We avoid using $form_state->setRedirect* here because it only
     // takes effect on submission. Instead, getCurrentStep() will provide a
     // sensible default when the query parameter is missing.
-    $current_step = $this->getCurrentStep($form_state) ?? self::STEP_GENERAL;
+    $current_step = $this->getCurrentStep($form_state) ?? self::STEP_ORGANIZATION;
 
     // Build the default entity form.
     $form = parent::buildForm($form, $form_state);
@@ -109,9 +156,21 @@ final class AssessmentForm extends ContentEntityForm {
     // Step 6: Completion message (read-only page within form).
     elseif ($current_step === self::STEP_COMPLETE) {
       $form['complete'] = [
-        '#type' => 'item',
-        '#title' => $this->t('Complete'),
-        '#markup' => $this->t('Your submission has been saved. You can revisit steps using the navigation above.'),
+        '#type' => 'container',
+        'title' => [
+          '#type' => 'item',
+          '#title' => $this->t('Complete'),
+        ],
+        'message' => [
+          '#type' => 'markup',
+          '#markup' => $this->t('Your submission has been saved as a draft. You can revisit steps using the navigation above.'),
+        ],
+        'view_link' => [
+          '#type' => 'link',
+          '#title' => $this->t('View assessment'),
+          '#url' => $this->entity->toUrl('canonical'),
+          '#attributes' => ['class' => ['button', 'button--primary']],
+        ],
       ];
     }
 
@@ -140,7 +199,7 @@ final class AssessmentForm extends ContentEntityForm {
     unset($actions['submit']);
 
     // Back button (not on first step).
-    if ($current_step > self::STEP_GENERAL && $current_step <= self::STEP_REVIEW) {
+    if ($current_step > self::STEP_ORGANIZATION && $current_step <= self::STEP_REVIEW) {
       $actions['back'] = [
         '#type' => 'submit',
         '#value' => $this->t('Back'),
@@ -151,14 +210,13 @@ final class AssessmentForm extends ContentEntityForm {
 
     // Continue button (first to penultimate step).
     if ($current_step < self::STEP_REVIEW) {
+      $paths = array_map(fn($f) => [$f], $this->getFieldsForStep($current_step));
+      array_unshift($paths, ['wizard_step']);
       $actions['continue'] = [
         '#type' => 'submit',
         '#value' => $this->t('Continue'),
         '#submit' => ['::submitContinue'],
-        '#limit_validation_errors' => [
-          // Validate only elements on the current step.
-          array_merge(['wizard_step'], $this->getFieldsForStep($current_step)),
-        ],
+        '#limit_validation_errors' => $paths,
       ];
     }
 
@@ -180,6 +238,7 @@ final class AssessmentForm extends ContentEntityForm {
    * Skip validation on Back/Continue. Keep default on final submission.
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
+    // Skip validation entirely if partial save explicitly requested.
     if ($form_state->get('wizard_skip_validation')) {
       return;
     }
@@ -192,7 +251,7 @@ final class AssessmentForm extends ContentEntityForm {
   public function submitBack(array &$form, FormStateInterface $form_state): void {
     $this->savePartial($form, $form_state);
     $current = $this->getCurrentStep($form_state);
-    $this->redirectToStep(max(self::STEP_GENERAL, $current - 1), $form_state);
+    $this->redirectToStep(max(self::STEP_ORGANIZATION, $current - 1), $form_state);
   }
 
   /**
@@ -210,7 +269,8 @@ final class AssessmentForm extends ContentEntityForm {
   public function submitForReview(array &$form, FormStateInterface $form_state): void {
     // Ensure normal validation applies (button is disabled if invalid anyway).
     $this->savePartial($form, $form_state);
-    $form_state->setRedirectUrl($this->entity->toUrl('canonical'));
+    // Redirect to the completion step of the wizard.
+    $this->redirectToStep(self::STEP_COMPLETE, $form_state);
   }
 
   /**
@@ -243,9 +303,9 @@ final class AssessmentForm extends ContentEntityForm {
    * Get current step from query or form state.
    */
   private function getCurrentStep(FormStateInterface $form_state): int {
-    $step = (int) ($form_state->getValue('wizard_step') ?? (int) ($_GET['step'] ?? self::STEP_GENERAL));
-    if ($step < self::STEP_GENERAL || $step > self::STEP_COMPLETE) {
-      $step = self::STEP_GENERAL;
+    $step = (int) ($form_state->getValue('wizard_step') ?? (int) ($_GET['step'] ?? self::STEP_ORGANIZATION));
+    if ($step < self::STEP_ORGANIZATION || $step > self::STEP_COMPLETE) {
+      $step = self::STEP_ORGANIZATION;
     }
     return $step;
   }
@@ -273,25 +333,20 @@ final class AssessmentForm extends ContentEntityForm {
    */
   private function getSteps(): array {
     return [
-      self::STEP_GENERAL => [
-        'label' => (string) $this->t('General information'),
-        'help' => (string) $this->t('Provide general information about the assessment.'),
+      self::STEP_ORGANIZATION => [
+        'label' => (string) $this->t('Public organization'),
+        'help' => (string) $this->t('Select or provide the public organization.'),
         'fields' => ['organization'],
       ],
       self::STEP_REQUIREMENTS => [
         'label' => (string) $this->t('Binding requirements'),
-        'help' => (string) $this->t('Select or provide the binding requirements.'),
+        'help' => (string) $this->t('Add the binding requirements (with participants, affected services, and assets).'),
         'fields' => ['requirement'],
       ],
-      self::STEP_RESULTS => [
-        'label' => (string) $this->t('Results'),
-        'help' => (string) $this->t('Add the results and statements related to the assessment.'),
+      self::STEP_STATEMENTS => [
+        'label' => (string) $this->t('Statements'),
+        'help' => (string) $this->t('Add the statements and their affected services.'),
         'fields' => ['statements'],
-      ],
-      self::STEP_SUPPORTING_DOCS => [
-        'label' => (string) $this->t('Supporting documents'),
-        'help' => (string) $this->t('Attach any supporting documents. (No fields available yet.)'),
-        'fields' => [],
       ],
       self::STEP_REVIEW => [
         'label' => (string) $this->t('Submission review'),
@@ -313,4 +368,5 @@ final class AssessmentForm extends ContentEntityForm {
     $steps = $this->getSteps();
     return $steps[$step]['fields'] ?? [];
   }
+
 }

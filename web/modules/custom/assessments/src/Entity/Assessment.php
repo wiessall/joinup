@@ -99,22 +99,22 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
-    // Provided by field. Reference to assessment_organization.
-    $fields['organization'] = BaseFieldDefinition::create('assessment_provider')
+    // Public organization reference (inline entity form).
+    $fields['organization'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Public Organization'))
       ->setDescription(t('Union entity or public sector body which is providing the report.'))
       ->setSetting('target_type', 'assessment_organization')
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'assessment_provider',
+        'type' => 'inline_entity_form_complex',
         'settings' => [],
         'weight' => -10,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'assessment_provider',
+        'type' => 'entity_reference_entity_view',
         'weight' => -10,
       ])
       ->setDisplayConfigurable('view', TRUE);
@@ -164,13 +164,6 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'type' => 'boolean',
@@ -188,15 +181,6 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setLabel(t('Author'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -209,11 +193,6 @@ final class Assessment extends RevisionableContentEntityBase implements Assessme
       ->setLabel(t('Authored on'))
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the assessment was created.'))
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('form', [
         'type' => 'datetime_timestamp',

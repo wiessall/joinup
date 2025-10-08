@@ -103,13 +103,6 @@ final class PublicOrganization extends ContentEntityBase implements PublicOrgani
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'type' => 'boolean',
@@ -141,15 +134,6 @@ final class PublicOrganization extends ContentEntityBase implements PublicOrgani
       ->setLabel(t('Author'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -202,6 +186,50 @@ final class PublicOrganization extends ContentEntityBase implements PublicOrgani
         'type' => 'list_default',
         'weight' => 5,
       ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    // Provider fields moved from Assessment Provider widget into
+    // Public Organization entity.
+    $fields['provider_type'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Type of public sector body'))
+      ->setRequired(TRUE)
+      ->setSettings([
+        'allowed_values' => [
+          'local_public_sector_body' => t('Local public sector body'),
+          'regional_public_sector_body' => t('Regional public sector body'),
+          'national_public_sector_body' => t('National public sector body'),
+          'eu_institution' => t('European Union institution'),
+          'eu_agency' => t('European Union agency'),
+          'eu_body' => t('European Union body'),
+        ],
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
+        'weight' => 6,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['provider_country'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Country'))
+      ->setDescription(t('Country code (2-letter)'))
+      ->setSettings(['max_length' => 2])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 7,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['provider_value'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Organization text/value'))
+      ->setRequired(TRUE)
+      ->setSettings(['max_length' => 255])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 8,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
