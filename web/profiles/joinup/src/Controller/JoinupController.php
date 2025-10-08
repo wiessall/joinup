@@ -53,14 +53,4 @@ class JoinupController extends ControllerBase {
     return AccessResult::allowedIfHasPermission($this->currentUser(), "propose {$node_type->id()} content");
   }
 
-  /**
-   * Provides a page outlining eligibility criteria for solutions.
-   *
-   * @return array
-   *   The page as a render array.
-   */
-  public function eligibilityCriteria(): array {
-    return ['#theme' => 'joinup_eligibility_criteria'];
-  }
-
 }

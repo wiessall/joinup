@@ -17,7 +17,7 @@ export default class ContactUsUi extends Plugin {
         const button = new ButtonView(locale);
 
         button.set({
-          label: t("Contact us"),
+          label: Drupal.t("Contact us"),
           tooltip: true,
           withText: false,
           icon,

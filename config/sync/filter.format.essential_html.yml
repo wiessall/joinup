@@ -5,6 +5,7 @@ dependencies:
   module:
     - blazy
     - joinup_collection
+    - joinup_html_stripper
     - markdown_easy
     - slick
 name: 'Essential HTML'
@@ -54,6 +55,12 @@ filters:
     weight: -49
     settings:
       filter_url_length: 72
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
+    status: true
+    weight: -40
+    settings: {  }
   markdown_easy:
     id: markdown_easy
     provider: markdown_easy

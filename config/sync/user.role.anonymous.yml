@@ -69,6 +69,8 @@ permissions:
   - 'view paragraph content layout'
   - 'view paragraph content poll'
   - 'view paragraph content quote'
+  - 'view paragraph content resource_file'
+  - 'view paragraph content resource_link'
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content social_media'
   - 'view paragraph content table_of_contents'
