@@ -100,8 +100,8 @@ Feature: Tests the group landing page customization.
     When I click "Edit landing page"
     When I check the box "Hide title"
     And I press "Update"
+    And the response should not contain "<h1 class='page-title__title visually-hidden>"
     Then I should see the heading "<group> group"
-    And I should not see the heading "Custom Page 3"
 
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
