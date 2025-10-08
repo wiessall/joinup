@@ -22,8 +22,8 @@
   }
   .btn-brand,
   .btn-primary {
-    border: 1px solid color.adjust($oss-brand, $lightness: -5%);
-    background-color: $oss-brand !important;
+    border: 1px solid color.adjust($oss-brand-darker, $lightness: -5%);
+    background-color: $oss-brand-darker !important;
   }
   .btn-outline-brand {
     color: $oss-brand;

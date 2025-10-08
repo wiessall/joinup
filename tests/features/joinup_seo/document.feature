@@ -17,8 +17,8 @@ Feature: SEO for document content.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
-      | title        | author                                 | document type | published at              | changed                   | keywords                                          | short title | file type | file     | field_paragraphs_body | licence      | collection                                          | abstract |
-      | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | nintendo64 manuals, Alphabet, nintendo64 licences | SEO         | upload    | test.zip | Document test1.zip    | Some license | Interoperable Europe Portal SEO document collection |          |
+      | title        | author                                 | document type | published at              | changed                   | keywords                                          | short title | resources | field_paragraphs_body | licence      | collection                                          | abstract |
+      | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | nintendo64 manuals, Alphabet, nintendo64 licences | SEO         | test.zip  | Document test1.zip    | Some license | Interoperable Europe Portal SEO document collection |          |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -75,8 +75,8 @@ Feature: SEO for document content.
 
   Scenario: Metatags for remote URL in documents.
     Given document content:
-      | title        | author                                 | published at              | changed                   | file type | file                                       | abstract                    | field_paragraphs_body   | collection                                          |
-      | SEO document | Interoperable Europe Portal SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | remote    | http://example.com/some-file-url.extension | Remote url example abstract | Remote url example body | Interoperable Europe Portal SEO document collection |
+      | title        | author                                 | published at              | changed                   | resources                                  | abstract                    | field_paragraphs_body   | collection                                          |
+      | SEO document | Interoperable Europe Portal SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | http://example.com/some-file-url.extension | Remote url example abstract | Remote url example body | Interoperable Europe Portal SEO document collection |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -95,6 +95,6 @@ Feature: SEO for document content.
       | property      | value                                      |
       | @type         | http://schema.org/MediaObject              |
       | @id           | http://example.com/some-file-url.extension |
-      | name          | some-file-url.extension                    |
+      | name          | http://example.com/some-file-url.extension |
       | url           | http://example.com/some-file-url.extension |
       | datePublished | 2019-12-25T__timezone__:00:00+0000         |

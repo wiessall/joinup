@@ -1,0 +1,12 @@
+uuid: e41452e8-dea7-49a4-8d44-1418ff90824e
+langcode: en
+status: true
+dependencies: {  }
+id: eligibility_criteria
+label: 'Eligibility criteria'
+description: ''
+use_admin_theme: false
+path: /joinup/eligibility-criteria
+access_logic: and
+access_conditions: {  }
+parameters: {  }

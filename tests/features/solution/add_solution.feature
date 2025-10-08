@@ -103,7 +103,7 @@ Feature: Test adding solutions.
     And I go to the homepage of the "Belgian barista's" collection
     And I click "Add solution" in the plus button menu
     Then I should see the heading "Add solution"
-    And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Abstract, Description, Related documents, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -132,7 +132,8 @@ Feature: Test adding solutions.
     And I click "Additional information"
     And I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Upload file"
+    And I attach the file "text.pdf" to "files[resources_0_subform_resource_file_0]"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Completed" from "Status"
@@ -170,7 +171,7 @@ Feature: Test adding solutions.
       | subject   | Interoperable Europe Portal: Your solution has been accepted                                                |
       | body      | Your proposed interoperability solution: "Espresso is the solution" has been validated as per your request. |
 
-    When I am logged in as a facilitator of the "Belgian barista's" collection
+    When I am logged in as "Wendell Silva"
     # Make sure that when another solution is added, both are affiliated.
     When I go to the homepage of the "Belgian barista's" collection
     And I click "Add solution" in the plus button menu
@@ -194,12 +195,29 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I select "Data Owner" options from "Solution type"
     # Attach a PDF to the documentation.
-    And I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Upload file"
+    And I attach the file "text.pdf" to "files[resources_0_subform_resource_file_0]"
+    And I press "Add remote file URL"
+    And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I attach the file "logo.png" to "Logo"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
     Then I should see the heading "V60 filter coffee solution"
+    When I go to the edit form of the "V60 filter coffee solution" solution
+    And I click "Additional information"
+    Then I press "resources_0_edit"
+    And I fill in "resources[0][subform][resource_file][0][description]" with "My uploaded file"
+    Then I press "resources_1_edit"
+    And I fill in "Link text" with "My remote file"
+    And I press "Confirm"
+    And I press "Propose"
+    And I should see "Documentation"
+    And I should not see "text.pdf"
+    And I should not see "logo.png"
+    And I should see "My uploaded file"
+    And I should see "My remote file"
+
     # The name of the solution should exist in the block of the relative content in a collection.
     When I go to the homepage of the "Belgian barista's" collection
     Then I should see the heading "Belgian barista's"

@@ -26,6 +26,7 @@
     .setAttribute('data-dialog-type', 'modal')
     .setAttribute('data-dialog-options', '{"width": "auto","height":"auto"}')
     .setAttribute('href', path('joinup_modal.anonymous', {type: 'like'}, {query: {destination: path('<current>')}}))
-    .setAttribute('aria-label', link_title) %}
+    .setAttribute('aria-label', link_title)
+    .setAttribute('role', 'button') %}
 
 <a{{ attributes }}><span class="visually-hidden">{{- link_title -}}</span><svg class="bi icon--xs me-1"><use xlink:href="{{ bcl_icon_path }}#hand-thumbs-up"></use></svg>{{- count -}}</a>

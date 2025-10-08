@@ -11,6 +11,7 @@
  */
 #}
 {{ attach_library('ventuno/menu--og--navigation') }}
+{{ attach_library('ventuno/duplicate-id-fixer') }}
 
 {% for item in items %}
   {% set item %}
@@ -26,7 +27,7 @@
 
 <div class="menu--og--navigation bg-light">
   <div class="container">
-    <nav>
+    <nav aria-label="{{ 'Secondary navigation'|t }}">
       {{ pattern('navigation', {
         variant: 'default',
         items: items,
