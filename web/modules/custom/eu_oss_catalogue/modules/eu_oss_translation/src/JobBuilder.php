@@ -9,15 +9,19 @@ use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\tmgmt\SourceManager;
+use Drupal\tmgmt\TMGMTException;
 use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Job builder service.
  */
-readonly class JobBuilder implements JobBuilderInterface {
+class JobBuilder implements JobBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Target language.
@@ -126,11 +130,39 @@ readonly class JobBuilder implements JobBuilderInterface {
       $job->requestTranslation();
     }
     catch (\Exception $e) {
+      if ($e instanceof TMGMTException && $this->isNoTranslatableContentException($e, $entity)) {
+        return;
+      }
+
       $this->logger->error('An issue occurred during creating the translation job. Message: @message', [
         '@message' => $e->getMessage(),
         'oss_solution' => $entity->id(),
       ]);
     }
+  }
+
+  /**
+   * Checks if exception is the "no translatable content" exception.
+   *
+   * Compare exception message with the translated template. Both go through
+   * translation, ensuring language-safe comparison.
+   *
+   *
+   * @param \Drupal\tmgmt\TMGMTException $exception
+   *   The exception to check.
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
+   *   The entity being processed.
+   *
+   * @return bool
+   *   TRUE if this is the "no translatable content" exception.
+   */
+  protected function isNoTranslatableContentException(TMGMTException $exception, OssSolutionInterface $entity): bool {
+    $expectedMessage = $this->t('Job item @label (@type) has no translatable content.', [
+      '@label' => $entity->label(),
+      '@type' => $entity->getEntityTypeId(),
+    ]);
+
+    return $exception->getMessage() === (string) $expectedMessage;
   }
 
 }
