@@ -6,8 +6,8 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Access the navigation menu through the contextual link
     Given <group> content:
-      | title          | logo     |
-      | Rainbow tables | logo.png |
+      | title          |
+      | Rainbow tables |
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items
@@ -74,11 +74,11 @@ Feature: Navigation menu for custom pages
       | title         |
       | Plaster molds |
     And custom_page content:
-      | title             | collection    | topic |
-      | Molds for candles | Plaster molds | HR    |
-      | Molds for walls   | Plaster molds | HR    |
-      | Molds for crafts  | Plaster molds | HR    |
-      | Molds for pottery | Plaster molds | HR    |
+      | title              | collection    | topic |
+      | Molds for candles  | Plaster molds | HR    |
+      | Molds for walls    | Plaster molds | HR    |
+      | Molds for crafts   | Plaster molds | HR    |
+      | Molds for pottery  | Plaster molds | HR    |
       | Molds for ceramics | Plaster molds | HR    |
       | Molds for soaps   | Plaster molds | HR    |
     When I go to the "Plaster molds" collection
@@ -97,8 +97,8 @@ Feature: Navigation menu for custom pages
   @javascript
   Scenario: The contextual links button in the navigation menu should be always visible
     Given collection content:
-      | title        | logo     |
-      | Prism Gazers | logo.png |
+      | title        |
+      | Prism Gazers |
     And custom_page content:
       | title           | collection   | topic |
       | Mists of dreams | Prism Gazers | HR    |
