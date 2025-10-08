@@ -107,8 +107,11 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [],
+        'type' => 'inline_entity_form_simple',
+        'settings' => [
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+        ],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -128,8 +131,11 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [],
+        'type' => 'inline_entity_form_simple',
+        'settings' => [
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+        ],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -154,8 +160,11 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ])
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [],
+        'type' => 'inline_entity_form_simple',
+        'settings' => [
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+        ],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -179,8 +188,11 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [],
+        'type' => 'inline_entity_form_simple',
+        'settings' => [
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+        ],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -199,8 +211,11 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setSetting('handler', 'default')
       ->setRequired(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [],
+        'type' => 'inline_entity_form_simple',
+        'settings' => [
+          'collapsible' => TRUE,
+          'collapsed' => TRUE,
+        ],
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -253,15 +268,6 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
       ->setLabel(t('Author'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -280,10 +286,6 @@ final class BindingRequirement extends ContentEntityBase implements BindingRequi
         'weight' => 20,
       ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 20,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
