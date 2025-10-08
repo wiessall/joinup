@@ -5,8 +5,8 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find items
     Given collection content:
-      | title                        | logo     | moderation | topic      | spatial coverage | state     |
-      | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
+      | title                        | moderation | topic      | spatial coverage | state     |
+      | Molecular cooking collection | no         | Demography | Belgium          | published |
     Given solution content:
       | title          | collection                   | description                                                     | topic      | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid      | Demography | published |
