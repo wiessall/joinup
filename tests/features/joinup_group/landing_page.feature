@@ -100,7 +100,8 @@ Feature: Tests the group landing page customization.
     When I click "Edit landing page"
     When I check the box "Hide title"
     And I press "Update"
-    And the response should not contain "<h1 class='page-title__title visually-hidden>"
+    Then I go to the homepage of the "<group> group" <group>
+    And the response should contain "page-title__title visually-hidden"
     Then I should see the heading "<group> group"
 
     When I click "Settings"
