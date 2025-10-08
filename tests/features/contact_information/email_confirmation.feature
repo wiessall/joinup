@@ -176,3 +176,6 @@ Feature: Resend validation email from collection/solution about page
     When I go to the "Existing to resend solution" solution
     Then I should see the link "Some Resend"
     But I should not see the text "Please confirm your contact information to enable users to contact you"
+    # ISAICP-10186 should not return ajax call.
+    Then I click "Some Resend"
+    And I should see the heading "Contact us"

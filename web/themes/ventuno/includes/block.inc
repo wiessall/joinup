@@ -96,6 +96,15 @@ function ventuno_preprocess_block__field_block__node__oss_solution__oss_vitality
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for solution resources field block.
+ */
+function ventuno_preprocess_block__field_block__node__solution__resources(array &$variables): void {
+  $variables['attributes']['class'][] = 'p-4';
+  $variables['attributes']['class'][] = 'rounded-3';
+  $variables['attributes']['class'][] = 'bg-light';
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
  */
 function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {

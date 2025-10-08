@@ -42,7 +42,7 @@
           'align-items-center',
         ]
       %}
-      <div aria-label="{{ status_headings[type] }}"{{ attributes.addClass(classes)|without('role', 'aria-label') }} role="{{ type == 'error' ? 'alert' : 'contentinfo' }}">
+      <div aria-label="{{ status_headings[type] }}"{{ attributes.addClass(classes)|without('role', 'aria-label') }} role="{{ type == 'error' ? 'alert' : 'status' }}">
         <svg class="flex-shrink-0 me-3 mt-1 align-self-start bi icon--s">
           <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
         </svg>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d599d73b874339da0261c0b2c6257ae7",
+    "content-hash": "42e3a52806cc290792a455bb15cc2e5b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13625,6 +13625,21 @@
             "time": "2025-08-13T20:13:15+00:00"
         },
         {
+            "name": "npm-asset/chart.js",
+            "version": "4.5.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.0.tgz"
+            },
+            "require": {
+                "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/dompurify",
             "version": "3.2.6",
             "dist": {
@@ -13684,6 +13699,18 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/kurkle--color",
+            "version": "0.3.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -26777,11 +26804,11 @@
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
         "drupal/flag": 10,
+        "drupal/masquerade": 5,
         "drupal/mimemail": 15,
         "drupal/poll": 15,
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
-        "drupal/masquerade": 5,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,

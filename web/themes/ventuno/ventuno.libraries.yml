@@ -317,6 +317,13 @@ menu--og--navigation:
     - core/once
     - ventuno/priority-plus
 
+duplicate-id-fixer:
+  js:
+    assets/js/duplicate-id-fixer.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+
 modals:
   css:
     theme:
