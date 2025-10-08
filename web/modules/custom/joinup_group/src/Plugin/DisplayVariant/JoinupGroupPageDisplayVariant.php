@@ -77,6 +77,17 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function setTitle($title): PageVariantInterface {
+    if ($landing_page = $this->getCustomLandingPage()) {
+      $title = $landing_page->label();
+    }
+    $this->title = $title;
+    return $this;
+  }
+
+  /**
    * Returns a custom page to be used as landing page, if any.
    *
    * @return \Drupal\custom_page\Entity\CustomPageInterface|null
