@@ -16,7 +16,7 @@
 {% set classes = ['js-vitality-index-chart'] %}
 {{ attach_library('eu_oss_vitality_index/vitality-index-chart') }}
 
-<button class="btn btn-link vitality-index-info-button btn-md px-0 pt-1" type="button" data-bs-toggle="modal" data-bs-target="#vitality-index-info">
+<button class="btn btn-link vitality-index-info-button btn-md px-0 pt-1" type="button" data-bs-toggle="modal" data-bs-target="#vitality-index-info" aria-label="{{ 'Click for Vitality index information'|t }}">
   {{ pattern('icon', {
     name: 'info-circle',
     size: 'm'

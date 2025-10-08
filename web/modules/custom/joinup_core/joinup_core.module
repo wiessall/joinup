@@ -42,10 +42,7 @@ use Drupal\node\NodeInterface;
 function joinup_core_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     '404_not_found' => [
-      'variables' => [
-        'search' => [],
-        'front' => [],
-      ],
+      'variables' => [],
     ],
     'download_link' => [
       'variables' => [

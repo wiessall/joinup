@@ -42,6 +42,7 @@ third_party_settings:
   field_group:
     group_main:
       children:
+        - langcode
         - group_solution_tabs
         - current_workflow_state
       label: Main
@@ -168,7 +169,7 @@ third_party_settings:
       label: Tabs
       region: content
       parent_name: group_main
-      weight: 1
+      weight: 4
       format_type: tabs
       format_settings:
         classes: ''
@@ -224,7 +225,7 @@ content:
     third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 2
+    weight: 5
     region: content
     settings:
       title: 'Current workflow state'
@@ -303,6 +304,13 @@ content:
     settings:
       placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
       placeholder_title: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
     third_party_settings: {  }
   language:
     type: tagify_entity_reference_autocomplete_widget
@@ -434,7 +442,6 @@ content:
 hidden:
   created: true
   field_shared_in: true
-  langcode: true
   metrics_page: true
   og_audience: true
   path: true
