@@ -6,6 +6,7 @@ dependencies:
     - assessments.assessment_content_type.assessment
     - field.field.assessment_content.assessment.binding_requirement
     - field.field.assessment_content.assessment.is_provided_by
+    - field.field.assessment_content.assessment.name
     - field.field.assessment_content.assessment.results_in
   module:
     - field_group
@@ -14,11 +15,13 @@ third_party_settings:
   field_group:
     group_general_information:
       children:
+        - name
+        - group_page1text1
         - is_provided_by
-      label: 'General information'
+      label: '1. General information'
       region: content
       parent_name: ''
-      weight: 0
+      weight: 1
       format_type: form_step
       format_settings:
         classes: ''
@@ -26,19 +29,19 @@ third_party_settings:
         id: ''
         label_as_html: false
         show_step_title: true
-        step_description: ''
+        step_description: "This section collects general information on your interoperability assessment.\r\n\r\n"
         back_button_show: false
         back_button_text: Back
         next_button_text: Next
-        required_fields: true
         step_help: ''
     group_binding_requirements:
       children:
+        - group_page2help
         - binding_requirement
-      label: 'Binding requirements'
+      label: '2. Binding requirements'
       region: content
       parent_name: ''
-      weight: 1
+      weight: 2
       format_type: form_step
       format_settings:
         classes: ''
@@ -54,10 +57,10 @@ third_party_settings:
     group_statements:
       children:
         - results_in
-      label: Statements
+      label: '3. Results'
       region: content
       parent_name: ''
-      weight: 2
+      weight: 3
       format_type: form_step
       format_settings:
         classes: ''
@@ -69,8 +72,37 @@ third_party_settings:
         back_button_show: true
         back_button_text: Back
         next_button_text: Next
-        required_fields: true
         step_help: ''
+    group_page1text1:
+      children: {  }
+      label: Page1Text1
+      region: content
+      parent_name: group_general_information
+      weight: 22
+      format_type: markup
+      format_settings:
+        markup:
+          value: '<div><h4>Union entity or public sector body which is providing the report.</h4></div>'
+          format: content_editor
+        show_empty_fields: '1'
+        id: ''
+        classes: form-wrapper
+        label_as_html: 0
+    group_page2help:
+      children: {  }
+      label: Page2Help
+      region: content
+      parent_name: group_binding_requirements
+      weight: 20
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<div><p>This section collects information on the assessed binding requirements.</p><p>The concept of ‘Binding requirements’ is defined in Article 2(15) IEA as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and</li><li>which has an effect on cross-border interoperability.</li></ul><p>For more information please consult the guidelines.</p></div><div><h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA.</p><p>‘<em>Digital services provided by Union entities or public sector bodies to one another or to natural or legal persons in the Union, and requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ – Article 2(2) IEA</p></div>'
+          format: content_editor
 id: assessment_content.assessment.default
 targetEntityType: assessment_content
 bundle: assessment
@@ -78,7 +110,7 @@ mode: default
 content:
   binding_requirement:
     type: inline_entity_form_complex
-    weight: 10
+    weight: 21
     region: content
     settings:
       form_mode: default
@@ -95,22 +127,25 @@ content:
       removed_reference: optional
     third_party_settings: {  }
   is_provided_by:
-    type: inline_entity_form_complex
-    weight: 9
+    type: inline_entity_form_simple
+    weight: 23
     region: content
     settings:
       form_mode: default
-      override_labels: false
+      override_labels: true
       label_singular: ''
       label_plural: ''
-      allow_new: true
-      allow_existing: true
-      match_operator: CONTAINS
-      allow_duplicate: false
       collapsible: false
       collapsed: false
       revision: false
-      removed_reference: optional
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   results_in:
     type: inline_entity_form_complex

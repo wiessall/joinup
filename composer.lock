@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecfe41d391181061d52794158f125fe4",
+    "content-hash": "ff6d4f6d54a84da1b93546dead6d4d8f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4952,6 +4952,51 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/field_group",
                 "issues": "https://www.drupal.org/project/issues/field_group"
+            }
+        },
+        {
+            "name": "drupal/field_group_markup",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/field_group_markup.git",
+                "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/field_group_markup-1.0.2.zip",
+                "reference": "1.0.2",
+                "shasum": "4e5859c975061ba7012c8aed0b25514b4ea26d8c"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/field_group": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.2",
+                    "datestamp": "1667186287",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "dieuwe",
+                    "homepage": "https://www.drupal.org/user/1536006"
+                }
+            ],
+            "description": "Provides a markup field group display formatter.",
+            "homepage": "https://www.drupal.org/project/field_group_markup",
+            "support": {
+                "source": "https://git.drupalcode.org/project/field_group_markup"
             }
         },
         {

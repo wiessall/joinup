@@ -4,12 +4,11 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.public_organization
+    - field.field.assessment_content.public_organization.country
     - field.field.assessment_content.public_organization.description
     - field.field.assessment_content.public_organization.name
-    - field.field.assessment_content.public_organization.spatial
     - field.field.assessment_content.public_organization.type
   module:
-    - geofield
     - options
     - user
 id: assessment_content.public_organization.default
@@ -17,6 +16,14 @@ targetEntityType: assessment_content
 bundle: public_organization
 mode: default
 content:
+  country:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 23
+    region: content
   created:
     type: timestamp
     label: above
@@ -50,15 +57,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 21
-    region: content
-  spatial:
-    type: geofield_default
-    label: above
-    settings:
-      output_format: wkt
-      output_escape: true
-    third_party_settings: {  }
-    weight: 23
     region: content
   status:
     type: boolean

@@ -13,22 +13,140 @@ dependencies:
     - field.field.assessment_content.binding_requirement.related_assets
     - field.field.assessment_content.binding_requirement.resource
   module:
+    - field_group
     - file
+    - inline_entity_form
     - link
+third_party_settings:
+  field_group:
+    group_page2text1:
+      children: {  }
+      label: Page2Text1
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: markup
+      format_settings:
+        markup:
+          value: '<h4>Provide a short description for the binding requirement.</h4>'
+          format: content_editor
+        show_empty_fields: '1'
+        id: ''
+        classes: form-wrapper
+        label_as_html: 0
+    group_page2text2:
+      children: {  }
+      label: Page2Text2
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<h4>Binding requirement expression</h4><p>An expression is the context from which the binding requirement derives from. That can be a legislation - specific article, or any other source that makes sense as a source for the requirement.</p>'
+          format: content_editor
+    group_page2text3:
+      children: {  }
+      label: Page2Text3
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: markup
+      format_settings:
+        markup:
+          value: '<h4>The documentation links point to URLs that explain either the expressions provided or the binding requirement itself.</h4>'
+          format: content_editor
+        show_empty_fields: '1'
+        id: ''
+        classes: form-wrapper
+        label_as_html: 0
+    group_page2text4:
+      children: {  }
+      label: Page2Text4
+      region: content
+      parent_name: ''
+      weight: 6
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<h4>The public service affected by the binding requirement.</h4>'
+          format: content_editor
+    group_page2text5:
+      children: {  }
+      label: Page2Text5
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<div><h4>Public and/or private stakeholders affected</h4></div>'
+          format: content_editor
+    group_page2text6:
+      children: {  }
+      label: Page2Text6
+      region: content
+      parent_name: ''
+      weight: 10
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<h4>If there are any documents that can support the definition of the binding requirement, you may upload them here.</h4>'
+          format: content_editor
+    group_page2text7:
+      children: {  }
+      label: Page2Text7
+      region: content
+      parent_name: ''
+      weight: 12
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<h4>This relation points to interoperability solutions relevant for the binding requirements.</h4>'
+          format: content_editor
+    group_page2text8:
+      children: {  }
+      label: Page2Text8
+      region: content
+      parent_name: ''
+      weight: 14
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<h4>Binding requirements may reference data, datasets, standards, solutions etc. This relation provides a machine readable version of that reference.</h4>'
+          format: content_editor
 id: assessment_content.binding_requirement.default
 targetEntityType: assessment_content
 bundle: binding_requirement
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 20
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   description:
     type: string_textarea
-    weight: 22
+    weight: 1
     region: content
     settings:
       rows: 5
@@ -36,90 +154,102 @@ content:
     third_party_settings: {  }
   documentation:
     type: file_generic
-    weight: 24
+    weight: 11
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   documented_in:
     type: link_default
-    weight: 23
+    weight: 5
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
   expression:
-    type: entity_reference_autocomplete
-    weight: 24
+    type: inline_entity_form_complex
+    weight: 3
     region: content
     settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Expression
+      label_plural: Expressions
+      allow_new: true
+      allow_existing: false
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: optional
     third_party_settings: {  }
   has_participation:
-    type: entity_reference_autocomplete
-    weight: 23
+    type: inline_entity_form_complex
+    weight: 9
     region: content
     settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: optional
     third_party_settings: {  }
   has_related_service:
-    type: entity_reference_autocomplete
-    weight: 21
+    type: inline_entity_form_complex
+    weight: 7
     region: content
     settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Affected service'
+      label_plural: 'Affected services'
+      allow_new: true
+      allow_existing: false
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: optional
     third_party_settings: {  }
   related_assets:
-    type: entity_reference_autocomplete
-    weight: 26
+    type: inline_entity_form_complex
+    weight: 13
     region: content
     settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: optional
     third_party_settings: {  }
   resource:
     type: link_default
-    weight: 25
+    weight: 15
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 0
-    region: content
-    settings:
-      display_label: false
-    third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 15
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
 hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true
   uri: true

@@ -54,6 +54,7 @@
         "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
         "drupal/field_group": "4.0.0 as 3.6",
+        "drupal/field_group_markup": "^1.0",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/file_visibility": "^1.0",

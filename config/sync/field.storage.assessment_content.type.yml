@@ -12,17 +12,23 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: assessment
-      label: Assessment
+      value: local_public_sector_body
+      label: 'Local public sector body'
     -
-      value: observation
-      label: Observation
+      value: regional_public_sector_body
+      label: 'Regional public sector body'
     -
-      value: recommendation
-      label: Recommendation
+      value: national_public_sector_body
+      label: 'National public sector body'
     -
-      value: review
-      label: Review
+      value: european_union_institution
+      label: 'European Union institution'
+    -
+      value: european_union
+      label: 'European Union agency'
+    -
+      value: european_union_body
+      label: 'European Union body'
   allowed_values_function: ''
 module: options
 locked: false

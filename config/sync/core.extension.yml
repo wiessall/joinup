@@ -72,6 +72,7 @@ module:
   field_formatter_range: 0
   field_group: 0
   field_group_accordion: 0
+  field_group_markup: 0
   field_permissions: 0
   field_ui: 0
   file: 0

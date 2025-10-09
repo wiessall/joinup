@@ -11,77 +11,60 @@ dependencies:
     - field.field.assessment_content.statement.type
   module:
     - file
+    - inline_entity_form
 id: assessment_content.statement.default
 targetEntityType: assessment_content
 bundle: statement
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 20
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   documentation:
     type: file_generic
-    weight: 24
+    weight: 4
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   has_related_service:
-    type: entity_reference_autocomplete
-    weight: 21
+    type: inline_entity_form_complex
+    weight: 3
     region: content
     settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Related service'
+      label_plural: 'Related services'
+      allow_new: true
+      allow_existing: false
       match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      allow_duplicate: false
+      collapsible: true
+      collapsed: true
+      revision: false
+      removed_reference: optional
     third_party_settings: {  }
   interpretation:
     type: options_select
-    weight: 22
+    weight: 0
     region: content
     settings: {  }
     third_party_settings: {  }
   judgement:
     type: string_textarea
-    weight: 23
+    weight: 1
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 0
-    region: content
-    settings:
-      display_label: false
-    third_party_settings: {  }
   type:
     type: options_select
-    weight: 22
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 15
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
 hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true
   uri: true

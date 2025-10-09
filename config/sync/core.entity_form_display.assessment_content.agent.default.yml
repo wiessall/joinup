@@ -11,49 +11,23 @@ targetEntityType: assessment_content
 bundle: agent
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 20
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 21
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
     weight: 0
     region: content
     settings:
-      display_label: false
-    third_party_settings: {  }
-  type:
-    type: options_select
-    weight: 22
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 15
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  type:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
+  created: true
+  langcode: true
+  status: true
+  uid: true
   uri: true
