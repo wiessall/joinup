@@ -1,5 +1,5 @@
-id: entity.assessment
-plugin_id: 'entity:assessment'
+id: entity.assessment_content
+plugin_id: 'entity:assessment_content'
 granularity: method
 configuration:
   GET:

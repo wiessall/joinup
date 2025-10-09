@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content_save_action
+label: 'Save assessment contents'
+type: assessment_content
+plugin: entity:save_action:assessment_content
+configuration: {  }

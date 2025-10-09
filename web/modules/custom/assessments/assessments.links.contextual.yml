@@ -1,98 +1,10 @@
-entity.assessments_agent.edit_form:
-  route_name: entity.assessments_agent.edit_form
-  group: assessments_agent
+entity.assessment_content.edit_form:
+  route_name: entity.assessment_content.edit_form
+  group: assessment_content
   title: 'Edit'
 
-entity.assessments_agent.delete_form:
-  route_name: entity.assessments_agent.delete_form
-  group: assessments_agent
-  title: 'Delete'
-  weight: 10
-
-entity.assessments_participation.edit_form:
-  route_name: entity.assessments_participation.edit_form
-  group: assessments_participation
-  title: 'Edit'
-
-entity.assessments_participation.delete_form:
-  route_name: entity.assessments_participation.delete_form
-  group: assessments_participation
-  title: 'Delete'
-  weight: 10
-
-entity.assessments_asset.edit_form:
-  route_name: entity.assessments_asset.edit_form
-  group: assessments_asset
-  title: 'Edit'
-
-entity.assessments_asset.delete_form:
-  route_name: entity.assessments_asset.delete_form
-  group: assessments_asset
-  title: 'Delete'
-  weight: 10
-
-entity.assessment_organization.edit_form:
-  route_name: entity.assessment_organization.edit_form
-  group: assessment_organization
-  title: 'Edit'
-
-entity.assessment_organization.delete_form:
-  route_name: entity.assessment_organization.delete_form
-  group: assessment_organization
-  title: 'Delete'
-  weight: 10
-
-entity.assessment_service.edit_form:
-  route_name: entity.assessment_service.edit_form
-  group: assessment_service
-  title: 'Edit'
-
-entity.assessment_service.delete_form:
-  route_name: entity.assessment_service.delete_form
-  group: assessment_service
-  title: 'Delete'
-  weight: 10
-
-entity.assessment_expression.edit_form:
-  route_name: entity.assessment_expression.edit_form
-  group: assessment_expression
-  title: 'Edit'
-
-entity.assessment_expression.delete_form:
-  route_name: entity.assessment_expression.delete_form
-  group: assessment_expression
-  title: 'Delete'
-  weight: 10
-
-entity.assessment_statement.edit_form:
-  route_name: entity.assessment_statement.edit_form
-  group: assessment_statement
-  title: 'Edit'
-
-entity.assessment_statement.delete_form:
-  route_name: entity.assessment_statement.delete_form
-  group: assessment_statement
-  title: 'Delete'
-  weight: 10
-
-entity.assessment_requirement.edit_form:
-  route_name: entity.assessment_requirement.edit_form
-  group: assessment_requirement
-  title: 'Edit'
-
-entity.assessment_requirement.delete_form:
-  route_name: entity.assessment_requirement.delete_form
-  group: assessment_requirement
-  title: 'Delete'
-  weight: 10
-
-entity.assessment.edit_form:
-  route_name: entity.assessment.edit_form
-  group: assessment
-  title: 'Edit'
-
-entity.assessment.delete_form:
-  route_name: entity.assessment.delete_form
-  group: assessment
+entity.assessment_content.delete_form:
+  route_name: entity.assessment_content.delete_form
+  group: assessment_content
   title: 'Delete'
   weight: 10

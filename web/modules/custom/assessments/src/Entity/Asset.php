@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class Asset extends ContentEntityBase implements AssetInterface {
+final class Asset extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

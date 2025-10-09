@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class Statement extends ContentEntityBase implements StatementInterface {
+final class Statement extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

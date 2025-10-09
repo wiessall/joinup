@@ -15,28 +15,22 @@ use Drupal\user\UserInterface;
  */
 function assessments_theme(): array {
   return [
-    'assessment_agent' => ['render element' => 'elements'],
-    'assessment_participation' => ['render element' => 'elements'],
-    'assessment_asset' => ['render element' => 'elements'],
-    'assessment_organization' => ['render element' => 'elements'],
-    'assessment_service' => ['render element' => 'elements'],
-    'assessment_expression' => ['render element' => 'elements'],
-    'assessment_statement' => ['render element' => 'elements'],
-    'assessment_requirement' => ['render element' => 'elements'],
-    'assessment' => ['render element' => 'elements'],
+    'assessment_content' => ['render element' => 'elements'],
   ];
 }
 
 /**
- * Prepares variables for assessment templates.
+ * Prepares variables for assessment content templates.
+ *
+ * Default template: assessment-content.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
- *   - elements: An associative array containing the assessment information and any
+ *   - elements: An associative array containing the assessment content information and any
  *     fields attached to the entity.
  *   - attributes: HTML attributes for the containing element.
  */
-function _assessments_template_preprocess(array &$variables): void {
+function template_preprocess_assessment_content(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
@@ -44,314 +38,32 @@ function _assessments_template_preprocess(array &$variables): void {
 }
 
 /**
- * Prepares variables for agent templates.
- *
- * Default template: assessments-agent.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the agent information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessments_agent(array &$variables): void {
-  _assessments_template_preprocess($variables);
-
-}
-
-/**
- * Prepares variables for agent templates.
- *
- * Default template: assessments-agent.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the agent information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessments_participation(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for agent templates.
- *
- * Default template: assessments-agent.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the agent information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessments_asset(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for publicorganization templates.
- *
- * Default template: assessment-organization.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the publicorganization information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment_organization(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for public service templates.
- *
- * Default template: assessment-service.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the public service information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment_service(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for legal expression templates.
- *
- * Default template: assessment-expression.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the legal expression information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment_expression(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for statement templates.
- *
- * Default template: assessment-statement.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the statement information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment_statement(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for binding requirement templates.
- *
- * Default template: assessment-requirement.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the binding requirement information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment_requirement(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
- * Prepares variables for binding requirement templates.
- *
- * Default template: assessment-requirement.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the binding requirement information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_assessment(array &$variables): void {
-  _assessments_template_preprocess($variables);
-}
-
-/**
  * Implements hook_user_cancel().
  */
 function assessments_user_cancel($edit, UserInterface $account, $method): void {
   switch ($method) {
-    case 'user_cancel_reassign':
-      // Anonymize agents.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessments_agent');
-      $assessments_agent_ids = $storage->getQuery()
+    case 'user_cancel_block_unpublish':
+      // Unpublish assessment contents.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
+      $assessment_content_ids = $storage->getQuery()
         ->condition('uid', $account->id())
+        ->condition('status', 1)
         ->accessCheck(FALSE)
         ->execute();
-      foreach ($storage->loadMultiple($assessments_agent_ids) as $assessments_agent) {
-        $assessments_agent->setOwnerId(0)->save();
-      }
-
-      // Anonymize participations.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessments_participation');
-      $assessments_participation_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessments_participation_ids) as $assessments_participation) {
-        $assessments_participation->setOwnerId(0)->save();
-      }
-
-      // Anonymize assets.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessments_asset');
-      $assessments_asset_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessments_asset_ids) as $assessments_asset) {
-        $assessments_asset->setOwnerId(0)->save();
-      }
-
-      // Anonymize publicorganizations.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_organization');
-      $assessment_organization_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_organization_ids) as $assessment_organization) {
-        $assessment_organization->setOwnerId(0)->save();
-      }
-
-      // Anonymize public services.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
-      $assessment_service_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_service_ids) as $assessment_service) {
-        $assessment_service->setOwnerId(0)->save();
-      }
-
-      // Anonymize legal expressions.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
-      $assessment_expression_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_expression_ids) as $assessment_expression) {
-        $assessment_expression->setOwnerId(0)->save();
-      }
-
-      // Anonymize statements.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_statement');
-      $assessment_statement_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_statement_ids) as $assessment_statement) {
-        $assessment_statement->setOwnerId(0)->save();
-      }
-
-      // Anonymize binding requirements.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
-      $assessment_requirement_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_requirement_ids) as $assessment_requirement) {
-        $assessment_requirement->setOwnerId(0)->save();
-      }
-
-      // Anonymize assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->setOwnerId(0)->save();
+      foreach ($storage->loadMultiple($assessment_content_ids) as $assessment_content) {
+        $assessment_content->set('status', FALSE)->save();
       }
       break;
 
-    case 'user_cancel_block_unpublish':
-      // Unpublish assets.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessments_asset');
-      $assessments_asset_ids = $storage->getQuery()
+    case 'user_cancel_reassign':
+      // Anonymize assessment contents.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
+      $assessment_content_ids = $storage->getQuery()
         ->condition('uid', $account->id())
-        ->condition('status', 1)
         ->accessCheck(FALSE)
         ->execute();
-      foreach ($storage->loadMultiple($assessments_asset_ids) as $assessments_asset) {
-        $assessments_asset->set('status', FALSE)->save();
-      }
-
-      // Unpublish publicorganizations.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_organization');
-      $assessment_organization_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_organization_ids) as $assessment_organization) {
-        $assessment_organization->set('status', FALSE)->save();
-      }
-
-      // Unpublish public services.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
-      $assessment_service_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_service_ids) as $assessment_service) {
-        $assessment_service->set('status', FALSE)->save();
-      }
-
-      // Unpublish legal expressions.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
-      $assessment_expression_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_expression_ids) as $assessment_expression) {
-        $assessment_expression->set('status', FALSE)->save();
-      }
-
-      // Unpublish statements.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_statement');
-      $assessment_statement_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_statement_ids) as $assessment_statement) {
-        $assessment_statement->set('status', FALSE)->save();
-      }
-
-      // Unpublish binding requirements.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
-      $assessment_requirement_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_requirement_ids) as $assessment_requirement) {
-        $assessment_requirement->set('status', FALSE)->save();
-      }
-
-      // Unpublish assessments.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-      $assessment_ids = $storage->getQuery()
-        ->condition('uid', $account->id())
-        ->condition('status', 1)
-        ->accessCheck(FALSE)
-        ->execute();
-      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
-        $assessment->set('status', FALSE)->save();
+      foreach ($storage->loadMultiple($assessment_content_ids) as $assessment_content) {
+        $assessment_content->setOwnerId(0)->save();
       }
       break;
   }
@@ -361,102 +73,13 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
  * Implements hook_ENTITY_TYPE_predelete() for user entities.
  */
 function assessments_user_predelete(UserInterface $account): void {
-  // Delete agents that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessments_agent');
-  $assessments_agent_ids = $storage->getQuery()
+  // Delete assessment contents that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
+  $assessment_content_ids = $storage->getQuery()
     ->condition('uid', $account->id())
     ->accessCheck(FALSE)
     ->execute();
   $storage->delete(
-    $storage->loadMultiple($assessments_agent_ids)
+    $storage->loadMultiple($assessment_content_ids)
   );
-
-  // Delete participations that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessments_participation');
-  $assessments_participation_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessments_participation_ids)
-  );
-
-  // Delete assets that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessments_asset');
-  $assessments_asset_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessments_asset_ids)
-  );
-
-  // Delete publicorganizations that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_organization');
-  $assessment_organization_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_organization_ids)
-  );
-
-  // Delete public services that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_service');
-  $assessment_service_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_service_ids)
-  );
-
-  // Delete legal expressions that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_expression');
-  $assessment_expression_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_expression_ids)
-  );
-
-  // Delete statements that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_statement');
-  $assessment_statement_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_statement_ids)
-  );
-
-  // Delete binding requirements that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_requirement');
-  $assessment_requirement_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_requirement_ids)
-  );
-
-  // Delete assessments that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
-  $assessment_ids = $storage->getQuery()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  $storage->delete(
-    $storage->loadMultiple($assessment_ids)
-  );
-  // Delete old revisions.
-  $assessment_ids = $storage->getQuery()
-    ->allRevisions()
-    ->condition('uid', $account->id())
-    ->accessCheck(FALSE)
-    ->execute();
-  foreach (array_keys($assessment_ids) as $revision_id) {
-    $storage->deleteRevision($revision_id);
-  }
 }

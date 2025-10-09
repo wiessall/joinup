@@ -8,16 +8,15 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 
 /**
- * Provides a list controller for the publicorganization entity type.
+ * Provides a list controller for the assessment content entity type.
  */
-final class PublicOrganizationListBuilder extends EntityListBuilder {
+final class AssessmentContentListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader(): array {
     $header['id'] = $this->t('ID');
-    $header['label'] = $this->t('Label');
     $header['status'] = $this->t('Status');
     $header['uid'] = $this->t('Author');
     $header['created'] = $this->t('Created');
@@ -29,9 +28,8 @@ final class PublicOrganizationListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity): array {
-    /** @var \Drupal\assessments\PublicOrganizationInterface $entity */
-    $row['id'] = $entity->id();
-    $row['label'] = $entity->toLink();
+    /** @var \Drupal\assessments\AssessmentContentInterface $entity */
+    $row['id'] = $entity->toLink();
     $row['status'] = $entity->get('status')->value ? $this->t('Enabled') : $this->t('Disabled');
     $username_options = [
       'label' => 'hidden',

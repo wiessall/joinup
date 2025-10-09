@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class Participation extends ContentEntityBase implements ParticipationInterface {
+final class Participation extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

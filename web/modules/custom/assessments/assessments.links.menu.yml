@@ -1,60 +1,11 @@
-entity.assessment.collection:
-  title: 'Assessments'
-  description: 'List of assessments.'
-  route_name: entity.assessment.collection
+entity.assessment_content_type.collection:
+  title: 'Assessment content types'
+  description: 'Manage and CRUD actions on Assessment content type.'
+  parent: system.admin_structure
+  route_name: entity.assessment_content_type.collection
+
+entity.assessment_content.collection:
+  title: 'Assessment contents'
+  description: 'List of assessment contents.'
+  route_name: entity.assessment_content.collection
   parent: system.admin_content
-
-# Default tab.
-entity.assessment.collection.assessment:
-  title: 'Assessments'
-  description: 'List of assessments.'
-  route_name: entity.assessment.collection
-  parent: entity.assessment.collection
-
-entity.assessments_agent.collection:
-  title: 'Agents'
-  description: 'List of agents.'
-  route_name: entity.assessments_agent.collection
-  parent: entity.assessment.collection
-
-entity.assessments_participation.collection:
-  title: 'Participations'
-  description: 'List of participations.'
-  route_name: entity.assessments_participation.collection
-  parent: entity.assessment.collection
-
-entity.assessments_asset.collection:
-  title: 'Assets'
-  description: 'List of assets.'
-  route_name: entity.assessments_asset.collection
-  parent: entity.assessment.collection
-
-entity.assessment_organization.collection:
-  title: 'Public Organizations'
-  description: 'List of public organizations.'
-  route_name: entity.assessment_organization.collection
-  parent: entity.assessment.collection
-
-entity.assessment_service.collection:
-  title: 'Public Services'
-  description: 'List of public services.'
-  route_name: entity.assessment_service.collection
-  parent: entity.assessment.collection
-
-entity.assessment_expression.collection:
-  title: 'Legal Expressions'
-  description: 'List of legal expressions.'
-  route_name: entity.assessment_expression.collection
-  parent: entity.assessment.collection
-
-entity.assessment_statement.collection:
-  title: 'Statements'
-  description: 'List of statements.'
-  route_name: entity.assessment_statement.collection
-  parent: entity.assessment.collection
-
-entity.assessment_requirement.collection:
-  title: 'Binding Requirements'
-  description: 'List of binding requirements.'
-  route_name: entity.assessment_requirement.collection
-  parent: entity.assessment.collection

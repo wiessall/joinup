@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class PublicOrganization extends ContentEntityBase implements PublicOrganizationInterface {
+final class PublicOrganization extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
