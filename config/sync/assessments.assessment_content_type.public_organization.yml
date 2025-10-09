@@ -1,0 +1,13 @@
+uuid: fded9f63-296c-4c0e-a4cc-871f85c9f6b3
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://data.europa.eu/m8g/PublicOrganisation'
+    uri_plugin: null
+    fields: {  }
+id: public_organization
+label: 'Public organization'

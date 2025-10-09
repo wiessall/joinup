@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AgentInterface;
-use Drupal\assessments\AssessmentContentInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -15,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the agent entity class.
- *
- * @ContentEntityType(
- *   id = "assessments_agent",
- *   label = @Translation("Agent"),
- *   label_collection = @Translation("Agents"),
- *   label_singular = @Translation("agent"),
- *   label_plural = @Translation("agents"),
- *   label_count = @PluralTranslation(
- *     singular = "@count agents",
- *     plural = "@count agents",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\AgentListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AgentForm",
- *       "edit" = "Drupal\assessments\Form\AgentForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessments_agent",
- *   data_table = "assessments_agent_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessments_agent",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "name",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/agent",
- *     "add-form" = "/assessments/agent/add",
- *     "canonical" = "/assessments/agent/{assessments_agent}",
- *     "edit-form" = "/assessments/agent/{assessments_agent}/edit",
- *     "delete-form" = "/assessments/agent/{assessments_agent}/delete",
- *     "delete-multiple-form" = "/admin/content/agent/delete-multiple",
- *   },
- * )
  */
 final class Agent extends AssessmentContent {
 

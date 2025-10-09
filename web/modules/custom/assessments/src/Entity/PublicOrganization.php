@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\PublicOrganizationInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the publicorganization entity class.
- *
- * @ContentEntityType(
- *   id = "assessment_organization",
- *   label = @Translation("PublicOrganization"),
- *   label_collection = @Translation("PublicOrganizations"),
- *   label_singular = @Translation("publicorganization"),
- *   label_plural = @Translation("publicorganizations"),
- *   label_count = @PluralTranslation(
- *     singular = "@count publicorganizations",
- *     plural = "@count publicorganizations",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\PublicOrganizationListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\PublicOrganizationForm",
- *       "edit" = "Drupal\assessments\Form\PublicOrganizationForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessment_organization",
- *   data_table = "assessment_organization_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment_organization",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "label",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment-organization",
- *     "add-form" = "/assessments/public-organization/add",
- *     "canonical" = "/assessments/public-organization/{assessment_organization}",
- *     "edit-form" = "/assessments/public-organization/{assessment_organization}/edit",
- *     "delete-form" = "/assessments/public-organization/{assessment_organization}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment-organization/delete-multiple",
- *   },
- * )
  */
 final class PublicOrganization extends AssessmentContent {
 

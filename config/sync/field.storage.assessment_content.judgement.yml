@@ -1,0 +1,19 @@
+uuid: a2bad882-f442-41bf-9e4d-eb670c901160
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content.judgement
+field_name: judgement
+entity_type: assessment_content
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

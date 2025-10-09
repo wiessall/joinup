@@ -1,0 +1,30 @@
+uuid: 7d5a404f-63ea-4c70-b782-53ee4c81da26
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.agent
+    - field.storage.assessment_content.type
+  module:
+    - options
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: 'xsd:string'
+id: assessment_content.agent.type
+field_name: type
+entity_type: assessment_content
+bundle: agent
+label: Type
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

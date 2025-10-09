@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\PublicServiceInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the public service entity class.
- *
- * @ContentEntityType(
- *   id = "assessment_service",
- *   label = @Translation("Public Service"),
- *   label_collection = @Translation("Public Services"),
- *   label_singular = @Translation("public service"),
- *   label_plural = @Translation("public services"),
- *   label_count = @PluralTranslation(
- *     singular = "@count public services",
- *     plural = "@count public services",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\PublicServiceListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\PublicServiceForm",
- *       "edit" = "Drupal\assessments\Form\PublicServiceForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessment_service",
- *   data_table = "assessment_service_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment_service",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "name",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment-service",
- *     "add-form" = "/assessment/public-service/add",
- *     "canonical" = "/assessment/public-service/{assessment_service}",
- *     "edit-form" = "/assessment/public-service/{assessment_service}/edit",
- *     "delete-form" = "/assessment/public-service/{assessment_service}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment-service/delete-multiple",
- *   },
- * )
  */
 final class PublicService extends AssessmentContent {
 

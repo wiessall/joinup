@@ -1,0 +1,19 @@
+uuid: 734008e5-9eb3-4d87-b1a0-7167e01812d6
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content.results_in
+field_name: results_in
+entity_type: assessment_content
+type: entity_reference
+settings:
+  target_type: assessment_content
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

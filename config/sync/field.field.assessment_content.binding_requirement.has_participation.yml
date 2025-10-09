@@ -1,0 +1,39 @@
+uuid: fb416a8b-e89c-4a2f-9a40-a1652414a7f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.agent
+    - assessments.assessment_content_type.binding_requirement
+    - field.storage.assessment_content.has_participation
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/m8g/hasParticipation'
+      type: resource
+id: assessment_content.binding_requirement.has_participation
+field_name: has_participation
+entity_type: assessment_content
+bundle: binding_requirement
+label: 'Has participation'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_content'
+  handler_settings:
+    target_bundles:
+      agent: agent
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

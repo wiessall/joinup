@@ -1,0 +1,23 @@
+uuid: e7d4a4de-8d39-4df4-a135-577ce09cce4c
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - file
+id: assessment_content.documentation
+field_name: documentation
+entity_type: assessment_content
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

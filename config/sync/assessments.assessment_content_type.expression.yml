@@ -1,0 +1,13 @@
+uuid: 96909909-fcdf-435a-b5ec-1748bedae92f
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://purl.org/vocab/frbr/core#Expression'
+    uri_plugin: null
+    fields: {  }
+id: expression
+label: Expression

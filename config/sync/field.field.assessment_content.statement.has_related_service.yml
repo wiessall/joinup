@@ -1,0 +1,39 @@
+uuid: 52586d6f-6a23-488f-ad97-26a49123a599
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.public_service
+    - assessments.assessment_content_type.statement
+    - field.storage.assessment_content.has_related_service
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/m8g/hasRelatedService'
+      type: resource
+id: assessment_content.statement.has_related_service
+field_name: has_related_service
+entity_type: assessment_content
+bundle: statement
+label: 'Has related service'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_content'
+  handler_settings:
+    target_bundles:
+      public_service: public_service
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\ParticipationInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the participation entity class.
- *
- * @ContentEntityType(
- *   id = "assessments_participation",
- *   label = @Translation("Participation"),
- *   label_collection = @Translation("Participations"),
- *   label_singular = @Translation("participation"),
- *   label_plural = @Translation("participations"),
- *   label_count = @PluralTranslation(
- *     singular = "@count participations",
- *     plural = "@count participations",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\ParticipationListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\ParticipationForm",
- *       "edit" = "Drupal\assessments\Form\ParticipationForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessments_participation",
- *   data_table = "assessments_participation_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessments_participation",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "id",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/participation",
- *     "add-form" = "/assessments/participation/add",
- *     "canonical" = "/assessments/participation/{assessments_participation}",
- *     "edit-form" = "/assessments/participation/{assessments_participation}/edit",
- *     "delete-form" = "/assessments/participation/{assessments_participation}/delete",
- *     "delete-multiple-form" = "/admin/content/participation/delete-multiple",
- *   },
- * )
  */
 final class Participation extends AssessmentContent {
 

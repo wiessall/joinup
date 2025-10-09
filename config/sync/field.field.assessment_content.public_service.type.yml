@@ -1,0 +1,30 @@
+uuid: 1e1694df-c10a-4d74-bb05-cc9b3e107119
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.public_service
+    - field.storage.assessment_content.type
+  module:
+    - options
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    value:
+      predicate: 'http://data.europa.eu/m8g/thematicArea'
+      type: 'xsd:string'
+id: assessment_content.public_service.type
+field_name: type
+entity_type: assessment_content
+bundle: public_service
+label: 'Thematic area'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

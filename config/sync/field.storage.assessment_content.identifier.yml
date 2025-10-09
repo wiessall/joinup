@@ -1,0 +1,21 @@
+uuid: bb4760de-5b97-43c0-965b-8b266f2ba014
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content.identifier
+field_name: identifier
+entity_type: assessment_content
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
