@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssetInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the asset entity class.
- *
- * @ContentEntityType(
- *   id = "assessments_asset",
- *   label = @Translation("Asset"),
- *   label_collection = @Translation("Assets"),
- *   label_singular = @Translation("asset"),
- *   label_plural = @Translation("assets"),
- *   label_count = @PluralTranslation(
- *     singular = "@count assets",
- *     plural = "@count assets",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\AssetListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssetForm",
- *       "edit" = "Drupal\assessments\Form\AssetForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessments_asset",
- *   data_table = "assessments_asset_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessments_asset",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "label",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/asset",
- *     "add-form" = "/assessments/asset/add",
- *     "canonical" = "/assessments/asset/{assessments_asset}",
- *     "edit-form" = "/assessments/asset/{assessments_asset}/edit",
- *     "delete-form" = "/assessments/asset/{assessments_asset}/delete",
- *     "delete-multiple-form" = "/admin/content/asset/delete-multiple",
- *   },
- * )
  */
 final class Asset extends AssessmentContent {
 

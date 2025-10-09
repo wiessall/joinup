@@ -4,77 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the assessment entity class.
- *
- * @ContentEntityType(
- *   id = "assessment",
- *   label = @Translation("Assessment"),
- *   label_collection = @Translation("Assessments"),
- *   label_singular = @Translation("assessment"),
- *   label_plural = @Translation("assessments"),
- *   label_count = @PluralTranslation(
- *     singular = "@count assessments",
- *     plural = "@count assessments",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\AssessmentListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "access" = "Drupal\assessments\AssessmentAccessControlHandler",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssessmentForm",
- *       "edit" = "Drupal\assessments\Form\AssessmentForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *       "revision-delete" = \Drupal\Core\Entity\Form\RevisionDeleteForm::class,
- *       "revision-revert" = \Drupal\Core\Entity\Form\RevisionRevertForm::class,
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *       "revision" = \Drupal\Core\Entity\Routing\RevisionHtmlRouteProvider::class,
- *     },
- *   },
- *   base_table = "assessment",
- *   data_table = "assessment_field_data",
- *   revision_table = "assessment_revision",
- *   revision_data_table = "assessment_field_revision",
- *   show_revision_ui = TRUE,
- *   translatable = TRUE,
- *   admin_permission = "administer assessment",
- *   entity_keys = {
- *     "id" = "id",
- *     "revision" = "revision_id",
- *     "langcode" = "langcode",
- *     "label" = "id",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_uid",
- *     "revision_created" = "revision_timestamp",
- *     "revision_log_message" = "revision_log",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment",
- *     "add-form" = "/assessments/add",
- *     "canonical" = "/assessments/{assessment}",
- *     "edit-form" = "/assessments/{assessment}/edit",
- *     "delete-form" = "/assessments/{assessment}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment/delete-multiple",
- *     "revision" = "/assessments/{assessment}/revision/{assessment_revision}/view",
- *     "revision-delete-form" = "/assessments/{assessment}/revision/{assessment_revision}/delete",
- *     "revision-revert-form" = "/assessments/{assessment}/revision/{assessment_revision}/revert",
- *     "version-history" = "/assessments/{assessment}/revisions",
- *   },
- * )
  */
 final class Assessment extends AssessmentContent {
 

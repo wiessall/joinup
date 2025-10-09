@@ -1,0 +1,39 @@
+uuid: ce34bf8c-3138-4471-b594-dce067a5dd3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.binding_requirement
+    - field.storage.assessment_content.binding_requirement
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2sa/cav#assesses'
+      type: resource
+id: assessment_content.assessment.binding_requirement
+field_name: binding_requirement
+entity_type: assessment_content
+bundle: assessment
+label: 'Binding requirement'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_content'
+  handler_settings:
+    target_bundles:
+      binding_requirement: binding_requirement
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

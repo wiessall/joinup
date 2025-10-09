@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\BindingRequirementInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the binding requirement entity class.
- *
- * @ContentEntityType(
- *   id = "assessment_requirement",
- *   label = @Translation("Binding Requirement"),
- *   label_collection = @Translation("Binding Requirements"),
- *   label_singular = @Translation("binding requirement"),
- *   label_plural = @Translation("binding requirements"),
- *   label_count = @PluralTranslation(
- *     singular = "@count binding requirements",
- *     plural = "@count binding requirements",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\BindingRequirementListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\BindingRequirementForm",
- *       "edit" = "Drupal\assessments\Form\BindingRequirementForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessment_requirement",
- *   data_table = "assessment_requirement_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment_requirement",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "id",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment-requirement",
- *     "add-form" = "/assessments/binding-requirements/add",
- *     "canonical" = "/assessments/binding-requirements/{assessment_requirement}",
- *     "edit-form" = "/assessments/binding-requirements/{assessment_requirement}/edit",
- *     "delete-form" = "/assessments/binding-requirements/{assessment_requirement}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment-requirement/delete-multiple",
- *   },
- * )
  */
 final class BindingRequirement extends AssessmentContent {
 

@@ -1,0 +1,19 @@
+uuid: e001ded4-032c-4f21-a1a1-2f9ceb2c6317
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content.binding_requirement
+field_name: binding_requirement
+entity_type: assessment_content
+type: entity_reference
+settings:
+  target_type: assessment_content
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

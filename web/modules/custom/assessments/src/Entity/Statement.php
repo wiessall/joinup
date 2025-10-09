@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\StatementInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the statement entity class.
- *
- * @ContentEntityType(
- *   id = "assessment_statement",
- *   label = @Translation("Statement"),
- *   label_collection = @Translation("Statements"),
- *   label_singular = @Translation("statement"),
- *   label_plural = @Translation("statements"),
- *   label_count = @PluralTranslation(
- *     singular = "@count statements",
- *     plural = "@count statements",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\StatementListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\StatementForm",
- *       "edit" = "Drupal\assessments\Form\StatementForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessment_statement",
- *   data_table = "assessment_statement_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment_statement",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "id",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment-statement",
- *     "add-form" = "/assessments/statements/add",
- *     "canonical" = "/assessments/statements/{assessment_statement}",
- *     "edit-form" = "/assessments/statements/{assessment_statement}/edit",
- *     "delete-form" = "/assessments/statements/{assessment_statement}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment-statement/delete-multiple",
- *   },
- * )
  */
 final class Statement extends AssessmentContent {
 

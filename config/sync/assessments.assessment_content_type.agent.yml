@@ -1,0 +1,13 @@
+uuid: 9df30cbb-2c19-49ad-8084-e4e9bafe4c0b
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://xmlns.com/foaf/0.1/'
+    uri_plugin: null
+    fields: {  }
+id: agent
+label: Agent

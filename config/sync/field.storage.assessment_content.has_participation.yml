@@ -1,0 +1,19 @@
+uuid: c7993495-5258-4826-a3c7-e84ae3158323
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_content.has_participation
+field_name: has_participation
+entity_type: assessment_content
+type: entity_reference
+settings:
+  target_type: assessment_content
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

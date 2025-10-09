@@ -1,0 +1,86 @@
+uuid: 5d38ae92-b425-4f8e-a38a-3c1cd7d690d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.participation
+    - field.field.assessment_content.participation.description
+    - field.field.assessment_content.participation.has_participation
+    - field.field.assessment_content.participation.identifier
+    - field.field.assessment_content.participation.role
+    - field.field.assessment_content.participation.type
+id: assessment_content.participation.default
+targetEntityType: assessment_content
+bundle: participation
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  description:
+    type: string_textarea
+    weight: 22
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  has_participation:
+    type: entity_reference_autocomplete
+    weight: 23
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  identifier:
+    type: string_textfield
+    weight: 25
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  role:
+    type: options_select
+    weight: 24
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 0
+    region: content
+    settings:
+      display_label: false
+    third_party_settings: {  }
+  type:
+    type: options_select
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 15
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  uri: true

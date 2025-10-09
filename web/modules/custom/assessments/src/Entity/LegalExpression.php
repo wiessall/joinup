@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\LegalExpressionInterface;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,50 +12,6 @@ use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the legal expression entity class.
- *
- * @ContentEntityType(
- *   id = "assessment_expression",
- *   label = @Translation("Legal Expression"),
- *   label_collection = @Translation("Legal Expressions"),
- *   label_singular = @Translation("legal expression"),
- *   label_plural = @Translation("legal expressions"),
- *   label_count = @PluralTranslation(
- *     singular = "@count legal expressions",
- *     plural = "@count legal expressions",
- *   ),
- *   handlers = {
- *     "list_builder" = "Drupal\assessments\LegalExpressionListBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\LegalExpressionForm",
- *       "edit" = "Drupal\assessments\Form\LegalExpressionForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "assessment_expression",
- *   data_table = "assessment_expression_field_data",
- *   translatable = TRUE,
- *   admin_permission = "administer assessment_expression",
- *   entity_keys = {
- *     "id" = "id",
- *     "langcode" = "langcode",
- *     "label" = "name",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *   },
- *   links = {
- *     "collection" = "/admin/content/assessment-expression",
- *     "add-form" = "/assessments/legal-expression/add",
- *     "canonical" = "/assessments/legal-expression/{assessment_expression}",
- *     "edit-form" = "/assessments/legal-expression/{assessment_expression}/edit",
- *     "delete-form" = "/assessments/legal-expression/{assessment_expression}/delete",
- *     "delete-multiple-form" = "/admin/content/assessment-expression/delete-multiple",
- *   },
- * )
  */
 final class LegalExpression extends AssessmentContent {
 

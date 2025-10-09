@@ -1,0 +1,32 @@
+uuid: 8281b12e-e3b4-4793-b65f-fb11d8b6310d
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.binding_requirement
+    - field.storage.assessment_content.resource
+  module:
+    - link
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    uri:
+      predicate: 'http://purl.org/dc/terms/references'
+      type: resource
+id: assessment_content.binding_requirement.resource
+field_name: resource
+entity_type: assessment_content
+bundle: binding_requirement
+label: Resource
+description: 'Additional resources that are related to the binding requirement, e.g. data, datasets, standards, solutions etc.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

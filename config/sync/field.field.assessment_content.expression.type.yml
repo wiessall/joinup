@@ -1,0 +1,25 @@
+uuid: 3ac81b8e-b00a-4d97-a615-6f54d7bd1f6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.expression
+    - field.storage.assessment_content.type
+  module:
+    - options
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment_content.expression.type
+field_name: type
+entity_type: assessment_content
+bundle: expression
+label: 'Expression type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

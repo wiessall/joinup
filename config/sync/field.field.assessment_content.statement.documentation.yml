@@ -1,0 +1,37 @@
+uuid: 15c3264c-c32f-44c4-aebe-640dc857c25b
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.statement
+    - field.storage.assessment_content.documentation
+  module:
+    - file
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://xmlns.com/foaf/0.1/page'
+      type: resource
+id: assessment_content.statement.documentation
+field_name: documentation
+entity_type: assessment_content
+bundle: statement
+label: Documentation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf ppt pptx xls xlsx'
+  max_filesize: ''
+  description_field: false
+  description_field_required: false
+field_type: file

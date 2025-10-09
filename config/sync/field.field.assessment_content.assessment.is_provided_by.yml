@@ -1,0 +1,39 @@
+uuid: 5a0b38c1-33fe-465e-9e38-2388b8276d2f
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.public_organization
+    - field.storage.assessment_content.is_provided_by
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/m8g/isProvidedBy'
+      type: resource
+id: assessment_content.assessment.is_provided_by
+field_name: is_provided_by
+entity_type: assessment_content
+bundle: assessment
+label: 'Provided by'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_content'
+  handler_settings:
+    target_bundles:
+      public_organization: public_organization
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

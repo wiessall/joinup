@@ -1,0 +1,13 @@
+uuid: ba4f0365-5e1b-419e-8d2e-fe01420445a0
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://data.europa.eu/m8g/Participation'
+    uri_plugin: null
+    fields: {  }
+id: participation
+label: Participation

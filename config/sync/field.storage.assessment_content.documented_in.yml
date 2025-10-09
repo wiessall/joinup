@@ -1,0 +1,19 @@
+uuid: cbbd7617-cf34-4139-8d32-5552d24b4f66
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - link
+id: assessment_content.documented_in
+field_name: documented_in
+entity_type: assessment_content
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

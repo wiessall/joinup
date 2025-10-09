@@ -1,0 +1,90 @@
+uuid: 4989ab53-f775-485c-89cb-770153880b5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.public_organization
+    - field.field.assessment_content.public_organization.description
+    - field.field.assessment_content.public_organization.name
+    - field.field.assessment_content.public_organization.spatial
+    - field.field.assessment_content.public_organization.type
+  module:
+    - geofield
+    - options
+    - user
+id: assessment_content.public_organization.default
+targetEntityType: assessment_content
+bundle: public_organization
+mode: default
+content:
+  created:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  spatial:
+    type: geofield_default
+    label: above
+    settings:
+      output_format: wkt
+      output_escape: true
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: enabled-disabled
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  uid:
+    type: author
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 15
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
+  uri: true
