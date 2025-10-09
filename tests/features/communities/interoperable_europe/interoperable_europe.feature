@@ -41,7 +41,6 @@ Feature:
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
     Then the page should be rendered using the "Interoperable Europe" theme
     And I should see the text "News"
-    And I should not see "News"
     And I should see the link "more news"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
