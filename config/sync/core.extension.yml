@@ -293,7 +293,6 @@ module:
   paragraphs: 11
   publication_date: 99
   joinup: 1000
-  joinup_debug: 1001
 theme:
   ventuno: 0
   oe_bootstrap_theme: 0
