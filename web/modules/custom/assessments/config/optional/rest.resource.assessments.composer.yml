@@ -7,7 +7,9 @@ configuration:
       - json
     supported_auth:
       - cookie
+      - oauth2
 dependencies:
   module:
     - rest
     - user
+    - simple_oauth

@@ -4,6 +4,7 @@ namespace Drupal\assessments\Plugin\rest\resource;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Annotation\RestResource;
 use Drupal\rest\Plugin\ResourceBase;
@@ -25,6 +26,13 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  *   }
  * )
  */
+#[\Drupal\rest\Attribute\RestResource(
+  id: "assessments.composer",
+  label: new TranslatableMarkup("Assessment Composer"),
+  uri_paths: [
+    "create" => "/assessments/compose",
+  ]
+)]
 class AssessmentComposerResource extends ResourceBase {
 
   /**
