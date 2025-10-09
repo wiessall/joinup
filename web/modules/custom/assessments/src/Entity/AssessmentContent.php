@@ -156,26 +156,6 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the assessment content was last edited.'));
 
-    // The URI field for RDF synchronization.
-    $fields['uri'] = BaseFieldDefinition::create('uri')
-      ->setLabel(t('URI'))
-      ->setDescription(t('The URI of the assessment content for RDF synchronization.'))
-      ->setSettings([
-        'max_length' => 2048,
-        'text_processing' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'uri',
-        'weight' => 5,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'uri',
-        'weight' => 5,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
     return $fields;
   }
 

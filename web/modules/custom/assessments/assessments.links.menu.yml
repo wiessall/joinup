@@ -5,7 +5,7 @@ entity.assessment_content_type.collection:
   route_name: entity.assessment_content_type.collection
 
 entity.assessment_content.collection:
-  title: 'Assessment contents'
-  description: 'List of assessment contents.'
+  title: 'Assessment entities'
+  description: 'List of assessment entities.'
   route_name: entity.assessment_content.collection
   parent: system.admin_content
