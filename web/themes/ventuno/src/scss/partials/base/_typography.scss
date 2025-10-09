@@ -1,10 +1,6 @@
 @use "sass:color";
 
 // stylelint-disable selector-no-qualifying-type
-.fs-sm,
-.fs-xs {
-  color: $gray-500;
-}
 .fw-medium {
   color: $gray-700;
 }

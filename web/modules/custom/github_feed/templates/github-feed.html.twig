@@ -6,7 +6,10 @@
   * - feed_type: The type of the feed.
 #}
 <div class="github-feed">
-  <h3>{{ 'Items of type'|t }} "{{ type_parsed }}" {{ 'from'|t }} {{ url }}:</h3>
+  <h3>{{ 'Items of type ":type" from :url:'|t({
+    ':type': type_parsed,
+    ':url': url
+  }) }}</h3>
   {% for item in items %}
     <div class="github-feed-item">
       {{ item }}
