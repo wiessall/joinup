@@ -1,0 +1,67 @@
+uuid: 40a4e747-ea8d-4d47-90f3-7f3c6a37f188
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.assessment
+    - field.field.assessment_content.assessment.binding_requirement
+    - field.field.assessment_content.assessment.is_provided_by
+    - field.field.assessment_content.assessment.name
+    - field.field.assessment_content.assessment.results_in
+  module:
+    - user
+id: assessment_content.assessment.default
+targetEntityType: assessment_content
+bundle: assessment
+mode: default
+content:
+  created:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: enabled-disabled
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  uid:
+    type: author
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 15
+    region: content
+hidden:
+  binding_requirement: true
+  is_provided_by: true
+  langcode: true
+  results_in: true
+  search_api_excerpt: true

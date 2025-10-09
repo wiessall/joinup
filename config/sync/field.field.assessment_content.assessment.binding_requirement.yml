@@ -22,7 +22,7 @@ entity_type: assessment_content
 bundle: assessment
 label: 'Binding requirement'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

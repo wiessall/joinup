@@ -1,0 +1,20 @@
+uuid: c98eee67-f8e2-43c3-8b28-dd4df0d723cf
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - taxonomy
+id: assessment_content.country
+field_name: country
+entity_type: assessment_content
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

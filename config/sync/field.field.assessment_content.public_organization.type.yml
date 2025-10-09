@@ -20,7 +20,7 @@ id: assessment_content.public_organization.type
 field_name: type
 entity_type: assessment_content
 bundle: public_organization
-label: Classification
+label: 'Type of public sector body'
 description: ''
 required: false
 translatable: false

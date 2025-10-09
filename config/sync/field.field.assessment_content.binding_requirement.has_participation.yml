@@ -20,7 +20,7 @@ id: assessment_content.binding_requirement.has_participation
 field_name: has_participation
 entity_type: assessment_content
 bundle: binding_requirement
-label: 'Has participation'
+label: 'Affected participant'
 description: ''
 required: false
 translatable: false
