@@ -314,7 +314,13 @@ final class AssessmentForm extends ContentEntityForm {
    * Redirect to the given step on the same form.
    */
   private function redirectToStep(int $step, FormStateInterface $form_state): void {
-    $url = $this->currentStepUrl($step);
+    // Always redirect to the edit route of the current entity.
+    $url = Url::fromRoute('entity.assessment.edit_form', [
+      'assessment' => $this->entity->id(),
+    ], [
+      'query' => ['step' => $step],
+    ]);
+
     $form_state->setRedirectUrl($url);
   }
 
