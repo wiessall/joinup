@@ -1,4 +1,0 @@
-joinup debug - access debug pages:
-  title: 'Access debug pages'
-  description: 'Allows access to the pages from the joinup_debug module'
-  restrict access: true
