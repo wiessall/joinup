@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class BindingRequirement extends ContentEntityBase implements BindingRequirementInterface {
+final class BindingRequirement extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

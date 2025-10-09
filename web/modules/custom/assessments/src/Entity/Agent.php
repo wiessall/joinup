@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\assessments\AgentInterface;
+use Drupal\assessments\AssessmentContentInterface;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -59,7 +60,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class Agent extends ContentEntityBase implements AgentInterface {
+final class Agent extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

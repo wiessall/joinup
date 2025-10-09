@@ -10,13 +10,13 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Defines the access control handler for the assessment entity type.
+ * Defines the access control handler for the assessment content entity type.
  *
  * phpcs:disable Drupal.Arrays.Array.LongLineDeclaration
  *
  * @see https://www.drupal.org/project/coder/issues/3185082
  */
-final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
+final class AssessmentContentAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}
@@ -27,12 +27,9 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     }
 
     return match($operation) {
-      'view' => AccessResult::allowedIfHasPermission($account, 'view assessment'),
-      'update' => AccessResult::allowedIfHasPermission($account, 'edit assessment'),
-      'delete' => AccessResult::allowedIfHasPermission($account, 'delete assessment'),
-      'delete revision' => AccessResult::allowedIfHasPermission($account, 'delete assessment revision'),
-      'view all revisions', 'view revision' => AccessResult::allowedIfHasPermissions($account, ['view assessment revision', 'view assessment']),
-      'revert' => AccessResult::allowedIfHasPermissions($account, ['revert assessment revision', 'edit assessment']),
+      'view' => AccessResult::allowedIfHasPermission($account, 'view assessment_content'),
+      'update' => AccessResult::allowedIfHasPermission($account, 'edit assessment_content'),
+      'delete' => AccessResult::allowedIfHasPermission($account, 'delete assessment_content'),
       default => AccessResult::neutral(),
     };
   }
@@ -41,7 +38,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
-    return AccessResult::allowedIfHasPermissions($account, ['create assessment', 'administer assessment'], 'OR');
+    return AccessResult::allowedIfHasPermissions($account, ['create assessment_content', 'administer assessment_content types'], 'OR');
   }
 
 }

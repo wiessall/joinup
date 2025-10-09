@@ -1,49 +1,12 @@
-administer assessments_agent:
-  title: 'Administer agents'
+administer assessment_content types:
+  title: 'Administer assessment content types'
+  description: 'Maintain the types of assessment content entity.'
   restrict access: true
-
-administer assessments_participation:
-  title: 'Administer participations'
-  restrict access: true
-
-administer assessments_asset:
-  title: 'Administer assets'
-  restrict access: true
-
-administer assessment_organization:
-  title: 'Administer publicorganizations'
-  restrict access: true
-
-administer assessment_service:
-  title: 'Administer public services'
-  restrict access: true
-
-administer assessment_expression:
-  title: 'Administer legal expressions'
-  restrict access: true
-
-administer assessment_statement:
-  title: 'Administer statements'
-  restrict access: true
-
-administer assessment_requirement:
-  title: 'Administer binding requirements'
-  restrict access: true
-
-administer assessment:
-  title: 'Administer assessments'
-  restrict access: true
-view assessment:
-  title: 'View assessment'
-edit assessment:
-  title: 'Edit assessment'
-delete assessment:
-  title: 'Delete assessment'
-create assessment:
-  title: 'Create assessment'
-view assessment revision:
-  title: 'View assessment revision'
-revert assessment revision:
-  title: 'Revert assessment revision'
-delete assessment revision:
-  title: 'Delete assessment revision'
+view assessment_content:
+  title: 'View assessment content'
+edit assessment_content:
+  title: 'Edit assessment content'
+delete assessment_content:
+  title: 'Delete assessment content'
+create assessment_content:
+  title: 'Create assessment content'

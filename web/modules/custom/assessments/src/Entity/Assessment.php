@@ -76,7 +76,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class Assessment extends RevisionableContentEntityBase implements AssessmentInterface {
+final class Assessment extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

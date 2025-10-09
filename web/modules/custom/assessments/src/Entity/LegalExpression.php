@@ -59,7 +59,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class LegalExpression extends ContentEntityBase implements LegalExpressionInterface {
+final class LegalExpression extends AssessmentContent {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

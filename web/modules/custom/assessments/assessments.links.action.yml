@@ -1,53 +1,11 @@
-assessments_agent.add_form:
-  title: 'Add agent'
-  route_name: entity.assessments_agent.add_form
+assessment_content.type_add:
+  title: 'Add assessment content type'
+  route_name: entity.assessment_content_type.add_form
   appears_on:
-    - entity.assessments_agent.collection
+    - entity.assessment_content_type.collection
 
-assessments_participation.add_form:
-  title: 'Add participation'
-  route_name: entity.assessments_participation.add_form
+assessment_content.add_page:
+  title: 'Add assessment content'
+  route_name: entity.assessment_content.add_page
   appears_on:
-    - entity.assessments_participation.collection
-
-assessments_asset.add_form:
-  title: 'Add asset'
-  route_name: entity.assessments_asset.add_form
-  appears_on:
-    - entity.assessments_asset.collection
-
-assessment_organization.add_form:
-  title: 'Add publicorganization'
-  route_name: entity.assessment_organization.add_form
-  appears_on:
-    - entity.assessment_organization.collection
-
-assessment_service.add_form:
-  title: 'Add public service'
-  route_name: entity.assessment_service.add_form
-  appears_on:
-    - entity.assessment_service.collection
-
-assessment_expression.add_form:
-  title: 'Add legal expression'
-  route_name: entity.assessment_expression.add_form
-  appears_on:
-    - entity.assessment_expression.collection
-
-assessment_statement.add_form:
-  title: 'Add statement'
-  route_name: entity.assessment_statement.add_form
-  appears_on:
-    - entity.assessment_statement.collection
-
-assessment_requirement.add_form:
-  title: 'Add binding requirement'
-  route_name: entity.assessment_requirement.add_form
-  appears_on:
-    - entity.assessment_requirement.collection
-
-assessment.add_form:
-  title: 'Add assessment'
-  route_name: entity.assessment.add_form
-  appears_on:
-    - entity.assessment.collection
+    - entity.assessment_content.collection

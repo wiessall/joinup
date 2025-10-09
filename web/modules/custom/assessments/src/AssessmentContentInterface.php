@@ -9,8 +9,8 @@ use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
- * Provides an interface defining a legal expression entity type.
+ * Provides an interface defining an assessment content entity type.
  */
-interface LegalExpressionInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
+interface AssessmentContentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
 }

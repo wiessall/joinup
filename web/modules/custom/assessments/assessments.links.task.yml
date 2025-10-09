@@ -1,170 +1,26 @@
-entity.assessments_agent.view:
+entity.assessment_content.view:
   title: 'View'
-  route_name: entity.assessments_agent.canonical
-  base_route: entity.assessments_agent.canonical
-entity.assessments_agent.edit_form:
+  route_name: entity.assessment_content.canonical
+  base_route: entity.assessment_content.canonical
+entity.assessment_content.edit_form:
   title: 'Edit'
-  route_name: entity.assessments_agent.edit_form
-  base_route: entity.assessments_agent.canonical
-entity.assessments_agent.delete_form:
+  route_name: entity.assessment_content.edit_form
+  base_route: entity.assessment_content.canonical
+entity.assessment_content.delete_form:
   title: 'Delete'
-  route_name: entity.assessments_agent.delete_form
-  base_route: entity.assessments_agent.canonical
+  route_name: entity.assessment_content.delete_form
+  base_route: entity.assessment_content.canonical
   weight: 10
-entity.assessments_agent.collection:
-  title: 'Agents'
-  route_name: entity.assessments_agent.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessments_participation.view:
-  title: 'View'
-  route_name: entity.assessments_participation.canonical
-  base_route: entity.assessments_participation.canonical
-entity.assessments_participation.edit_form:
-  title: 'Edit'
-  route_name: entity.assessments_participation.edit_form
-  base_route: entity.assessments_participation.canonical
-entity.assessments_participation.delete_form:
-  title: 'Delete'
-  route_name: entity.assessments_participation.delete_form
-  base_route: entity.assessments_participation.canonical
-  weight: 10
-entity.assessments_participation.collection:
-  title: 'Participations'
-  route_name: entity.assessments_participation.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessments_asset.view:
-  title: 'View'
-  route_name: entity.assessments_asset.canonical
-  base_route: entity.assessments_asset.canonical
-entity.assessments_asset.edit_form:
-  title: 'Edit'
-  route_name: entity.assessments_asset.edit_form
-  base_route: entity.assessments_asset.canonical
-entity.assessments_asset.delete_form:
-  title: 'Delete'
-  route_name: entity.assessments_asset.delete_form
-  base_route: entity.assessments_asset.canonical
-  weight: 10
-entity.assessments_asset.collection:
-  title: 'Assets'
-  route_name: entity.assessments_asset.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment_organization.view:
-  title: 'View'
-  route_name: entity.assessment_organization.canonical
-  base_route: entity.assessment_organization.canonical
-entity.assessment_organization.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment_organization.edit_form
-  base_route: entity.assessment_organization.canonical
-entity.assessment_organization.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment_organization.delete_form
-  base_route: entity.assessment_organization.canonical
-  weight: 10
-entity.assessment_organization.collection:
-  title: 'Public Organizations'
-  route_name: entity.assessment_organization.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment_service.view:
-  title: 'View'
-  route_name: entity.assessment_service.canonical
-  base_route: entity.assessment_service.canonical
-entity.assessment_service.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment_service.edit_form
-  base_route: entity.assessment_service.canonical
-entity.assessment_service.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment_service.delete_form
-  base_route: entity.assessment_service.canonical
-  weight: 10
-entity.assessment_service.collection:
-  title: 'Public Services'
-  route_name: entity.assessment_service.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment_expression.view:
-  title: 'View'
-  route_name: entity.assessment_expression.canonical
-  base_route: entity.assessment_expression.canonical
-entity.assessment_expression.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment_expression.edit_form
-  base_route: entity.assessment_expression.canonical
-entity.assessment_expression.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment_expression.delete_form
-  base_route: entity.assessment_expression.canonical
-  weight: 10
-entity.assessment_expression.collection:
-  title: 'Legal Expressions'
-  route_name: entity.assessment_expression.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment_statement.view:
-  title: 'View'
-  route_name: entity.assessment_statement.canonical
-  base_route: entity.assessment_statement.canonical
-entity.assessment_statement.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment_statement.edit_form
-  base_route: entity.assessment_statement.canonical
-entity.assessment_statement.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment_statement.delete_form
-  base_route: entity.assessment_statement.canonical
-  weight: 10
-entity.assessment_statement.collection:
-  title: 'Statements'
-  route_name: entity.assessment_statement.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment_requirement.view:
-  title: 'View'
-  route_name: entity.assessment_requirement.canonical
-  base_route: entity.assessment_requirement.canonical
-entity.assessment_requirement.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment_requirement.edit_form
-  base_route: entity.assessment_requirement.canonical
-entity.assessment_requirement.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment_requirement.delete_form
-  base_route: entity.assessment_requirement.canonical
-  weight: 10
-entity.assessment_requirement.collection:
-  title: 'Binding Requirements'
-  route_name: entity.assessment_requirement.collection
-  base_route: entity.assessment.collection
-  weight: 10
-
-entity.assessment.view:
-  title: 'View'
-  route_name: entity.assessment.canonical
-  base_route: entity.assessment.canonical
-entity.assessment.edit_form:
-  title: 'Edit'
-  route_name: entity.assessment.edit_form
-  base_route: entity.assessment.canonical
-entity.assessment.delete_form:
-  title: 'Delete'
-  route_name: entity.assessment.delete_form
-  base_route: entity.assessment.canonical
-  weight: 10
-entity.assessment.collection:
-  title: 'Assessments'
-  route_name: entity.assessment.collection
+entity.assessment_content.collection:
+  title: 'Assessment contents'
+  route_name: entity.assessment_content.collection
   base_route: system.admin_content
   weight: 10
+entity.assessment_content_type.edit_form:
+  title: 'Edit'
+  route_name: entity.assessment_content_type.edit_form
+  base_route: entity.assessment_content_type.edit_form
+entity.assessment_content_type.collection:
+  title: 'List'
+  route_name: entity.assessment_content_type.collection
+  base_route: entity.assessment_content_type.collection
