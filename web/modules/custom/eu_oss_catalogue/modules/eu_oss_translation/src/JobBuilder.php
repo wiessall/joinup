@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Job builder service.
  */
-class JobBuilder implements JobBuilderInterface {
+readonly class JobBuilder implements JobBuilderInterface {
 
   /**
    * Target language.
