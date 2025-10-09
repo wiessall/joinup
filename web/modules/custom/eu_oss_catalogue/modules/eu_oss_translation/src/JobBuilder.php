@@ -9,7 +9,6 @@ use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\tmgmt\Data;
 use Drupal\tmgmt\SourceManager;
@@ -20,8 +19,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * Job builder service.
  */
 class JobBuilder implements JobBuilderInterface {
-
-  use StringTranslationTrait;
 
   /**
    * Target language.
