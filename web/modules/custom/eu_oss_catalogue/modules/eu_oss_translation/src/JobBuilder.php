@@ -11,8 +11,8 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\tmgmt\Data;
 use Drupal\tmgmt\SourceManager;
-use Drupal\tmgmt\TMGMTException;
 use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -49,6 +49,8 @@ class JobBuilder implements JobBuilderInterface {
     protected LoggerChannelInterface $logger,
     #[Autowire(service: 'plugin.manager.tmgmt.source')]
     protected SourceManager $sourcePluginManager,
+    #[Autowire(service: 'tmgmt.data')]
+    protected Data $tmgmtData,
     ConfigFactoryInterface $configFactory,
   ) {
     $this->config = $configFactory->get('eu_oss_translation.settings');
@@ -93,12 +95,21 @@ class JobBuilder implements JobBuilderInterface {
    *   True if a node needs translation.
    */
   protected function needsTranslation(OssSolutionInterface $entity): bool {
-    if ($entity->getRelevantLangCode() === self::TARGET_LANGUAGE) {
+    $sourceLangCode = $entity->getRelevantLangCode();
+
+    if ($sourceLangCode === self::TARGET_LANGUAGE) {
       return FALSE;
     }
 
-    $fields = $this->contentSource->extractTranslatableData($entity);
-    return !empty($fields);
+    // Extract data from the source language translation.
+    $sourceEntity = $entity->hasTranslation($sourceLangCode)
+      ? $entity->getTranslation($sourceLangCode)
+      : $entity;
+
+    $data = $this->contentSource->extractTranslatableData($sourceEntity);
+    // Use TMGMT's built-in method to filter out empty translatable content.
+    $filteredData = $this->tmgmtData->filterTranslatable($data);
+    return !empty($filteredData);
   }
 
   /**
@@ -130,38 +141,11 @@ class JobBuilder implements JobBuilderInterface {
       $job->requestTranslation();
     }
     catch (\Exception $e) {
-      if ($e instanceof TMGMTException && $this->isNoTranslatableContentException($e, $entity)) {
-        return;
-      }
-
       $this->logger->error('An issue occurred during creating the translation job. Message: @message', [
         '@message' => $e->getMessage(),
         'oss_solution' => $entity->id(),
       ]);
     }
-  }
-
-  /**
-   * Checks if exception is the "no translatable content" exception.
-   *
-   * Compare exception message with the translated template. Both go through
-   * translation, ensuring language-safe comparison.
-   *
-   * @param \Drupal\tmgmt\TMGMTException $exception
-   *   The exception to check.
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
-   *   The entity being processed.
-   *
-   * @return bool
-   *   TRUE if this is the "no translatable content" exception.
-   */
-  protected function isNoTranslatableContentException(TMGMTException $exception, OssSolutionInterface $entity): bool {
-    $expectedMessage = $this->t('Job item @label (@type) has no translatable content.', [
-      '@label' => $entity->label(),
-      '@type' => $entity->getEntityTypeId(),
-    ]);
-
-    return $exception->getMessage() === (string) $expectedMessage;
   }
 
 }

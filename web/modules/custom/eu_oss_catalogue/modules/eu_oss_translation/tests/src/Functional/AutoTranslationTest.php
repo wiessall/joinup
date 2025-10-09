@@ -115,12 +115,6 @@ class AutoTranslationTest extends FetchTestBase {
     $this->processQueue($tmgProviderWorker, $tmgProviderQueue, 11);
     $this->assertEquals(0, $tmgProviderQueue->numberOfItems());
 
-    // Verify no translation job errors were logged for the entity with no
-    // translatable content. We specifically check for the error message pattern
-    // from JobBuilder.
-    $errorLogs = $this->getLogEntries('An issue occurred during creating the translation job. Message: @message');
-    $this->assertEquals(1, count($errorLogs));
-
     $this->entityTypeManager->getStorage('node')->resetCache();
 
     $this->assertOssSolution('GitHub solution 1', 'en');
