@@ -60,7 +60,7 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
     // Reload the solution to get the latest data, as getVitalityIndexPerDay()
     // takes a long time and the solution may have been updated meanwhile.
-    $solutionStorage = $this->entityTypeManager->getStorage('oss_solution');
+    $solutionStorage = $this->entityTypeManager->getStorage('node');
     $solution = $solutionStorage->load($solution->id());
 
     if (!$solution || $vitalityIndexEncoded === $solution->get('oss_vitality_index_range')->value) {
