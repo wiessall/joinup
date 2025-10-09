@@ -82,7 +82,7 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
     $storage->load(111)->willReturn($ossSolution->reveal());
 
     $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
-    $entityTypeManager->getStorage('oss_solution')->willReturn($storage->reveal());
+    $entityTypeManager->getStorage('node')->willReturn($storage->reveal());
 
     $vitalityIndexGenerator = new VitalityIndexGeneratorHelper(
       $entityTypeManager->reveal(),
