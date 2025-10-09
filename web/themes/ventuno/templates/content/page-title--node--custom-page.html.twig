@@ -17,7 +17,7 @@
 
 {% if title %}
   <div class="page-title page__title-wrapper my-4">
-    <h1 class="visually-hidden">{{  additional_content.parent_page_title }} / {{ title|striptags  }} </h1>
+    <h1 class="visually-hidden">{{ additional_content.parent_page_title }} / {{ title|striptags }} </h1>
     <span{{ h1_attributes.addClass(classes) }}>
       {{ title }}
       {% if permalink %}
