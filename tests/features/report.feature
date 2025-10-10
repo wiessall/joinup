@@ -27,7 +27,7 @@ Feature: Report inappropriate content
       | Subject        | Invalid content |
       | Message        | Spam            |
     When I press "Submit"
-    Then I should see the heading "<title>"
+    Then I should see "<title>"
 
     Examples:
       | type        | title                        | body                    |

@@ -91,7 +91,7 @@ Feature: "Add custom page" visibility options.
 
     And I select "E-health,EU and European Policies" options from "Topic"
     And I press "Save as draft"
-    Then I should see the heading "About us"
+    Then I should see "About us"
     And I should see the success message "Custom page About us has been created."
     And I should see the text "Attachments"
     # The description of the file is set as the text to display.
@@ -216,7 +216,7 @@ Feature: "Add custom page" visibility options.
       | Abstract | Rubber boots abstract |
     And I select "E-health" options from "Topic"
     And I press "Save"
-    Then I should see the heading "Rubber boots"
+    Then I should see "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
 
     # Assert that the "Custom page" tile is present and contains last update, label and bundle type.

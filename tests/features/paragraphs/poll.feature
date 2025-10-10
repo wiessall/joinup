@@ -37,7 +37,7 @@ Feature: Pool paragraph tests.
       | E-mail address | cpoll@ec.example.eu |
       | Password       | poll123!#$          |
     And I press "Log in"
-    When I should see the heading "TV series"
+    When I should see "TV series"
 
   Scenario: Authenticated user can vote
     Given the following polls:
