@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\joinup\ExistingSite;
+namespace Drupal\Tests\joinup_pin\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\collection\Entity\CollectionInterface;
@@ -13,7 +13,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 /**
  * Tests pinnable entities.
  *
- * @group joinup
+ * @group joinup_pin
  */
 class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
 
