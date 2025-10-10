@@ -331,7 +331,7 @@ Feature:
     # checker and the compatibility documents.
     Given I am logged in as an "authenticated user"
     When I visit the "JLC" "custom page"
-    Then I should see the heading "JLC"
+    Then I should see "JLC"
     And the page should be cacheable
     When I reload the page
     Then the page should be cached

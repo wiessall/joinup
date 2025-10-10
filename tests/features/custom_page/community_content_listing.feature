@@ -100,7 +100,7 @@ Feature:
 
     When I press "Save" in the "Modal buttons" region
     And I press "Publish"
-    Then I should see the heading "Latest content"
+    Then I should see "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
     And I should see the "Latest news listing" tile
@@ -116,7 +116,7 @@ Feature:
     And I fill in "Query presets" with "entity_bundle|news"
     When I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Latest news"
+    Then I should see "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -204,7 +204,7 @@ Feature:
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Save" in the "Modal buttons" region
     And I press "Save as draft"
-    Then I should see the heading "Chosen content"
+    Then I should see "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
@@ -349,7 +349,7 @@ Feature:
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
-    Then I should see the heading "Collection content"
+    Then I should see "Collection content"
     # Verify that unwanted facets are not shown in the page.
     And I should see the following facet items "Discussions, Event, News" in this order
     And I should see the following tiles in the correct order:
@@ -612,7 +612,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     Then I press "Update"
-    And I should see the heading "Bikes"
+    And I should see "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
     And I "edit" from the "Custom page body" field the child 2 paragraph of 1 layout
@@ -709,11 +709,11 @@ Feature:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
     And I go to the "Multi paragraph facets" custom_page
-    Then I should see the heading "Multi paragraph facets"
+    Then I should see "Multi paragraph facets"
     And I should see the following facet items "Discussions, Events, News" in this order
 
     Given I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
     And I go to the "Multi paragraph facets" custom_page
-    Then I should see the heading "Multi paragraph facets"
+    Then I should see "Multi paragraph facets"
     And I should not see the following facet items "Discussion, Event, News"

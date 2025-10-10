@@ -32,7 +32,7 @@ Feature:
     And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
-    Then I should see the heading "Paragraphs accordion page"
+    Then I should see "Paragraphs accordion page"
     And I should see the text "Super"
     And I should see the text "Duper"
     But I should not see the text "Clumsy text"
