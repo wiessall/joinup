@@ -93,7 +93,7 @@ function joinup_slick_preprocess_field(array &$variables): void {
         'entity_type' => $variables['element']['#entity_type'],
         'bundle' => $variables['element']['#bundle'],
         'field_name' => $variables['element']['#field_name'],
-        'field_label' => $useFieldLabel ? $variables['label'] : NULL
+        'field_label' => $useFieldLabel ? $variables['label'] : NULL,
       ];
       // Move Slick renderable to the field theme output, overriding the items
       // key. Structurally, this is the same if the field has one single value.
