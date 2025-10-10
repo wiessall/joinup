@@ -1,10 +1,10 @@
-uuid: 7d5a404f-63ea-4c70-b782-53ee4c81da26
+uuid: 5d2c3f2d-c5be-451f-91fa-ad7e1dbb8e8c
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.agent
-    - field.storage.assessment_content.type
+    - assessments.assessment_content_type.statement
+    - field.storage.assessment_content.statement_type
   module:
     - options
     - rdf_sync
@@ -14,13 +14,13 @@ third_party_settings:
     excluded: false
   rdf_sync:
     value:
-      predicate: 'http://purl.org/dc/terms/type'
+      predicate: 'http://data.europa.eu/2sa/cav#type'
       type: 'xsd:string'
-id: assessment_content.agent.type
-field_name: type
+id: assessment_content.statement.statement_type
+field_name: statement_type
 entity_type: assessment_content
-bundle: agent
-label: Type
+bundle: statement
+label: 'Statement type'
 description: ''
 required: false
 translatable: false

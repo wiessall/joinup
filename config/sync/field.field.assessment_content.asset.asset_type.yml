@@ -1,10 +1,10 @@
-uuid: 43bb3481-6708-45b5-8617-6bd2666d16d3
+uuid: 01e211ab-3ad4-4928-a58c-545b63a27f92
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organization
-    - field.storage.assessment_content.type
+    - assessments.assessment_content_type.asset
+    - field.storage.assessment_content.asset_type
   module:
     - options
     - rdf_sync
@@ -14,13 +14,13 @@ third_party_settings:
     excluded: false
   rdf_sync:
     value:
-      predicate: 'http://www.w3.org/ns/org#classification'
+      predicate: 'http://purl.org/dc/terms/type'
       type: 'xsd:string'
-id: assessment_content.public_organization.type
-field_name: type
+id: assessment_content.asset.asset_type
+field_name: asset_type
 entity_type: assessment_content
-bundle: public_organization
-label: 'Type of public sector body'
+bundle: asset
+label: 'Asset type'
 description: ''
 required: false
 translatable: false

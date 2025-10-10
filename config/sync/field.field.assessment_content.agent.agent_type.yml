@@ -1,10 +1,10 @@
-uuid: 1e1694df-c10a-4d74-bb05-cc9b3e107119
+uuid: 9a2e37e8-bf36-4c20-8ecc-4d29c4e5c9d5
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_service
-    - field.storage.assessment_content.type
+    - assessments.assessment_content_type.agent
+    - field.storage.assessment_content.agent_type
   module:
     - options
     - rdf_sync
@@ -14,13 +14,13 @@ third_party_settings:
     excluded: false
   rdf_sync:
     value:
-      predicate: 'http://data.europa.eu/m8g/thematicArea'
+      predicate: 'http://purl.org/dc/terms/type'
       type: 'xsd:string'
-id: assessment_content.public_service.type
-field_name: type
+id: assessment_content.agent.agent_type
+field_name: agent_type
 entity_type: assessment_content
-bundle: public_service
-label: 'Thematic area'
+bundle: agent
+label: 'Agent type'
 description: ''
 required: false
 translatable: false

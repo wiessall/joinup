@@ -6,8 +6,8 @@ dependencies:
     - assessments.assessment_content_type.expression
     - field.field.assessment_content.expression.description
     - field.field.assessment_content.expression.documented_in
+    - field.field.assessment_content.expression.expression_type
     - field.field.assessment_content.expression.name
-    - field.field.assessment_content.expression.type
   module:
     - link
 id: assessment_content.expression.default
@@ -25,11 +25,17 @@ content:
     third_party_settings: {  }
   documented_in:
     type: link_default
-    weight: 3
+    weight: 4
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {  }
+  expression_type:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
     third_party_settings: {  }
   name:
     type: string_textfield
@@ -38,12 +44,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  type:
-    type: options_select
-    weight: 2
-    region: content
-    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

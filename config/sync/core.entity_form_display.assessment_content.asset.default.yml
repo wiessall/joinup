@@ -4,10 +4,10 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.asset
+    - field.field.assessment_content.asset.asset_type
     - field.field.assessment_content.asset.description
     - field.field.assessment_content.asset.landing_page
     - field.field.assessment_content.asset.name
-    - field.field.assessment_content.asset.type
   module:
     - link
 id: assessment_content.asset.default
@@ -15,6 +15,12 @@ targetEntityType: assessment_content
 bundle: asset
 mode: default
 content:
+  asset_type:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   description:
     type: string_textarea
     weight: 1
@@ -38,12 +44,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  type:
-    type: options_select
-    weight: 2
-    region: content
-    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

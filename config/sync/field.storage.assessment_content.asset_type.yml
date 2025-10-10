@@ -1,0 +1,36 @@
+uuid: 70fde202-af5a-4043-b492-4cfa3f0aa520
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - options
+id: assessment_content.asset_type
+field_name: asset_type
+entity_type: assessment_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: software
+      label: Software
+    -
+      value: dataset
+      label: Dataset
+    -
+      value: specification
+      label: Specification
+    -
+      value: service
+      label: Service
+    -
+      value: other
+      label: Other
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

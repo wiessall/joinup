@@ -1,0 +1,33 @@
+uuid: b7890526-8b68-43bc-8d55-b63194ecaddf
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - options
+id: assessment_content.participant_type
+field_name: participant_type
+entity_type: assessment_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: citizen
+      label: Citizen
+    -
+      value: organisation
+      label: Organisation
+    -
+      value: national_government_entity
+      label: 'National government entity'
+    -
+      value: ec_entity
+      label: 'European Union entity'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

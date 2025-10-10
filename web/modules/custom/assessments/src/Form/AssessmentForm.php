@@ -14,7 +14,7 @@ use Drupal\Component\Utility\NestedArray;
 /**
  * Form controller for the assessment entity edit forms.
  */
-final class AssessmentForm extends ContentEntityForm {
+class AssessmentForm extends ContentEntityForm {
 
   /**
    * Copy only current-step values from form to entity on partial saves.
