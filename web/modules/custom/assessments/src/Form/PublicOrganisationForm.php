@@ -23,9 +23,7 @@ final class PublicOrganisationForm {
   /**
    * {@inheritdoc}
    */
-  public static function formAlter(array &$form, FormStateInterface $form_state): array {
-    // Setup dynamic behaviour using AJAX, replacing previous #states usage.
-
+  public static function formAlter(array &$form, FormStateInterface $form_state): void {
     // Wrap dynamic section for AJAX refresh.
     $form['public_org_dynamic_wrapper'] = [
       '#type' => 'container',
@@ -33,20 +31,11 @@ final class PublicOrganisationForm {
     ];
 
     // Convert state-driven logic to AJAX: organisation_type triggers refresh.
-    if (isset($form['organisation_type']['widget'][0]['value'])) {
-      $form['organisation_type']['widget'][0]['value']['#ajax'] = [
-        'callback' => [self::class, 'ajaxRefresh'],
-        'event' => 'change',
-        'wrapper' => 'public-org-dynamic-wrapper',
-      ];
-    }
-    elseif (isset($form['fields']['organisation_type'][0]['value'])) {
-      $form['fields']['organisation_type'][0]['value']['#ajax'] = [
-        'callback' => [self::class, 'ajaxRefresh'],
-        'event' => 'change',
-        'wrapper' => 'public-org-dynamic-wrapper',
-      ];
-    }
+    $form['organisation_type']['widget'][0]['value']['#ajax'] = [
+      'callback' => [self::class, 'ajaxRefresh'],
+      'event' => 'change',
+      'wrapper' => 'public-org-dynamic-wrapper',
+    ];
 
     // Determine current org type value from form state or defaults.
     $org_type = NULL;
@@ -109,7 +98,6 @@ final class PublicOrganisationForm {
       '#required' => $org_type === 'european_union_agency',
     ];
 
-    return $form;
   }
 
 }
