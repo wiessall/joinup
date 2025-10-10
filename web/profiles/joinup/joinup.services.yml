@@ -4,11 +4,6 @@ services:
     autoconfigure: true
     autowire: true
 
-  cache_context.community_content_author:
-    class: 'Drupal\joinup\Cache\Context\CommunityContentAuthorCacheContext'
-    tags:
-      - { name: 'cache.context'}
-
   Drupal\joinup\Routing\RouteSubscriber: { }
 
   Drupal\joinup\Access\NodeCreationRoutesAccess:
