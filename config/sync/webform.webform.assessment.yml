@@ -33,7 +33,7 @@ elements: |-
       '#type': textfield
       '#title': 'Short title'
       '#description': '<p>This will be used as the title of the published report. Maximum 200 characters.</p>'
-      '#maxlength': 255
+      '#maxlength': 200
       '#required': true
     public_sector_body:
       '#type': select
