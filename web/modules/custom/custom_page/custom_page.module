@@ -303,6 +303,14 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         ->andIf($accessPermission)
         ->addCacheContexts(['og_group_context']);
 
+    case 'landing_page':
+      return AccessResult::forbiddenIf($operation === 'edit'
+        && $field_definition->getTargetEntityTypeId() === 'meta_entity'
+        && !$account->hasPermission('manage custom landing pages')
+      )
+        ->addCacheableDependency($field_definition)
+        ->cachePerPermissions();
+
     default:
       return AccessResult::neutral();
   }
