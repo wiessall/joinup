@@ -125,7 +125,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
