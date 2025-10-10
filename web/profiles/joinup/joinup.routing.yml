@@ -14,39 +14,3 @@ node.propose_form:
       node_type:
         type: entity:node_type
         with_config_overrides: TRUE
-
-joinup.pin_entity:
-  path: '/pin/group/{entity_type}/{entity}/add/{group}'
-  defaults:
-    _controller: '\Drupal\joinup\Controller\PinEntityController::pin'
-    _title: 'Pin'
-  requirements:
-    _custom_access: '\Drupal\joinup\Controller\PinEntityController::pinAccess'
-    _csrf_token: 'TRUE'
-  options:
-    parameters:
-      entity:
-        type: entity:{entity_type}
-      group:
-        type: entity:node
-        bundle:
-          - collection
-          - solution
-
-joinup.unpin_entity:
-  path: '/pin/group/{entity_type}/{entity}/remove/{group}'
-  defaults:
-    _controller: '\Drupal\joinup\Controller\PinEntityController::unpin'
-    _title: 'Unpin'
-  requirements:
-    _custom_access: '\Drupal\joinup\Controller\PinEntityController::unpinAccess'
-    _csrf_token: 'TRUE'
-  options:
-    parameters:
-      entity:
-        type: entity:{entity_type}
-      group:
-        type: entity:node
-        bundle:
-          - collection
-          - solution

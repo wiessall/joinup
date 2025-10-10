@@ -2,13 +2,3 @@ comment_approve:
   title: 'Approve comment'
   route_name: 'comment.approve'
   group: comment
-
-joinup.pin_entity:
-  route_name: joinup.pin_entity
-  title: Pin
-  group: group_context
-
-joinup.unpin_entity:
-  route_name: joinup.unpin_entity
-  title: Unpin
-  group: group_context

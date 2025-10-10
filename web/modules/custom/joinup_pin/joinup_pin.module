@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Provides pin/unpin functionality for group content entities.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+
+/**
+ * Implements hook_entity_view_alter().
+ *
+ * Adds metadata needed to show relevant contextual links whenever entities are
+ * displayed.
+ */
+function joinup_pin_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  if (!$entity instanceof PinnableGroupContentInterface) {
+    return;
+  }
+
+  // The contextual links vary per user roles (since moderators are able to pin
+  // content) and per OG roles (since facilitators are able to pin content).
+  // Core already takes care of varying by roles by applying the
+  // user.permissions cache context and applying the permission hash in the
+  // contextual links. We need to include the corresponding data deriving from
+  // the og_role cache context.
+  /** @var \Drupal\og\Cache\Context\OgRoleCacheContext $cache_service */
+  $cache_service = \Drupal::service('cache_context.og_role');
+  $roles_hash = $cache_service->getContext();
+
+  // The rendered entity needs to vary by OG group context.
+  $build['#cache']['contexts'] = Cache::mergeContexts($build['#cache']['contexts'], [
+    'og_role',
+    'og_group_context',
+  ]);
+
+  /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+  $group = \Drupal::service('og.context')->getGroup();
+
+  // The existence of the group context contextual links helps with enforcing
+  // the og_context to the entity because otherwise there is nothing in the view
+  // itself that would invalidate the tile and make it really `og_role`
+  // dependant.
+  $build['#contextual_links']['group_context'] = [
+    'route_parameters' => [
+      'entity_type' => $entity->getEntityTypeId(),
+      'entity' => $entity->id(),
+      // The group parameter is a required parameter in the pin/unpin
+      // routes. If the parameter is left empty, a critical exception will
+      // occur and the contextual links generation will break. By passing an
+      // empty value, an upcast exception will be catched and the access
+      // checks will correctly return an access denied.
+      'group' => NULL,
+    ],
+    'metadata' => [
+      'changed' => $entity->getChangedTime(),
+      'og_roles_hash' => $roles_hash,
+      'pin_status' => $entity->isPinned($group),
+    ],
+  ];
+
+  // The next check asserts that the group is either a collection or a solution
+  // but for solutions, only community content are allowed to be pinned, not
+  // related solutions.
+  if ($group && ($group instanceof CollectionInterface || $entity instanceof CommunityContentInterface && $group instanceof SolutionInterface)) {
+    // Used by the contextual links for pinning/unpinning entity in group.
+    // @see: joinup_pin.pin_entity, joinup_pin.unpin_entity routes.
+    $build['#contextual_links']['group_context']['route_parameters']['group'] = $group->id();
+  }
+}
