@@ -221,7 +221,6 @@ permissions:
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
   - 'manage solutions'
-  - 'moderate entity parents'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
