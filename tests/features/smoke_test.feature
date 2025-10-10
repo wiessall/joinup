@@ -34,3 +34,9 @@ Feature: Minimal install clone testing.
     And I press "Generate data"
     Then I should see the heading "Exporting statistics per group"
     And I wait for the batch process to finish
+
+  Scenario: Access the file fields report page
+    # Regression test for ticket ISAICP-10240.
+    Given I am logged in as a user with the developer role
+    When I am on "/admin/reports/fields/file"
+    Then the response status code should be 200
