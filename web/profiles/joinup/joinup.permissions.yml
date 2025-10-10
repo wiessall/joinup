@@ -1,6 +1,3 @@
-'filter membership overview':
-  title: 'Filter the membership overview'
-  description: 'Unlocks exposed filters in the bulk operations view for collection and solution members.'
 'moderate entity parents':
   title: 'Alter parent groups of group content'
 

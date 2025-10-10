@@ -213,7 +213,6 @@ permissions:
   - 'edit terms in tags'
   - 'eu oss catalogue log'
   - 'feature entity'
-  - 'filter membership overview'
   - 'flag interoperability'
   - 'manage assessments'
   - 'manage custom landing pages'
