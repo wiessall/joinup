@@ -5,7 +5,3 @@ services:
     autowire: true
 
   Drupal\joinup\Routing\RouteSubscriber: { }
-
-  Drupal\joinup\Access\NodeCreationRoutesAccess:
-    tags:
-      - { name: access_check, applies_to: _node_creation_route }

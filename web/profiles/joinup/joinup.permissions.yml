@@ -1,4 +1,0 @@
-access node creation routes:
-  title: 'Access node standard creation routes'
-  description: 'Most of the node type are part of groups, thus standard routes should be forbidden.'
-  restrict access: true
