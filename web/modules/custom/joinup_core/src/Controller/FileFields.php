@@ -57,14 +57,19 @@ class FileFields extends ControllerBase {
    */
   protected function buildRow($entity_type, $bundle, $field_name): array {
     $info = $this->entityFieldManager->getFieldDefinitions($entity_type, $bundle);
-    /** @var \Drupal\field\Entity\FieldConfig $field_info */
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_info */
     $field_info = $info[$field_name];
     $dir = $field_info->getSetting('file_directory');
     $extensions = $field_info->getSetting('file_extensions');
+
+    // BaseFieldDefinition doesn't have a label() method,
+    // use getLabel() instead.
+    $label = method_exists($field_info, 'label') ? $field_info->label() : $field_info->getLabel();
+
     return [
       'entity_type' => $entity_type,
       'bundle' => $bundle,
-      'field_name' => $field_info->label() . " ($field_name)",
+      'field_name' => $label . " ($field_name)",
       'storage_path' => $dir,
       'allowed_extensions' => $extensions,
     ];
