@@ -125,7 +125,7 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
+
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -156,7 +156,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -1005,7 +1004,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 2
@@ -1052,7 +1050,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 3
@@ -1226,7 +1223,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: documentation
             weight: 0
