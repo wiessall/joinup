@@ -10,4 +10,4 @@ third_party_settings:
     uri_plugin: null
     fields: {  }
 id: public_organization
-label: 'Public organization'
+label: 'Public organisation'

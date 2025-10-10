@@ -7,8 +7,8 @@ dependencies:
     - field.field.assessment_content.participation.description
     - field.field.assessment_content.participation.has_participation
     - field.field.assessment_content.participation.identifier
+    - field.field.assessment_content.participation.participant_type
     - field.field.assessment_content.participation.role
-    - field.field.assessment_content.participation.type
   module:
     - options
     - user
@@ -59,6 +59,13 @@ content:
     third_party_settings: {  }
     weight: 25
     region: content
+  participant_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 26
+    region: content
   role:
     type: list_default
     label: above
@@ -75,13 +82,6 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 0
-    region: content
-  type:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
     region: content
   uid:
     type: author

@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Form controller for the assessment content entity edit forms.
  */
-final class AssessmentContentForm extends ContentEntityForm {
+class AssessmentContentForm extends ContentEntityForm {
 
   /**
    * {@inheritdoc}

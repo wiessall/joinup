@@ -6,8 +6,8 @@ dependencies:
     - assessments.assessment_content_type.expression
     - field.field.assessment_content.expression.description
     - field.field.assessment_content.expression.documented_in
+    - field.field.assessment_content.expression.expression_type
     - field.field.assessment_content.expression.name
-    - field.field.assessment_content.expression.type
   module:
     - link
     - options
@@ -55,6 +55,13 @@ content:
     third_party_settings: {  }
     weight: 23
     region: content
+  expression_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 24
+    region: content
   name:
     type: string
     label: above
@@ -72,13 +79,6 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 0
-    region: content
-  type:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
     region: content
   uid:
     type: author

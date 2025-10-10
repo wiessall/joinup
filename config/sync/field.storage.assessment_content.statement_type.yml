@@ -1,0 +1,33 @@
+uuid: 47fe7876-6bcb-4565-b1db-96aa5c2dcdc3
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - options
+id: assessment_content.statement_type
+field_name: statement_type
+entity_type: assessment_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: assessment
+      label: Assessment
+    -
+      value: observation
+      label: Observation
+    -
+      value: recommendation
+      label: Recommendation
+    -
+      value: review
+      label: Review
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

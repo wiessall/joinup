@@ -1,12 +1,12 @@
-uuid: 0cd9ff02-cc6a-4e94-9c7e-ead6e48be169
+uuid: 2854199c-c580-4dc3-b1ad-df3d22b74c79
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
     - options
-id: assessment_content.type
-field_name: type
+id: assessment_content.organisation_type
+field_name: organisation_type
 entity_type: assessment_content
 type: list_string
 settings:
@@ -24,7 +24,7 @@ settings:
       value: european_union_institution
       label: 'European Union institution'
     -
-      value: european_union
+      value: european_union_agency
       label: 'European Union agency'
     -
       value: european_union_body

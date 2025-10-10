@@ -8,7 +8,7 @@ dependencies:
     - field.field.assessment_content.statement.has_related_service
     - field.field.assessment_content.statement.interpretation
     - field.field.assessment_content.statement.judgement
-    - field.field.assessment_content.statement.type
+    - field.field.assessment_content.statement.statement_type
   module:
     - file
     - inline_entity_form
@@ -19,14 +19,14 @@ mode: default
 content:
   documentation:
     type: file_generic
-    weight: 4
+    weight: 5
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   has_related_service:
     type: inline_entity_form_complex
-    weight: 3
+    weight: 4
     region: content
     settings:
       form_mode: default
@@ -56,9 +56,9 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  type:
+  statement_type:
     type: options_select
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }

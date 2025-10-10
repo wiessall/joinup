@@ -7,8 +7,8 @@ dependencies:
     - field.field.assessment_content.participation.description
     - field.field.assessment_content.participation.has_participation
     - field.field.assessment_content.participation.identifier
+    - field.field.assessment_content.participation.participant_type
     - field.field.assessment_content.participation.role
-    - field.field.assessment_content.participation.type
   module:
     - inline_entity_form
 id: assessment_content.participation.default
@@ -25,40 +25,35 @@ content:
       placeholder: ''
     third_party_settings: {  }
   has_participation:
-    type: inline_entity_form_complex
-    weight: 2
+    type: inline_entity_form_simple
+    weight: 4
     region: content
     settings:
       form_mode: default
       override_labels: true
       label_singular: 'Agent entity'
       label_plural: 'Agent entities'
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
       collapsible: true
       collapsed: true
       revision: false
-      removed_reference: optional
     third_party_settings: {  }
   identifier:
     type: string_textfield
-    weight: 4
+    weight: 5
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  role:
+  participant_type:
     type: options_select
-    weight: 3
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
-  type:
+  role:
     type: options_select
-    weight: 1
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }

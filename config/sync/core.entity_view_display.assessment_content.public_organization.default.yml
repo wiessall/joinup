@@ -7,7 +7,7 @@ dependencies:
     - field.field.assessment_content.public_organization.country
     - field.field.assessment_content.public_organization.description
     - field.field.assessment_content.public_organization.name
-    - field.field.assessment_content.public_organization.type
+    - field.field.assessment_content.public_organization.organisation_type
   module:
     - options
     - user
@@ -58,6 +58,13 @@ content:
     third_party_settings: {  }
     weight: 21
     region: content
+  organisation_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 24
+    region: content
   status:
     type: boolean
     label: above
@@ -67,13 +74,6 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 0
-    region: content
-  type:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
     region: content
   uid:
     type: author

@@ -1,0 +1,51 @@
+uuid: 287d2f49-52bd-422e-a6f5-91d0029d5f0d
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - options
+id: assessment_content.thematic_area
+field_name: thematic_area
+entity_type: assessment_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: core_governance_and_administration
+      label: 'Core Governance and Administration'
+    -
+      value: health_and_wellbeing
+      label: 'Health and Wellbeing'
+    -
+      value: education_and_research
+      label: 'Education and Research'
+    -
+      value: environment_and_energy
+      label: 'Environment and Energy'
+    -
+      value: economy_and_employment
+      label: 'Economy and Employment'
+    -
+      value: social_and_community_services
+      label: 'Social and Community Services'
+    -
+      value: security_justice_and_emergency_services
+      label: 'Security, Justice, and Emergency Services'
+    -
+      value: transport_and_infrastructure
+      label: 'Transport and Infrastructure'
+    -
+      value: digital_and_innovation_services
+      label: 'Digital and Innovation Services'
+    -
+      value: international_and_regional_cooperation
+      label: 'International and Regional Cooperation'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

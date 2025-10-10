@@ -1,26 +1,21 @@
-uuid: 9e3621d4-42c3-427e-8fc4-6bd877688a9c
+uuid: 3154661c-d290-47aa-a4db-c5fae757e82f
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.assessment_content_type.participation
-    - field.storage.assessment_content.type
+    - field.storage.assessment_content.participant_type
   module:
     - options
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    value:
-      predicate: 'http://purl.org/dc/terms/type'
-      type: 'xsd:string'
-id: assessment_content.participation.type
-field_name: type
+id: assessment_content.participation.participant_type
+field_name: participant_type
 entity_type: assessment_content
 bundle: participation
-label: Type
+label: 'Participant type'
 description: ''
 required: false
 translatable: false

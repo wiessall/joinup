@@ -8,7 +8,7 @@ dependencies:
     - field.field.assessment_content.public_service.identifier
     - field.field.assessment_content.public_service.name
     - field.field.assessment_content.public_service.spatial
-    - field.field.assessment_content.public_service.type
+    - field.field.assessment_content.public_service.thematic_area
   module:
     - geofield
     - options
@@ -79,12 +79,12 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  type:
+  thematic_area:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 22
+    weight: 26
     region: content
   uid:
     type: author

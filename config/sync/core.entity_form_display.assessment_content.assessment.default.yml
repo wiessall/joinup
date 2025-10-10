@@ -22,18 +22,15 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 1
-      format_type: form_step
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
-        show_step_title: true
-        step_description: "This section collects general information on your interoperability assessment.\r\n\r\n"
-        back_button_show: false
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
+        open: true
+        description: ''
+        required_fields: true
     group_binding_requirements:
       children:
         - group_page2help
@@ -42,12 +39,14 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 2
-      format_type: form_step
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        open: false
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
@@ -61,12 +60,14 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 3
-      format_type: form_step
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        open: false
+        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true

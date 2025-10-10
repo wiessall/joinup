@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.agent
+    - field.field.assessment_content.agent.agent_type
     - field.field.assessment_content.agent.name
-    - field.field.assessment_content.agent.type
   module:
     - options
     - user
@@ -14,6 +14,13 @@ targetEntityType: assessment_content
 bundle: agent
 mode: default
 content:
+  agent_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 23
+    region: content
   created:
     type: timestamp
     label: above
@@ -50,13 +57,6 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     weight: 0
-    region: content
-  type:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
     region: content
   uid:
     type: author
