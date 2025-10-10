@@ -13,7 +13,6 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -109,44 +108,6 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
     if (!empty($form[$field])) {
       $form[$field]['#access'] = FALSE;
     }
-  }
-}
-
-/**
- * Implements hook_preprocess_node().
- */
-function joinup_preprocess_node(&$variables): void {
-  _joinup_preprocess_entity_tiles($variables);
-}
-
-/**
- * Adds common functionality to the tile view mode of nodes.
- *
- * @param array $variables
- *   The variables array.
- */
-function _joinup_preprocess_entity_tiles(array &$variables): void {
-  // View modes where tiles are expected.
-  $tile_view_modes = [
-    'view_mode_tile',
-    'view_mode_tile_horizontal',
-    'carousel',
-    'spotlight',
-  ];
-  if (!in_array($variables['view_mode'], $tile_view_modes)) {
-    return;
-  }
-
-  /** @var \Drupal\Core\Entity\ContentEntityBase $entity */
-  $entity = $variables[$variables['elements']['#entity_type']] ?? NULL;
-  if (empty($entity)) {
-    return;
-  }
-
-  // If the entity is featured site-wide, enable the related JS library.
-  if ($entity instanceof FeaturedContentInterface && $entity->isFeatured()) {
-    $variables['attributes']['data-joinup-featured'][] = TRUE;
-    $variables['#attached']['library'][] = 'joinup/site_wide_featured';
   }
 }
 
