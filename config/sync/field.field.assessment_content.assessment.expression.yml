@@ -1,0 +1,34 @@
+uuid: 34f01953-92eb-4f6f-ae07-a25f4e7fd9d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.expression
+    - field.storage.assessment_content.expression
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment_content.assessment.expression
+field_name: expression
+entity_type: assessment_content
+bundle: assessment
+label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_content'
+  handler_settings:
+    target_bundles:
+      expression: expression
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

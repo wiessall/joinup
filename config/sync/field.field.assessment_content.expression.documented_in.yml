@@ -20,7 +20,7 @@ id: assessment_content.expression.documented_in
 field_name: documented_in
 entity_type: assessment_content
 bundle: expression
-label: 'Documented in'
+label: 'If applicable, provide a link to the initiative, project or action concerned'
 description: ''
 required: false
 translatable: false

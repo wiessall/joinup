@@ -5,6 +5,8 @@ dependencies:
   config:
     - assessments.assessment_content_type.assessment
     - field.field.assessment_content.assessment.binding_requirement
+    - field.field.assessment_content.assessment.expression
+    - field.field.assessment_content.assessment.has_related_service
     - field.field.assessment_content.assessment.is_provided_by
     - field.field.assessment_content.assessment.name
     - field.field.assessment_content.assessment.results_in
@@ -18,41 +20,49 @@ third_party_settings:
         - name
         - group_page1text1
         - is_provided_by
+        - expression
       label: '1. General information'
       region: content
       parent_name: ''
       weight: 1
-      format_type: details
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
+        show_step_title: true
+        step_description: ''
+        back_button_show: false
+        back_button_text: Back
+        next_button_text: Next
+        required_fields: true
+        step_help: ''
         open: true
         description: ''
-        required_fields: true
     group_binding_requirements:
       children:
         - group_page2help
+        - has_related_service
         - binding_requirement
       label: '2. Binding requirements'
       region: content
       parent_name: ''
       weight: 2
-      format_type: details
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
-        open: false
-        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
         back_button_text: Back
         next_button_text: Next
+        required_fields: true
         step_help: ''
+        open: false
     group_statements:
       children:
         - results_in
@@ -60,20 +70,20 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 3
-      format_type: details
+      format_type: form_step
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
         label_as_html: false
-        open: false
-        required_fields: true
         show_step_title: true
         step_description: ''
         back_button_show: true
         back_button_text: Back
         next_button_text: Next
+        required_fields: true
         step_help: ''
+        open: false
     group_page1text1:
       children: {  }
       label: Page1Text1
@@ -94,7 +104,7 @@ third_party_settings:
       label: Page2Help
       region: content
       parent_name: group_binding_requirements
-      weight: 20
+      weight: 4
       format_type: markup
       format_settings:
         show_empty_fields: 1
@@ -110,22 +120,43 @@ bundle: assessment
 mode: default
 content:
   binding_requirement:
-    type: inline_entity_form_complex
-    weight: 21
+    type: inline_entity_form_simple
+    weight: 6
     region: content
     settings:
       form_mode: default
       override_labels: false
       label_singular: ''
       label_plural: ''
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: true
+      collapsible: false
       collapsed: true
       revision: false
-      removed_reference: optional
+    third_party_settings: {  }
+  expression:
+    type: inline_entity_form_simple
+    weight: 24
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Expression
+      label_plural: Expressions
+      collapsible: false
+      collapsed: true
+      revision: false
+    third_party_settings: {  }
+  has_related_service:
+    type: inline_entity_form_simple
+    weight: 5
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Affected service'
+      label_plural: 'Affected services'
+      collapsible: false
+      collapsed: true
+      revision: false
     third_party_settings: {  }
   is_provided_by:
     type: inline_entity_form_simple
@@ -134,8 +165,8 @@ content:
     settings:
       form_mode: default
       override_labels: true
-      label_singular: ''
-      label_plural: ''
+      label_singular: 'Public service'
+      label_plural: 'Public services'
       collapsible: false
       collapsed: false
       revision: false
@@ -149,7 +180,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   results_in:
-    type: inline_entity_form_complex
+    type: inline_entity_form_simple
     weight: 10
     region: content
     settings:
@@ -157,14 +188,9 @@ content:
       override_labels: false
       label_singular: ''
       label_plural: ''
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: true
+      collapsible: false
       collapsed: true
       revision: false
-      removed_reference: optional
     third_party_settings: {  }
 hidden:
   created: true
