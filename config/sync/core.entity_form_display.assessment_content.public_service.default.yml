@@ -10,28 +10,12 @@ dependencies:
     - field.field.assessment_content.public_service.spatial
     - field.field.assessment_content.public_service.thematic_area
   module:
-    - geofield
+    - tagify
 id: assessment_content.public_service.default
 targetEntityType: assessment_content
 bundle: public_service
 mode: default
 content:
-  description:
-    type: string_textarea
-    weight: 2
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-  identifier:
-    type: string_textfield
-    weight: 1
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 0
@@ -40,22 +24,21 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  spatial:
-    type: geofield_latlon
-    weight: 3
+  thematic_area:
+    type: tagify_select_widget
+    weight: 1
     region: content
     settings:
-      html5_geolocation: false
-    third_party_settings: {  }
-  thematic_area:
-    type: options_select
-    weight: 5
-    region: content
-    settings: {  }
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true
+  description: true
+  identifier: true
   langcode: true
+  spatial: true
   status: true
   uid: true
   uri: true
