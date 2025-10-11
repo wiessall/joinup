@@ -1,23 +1,23 @@
-uuid: 4a64b2cd-5c00-4264-9abc-c9a9170258ab
+uuid: 17b23a06-ce24-4aa7-83ec-139b467e4af8
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.binding_requirement
-    - assessments.assessment_content_type.public_service
-    - field.storage.assessment_content.has_related_service
+    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.participation
+    - field.storage.assessment_content.affected_party
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.binding_requirement.has_related_service
-field_name: has_related_service
+id: assessment_content.assessment.affected_party
+field_name: affected_party
 entity_type: assessment_content
-bundle: binding_requirement
-label: 'Affected service'
+bundle: assessment
+label: 'Affected party'
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -25,7 +25,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      public_service: public_service
+      participation: participation
     sort:
       field: _none
       direction: ASC

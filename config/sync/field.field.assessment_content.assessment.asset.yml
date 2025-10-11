@@ -1,26 +1,21 @@
-uuid: d7233d4a-097f-4960-b904-300fc8af091c
+uuid: a1167c58-33f4-4d28-92eb-8fe13cb915cf
 langcode: en
 status: true
 dependencies:
   config:
+    - assessments.assessment_content_type.assessment
     - assessments.assessment_content_type.asset
-    - assessments.assessment_content_type.binding_requirement
-    - field.storage.assessment_content.related_assets
+    - field.storage.assessment_content.asset
   module:
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://purl.org/dc/terms/relation'
-      type: resource
-id: assessment_content.binding_requirement.related_assets
-field_name: related_assets
+id: assessment_content.assessment.asset
+field_name: asset
 entity_type: assessment_content
-bundle: binding_requirement
-label: 'Related assets'
+bundle: assessment
+label: Asset
 description: ''
 required: false
 translatable: false

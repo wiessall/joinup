@@ -1,26 +1,21 @@
-uuid: 15c3264c-c32f-44c4-aebe-640dc857c25b
+uuid: a6778d99-bb5c-4fff-b7f7-769dc3afd0a5
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.statement
-    - field.storage.assessment_content.documentation
+    - assessments.assessment_content_type.assessment
+    - field.storage.assessment_content.requirement_documents
   module:
     - file
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://xmlns.com/foaf/0.1/page'
-      type: resource
-id: assessment_content.statement.documentation
-field_name: documentation
+id: assessment_content.assessment.requirement_documents
+field_name: requirement_documents
 entity_type: assessment_content
-bundle: statement
-label: Documentation
+bundle: assessment
+label: 'Binding requirements supporting documents'
 description: ''
 required: false
 translatable: false
@@ -30,7 +25,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: '[date:custom:Y]-[date:custom:m]'
-  file_extensions: 'txt doc docx pdf ppt pptx xls xlsx'
+  file_extensions: 'txt doc docx pdf ppt pptx zip rar xls xlsx'
   max_filesize: ''
   description_field: false
   description_field_required: false

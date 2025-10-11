@@ -1,0 +1,13 @@
+diff --git a/inline_entity_form.module b/inline_entity_form.module
+index 8f6b69d90fb978e6e5759b70b5a55b6bd70beee4..42cb810f4115610b67b1583975c6c38432035e41 100644
+--- a/inline_entity_form.module
++++ b/inline_entity_form.module
+@@ -284,7 +284,7 @@ function inline_entity_form_close_all_forms(array $elements, FormStateInterface
+     // Close the main form.
+     $form_state->set(['inline_entity_form', $ief_id, 'form'], NULL);
+     // Close the row forms.
+-    $entities = $form_state->get(['inline_entity_form', $ief_id, 'entities']);
++    $entities = $form_state->get(['inline_entity_form', $ief_id, 'entities']) ?? [];
+     foreach ($entities as $key => $value) {
+       $entities[$key]['form'] = NULL;
+     }

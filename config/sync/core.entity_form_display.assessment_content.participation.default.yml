@@ -4,56 +4,60 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.participation
-    - field.field.assessment_content.participation.description
-    - field.field.assessment_content.participation.has_participation
-    - field.field.assessment_content.participation.identifier
+    - field.field.assessment_content.participation.country
     - field.field.assessment_content.participation.participant_type
-    - field.field.assessment_content.participation.role
   module:
-    - inline_entity_form
+    - field_group
+    - tagify
+third_party_settings:
+  field_group:
+    group_participant_type:
+      children: {  }
+      label: 'Participant type'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<p><strong>Select the groups of stakeholders to which binding requirement(s) are relevant:</strong></p>'
+          format: content_editor
+    group_participant_country:
+      children: {  }
+      label: 'Participant country'
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: markup
+      format_settings:
+        show_empty_fields: 1
+        label_as_html: 0
+        id: ''
+        classes: form-wrapper
+        markup:
+          value: '<p>Select the stakeholder’s country</p>'
+          format: content_editor
 id: assessment_content.participation.default
 targetEntityType: assessment_content
 bundle: participation
 mode: default
 content:
-  description:
-    type: string_textarea
-    weight: 0
+  country:
+    type: tagify_select_widget
+    weight: 3
     region: content
     settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-  has_participation:
-    type: inline_entity_form_simple
-    weight: 4
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Agent entity'
-      label_plural: 'Agent entities'
-      collapsible: true
-      collapsed: true
-      revision: false
-    third_party_settings: {  }
-  identifier:
-    type: string_textfield
-    weight: 5
-    region: content
-    settings:
-      size: 60
+      match_operator: CONTAINS
+      match_limit: 10
       placeholder: ''
     third_party_settings: {  }
   participant_type:
-    type: options_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  role:
-    type: options_select
-    weight: 3
+    type: options_buttons
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
