@@ -6,6 +6,7 @@ dependencies:
     - assessments.assessment_content_type.statement
     - field.field.assessment_content.statement.interpretation
     - field.field.assessment_content.statement.judgement
+    - field.field.assessment_content.statement.statement_type
 id: assessment_content.statement.default
 targetEntityType: assessment_content
 bundle: statement
@@ -13,17 +14,23 @@ mode: default
 content:
   interpretation:
     type: options_select
-    weight: 0
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   judgement:
     type: string_textarea
-    weight: 1
+    weight: 2
     region: content
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  statement_type:
+    type: options_buttons
+    weight: 0
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

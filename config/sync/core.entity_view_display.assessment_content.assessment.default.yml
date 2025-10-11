@@ -16,62 +16,372 @@ dependencies:
     - field.field.assessment_content.assessment.statement_documents
   module:
     - file
-    - user
+    - joinup_layout
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            top:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            first:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            second:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            bottom:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          f080f8ad-1aaf-4377-8477-2e1edd777732:
+            uuid: f080f8ad-1aaf-4377-8477-2e1edd777732
+            region: top
+            configuration:
+              id: 'field_block:assessment_content:assessment:name'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          d8de6b29-cc14-4ebc-b5ea-5640a65e7c93:
+            uuid: d8de6b29-cc14-4ebc-b5ea-5640a65e7c93
+            region: first
+            configuration:
+              id: 'field_block:assessment_content:assessment:expression'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          3741dd00-a7de-4d50-b9f7-344952f8a341:
+            uuid: 3741dd00-a7de-4d50-b9f7-344952f8a341
+            region: second
+            configuration:
+              id: 'field_block:assessment_content:assessment:has_related_service'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          4a46a810-83b7-4351-b244-f827e812cbed:
+            uuid: 4a46a810-83b7-4351-b244-f827e812cbed
+            region: second
+            configuration:
+              id: 'field_block:assessment_content:assessment:affected_party'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          f84e4b89-ed1d-4d9d-9889-8c7cf2ec65ee:
+            uuid: f84e4b89-ed1d-4d9d-9889-8c7cf2ec65ee
+            region: first
+            configuration:
+              id: 'field_block:assessment_content:assessment:asset'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            top:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            first:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            second:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            bottom:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          9e434583-c9a2-4674-beb4-5d5730c04ff5:
+            uuid: 9e434583-c9a2-4674-beb4-5d5730c04ff5
+            region: first
+            configuration:
+              id: 'field_block:assessment_content:assessment:binding_requirement'
+              label: 'Binding requirement'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          7e7f2ece-eb35-4ea2-b07c-170de883d9a7:
+            uuid: 7e7f2ece-eb35-4ea2-b07c-170de883d9a7
+            region: second
+            configuration:
+              id: 'field_block:assessment_content:assessment:requirement_documents'
+              label: 'Binding requirements supporting documents'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            top:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            first:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            second:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            bottom:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          79a43c20-ad3a-4c2c-86fb-a530b7056f7b:
+            uuid: 79a43c20-ad3a-4c2c-86fb-a530b7056f7b
+            region: first
+            configuration:
+              id: 'field_block:assessment_content:assessment:results_in'
+              label: 'Results in'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          71210540-27f5-4b3d-aceb-48c605d657f0:
+            uuid: 71210540-27f5-4b3d-aceb-48c605d657f0
+            region: second
+            configuration:
+              id: 'field_block:assessment_content:assessment:statement_documents'
+              label: 'Statement supporting documents'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
 id: assessment_content.assessment.default
 targetEntityType: assessment_content
 bundle: assessment
 mode: default
 content:
   affected_party:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 25
+    weight: 3
     region: content
   asset:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 28
-    region: content
-  created:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 20
+    weight: 4
     region: content
   expression:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 24
+    weight: 2
     region: content
   has_related_service:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: above
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 21
+    weight: 1
     region: content
   name:
     type: string
@@ -79,7 +389,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 21
+    weight: 0
     region: content
   requirement_documents:
     type: file_default
@@ -87,7 +397,7 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 26
+    weight: 5
     region: content
   statement_documents:
     type: file_default
@@ -95,28 +405,14 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 27
-    region: content
-  status:
-    type: boolean
-    label: above
-    settings:
-      format: enabled-disabled
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  uid:
-    type: author
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 15
+    weight: 6
     region: content
 hidden:
   binding_requirement: true
+  created: true
   is_provided_by: true
   langcode: true
   results_in: true
   search_api_excerpt: true
+  status: true
+  uid: true

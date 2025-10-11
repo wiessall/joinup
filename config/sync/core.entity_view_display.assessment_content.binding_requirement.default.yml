@@ -8,31 +8,11 @@ dependencies:
     - field.field.assessment_content.binding_requirement.name
   module:
     - link
-    - user
 id: assessment_content.binding_requirement.default
 targetEntityType: assessment_content
 bundle: binding_requirement
 mode: default
 content:
-  created:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 20
-    region: content
   documented_in:
     type: link
     label: above
@@ -43,7 +23,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 23
+    weight: 1
     region: content
   name:
     type: string
@@ -51,26 +31,12 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 21
-    region: content
-  status:
-    type: boolean
-    label: above
-    settings:
-      format: enabled-disabled
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
     weight: 0
     region: content
-  uid:
-    type: author
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 15
-    region: content
 hidden:
+  created: true
   langcode: true
   search_api_excerpt: true
+  status: true
+  uid: true
   uri: true

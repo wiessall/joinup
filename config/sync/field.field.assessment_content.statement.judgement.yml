@@ -21,7 +21,7 @@ entity_type: assessment_content
 bundle: statement
 label: Judgement
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

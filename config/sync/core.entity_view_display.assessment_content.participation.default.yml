@@ -8,7 +8,6 @@ dependencies:
     - field.field.assessment_content.participation.participant_type
   module:
     - options
-    - user
 id: assessment_content.participation.default
 targetEntityType: assessment_content
 bundle: participation
@@ -20,52 +19,19 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 23
-    region: content
-  created:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 20
+    weight: 1
     region: content
   participant_type:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 26
-    region: content
-  status:
-    type: boolean
-    label: above
-    settings:
-      format: enabled-disabled
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
     weight: 0
     region: content
-  uid:
-    type: author
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 15
-    region: content
 hidden:
+  created: true
   langcode: true
   search_api_excerpt: true
+  status: true
+  uid: true
   uri: true

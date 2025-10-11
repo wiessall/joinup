@@ -1,0 +1,25 @@
+uuid: c7f80fb7-55b0-4c0d-a49d-1c1d6e047356
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_content_type.statement
+    - field.storage.assessment_content.statement_type
+  module:
+    - options
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment_content.statement.statement_type
+field_name: statement_type
+entity_type: assessment_content
+bundle: statement
+label: 'Statement type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
