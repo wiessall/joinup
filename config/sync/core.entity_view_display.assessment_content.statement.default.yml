@@ -6,65 +6,39 @@ dependencies:
     - assessments.assessment_content_type.statement
     - field.field.assessment_content.statement.interpretation
     - field.field.assessment_content.statement.judgement
+    - field.field.assessment_content.statement.statement_type
   module:
     - options
-    - user
 id: assessment_content.statement.default
 targetEntityType: assessment_content
 bundle: statement
 mode: default
 content:
-  created:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 20
-    region: content
   interpretation:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 22
+    weight: 0
     region: content
   judgement:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 23
+    weight: 1
     region: content
-  status:
-    type: boolean
-    label: above
-    settings:
-      format: enabled-disabled
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  uid:
-    type: author
+  statement_type:
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 15
+    weight: 2
     region: content
 hidden:
+  created: true
   langcode: true
   search_api_excerpt: true
+  status: true
+  uid: true
   uri: true
