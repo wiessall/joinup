@@ -1,5 +1,5 @@
 _core:
-  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
+  default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
   addtocal: 0
   adms_validator: 0
@@ -96,6 +96,7 @@ module:
   inline_form_errors: 0
   interoperable_europe: 0
   isa2_analytics: 0
+  joinup: 0
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
@@ -170,6 +171,7 @@ module:
   media: 0
   media_library: 0
   memcache: 0
+  menu_link_content: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
@@ -289,17 +291,15 @@ module:
   webform_ui: 0
   webform_views: 0
   menu_admin_per_menu: 1
-  menu_link_content: 1
   pathauto: 1
   content_translation: 10
   externalauth: 10
   views: 10
   paragraphs: 11
   publication_date: 99
-  joinup: 1000
 theme:
-  ventuno: 0
-  oe_bootstrap_theme: 0
   claro: 0
+  oe_bootstrap_theme: 0
+  ventuno: 0
   iop: 0
 profile: joinup
