@@ -4,11 +4,8 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.participation
-    - field.field.assessment_content.participation.description
-    - field.field.assessment_content.participation.has_participation
-    - field.field.assessment_content.participation.identifier
+    - field.field.assessment_content.participation.country
     - field.field.assessment_content.participation.participant_type
-    - field.field.assessment_content.participation.role
   module:
     - options
     - user
@@ -17,6 +14,14 @@ targetEntityType: assessment_content
 bundle: participation
 mode: default
 content:
+  country:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 23
+    region: content
   created:
     type: timestamp
     label: above
@@ -36,42 +41,12 @@ content:
     third_party_settings: {  }
     weight: 20
     region: content
-  description:
-    type: basic_string
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
-    region: content
-  has_participation:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 23
-    region: content
-  identifier:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 25
-    region: content
   participant_type:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 26
-    region: content
-  role:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 24
     region: content
   status:
     type: boolean

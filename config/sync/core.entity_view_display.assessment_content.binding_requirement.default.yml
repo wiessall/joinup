@@ -4,16 +4,9 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.binding_requirement
-    - field.field.assessment_content.binding_requirement.description
-    - field.field.assessment_content.binding_requirement.documentation
     - field.field.assessment_content.binding_requirement.documented_in
-    - field.field.assessment_content.binding_requirement.expression
-    - field.field.assessment_content.binding_requirement.has_participation
-    - field.field.assessment_content.binding_requirement.has_related_service
-    - field.field.assessment_content.binding_requirement.related_assets
-    - field.field.assessment_content.binding_requirement.resource
+    - field.field.assessment_content.binding_requirement.name
   module:
-    - file
     - link
     - user
 id: assessment_content.binding_requirement.default
@@ -40,21 +33,6 @@ content:
     third_party_settings: {  }
     weight: 20
     region: content
-  description:
-    type: basic_string
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 22
-    region: content
-  documentation:
-    type: file_default
-    label: above
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
-    weight: 24
-    region: content
   documented_in:
     type: link
     label: above
@@ -67,49 +45,13 @@ content:
     third_party_settings: {  }
     weight: 23
     region: content
-  expression:
-    type: entity_reference_label
+  name:
+    type: string
     label: above
     settings:
-      link: true
-    third_party_settings: {  }
-    weight: 24
-    region: content
-  has_participation:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 23
-    region: content
-  has_related_service:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
+      link_to_entity: false
     third_party_settings: {  }
     weight: 21
-    region: content
-  related_assets:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 26
-    region: content
-  resource:
-    type: link
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 25
     region: content
   status:
     type: boolean

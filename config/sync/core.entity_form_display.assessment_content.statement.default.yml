@@ -4,44 +4,13 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.statement
-    - field.field.assessment_content.statement.documentation
-    - field.field.assessment_content.statement.has_related_service
     - field.field.assessment_content.statement.interpretation
     - field.field.assessment_content.statement.judgement
-    - field.field.assessment_content.statement.statement_type
-  module:
-    - file
-    - inline_entity_form
 id: assessment_content.statement.default
 targetEntityType: assessment_content
 bundle: statement
 mode: default
 content:
-  documentation:
-    type: file_generic
-    weight: 5
-    region: content
-    settings:
-      progress_indicator: throbber
-    third_party_settings: {  }
-  has_related_service:
-    type: inline_entity_form_complex
-    weight: 4
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Related service'
-      label_plural: 'Related services'
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: true
-      collapsed: true
-      revision: false
-      removed_reference: optional
-    third_party_settings: {  }
   interpretation:
     type: options_select
     weight: 0
@@ -55,12 +24,6 @@ content:
     settings:
       rows: 5
       placeholder: ''
-    third_party_settings: {  }
-  statement_type:
-    type: options_select
-    weight: 3
-    region: content
-    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

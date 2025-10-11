@@ -1,11 +1,11 @@
-uuid: c7993495-5258-4826-a3c7-e84ae3158323
+uuid: 8e2ead93-81ae-424a-be6b-7c768160e960
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment_content.has_participation
-field_name: has_participation
+id: assessment_content.affected_party
+field_name: affected_party
 entity_type: assessment_content
 type: entity_reference
 settings:

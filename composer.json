@@ -433,7 +433,8 @@
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch",
-                "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff"
+                "Required fields make an optional IEF (erroneously) required @see https://www.drupal.org/i/3099844": "resources/patch/php/drupal/inline_entity_form/3099844.diff",
+                "Foreach expects array|object, null given @see https://www.drupal.org/i/3516478": "resources/patch/php/drupal/inline_entity_form/3516478.diff"
             },
             "drupal/l10n_pconfig": {
                 "Update state var on language entity update (not only on form edit) @see https://www.drupal.org/i/3533900": "resources/patch/php/drupal/l10n_pconfig/3533900.diff",

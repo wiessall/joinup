@@ -19,7 +19,7 @@ id: assessment_content.expression.name
 field_name: name
 entity_type: assessment_content
 bundle: expression
-label: 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
+label: 'Name or description'
 description: ''
 required: true
 translatable: false
