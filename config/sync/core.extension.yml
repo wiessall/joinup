@@ -96,7 +96,6 @@ module:
   inline_form_errors: 0
   interoperable_europe: 0
   isa2_analytics: 0
-  joinup: 0
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
@@ -297,6 +296,7 @@ module:
   views: 10
   paragraphs: 11
   publication_date: 99
+  joinup: 1000
 theme:
   claro: 0
   oe_bootstrap_theme: 0
