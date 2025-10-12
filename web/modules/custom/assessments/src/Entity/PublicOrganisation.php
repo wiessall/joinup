@@ -42,7 +42,7 @@ final class PublicOrganisation extends AssessmentContent {
       'European Ombudsman' => t('European Ombudsman'),
       'European Data Protection Supervisor' => t('European Data Protection Supervisor'),
       'European Data Protection Board' => t('European Data Protection Board'),
-      'Eruopean Public Prosecutor\'s Office' => t('Eruopean Public Prosecutor\'s Office'),
+      "Eruopean Public Prosecutor's Office" => t("Eruopean Public Prosecutor's Office"),
     ];
   }
 

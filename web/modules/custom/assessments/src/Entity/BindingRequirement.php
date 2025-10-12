@@ -7,4 +7,4 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the binding requirement bundle entity class.
  */
-final class BindingRequirement extends AssessmentContent { }
+final class BindingRequirement extends AssessmentContent {}
