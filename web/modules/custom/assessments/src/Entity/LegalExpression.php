@@ -7,4 +7,4 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the legal expression entity class.
  */
-final class LegalExpression extends AssessmentContent { }
+final class LegalExpression extends AssessmentContent {}

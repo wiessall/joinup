@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Form;
 
-use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\assessments\Entity\PublicOrganisation;
 
 /**
  * Form controller for the assessment entity edit forms.
@@ -15,7 +15,7 @@ final class PublicOrganisationForm {
   /**
    * Ajax callback to refresh dynamic fields based on organisation type.
    */
-  public static function ajaxRefresh(array &$form, FormStateInterface $form_state) {
+  public static function ajaxRefresh(array &$form, FormStateInterface $form_state): array {
     $form_state->setRebuild(TRUE);
     return $form['public_org_dynamic_wrapper'];
   }
