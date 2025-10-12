@@ -1,0 +1,34 @@
+default:
+  id: assessment_workflow
+  label: 'Assessment content type default'
+  group: assessment_content
+  states:
+    draft:
+      label: Draft
+      published: false
+    review:
+      label: In Review
+      published: false
+    published:
+      label: Published
+      published: true
+    rejected:
+      label: Rejected
+      published: false
+  transitions:
+    save_draft:
+      label: Save as Draft
+      from: [draft]
+      to: draft
+    submit_for_review:
+      label: Submit for Review
+      from: [draft]
+      to: review
+    approve:
+      label: Approve
+      from: [review]
+      to: published
+    reject:
+      label: Reject
+      from: [review]
+      to: rejected

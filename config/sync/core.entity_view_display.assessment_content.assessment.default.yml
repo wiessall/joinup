@@ -13,11 +13,13 @@ dependencies:
     - field.field.assessment_content.assessment.name
     - field.field.assessment_content.assessment.requirement_documents
     - field.field.assessment_content.assessment.results_in
+    - field.field.assessment_content.assessment.state
     - field.field.assessment_content.assessment.statement_documents
   module:
     - file
     - joinup_layout
     - layout_builder
+    - options
 third_party_settings:
   layout_builder:
     enabled: true
@@ -142,6 +144,21 @@ third_party_settings:
                   link: true
                 third_party_settings: {  }
             weight: 2
+            additional: {  }
+          a021c64e-a5dd-4a5c-a62e-b7f98e2e24ba:
+            uuid: a021c64e-a5dd-4a5c-a62e-b7f98e2e24ba
+            region: first
+            configuration:
+              id: 'field_block:assessment_content:assessment:state'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: list_default
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 3
             additional: {  }
         third_party_settings: {  }
       -
@@ -399,6 +416,13 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
+  state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: first
   statement_documents:
     type: file_default
     label: above

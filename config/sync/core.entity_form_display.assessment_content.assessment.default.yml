@@ -13,11 +13,13 @@ dependencies:
     - field.field.assessment_content.assessment.name
     - field.field.assessment_content.assessment.requirement_documents
     - field.field.assessment_content.assessment.results_in
+    - field.field.assessment_content.assessment.state
     - field.field.assessment_content.assessment.statement_documents
   module:
     - field_group
     - file
     - inline_entity_form
+    - joinup_workflow
 third_party_settings:
   field_group:
     group_general_information:
@@ -156,6 +158,7 @@ third_party_settings:
       children:
         - requirement_documents
         - statement_documents
+        - state
       label: '4. Supporting documents'
       region: content
       parent_name: ''
@@ -325,6 +328,13 @@ content:
       collapsible: false
       collapsed: true
       revision: false
+    third_party_settings: {  }
+  state:
+    type: state_machine_buttons
+    weight: 6
+    region: content
+    settings:
+      use_transition_label: 0
     third_party_settings: {  }
   statement_documents:
     type: file_generic
