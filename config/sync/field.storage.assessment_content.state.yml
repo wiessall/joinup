@@ -1,0 +1,19 @@
+uuid: af0f460a-13b6-47aa-9781-8d746b444634
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - state_machine
+id: assessment_content.state
+field_name: state
+entity_type: assessment_content
+type: state
+settings: {  }
+module: state_machine
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
