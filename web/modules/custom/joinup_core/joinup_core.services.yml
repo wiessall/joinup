@@ -44,3 +44,5 @@ services:
       - { name: twig.extension }
 
   Drupal\joinup_core\Routing\AssetControllerRouteSubscriber: { }
+
+  Drupal\joinup_core\Routing\NodeCreationAccessRouteSubscriber: { }
