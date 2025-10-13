@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core\Plugin\Block;
+namespace Drupal\joinup_group\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\Plugin\Block\LocalTasksBlock;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup\Traits\GroupHeaderAccessTrait;
-use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
+use Drupal\joinup_group\Traits\GroupHeaderAccessTrait;
+use Drupal\joinup_group\Traits\GroupPluginCacheTrait;
 
 /**
  * Provides a "Tabs" block to display the local tasks.

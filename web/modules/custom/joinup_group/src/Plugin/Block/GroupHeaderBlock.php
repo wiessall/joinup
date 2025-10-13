@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Plugin\Block;
+namespace Drupal\joinup_group\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
@@ -11,7 +11,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup\Traits\GroupHeaderAccessTrait;
+use Drupal\joinup_group\Traits\GroupHeaderAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

@@ -9,9 +9,9 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\AddGroupContentEvent;
+use Drupal\joinup_group\Traits\GroupPluginCacheTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
