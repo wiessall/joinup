@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup;
+namespace Drupal\joinup_core\Controller;
 
-use Drupal\joinup\Traits\FaultTolerantAssetControllerTrait;
+use Drupal\joinup_core\Traits\FaultTolerantAssetControllerTrait;
 use Drupal\system\Controller\CssAssetController;
 
 /**
