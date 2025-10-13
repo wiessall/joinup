@@ -110,6 +110,7 @@ Project 1.1:
       - 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/Group_1_Project1_IT_Screenshot.jpg'
     oss_git_open_pull_requests: 32
   de:
+    default_langcode: '0'
     langcode: de
     oss_documentation: https://example.com/group1/project-1-1/de/docs.md
     oss_features:
@@ -118,6 +119,7 @@ Project 1.1:
     oss_long_description: '[DE] Group1: Project 1: Long description'
     oss_short_description: '[DE] Group1: Project 1: Short description'
   en:
+    default_langcode: '1'
     langcode: en
     oss_features:
       - '[IT] feat 1 it en'
