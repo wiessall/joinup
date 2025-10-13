@@ -145,8 +145,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['info']['icon'] = 'geo-alt';
       $node = $variables['elements']['#node'];
       if (!$node->get('field_location')
-          ->isEmpty() && !$node->get('field_event_online_location')
-          ->isEmpty()) {
+        ->isEmpty() && !$node->get('field_event_online_location')
+        ->isEmpty()) {
         $variables['info']['label'] = t('Hybrid event');
       }
       elseif ($node->get('field_location')->isEmpty()) {
