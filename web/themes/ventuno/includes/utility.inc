@@ -51,7 +51,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $entity = $variables[$entity_type_id];
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
-  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+  $bundle_key = \Drupal::entityTypeManager()
+    ->getDefinition($entity_type_id)
+    ->getKey('bundle');
 
   // Prepare different data depending on the route.
   $route_match = \Drupal::routeMatch();
@@ -79,7 +81,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Image.
-  $variables['image'] = ($entity instanceof LogoInterface) && !$entity->get($entity->getLogoFieldName())->isEmpty()
+  $variables['image'] = ($entity instanceof LogoInterface) && !$entity->get($entity->getLogoFieldName())
+    ->isEmpty()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
@@ -99,7 +102,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
       '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
-      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+      '@changed' => \Drupal::service('date.formatter')
+        ->format($changed_time, 'date_only'),
     ]);
   }
 
@@ -112,9 +116,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   // Iterate over entity bundles for case-specific data.
   switch ($entity->bundle()) {
     case 'assessment_report':
-      $sid = $entity->submission->entity->id();
-      $submission_data = $entity->submission->entity->getData();
-      $variables['label'] = isset($submission_data['short_title']) ? $submission_data['short_title'] . ' #' . $sid : $entity->label();
+      if (!empty($entity->submission->entity)) {
+        $sid = $entity->submission->entity->id();
+        $submission_data = $entity->submission->entity->getData();
+        $variables['label'] = isset($submission_data['short_title']) ? $submission_data['short_title'] . ' #' . $sid : $entity->label();
+      }
       $variables['extra_data']['submitter'] = $entity->organization->value;
       break;
 
@@ -138,7 +144,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['highlighted']['text'] = $variables['content']['field_event_date'];
       $variables['info']['icon'] = 'geo-alt';
       $node = $variables['elements']['#node'];
-      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
+      if (!$node->get('field_location')
+          ->isEmpty() && !$node->get('field_event_online_location')
+          ->isEmpty()) {
         $variables['info']['label'] = t('Hybrid event');
       }
       elseif ($node->get('field_location')->isEmpty()) {
@@ -195,7 +203,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if ($published_at = $entity->getPublicationTime()) {
         $variables['info']['label'] = t('@label: @published_at', [
           '@label' => t('Release date'),
-          '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
+          '@published_at' => \Drupal::service('date.formatter')
+            ->format($published_at, 'date_only'),
         ]);
       }
       // Map process status to icons.
@@ -232,9 +241,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $node = $variables['node'];
-      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
+      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)
+        ->isEmpty()) {
         /** @var \Drupal\node\NodeInterface|null $parent */
-        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->first()->entity;
+        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)
+          ->first()->entity;
         $variables['attributes']['data-joinup-parent-id'] = $parent->id();
         $variables['attributes']['data-joinup-parent-label'] = $parent->label();
       }
