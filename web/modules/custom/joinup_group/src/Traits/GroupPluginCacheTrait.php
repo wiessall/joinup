@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core\Traits;
+namespace Drupal\joinup_group\Traits;
 
 use Drupal\Core\Cache\Cache;
 
