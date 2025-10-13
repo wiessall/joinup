@@ -42,3 +42,5 @@ services:
     class: Drupal\joinup_core\TwigExtension\DummyTextTwigExtension
     tags:
       - { name: twig.extension }
+
+  Drupal\joinup_core\Routing\AssetControllerRouteSubscriber: { }

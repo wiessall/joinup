@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Traits;
+namespace Drupal\joinup_core\Traits;
 
 /**
  * Trait to modify asset controllers to return empty file when request is wrong.
