@@ -366,14 +366,8 @@ function collection_entity_field_access(string $operation, FieldDefinitionInterf
     return AccessResult::neutral();
   }
 
-  // Until ISAICP-7223 only moderators are able to set a landing page.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
   $field_name = $field_definition->getName();
   switch ($field_name) {
-    case 'landing_page':
-      return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'))
-        ->cachePerPermissions();
-
     case 'code_of_conduct':
       if ($operation === 'edit') {
         return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'))
