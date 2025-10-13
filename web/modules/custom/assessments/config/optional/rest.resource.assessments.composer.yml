@@ -1,7 +1,13 @@
 id: assessments.composer
-plugin_id: assessments.composer
+plugin_id: 'assessments.composer'
 granularity: method
 configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
+      - oauth2
   POST:
     supported_formats:
       - json

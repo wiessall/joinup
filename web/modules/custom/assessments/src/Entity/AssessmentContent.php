@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\assessments\AssessmentContentInterface;
+use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
@@ -70,6 +71,7 @@ use Drupal\user\EntityOwnerTrait;
 class AssessmentContent extends ContentEntityBase implements AssessmentContentInterface, RdfSyncEntityInterface {
 
   use EntityChangedTrait;
+  use EntityCreationTrait;
   use EntityOwnerTrait;
   use RdfSyncEntityTrait;
 

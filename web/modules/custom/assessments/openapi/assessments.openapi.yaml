@@ -1,0 +1,215 @@
+openapi: 3.0.3
+info:
+  title: Assessments API
+  version: 1.0.0
+  description: |
+    API for listing and creating Assessments (assessment_content). This reflects the current structure described in the module README.
+servers:
+  - url: /
+paths:
+  /api/assessments:
+    get:
+      summary: List assessments
+      operationId: listAssessments
+      tags: [Assessments]
+      responses:
+        '200':
+          description: A list of assessments.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Assessment'
+    post:
+      summary: Create an assessment
+      operationId: createAssessment
+      tags: [Assessments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+            description: Submit a single assessment object with all referenced entities embedded (no IDs provided).
+            examples:
+              fullMinimal:
+                summary: Minimal full assessment with embedded entities only
+                value:
+                  name: "Assessment title"
+                  provided_by:
+                    name: "Gov Org"
+                    organization_type: "national_public_administration"
+                    country: "BE"
+                  expression:
+                    - name: "Legal expression name"
+                      description: "Description of the expression"
+                      expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
+                      documented_in: "https://example.org/law/123"
+                  has_related_service:
+                    - name: "Vaccination service"
+                      thematic_area: "health_and_wellbeing"
+                  binding_requirement:
+                    - name: "GDPR compliance"
+                      documented_in: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679"
+                  affected_party:
+                    - country: "NL"
+                      participation_type: "citizen"
+                  asset:
+                    - name: "Open Data Portal"
+                      landing_page: "https://data.example.org/"
+                  requirement_documents:
+                    - uri: "https://example.org/docs/req.pdf"
+                  results_in:
+                    - judgment: "Service complies with GDPR"
+                      interpretation: "1"
+                      statement_type: "legal_interoperability"
+                  statement_documents:
+                    - uri: "https://example.org/docs/statement.pdf"
+      responses:
+        '201':
+          description: Assessment created.
+          headers:
+            Location:
+              description: URL of the created resource.
+              schema:
+                type: string
+        '400':
+          description: Invalid input.
+        '422':
+          description: Validation error.
+components:
+  schemas:
+    Assessment:
+      type: object
+      description: Assessment entity with only the user-provided properties; referenced entries are embedded (no IDs).
+      properties:
+        # Assessment (assessment)
+        affected_party:
+          type: array
+          description: Affected participants embedded.
+          items:
+            $ref: '#/components/schemas/Participation'
+        has_related_service:
+          type: array
+          description: Affected services embedded.
+          items:
+            $ref: '#/components/schemas/PublicService'
+        asset:
+          type: array
+          description: Assets embedded.
+          items:
+            $ref: '#/components/schemas/Asset'
+        binding_requirement:
+          type: array
+          description: Binding requirements embedded.
+          items:
+            $ref: '#/components/schemas/BindingRequirement'
+        requirement_documents:
+          type: array
+          description: Binding requirements supporting documents. Each is a File object with only URI.
+          items:
+            $ref: '#/components/schemas/File'
+        expression:
+          type: array
+          description: Expressions embedded.
+          items:
+            $ref: '#/components/schemas/Expression'
+        name:
+          type: string
+        provided_by:
+          $ref: '#/components/schemas/PublicOrganization'
+        results_in:
+          type: array
+          description: Statements embedded.
+          items:
+            $ref: '#/components/schemas/Statement'
+        statement_documents:
+          type: array
+          description: Statement supporting documents. Each is a File object with only URI.
+          items:
+            $ref: '#/components/schemas/File'
+    # Reference entity schemas (simplified) based on README
+    Asset:
+      type: object
+      properties:
+        name: { type: string }
+        landing_page: { type: string, format: uri }
+    BindingRequirement:
+      type: object
+      properties:
+        name: { type: string }
+        documented_in: { type: string, format: uri }
+    Expression:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string }
+        expression_type:
+          type: string
+          enum:
+            - http://data.europa.eu/eli/ontology#LegalExpression
+            - http://purl.org/vocab/frbr/core#Expression
+        documented_in: { type: string, format: uri }
+    Participation:
+      type: object
+      properties:
+        country: { type: string, description: "ISO 3166-1 alpha-2" }
+        participation_type: { type: string }
+    PublicService:
+      type: object
+      properties:
+        name: { type: string }
+        thematic_area:
+          type: string
+          enum:
+            - core_governance_and_administration
+            - health_and_wellbeing
+            - education_and_research
+            - environment_and_energy
+            - economy_and_employment
+            - social_and_community_services
+            - security_justice_and_emergency_services
+            - transport_and_infrastructure
+            - digital_and_innovation_services
+            - international_and_regional_cooperation
+    PublicOrganization:
+      type: object
+      properties:
+        name: { type: string }
+        organization_type:
+          type: string
+          enum:
+            - local_public_administration
+            - regional_public_administration
+            - national_public_administration
+            - european_union_institution
+            - european_union_agency
+            - european_union_body
+        country: { type: string, description: "ISO 3166-1 alpha-2" }
+    Statement:
+      type: object
+      properties:
+        judgment: { type: string }
+        interpretation:
+          type: string
+          enum: ["-1", "0", "1"]
+        statement_type:
+          type: string
+          enum:
+            - legal_interoperability
+            - organisational_interoperability
+            - semantic_interoperability
+            - technical_interoperability
+    File:
+      type: object
+      description: Simplified file reference by URI only.
+      properties:
+        uri:
+          type: string
+          format: uri

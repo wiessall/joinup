@@ -1,0 +1,19 @@
+uuid: d43c231f-a752-4bca-a4e1-37073309c3e6
+langcode: en
+status: false
+dependencies:
+  module:
+    - assessments
+    - serialization
+    - simple_oauth
+id: entity.assessment_content
+plugin_id: 'entity:assessment_content'
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - oauth2

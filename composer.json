@@ -176,6 +176,7 @@
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
+        "drupal/restui": "^1.22",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",

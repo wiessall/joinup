@@ -5,27 +5,17 @@ configuration:
   GET:
     supported_formats:
       - json
-      - xml
     supported_auth:
       - cookie
+      - oauth2
   POST:
     supported_formats:
       - json
-      - xml
     supported_auth:
       - cookie
-  PATCH:
-    supported_formats:
-      - json
-      - xml
-    supported_auth:
-      - cookie
-  DELETE:
-    supported_formats:
-      - json
-      - xml
-    supported_auth:
-      - cookie
+      - oauth2
 dependencies:
   module:
+    - rest
     - user
+    - simple_oauth

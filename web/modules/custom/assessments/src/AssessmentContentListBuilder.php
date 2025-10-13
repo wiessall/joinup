@@ -18,6 +18,7 @@ final class AssessmentContentListBuilder extends EntityListBuilder {
   public function buildHeader(): array {
     $header['id'] = $this->t('ID');
     $header['status'] = $this->t('Status');
+    $header['bundle'] = $this->t('Type');
     $header['uid'] = $this->t('Author');
     $header['created'] = $this->t('Created');
     $header['changed'] = $this->t('Updated');
@@ -31,6 +32,7 @@ final class AssessmentContentListBuilder extends EntityListBuilder {
     /** @var \Drupal\assessments\AssessmentContentInterface $entity */
     $row['id'] = $entity->toLink();
     $row['status'] = $entity->get('status')->value ? $this->t('Enabled') : $this->t('Disabled');
+    $row['bundle'] = $entity->bundle();
     $username_options = [
       'label' => 'hidden',
       'settings' => ['link' => $entity->get('uid')->entity->isAuthenticated()],

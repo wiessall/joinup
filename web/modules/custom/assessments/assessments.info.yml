@@ -8,3 +8,4 @@ dependencies:
   - drupal:inline_entity_form
   - drupal:rdf_sync
   - drupal:joinup_rdf
+  - drupal:rest
