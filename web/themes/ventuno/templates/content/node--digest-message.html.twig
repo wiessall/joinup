@@ -24,46 +24,36 @@
 
 <table role="presentation">
   <tbody>
-  <tr>
-    <td class="bg-primary p-3">
-      <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ digest_item_date }}</span>
-    </td>
-  </tr>
-  <tr>
-    <td class="fs-lg fw-bold">
-      <a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a>
-    </td>
-  </tr>
-  <tr>
-    <td style="height: 10px;">&nbsp;</td>
-  </tr>
+    <tr>
+      <td class="bg-primary p-3">
+        <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ digest_item_date }}</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="height: 10px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="fs-lg fw-bold">
+        <a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a>
+      </td>
+    </tr>
 
-  <tr>
-    <td>
-      <table role="presentation">
-        <tbody>
-        <tr>
-          <td style="width: 200px;" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ digest_item_img }}" width="200" alt=""/></a></td>
-          <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
-          <td style="vertical-align: top;">
-            {{ digest_item_body }}
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td style="height: 20px;">&nbsp;</td>
-  </tr>
+    <tr>
+      <td>
+        {{ digest_item_body }}
+      </td>
+    </tr>
+    <tr>
+      <td style="height: 10px;">&nbsp;</td>
+    </tr>
 
-  <tr>
-    <td class="d-flex justify-content-center">
-      <a class="btn btn-brand" href="{{ url }}">{{ 'Read more'|t }}</a>
-    </td>
-  </tr>
-  <tr>
-    <td style="height: 30px;">&nbsp;</td>
-  </tr>
+    <tr>
+      <td>
+        <a href="{{ url }}">{{ 'Read more'|t }}</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="height: 20px;">&nbsp;</td>
+    </tr>
   </tbody>
 </table>
