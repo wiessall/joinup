@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
@@ -29,6 +31,16 @@ class CollectionProposeController extends ControllerBase {
     $form = $this->entityFormBuilder()->getForm($node, 'propose');
     $form['#title'] = $this->t('Propose collection');
     return $form;
+  }
+
+  /**
+   * Handles access to the collection proposal form.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function createAccess(): AccessResultInterface {
+    return AccessResult::allowedIfHasPermission($this->currentUser(), 'propose collection content');
   }
 
 }
