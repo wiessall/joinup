@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\tmgmt\Data;
 use Drupal\tmgmt\SourceManager;
 use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -45,6 +46,8 @@ readonly class JobBuilder implements JobBuilderInterface {
     protected LoggerChannelInterface $logger,
     #[Autowire(service: 'plugin.manager.tmgmt.source')]
     protected SourceManager $sourcePluginManager,
+    #[Autowire(service: 'tmgmt.data')]
+    protected Data $tmgmtData,
     ConfigFactoryInterface $configFactory,
   ) {
     $this->config = $configFactory->get('eu_oss_translation.settings');
@@ -89,12 +92,21 @@ readonly class JobBuilder implements JobBuilderInterface {
    *   True if a node needs translation.
    */
   protected function needsTranslation(OssSolutionInterface $entity): bool {
-    if ($entity->getRelevantLangCode() === self::TARGET_LANGUAGE) {
+    $sourceLangCode = $entity->getRelevantLangCode();
+
+    if ($sourceLangCode === self::TARGET_LANGUAGE) {
       return FALSE;
     }
 
-    $fields = $this->contentSource->extractTranslatableData($entity);
-    return !empty($fields);
+    // Extract data from the source language translation.
+    $sourceEntity = $entity->hasTranslation($sourceLangCode)
+      ? $entity->getTranslation($sourceLangCode)
+      : $entity;
+
+    $data = $this->contentSource->extractTranslatableData($sourceEntity);
+    // Use TMGMT's built-in method to filter out empty translatable content.
+    $filteredData = $this->tmgmtData->filterTranslatable($data);
+    return !empty($filteredData);
   }
 
   /**
