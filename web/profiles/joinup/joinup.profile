@@ -63,11 +63,3 @@ function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, Fo
     }
   }
 }
-
-/**
- * Implements hook_inline_entity_form_reference_form_alter().
- */
-function joinup_inline_entity_form_reference_form_alter(&$reference_form, &$form_state): void {
-  // Avoid showing two labels one after each other.
-  $reference_form['entity_id']['#title_display'] = 'invisible';
-}
