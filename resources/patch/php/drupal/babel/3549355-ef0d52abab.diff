@@ -1,0 +1,134 @@
+diff --git a/src/Form/BabelTranslateForm.php b/src/Form/BabelTranslateForm.php
+index 97df151934d25e4f0aff5243f84630d01fb41bf8..cea2d23d0efbef9c5fb2796a2e96d9d3a8c311de 100644
+--- a/src/Form/BabelTranslateForm.php
++++ b/src/Form/BabelTranslateForm.php
+@@ -194,7 +194,7 @@ class BabelTranslateForm extends FormBase {
+     ];
+ 
+     foreach ($strings as $hash => $string) {
+-      $form['list'][$hash] = $this->buildTranslationTableRow($hash, $string, $selectedLangcode);
++      $form['list'][$hash] = $this->buildTranslationTableRow($hash, $string, $selectedLangcode, $form_state->getUserInput()['list'] ?? []);
+     }
+ 
+     // @see https://www.drupal.org/node/2897377
+@@ -273,11 +273,14 @@ class BabelTranslateForm extends FormBase {
+    *   preexisting translation (if any).
+    * @param string $selectedLangcode
+    *   The language code of the selected translation language.
++   * @param array $list
++   *   The translations coming from the submitted form. This
++   *   value comes from $form_state->getUserInput()['list'] ?? [].
+    *
+    * @return array[]
+    *   Markup of the form table row.
+    */
+-  protected function buildTranslationTableRow(string $hash, StringTranslation $string, string $selectedLangcode): array {
++  protected function buildTranslationTableRow(string $hash, StringTranslation $string, string $selectedLangcode, array $list): array {
+     $row = [
+       '#attributes' => [
+         'data-babel-row' => $hash,
+@@ -318,6 +321,8 @@ class BabelTranslateForm extends FormBase {
+         'data-babel-translation' => $hash,
+       ],
+     ];
++    // We need this, to detect changes in translations in the form.
++    $row['translation']['translation_original'] = [];
+ 
+     $translationVariants = $string->getTranslatedPluralVariants() ?: [];
+     // StringTranslationTrait::getNumberOfPlurals can return string, so casting
+@@ -325,11 +330,22 @@ class BabelTranslateForm extends FormBase {
+     $targetPluralVariants = (int) $this->getNumberOfPlurals($selectedLangcode);
+     $variantNum = $sourceIsPlural ? $targetPluralVariants : 1;
+     for ($targetVariantIndex = 0; $targetVariantIndex < $variantNum; $targetVariantIndex++) {
++
++      // If the there was a change in the form, we use that translation.
++      if (@$list[$hash]['translation']['translation_original'][$selectedLangcode][$targetVariantIndex] != @$list[$hash]['translation'][$selectedLangcode][$targetVariantIndex]) {
++        $value = $list[$hash]['translation'][$selectedLangcode][$targetVariantIndex];
++      }
++      // Otherwise, we use the value coming from the storage, which
++      // may be different from the one initially existing in the form.
++      else {
++        $value = $translationVariants[$targetVariantIndex] ?? '';
++      }
++
+       $row['translation'][$selectedLangcode][$targetVariantIndex] = [
+         '#type' => 'textarea',
+         '#title' => $this->getTranslationLabel($targetVariantIndex, $targetPluralVariants),
+         '#title_display' => $sourceIsPlural ? 'before' : 'invisible',
+-        '#default_value' => $translationVariants[$targetVariantIndex] ?? '',
++        '#value' => $value,
+         '#wrapper_attributes' => ['data-babel-translation-variant' => $targetVariantIndex],
+         '#rows' => min(count(explode("\n", $variants[$targetVariantIndex] ?? $translationVariants[$targetVariantIndex] ?? '')), 8) ?: 1,
+         '#attributes' => [
+@@ -337,6 +353,10 @@ class BabelTranslateForm extends FormBase {
+           'data-babel-textarea-height-group' => "$hash-$targetVariantIndex",
+         ],
+       ];
++      $row['translation']['translation_original'][$selectedLangcode][$targetVariantIndex] = [
++        '#type' => 'hidden',
++        '#value' => $translationVariants[$targetVariantIndex] ?? '',
++      ];
+     }
+ 
+     $row['save'] = [
+diff --git a/tests/src/Functional/TranslationInterfaceTest.php b/tests/src/Functional/TranslationInterfaceTest.php
+index 9257f40af73e487f2d3e2d694c4bc17481647371..41f3840e415cf119cc9354cf4e29f6c3ad765646 100644
+--- a/tests/src/Functional/TranslationInterfaceTest.php
++++ b/tests/src/Functional/TranslationInterfaceTest.php
+@@ -155,6 +155,24 @@ class TranslationInterfaceTest extends BabelFunctionalTestBase {
+     $assertSession->pageTextContains('Administration');
+     $assertSession->pageTextContains('[TEST LANGCODE] Administration');
+ 
++    // Test that if a translation is done outside the form,
++    // the change is reflected in the form, after applying the filter.
++    $override = $this->container->get('language_manager')->getLanguageConfigOverride(static::LANGCODE, 'system.menu.admin');
++    $override->set('label', '[TEST UPDATE] Administration');
++    $override->save();
++    $page->pressButton('Filter');
++    $assertSession->pageTextContains('[TEST UPDATE] Administration');
++    // Test that if a translation is emptied but not saved,
++    // it doesn't change, after applying the filter.
++    $this->translateSourceStringTo('Administration', '', NULL, FALSE);
++    $page->pressButton('Filter');
++    $assertSession->pageTextContains('');
++    // Test that if a translation is filled but not saved,
++    // it doesn't change, after applying the filter.
++    $this->translateSourceStringTo('Administration', '[TEST UPDATE 2] Administration', NULL, FALSE);
++    $page->pressButton('Filter');
++    $assertSession->pageTextContains('[TEST UPDATE 2] Administration');
++
+     // Test removing translation.
+     $this->translateSourceStringTo('Administration', '');
+     $assertSession->pageTextContains('Translation of source string "Administration" in language Portuguese, Portugal was deleted.');
+diff --git a/tests/src/Traits/TranslationAssertionTrait.php b/tests/src/Traits/TranslationAssertionTrait.php
+index 9babfb873d9f1771f1e4d529aa453f98ada5cb80..3979cc39c07d30a21c5e1d6a5240387dbc46f8d4 100644
+--- a/tests/src/Traits/TranslationAssertionTrait.php
++++ b/tests/src/Traits/TranslationAssertionTrait.php
+@@ -23,8 +23,10 @@ trait TranslationAssertionTrait {
+    *   source and the destination have the same amount of plural forms, this can
+    *   be NULL. In this case, the plural version is automatically calculated
+    *   based on the source string.
++   * @param bool $save
++   *   Whether the translation should be saved.
+    */
+-  protected function translateSourceStringTo(string $sourceString, string $translation, ?int $pluralVersion = NULL): void {
++  protected function translateSourceStringTo(string $sourceString, string $translation, ?int $pluralVersion = NULL, $save = TRUE): void {
+     $page = $this->getSession()->getPage();
+     // Find the matching source string.
+     $sourceSelector = '*[@data-babel-source-variant]';
+@@ -46,10 +48,12 @@ trait TranslationAssertionTrait {
+     $translationInput = $sourceStringItem->find('xpath', "/ancestor::tr//*[@data-babel-translation-variant='$pluralVersion']")->find('css', 'input,textarea');
+     $this->assertInstanceOf(NodeElement::class, $translationInput);
+     $translationInput->setValue($translation);
+-    $translationRow->find('xpath', '//*[@data-babel-save]')->click();
+ 
+-    if (method_exists($this->assertSession(), 'assertWaitOnAjaxRequest')) {
+-      $this->assertSession()->assertWaitOnAjaxRequest();
++    if ($save) {
++      $translationRow->find('xpath', '//*[@data-babel-save]')->click();
++      if (method_exists($this->assertSession(), 'assertWaitOnAjaxRequest')) {
++        $this->assertSession()->assertWaitOnAjaxRequest();
++      }
+     }
+   }
+ 
