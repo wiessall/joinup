@@ -9,11 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -98,49 +96,4 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
       $form[$field]['#access'] = FALSE;
     }
   }
-}
-
-/**
- * Implements hook_views_pre_execute().
- *
- * Sets the view max age to tomorrow midnight when filtering down for upcoming
- * or past events.
- */
-function joinup_views_pre_execute(ViewExecutable $view): void {
-  $facets = _joinup_get_facets_by_facet_source_id('search_api:views_page__content_overview__page_1');
-
-  if (
-    !isset($facets['event_date']) ||
-    empty(array_intersect(
-      $facets['event_date']->getActiveItems(),
-      ['upcoming_events', 'past_events']
-    ))
-  ) {
-    return;
-  }
-
-  $max_age = (new DrupalDateTime('tomorrow'))->getTimestamp() - \Drupal::time()->getRequestTime();
-  $view->display_handler->display['cache_metadata']['max-age'] = $max_age;
-}
-
-/**
- * Returns currently rendered facets filtered by facet source ID, keyed by ID.
- *
- * @param string $facet_source_id
- *   The facet source ID to filter by.
- *
- * @return \Drupal\facets\FacetInterface[]
- *   An array of facet, keyed by facet ID.
- */
-function _joinup_get_facets_by_facet_source_id($facet_source_id): array {
-  /** @var \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager */
-  $facet_manager = \Drupal::service('facets.manager');
-
-  /** @var \Drupal\facets\FacetInterface[] $facets */
-  $facets = [];
-  foreach ($facet_manager->getFacetsByFacetSourceId($facet_source_id) as $facet) {
-    $facets[$facet->id()] = $facet;
-  }
-
-  return $facets;
 }
