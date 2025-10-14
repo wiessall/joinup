@@ -34,4 +34,4 @@ collection.propose_form:
     _controller: '\Drupal\collection\Controller\CollectionProposeController::proposeEntity'
     _title: 'Propose collection'
   requirements:
-    _permission: 'propose collection content'
+    _custom_access: '\Drupal\collection\Controller\CollectionProposeController::createAccess'
