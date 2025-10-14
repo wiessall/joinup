@@ -329,7 +329,8 @@
         },
         "patches": {
             "drupal/babel": {
-                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff"
+                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff",
+                "Form not refreshed with \"Filter\" after translation outside Babel @see https://drupal.org/i/3549355": "resources/patch/php/drupal/babel/3549355-ef0d52abab.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
