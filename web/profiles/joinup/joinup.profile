@@ -16,17 +16,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewExecutable;
 
 /**
- * Implements hook_entity_type_alter().
- */
-function joinup_entity_type_alter(array $entityTypes): void {
-  // Add the "Propose" form operation to nodes entities so that we can add
-  // propose form displays to them. Skip this during installation.
-  if (isset($entityTypes['node'])) {
-    $entityTypes['node']->setFormClass('propose', $entityTypes['node']->getFormClass('edit'));
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function joinup_form_field_config_edit_form_alter(&$form): void {
