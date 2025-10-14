@@ -71,29 +71,3 @@ function joinup_inline_entity_form_reference_form_alter(&$reference_form, &$form
   // Avoid showing two labels one after each other.
   $reference_form['entity_id']['#title_display'] = 'invisible';
 }
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * - Disable access to the revision information vertical tab.
- *   This prevents access to the revision log and the revision checkbox too.
- * - Disable access to the comment settings. These are managed on collection
- *   level.
- * - Disable access to the meta information.
- * - Allow access to the uid field only to the moderators.
- */
-function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  $form['revision_information']['#access'] = FALSE;
-  $form['revision']['#access'] = FALSE;
-  $form['meta']['#access'] = FALSE;
-
-  if (isset($form['uid'])) {
-    $form['uid']['#access'] = \Drupal::currentUser()->hasPermission('administer nodes');
-  }
-
-  foreach (['field_comments', 'field_replies'] as $field) {
-    if (!empty($form[$field])) {
-      $form[$field]['#access'] = FALSE;
-    }
-  }
-}
