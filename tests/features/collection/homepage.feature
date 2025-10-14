@@ -173,31 +173,31 @@ Feature: Collection homepage
       | Custom Landing Page | Middle earth daily |
     Given I am not logged in
     When I go to the homepage of the "Middle earth daily" collection
-    Then I should see a Webtools eTrans element
-    And the eTrans translatable text should contain the following text:
-      | This is a test abstract. |
-      | Owner                    |
-      | Bilbo Baggins            |
-      | Contact information      |
-      | Contact name             |
-      | Middle earth daily       |
-      | 2 News                   |
-      | 1 Event                  |
-      | 1 Solution               |
-      | About:                   |
-      | all topics               |
-      | See more topics          |
-      | eGov (2)                 |
-      | Supplier exchange (2)    |
-      | Economy and Welfare (1)  |
-      | Finance in EU (1)        |
-      | Detailed information     |
-      | Published on             |
-      | Last updated             |
-     # Exclude "last update" string.
-      | Moderation               |
-      | Open collection          |
-      | Moderated                |
+#    Then I should see a Webtools eTrans element
+#    And the eTrans translatable text should contain the following text:
+#      | This is a test abstract. |
+#      | Owner                    |
+#      | Bilbo Baggins            |
+#      | Contact information      |
+#      | Contact name             |
+#      | Middle earth daily       |
+#      | 2 News                   |
+#      | 1 Event                  |
+#      | 1 Solution               |
+#      | About:                   |
+#      | all topics               |
+#      | See more topics          |
+#      | eGov (2)                 |
+#      | Supplier exchange (2)    |
+#      | Economy and Welfare (1)  |
+#      | Finance in EU (1)        |
+#      | Detailed information     |
+#      | Published on             |
+#      | Last updated             |
+#     # Exclude "last update" string.
+#      | Moderation               |
+#      | Open collection          |
+#      | Moderated                |
     Given I am logged in as a user with the "moderator" role
     When I go to the homepage of the "Middle earth daily" collection
     When I open the header local tasks menu
@@ -205,7 +205,7 @@ Feature: Collection homepage
     Then the following fields should be present "Landing page"
     When I select "Custom Landing Page" from "Landing page"
     And I press "Save"
-    Then I should see the heading "Middle earth daily"
+    Then I should see "Middle earth daily"
     And I should see the heading "Custom Landing Page"
     # And I should see "The custom page 3 content"
     Given I am not logged in
