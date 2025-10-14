@@ -14,6 +14,7 @@ Feature: Assessments
     And I should see the heading "Online form for Assessments"
 
     # 1st page.
+    And I fill in "Short title" with "Short title"
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
@@ -321,6 +322,7 @@ Feature: Assessments
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
+    And I fill in "Short title" with "Short title"
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
     And I select "<public_sector_body>" from "Type of public sector body"
     And I select "<institution_name>" from "<institution>"
@@ -358,6 +360,7 @@ Feature: Assessments
     Then I should not see the link "Download PDF" in the "Content" region
 
     # 1st page.
+    And I fill in "Short title" with "Short title"
     And I select "European Union agency" from "Type of public sector body"
     And I select "Eurojust" from "Select your Agency"
     And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"

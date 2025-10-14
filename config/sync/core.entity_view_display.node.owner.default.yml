@@ -41,7 +41,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 1

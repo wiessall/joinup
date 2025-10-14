@@ -115,6 +115,9 @@ class AutoTranslationTest extends FetchTestBase {
     $this->processQueue($tmgProviderWorker, $tmgProviderQueue, 11);
     $this->assertEquals(0, $tmgProviderQueue->numberOfItems());
 
+    $errorLogs = $this->getLogEntries('An issue occurred during creating the translation job. Message: @message');
+    $this->assertEmpty($errorLogs, 'No translation job creation errors should be logged.');
+
     $this->entityTypeManager->getStorage('node')->resetCache();
 
     $this->assertOssSolution('GitHub solution 1', 'en');
