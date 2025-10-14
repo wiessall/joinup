@@ -70,8 +70,12 @@ function ventuno_preprocess_node(array &$variables): void {
   // Provide variable to know whether the page has been set as the landing page
   // of a group, so we can add a <h1> title in the group header.
   $route_match = \Drupal::routeMatch();
-  $variables['is_canonical'] = $route_match->getRouteName() === 'entity.node.canonical'
+  $is_canonical = $route_match->getRouteName() === 'entity.node.canonical'
     && in_array($bundle, ['collection', 'solution']);
+  if ($is_canonical) {
+    $landing_page = $node->getSetting('landing_page');
+    $variables['has_landing_page'] = empty($landing_page->entity);
+  }
 
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
