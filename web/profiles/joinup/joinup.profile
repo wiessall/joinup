@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -42,24 +41,4 @@ function joinup_entity_access(EntityInterface $entity, $operation, AccountInterf
   }
 
   return AccessResult::neutral();
-}
-
-/**
- * Implements hook_field_widget_inline_entity_form_complex_form_alter().
- *
- * Simplifies the widget buttons when only a bundle is configured.
- */
-function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, FormStateInterface $form_state, $context): void {
-  if (isset($element['actions']['bundle']['#type']) && $element['actions']['bundle']['#type'] == 'value') {
-    $buttons = [
-      'ief_add' => t('Add new'),
-      'ief_add_existing' => t('Add existing'),
-    ];
-
-    foreach ($buttons as $key => $label) {
-      if (!empty($element['actions'][$key])) {
-        $element['actions'][$key]['#value'] = $label;
-      }
-    }
-  }
 }
