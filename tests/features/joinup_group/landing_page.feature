@@ -69,7 +69,7 @@ Feature: Tests the group landing page customization.
     When I select "Custom Page 3" from "Landing page"
     And I fill in "Overview label" with "Welcome"
     And I press "Save"
-    Then I should see the heading "<group> group"
+    Then I should see "<group> group"
     And I should see the heading "Custom Page 3"
     And I should see "The custom page 3 content"
     But I should not see "The <group> arbitrary description"
@@ -88,7 +88,7 @@ Feature: Tests the group landing page customization.
     And I press "Update"
     Then I go to the homepage of the "<group> group" <group>
     And the response should contain "page-title__title visually-hidden"
-    Then I should see the heading "<group> group"
+    Then I should see "<group> group"
 
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
