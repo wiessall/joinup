@@ -65,6 +65,18 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Increases the maximum length of the file extension field to allow
+ * registration of large amounts of extensions.
+ */
+function joinup_core_form_field_config_edit_form_alter(array &$form): void {
+  if (isset($form['settings']['file_extensions']['#maxlength'])) {
+    $form['settings']['file_extensions']['#maxlength'] = 1024;
+  }
+}
+
+/**
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
