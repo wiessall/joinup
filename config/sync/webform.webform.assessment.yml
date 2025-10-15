@@ -197,7 +197,7 @@ elements: |-
         initiative:
           '#type': textfield
           '#required': true
-          '#title': 'Initiative, project, action'
+          '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed:'
         initiative_link:
           '#type': textfield
           '#title': 'If applicable, provide a link to the initiative, project or action concerned:'
