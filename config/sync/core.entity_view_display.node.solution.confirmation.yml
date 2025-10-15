@@ -140,7 +140,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 7
@@ -169,7 +168,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 4
@@ -198,7 +196,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 5
@@ -232,7 +229,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 7
@@ -315,7 +311,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 7

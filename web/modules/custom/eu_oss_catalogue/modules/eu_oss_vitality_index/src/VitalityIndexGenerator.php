@@ -50,16 +50,26 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
    *   The OSS Solution entity.
    */
   public function processSolution(OssSolutionInterface $solution): void {
-    if ($vitalityIndex = $this->getVitalityIndexPerDay($solution)) {
-      // Order chronologically.
-      $vitalityIndexEncoded = Json::encode(array_reverse($vitalityIndex));
-      if ($vitalityIndexEncoded !== $solution->get('oss_vitality_index_range')->value) {
-        $solution
-          ->set('oss_vitality_index_range', $vitalityIndexEncoded)
-          ->set('oss_vitality_index', array_sum($vitalityIndex) / count($vitalityIndex) / 100)
-          ->save();
-      }
+    $vitalityIndex = $this->getVitalityIndexPerDay($solution);
+    if (!$vitalityIndex) {
+      return;
     }
+
+    // Order chronologically.
+    $vitalityIndexEncoded = Json::encode(array_reverse($vitalityIndex));
+
+    // Reload the solution to get the latest data, as getVitalityIndexPerDay()
+    // takes a long time and the solution may have been updated meanwhile.
+    $solutionStorage = $this->entityTypeManager->getStorage('node');
+    $solution = $solutionStorage->load($solution->id());
+
+    if (!$solution || $vitalityIndexEncoded === $solution->get('oss_vitality_index_range')->value) {
+      return;
+    }
+
+    $solution->set('oss_vitality_index_range', $vitalityIndexEncoded);
+    $solution->set('oss_vitality_index', array_sum($vitalityIndex) / count($vitalityIndex) / 100);
+    $solution->save();
   }
 
   /**
