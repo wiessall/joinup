@@ -43,18 +43,6 @@ function joinup_slick_field_formatter_third_party_settings_form(FormatterInterfa
     '#title' => t('Use field label as Slick carousel title'),
     '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'field_label', TRUE),
   ];
-  $element['custom_label'] = [
-    '#type' => 'textfield',
-    '#title' => t('Custom carousel title'),
-    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'custom_label', ''),
-    '#states' => [
-      'visible' => [
-        ':input[name$="[third_party_settings][joinup_slick][field_label]"]' => [
-          'checked' => FALSE,
-        ],
-      ],
-    ],
-  ];
 
   return $element;
 }
@@ -105,7 +93,7 @@ function joinup_slick_preprocess_field(array &$variables): void {
         'entity_type' => $variables['element']['#entity_type'],
         'bundle' => $variables['element']['#bundle'],
         'field_name' => $variables['element']['#field_name'],
-        'field_label' => $useFieldLabel ? $variables['label'] : $joinupSlickSettings['custom_label'],
+        'field_label' => $useFieldLabel ? $variables['label'] : NULL,
       ];
       // Move Slick renderable to the field theme output, overriding the items
       // key. Structurally, this is the same if the field has one single value.
