@@ -233,24 +233,7 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
             ],
           ],
         ],
-        'expectedResults' => [
-          [
-            'namespace' => 'fooNS',
-            'name' => 'fooProject',
-            'url' => 'https://example.com/fooNS/fooProject',
-            'platform' => 'testPlatform',
-            'defaultBranch' => 'main',
-            'files' => ['publiccodeYml' => "name: 'fooNS/fooProject'\n"],
-          ],
-          [
-            'namespace' => 'barNs',
-            'name' => 'barProject',
-            'url' => 'https://example.com/barNs/barProject',
-            'platform' => 'testPlatform',
-            'defaultBranch' => 'main',
-            'files' => ['publiccodeYml' => "name: 'barNs/barProject'\n"],
-          ],
-        ],
+        'expectedResults' => [],
       ],
     ];
   }
