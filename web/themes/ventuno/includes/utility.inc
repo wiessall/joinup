@@ -99,8 +99,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
       '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
-      '@changed' => \Drupal::service('date.formatter')
-        ->format($changed_time, 'date_only'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
 
