@@ -56,7 +56,6 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
    * Test node updates.
    */
   public function testNodeUpdate(): void {
-    $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
     $logger = $this->prophesize(LoggerChannelInterface::class);
     $fileSystem = $this->prophesize(FileSystemInterface::class);
     $immutableConfig = $this->prophesize(ImmutableConfig::class);
@@ -71,12 +70,19 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
 
     $ossSolution = $this->prophesize(OssSolutionInterface::class);
     $ossSolution->getUrl()->willReturn('https://www.repo.com/dummy.git');
+    $ossSolution->id()->willReturn(111);
     $ossSolution->get('oss_vitality_index_range')->willReturn($stdObject);
     $ossSolution->set('oss_vitality_index_range', $expectedVitalityIndex)
       ->willReturn($ossSolution)->shouldBeCalledTimes(1);
     $ossSolution->set('oss_vitality_index', array_sum(VitalityIndexGeneratorHelper::INDEX_PER_DAY) / count(VitalityIndexGeneratorHelper::INDEX_PER_DAY) / 100)
       ->willReturn($ossSolution)->shouldBeCalledTimes(1);
     $ossSolution->save()->willReturn(1)->shouldBeCalledTimes(1);
+
+    $storage = $this->prophesize('Drupal\Core\Entity\EntityStorageInterface');
+    $storage->load(111)->willReturn($ossSolution->reveal());
+
+    $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
+    $entityTypeManager->getStorage('node')->willReturn($storage->reveal());
 
     $vitalityIndexGenerator = new VitalityIndexGeneratorHelper(
       $entityTypeManager->reveal(),
