@@ -17,6 +17,7 @@ content:
     weight: 0
     region: content
     settings:
+      headerlevel: '3'
       class: ''
       frameborder: '0'
       scrolling: auto
@@ -27,11 +28,7 @@ content:
       height: 100%
       expose_class: false
     third_party_settings: {  }
-  translation:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   created: true
   status: true
+  translation: true

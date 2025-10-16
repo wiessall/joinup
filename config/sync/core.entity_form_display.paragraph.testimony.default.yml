@@ -11,7 +11,7 @@ dependencies:
     - image.style.thumbnail
     - paragraphs.paragraphs_type.testimony
   module:
-    - image
+    - svg_image
 id: paragraph.testimony.default
 targetEntityType: paragraph
 bundle: testimony
@@ -57,11 +57,7 @@ content:
       rows: 3
       placeholder: ''
     third_party_settings: {  }
-  translation:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   created: true
   status: true
+  translation: true
