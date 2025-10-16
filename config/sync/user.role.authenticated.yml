@@ -24,6 +24,7 @@ dependencies:
     - node.type.event
     - node.type.news
     - node.type.owner
+    - oauth_client.type.authenticated_user_api
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
@@ -41,6 +42,7 @@ dependencies:
     - media
     - meta_entity
     - node
+    - oauth_client
     - paragraphs
     - paragraphs_type_permissions
     - poll
@@ -159,6 +161,7 @@ permissions:
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
   - 'propose collection content'
+  - 'request authenticated_user_api oauth2 client'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
