@@ -7,11 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
 
@@ -67,16 +69,6 @@ function ventuno_preprocess_node(array &$variables): void {
   $node = $variables['node'];
   $bundle = $node->bundle();
 
-  // Provide variable to know whether the page has been set as the landing page
-  // of a group, so we can add a <h1> title in the group header.
-  $route_match = \Drupal::routeMatch();
-  $is_canonical = $route_match->getRouteName() === 'entity.node.canonical'
-    && in_array($bundle, ['collection', 'solution']);
-  if ($is_canonical) {
-    $landing_page = $node->getSetting('landing_page');
-    $variables['has_landing_page'] = !empty($landing_page->entity);
-  }
-
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
 
@@ -124,10 +116,39 @@ function ventuno_preprocess_node(array &$variables): void {
 }
 
 /**
+ * Common preprocess helper for group header nodes.
+ */
+function ventuno_preprocess_group_header_node(array &$variables, string $expected_interface): void {
+  $route_match = \Drupal::routeMatch();
+  $node = $variables['node'];
+  $current_node = $route_match->getParameter('node');
+
+  if ($current_node instanceof $expected_interface) {
+    $landing_page = $node->getSetting('landing_page');
+    $variables['has_no_landing_page'] = empty($landing_page->entity);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node__collection__group-header.
+ */
+function ventuno_preprocess_node__collection__group_header(array &$variables): void {
+  ventuno_preprocess_group_header_node($variables, CollectionInterface::class);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--6d621a47-71ce-4f1a-90e2-8859403d3ecd--group-header.html.twig.
+ */
+function ventuno_preprocess_node__6d621a47_71ce_4f1a_90e2_8859403d3ecd__group_header(array &$variables): void {
+  ventuno_preprocess_group_header_node($variables, CollectionInterface::class);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for node__solution__group-header.
  */
 function ventuno_preprocess_node__solution__group_header(array &$variables): void {
   $node = $variables['node'];
+  ventuno_preprocess_group_header_node($variables, SolutionInterface::class);
   if (isset($variables['content']['releases_overview'])) {
     $variables['content']['releases_overview']['#attributes'] = [
       'class' => [
