@@ -12,6 +12,7 @@ entity.node.glossary:
         type: entity:node
         bundle:
           - collection
+
 collection.code_of_conduct_consent:
   path: '/node/{node}/code-of-conduct-consent'
   defaults:
@@ -26,3 +27,11 @@ collection.code_of_conduct_consent:
         type: entity:node
         bundle:
           - collection
+
+collection.propose_form:
+  path: '/propose/collection'
+  defaults:
+    _controller: '\Drupal\collection\Controller\CollectionProposeController::proposeEntity'
+    _title: 'Propose collection'
+  requirements:
+    _permission: 'propose collection content'
