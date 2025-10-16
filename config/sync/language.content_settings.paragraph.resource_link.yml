@@ -15,4 +15,4 @@ id: paragraph.resource_link
 target_entity_type_id: paragraph
 target_bundle: resource_link
 default_langcode: site_default
-language_alterable: true
+language_alterable: false
