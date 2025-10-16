@@ -14,6 +14,7 @@ Feature: Notification test for the assessment.
     And I am logged in as "AA owner"
     When I am at "/collection/assessments/assessment-reports/questionnaire"
     # 1st page.
+    And I fill in "Short title" with "Short title"
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
     When I fill in "Name of your organisation" with "Pink Floyd"
