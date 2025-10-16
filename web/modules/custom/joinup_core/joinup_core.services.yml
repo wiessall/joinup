@@ -17,6 +17,10 @@ services:
 
   Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber: { }
 
+  Drupal\joinup_core\Access\NodeCreationRoutesAccess:
+    tags:
+      - { name: access_check, applies_to: _node_creation_route }
+
   path_processor.joinup_core:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
     tags:
@@ -38,3 +42,7 @@ services:
     class: Drupal\joinup_core\TwigExtension\DummyTextTwigExtension
     tags:
       - { name: twig.extension }
+
+  Drupal\joinup_core\Routing\AssetControllerRouteSubscriber: { }
+
+  Drupal\joinup_core\Routing\NodeCreationAccessRouteSubscriber: { }

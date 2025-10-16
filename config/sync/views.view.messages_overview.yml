@@ -414,7 +414,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'access messages overview'
+          perm: 'access joinup reports'
       cache:
         type: tag
         options: {  }
