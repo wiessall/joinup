@@ -77,13 +77,15 @@
     </div>
   {% endif %}
 
-  {% if page.content_top %}
-    <div class="container">
-      {{ page.content_top }}
-    </div>
-  {% endif %}
-
   <div class="content container mb-5">
+    {% block page_content_top %}
+      {% if page.content_top %}
+        <div class="region-content-top justify-content-end position-relative d-flex my-3">
+          {{ page.content_top }}
+        </div>
+      {% endif %}
+    {% endblock %}
+
     <main role="main">
       <div id="main-content" tabindex="-1"></div>
       <div class="layout-content">
