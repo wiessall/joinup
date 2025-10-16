@@ -6,6 +6,9 @@
   "solutions": [
     {
       "url": "https://github.com/decidim/decidim"
+    },
+    {
+      "url": "https://github.com/waldur/waldur-docs"
     }
   ]
 }
