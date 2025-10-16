@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+
 /**
  * Fix webform configuration validation errors and clean control characters.
  */
@@ -128,5 +131,53 @@ function joinup_core_deploy_200702(): string {
   return sprintf(
     'Queued %d solution(s) created before July 14, 2025 for processing. The queue will be processed by cron.',
     $count
+  );
+}
+
+/**
+ * Delete invalid track_usage queue items.
+ */
+function joinup_core_deploy_200703(array &$sandbox): string {
+  $db = \Drupal::database();
+  if (!isset($sandbox['item_ids'])) {
+    $sandbox['item_ids'] = $db->select('queue', 'q')
+      ->fields('q', ['item_id'])
+      ->condition('q.name', 'track_usage')
+      ->execute()
+      ->fetchCol();
+    $sandbox['processed'] = 0;
+    $sandbox['deleted'] = 0;
+    $sandbox['total'] = count($sandbox['item_ids']);
+    $sandbox['content_entity_type_ids'] = array_keys(
+      array_filter(
+        \Drupal::entityTypeManager()->getDefinitions(),
+        fn (EntityTypeInterface $entityType): bool => $entityType instanceof ContentEntityTypeInterface,
+      ),
+    );
+  }
+  $itemIds = array_splice($sandbox['item_ids'], 0, 1000);
+  $itemsQuery = $db->select('queue', 'q')
+    ->fields('q', ['item_id', 'data'])
+    ->condition('q.name', 'track_usage')
+    ->condition('q.item_id', $itemIds, 'IN');
+  foreach ($itemsQuery->execute()->fetchAll() as $item) {
+    $unserializedData = unserialize($item->data, ['allowed_classes' => FALSE]);
+    if (
+      !in_array($unserializedData['type'], $sandbox['content_entity_type_ids']) ||
+      !array_key_exists('revision', $unserializedData) ||
+      !is_bool($unserializedData['revision']) ||
+      !is_array($unserializedData['ids'])
+    ) {
+      $db->delete('queue')->condition('item_id', $item->item_id)->execute();
+      $sandbox['deleted']++;
+    }
+  }
+  $sandbox['processed'] += count($itemIds);
+  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
+  return sprintf(
+    "Processed %s 'track_usage' queue item from %s. Deleted %s items.",
+    $sandbox['processed'],
+    $sandbox['total'],
+    $sandbox['deleted'],
   );
 }
