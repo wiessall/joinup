@@ -74,7 +74,7 @@ function ventuno_preprocess_node(array &$variables): void {
     && in_array($bundle, ['collection', 'solution']);
   if ($is_canonical) {
     $landing_page = $node->getSetting('landing_page');
-    $variables['has_landing_page'] = empty($landing_page->entity);
+    $variables['has_landing_page'] = !empty($landing_page->entity);
   }
 
   // Add the site URL to use in nodes.
