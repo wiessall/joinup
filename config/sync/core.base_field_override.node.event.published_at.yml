@@ -1,0 +1,20 @@
+uuid: 2dfe47b8-6c86-45ae-9390-e733712e75cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.event
+  module:
+    - publication_date
+id: node.event.published_at
+field_name: published_at
+entity_type: node
+bundle: event
+label: 'Published on'
+description: 'Keep the publication timestamp for each node.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: published_at
