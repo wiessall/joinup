@@ -1,0 +1,366 @@
+diff --git a/babel.libraries.yml b/babel.libraries.yml
+index 73f1e0b5b3596324d2c49484e9743db1dc3c0ab9..24f11c9e0ca4f3796c3b5258ade32991baba50b9 100644
+--- a/babel.libraries.yml
++++ b/babel.libraries.yml
+@@ -10,7 +10,7 @@ translate-form:
+ 
+ textarea-height:
+   js:
+-    js/babel-textarea-height.js : {}
++    js/babel-textarea-height.js: {}
+   dependencies:
+     - core/drupal
+     - core/jquery
+@@ -26,3 +26,10 @@ push_parameters:
+ popstate_handler:
+   js:
+     js/popstate-handler.js: {}
++
++copy_source:
++  js:
++    js/babel-copy-source.js: {}
++  dependencies:
++    - core/drupal
++    - core/once
+diff --git a/css/babel.css b/css/babel.css
+index 1a2a4f8fc62ecb42144934a78520fbeaf0d6d2cc..9363e5a3e441ce6103e430ff84d102e4864e4536 100644
+--- a/css/babel.css
++++ b/css/babel.css
+@@ -18,6 +18,10 @@
+   width: 40%;
+ }
+ 
++.babel-copy-col {
++  text-align: center;
++}
++
+ .babel-translate-row {
+   vertical-align: top;
+ }
+@@ -61,8 +65,33 @@
+   background-image: url(../images/remove_595959.svg);
+ }
+ 
+-/* Workaround for Claro theme */
+-.babel-filters.container-inline label.option::after,
+-.babel-filters.container-inline .label.option::after {
+-  content: none;
++.babel--copy {
++  text-align: center;
++  vertical-align: middle;
++}
++
++input.babel-copy-button,
++input.babel-copy-button:hover,
++input.babel-copy-button:focus,
++input.babel-copy-button:active {
++  width: 40px;
++  border: 0;
++  background: transparent no-repeat center;
++  box-shadow: none !important;
++}
++input.babel-copy-button {
++  background-image: url(../images/arrow_right_bebebe.svg);
++}
++input.babel-copy-button:hover,
++input.babel-copy-button:focus {
++  background-image: url(../images/arrow_right_0074bd.svg);
++}
++
++[dir="rtl"] input.babel-copy-button {
++  background-image: url(../images/arrow_left_bebebe.svg);
++}
++
++[dir="rtl"] input.babel-copy-button:hover,
++[dir="rtl"] input.babel-copy-button:focus {
++  background-image: url(../images/arrow_left_0074bd.svg);
+ }
+diff --git a/images/arrow_left_0074bd.svg b/images/arrow_left_0074bd.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..b9cadf2fc74844d0db4ec8357598ec79d9d44965
+--- /dev/null
++++ b/images/arrow_left_0074bd.svg
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
++	 width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
++<polygon fill="#0074BD" points="12,0 15,3 9,8 15,13 12,16 3,8 "/>
++</svg>
+diff --git a/images/arrow_left_bebebe.svg b/images/arrow_left_bebebe.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..745b2b1ca0a38ad4649097d39eba06ecf9d92c8b
+--- /dev/null
++++ b/images/arrow_left_bebebe.svg
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
++	 width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
++<polygon fill="#BEBEBE" points="12,0 15,3 9,8 15,13 12,16 3,8 "/>
++</svg>
+diff --git a/images/arrow_right_0074bd.svg b/images/arrow_right_0074bd.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..0eee94a1b4708413931cf4b6f12aaf63a17dfd6f
+--- /dev/null
++++ b/images/arrow_right_0074bd.svg
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
++	 width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
++<polygon fill="#0074BD" points="4,0 1,3 7,8 1,13 4,16 13,8 "/>
++</svg>
+diff --git a/images/arrow_right_bebebe.svg b/images/arrow_right_bebebe.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..c0fc2a61ef08efd1639f105ba4ce5b17c11c03c2
+--- /dev/null
++++ b/images/arrow_right_bebebe.svg
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
++	 width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
++<polygon fill="#BEBEBE" points="4,0 1,3 7,8 1,13 4,16 13,8 "/>
++</svg>
+diff --git a/js/babel-copy-source.js b/js/babel-copy-source.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..a8f93056effdf2571f402428ffc612e487f35dbe
+--- /dev/null
++++ b/js/babel-copy-source.js
+@@ -0,0 +1,51 @@
++/**
++ * @file
++ * Handles copying source strings to translation form elements.
++ */
++
++(function (Drupal, once) {
++  /**
++   * Copies source string content to translation form elements.
++   *
++   * @type {Drupal~behavior}
++   *
++   * @prop {Drupal~behaviorAttach} attach
++   *   Attaches copy button click handlers to the translation form.
++   */
++  Drupal.behaviors.babelCopySource = {
++    attach(context) {
++      const copyButtons = once('babel-copy', '[data-babel-copy]', context);
++
++      copyButtons.forEach(function (button) {
++        button.addEventListener('click', function (e) {
++          e.preventDefault();
++
++          const hash = this.getAttribute('data-babel-copy');
++          const row = document.querySelector(`[data-babel-row="${hash}"]`);
++
++          if (!row) {
++            return;
++          }
++
++          const sourceVariants = row.querySelectorAll(
++            '[data-babel-source-variant]',
++          );
++          const translationVariants = row.querySelectorAll(
++            '[data-babel-translation-variant]',
++          );
++
++          translationVariants.forEach(function (variant, index) {
++            const textarea = variant.querySelector('textarea');
++            if (textarea && !textarea.value) {
++              const sourceIndex = index < sourceVariants.length ? index : 1;
++              const sourceText =
++                sourceVariants[sourceIndex].querySelector('textarea').value;
++              textarea.value = sourceText;
++              textarea.dispatchEvent(new Event('input', { bubbles: true }));
++            }
++          });
++        });
++      });
++    },
++  };
++})(Drupal, once);
+diff --git a/src/Form/BabelTranslateForm.php b/src/Form/BabelTranslateForm.php
+index cea2d23d0efbef9c5fb2796a2e96d9d3a8c311de..10fcf1f5db7ef3459b40e6500b397edd98cff9b9 100644
+--- a/src/Form/BabelTranslateForm.php
++++ b/src/Form/BabelTranslateForm.php
+@@ -90,6 +90,7 @@ class BabelTranslateForm extends FormBase {
+     $form['#attached']['library'][] = 'babel/textarea-height';
+     $form['#attached']['library'][] = 'babel/push_parameters';
+     $form['#attached']['library'][] = 'babel/popstate_handler';
++    $form['#attached']['library'][] = 'babel/copy_source';
+ 
+     $form['filters'] = [
+       '#type' => 'container',
+@@ -179,6 +180,10 @@ class BabelTranslateForm extends FormBase {
+       '#type' => 'table',
+       '#header' => [
+         ['data' => $this->t('Source'), 'class' => ['babel-source-col']],
++        [
++          'data' => ['#markup' => '<span class="visually-hidden">' . $this->t('Copy') . '</span>'],
++          'class' => ['babel-copy-col', 'js-show'],
++        ],
+         ['data' => $this->t('Translation'), 'class' => ['babel-translation-col']],
+         $this->t('Save'),
+         $this->t('Status'),
+@@ -315,6 +320,19 @@ class BabelTranslateForm extends FormBase {
+       ];
+     }
+ 
++    $row['copy'] = [
++      '#type' => 'button',
++      '#value' => '',
++      '#name' => 'babel-copy-' . $hash,
++      '#attributes' => [
++        'class' => ['babel-copy-button'],
++        'title' => $this->t('Copy source to translation'),
++        'data-babel-copy' => $hash,
++        'type' => 'button',
++      ],
++      '#wrapper_attributes' => ['class' => ['babel--copy', 'js-show']],
++    ];
++
+     $row['translation'] = [
+       '#type' => 'container',
+       '#wrapper_attributes' => [
+diff --git a/tests/src/FunctionalJavascript/CopySourceToTranslationTest.php b/tests/src/FunctionalJavascript/CopySourceToTranslationTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..99f65c7f3c8de174edb57b18a641b860f5c74526
+--- /dev/null
++++ b/tests/src/FunctionalJavascript/CopySourceToTranslationTest.php
+@@ -0,0 +1,139 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\babel\FunctionalJavascript;
++
++use Drupal\babel\BabelStorageInterface;
++use Drupal\babel\Model\Source;
++use Drupal\Component\Gettext\PoItem;
++use Drupal\Core\Url;
++
++/**
++ * Tests the copy source to translation button functionality.
++ *
++ * @group babel
++ */
++class CopySourceToTranslationTest extends BabelFunctionalJavascriptTestBase {
++
++  /**
++   * Tests copying plural strings in LTR language.
++   */
++  public function testCopySourceToTranslation(): void {
++    // Create a plural string in the locale storage.
++    $localeStorage = \Drupal::service('locale.storage');
++    $source_string = '1 person' . PoItem::DELIMITER . '@count persons';
++    $localeSource = $localeStorage->createString(['source' => $source_string, 'context' => '']);
++    $localeSource->save();
++
++    // Register the string with Babel.
++    $babelStorage = \Drupal::service(BabelStorageInterface::class);
++    $source = new Source($source_string, '');
++    $babelStorage->update('locale', [(string) $localeSource->lid => $source]);
++
++    $this->drupalLogin($this->testAccount);
++    $this->drupalGet(Url::fromRoute('babel.ui'));
++
++    $page = $this->getSession()->getPage();
++    $assertSession = $this->assertSession();
++
++    $page->fillField('Search', 'person');
++    $page->pressButton('Filter');
++    $assertSession->assertWaitOnAjaxRequest();
++
++    $singularSource = $page->find('xpath', '//*[@data-babel-source-variant="0"][contains(.,"1 person")]');
++    $this->assertNotNull($singularSource);
++
++    $translationRow = $singularSource->find('xpath', 'ancestor::tr');
++    $pluralSource = $translationRow->find('xpath', '//*[@data-babel-source-variant="1"][contains(.,"@count persons")]');
++    $this->assertNotNull($pluralSource);
++
++    $singularTranslation = $translationRow->find('xpath', '//*[@data-babel-translation-variant="0"]//textarea');
++    $pluralTranslation = $translationRow->find('xpath', '//*[@data-babel-translation-variant="1"]//textarea');
++    $copyButton = $translationRow->find('css', '.babel-copy-button');
++
++    $this->assertNotNull($copyButton);
++    // Check that the copy button shows the right arrow icon.
++    $copyButtonBackgroundImage = $this->getSession()->evaluateScript(
++      'window.getComputedStyle(document.querySelector(".babel-copy-button")).getPropertyValue("background-image")'
++    );
++    $this->assertStringContainsString('arrow_right_bebebe.svg', $copyButtonBackgroundImage);
++    $this->assertEmpty($singularTranslation->getValue());
++    $this->assertEmpty($pluralTranslation->getValue());
++
++    $copyButton->click();
++    $this->getSession()->wait(200);
++
++    $this->assertEquals('1 person', $singularTranslation->getValue());
++    $this->assertEquals('@count persons', $pluralTranslation->getValue());
++
++    // Test that clicking copy button again doesn't overwrite existing content.
++    $singularTranslation->setValue('Custom translation');
++    $pluralTranslation->setValue('Custom plural translation');
++
++    $copyButton->click();
++    $this->getSession()->wait(200);
++
++    // Values should remain unchanged.
++    $this->assertEquals('Custom translation', $singularTranslation->getValue());
++    $this->assertEquals('Custom plural translation', $pluralTranslation->getValue());
++  }
++
++  /**
++   * Tests copying plural strings in RTL language.
++   */
++  public function testCopySourceToTranslationRtl(): void {
++    // Create an RTL language (Arabic).
++    \Drupal::service('module_installer')->install(['language']);
++    $language = \Drupal::service('entity_type.manager')
++      ->getStorage('configurable_language')
++      ->create([
++        'id' => 'ar',
++        'label' => 'Arabic',
++        'direction' => 'rtl',
++      ]);
++    $language->save();
++
++    // Create a plural string in the locale storage.
++    $localeStorage = \Drupal::service('locale.storage');
++    $source_string = '1 person' . PoItem::DELIMITER . '@count persons';
++    $localeSource = $localeStorage->createString(['source' => $source_string, 'context' => '']);
++    $localeSource->save();
++
++    // Register the string with Babel.
++    $babelStorage = \Drupal::service(BabelStorageInterface::class);
++    $source = new Source($source_string, '');
++    $babelStorage->update('locale', [(string) $localeSource->lid => $source]);
++
++    $this->drupalLogin($this->testAccount);
++    $this->drupalGet(Url::fromRoute('babel.ui', ['language' => 'ar']));
++
++    $page = $this->getSession()->getPage();
++    $assertSession = $this->assertSession();
++
++    // Manually set the dir attribute to rtl for testing the CSS behavior.
++    $this->getSession()->executeScript('document.documentElement.setAttribute("dir", "rtl");');
++
++    $page->fillField('Search', 'person');
++    $page->pressButton('Filter');
++    $assertSession->assertWaitOnAjaxRequest();
++
++    $singularSource = $page->find('xpath', '//*[@data-babel-source-variant="0"][contains(.,"1 person")]');
++    $this->assertNotNull($singularSource);
++
++    $translationRow = $singularSource->find('xpath', 'ancestor::tr');
++    $copyButton = $translationRow->find('css', '.babel-copy-button');
++
++    $this->assertNotNull($copyButton);
++    // Check that the dir attribute is set to rtl on the html element.
++    $dir = $this->getSession()->evaluateScript('document.documentElement.getAttribute("dir")');
++    $this->assertEquals('rtl', $dir);
++
++    // Check that the copy button shows the left arrow icon for RTL.
++    $copyButtonBackgroundImage = $this->getSession()->evaluateScript(
++      'window.getComputedStyle(document.querySelector(".babel-copy-button")).getPropertyValue("background-image")'
++    );
++    $this->assertStringContainsString('arrow_left_bebebe.svg', $copyButtonBackgroundImage);
++  }
++
++}
