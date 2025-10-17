@@ -7339,7 +7339,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/oauth_client.git",
-                "reference": "e87e0af981a6f7d7e65bb0eafff17f291093470d"
+                "reference": "07f279467f9d222f4722bd95b2bcef395a4a31a9"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11",
@@ -7357,7 +7357,7 @@
                 },
                 "drupal": {
                     "version": "1.x-dev",
-                    "datestamp": "1760450066",
+                    "datestamp": "1760690708",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
