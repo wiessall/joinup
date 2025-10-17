@@ -35,11 +35,7 @@
                   <!-- HEADER END-->
 
                   <!-- WELCOME START-->
-                  <tr>
-                    <td style="height: 10px;">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td class="text-left">
+                    <td class="text-left" style="padding: 10px 0;">
                       <span class="fs-lg fw-bold">{% trans %}Dear {{ receiver_name }},{% endtrans %}</span>
                     </td>
                   </tr>
@@ -54,15 +50,12 @@
                   <!-- MESSAGES END-->
 
                   <tr>
-                    <td>
+                    <td style="padding: 20px 0 10px 0;">
                       {% trans %}
                         <b>Kind regards,</b><br/> <small>The Portal Support Team</small>
                       {% endtrans %}
                     </td>
                   </tr>
-                  <tr>
-                    <td style="height: 30px;">
-                  <tr>
                 </tbody>
               </table>
             </td>
@@ -80,10 +73,7 @@
           <tr>
             <td style="height: 10px;" class="bg-primary">&nbsp;</td>
           </tr>
-          <tr>
-            <td style="height: 30px;">
-          <tr>
-            <td class="fs-sm text-center">
+            <td class="fs-sm" style="padding: 10px 0;">
               <p>{% trans %}
                 You received this email because you opted in for Interoperable Europe Portal digest messages.<br/>
                 <a href="{{ subscription_url }}">Manage</a> your subscription notifications or <a href="{{ unsubscription_url }}">unsubscribe</a> from all.<br/>
