@@ -17,7 +17,7 @@ bundle: custom_page
 label: Abstract
 description: 'Short description text of the document, displayed in content tiles and search results.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }
