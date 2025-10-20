@@ -1,0 +1,22 @@
+uuid: a3bead7c-1513-4120-b03c-114a1114b858
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.json_map
+id: paragraph.json_map.status
+field_name: status
+entity_type: paragraph
+bundle: json_map
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
