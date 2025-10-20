@@ -1,0 +1,18 @@
+uuid: 8ac1704b-f1f6-49be-95cf-a27a85e7bd54
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.json_map
+id: paragraph.json_map.created
+field_name: created
+entity_type: paragraph
+bundle: json_map
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created
