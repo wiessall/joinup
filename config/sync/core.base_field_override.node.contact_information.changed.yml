@@ -1,0 +1,18 @@
+uuid: 8e8c0457-6d2a-4fb7-9b9a-6503ddb594f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+id: node.contact_information.changed
+field_name: changed
+entity_type: node
+bundle: contact_information
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed
