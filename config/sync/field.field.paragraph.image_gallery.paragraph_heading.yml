@@ -12,7 +12,7 @@ bundle: image_gallery
 label: Heading
 description: 'Heading that will be rendered in a <h2> tag, on top of the row on small devices and on top of right column on medium and big devices.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }
