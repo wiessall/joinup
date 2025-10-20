@@ -17,6 +17,7 @@ content:
     weight: 0
     region: content
     settings:
+      headerlevel: '3'
       class: ''
       frameborder: '0'
       scrolling: auto
@@ -30,3 +31,4 @@ content:
 hidden:
   created: true
   status: true
+  translation: true

@@ -9,8 +9,8 @@ dependencies:
     - field.field.paragraph.configurable_listing.paragraph_heading
     - paragraphs.paragraphs_type.configurable_listing
   module:
-    - custom_page
     - link
+    - search_api_field
 id: paragraph.configurable_listing.default
 targetEntityType: paragraph
 bundle: configurable_listing
@@ -48,3 +48,4 @@ content:
 hidden:
   created: true
   status: true
+  translation: true
