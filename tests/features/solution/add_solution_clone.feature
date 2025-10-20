@@ -6,7 +6,7 @@ Feature: Test adding solutions with clone data.
 
   Scenario: Moderator can add a solution with the right language availabilities.
     Given I am logged in as a moderator
-    When I go to the homepage of the "The portal" collection
+    When I go to the homepage of the "Portal support" collection
     And I click "Add solution" in the plus button menu
     Then the "Language availability" tagify autocomplete should contain the following options:
       | Bulgarian   |
