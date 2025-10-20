@@ -52,6 +52,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $this->sanitizeLogAlertsSettings();
     $this->sanitizeEmailConfirmerData();
     $this->sanitizeDownloadEventData();
+    $this->sanitizePrivateMessageEntityData();
   }
 
   /**
@@ -65,6 +66,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $messages[] = dt('Sanitize log alerts settings.');
     $messages[] = dt('Sanitize email confirmer data.');
     $messages[] = dt('Sanitize download event data.');
+    $messages[] = dt('Sanitize private messages data.');
   }
 
   /**
@@ -124,6 +126,15 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   }
 
   /**
+   * Sanitizes private message entity related data.
+   */
+  protected function sanitizePrivateMessageEntityData(): void {
+    $this->sanitizeEntityFieldsData('private_message', [
+      'message',
+    ]);
+  }
+
+  /**
    * Truncates the given table.
    */
   #[CLi\Argument(name: 'tableName', description: 'The table name to truncate.')]
@@ -173,6 +184,18 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       $entityStorageSchemaSql = $this->keyValue->get('entity.storage_schema.sql');
       $fieldSchema = $entityStorageSchemaSql->get("$entityType.field_schema_data.$fieldName", []);
       foreach (array_keys($fieldSchema) as $fieldTable) {
+        if (in_array($fieldType, ['text_long', 'text_with_summary'])) {
+          if (isset($fieldSchema[$fieldTable]['fields'][$fieldName . '__value'])) {
+            // For base fields, the column names use double underscores.
+            foreach ($updateFields as $columnName => $value) {
+              // Let's also not make this unreadable in the UI. Limit to 128
+              // chars.
+              $updateFields[str_replace('_', '__', $columnName)] = substr($value, 0, 128);
+              unset($updateFields[$columnName]);
+            }
+          }
+        }
+
         $this->db->update($fieldTable)->fields($updateFields)->execute();
         $this->logger()->success(dt('@table_name table sanitized.', ['@table_name' => $fieldTable]));
       }
