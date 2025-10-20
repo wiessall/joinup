@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_api\Plugin\rest\resource;
 
-use Drupal\comment\Entity\Comment;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\comment\Entity\Comment;
 use Drupal\rest\Attribute\RestResource;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -29,24 +29,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 )]
 class DiscussionCommentResource extends ResourceBase {
 
-  /**
-   * Constructs a DiscussionCommentResource object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param array $serializer_formats
-   *   The available serialization formats.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The current user.
-   */
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -72,6 +54,13 @@ class DiscussionCommentResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('current_user'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function permissions(): array {
+    return ['post comments'];
   }
 
   /**
@@ -101,6 +90,13 @@ class DiscussionCommentResource extends ResourceBase {
       throw new BadRequestHttpException('Missing required fields: subject and comment_body are required.');
     }
 
+    // Validate text format.
+    $allowed_formats = ['plain_text', 'basic_html'];
+    $format = $data['format'] ?? 'plain_text';
+    if (!in_array($format, $allowed_formats, TRUE)) {
+      throw new BadRequestHttpException('Invalid text format. Allowed formats: ' . implode(', ', $allowed_formats));
+    }
+
     // Load the discussion node.
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $discussion = $nodeStorage->load($discussion_id);
@@ -114,9 +110,9 @@ class DiscussionCommentResource extends ResourceBase {
       throw new BadRequestHttpException('The specified node is not a discussion.');
     }
 
-    // Check if user has access to view the discussion.
-    if (!$discussion->access('view', $this->currentUser)) {
-      throw new AccessDeniedHttpException('You do not have access to this discussion.');
+    // Check if user has permission to view the discussion.
+    if (!$discussion->access('view', $this->currentUser->getAccount())) {
+      throw new AccessDeniedHttpException('You do not have permission to view this discussion.');
     }
 
     // Check if the discussion allows comments.
@@ -125,28 +121,26 @@ class DiscussionCommentResource extends ResourceBase {
     }
 
     try {
+      // Get the comment type from field definition.
+      $field_definition = $discussion->getFieldDefinition('field_replies');
+      $comment_type = $field_definition->getSetting('comment_type');
+
       // Create the comment.
       $comment = Comment::create([
         'entity_type' => 'node',
         'entity_id' => $discussion_id,
         'field_name' => 'field_replies',
         'uid' => $this->currentUser->id(),
-        'comment_type' => 'comment',
+        'comment_type' => $comment_type,
         'subject' => $data['subject'],
         'comment_body' => [
           'value' => $data['comment_body'],
-          'format' => $data['format'] ?? 'plain_text',
+          'format' => $format,
         ],
         'status' => 1,
       ]);
 
       $comment->save();
-
-      $this->logger->notice('Comment @cid created on discussion @nid via API by user @uid.', [
-        '@cid' => $comment->id(),
-        '@nid' => $discussion_id,
-        '@uid' => $this->currentUser->id(),
-      ]);
 
       return new ModifiedResourceResponse([
         'message' => 'Comment created successfully.',
@@ -155,7 +149,7 @@ class DiscussionCommentResource extends ResourceBase {
       ], 201);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error creating comment via API: @message', [
+      $this->logger->error('Unexpected error creating comment via API: @message', [
         '@message' => $e->getMessage(),
       ]);
       throw new BadRequestHttpException('Failed to create comment: ' . $e->getMessage());
