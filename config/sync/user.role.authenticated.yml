@@ -104,7 +104,6 @@ permissions:
   - 'create polls'
   - 'create remote_video media'
   - 'create terms in tags'
-  - 'debug simple_oauth tokens'
   - 'delete own comments'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
