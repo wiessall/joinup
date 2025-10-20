@@ -5,7 +5,7 @@ Feature: Minimal install clone testing.
 
     Given I am an anonymous user
     When I visit "/search?keys=joinup&f[0]=type:collection"
-    Then I should see the "The Portal" tile
+    Then I should see the "Portal support" tile
     And I should see "The European Commission provides this common place"
 
   Scenario: Assert that the cache backend is set to memcache.
@@ -17,8 +17,8 @@ Feature: Minimal install clone testing.
     When I visit "/interoperable_solutions"
     Then I should see the link "Solutions"
     And "Solutions" should be the active item in the "Navigation bar" region
-    Then I visit "/collection/portal"
-    And no menu items should be active in the "Navigation bar" region
+    Then I visit "/collection/portal-support"
+    And "Support centre > Portal support" should be the active items in the "Navigation bar" region
 
   @javascript
   Scenario: Assert publiccode.yml page.
