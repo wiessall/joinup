@@ -25,6 +25,7 @@ dependencies:
     - node.type.news
     - node.type.owner
     - oauth_client.type.authenticated_user_api
+    - rest.resource.discussion_comment
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
@@ -47,7 +48,9 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rest
     - search_api_autocomplete
+    - simple_oauth
     - sitewide_alert
     - sparql_endpoint
     - state_machine_permissions
@@ -101,6 +104,7 @@ permissions:
   - 'create polls'
   - 'create remote_video media'
   - 'create terms in tags'
+  - 'debug simple_oauth tokens'
   - 'delete own comments'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
@@ -162,6 +166,7 @@ permissions:
   - 'post comments'
   - 'propose collection content'
   - 'request authenticated_user_api oauth2 client'
+  - 'restful post discussion_comment'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
