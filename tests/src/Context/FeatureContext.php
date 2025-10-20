@@ -1388,7 +1388,9 @@ class FeatureContext extends RawDrupalContext {
 
     if (preg_match('/^(\d+)(st|nd|rd|th)$/', $buttonIdentifier, $found)) {
       $index = (int) $found[1];
-      $button = $row->find('xpath', "//input[@type='submit'][$index]");
+      $buttons = $row->findAll('xpath', "//input[@type='submit']");
+      $position = $index - 1;
+      $button = $buttons[$position] ?? NULL;
     }
     else {
       $button = $row->findButton($buttonIdentifier);
