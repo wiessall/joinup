@@ -131,7 +131,7 @@ class EifContext extends RawDrupalContext {
         case 'Model':
         case 'Principle':
         case 'Solution type':
-          $value = $this->explodeCommaSeparatedStepArgument($row[1]);
+          $value = $this->explodeDelimitedSeparatedStepArgument($row[1]);
           break;
 
         case 'Recommendation':
