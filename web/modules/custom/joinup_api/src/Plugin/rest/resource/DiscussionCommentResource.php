@@ -91,8 +91,8 @@ class DiscussionCommentResource extends ResourceBase {
     }
 
     // Validate text format.
-    $allowed_formats = ['plain_text', 'basic_html'];
-    $format = $data['format'] ?? 'plain_text';
+    $allowed_formats = ['simple_text', 'simple_html'];
+    $format = $data['format'] ?? 'simple_text';
     if (!in_array($format, $allowed_formats, TRUE)) {
       throw new BadRequestHttpException('Invalid text format. Allowed formats: ' . implode(', ', $allowed_formats));
     }
@@ -133,7 +133,7 @@ class DiscussionCommentResource extends ResourceBase {
         'uid' => $this->currentUser->id(),
         'comment_type' => $comment_type,
         'subject' => $data['subject'],
-        'comment_body' => [
+        'field_body' => [
           'value' => $data['comment_body'],
           'format' => $format,
         ],
