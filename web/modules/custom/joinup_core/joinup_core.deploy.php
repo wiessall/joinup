@@ -7,9 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-
 /**
  * Fix webform configuration validation errors and clean control characters.
  */
@@ -135,10 +132,12 @@ function joinup_core_deploy_200702(): string {
 }
 
 /**
- * Delete invalid track_usage queue items.
+ * Recreate invalid track_usage queue items.
  */
 function joinup_core_deploy_200703(array &$sandbox): string {
   $db = \Drupal::database();
+  $queue = \Drupal::queue('track_usage');
+  $queue->createQueue();
   if (!isset($sandbox['item_ids'])) {
     $sandbox['item_ids'] = $db->select('queue', 'q')
       ->fields('q', ['item_id'])
@@ -146,13 +145,16 @@ function joinup_core_deploy_200703(array &$sandbox): string {
       ->execute()
       ->fetchCol();
     $sandbox['processed'] = 0;
-    $sandbox['deleted'] = 0;
+    $sandbox['recreated'] = 0;
     $sandbox['total'] = count($sandbox['item_ids']);
-    $sandbox['content_entity_type_ids'] = array_keys(
-      array_filter(
-        \Drupal::entityTypeManager()->getDefinitions(),
-        fn (EntityTypeInterface $entityType): bool => $entityType instanceof ContentEntityTypeInterface,
-      ),
+    $bundle_info = \Drupal::service('entity_type.bundle.info')->getAllBundleInfo();
+    $sandbox['bundles'] = array_merge(
+      ...array_map(
+        static fn (string $entity_type_id, array $bundles) =>
+        array_fill_keys(array_keys($bundles), $entity_type_id),
+        array_keys($bundle_info),
+        $bundle_info
+      )
     );
   }
   $itemIds = array_splice($sandbox['item_ids'], 0, 1000);
@@ -162,22 +164,31 @@ function joinup_core_deploy_200703(array &$sandbox): string {
     ->condition('q.item_id', $itemIds, 'IN');
   foreach ($itemsQuery->execute()->fetchAll() as $item) {
     $unserializedData = unserialize($item->data, ['allowed_classes' => FALSE]);
+    $entityType = $sandbox['bundles'][$unserializedData['type']] ?? NULL;
     if (
-      !in_array($unserializedData['type'], $sandbox['content_entity_type_ids']) ||
+      $entityType ||
       !array_key_exists('revision', $unserializedData) ||
       !is_bool($unserializedData['revision']) ||
       !is_array($unserializedData['ids'])
     ) {
       $db->delete('queue')->condition('item_id', $item->item_id)->execute();
-      $sandbox['deleted']++;
+      $queue->createItem(
+        [
+          'type' => $entityType,
+          'ids' => [$unserializedData['ids']],
+          'revision' => 'loadMultiple',
+          'config' => 'file_visibility',
+        ]
+      );
+      $sandbox['recreated']++;
     }
   }
   $sandbox['processed'] += count($itemIds);
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
   return sprintf(
-    "Processed %s 'track_usage' queue item from %s. Deleted %s items.",
+    "Processed %s 'track_usage' queue item from %s. Recreated %s items.",
     $sandbox['processed'],
     $sandbox['total'],
-    $sandbox['deleted'],
+    $sandbox['recreated'],
   );
 }
