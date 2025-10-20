@@ -57,13 +57,6 @@ class DiscussionCommentResource extends ResourceBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function permissions(): array {
-    return ['post comments'];
-  }
-
-  /**
    * Responds to POST requests.
    *
    * Creates a new comment on a discussion node.
