@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_file
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -17,14 +16,15 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.keywords
     - field.field.node.document.og_audience
+    - field.field.node.document.resources
     - field.field.node.document.spatial_coverage
     - node.type.document
   module:
     - comment
+    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
-    - file_url
     - layout_paragraphs
     - link
     - options
@@ -52,7 +52,7 @@ third_party_settings:
         speed: fast
     group_attachment:
       children:
-        - field_file
+        - resources
       label: Attachment
       parent_name: ''
       region: content
@@ -77,7 +77,7 @@ content:
   anonymous_comment_links:
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
   field_comments:
     type: comment_default
@@ -87,16 +87,6 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 6
-    region: content
-  field_file:
-    type: file_url_default
-    label: hidden
-    settings:
-      mode: link
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: fieldset
-    weight: 5
     region: content
   field_licence:
     type: entity_reference_label
@@ -168,6 +158,15 @@ content:
       template_suggestion:
         template_suggestion: no_wrappers
     weight: 5
+    region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 9
     region: content
   share_link:
     settings: {  }

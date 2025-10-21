@@ -32,13 +32,22 @@
     .choice-title,
     .choice-result {
       &.selected {
-        color: color.adjust($success, $lightness: -15%);
+        color: $success;
         margin-inline: $spacer;
       }
       &.not-selected {
         color: $primary;
         margin-inline: $spacer;
       }
+    }
+    .percent {
+      display: inline-block;
+      width: 100%;
+    }
+    dl {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
     }
     .bar {
       position: absolute;

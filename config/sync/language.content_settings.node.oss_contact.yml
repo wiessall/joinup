@@ -1,0 +1,11 @@
+uuid: 2f6c5ca7-10e1-4309-8051-8e3da90df76c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contact
+id: node.oss_contact
+target_entity_type_id: node
+target_bundle: oss_contact
+default_langcode: site_default
+language_alterable: false

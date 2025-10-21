@@ -149,7 +149,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title        | release number | release notes         | is version of    |
       | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge |
     And distribution content:
-      | title   | description          | solution         | release      | access url         |
+      | title   | description          | solution         | release      | resources          |
       | Distro1 | Alphabet & CLR       | Under The Bridge |              | http://example.com |
       | Distro2 | Colors & ABC & colrs |                  | Summer of 69 | http://example.com |
     And custom_page content:

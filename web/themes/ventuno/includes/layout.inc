@@ -176,7 +176,7 @@ function ventuno_preprocess_container(array &$variables): void {
   if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-actions') {
     // Target only the submit input of the collections members overview page.
     if (isset($variables['element']['submit']['#id']) && $variables['element']['submit']['#id'] === 'edit-submit-og-members-overview') {
-      $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-3';
+      $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-4';
     }
   }
 }

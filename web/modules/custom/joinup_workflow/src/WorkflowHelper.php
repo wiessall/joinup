@@ -6,6 +6,8 @@ namespace Drupal\joinup_workflow;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -79,6 +81,21 @@ class WorkflowHelper implements WorkflowHelperInterface {
     }
 
     return $transitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkTransitionAccess(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): AccessResultInterface {
+    $transitions = $this->getAvailableTransitions($entity, $account);
+
+    $access = !empty($transitions)
+      ? AccessResult::allowed()
+      : AccessResult::forbidden('No available transitions for the entity.');
+
+    return $access
+      ->addCacheContexts(['user.permissions', 'user'])
+      ->addCacheableDependency($entity);
   }
 
   /**

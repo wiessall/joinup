@@ -1,0 +1,19 @@
+uuid: bcd7a795-713e-44dd-916e-4f260f83fa2c
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - paragraphs
+id: paragraph.remote_file_url
+field_name: remote_file_url
+entity_type: paragraph
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -69,8 +69,12 @@
         </tr>
         <tr>
           <td class="p-3 pt-0">
-            <p class="fw-bold">Dear {{ message.recipient_name }},</p>
-            <p class="mb-3"><a href="{{ message.group_landing_page }}" target="_blank">{{ message.group_title }}</a> {{ message.group_type }} has an announcement for its members:</p>
+            <p class="fw-bold">{{ 'Dear @recipient_name,'|t({'@recipient_name': message.recipient_name}) }}</p>
+            <p class="mb-3">{{ '<a href=":group_url" target="_blank">:group_title</a> :group_type has an announcement for its members:'|t({
+              ':group_url': message.group_landing_page,
+              ':group_title': message.group_title,
+              ':group_type': message.group_type
+            }) }}</p>
           </td>
         </tr>
         <tr class="bg-light">
@@ -94,8 +98,11 @@
         </tr>
         <tr>
           <td class="p-3 pt-0">
-            <p class="fw-bold">Kind regards,</p>
-            <p class="fw-bold">The <span class="text-primary">{{ message.group_title }}</span> {{ message.group_type }} team</p>
+            <p class="fw-bold">{{ 'Kind regards,'|t }}</p>
+            <p class="fw-bold">{{ 'The <span class="text-primary">:group_title</span> :group_type team'|t({
+              ':group_title': message.group_title,
+              ':group_type': message.group_type
+            }) }}</p>
           </td>
         </tr>
       </tbody>
@@ -111,11 +118,19 @@
         </tr>
         <tr class="bg-light">
           <td class="p-3 fs-sm text-center">
-            {% trans %}
-              <p>You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of {{ message.group_title }} {{ message.group_type }}, you agreed to receive information sent to you by the {{ message.group_title }} {{ message.group_type }} owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725).</p>
-              <p>In case you do not want to receive such e-mails, you can <a href="{{ message.recipient_unsubscribe }}" target="_blank">unsubscribe</a> from group announcement notifications or manage all your subscription notifications from the <a href="{{ message.recipient_subscriptions }}" target="_blank">user subscriptions</a> page.</p>
-              <p>This is an unmonitored email address, please do not reply.<br> You can contact directly {{ message.group_title }} {{ message.group_type }} via the <a href="{{ message.group_landing_page }}" target="_blank">Overview</a> page.</p>
-            {% endtrans %}
+              <p>{{ 'You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of :group_title :group_type, you agreed to receive information sent to you by the :group_title :group_type owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725).'|t({
+                ':group_title': message.group_title,
+                ':group_type': message.group_type
+              }) }}</p>
+              <p>{{ 'In case you do not want to receive such e-mails, you can <a href=":unsubscribe_url" target="_blank">unsubscribe</a> from group announcement notifications or manage all your subscription notifications from the <a href=":subscriptions_url" target="_blank">user subscriptions</a> page.'|t({
+                ':unsubscribe_url': message.recipient_unsubscribe,
+                ':subscriptions_url': message.recipient_subscriptions
+              }) }}</p>
+              <p>{{ 'This is an unmonitored email address, please do not reply.<br> You can contact directly :group_title :group_type via the <a href=":group_url" target="_blank">Overview</a> page.'|t({
+                ':group_title': message.group_title,
+                ':group_type': message.group_type,
+                ':group_url': message.group_landing_page
+              }) }}</p>
           </td>
         </tr>
       </tfoot>

@@ -64,20 +64,16 @@
 // In the Spotlight
 .block-views-blockin-the-spotlight-block {
   @include full-width-color-to-top(
-    $primary,
+    $gray-200,
     $white,
     8rem,
     3rem,
-    $primary,
+    $gray-200,
     0,
     3rem
   );
 
   padding-bottom: $spacer * 2; // 32px
-
-  .layout-block__title--in_the_spotlight-block {
-    color: $white;
-  }
 }
 
 // Latest News
@@ -150,6 +146,7 @@
   margin-bottom: $spacer * 3; // 48px
   .explore-block-title {
     margin-bottom: $spacer * 1.5; // 24px
+    padding-top: $spacer * 0.75;
     padding-bottom: $spacer * 1.5; // 24px
     text-transform: uppercase;
     border-bottom: 1px solid rgba($primary, 0.1);

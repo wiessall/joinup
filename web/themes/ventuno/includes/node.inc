@@ -108,25 +108,6 @@ function ventuno_preprocess_node(array &$variables): void {
     $variables['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
   }
 
-  // Add a variable indicating the attachment file type on documents.
-  if ($bundle === 'document' && !$node->get('field_file')->isEmpty()) {
-    /** @var \Drupal\file\FileInterface $file */
-    $file = $node->get('field_file')->first()->entity;
-
-    // The document could reference an orphaned file entity, so only proceed if
-    // we actually have a file.
-    if (!empty($file)) {
-      $is_remote = \Drupal::service('file_url.handler')->isRemote($file);
-
-      if (!$is_remote) {
-        $variables['extension'] = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
-      }
-      else {
-        $variables['extension'] = t('External');
-      }
-    }
-  }
-
   // Hide the white area (main content block) from the EIF Toolbox.
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);

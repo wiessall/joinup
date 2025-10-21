@@ -13,6 +13,5 @@
   'text-center',
 ] %}
 <div{{ attributes.addClass(classes) }}>
-  <a href="{{ url('cas.login') }}">Login</a> or
-  <a href="{{ url('user.register') }}">create an account</a> to comment.
+  {{ '<a href=":login_url">Login</a> or <a href=":register_url">create an account</a> to comment.'|t({':login_url': path('cas.login'), ':register_url': path('user.register')}) }}
 </div>

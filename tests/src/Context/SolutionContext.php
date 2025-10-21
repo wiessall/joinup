@@ -102,7 +102,7 @@ class SolutionContext extends RawDrupalContext {
 
     // For reference fields, we need to convert the value to the entity ID.
     if ($fieldDefinitions[$fieldName]->getType() === 'entity_reference') {
-      $values = $this->explodeCommaSeparatedStepArgument($fieldValue);
+      $values = $this->explodeDelimitedSeparatedStepArgument($fieldValue);
       $fieldValue = [];
       foreach ($values as $value) {
         $targetType = $fieldDefinitions[$fieldName]->getSetting('target_type');
@@ -195,31 +195,6 @@ class SolutionContext extends RawDrupalContext {
         );
         $entity->unpin($group);
       }
-    }
-  }
-
-  /**
-   * Deletes a solution document's files.
-   *
-   * @param string $solution
-   *   The name of the solution.
-   *
-   * @When I delete documents from :solution solution
-   */
-  public function deleteDocumentsFromSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('node', $solution);
-
-    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
-    $fileHandler = \Drupal::service('file_url.handler');
-
-    $values = $solution->get('documentation')->getValue();
-    foreach ($values as $value) {
-      $file = $fileHandler::urlToFile($value['target_id']);
-      if (!$file || $fileHandler::isRemote($file)) {
-        continue;
-      }
-
-      $file->delete();
     }
   }
 

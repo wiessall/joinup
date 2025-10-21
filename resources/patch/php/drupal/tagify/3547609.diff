@@ -1,0 +1,22 @@
+diff --git a/config/schema/tagify.schema.yml b/config/schema/tagify.schema.yml
+index e496550d9539d1373f0fb311d50d532104fe7661..eedf91554dea63bba31f1d22f5d3df09353d0130 100644
+--- a/config/schema/tagify.schema.yml
++++ b/config/schema/tagify.schema.yml
+@@ -9,7 +9,7 @@ field.widget.settings.tagify_entity_reference_autocomplete_widget:
+       type: integer
+       label: 'Maximum number of autocomplete suggestions'
+     placeholder:
+-      type: string
++      type: label
+       label: 'Placeholder'
+     suggestions_dropdown:
+       type: integer
+@@ -45,7 +45,7 @@ field.widget.settings.tagify_select_widget:
+       type: integer
+       label: 'Maximum number of autocomplete suggestions'
+     placeholder:
+-      type: string
++      type: label
+       label: 'Placeholder'
+     cardinality:
+       type: integer

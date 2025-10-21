@@ -1,29 +1,38 @@
 @import "../partials/core";
 
-.language-picker {
-  .ventuno-popover__trigger {
+.block-language-picker {
+  position: relative;
+  z-index: 504;
+  #language-picker__button {
     &::before {
       @include get-bootstrap-icon("globe");
     }
   }
-}
-.language-picker__link {
-  &--active {
-    text-decoration: underline;
-    text-decoration-color: currentColor !important;
-  }
-  &:focus,
-  &:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 4px;
-  }
-  .language-picker__code {
-    color: $gray-800;
-  }
-}
-.ventuno-popover__close {
-  padding: 0.6rem 0.4rem 0.2rem;
-  &::before {
-    @include get-bootstrap-icon("x-lg", $gray-800, 1.4em);
+  .dropdown-menu {
+    width: calc(100vw - var(--bs-gutter-x));
+    max-width: 30rem;
+    .language-picker__link {
+      display: block;
+      padding: 0.1rem 0;
+      .language-picker__code {
+        display: inline-block;
+        width: 1.4em;
+        color: $gray-800;
+      }
+      &--active {
+        text-decoration: underline;
+        text-decoration-color: currentColor !important;
+      }
+    }
+    &::after {
+      position: absolute;
+      top: -11px;
+      right: var(--bs-gutter-x);
+      content: "";
+      filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.2));
+      border-right: 12px solid transparent;
+      border-bottom: 12px solid $white;
+      border-left: 14px solid transparent;
+    }
   }
 }

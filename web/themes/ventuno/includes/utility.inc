@@ -7,8 +7,10 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
@@ -65,7 +67,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
     $is_oss_solution_tile ||
     $variables['view_mode'] === 'view_mode_tile_horizontal' ||
-    // @todo Align or remove in ISAICP-9497.
     $variables['view_mode'] === 'spotlight' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
@@ -97,7 +98,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $variables['info']['icon'] = 'calendar-event';
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
-      '@label' => t('Last update'),
+      '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
@@ -110,6 +111,15 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
   // Iterate over entity bundles for case-specific data.
   switch ($entity->bundle()) {
+    case 'assessment_report':
+      if (!empty($entity->submission->entity)) {
+        $sid = $entity->submission->entity->id();
+        $submission_data = $entity->submission->entity->getData();
+        $variables['label'] = isset($submission_data['short_title']) ? $submission_data['short_title'] . ' #' . $sid : $entity->label();
+      }
+      $variables['extra_data']['submitter'] = $entity->organization->value;
+      break;
+
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
       if ($changed_time = $entity->getLatestUpdateTime()) {
@@ -190,27 +200,26 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
-      $status = $variables['elements']['process_status'][0]['#plain_text'] ?? 'No status';
-      switch ($status) {
+      // Map process status to icons.
+      $status_icon_map = [
+        'Completed' => 'check-circle',
+        'Deprecated' => 'file-x',
+        'Under development' => 'clock-history',
+        'Withdrawn' => 'patch-exclamation',
+      ];
 
-        case 'Completed':
-          $icon_id = 'check-circle';
-          break;
-
-        case 'Deprecated':
-          $icon_id = 'file-x';
-          break;
-
-        case 'Under development':
-          $icon_id = 'clock-history';
-          break;
-
-        case 'Withdrawn':
-          $icon_id = 'patch-exclamation';
-          break;
+      $untranslated_status = 'No status';
+      $status = t('No status');
+      if (Element::getVisibleChildren($variables['elements']['process_status'])) {
+        $entity = $variables['elements']['process_status'][0]['#entity'];
+        $untranslated_status = $entity->getUntranslated()->getName();
+        $status = $entity->getName();
       }
+
+      $icon_id = $status_icon_map[$untranslated_status] ?? 'question-lg';
+
       $variables['extra_data'][] = [
-        'icon' => $icon_id ?? 'question-lg',
+        'icon' => $icon_id,
         'label' => $status,
       ];
       break;

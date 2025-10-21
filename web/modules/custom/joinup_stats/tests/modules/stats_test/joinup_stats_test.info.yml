@@ -1,8 +1,0 @@
-type: module
-name: 'Statistics test'
-description: 'Used to test Joinup Statistics.'
-core_version_requirement: "^10.4 || ^11"
-package: Testing
-dependecies:
-  - joinup:joinup_stats
-  - drupal:node

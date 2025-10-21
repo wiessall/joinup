@@ -5,13 +5,13 @@ dependencies:
   config:
     - core.entity_view_mode.node.compact
     - field.field.node.release.description
-    - field.field.node.release.documentation
     - field.field.node.release.field_state
     - field.field.node.release.keywords
     - field.field.node.release.language
     - field.field.node.release.og_audience
     - field.field.node.release.process_status
     - field.field.node.release.release_number
+    - field.field.node.release.resources
     - field.field.node.release.solution_data
     - field.field.node.release.spatial_coverage
     - node.type.release
@@ -51,7 +51,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 4
@@ -80,7 +79,6 @@ content:
     weight: 1
     region: content
 hidden:
-  documentation: true
   field_state: true
   keywords: true
   langcode: true
@@ -91,6 +89,7 @@ hidden:
   process_status: true
   published_at: true
   report: true
+  resources: true
   search_api_excerpt: true
   solution_data: true
   spatial_coverage: true

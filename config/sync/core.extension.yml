@@ -7,6 +7,7 @@ module:
   antibot: 0
   autologout: 0
   babel: 0
+  babel_content_entity: 0
   babel_menu_link_content: 0
   better_exposed_filters: 0
   blazy: 0
@@ -72,7 +73,6 @@ module:
   field_permissions: 0
   field_ui: 0
   file: 0
-  file_url: 0
   file_visibility: 0
   file_visibility_track_usage: 0
   filter: 0
@@ -125,6 +125,7 @@ module:
   joinup_notification: 0
   joinup_oss_catalogue: 0
   joinup_paragraphs: 0
+  joinup_pin: 0
   joinup_poll: 0
   joinup_private_message: 0
   joinup_publication_date: 0
@@ -238,7 +239,6 @@ module:
   search_api_solr_autocomplete: 0
   search_api_spellcheck: 0
   serialization: 0
-  simple_block: 0
   simple_multistep: 0
   simple_sitemap: 0
   sitewide_alert: 0
@@ -294,7 +294,6 @@ module:
   paragraphs: 11
   publication_date: 99
   joinup: 1000
-  joinup_debug: 1001
 theme:
   ventuno: 0
   oe_bootstrap_theme: 0

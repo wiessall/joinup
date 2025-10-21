@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Ventuno theme override for language picker with popover functionality.
+ * Ventuno theme override for language picker with dropdown.
  *
  * Available variables:
  * - current_language: The current language object.
@@ -10,24 +10,13 @@
 #}
 {{ attach_library('ventuno/language-picker') }}
 
-{% set popover_content %}
-  <div class="language-picker__grid row">
-    {% for language in languages %}
-    <div class="language-picker__item col-6 col-sm-4 pb-1 d-inline-block">
-      <a href="{{ language.url }}"{{ language.attributes }}>
-        <span class="language-picker__code">{{ language.code|upper }}</span>
-        <span class="language-picker__name">{{ language.name }}</span>
-      </a>
-    </div>
+<button id="language-picker__button" class="btn btn-link bg-white icon-link d-inline-flex px-3" type="button" data-bs-toggle="dropdown" aria-label="{{ 'Toggle language picker'|t }}">{{ current_language.code|upper }}</button>
+<div class="dropdown-menu dropdown-menu-end p-3" role="menu" aria-labelledby="language-picker__button">
+  <ul class="list-unstyled mb-0 row row-cols-2 row-cols-md-3">
+  {% for language in languages %}
+    <li class="col">
+      <a href="{{ language.url }}"{{ language.attributes }}><span class="language-picker__code">{{ language.code|upper }}</span> {{ language.name }}</a>
+    </li>
   {% endfor %}
-  </div>
-{% endset %}
-
-{{ pattern('popover', {
-  trigger_text: current_language.code|upper,
-  content: popover_content,
-  popover_classes: ['language-picker'],
-  trigger_classes: ['btn', 'btn-link', 'icon-link'],
-  placement: 'bottom',
-  show_close_button: true,
-}) }}
+  </ul>
+</div>

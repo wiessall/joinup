@@ -12,14 +12,6 @@ joinup_solution.collection_solution.add:
         bundle:
           - collection
 
-joinup_solution.collection_solution.tca:
-  path: '/solution-terms-of-agreement'
-  defaults:
-    _controller: '\Drupal\joinup_solution\Controller\TermsAndConditionsController::display'
-    _title: 'Terms of agreement'
-  requirements:
-    _permission: 'access content'
-
 joinup_solution.change_collection:
   path: '/node/{node}/change-collection'
   defaults:

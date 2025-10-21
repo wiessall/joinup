@@ -1,0 +1,27 @@
+uuid: af5da623-0322-4b33-81ea-e39e8798fa39
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.remote_file_url
+    - paragraphs.paragraphs_type.resource_link
+  module:
+    - link
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: paragraph.resource_link.remote_file_url
+field_name: remote_file_url
+entity_type: paragraph
+bundle: resource_link
+label: 'Remote file URL'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 16
+field_type: link

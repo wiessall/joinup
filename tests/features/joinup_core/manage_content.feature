@@ -280,7 +280,7 @@ Feature:
       | title     | release number | release notes | is version of |
       | Release 1 | 1.0            | Release notes | Solution 1    |
     And distribution content:
-      | title          | description | release   | access url         |
+      | title          | description | release   | resources          |
       | Distribution 1 | Description | Release 1 | http://example.com |
 
     When I am logged in as a moderator

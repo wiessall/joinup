@@ -37,13 +37,14 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Sample body.   |
       | field_body:format | content_editor |
+    And I attach the file "logo.png" to "files[resources_0_subform_resource_file_0]"
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" options from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                             |
-      | subject   | Interoperable Europe Portal: Content has been published                                                                                                              |
-      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: http |
+      | recipient | CC owner                                                                                                                                                            |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                             |
+      | body      | Dear CC, CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: |
 
     # Test 'update' operation.
     When I am logged in as "CC member"
@@ -52,7 +53,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                |
       | subject   | Interoperable Europe Portal: Content has been published                                                 |
-      | body      | CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
+      | body      | Dear CC, CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the edit form of the "CC notify post request changes" document

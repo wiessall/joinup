@@ -190,10 +190,32 @@ interface GroupInterface extends
   public function isSoleGroupOwner(int $uid): bool;
 
   /**
-   * Checks if the user has at least one role with the given OG permission.
+   * Gets the access result for a user's group permission check.
    *
-   * This is a simple wrapper around OgMembershipInterface::hasPermission() and
-   * should not be relied on for access checks. Use ::getGroupAccess() instead.
+   * This method provides a complete access result object that includes not only
+   * whether the user has the permission, but also proper cache metadata and
+   * dependencies. Use this method when you need to combine access results,
+   * add additional cache dependencies, or perform other operations that require
+   * the full AccessResultInterface.
+   *
+   * For simple boolean permission checks, use hasGroupPermission() instead.
+   *
+   * @param int|string $uid
+   *   The ID of the user to check.
+   * @param string $permission
+   *   The permission string.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   An access result object with proper metadata and cache dependencies.
+   *   The result will be:
+   *   - AccessResult::allowed() if the user has the permission
+   *   - AccessResult::neutral() if the user has no membership or lacks the
+   *     permission
+   */
+  public function getGroupPermissionAccess(int|string $uid, string $permission): AccessResultInterface;
+
+  /**
+   * Checks if the user has at least one role with the given OG permission.
    *
    * @param int|string $uid
    *   The ID of the user to check.
@@ -201,8 +223,7 @@ interface GroupInterface extends
    *   The permission string.
    *
    * @return bool
-   *   TRUE if the permission is present in at least one of the user's roles in
-   *   the group.
+   *   TRUE if the user has the permission, FALSE otherwise.
    */
   public function hasGroupPermission(int|string $uid, string $permission): bool;
 

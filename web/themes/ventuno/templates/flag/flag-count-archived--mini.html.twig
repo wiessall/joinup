@@ -36,6 +36,9 @@
   {% set count = flagcount(flag, flaggable) %}
 
 {# Set nofollow to prevent search bots from crawling anonymous flag links #}
-{% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('aria-label', 'Archived content can not be liked'|t) %}
+{% set attributes = attributes
+  .setAttribute('rel', 'nofollow')
+  .setAttribute('aria-label', 'Archived content can not be liked'|t)
+  .setAttribute('role', 'button') %}
 
 <a{{ attributes.addClass(link_classes) }}><svg class="bi icon--xs me-1"><use xlink:href="{{ bcl_icon_path }}#{{ action == 'unflag' ? 'hand-thumbs-up-fill' : 'hand-thumbs-up' }}"></use></svg>{{- count -}}</a>

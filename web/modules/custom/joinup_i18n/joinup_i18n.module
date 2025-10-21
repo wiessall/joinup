@@ -10,6 +10,16 @@ declare(strict_types=1);
 use Drupal\Core\Template\Attribute;
 
 /**
+ * Implements hook_install_tasks_alter().
+ */
+function joinup_i18n_install_tasks_alter(array &$tasks, array $install_state): void {
+  // Do not download UI and config translations at installation time.
+  unset($tasks['install_config_download_translations']);
+  unset($tasks['install_import_translations']);
+  unset($tasks['install_finish_translations']);
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function joinup_i18n_module_implements_alter(array &$implementations, string $hook): void {
@@ -53,6 +63,11 @@ function joinup_i18n_babel_translation_type_info_alter(array &$definitions): voi
   // By default, disable all Babel plugins. They can be enabled on a
   // case-by-case basis.
   foreach ($definitions as $pluginId => $definition) {
+    if ($pluginId === 'content_entity:taxonomy_term') {
+      // Keep the taxonomy terms as declared so that taxonomy terms are enabled
+      // if set.
+      continue;
+    }
     $definitions[$pluginId]['status'] = FALSE;
   }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b44d25866eff7e2d24fd88651b2266b",
+    "content-hash": "2e08834d750ff49861352d1eb86530cc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2129,17 +2129,17 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha4",
+            "version": "1.0.0-alpha6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha4"
+                "reference": "1.0.0-alpha6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha4.zip",
-                "reference": "1.0.0-alpha4",
-                "shasum": "6091ca7ea64cb6805413bf1dde5f5576a14370cd"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha6.zip",
+                "reference": "1.0.0-alpha6",
+                "shasum": "7ec1e402122698c9d14e04f4e979b78c3896a217"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
@@ -2152,8 +2152,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha4",
-                    "datestamp": "1757321782",
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1759248213",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -5473,26 +5473,26 @@
         },
         {
             "name": "drupal/image_library_widget",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/image_library_widget.git",
-                "reference": "2.0.0-alpha3"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/image_library_widget-2.0.0-alpha3.zip",
-                "reference": "2.0.0-alpha3",
-                "shasum": "45902b1672789fea81bfa6528efc145b0e979267"
+                "url": "https://ftp.drupal.org/files/projects/image_library_widget-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "60bba353b29de6e8e8933234a193b697e494d1c3"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^10.2 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha3",
-                    "datestamp": "1749809070",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1757347741",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -5510,16 +5510,24 @@
                     "email": "clau.cristea@gmail.com"
                 },
                 {
+                    "name": "andras_szilagyi",
+                    "homepage": "https://www.drupal.org/user/1217938"
+                },
+                {
                     "name": "claudiu.cristea",
                     "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
                 },
                 {
                     "name": "huzooka",
                     "homepage": "https://www.drupal.org/user/281301"
                 },
                 {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
                 }
             ],
             "description": "Provides a widget allowing users to upload or choose an existing image from a library.",
@@ -5874,17 +5882,17 @@
         },
         {
             "name": "drupal/json_field",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/json_field.git",
-                "reference": "8.x-1.4"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/json_field-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "422ec5a48bb0a36d6c506bc51a38e0b85ceba69d"
+                "url": "https://ftp.drupal.org/files/projects/json_field-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "ea1fa6c9a516ede9ea381489aaeaa50d65c5317c"
             },
             "require": {
                 "drupal/core": "^10 || ^11",
@@ -5902,8 +5910,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1729185545",
+                    "version": "8.x-1.5",
+                    "datestamp": "1758734220",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8783,28 +8791,28 @@
         },
         {
             "name": "drupal/schema_social_media_posting",
-            "version": "1.0.0-alpha3",
+            "version": "1.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/schema_social_media_posting.git",
-                "reference": "1.0.0-alpha3"
+                "reference": "1.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/schema_social_media_posting-1.0.0-alpha3.zip",
-                "reference": "1.0.0-alpha3",
-                "shasum": "8e342b89bb15fbc5228516636322011e3366dfe7"
+                "url": "https://ftp.drupal.org/files/projects/schema_social_media_posting-1.0.0-alpha4.zip",
+                "reference": "1.0.0-alpha4",
+                "shasum": "4babbe7aa74a3bd3de155d9ffc68bb33238291e4"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/core": "^8 || ^9 || ^10 || ^11",
                 "drupal/schema_article": "*",
                 "drupal/schema_metatag": "^2.3 || ^3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha3",
-                    "datestamp": "1688053127",
+                    "version": "1.0.0-alpha4",
+                    "datestamp": "1757350703",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -8821,7 +8829,7 @@
                     "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
-                    "name": "idimopoulos",
+                    "name": "dimilias",
                     "homepage": "https://www.drupal.org/user/2578708"
                 },
                 {
@@ -9768,30 +9776,30 @@
         },
         {
             "name": "drupal/symfony_mailer_lite",
-            "version": "1.0.7",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/symfony_mailer_lite.git",
-                "reference": "1.0.7"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/symfony_mailer_lite-1.0.7.zip",
-                "reference": "1.0.7",
-                "shasum": "8c0e9846353568f93601eb67e35f5e74458f9f48"
+                "url": "https://ftp.drupal.org/files/projects/symfony_mailer_lite-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "50f1b02fcad01c902818a0df02cba59cc6b8f47a"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
+                "drupal/core": "^10.1 || ^11",
                 "drupal/mailsystem": "^4.4",
                 "html2text/html2text": "^4.0.1",
-                "symfony/mailer": "^5.3 || ^6.0",
+                "symfony/mailer": "^6.4 || ^7.1",
                 "tijsverkoyen/css-to-inline-styles": "^2.2"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.7",
-                    "datestamp": "1720800748",
+                    "version": "2.0.3",
+                    "datestamp": "1750948870",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9869,26 +9877,26 @@
         },
         {
             "name": "drupal/theme_rule",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/theme_rule.git",
-                "reference": "1.1.0"
+                "reference": "1.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/theme_rule-1.1.0.zip",
-                "reference": "1.1.0",
-                "shasum": "9dde47d185a79a1d1a4d508e2b7d275c02b81ca9"
+                "url": "https://ftp.drupal.org/files/projects/theme_rule-1.2.0.zip",
+                "reference": "1.2.0",
+                "shasum": "a2679b21bad3e56ce7c3c83bff53f0786df5e144"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9.2 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.1.0",
-                    "datestamp": "1664898105",
+                    "version": "1.2.0",
+                    "datestamp": "1757348093",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9910,18 +9918,18 @@
                     "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
-                    "name": "huzooka",
-                    "homepage": "https://www.drupal.org/user/281301"
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
                 },
                 {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
+                    "name": "huzooka",
+                    "homepage": "https://www.drupal.org/user/281301"
                 }
             ],
             "description": "Shows pages using different themes based on site builder's defined conditions",
             "homepage": "https://www.drupal.org/project/theme_rule",
             "support": {
-                "source": "https://https://git.drupalcode.org/project/theme_rule",
+                "source": "https://git.drupalcode.org/project/theme_rule",
                 "issues": "https://www.drupal.org/project/issues/theme_rule"
             }
         },
@@ -13617,6 +13625,21 @@
             "time": "2025-08-13T20:13:15+00:00"
         },
         {
+            "name": "npm-asset/chart.js",
+            "version": "4.5.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chart.js/-/chart.js-4.5.0.tgz"
+            },
+            "require": {
+                "npm-asset/kurkle--color": ">=0.3.0,<0.4.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/dompurify",
             "version": "3.2.6",
             "dist": {
@@ -13676,6 +13699,18 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/kurkle--color",
+            "version": "0.3.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
             },
             "type": "npm-asset",
             "license": [

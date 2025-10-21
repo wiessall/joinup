@@ -211,6 +211,8 @@ drupal:
         // Disable Piwik API calls until ISAICP-6944.
         // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6944
         $settings['joinup.parse_cached_computed_field'] = FALSE;
+        // Allow the sendmail command.
+        $settings['mailer_sendmail_commands'][] = '/usr/sbin/sendmail -bs';
       Configuration: |
         $settings['config_exclude_modules'] = [
           'action',

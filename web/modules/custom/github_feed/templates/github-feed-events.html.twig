@@ -18,49 +18,94 @@
   <div class="github-feed-activity-stream-item__body__content">
     <div class="github-feed-activity-stream-item__body__content__event">
       {% if item.type == 'IssueCommentEvent' %}
-        {{ item.payload.action }} {{ 'comment'|t }} {{ item.payload.issue.number }} {{ 'on'|t }}
-        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action comment :number on <a href=":issue_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':number': item.payload.issue.number,
+          ':issue_url': item.payload.issue.html_url,
+          ':title': item.payload.issue.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'IssuesEvent' %}
-        {{ item.payload.action }} {{ 'issue'|t }} {{ 'on'|t }}
-        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action issue on <a href=":issue_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':issue_url': item.payload.issue.html_url,
+          ':title': item.payload.issue.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'PullRequestEvent' %}
-        {{ item.payload.action }} {{ 'pull request'|t }} {{ 'on'|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action pull request on <a href=":pr_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':pr_url': item.payload.pull_request.html_url,
+          ':title': item.payload.pull_request.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'PullRequestReviewEvent' %}
-        {{ item.payload.action }} {{ 'pull request review'|t }} {{ 'on'|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action pull request review on <a href=":pr_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':pr_url': item.payload.pull_request.html_url,
+          ':title': item.payload.pull_request.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'PushEvent' %}
-        {{ item.payload.commits|length }} {{ 'commits'|t }} {{ 'on'|t }}
-        <a href="{{ item.payload.commits.0.url }}">{{ item.payload.commits.0.sha|slice(0, 7) }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':count commits on <a href=":commit_url">:sha</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':count': item.payload.commits|length,
+          ':commit_url': item.payload.commits.0.url,
+          ':sha': item.payload.commits.0.sha|slice(0, 7),
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'WatchEvent' %}
-        {{ 'User'|t }} {{ item.actor.login }} {{ 'starred the repository'|t }}.
+        {{ 'User :username starred the repository.'|t({':username': item.actor.login}) }}
       {% elseif item.type == 'ForkEvent' %}
-        {{ 'User'|t }} {{ item.actor.login }} {{ 'forked the repository'|t }}.
+        {{ 'User :username forked the repository.'|t({':username': item.actor.login}) }}
       {% elseif item.type == 'CreateEvent' %}
-        {{ item.payload.ref_type }} created: {{ item.payload.ref }}
+        {{ ':ref_type created: :ref'|t({
+          ':ref_type': item.payload.ref_type,
+          ':ref': item.payload.ref
+        }) }}
       {% elseif item.type == 'DeleteEvent' %}
-        {{ item.payload.ref_type }} deleted: {{ item.payload.ref }}
+        {{ ':ref_type deleted: :ref'|t({
+          ':ref_type': item.payload.ref_type,
+          ':ref': item.payload.ref
+        }) }}
       {% elseif item.type == 'PullRequestReviewCommentEvent' %}
-        {{ item.payload.action }} comment on pull request {{ 'on'|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action comment on pull request on <a href=":pr_url">:title</a> by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':pr_url': item.payload.pull_request.html_url,
+          ':title': item.payload.pull_request.title,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'CommitCommentEvent' %}
-        {{ item.payload.action }} comment on commit {{ item.payload.comment.commit_id|slice(0, 7) }} {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action comment on commit :commit_id by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':commit_id': item.payload.comment.commit_id|slice(0, 7),
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'ReleaseEvent' %}
-        {{ item.payload.action }} release {{ item.payload.release.tag_name }} {{ 'by'|t }}
-        <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
+        {{ ':action release :tag_name by <a href=":actor_url">:actor</a>.'|t({
+          ':action': item.payload.action,
+          ':tag_name': item.payload.release.tag_name,
+          ':actor_url': item.actor.url,
+          ':actor': item.actor.login
+        }) }}
       {% elseif item.type == 'MemberEvent' %}
-        {{ item.payload.action }} {{ 'user'|t }} {{ item.payload.member.login }} {{ 'was added to the repository'|t }}.
+        {{ ':action user :username was added to the repository.'|t({
+          ':action': item.payload.action,
+          ':username': item.payload.member.login
+        }) }}
       {% elseif item.type == 'PublicEvent' %}
-        Repository made public.
+        {{ 'Repository made public.'|t }}
       {% elseif item.type == 'GollumEvent' %}
-        {{ item.payload.pages|length }} wiki page(s) {{ item.payload.pages.0.action }} on the repository.
+        {{ ':count wiki page(s) :action on the repository.'|t({
+          ':count': item.payload.pages|length,
+          ':action': item.payload.pages.0.action
+        }) }}
       {% else %}
         {{ 'Unrecognized event type'|t }}
       {% endif %}

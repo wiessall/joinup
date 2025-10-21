@@ -24,6 +24,12 @@ elements: |-
       '#type': processed_text
       '#text': '<p>This section collects general information on your interoperability assessment.</p>'
       '#format': content_editor
+    short_title:
+      '#type': textfield
+      '#title': 'Short title'
+      '#description': '<p>This will be used as the title of the published report. Maximum 200 characters.</p>'
+      '#maxlength': 200
+      '#required': true
     report_provider:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'

@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Identifies regular user.
+ *
+ * @todo Drop this language negotiator in ISAICP-10215.
  */
 #[LanguageNegotiation(
   id: self::METHOD_ID,

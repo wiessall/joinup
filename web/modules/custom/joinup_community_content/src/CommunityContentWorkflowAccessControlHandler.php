@@ -116,14 +116,13 @@ readonly class CommunityContentWorkflowAccessControlHandler {
     }
 
     if ($group = $content->getGroup()) {
-      $membership = $group->getMembership($account->id());
-      if ($group->hasGroupPermission($account->id(), 'view any unpublished content')) {
-        return AccessResult::allowed()
-          ->addCacheableDependency($membership);
+      $view_any_access = $group->getGroupPermissionAccess($account->id(), 'view any unpublished content');
+      if ($view_any_access->isAllowed()) {
+        return $view_any_access;
       }
-      elseif ($isOwner && $group->hasGroupPermission($account->id(), 'view own unpublished content')) {
-        return AccessResult::allowed()
-          ->addCacheableDependency($membership);
+      $view_own_access = $group->getGroupPermissionAccess($account->id(), 'view own unpublished content');
+      if ($isOwner && $view_own_access->isAllowed()) {
+        return $view_own_access;
       }
     }
 

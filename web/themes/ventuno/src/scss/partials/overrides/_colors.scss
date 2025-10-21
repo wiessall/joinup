@@ -1,7 +1,7 @@
 @use "sass:color";
 
 // Ventuno theme colors
-$brand: #1073de;
+$brand: #0f6fd7;
 $primary: #143b76;
 $secondary: color.adjust(
   $brand,
@@ -24,7 +24,7 @@ $primary-darker: color.adjust(
 ); // #113264
 
 $link-color: $brand;
-$success: #18bf80;
+$success: #108457;
 $warning: #eba843;
 $danger: #eb3434;
 $gray-100: #fafbfc;

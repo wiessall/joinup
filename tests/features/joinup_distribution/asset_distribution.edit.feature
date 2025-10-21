@@ -23,7 +23,7 @@ Feature: Asset distribution editing.
       | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
-      | title                      | description        | licence | access url | release               | published at | modification date |
+      | title                      | description        | licence | resources  | release               | published at | modification date |
       | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | 2019-11-19   | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |
@@ -68,7 +68,7 @@ Feature: Asset distribution editing.
     When I fill in "Title" with "Asset distribution example revised"
     # Set a non-HTTP protocol remote URL.
     And I press "Remove"
-    And I set a remote URL "ftp://example.com/file.txt" to "Access URL"
+#    And I set a remote URL "ftp://example.com/file.txt" to "Access URL"
     And I press "Update"
     Then I should see the heading "Asset distribution example revised"
     And the following email should have been sent:

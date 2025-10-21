@@ -50,6 +50,7 @@ Feature: Publication date works as expected on RDF entities
     Then I should see the heading "Add Distribution"
     When I fill in "Title" with "Distribution published at test"
     And I select "Licence" from "Licence"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     Then I should see the heading "Distribution published at test"
     And the published_at field in "Distribution published at test" distribution should not be empty

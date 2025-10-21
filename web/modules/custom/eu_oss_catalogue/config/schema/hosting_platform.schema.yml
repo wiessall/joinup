@@ -33,7 +33,7 @@ eu_oss_catalogue.hosting_platform.*:
             type: string
             label: URL
           title:
-            type: string
+            type: label
             label: Title
             nullable: true
     description:

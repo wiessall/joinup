@@ -6,6 +6,7 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -115,6 +116,85 @@ trait FileTrait {
         $values[$field_name] = $this->createFile($value)->get('uri')->value;
       }
     }
+  }
+
+  /**
+   * Lists all files in the fixtures folder.
+   *
+   * @return array
+   *   An array of file names found in the fixtures folder.
+   */
+  protected function listFilesInFixtures(): array {
+    $filesPath = rtrim(realpath(
+      $this->getMinkParameter('files_path')
+    ), DIRECTORY_SEPARATOR);
+    $files = [];
+    if (is_dir($filesPath)) {
+      $dir = new \DirectoryIterator($filesPath);
+      foreach ($dir as $fileInfo) {
+        if ($fileInfo->isFile()) {
+          $files[] = $fileInfo->getFilename();
+        }
+      }
+    }
+    return $files;
+  }
+
+  /**
+   * Creates a paragraph for as a resource paragraph.
+   *
+   * @param \stdClass $node
+   *   The node object containing the resource information.
+   * @param string $fieldName
+   *   The name of the field to create the paragraph for, defaults to
+   *   'resources'.
+   * @param bool $random
+   *   Whether to create a random file paragraph or not. This can be used when
+   *   the goal is to create a random file paragraph for testing purposes.
+   *
+   * @return \Drupal\paragraphs\Entity\Paragraph
+   *   The created paragraph.
+   */
+  protected function createResourceFileParagraph(\stdClass $node, string $fieldName = 'resources', bool $random = FALSE): ?Paragraph {
+    // Ensure that the value is not empty or a random value is requested.
+    assert(!empty($node->{$fieldName}) || $random);
+
+    $availableFiles = $this->listFilesInFixtures();
+    $type = 'remote';
+    if ($random) {
+      // If random is true, select a random file from the available files.
+      $fileName = $availableFiles[array_rand($availableFiles)];
+      $type = 'local';
+    }
+    elseif (!empty($node->{$fieldName}) && in_array($node->{$fieldName}, $availableFiles)) {
+      // If the field is not empty, use the provided value.
+      $fileName = $node->{$fieldName};
+      $type = 'local';
+    }
+
+    if ($type !== 'remote') {
+      $file = $this->createFile($fileName);
+      $paragraph = Paragraph::create([
+        'type' => 'resource_file',
+        'resource_file' => [
+          [
+            'target_id' => $file->id(),
+          ],
+        ],
+      ]);
+    }
+    else {
+      $paragraph = Paragraph::create([
+        'type' => 'resource_link',
+        'remote_file_url' => $node->resources,
+      ]);
+    }
+    $paragraph->save();
+    $node->{"resources:target_id"} = $paragraph->id();
+    $node->{"resources:target_revision_id"} = $paragraph->getRevisionId();
+    unset($node->resources);
+
+    return $paragraph;
   }
 
 }

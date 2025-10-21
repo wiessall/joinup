@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -22,6 +21,7 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
+    - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -29,10 +29,10 @@ dependencies:
     - image.style.thumbnail
     - node.type.solution
   module:
+    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
-    - file_url
     - joinup_slick
     - layout_builder
     - link
@@ -85,6 +85,7 @@ third_party_settings:
         - logo
         - short_id
         - documentation
+        - resources
         - related_solutions
         - process_status
         - landing_page
@@ -139,7 +140,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 7
@@ -151,26 +151,6 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
-    region: content
-  documentation:
-    type: file_url_default
-    label: inline
-    settings:
-      mode: link
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: inline
     weight: 2
     region: content
   domain:
@@ -188,7 +168,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 4
@@ -217,7 +196,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 5
@@ -251,7 +229,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 7
@@ -302,6 +279,15 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: inline
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
   short_id:
     type: string
     label: inline
@@ -325,7 +311,6 @@ content:
       joinup_slick:
         preset: ''
         field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: inline
     weight: 7

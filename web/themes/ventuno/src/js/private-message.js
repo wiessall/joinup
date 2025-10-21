@@ -1,7 +1,8 @@
 /**
  * @file
  * Show the notification with counter in the link for private messages page.
- * Also hides the inbox toggle button if the inbox container is empty.
+ * Hides the inbox toggle button if the inbox container is empty.
+ * Adds aria-labels for better accessibility.
  */
 ((Drupal, once, $) => {
   Drupal.behaviors.privateMessage = {
@@ -47,6 +48,15 @@
         if (threadContainer && threadContainer.matches(":empty")) {
           toggle?.classList.add("hidden-toggle");
         }
+      });
+
+      // Add aria-label to thread links for accessibility.
+      once(
+        "thread-link-aria-label",
+        ".private-message-inbox-thread-link",
+        context,
+      ).forEach((link) => {
+        link.setAttribute("aria-label", Drupal.t("Read thread"));
       });
     },
   };

@@ -1,0 +1,122 @@
+uuid: 4aae1be1-f922-4a99-b4df-69ec07aa9801
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.resources
+    - node.type.release
+    - paragraphs.paragraphs_type.resource_file
+    - paragraphs.paragraphs_type.resource_link
+  module:
+    - entity_reference_revisions
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.release.resources
+field_name: resources
+entity_type: node
+bundle: release
+label: Documentation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      resource_file: resource_file
+      resource_link: resource_link
+    negate: 0
+    target_bundles_drag_drop:
+      accordion:
+        weight: 31
+        enabled: false
+      accordion_item:
+        weight: 32
+        enabled: false
+      block:
+        weight: 33
+        enabled: false
+      call_to_action:
+        weight: 34
+        enabled: false
+      carousel:
+        weight: 35
+        enabled: false
+      configurable_listing:
+        weight: 36
+        enabled: false
+      content_listing:
+        weight: 37
+        enabled: false
+      entity_reference:
+        weight: 38
+        enabled: false
+      events_calendar:
+        weight: 39
+        enabled: false
+      github_feed:
+        weight: 40
+        enabled: false
+      heading:
+        weight: 41
+        enabled: false
+      iframe:
+        weight: 42
+        enabled: false
+      image:
+        weight: 43
+        enabled: false
+      image_gallery:
+        weight: 44
+        enabled: false
+      json_map:
+        weight: 45
+        enabled: false
+      layout:
+        weight: 46
+        enabled: false
+      poll:
+        weight: 47
+        enabled: false
+      quote:
+        weight: 48
+        enabled: false
+      resource_file:
+        weight: 30
+        enabled: true
+      resource_link:
+        weight: 49
+        enabled: true
+      simple_paragraph:
+        weight: 50
+        enabled: false
+      social_media:
+        weight: 51
+        enabled: false
+      table_of_contents:
+        weight: 52
+        enabled: false
+      testimony:
+        weight: 53
+        enabled: false
+      text:
+        weight: 54
+        enabled: false
+      tile:
+        weight: 55
+        enabled: false
+      tiles:
+        weight: 56
+        enabled: false
+      video:
+        weight: 57
+        enabled: false
+      webform:
+        weight: 58
+        enabled: false
+field_type: entity_reference_revisions

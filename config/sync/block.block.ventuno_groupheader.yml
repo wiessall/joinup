@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup
     - joinup_core
+    - joinup_group
   theme:
     - ventuno
 _core:
@@ -19,7 +19,7 @@ settings:
   id: group_header_block
   label: 'Group header'
   label_display: '0'
-  provider: joinup
+  provider: joinup_group
   context_mapping:
     og: '@og.context:og'
 visibility: {  }

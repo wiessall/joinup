@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.distribution.access_url
     - field.field.node.distribution.description
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
@@ -13,11 +12,12 @@ dependencies:
     - field.field.node.distribution.process_status
     - field.field.node.distribution.release
     - field.field.node.distribution.representation_technique
+    - field.field.node.distribution.resources
     - node.type.distribution
   module:
     - digital_size_formatter
+    - entity_reference_revisions
     - field_group
-    - joinup_distribution
     - options
     - template_suggestion
     - text
@@ -50,18 +50,6 @@ targetEntityType: node
 bundle: distribution
 mode: default
 content:
-  access_url:
-    type: tracked_hosted_file_download
-    label: hidden
-    settings:
-      hosted_files_title: Download
-      remote_files_title: External
-      show_remote_files: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 3
-    region: content
   description:
     type: text_default
     label: hidden
@@ -122,6 +110,15 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 8
+    region: content
+  resources:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   download_count: true

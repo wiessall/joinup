@@ -146,7 +146,7 @@ class JoinupContext extends RawDrupalContext {
     if (!$entity) {
       throw new \Exception("No entity found with label $group_label");
     }
-    $roles = $this->explodeCommaSeparatedStepArgument($roles);
+    $roles = $this->explodeDelimitedSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
 
     // Check if a user with this role is already logged in.
@@ -192,7 +192,7 @@ class JoinupContext extends RawDrupalContext {
     if (!$entity) {
       throw new \Exception("No entity found with label $group_label");
     }
-    $roles = $this->explodeCommaSeparatedStepArgument($roles);
+    $roles = $this->explodeDelimitedSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
 
     $current_user = $this->getUserManager()->getCurrentUser();
@@ -318,7 +318,7 @@ class JoinupContext extends RawDrupalContext {
     $available_options = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    $options = $this->explodeCommaSeparatedStepArgument($options);
+    $options = $this->explodeDelimitedSeparatedStepArgument($options);
 
     if (array_intersect($options, $available_options) !== $options) {
       throw new \Exception("Options are not included in select.");
@@ -360,7 +360,7 @@ class JoinupContext extends RawDrupalContext {
     $available_options = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    $options = $this->explodeCommaSeparatedStepArgument($options);
+    $options = $this->explodeDelimitedSeparatedStepArgument($options);
 
     $intersection = array_intersect($available_options, $options);
 
@@ -405,7 +405,7 @@ class JoinupContext extends RawDrupalContext {
     }, $this->getSelectOptions($field));
     sort($availableOptions);
 
-    $options = $this->explodeCommaSeparatedStepArgument($options);
+    $options = $this->explodeDelimitedSeparatedStepArgument($options);
     sort($options);
 
     // The PHPUnit assertion will allow to understand easily which values are
@@ -460,7 +460,7 @@ class JoinupContext extends RawDrupalContext {
     $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    $options = $this->explodeCommaSeparatedStepArgument($options);
+    $options = $this->explodeDelimitedSeparatedStepArgument($options);
 
     Assert::assertEmpty(array_intersect($availableOptions, $options), "The '$select' select options include at least one of the given values.");
   }
@@ -478,7 +478,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertSelectContainsOptgroups($select, $optgroups): void {
     $field = $this->findSelect($select);
     $availableOptgroups = array_values($this->getSelectOptgroups($field));
-    $options = $this->explodeCommaSeparatedStepArgument($optgroups);
+    $options = $this->explodeDelimitedSeparatedStepArgument($optgroups);
 
     foreach ($options as $option) {
       Assert::assertContains($option, $availableOptgroups, "The '$select' select doesn't contain the option '$option''.", TRUE);
@@ -716,7 +716,7 @@ class JoinupContext extends RawDrupalContext {
       $environment = $scope->getEnvironment();
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
-      foreach ($context->explodeCommaSeparatedStepArgument($node->field_attachment) as $filename) {
+      foreach ($context->explodeDelimitedSeparatedStepArgument($node->field_attachment) as $filename) {
         if (strpos($filename, ':')) {
           preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
           if (empty($matches['filename'])) {
@@ -847,10 +847,8 @@ class JoinupContext extends RawDrupalContext {
     }
 
     // Handle file URL fields.
-    if (!empty($node->documentation)) {
-      $fileHandler = \Drupal::service('file_url.handler');
-      $file = $this->createFile($node->documentation);
-      $node->documentation = $fileHandler::fileToUrl($file);
+    if (!empty($node->resources)) {
+      $this->createResourceFileParagraph($node);
     }
   }
 
@@ -1201,7 +1199,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
-    $headings = $this->explodeCommaSeparatedStepArgument($headings);
+    $headings = $this->explodeDelimitedSeparatedStepArgument($headings);
 
     sort($headings);
     sort($tiles_in_page);
@@ -1437,7 +1435,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see the contextual link(s) :links in the :heading tile
    */
   public function assertContextualLinkPresentInTile($links, $heading): void {
-    $links = $this->explodeCommaSeparatedStepArgument($links);
+    $links = $this->explodeDelimitedSeparatedStepArgument($links);
     $element = $this->getTileByHeading($heading);
     $found_links = array_keys($this->findContextualLinkPaths($element));
 
@@ -1461,7 +1459,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should not see the contextual link(s) :links in the :heading tile
    */
   public function assertContextualLinkNotPresentInTile($links, $heading): void {
-    $links = $this->explodeCommaSeparatedStepArgument($links);
+    $links = $this->explodeDelimitedSeparatedStepArgument($links);
     $element = $this->getTileByHeading($heading);
     $found_links = array_keys($this->findContextualLinkPaths($element));
 
@@ -1509,7 +1507,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the following :count button(s) should be present :buttons
    */
   public function assertFormSubmitButtonsVisible($buttons, $count = NULL): void {
-    $buttons = $this->explodeCommaSeparatedStepArgument($buttons);
+    $buttons = $this->explodeDelimitedSeparatedStepArgument($buttons);
 
     $this->assertSubmitButtonsVisible($buttons, FALSE);
 
@@ -1534,7 +1532,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then (the following )buttons should not be present :buttons
    */
   public function assertButtonsNotVisible($buttons): void {
-    $buttons = $this->explodeCommaSeparatedStepArgument($buttons);
+    $buttons = $this->explodeDelimitedSeparatedStepArgument($buttons);
 
     $page = $this->getSession()->getPage();
     $found = [];
@@ -1799,7 +1797,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see the workflow buttons :buttons
    */
   public function assertWorkflowButtons(string $buttons): void {
-    $labels = $this->explodeCommaSeparatedStepArgument($buttons);
+    $labels = $this->explodeDelimitedSeparatedStepArgument($buttons);
     $this->assertSubmitButtonsVisible($labels);
   }
 
@@ -1835,27 +1833,6 @@ class JoinupContext extends RawDrupalContext {
       }
     }
     throw new ExpectationFailedException("The description $description was not found for the $label field.");
-  }
-
-  /**
-   * Checks that the description of the field with given label is not present.
-   *
-   * @param string $label
-   *   The label of the field to check.
-   * @param string $description
-   *   The description that is expected to be absent.
-   *
-   * @throws \Exception
-   *   Thrown when the field does not have a description.
-   *
-   * @Then I should not see the description :description for (the ):label( field)
-   */
-  public function assertNoFieldDescription($label, $description): void {
-    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
-    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    foreach ($elements as $element) {
-      Assert::assertNotEquals($description, trim($element->getText()));
-    }
   }
 
   /**
@@ -2052,42 +2029,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a certain link points to a specific path.
-   *
-   * Example: Then the link "Login" should point to "user/login"
-   *
-   * @param string $link
-   *   The text of the link.
-   * @param string $expected_href
-   *   The expected path the link should point to, without trailing slashes.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not found.
-   *
-   * @Then the link :link should point to :expected_href
-   */
-  public function assertLinkHref(string $link, string $expected_href): void {
-    $element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$element) {
-      throw new \Exception("The link '$link' was not found in the page.");
-    }
-
-    $expected_href = trim($expected_href, '/');
-    $actual_href = $element->getAttribute('href');
-
-    // Remove the leading base URL or base path from the link href.
-    $base_url = rtrim($this->getMinkParameter('base_url') ?? '', '/');
-    if (str_starts_with($actual_href, $base_url)) {
-      // Strip the URL base, the leading slash, the query string and the
-      // fragment.
-      $actual_href = ltrim(parse_url($actual_href, PHP_URL_PATH), '/');
-    }
-
-    Assert::assertSame($expected_href, $actual_href, "The link '$link' doesn't point to the expected path '$expected_href'.");
-  }
-
-  /**
    * Simulates picking of an autosuggestion value from a field.
    *
    * @param string $value
@@ -2180,40 +2121,18 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that no links marked as active are found in a certain region.
-   *
-   * @param string $region
-   *   The name of the region.
-   *
-   * @throws \Exception
-   *   Thrown when active links are found.
-   *
-   * @Then no menu items should be active in the :region region
-   */
-  public function assertNoActiveLinksInRegion($region): void {
-    $links = $this->findLinksMarkedAsActive($region);
-
-    if (!empty($links)) {
-      $labels = array_map(function ($link) {
-        /** @var \Behat\Mink\Element\NodeElement $link */
-        return $link->getText() . ' (' . $link->getAttribute('href') . ')';
-      }, $links);
-      throw new \Exception("No active links were expected in the '$region' region, but the following were found: " . implode(', ', $labels));
-    }
-  }
-
-  /**
    * Asserts that a specific link is marked as active in a certain region.
    *
    * @param string $text
-   *   The link text.
+   *   The link text. You can pass multiple links separated by '>' to
+   *   indicate more than one active items - can happen in multi-level menus.
    * @param string $region
    *   The name of the region.
    *
    * @throws \Exception
    *   Thrown when multiple or no links at all are found in the region.
    *
-   * @Then :text should be the active item in the :region region
+   * @Then :text should be the active item(s) in the :region region
    */
   public function assertActiveLinkInRegion($text, $region): void {
     $links = $this->findLinksMarkedAsActive($region);
@@ -2222,17 +2141,14 @@ class JoinupContext extends RawDrupalContext {
       throw new \Exception("No active links found in the '$region' region.");
     }
 
-    /** @var \Behat\Mink\Element\NodeElement[] $links */
-    if (count($links) > 1) {
-      $labels = array_map(function ($link) {
-        /** @var \Behat\Mink\Element\NodeElement $link */
-        return $link->getText() . ' (' . $link->getAttribute('href') . ')';
-      }, $links);
-      throw new \Exception("More than one active link found in '$region' region: " . implode(', ', $labels));
-    }
+    // In order to get the text from an anchor tag that has the is-active class
+    // right in it, and not a wrapper, we check both getText() and getHtml().
+    $foundLinks = array_map(fn ($link) => $link->getText() ?: $link->getHtml(), $links);
+    $expectedLinks = $this->explodeDelimitedSeparatedStepArgument($text, '>');
+    sort($foundLinks);
+    sort($expectedLinks);
 
-    $link = reset($links);
-    Assert::assertEquals($text, $link->getText());
+    Assert::assertSame($expectedLinks, $foundLinks, "The active links in the '$region' region do not match the expected ones.");
   }
 
   /**

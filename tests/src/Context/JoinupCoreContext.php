@@ -197,7 +197,7 @@ class JoinupCoreContext extends RawDrupalContext {
    * @Then the following button(s) should be disabled :fields
    */
   public function givenDisabledFields(string $fields): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $found = [];
     foreach ($fields as $field) {
       $element = $this->findDisabledField($field);
@@ -223,7 +223,7 @@ class JoinupCoreContext extends RawDrupalContext {
    * @Then the following fields should not be disabled :fields
    */
   public function givenNotDisabledFields(string $fields): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $found = [];
     foreach ($fields as $field) {
       $element = $this->findDisabledField($field);

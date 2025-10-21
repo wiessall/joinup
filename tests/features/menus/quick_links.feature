@@ -66,7 +66,6 @@ Feature: Test the visibility of the quick links menu.
     And I should not see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     And I should not see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     Given I am logged in as a moderator
@@ -75,7 +74,6 @@ Feature: Test the visibility of the quick links menu.
     And I should not see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     But I should see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     # Lets not test all links in a separate list of steps to save time.
@@ -86,14 +84,14 @@ Feature: Test the visibility of the quick links menu.
     And I click "Additional information"
     And I fill in the following:
       | Relevant website | http://www.example.com |
-    Then I upload the file "text.pdf" to "Upload a new file or enter a URL"
+    And I press "Upload file"
+    Then I attach the file "text.pdf" to "files[resources_0_subform_resource_file_0]"
     And I press "Confirm"
     And I press "Publish"
     Then I should see the text "Quick links"
     And I should see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     But I should not see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
      # Test that facilitators can see the contextual links
@@ -109,7 +107,6 @@ Feature: Test the visibility of the quick links menu.
     And I should see the following links:
       | Website link    |
       | Release history |
-      | Documentation   |
     And I should not see the contextual link "Edit menu" in the "Navigation menu" region
 
   @javascript

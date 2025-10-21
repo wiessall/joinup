@@ -54,7 +54,6 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
 
       if ($group->bundle() === 'solution') {
         $event->addMenuLink(Url::fromRoute('joinup_release.solution_release.overview', $parameters), 'Release history');
-        $event->addMenuLink(Url::fromRoute('joinup_menu.documentation_file', $parameters), 'Documentation');
       }
     }
   }

@@ -33,6 +33,7 @@ traversable:
     - entity_reference
     - image
     - image_gallery
+    - resource_file
     - simple_paragraph
     - testimony
     - tile

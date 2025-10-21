@@ -4,5 +4,5 @@ show_on_admin: false
 alert_styles: "danger|High\r\nwarning|Medium\r\nbrand|Low"
 display_order: ascending
 automatic_refresh: false
-refresh_interval: null
+refresh_interval: 0
 cache_max_age: 15

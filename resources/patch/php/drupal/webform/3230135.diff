@@ -1,0 +1,137 @@
+diff --git a/src/WebformSubmissionForm.php b/src/WebformSubmissionForm.php
+index 4073d1dd51df5dce4efa29e9c75807e5a2e06ba2..10c4d2fdb84841652c16199a461960d77c5abf77 100644
+--- a/src/WebformSubmissionForm.php
++++ b/src/WebformSubmissionForm.php
+@@ -170,6 +170,13 @@ class WebformSubmissionForm extends ContentEntityForm {
+    */
+   protected $sourceEntity;
+ 
++  /**
++   * The paragraph entity.
++   *
++   * @var \Drupal\paragraphs\ParagraphInterface
++   */
++  protected $paragraphEntity;
++
+   /**
+    * States API prefix.
+    *
+@@ -331,6 +338,7 @@ class WebformSubmissionForm extends ContentEntityForm {
+     if ($source_entity && $source_entity->getEntityTypeId() === 'paragraph') {
+       // Disable :clear suffix to prevent webform tokens from being removed.
+       $data = $this->tokenManager->replace($data, $source_entity, [], ['suffixes' => ['clear' => FALSE]], $this->bubbleableMetadata);
++      $this->paragraphEntity = $source_entity;
+       $source_entity = WebformSourceEntityManager::getMainSourceEntity($source_entity);
+     }
+     // Set source entity.
+@@ -343,7 +351,7 @@ class WebformSubmissionForm extends ContentEntityForm {
+     // submission form.
+     if (!in_array($this->operation, ['edit', 'edit_all', 'test'])) {
+       $token = $this->getRequest()->query->get('token');
+-      $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $source_entity);
++      $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $this->paragraphEntity ?: $this->sourceEntity);
+       if ($webform_submission_token) {
+         $entity = $webform_submission_token;
+         $data = $entity->getRawData();
+@@ -354,21 +362,21 @@ class WebformSubmissionForm extends ContentEntityForm {
+           // Allow multiple drafts to be restored using token.
+           // This allows the webform's public facing URL to be used instead of
+           // the admin URL of the webform.
+-          $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $source_entity, $account);
++          $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $this->paragraphEntity ?: $this->sourceEntity, $account);
+           $request_token = $this->requestStack->getCurrentRequest()->request->get('webform_submission_token');
+           if ($webform_submission_token && $webform_submission_token->isDraft()) {
+             $entity = $webform_submission_token;
+             $data = $entity->getRawData();
+           }
+           elseif ($request_token) {
+-            $webform_submission_token = $this->getStorage()->loadFromToken($request_token, $webform, $source_entity, $account);
++            $webform_submission_token = $this->getStorage()->loadFromToken($request_token, $webform, $this->paragraphEntity ?: $this->sourceEntity, $account);
+             if ($webform_submission_token && $webform_submission_token->isDraft()) {
+               $entity = $webform_submission_token;
+               $data = $entity->getRawData();
+             }
+           }
+         }
+-        elseif ($webform_submission_draft = $this->getStorage()->loadDraft($webform, $source_entity, $account)) {
++        elseif ($webform_submission_draft = $this->getStorage()->loadDraft($webform, $this->paragraphEntity ?: $this->sourceEntity, $account)) {
+           // Else load the most recent draft.
+           $entity = $webform_submission_draft;
+           $data = $entity->getRawData();
+@@ -1135,7 +1143,7 @@ class WebformSubmissionForm extends ContentEntityForm {
+       && (
+         $previous_draft_total = $this->getStorage()->getTotal(
+           $webform,
+-          $this->sourceEntity,
++          $this->paragraphEntity ?: $this->sourceEntity,
+           $this->currentUser(),
+           [
+             'in_draft' => TRUE,
+@@ -1148,7 +1156,7 @@ class WebformSubmissionForm extends ContentEntityForm {
+         $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFT_PENDING_MULTIPLE);
+       }
+       else {
+-        $draft_submission = $this->getStorage()->loadDraft($webform, $this->sourceEntity, $this->currentUser());
++        $draft_submission = $this->getStorage()->loadDraft($webform, $this->paragraphEntity ?: $this->sourceEntity, $this->currentUser());
+         if (!$draft_submission || $webform_submission->id() !== $draft_submission->id()) {
+           $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFT_PENDING_SINGLE);
+         }
+@@ -3114,6 +3122,16 @@ class WebformSubmissionForm extends ContentEntityForm {
+     return $this->sourceEntity;
+   }
+ 
++  /**
++   * Get the webform submission's paragraph entity.
++   *
++   * @return \Drupal\Core\Entity\EntityInterface
++   *   The webform submission's paragraph entity.
++   */
++  protected function getParagraphEntity() {
++    return $this->paragraphEntity;
++  }
++
+   /**
+    * Get the webform submission entity storage.
+    *
+diff --git a/tests/src/Functional/Paragraphs/WebformParagraphsDraftsTest.php b/tests/src/Functional/Paragraphs/WebformParagraphsDraftsTest.php
+index 6d5804396aafd73b7eadb259f809c227d2c2753d..f0300c141249da1f77cb195fb22963159f4fdd19 100644
+--- a/tests/src/Functional/Paragraphs/WebformParagraphsDraftsTest.php
++++ b/tests/src/Functional/Paragraphs/WebformParagraphsDraftsTest.php
+@@ -10,7 +10,7 @@ namespace Drupal\Tests\webform\Functional\Paragraphs;
+ class WebformParagraphsDraftsTest extends WebformParagraphsTestBase {
+ 
+   /**
+-   * Tests paragraphs draft (which are not working as expected).
++   * Tests paragraphs draft.
+    */
+   public function testParagraphsDrafts() {
+     $assert_session = $this->assertSession();
+@@ -28,11 +28,11 @@ class WebformParagraphsDraftsTest extends WebformParagraphsTestBase {
+     $this->submitForm($edit, 'Save Draft');
+     $assert_session->fieldValueEquals('textfield', '{draft_value}');
+ 
+-    // Check that draft is NOT loaded when the page is reloaded.
++    // Check that draft is loaded when the page is reloaded.
+     $this->drupalGet('/node/' . $node->id());
+-    $assert_session->responseNotContains('A partially-completed form was found. Please complete the remaining portions.');
+-    $assert_session->fieldValueEquals('textfield', '{default_value}');
+-    $assert_session->fieldValueNotEquals('textfield', '{draft_value}');
++    $assert_session->responseContains('A partially-completed form was found. Please complete the remaining portions.');
++    $assert_session->fieldValueNotEquals('textfield', '{default_value}');
++    $assert_session->fieldValueEquals('textfield', '{draft_value}');
+ 
+     /* ********************************************************************** */
+     // Inline (No Source).
+@@ -70,9 +70,9 @@ class WebformParagraphsDraftsTest extends WebformParagraphsTestBase {
+ 
+     // Check that draft is NOT loaded when the page is reloaded.
+     $this->drupalGet('/webform/webform_test_paragraphs', $options);
+-    $assert_session->responseNotContains('A partially-completed form was found. Please complete the remaining portions.');
+-    $assert_session->fieldValueEquals('textfield', '{default_value}');
+-    $assert_session->fieldValueNotEquals('textfield', '{draft_value}');
++    $assert_session->responseContains('A partially-completed form was found. Please complete the remaining portions.');
++    $assert_session->fieldValueNotEquals('textfield', '{default_value}');
++    $assert_session->fieldValueEquals('textfield', '{draft_value}');
+   }
+ 
+ }

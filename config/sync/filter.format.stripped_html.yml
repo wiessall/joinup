@@ -7,6 +7,7 @@ dependencies:
     - joinup_collection
     - editor
     - image
+    - joinup_html_stripper
     - linkit
     - markdown_easy
     - media
@@ -108,6 +109,12 @@ filters:
     weight: -42
     settings:
       filter_url_length: 72
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
+    status: true
+    weight: -38
+    settings: {  }
   linkit:
     id: linkit
     provider: linkit

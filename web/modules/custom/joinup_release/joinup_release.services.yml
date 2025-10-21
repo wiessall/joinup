@@ -21,4 +21,4 @@ services:
 
   Drupal\joinup_release\EventSubscriber\ReleaseGroupSubscriber: { }
 
-  Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber: { }
+  Drupal\joinup_release\EventSubscriber\ReleaseRdfSyncSubscriber: { }

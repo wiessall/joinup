@@ -78,7 +78,7 @@ class AdmsValidatorForm extends FormBase {
 
     $file = $this->uploadedFile();
     if (!$file) {
-      $form_state->setError($form['adms_file'], 'Please upload a valid RDF file.');
+      $form_state->setError($form['adms_file'], $this->t('Please upload a valid RDF file.'));
       return;
     }
 

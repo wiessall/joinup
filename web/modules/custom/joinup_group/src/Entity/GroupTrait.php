@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -146,12 +147,22 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function hasGroupPermission(int|string $uid, string $permission): bool {
+  public function getGroupPermissionAccess(int|string $uid, string $permission): AccessResultInterface {
     $membership_manager = $this->getMembershipManager();
     if ($membership = $membership_manager->getMembership($this, $uid)) {
-      return $membership->hasPermission($permission);
+      $has_permission = $membership->hasPermission($permission);
+      return AccessResult::allowedIf($has_permission)
+        ->addCacheableDependency($membership)
+        ->addCacheableDependency($this);
     }
-    return FALSE;
+    return AccessResult::neutral();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasGroupPermission(int|string $uid, string $permission): bool {
+    return $this->getGroupPermissionAccess($uid, $permission)->isAllowed();
   }
 
   /**

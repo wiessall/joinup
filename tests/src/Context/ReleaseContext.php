@@ -6,10 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\SearchTrait;
 
 /**
@@ -19,32 +17,7 @@ class ReleaseContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
   use EntityTrait;
-  use FileTrait;
   use SearchTrait;
-
-  /**
-   * Handles release specific fields.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The scope object.
-   *
-   * @BeforeNodeCreate
-   */
-  public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    if ($scope->getEntity()->type !== 'release') {
-      return;
-    }
-
-    if (!empty($node->documentation)) {
-      foreach ($node->documentation as &$filename) {
-        if (empty($filename)) {
-          continue;
-        }
-
-        $filename = [$this->createFile($filename)->id()];
-      }
-    }
-  }
 
   /**
    * Asserts that releases are shown in the page in the exact order.

@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - blazy
+    - joinup_html_stripper
     - markdown_easy
     - slick
 name: 'Text HTML'
@@ -43,6 +44,12 @@ filters:
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
+    status: true
+    weight: 10
+    settings: {  }
+  joinup_accessibility_filter:
+    id: joinup_accessibility_filter
+    provider: joinup_html_stripper
     status: true
     weight: 10
     settings: {  }

@@ -41,7 +41,7 @@ Feature: Add distribution through the UI
     And I should see the link "contacting us"
     When I fill in "Title" with "Linux x86-64 SDK"
     And I enter "<p>The full software development kit for systems based on the x86-64 architecture.</p>" in the "Description" wysiwyg editor
-    And I upload the file "test.zip" to "Access URL"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I select "ZIP" from "Format"
     And I select "Datalog" from "Representation technique"
     And I select "WTFPL" from "Licence"
@@ -102,10 +102,17 @@ Feature: Add distribution through the UI
     And I should see the link "contacting us"
     When I fill in "Title" with "Source tarball"
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
-    Given I upload the file "test.zip" to "Access URL"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I select "WTFPL" from "Licence"
     And I select "Datalog" from "Representation technique"
     And I press "Publish"
+    And I should see "Download test.zip"
+    And I go to the edit form of the "Source tarball" distribution
+    And I press "Edit"
+    And I fill in "resources[0][subform][resource_file][0][description]" with "My uploaded file"
+    And I press "Update"
+    And I should not see "Download test.zip"
+    And I should see "Download My uploaded file"
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
@@ -121,7 +128,6 @@ Feature: Add distribution through the UI
     And I should see the heading "Categorisation"
     And I should see the following lines of text:
       | The full source code.    |
-      | Format                   |
       | ZIP                      |
       | Representation technique |
       | Datalog                  |
@@ -134,8 +140,7 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
 
-    Given I select the radio button "Upload file"
-    Then I should see the description "Allowed types: 7z adf archimate asc aspx bak bat bin bmp bz2 cab cer cml conf css csv dbf deb dgn diff dmg doc docx dwg dxf eap ear ecw emf gdms gid gif gml gsb gvl gvp gvspkg gvspki gvt gz hdr hlp jar java jp2 jpeg jpg jpgw json jsonld jsp kml ksh lan log lograster mht msi odg odp ods odt ogv org ott out oxt patch path pdf pem pkg png pod pps ppt pptx prj ps rar raw rdf rmf rst rtf sbn sh shp shx sld sp0 sp1 spx sql sym tar tgz tif tiff torrent trig ttf ttl txt type vmdk vmx vrt vsd war wld wsdl xls xlsm xlsx xmi xml xsd xsl xslt zip." for the "Access URL" field
+    Then I should see "One file only. 32 MB limit. Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
 
   Scenario: Adding a distribution with a duplicate title
     Given solution content:
@@ -151,10 +156,12 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     When I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
+    And I attach the file "test.zip" to "files[resources_0_subform_resource_file_0]"
     And I press "Publish"
     Then I should see the inline form error message "A distribution with title MacOSX binary already exists in this release. Please choose a different title."
 
@@ -167,7 +174,7 @@ Feature: Add distribution through the UI
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
-      | title            | description        | access url | solution               |
+      | title            | description        | resources  | solution               |
       | Windows - source | Sample description | test.zip   | Solution random x name |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
@@ -203,7 +210,7 @@ Feature: Add distribution through the UI
   # Regression test for ticket ISAICP-9239
   Scenario Outline: Check distribution cannot be serialized to JsonLD object.
     Given distribution content:
-      | title   | description        | access url   | solution               |
+      | title   | description        | resources    | solution               |
       | <title> | Sample description | <access url> | Solution random x name |
     When I go to the "<title>" distribution
     And the page should contain the html text '<script type="application/ld+json">'
