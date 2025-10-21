@@ -1,0 +1,8 @@
+name: 'Joinup API'
+type: module
+description: 'Provides API integration for Joinup platform.'
+core_version_requirement: ^10 || ^11
+package: 'Custom'
+dependencies:
+  - simple_oauth:simple_oauth
+
