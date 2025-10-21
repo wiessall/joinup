@@ -25,7 +25,6 @@ dependencies:
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
-    - field.field.node.solution.translation
     - node.type.solution
     - responsive_image.styles.tile
   module:
@@ -122,5 +121,4 @@ hidden:
   solution_settings: true
   solution_subscribe: true
   solution_type: true
-  translation: true
   uri: true

@@ -181,6 +181,13 @@ content:
       info_label: ''
       parent_selection: 1
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 4
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   logo:
     type: image_library_widget
     weight: 4
@@ -255,6 +262,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  translation:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   website_url:
     type: link_default
     weight: 3
@@ -265,7 +277,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  langcode: true
   path: true
   promote: true
   published_at: true

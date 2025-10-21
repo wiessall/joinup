@@ -1,0 +1,22 @@
+uuid: 052faeda-1c4f-4ccd-a276-a8f60b80e365
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+id: node.contact_information.status
+field_name: status
+entity_type: node
+bundle: contact_information
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -24,7 +24,7 @@ bundle: solution
 label: Description
 description: 'Main description of the solution for its default overview page.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

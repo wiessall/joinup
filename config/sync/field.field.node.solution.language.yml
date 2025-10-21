@@ -22,7 +22,7 @@ bundle: solution
 label: 'Language availability'
 description: 'The linguistic accessibility of the solution to facilitate cross-border adoption.'
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
