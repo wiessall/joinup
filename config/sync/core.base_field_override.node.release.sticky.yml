@@ -1,0 +1,22 @@
+uuid: bedbf55f-8eb2-43e2-98f7-4581602891e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.release
+id: node.release.sticky
+field_name: sticky
+entity_type: node
+bundle: release
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
