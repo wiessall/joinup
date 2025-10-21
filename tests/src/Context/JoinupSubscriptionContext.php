@@ -152,7 +152,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $membership = $this->getMembershipByGroupAndUser($group, $user, OgMembershipInterface::ALL_STATES);
       $subscriptions = [];
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$bundle];
-      foreach ($this->explodeCommaSeparatedStepArgument(strtolower($values['subscriptions'])) as $subscription_bundle) {
+      foreach ($this->explodeDelimitedSeparatedStepArgument(strtolower($values['subscriptions'])) as $subscription_bundle) {
         $subscription_bundle = $this->translateBundle($subscription_bundle);
         $entity_type = NULL;
         foreach ($subscription_bundles as $entity_type_id => $bundles) {
@@ -321,7 +321,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
     foreach ($subscription_options->getRowsHash() as $group_label => $expected_options) {
-      $expected_options = $this->explodeCommaSeparatedStepArgument(strtolower($expected_options));
+      $expected_options = $this->explodeDelimitedSeparatedStepArgument(strtolower($expected_options));
       $group = $this->getEntityByLabel('node', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       // Remove the 'assessment_report' subscription for all collections,
@@ -384,7 +384,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('node', $groupLabel);
     assert($group instanceof GroupInterface);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
-    $expectedBundleIds = $this->explodeCommaSeparatedStepArgument(strtolower($bundlesCommaSeparated));
+    $expectedBundleIds = $this->explodeDelimitedSeparatedStepArgument(strtolower($bundlesCommaSeparated));
 
     $announcements = FALSE;
     if (in_array('announcements', $expectedBundleIds)) {
