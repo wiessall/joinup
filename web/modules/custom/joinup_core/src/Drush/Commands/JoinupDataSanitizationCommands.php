@@ -163,6 +163,9 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       // Generate a sample value from the field definition class.
       $fieldDefinition = BaseFieldDefinition::createFromFieldStorageDefinition($fieldStorageDefinition);
       $sampleValue = $fieldTypeClass::generateSampleValue($fieldDefinition);
+      // Determine a separator based on whether it's a base field.
+      $separator = $fieldStorageDefinition->isBaseField() ? '__' : '_';
+
       $updateFields = match ($fieldType) {
         'email',
         'telephone',
@@ -170,11 +173,11 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
         'string_long',
         'text',
         'text_long' => [
-          $fieldName . '_value' => $sampleValue['value'],
+          $fieldName . $separator . 'value' => substr($sampleValue['value'], 0, 128),
         ],
         'text_with_summary' => [
-          $fieldName . '_value' => $sampleValue['value'],
-          $fieldName . '_summary' => $sampleValue['summary'],
+          $fieldName . $separator . 'value' => substr($sampleValue['value'], 0, 128),
+          $fieldName . $separator . 'summary' => substr($sampleValue['summary'], 0, 128),
         ],
         // Unsupported field type.
         default => throw new \Exception(dt('The @field_type field type is not supported.', ['@field_type' => $fieldType])),
@@ -184,18 +187,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       $entityStorageSchemaSql = $this->keyValue->get('entity.storage_schema.sql');
       $fieldSchema = $entityStorageSchemaSql->get("$entityType.field_schema_data.$fieldName", []);
       foreach (array_keys($fieldSchema) as $fieldTable) {
-        if (in_array($fieldType, ['text_long', 'text_with_summary'])) {
-          if (isset($fieldSchema[$fieldTable]['fields'][$fieldName . '__value'])) {
-            // For base fields, the column names use double underscores.
-            foreach ($updateFields as $columnName => $value) {
-              // Let's also not make this unreadable in the UI. Limit to 128
-              // chars.
-              $updateFields[str_replace('_', '__', $columnName)] = substr($value, 0, 128);
-              unset($updateFields[$columnName]);
-            }
-          }
-        }
-
         $this->db->update($fieldTable)->fields($updateFields)->execute();
         $this->logger()->success(dt('@table_name table sanitized.', ['@table_name' => $fieldTable]));
       }
