@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
@@ -97,7 +98,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $variables['info']['icon'] = 'calendar-event';
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
-      '@label' => t('Last update'),
+      '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
@@ -110,6 +111,15 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
   // Iterate over entity bundles for case-specific data.
   switch ($entity->bundle()) {
+    case 'assessment_report':
+      if (!empty($entity->submission->entity)) {
+        $sid = $entity->submission->entity->id();
+        $submission_data = $entity->submission->entity->getData();
+        $variables['label'] = isset($submission_data['short_title']) ? $submission_data['short_title'] . ' #' . $sid : $entity->label();
+      }
+      $variables['extra_data']['submitter'] = $entity->organization->value;
+      break;
+
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
       if ($changed_time = $entity->getLatestUpdateTime()) {
