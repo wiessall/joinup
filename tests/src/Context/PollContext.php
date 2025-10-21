@@ -53,7 +53,7 @@ class PollContext extends RawDrupalContext {
   protected function convertChoices(string $choiceValues): array {
     $pollChoiceIds = [];
 
-    $choices = $this->explodeCommaSeparatedStepArgument($choiceValues);
+    $choices = $this->explodeDelimitedSeparatedStepArgument($choiceValues);
     foreach ($choices as $choice) {
       $pollChoiceIds[] = $this->createPollChoice($choice)->id();
     }
