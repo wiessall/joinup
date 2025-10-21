@@ -125,6 +125,7 @@ module:
   joinup_notification: 0
   joinup_oss_catalogue: 0
   joinup_paragraphs: 0
+  joinup_pin: 0
   joinup_poll: 0
   joinup_private_message: 0
   joinup_publication_date: 0

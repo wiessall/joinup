@@ -367,7 +367,7 @@ class CollectionContext extends RawDrupalContext {
 
       // Go to the edit form and check that the expected buttons are visible.
       $this->visitEntityForm('edit', $values['collection'], 'collection');
-      $buttons = $this->explodeCommaSeparatedStepArgument($values['buttons']);
+      $buttons = $this->explodeDelimitedSeparatedStepArgument($values['buttons']);
       $this->assertSubmitButtonsVisible($buttons);
     }
   }
@@ -443,7 +443,7 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $failures = [];
-    foreach ($this->explodeCommaSeparatedStepArgument($labels) as $label) {
+    foreach ($this->explodeDelimitedSeparatedStepArgument($labels) as $label) {
       /** @var \Drupal\collection\Entity\CollectionInterface $collection */
       $collection = $this->getEntityByLabel('node', $label, 'collection');
       if (!$collection->getMembership($account->id(), [])) {
