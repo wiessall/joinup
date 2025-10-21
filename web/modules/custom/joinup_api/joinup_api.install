@@ -38,7 +38,12 @@ function joinup_api_requirements($phase): array {
 
   $privateKeyPath = $fileSystem->realpath($privateKey);
   $publicKeyPath = $fileSystem->realpath($publicKey);
-  $requirementsAreMet = TRUE;
+  $requirements['simple_oauth_keys'] = [
+    'title' => t('Simple OAuth keys'),
+    'value' => t('OK'),
+    'description' => t('Both private and public keys are present.'),
+    'severity' => REQUIREMENT_OK,
+  ];
 
   if (!file_exists($privateKeyPath)) {
     $requirements['simple_oauth_keys'] = [
@@ -47,7 +52,7 @@ function joinup_api_requirements($phase): array {
       'description' => t('The private key does not exist at @path.', ['@path' => $privateKeyPath]),
       'severity' => REQUIREMENT_ERROR,
     ];
-    $requirementsAreMet = FALSE;
+    return $requirements;
   }
 
   if (!file_exists($publicKeyPath)) {
@@ -57,16 +62,7 @@ function joinup_api_requirements($phase): array {
       'description' => t('The public key does not exist at @path.', ['@path' => $publicKeyPath]),
       'severity' => REQUIREMENT_ERROR,
     ];
-    $requirementsAreMet = FALSE;
-  }
-
-  if (!$requirementsAreMet) {
-    $requirements['simple_oauth_keys'] = [
-      'title' => t('Simple OAuth keys'),
-      'value' => t('OK'),
-      'description' => t('Both private and public keys are present.'),
-      'severity' => REQUIREMENT_OK,
-    ];
+    return $requirements;
   }
 
   return $requirements;
