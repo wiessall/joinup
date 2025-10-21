@@ -105,7 +105,7 @@ class WysiwygContext extends RawDrupalContext {
       'h5' => 'heading5',
       'h6' => 'heading6',
     ];
-    $format_tags = $this->explodeCommaSeparatedStepArgument($format_tags);
+    $format_tags = $this->explodeDelimitedSeparatedStepArgument($format_tags);
 
     $editor = $this->getWysiwygEditorEntity($label);
     $settings = $editor->getSettings();
