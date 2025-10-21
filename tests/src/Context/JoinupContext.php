@@ -2121,29 +2121,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that no links marked as active are found in a certain region.
-   *
-   * @param string $region
-   *   The name of the region.
-   *
-   * @throws \Exception
-   *   Thrown when active links are found.
-   *
-   * @Then no menu items should be active in the :region region
-   */
-  public function assertNoActiveLinksInRegion($region): void {
-    $links = $this->findLinksMarkedAsActive($region);
-
-    if (!empty($links)) {
-      $labels = array_map(function ($link) {
-        /** @var \Behat\Mink\Element\NodeElement $link */
-        return $link->getText() . ' (' . $link->getAttribute('href') . ')';
-      }, $links);
-      throw new \Exception("No active links were expected in the '$region' region, but the following were found: " . implode(', ', $labels));
-    }
-  }
-
-  /**
    * Asserts that a specific link is marked as active in a certain region.
    *
    * @param string $text

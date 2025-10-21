@@ -18,7 +18,7 @@ Feature: Minimal install clone testing.
     Then I should see the link "Solutions"
     And "Solutions" should be the active item in the "Navigation bar" region
     Then I visit "/collection/portal-support"
-    And "Support centre > Portal support" should be the active items in the "Navigation bar" region
+    And "Support Centre > Portal support" should be the active items in the "Navigation bar" region
 
   @javascript
   Scenario: Assert publiccode.yml page.
