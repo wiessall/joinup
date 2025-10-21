@@ -32,7 +32,6 @@ use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Entity\ShareableContentInterface;
 use Drupal\joinup_group\Entity\Sharing;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
@@ -463,66 +462,6 @@ function joinup_group_node_update(EntityInterface $entity): void {
       ]
     );
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- *
- * Make sure that when an entity is (un)pinned it is reindexed and its caches
- * are invalidated.
- *
- * Note that this duplicates code for featuring entities in the joinup_featured
- * module. This was considered a better solution that introducing some awkward
- * dependency between the two modules. The code is trivial and most can be
- * removed when the cache of the parent entity is invalidated automatically by
- * the Meta Entity module.
- *
- * @see https://www.drupal.org/project/meta_entity/issues/3169560
- */
-function joinup_group_meta_entity_update(MetaEntityInterface $entity): void {
-  if ($entity->bundle() === 'pinned_in') {
-    $parent_entity = $entity->getTargetEntity();
-    if (empty($parent_entity)) {
-      // If the parent entity no longer exists nothing needs to be done. This
-      // can happen if this is called via joinup_group_meta_entity_delete() as
-      // part of an orphan cleanup.
-      return;
-    }
-
-    // Invalidate the entity storage cache of the parent entity, this ensures
-    // that we are reindexing the updated values of the parent entity.
-    \Drupal::entityTypeManager()->getStorage($parent_entity->getEntityTypeId())->resetCache([$parent_entity->id()]);
-
-    // Reindex the parent entity since the pinned status affects the ordering of
-    // search results: pinned entities are shown at the top.
-    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
-    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
-    $content_tracking_manager->trackEntityChange($parent_entity);
-
-    // Invalidate caches of the parent entity so that the pin icon will be shown
-    // or hidden according to the new pinned status.
-    // @todo Remove this workaround once Meta Entity clears list cache tags.
-    // @see https://www.drupal.org/project/meta_entity/issues/3169560
-    Cache::invalidateTags($parent_entity->getCacheTagsToInvalidate());
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- *
- * @see joinup_group_meta_entity_update()
- */
-function joinup_group_meta_entity_insert(MetaEntityInterface $entity): void {
-  joinup_group_meta_entity_update($entity);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- *
- * @see joinup_group_meta_entity_update()
- */
-function joinup_group_meta_entity_delete(MetaEntityInterface $entity): void {
-  joinup_group_meta_entity_update($entity);
 }
 
 /**
@@ -1006,16 +945,7 @@ function joinup_group_node_view_alter(array &$build, EntityInterface $entity, En
  * Implements hook_entity_view().
  */
 function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
-  if ($entity instanceof PinnableGroupContentInterface && $view_mode === 'view_mode_tile') {
-    $group = \Drupal::service('joinup_group.group_manager')
-      ->getGroupFromContext();
-    if ($entity->isPinned($group)) {
-      $build['#attributes']['class'][] = 'is-pinned';
-      $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
-      $build['#attached']['library'][] = 'joinup_group/pinned_entities';
-    }
-  }
-  elseif ($entity instanceof GroupInterface && $view_mode === 'group_header') {
+  if ($entity instanceof GroupInterface && $view_mode === 'group_header') {
     // The group header featured stats visibility is controlled by the group
     // settings. Add the relevant cache tags.
     $bundle = "{$entity->bundle()}_settings";

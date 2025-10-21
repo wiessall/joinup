@@ -71,7 +71,7 @@ trait NameMappingsTrait {
       'document' => [
         'document type' => 'field_type',
         'body' => 'field_paragraphs_body',
-        'file' => 'field_file',
+        'file' => 'resources',
         'keywords' => 'keywords',
         'licence' => 'field_licence',
         'logo' => 'field_document_logo',
@@ -124,7 +124,7 @@ trait NameMappingsTrait {
         'author' => 'uid',
       ],
       'distribution' => [
-        'access url' => 'access_url',
+        'access url' => 'resources',
         'creation date' => 'created',
         'description' => 'description',
         'downloads' => 'downloads',
@@ -153,7 +153,7 @@ trait NameMappingsTrait {
         'creation date' => 'created',
         'modification date' => 'changed',
         'published at' => 'published_at',
-        'documentation' => 'documentation',
+        'resources' => 'resources',
         'release notes' => 'description',
       ],
       'solution' => [
@@ -165,7 +165,7 @@ trait NameMappingsTrait {
         'contact information' => 'contact',
         'creation date' => 'created',
         'description' => 'description',
-        'documentation' => 'documentation',
+        'resources' => 'resources',
         'domain' => 'domain',
         'keywords' => 'keywords',
         'landing page' => 'landing_page',

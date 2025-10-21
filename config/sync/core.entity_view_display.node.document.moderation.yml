@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
-    - field.field.node.document.field_file
     - field.field.node.document.field_licence
     - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_short_title
@@ -17,6 +16,7 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.keywords
     - field.field.node.document.og_audience
+    - field.field.node.document.resources
     - field.field.node.document.spatial_coverage
     - node.type.document
   module:
@@ -65,7 +65,6 @@ hidden:
   featured: true
   field_comments: true
   field_document_logo: true
-  field_file: true
   field_licence: true
   field_paragraphs_body: true
   field_shared_in: true
@@ -83,6 +82,7 @@ hidden:
   published_at: true
   read_more: true
   report: true
+  resources: true
   search_api_excerpt: true
   share_link: true
   shared_in: true

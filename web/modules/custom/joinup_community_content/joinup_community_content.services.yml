@@ -4,6 +4,11 @@ services:
     autoconfigure: true
     autowire: true
 
+  cache_context.community_content_author:
+    class: Drupal\joinup_community_content\Cache\Context\CommunityContentAuthorCacheContext
+    tags:
+      - { name: 'cache.context'}
+
   Drupal\joinup_community_content\EventSubscriber\EventSubscriber: { }
 
   joinup_community_content.community_content_workflow_access:

@@ -55,8 +55,6 @@
     <testsuite name="kernel">
       <directory>web/modules/custom/**/tests/src/Kernel</directory>
       <directory>web/modules/custom/**/modules/**/tests/src/Kernel</directory>
-      <!-- WIP -->
-      <exclude>web/modules/custom/joinup_stats/tests/src/Kernel/RefreshCountersTest.php</exclude>
     </testsuite>
     <testsuite name="functional">
       <directory>web/modules/custom/**/tests/src/Functional</directory>
@@ -67,7 +65,6 @@
       <directory>
         web/modules/custom/**/tests/src/ExistingSite
       </directory>
-      <directory>web/profiles/joinup/tests/src/ExistingSite</directory>
       <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
     </testsuite>
   </testsuites>

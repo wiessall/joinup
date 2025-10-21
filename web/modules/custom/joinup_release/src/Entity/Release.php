@@ -11,6 +11,7 @@ use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_paragraphs\Traits\ParagraphResourcesTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_solution\Entity\SolutionContentTrait;
@@ -34,6 +35,7 @@ class Release extends Node implements ReleaseInterface {
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
   use JoinupBundleClassFieldAccessTrait;
+  use ParagraphResourcesTrait;
   use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;

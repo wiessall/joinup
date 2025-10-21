@@ -7,12 +7,14 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\joinup_event\Entity\Event;
 use Drupal\joinup_event\Entity\EventInterface;
 use Drupal\joinup_event\Plugin\Field\FieldFormatter\WebtoolsMapFormatter;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_entity_bundle_field_info_alter().
@@ -146,4 +148,49 @@ function joinup_event_geocode_entity_field_address_string_alter(string &$address
   if ($field->getName() === 'field_event_coordinates') {
     $address_string = strtr($address_string, ["\r\n" => ' ']);
   }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ *
+ * Sets the view max age to tomorrow midnight when filtering down for upcoming
+ * or past events.
+ */
+function joinup_event_views_pre_execute(ViewExecutable $view): void {
+  $facets = _joinup_event_get_facets_by_facet_source_id('search_api:views_page__content_overview__page_1');
+
+  if (
+    !isset($facets['event_date']) ||
+    empty(array_intersect(
+      $facets['event_date']->getActiveItems(),
+      ['upcoming_events', 'past_events']
+    ))
+  ) {
+    return;
+  }
+
+  $max_age = (new DrupalDateTime('tomorrow'))->getTimestamp() - \Drupal::time()->getRequestTime();
+  $view->display_handler->display['cache_metadata']['max-age'] = $max_age;
+}
+
+/**
+ * Returns currently rendered facets filtered by facet source ID, keyed by ID.
+ *
+ * @param string $facet_source_id
+ *   The facet source ID to filter by.
+ *
+ * @return \Drupal\facets\FacetInterface[]
+ *   An array of facet, keyed by facet ID.
+ */
+function _joinup_event_get_facets_by_facet_source_id(string $facet_source_id): array {
+  /** @var \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager */
+  $facet_manager = \Drupal::service('facets.manager');
+
+  /** @var \Drupal\facets\FacetInterface[] $facets */
+  $facets = [];
+  foreach ($facet_manager->getFacetsByFacetSourceId($facet_source_id) as $facet) {
+    $facets[$facet->id()] = $facet;
+  }
+
+  return $facets;
 }

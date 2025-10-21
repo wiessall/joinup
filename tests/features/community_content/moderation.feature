@@ -399,6 +399,7 @@ Feature: Moderate community content
     And I select "Statistics and Analysis" options from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"
+    And I fill in "Alternative text" with "The event logo"
     When I press "Propose"
     Then I should see the success message "Event Alice in Wonderland has been created."
 
@@ -421,6 +422,7 @@ Feature: Moderate community content
     And I select "Data gathering and processing" options from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"
+    And I fill in "Alternative text" with "The event logo"
     When I press "Propose"
     Then I should see the success message "News Declared the ultimate metal has been created."
 

@@ -107,7 +107,7 @@ class ContentModerationOverviewForm extends FormBase {
     // If the user doesn't have global permission, check if they have permission
     // inside the group.
     if (!$access) {
-      $access = $node->hasGroupPermission($user->id(), 'access content moderation overview');
+      return $node->getGroupPermissionAccess($user->id(), 'access content moderation overview')->addCacheableDependency($cache_metadata);
     }
 
     return AccessResult::allowedIf($access)->addCacheableDependency($cache_metadata);
@@ -235,7 +235,7 @@ class ContentModerationOverviewForm extends FormBase {
           '#attributes' => ['class' => 'filter'],
           'type' => [
             '#type' => 'select',
-            '#title' => 'Content of type',
+            '#title' => $this->t('Content of type'),
             '#options' => $this->getTypeFilterOptions($count),
             '#ajax' => [
               'callback' => '::updateForm',
@@ -245,7 +245,7 @@ class ContentModerationOverviewForm extends FormBase {
           ],
           'state' => [
             '#type' => 'select',
-            '#title' => 'in state',
+            '#title' => $this->t('in state'),
             '#options' => $this->getStateFilterOptions($count, $type_filter),
             '#ajax' => [
               'callback' => '::updateForm',

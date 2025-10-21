@@ -3,7 +3,7 @@ field.widget.settings.current_workflow_state_widget:
   label: 'Field widget format settings for the current workflow state field.'
   mapping:
     title:
-      type: string
+      type: label
       label: 'The title to use for the field widget.'
     title_display:
       type: string

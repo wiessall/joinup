@@ -66,7 +66,7 @@
         "drupal/imagecache_external": "^3.0",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
-        "drupal/json_field": "^1.0",
+        "drupal/json_field": "^1.5",
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
@@ -119,9 +119,9 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/symfony_mailer_lite": "^1.0",
+        "drupal/symfony_mailer_lite": "^2",
         "drupal/tagify": "^1.2",
-        "drupal/theme_rule": "^1.0",
+        "drupal/theme_rule": "^1.2",
         "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
         "drupal/tour": "^1.0",
@@ -140,6 +140,7 @@
         "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
+        "npm-asset/chart.js": "^4.5",
         "npm-asset/dompurify": "^3.0.9",
         "npm-asset/jquery-colorbox": "^1.6.4",
         "npm-asset/jquery-jsonview": "^1.2.3",
@@ -327,11 +328,19 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/babel": {
+                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff",
+                "Form not refreshed with \"Filter\" after translation outside Babel @see https://drupal.org/i/3549355": "resources/patch/php/drupal/babel/3549355-ef0d52abab.diff",
+                "Button to copy the source over translation @see https://www.drupal.org/i/3543063": "resources/patch/php/drupal/babel/3543063-eb6fec4ee7.diff"
+            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
             "drupal/cas": {
                 "Invalid constraint for server.verify in cas.settings @see https://www.drupal.org/i/3542632": "resources/patch/php/drupal/cas/3542632.diff"
+            },
+            "drupal/config_inspector": {
+                "Missing schema on nested elements @see https://www.drupal.org/i/3548299": "resources/patch/php/drupal/config_inspector/3548299.diff"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
@@ -365,7 +374,9 @@
                 "ImageItem generate sample value should take into account if the files exist @see https://www.drupal.org/i/3516691": "resources/patch/php/drupal/core/3516691-10.5.x.diff",
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
-                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch"
+                "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
+                "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
+                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -381,6 +392,9 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
+            },
+            "drupal/email_contact": {
+                "Use AjaxHelperTrait::isAjax() to fix modal behavior for non-Ajax requests. @see https://www.drupal.org/i/3546736": "resources/patch/php/drupal/email_contact/3546736.diff"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
@@ -402,11 +416,6 @@
             },
             "drupal/field_permissions": {
                 "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
-            },
-            "drupal/file_url": {
-                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
-                "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
-                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664-4.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
@@ -510,7 +519,8 @@
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff"
+                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff",
+                "Tagify placeholder is not translatable @see https://www.drupal.org/i/3547609": "resources/patch/php/drupal/tagify/3547609.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Race Condition in Translation Callback": "resources/patch/php/drupal/tmgmt_ec_etranslation/3526972.diff"
@@ -528,7 +538,8 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
-                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff"
+                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff",
+                "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
             },
             "gitonomy/gitlib": {
                 "The log parser fails in the case of a mergetag": "resources/patch/php/gitonomy/gitlib/231.diff",

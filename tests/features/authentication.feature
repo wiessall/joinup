@@ -50,30 +50,9 @@ Feature: User authentication
       | dashboard/private-message-report                    |
       | licence                                             |
       | media/add                                           |
-      | media/add/collection_logo                           |
-      | media/add/event_logo                                |
-      | media/add/file                                      |
-      | media/add/image                                     |
-      | media/add/news_logo                                 |
-      | media/add/solution_logo                             |
-      | media/add/remote_video                              |
       | node/add                                            |
-      | node/add/collection                                 |
-      | node/add/contact_information                        |
-      | node/add/custom_page                                |
-      | node/add/discussion                                 |
-      | node/add/distribution                               |
-      | node/add/document                                   |
-      | node/add/event                                      |
-      | node/add/glossary                                   |
-      | node/add/licence                                    |
-      | node/add/news                                       |
-      | node/add/owner                                      |
-      | node/add/release                                    |
-      | node/add/solution                                   |
       | outdated-content-threshold                          |
       | propose/collection                                  |
-      | propose/solution                                    |
       | user/subscriptions                                  |
 
   Scenario Outline: Authenticated user can access pages they are authorized to
@@ -124,29 +103,8 @@ Feature: User authentication
       | dashboard/private-message-report                    |
       | licence                                             |
       | media/add                                           |
-      | media/add/collection_logo                           |
-      | media/add/event_logo                                |
-      | media/add/file                                      |
-      | media/add/image                                     |
-      | media/add/news_logo                                 |
-      | media/add/solution_logo                             |
-      | media/add/remote_video                              |
       | node/add                                            |
-      | node/add/collection                                 |
-      | node/add/contact_information                        |
-      | node/add/custom_page                                |
-      | node/add/discussion                                 |
-      | node/add/distribution                               |
-      | node/add/document                                   |
-      | node/add/event                                      |
-      | node/add/glossary                                   |
-      | node/add/licence                                    |
-      | node/add/news                                       |
-      | node/add/owner                                      |
-      | node/add/release                                    |
-      | node/add/solution                                   |
       | outdated-content-threshold                          |
-      | propose/solution                                    |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
     Given I am logged in as a user with the "authenticated" role
@@ -178,13 +136,6 @@ Feature: User authentication
       | dashboard                                                     |
       | licence                                                       |
       | media/add                                                     |
-      | media/add/collection_logo                                     |
-      | media/add/event_logo                                          |
-      | media/add/file                                                |
-      | media/add/image                                               |
-      | media/add/news_logo                                           |
-      | media/add/solution_logo                                       |
-      | media/add/remote_video                                        |
       | outdated-content-threshold                                    |
       | propose/collection                                            |
 
@@ -212,19 +163,6 @@ Feature: User authentication
       | admin/tmgmt/sources                                 |
       | admin/tmgmt/translators                             |
       | node/add                                            |
-      | node/add/collection                                 |
-      | node/add/contact_information                        |
-      | node/add/custom_page                                |
-      | node/add/discussion                                 |
-      | node/add/distribution                               |
-      | node/add/document                                   |
-      | node/add/event                                      |
-      | node/add/glossary                                   |
-      | node/add/news                                       |
-      | node/add/owner                                      |
-      | node/add/release                                    |
-      | node/add/solution                                   |
-      | propose/solution                                    |
 
   Scenario Outline: Administrator can access pages they are authorized to
     Given I am logged in as a user with the "administrator" role
@@ -246,21 +184,7 @@ Feature: User authentication
       | admin/config                               |
       | admin/config/search/redirect               |
       | admin/content                              |
-      | admin/content/files                        |
-      | admin/content/media                        |
       | admin/legal-notice                         |
       | admin/legal-notice/add                     |
       | admin/structure                            |
       | node/add                                   |
-      | node/add/collection                        |
-      | node/add/contact_information               |
-      | node/add/custom_page                       |
-      | node/add/discussion                        |
-      | node/add/distribution                      |
-      | node/add/document                          |
-      | node/add/event                             |
-      | node/add/licence                           |
-      | node/add/news                              |
-      | node/add/owner                             |
-      | node/add/release                           |
-      | node/add/solution                          |

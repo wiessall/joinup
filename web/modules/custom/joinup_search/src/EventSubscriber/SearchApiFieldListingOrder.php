@@ -65,7 +65,7 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // the search api field listing.
     if (_joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'entity_bundle', 'event')) {
       // If the upcoming events are selected, set the order to 'ASC'.
-      // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
+      // @see \Drupal\joinup_search\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
       $value = $this->facetDateHandler->isoDate((new DrupalDateTime('today'))->getTimestamp());
       $order = _joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'field_event_date_end', $value, '>=') ? Query::SORT_ASC : Query::SORT_DESC;
 

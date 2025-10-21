@@ -32,28 +32,11 @@ class JoinupDocumentContext extends RawDrupalContext {
    *   Thrown when an attached file cannot be found or cannot be saved in the
    *   Drupal public files folder.
    */
-  public static function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
+  public function massageDocumentFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     if ($node->type !== 'document') {
       return;
-    }
-
-    if (!empty($node->field_file)) {
-      $type = $node->{'file type'} ?? 'remote';
-      if ($type !== 'remote') {
-        // If the file is local we want to copy it from the fixtures into the
-        // file system and register it in the DocumentSubContext so it can be
-        // cleaned up after the scenario ends. Perform a small dance to get
-        // access to the context class from inside this static callback.
-        /** @var \Behat\Behat\Context\Environment\InitializedContextEnvironment $environment */
-        $environment = $scope->getEnvironment();
-        /** @var \Drupal\joinup\Context\JoinupDocumentContext $context */
-        $context = $environment->getContext(self::class);
-        $node->field_file = $context->createFile($node->field_file)->id();
-      }
-
-      unset($node->{'file type'});
     }
 
     // The document type is a required field and in normal usage a document

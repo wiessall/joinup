@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.solution.classification
     - field.field.node.solution.contact
     - field.field.node.solution.description
-    - field.field.node.solution.documentation
     - field.field.node.solution.domain
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -22,6 +21,7 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
+    - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -31,11 +31,11 @@ dependencies:
     - node.type.solution
   module:
     - field_group
-    - file_url
     - image_library_widget
     - inline_entity_form
     - joinup_core
     - joinup_workflow
+    - paragraphs
     - tagify
     - text
 third_party_settings:
@@ -103,7 +103,7 @@ third_party_settings:
       children:
         - logo
         - short_id
-        - documentation
+        - resources
         - keywords
         - related_solutions
         - process_status
@@ -239,14 +239,6 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  documentation:
-    type: file_url_generic
-    weight: 36
-    region: content
-    settings:
-      progress_indicator: throbber
-      add_new_label: 'Upload a new file or enter a URL'
-    third_party_settings: {  }
   domain:
     type: tagify_entity_reference_autocomplete_widget
     weight: 5
@@ -292,7 +284,7 @@ content:
     third_party_settings: {  }
   keywords:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 37
+    weight: 38
     region: content
     settings:
       match_operator: CONTAINS
@@ -306,7 +298,7 @@ content:
     third_party_settings: {  }
   landing_page:
     type: link_legacy_multicardinality
-    weight: 40
+    weight: 41
     region: content
     settings:
       placeholder_url: 'Start typing the homepage address of your solution in an external platform...'
@@ -361,13 +353,13 @@ content:
     third_party_settings: {  }
   process_status:
     type: options_select
-    weight: 39
+    weight: 40
     region: content
     settings: {  }
     third_party_settings: {  }
   related_solutions:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 38
+    weight: 39
     region: content
     settings:
       match_operator: CONTAINS
@@ -379,6 +371,26 @@ content:
       info_label: ''
       parent_selection: 1
     third_party_settings: {  }
+  resources:
+    type: paragraphs
+    weight: 37
+    region: content
+    settings:
+      title: Document
+      title_plural: Documents
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: button
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        convert: '0'
+        duplicate: '0'
+    third_party_settings: {  }
   short_id:
     type: string_textfield
     weight: 35
@@ -389,7 +401,7 @@ content:
     third_party_settings: {  }
   solution_type:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 41
+    weight: 42
     region: content
     settings:
       match_operator: CONTAINS

@@ -24,6 +24,10 @@ button.button--primary {
   @extend .btn-primary;
 }
 
+.btn-outline-secondary {
+  color: $white;
+  border-color: $white;
+}
 .shepherd-button {
   @extend .btn;
   @extend .btn-primary;
