@@ -13,7 +13,7 @@ Feature:  The translator is able to translate taxonomy terms.
     And I press "Filter"
 
     When I fill in the 2nd occurrence of the "Singular form" field with "Komplett lösning" in the "Complete Solution" row
-    And I press the 1st button in the "Complete Solution" row
+    And I press the 2nd button in the "Complete Solution" row
     Then I should see the success message 'Translation of source string "Complete Solution" in language Swedish was updated.'
 
     And I go to the "Complete Solution" solution_classification term page

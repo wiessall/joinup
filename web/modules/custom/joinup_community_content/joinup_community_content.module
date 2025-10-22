@@ -109,6 +109,25 @@ function joinup_community_content_node_access(NodeInterface $entity, string $ope
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function joinup_community_content_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  // Disable access to the revision information vertical tab.
+  // This prevents access to the revision log and the revision checkbox too.
+  $form['revision_information']['#access'] = FALSE;
+  $form['revision']['#access'] = FALSE;
+  // Disable access to the meta information.
+  $form['meta']['#access'] = FALSE;
+
+  // Allow access to the uid field only to the moderators.
+  if (isset($form['uid'])) {
+    $form['uid']['#access'] = \Drupal::currentUser()->hasPermission('administer nodes');
+  }
+
+  // Hide comment fields. These are managed on collection level.
+  foreach (['field_comments', 'field_replies'] as $field) {
+    if (!empty($form[$field])) {
+      $form[$field]['#access'] = FALSE;
+    }
+  }
+
   // Skip if we are not on a community content form.
   $community_content_form_ids = [];
   foreach (CommunityContentHelper::BUNDLES as $bundle) {
