@@ -1,0 +1,9 @@
+joinup_pin.pin_entity:
+  route_name: joinup_pin.pin_entity
+  title: Pin
+  group: group_context
+
+joinup_pin.unpin_entity:
+  route_name: joinup_pin.unpin_entity
+  title: Unpin
+  group: group_context

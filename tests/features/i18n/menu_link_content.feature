@@ -20,7 +20,7 @@ Feature:  The translator is able to translate
     And I press "Filter"
 
     When I fill in the "2nd" occurrence of the "Singular form" field with "Homepage SV" in the "Homepage EN" row
-    And I press the 1st button in the "Homepage EN" row
+    And I press the 2nd button in the "Homepage EN" row
     Then I should see the success message 'Translation of source string "Homepage EN" in language Swedish was updated.'
 
     And I visit "/"
