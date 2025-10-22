@@ -1,0 +1,45 @@
+diff --git a/src/Authentication/Provider/SimpleOauthAuthenticationProvider.php b/src/Authentication/Provider/SimpleOauthAuthenticationProvider.php
+index 522bbb4ca9b118ecef236c9995ccde90fd7b1caa..f52282ba3ce963d0ff60c8883affd4e5c5e9b7db 100644
+--- a/src/Authentication/Provider/SimpleOauthAuthenticationProvider.php
++++ b/src/Authentication/Provider/SimpleOauthAuthenticationProvider.php
+@@ -125,6 +125,19 @@ class SimpleOauthAuthenticationProvider implements AuthenticationProviderInterfa
+    * {@inheritdoc}
+    */
+   public function applies(Request $request) {
++    // Check for OAuth2 request FIRST to avoid unnecessary route lookups.
++    // The request policy service won't be used in case of non GET or HEAD
++    // methods, so we have to explicitly call it.
++    /* @see \Drupal\Core\PageCache\RequestPolicy\CommandLineOrUnsafeMethod::check() */
++    $is_oauth2_request = $this->oauthPageCacheRequestPolicy->isOauth2Request($request);
++
++    // If this is not an OAuth2 request, return FALSE immediately to avoid
++    // interfering with other authentication providers (e.g., cookie auth).
++    if (!$is_oauth2_request) {
++      return FALSE;
++    }
++
++    // Only check route options if this IS an OAuth2 request.
+     // Retrieve the route name and fetch the route name without access checks.
+     try {
+       $url_object = $this->pathValidator->getUrlIfValidWithoutAccessCheck($request->getPathInfo());
+@@ -133,7 +146,7 @@ class SimpleOauthAuthenticationProvider implements AuthenticationProviderInterfa
+       // The getUrlIfValidWithoutAccessCheck method can throw an exception when
+       // using a custom REST resource with limited formats.
+     }
+-    if ($url_object) {
++    if ($url_object ?? FALSE) {
+       $route_name = $url_object->getRouteName();
+       $route = $this->routeProvider->getRouteByName($route_name);
+       // Check if the current route has opted out of OAuth authentication.
+@@ -142,10 +155,7 @@ class SimpleOauthAuthenticationProvider implements AuthenticationProviderInterfa
+       }
+     }
+ 
+-    // The request policy service won't be used in case of non GET or HEAD
+-    // methods, so we have to explicitly call it.
+-    /* @see \Drupal\Core\PageCache\RequestPolicy\CommandLineOrUnsafeMethod::check() */
+-    return $this->oauthPageCacheRequestPolicy->isOauth2Request($request);
++    return TRUE;
+   }
+ 
+   /**
