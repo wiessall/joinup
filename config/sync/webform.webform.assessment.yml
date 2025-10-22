@@ -197,10 +197,10 @@ elements: |-
         initiative:
           '#type': textfield
           '#required': true
-          '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed:'
+          '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
         initiative_link:
           '#type': textfield
-          '#title': 'If applicable, provide a link to the initiative, project or action concerned:'
+          '#title': 'If applicable, provide a link to the initiative, project or action concerned'
     previous_assessments:
       '#type': radios
       '#title': 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'

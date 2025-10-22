@@ -105,30 +105,30 @@ Feature: Assessments
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
     And the "div.page-title__details" element should contain "Assessment report"
     Then I should see the following lines of text:
-      | 1. General information                                                                                                                   |
-      | Type of public sector body European Union agency                                                                                         |
-      | Select your Agency Eurojust                                                                                                              |
-      | Provide the name of the initiative, project or action containing the binding requirements to be assessed:: Pioneer in making automobiles |
-      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                 |
-      | 2. Binding requirements                                                                                                                  |
-      | The binding requirements identified concern: {Empty}                                                                                     |
-      | Specify the concerned function of trans-European digital public service(s): Defense                                                      |
-      | List the binding requirement(s) assessed. {Empty}                                                                                        |
-      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                  |
-      | Identified effects on cross-border legal interoperability {Empty}                                                                        |
-      | Identified effects on cross-border organisational interoperability {Empty}                                                               |
-      | Identified effects on cross-border semantic interoperability {Empty}                                                                     |
-      | Identified effects on cross-border technical interoperability {Empty}                                                                    |
-      | 3. Results                                                                                                                               |
-      | Internal Solutions in the Portal {Empty}                                                                                                 |
-      | Solutions not in the Portal (link) {Empty}                                                                                               |
-      | Have you discovered any remaining barriers to cross-border interoperability? No                                                          |
-      | 4. Supporting documents                                                                                                                  |
-      | Binding requirements supporting documents                                                                                                |
-      | empty_pdf.pdf                                                                                                                            |
-      | General Assessment supporting documents                                                                                                  |
-      | empty_pdf1.pdf                                                                                                                           |
-      | Please add any other comment you would like to share. {Empty}                                                                            |
+      | 1. General information                                                                                                                  |
+      | Type of public sector body European Union agency                                                                                        |
+      | Select your Agency Eurojust                                                                                                             |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
+      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
+      | 2. Binding requirements                                                                                                                 |
+      | The binding requirements identified concern: {Empty}                                                                                    |
+      | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
+      | List the binding requirement(s) assessed. {Empty}                                                                                       |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
+      | Identified effects on cross-border legal interoperability {Empty}                                                                       |
+      | Identified effects on cross-border organisational interoperability {Empty}                                                              |
+      | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
+      | Identified effects on cross-border technical interoperability {Empty}                                                                   |
+      | 3. Results                                                                                                                              |
+      | Internal Solutions in the Portal {Empty}                                                                                                |
+      | Solutions not in the Portal (link) {Empty}                                                                                              |
+      | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
+      | 4. Supporting documents                                                                                                                 |
+      | Binding requirements supporting documents                                                                                               |
+      | empty_pdf.pdf                                                                                                                           |
+      | General Assessment supporting documents                                                                                                 |
+      | empty_pdf1.pdf                                                                                                                          |
+      | Please add any other comment you would like to share. {Empty}                                                                           |
 
     # Make sure assessment reports are not leaking into manage content list.
     When I visit "/collection/assessments/manage-content"
@@ -159,30 +159,30 @@ Feature: Assessments
 
     When I click "View your previous submission"
     Then I should see the following lines of text:
-      | 1. General information                                                                                                                   |
-      | Type of public sector body European Union agency                                                                                         |
-      | Select your Agency Eurojust                                                                                                              |
-      | Provide the name of the initiative, project or action containing the binding requirements to be assessed:: Pioneer in making automobiles |
-      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                 |
-      | 2. Binding requirements                                                                                                                  |
-      | The binding requirements identified concern: {Empty}                                                                                     |
-      | Specify the concerned function of trans-European digital public service(s): Defense                                                      |
-      | List the binding requirement(s) assessed. {Empty}                                                                                        |
-      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                  |
-      | Identified effects on cross-border legal interoperability {Empty}                                                                        |
-      | Identified effects on cross-border organisational interoperability {Empty}                                                               |
-      | Identified effects on cross-border semantic interoperability {Empty}                                                                     |
-      | Identified effects on cross-border technical interoperability {Empty}                                                                    |
-      | 3. Results                                                                                                                               |
-      | Internal Solutions in the Portal {Empty}                                                                                                 |
-      | Solutions not in the Portal (link) {Empty}                                                                                               |
-      | Have you discovered any remaining barriers to cross-border interoperability? No                                                          |
-      | 4. Supporting documents                                                                                                                  |
-      | Binding requirements supporting documents                                                                                                |
-      | empty_pdf.pdf                                                                                                                            |
-      | General Assessment supporting documents                                                                                                  |
-      | empty_pdf1.pdf                                                                                                                           |
-      | Please add any other comment you would like to share. {Empty}                                                                            |
+      | 1. General information                                                                                                                  |
+      | Type of public sector body European Union agency                                                                                        |
+      | Select your Agency Eurojust                                                                                                             |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
+      | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
+      | 2. Binding requirements                                                                                                                 |
+      | The binding requirements identified concern: {Empty}                                                                                    |
+      | Specify the concerned function of trans-European digital public service(s): Defense                                                     |
+      | List the binding requirement(s) assessed. {Empty}                                                                                       |
+      | Select the groups of stakeholders to which binding requirement(s) are relevant: {Empty}                                                 |
+      | Identified effects on cross-border legal interoperability {Empty}                                                                       |
+      | Identified effects on cross-border organisational interoperability {Empty}                                                              |
+      | Identified effects on cross-border semantic interoperability {Empty}                                                                    |
+      | Identified effects on cross-border technical interoperability {Empty}                                                                   |
+      | 3. Results                                                                                                                              |
+      | Internal Solutions in the Portal {Empty}                                                                                                |
+      | Solutions not in the Portal (link) {Empty}                                                                                              |
+      | Have you discovered any remaining barriers to cross-border interoperability? No                                                         |
+      | 4. Supporting documents                                                                                                                 |
+      | Binding requirements supporting documents                                                                                               |
+      | empty_pdf.pdf                                                                                                                           |
+      | General Assessment supporting documents                                                                                                 |
+      | empty_pdf1.pdf                                                                                                                          |
+      | Please add any other comment you would like to share. {Empty}                                                                           |
 
     Then I mark all emails as read
     When I move backward one page
@@ -281,7 +281,7 @@ Feature: Assessments
       | Type of public sector body National public sector body                                                             |
       | Select your country Luxembourg                                                                                     |
       | Name of your organisation Pink Floyd                                                                               |
-      | Provide the name of the initiative, project or action containing the binding requirements to be assessed:: The Wall |
+      | Provide the name of the initiative, project or action containing the binding requirements to be assessed: The Wall |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No           |
       | 2. Binding requirements                                                                                            |
       | The binding requirements identified concern: {Empty}                                                               |
