@@ -14,7 +14,7 @@ bundle: news
 label: 'Site featured'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 0
