@@ -1,0 +1,16 @@
+diff --git a/core/lib/Drupal/Core/Layout/LayoutPluginManager.php b/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
+index 0adbe2d2b3e..b0f1c54247f 100644
+--- a/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
++++ b/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
+@@ -205,9 +205,9 @@ public function getSortedDefinitions(?array $definitions = NULL, $label_key = 'l
+     $definitions = $definitions ?? $this->getDefinitions();
+     uasort($definitions, function (LayoutDefinition $a, LayoutDefinition $b) {
+       if ($a->getCategory() != $b->getCategory()) {
+-        return strnatcasecmp($a->getCategory(), $b->getCategory());
++        return strnatcasecmp((string) $a->getCategory(), (string) $b->getCategory());
+       }
+-      return strnatcasecmp($a->getLabel(), $b->getLabel());
++      return strnatcasecmp((string) $a->getLabel(), (string) $b->getLabel());
+     });
+     return $definitions;
+   }
