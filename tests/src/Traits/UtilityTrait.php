@@ -17,12 +17,14 @@ trait UtilityTrait {
    *
    * @param string $argument
    *   The string argument.
+   * @param string $delimiter
+   *   The delimiter to use. Defaults to comma.
    *
    * @return array
    *   The argument as array, with trimmed non-empty values.
    */
-  protected function explodeCommaSeparatedStepArgument(string $argument): array {
-    $argument = explode(',', $argument);
+  protected function explodeDelimitedSeparatedStepArgument(string $argument, string $delimiter = ','): array {
+    $argument = explode($delimiter, $argument);
     $argument = array_map('trim', $argument);
     $argument = array_filter($argument);
 

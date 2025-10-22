@@ -9,6 +9,12 @@ joinup_group.settings_form:
   title: 'Settings'
   base_route: entity.node.canonical
 
+joinup.moderate_content:
+  route_name: moderation.content_moderation_overview
+  title: 'Moderate content'
+  base_route: entity.node.canonical
+  weight: 199
+
 joinup_group.unpublished_content:
   route_name: entity.node.unpublished_content
   base_route: entity.node.canonical
