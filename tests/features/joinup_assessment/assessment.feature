@@ -487,3 +487,8 @@ Feature: Assessments
     And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    Then I set "short_title" as "Short title" for "Assessment 12" assessment_report submission
+    Then I go to "/collection/assessments/assessment-reports"
+    And I should not see "Assessment 12"
+    And I should see "Short title"
+    And I should see "default organization"

@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_core
+    - joinup_group
     - system
   theme:
     - iop
@@ -17,7 +17,7 @@ settings:
   id: joinup_local_tasks_block
   label: Tabs
   label_display: '0'
-  provider: joinup_core
+  provider: joinup_group
   primary: true
   secondary: false
 visibility:
