@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_core
+    - joinup_group
   theme:
     - ventuno
 id: ventuno_three_dots_menu
@@ -16,7 +16,7 @@ settings:
   id: joinup_local_tasks_block
   label: Tabs
   label_display: '0'
-  provider: joinup_core
+  provider: joinup_group
   primary: true
   secondary: false
 visibility: {  }

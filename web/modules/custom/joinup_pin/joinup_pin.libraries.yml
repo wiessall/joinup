@@ -1,0 +1,6 @@
+pinned_entities:
+  js:
+    js/pinned_entities.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

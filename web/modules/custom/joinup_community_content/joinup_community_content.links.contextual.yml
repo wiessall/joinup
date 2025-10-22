@@ -1,0 +1,4 @@
+comment_approve:
+  title: 'Approve comment'
+  route_name: 'comment.approve'
+  group: comment
