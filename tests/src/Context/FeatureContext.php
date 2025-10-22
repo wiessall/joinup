@@ -105,7 +105,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then I should see the :fields field(s) in the :region region
    */
   public function assertFieldsPresent(string $fields, string $region = ''): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
     $not_found = [];
     foreach ($fields as $field) {
@@ -134,7 +134,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then I should not see the :fields field(s) in the :region region
    */
   public function assertFieldsNotPresent(string $fields, string $region = ''): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
     foreach ($fields as $field) {
       $is_found = $region_element->findField($field);
@@ -156,7 +156,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then (the following )field(s) should be visible :fields
    */
   public function assertFieldsVisible(string $fields): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $page = $this->getSession()->getPage();
     $not_found = [];
     $not_visible = [];
@@ -198,7 +198,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then (the following )field(s) should not be visible :fields
    */
   public function assertFieldsNotVisible(string $fields): void {
-    $fields = $this->explodeCommaSeparatedStepArgument($fields);
+    $fields = $this->explodeDelimitedSeparatedStepArgument($fields);
     $page = $this->getSession()->getPage();
     $not_found = [];
     $visible = [];
@@ -240,7 +240,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then (the following )fieldsets should be present :fieldsets
    */
   public function assertFieldsetsPresent(string $fieldsets): void {
-    $fieldsets = $this->explodeCommaSeparatedStepArgument($fieldsets);
+    $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
     $not_found = [];
     foreach ($fieldsets as $fieldset) {
@@ -271,7 +271,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then (the following )fieldsets should be visible :fieldsets
    */
   public function assertFieldsetsVisible(string $fieldsets): void {
-    $fieldsets = $this->explodeCommaSeparatedStepArgument($fieldsets);
+    $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
     $not_found = [];
     $not_visible = [];
@@ -307,7 +307,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then (the following )fieldsets should not be visible :fieldsets
    */
   public function assertFieldsetsNotVisible(string $fieldsets): void {
-    $fieldsets = $this->explodeCommaSeparatedStepArgument($fieldsets);
+    $fieldsets = $this->explodeDelimitedSeparatedStepArgument($fieldsets);
     $page = $this->getSession()->getPage();
     $not_found = [];
     $visible = [];
@@ -912,7 +912,7 @@ class FeatureContext extends RawDrupalContext {
    * @When I fill in :field with values :values
    */
   public function fillFieldWithValues(string $field, string $values): void {
-    $values = $this->explodeCommaSeparatedStepArgument($values);
+    $values = $this->explodeDelimitedSeparatedStepArgument($values);
 
     /** @var \Behat\Mink\Element\NodeElement[] $items */
     $items = $this->getSession()->getPage()->findAll('named', ['field', $field]);
@@ -1388,7 +1388,9 @@ class FeatureContext extends RawDrupalContext {
 
     if (preg_match('/^(\d+)(st|nd|rd|th)$/', $buttonIdentifier, $found)) {
       $index = (int) $found[1];
-      $button = $row->find('xpath', "//input[@type='submit'][$index]");
+      $buttons = $row->findAll('xpath', "//input[@type='submit']");
+      $position = $index - 1;
+      $button = $buttons[$position] ?? NULL;
     }
     else {
       $button = $row->findButton($buttonIdentifier);

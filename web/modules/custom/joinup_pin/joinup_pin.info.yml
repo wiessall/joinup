@@ -1,0 +1,12 @@
+name: Joinup Pin
+type: module
+description: 'Provides pin/unpin functionality for group content entities.'
+package: Joinup
+core_version_requirement: ^10 || ^11
+dependencies:
+  - joinup_group
+  - og
+  - collection
+  - joinup_solution
+  - joinup_community_content
+  - meta_entity

@@ -276,6 +276,28 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
 }
 
 /**
+ * Implements hook_entity_access().
+ *
+ * Restricts access to OG Menu instances that are managed by custom pages.
+ */
+function custom_page_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // Moderators have the 'administer organic groups' permission so they can
+  // manage all group content across all groups. However since the OG Menu
+  // entities are also group content moderators are also granted access to the
+  // OG Menu administration pages. Let's specifically deny access to these,
+  // since we are handling the menu items transparently whenever custom pages
+  // are created or deleted. Moderators and collection facilitators should only
+  // have access to the edit form of an OG Menu instance so they can rearrange
+  // the custom pages, but not to the entity forms of the menu items themselves.
+  // In fact, nobody should have access to these pages except UID 1.
+  if ($entity->getEntityTypeId() === 'ogmenu_instance' && $operation !== 'update') {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
  * Implements hook_entity_field_access().
  */
 function custom_page_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
@@ -326,7 +348,7 @@ function custom_page_node_presave(NodeInterface $entity): void {
 
   $original = $entity->original ?? NULL;
   assert($original instanceof CustomPageInterface || $original === NULL);
-  if ($original && $original->isPublished() && !$entity->isPublished() && $entity->isGroupLandingPage()) {
+  if ($original && $original->isPublished() && $entity->isArchived() && $entity->isGroupLandingPage()) {
     throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
   }
 }
