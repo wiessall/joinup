@@ -1,0 +1,13 @@
+assessments.assessment_content_type.*:
+  type: config_entity
+  label: 'Assessment content type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+
+assessments.assessment_content_type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
