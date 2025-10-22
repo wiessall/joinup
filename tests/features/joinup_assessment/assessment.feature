@@ -15,7 +15,7 @@ Feature: Assessments
 
     # 1st page.
     And I fill in "Short title" with "Short title"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
     Then I should see the inline form error message "Type of public sector body field is required."
@@ -155,7 +155,7 @@ Feature: Assessments
       | You have already submitted this webform. View your previous submission.                                       |
       | You're about to fill a new assessment questionnaire. The form is prefilled with your previous submitted data. |
     # New submission is prefilled with values from previous submission.
-    And the "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" field should contain "Pioneer in making automobiles"
+    And the "Provide the name of the initiative, project or action containing the binding requirements to be assessed" field should contain "Pioneer in making automobiles"
 
     When I click "View your previous submission"
     Then I should see the following lines of text:
@@ -186,7 +186,7 @@ Feature: Assessments
 
     Then I mark all emails as read
     When I move backward one page
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Abbey Road"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Abbey Road"
     And I select the radio button "No"
     And I press "Next"
 
@@ -232,7 +232,7 @@ Feature: Assessments
     # User is able to edit a 'Require updates' submission.
     Given I am logged in as "Regular"
     And I click the link from email sent to "Regular" with subject "Your assessment needs updates"
-    When I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Let It Be"
+    When I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Let It Be"
     And I press "Next"
     And I press "Next"
     And I press "Next"
@@ -248,7 +248,7 @@ Feature: Assessments
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
     When I fill in "Name of your organisation" with "Pink Floyd"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "The Wall"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "The Wall"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
@@ -320,7 +320,7 @@ Feature: Assessments
 
     # 1st page.
     And I fill in "Short title" with "Short title"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select "<public_sector_body>" from "Type of public sector body"
     And I select "<institution_name>" from "<institution>"
     And I select the radio button "No"
@@ -360,7 +360,7 @@ Feature: Assessments
     And I fill in "Short title" with "Short title"
     And I select "European Union agency" from "Type of public sector body"
     And I select "Eurojust" from "Select your Agency"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
