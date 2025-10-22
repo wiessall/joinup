@@ -13,10 +13,11 @@ caused by hardware differences.
 
 ## Running Tests
 
-1. **Install a clean version of the site:**
+1. **Install a clean version of the site and setup for playwright:**
 
    ```bash
    ddev install
+   ddev playwright setup
    ```
 
 2. **Run the visual regression tests:**
@@ -31,6 +32,7 @@ caused by hardware differences.
    > ℹ️ To explore available tests or run individual ones:
    >
    > - `ddev playwright test --help` — see all available options
+   > - `ddev playwright test --headed` — run tests in headed mode, useful to visualize and debug
    > - `ddev playwright test [path_to_file]` — run a specific test file
    > - `ddev playwright test --list` — list available tests
    > - `ddev playwright test --grep ` — only run tests matching this regular
@@ -44,6 +46,12 @@ caused by hardware differences.
 
    Then
    open: [https://[your-project-name].ddev.local:9324/](https://[your-project-name].ddev.local:9324/)
+
+4. **(Optional) Teardown playwright setup:**
+
+   ```bash
+   ddev playwright teardown
+   ```
 
 ---
 
