@@ -336,7 +336,7 @@ class Archiver {
       $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
         $entity,
         'archived',
-        'Joinup',
+        'the Portal',
       );
       $this->workflowHelper->archiveEntity($entity, $revisionLogMessage);
     }
