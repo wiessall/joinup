@@ -43,10 +43,7 @@ third_party_settings:
         back_button_show: false
         back_button_text: Back
         next_button_text: Next
-        required_fields: true
         step_help: ''
-        open: true
-        description: ''
     group_binding_requirements:
       children:
         - group_page2help
@@ -69,9 +66,7 @@ third_party_settings:
         back_button_show: true
         back_button_text: Back
         next_button_text: Next
-        required_fields: true
         step_help: ''
-        open: false
     group_statements:
       children:
         - group_assessments_statements
@@ -91,9 +86,7 @@ third_party_settings:
         back_button_show: true
         back_button_text: Back
         next_button_text: Next
-        required_fields: true
         step_help: ''
-        open: false
     group_page1text1:
       children: {  }
       label: Page1Text1
@@ -117,13 +110,13 @@ third_party_settings:
       weight: 4
       format_type: markup
       format_settings:
-        show_empty_fields: 1
-        label_as_html: 0
-        id: ''
-        classes: form-wrapper
         markup:
           value: '<div><p>This section collects information on the assessed binding requirements.</p><p>The concept of ‘Binding requirements’ is defined in Article 2(15) IEA as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and</li><li>which has an effect on cross-border interoperability.</li></ul><p>For more information please consult the guidelines.</p></div><div><h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA.</p><p>‘<em>Digital services provided by Union entities or public sector bodies to one another or to natural or legal persons in the Union, and requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ – Article 2(2) IEA</p></div>'
           format: content_editor
+        show_empty_fields: '1'
+        id: ''
+        classes: form-wrapper
+        label_as_html: 0
     group_assessment_requirements:
       children: {  }
       label: 'Assessment requirements'
@@ -147,13 +140,13 @@ third_party_settings:
       weight: 20
       format_type: markup
       format_settings:
-        show_empty_fields: 1
-        label_as_html: 0
-        id: ''
-        classes: form-wrapper
         markup:
           value: '<div><h2>Identified effects on cross-border interoperability</h2></div><div><p>The Interoperable Europe Act requires the identification of effects on cross-border interoperability, i.e., on the legal, organisational, semantic and technical interoperability of digital public services that exchange data across borders.</p><p>Taking the EIF as the main starting point for your assessment means considering the extent to which the proposed requirements enable or hinder interoperability. This could also show whether additional requirements are needed. As explained above, it is necessary to keep in mind that <strong>the assessment does not need to show the way towards full interoperability, but it should help detect ways towards </strong><em><strong>more </strong></em><strong>interoperability.</strong></p><p>Please tick the most appropriate and provide a brief description.</p></div>'
           format: content_editor
+        show_empty_fields: '1'
+        id: ''
+        classes: form-wrapper
+        label_as_html: 0
     group_supporting_documents:
       children:
         - requirement_documents
