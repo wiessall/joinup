@@ -27,7 +27,7 @@ Feature: Report inappropriate content
       | Subject        | Invalid content |
       | Message        | Spam            |
     When I press "Submit"
-    And I see h1 span element with title "<title>"
+    And I should see "<title>"
 
     Examples:
       | type        | title                        | body                    |
