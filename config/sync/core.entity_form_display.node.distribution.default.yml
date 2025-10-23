@@ -26,7 +26,7 @@ mode: default
 content:
   current_workflow_state:
     type: current_workflow_state_widget
-    weight: 7
+    weight: 8
     region: content
     settings:
       title: 'Current workflow state'
@@ -35,7 +35,7 @@ content:
     third_party_settings: {  }
   description:
     type: text_textarea
-    weight: 1
+    weight: 2
     region: content
     settings:
       rows: 9
@@ -46,38 +46,45 @@ content:
         hide_guidelines: '1'
   field_licence:
     type: options_select
-    weight: 3
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
-    weight: 8
+    weight: 9
     region: content
     settings:
       use_transition_label: 1
     third_party_settings: {  }
   format:
     type: options_select
-    weight: 4
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  process_status:
-    type: options_select
     weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
-  representation_technique:
+  langcode:
+    type: language_select
+    weight: 0
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  process_status:
     type: options_select
     weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
+  representation_technique:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   resources:
     type: paragraphs
-    weight: 2
+    weight: 3
     region: content
     settings:
       title: Paragraph
@@ -97,7 +104,7 @@ content:
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
@@ -111,7 +118,6 @@ content:
 hidden:
   created: true
   file_size: true
-  langcode: true
   og_audience: true
   path: true
   promote: true
