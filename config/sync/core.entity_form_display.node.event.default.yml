@@ -100,7 +100,7 @@ content:
     third_party_settings: {  }
   field_event_contact_email:
     type: email_default
-    weight: 12
+    weight: 13
     region: content
     settings:
       placeholder: ''
@@ -132,7 +132,7 @@ content:
     third_party_settings: {  }
   field_event_web_url:
     type: link_default
-    weight: 13
+    weight: 14
     region: content
     settings:
       placeholder_url: ''
@@ -174,7 +174,7 @@ content:
     third_party_settings: {  }
   field_scope:
     type: tagify_select_widget
-    weight: 14
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -198,7 +198,7 @@ content:
     third_party_settings: {  }
   field_topic:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 15
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -224,14 +224,21 @@ content:
       info_label: ''
       parent_selection: 1
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 25
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   simple_sitemap:
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   spatial_coverage:
     type: tagify_entity_reference_autocomplete_widget
-    weight: 17
+    weight: 18
     region: content
     settings:
       match_operator: CONTAINS
@@ -256,6 +263,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  translation:
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 20
@@ -275,7 +287,6 @@ hidden:
   created: true
   field_event_coordinates: true
   field_site_featured: true
-  langcode: true
   og_audience: true
   path: true
   promote: true
