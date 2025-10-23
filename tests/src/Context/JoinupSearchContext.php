@@ -178,7 +178,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see the following :facet facet items :labels in this order
    */
   public function assertContentTypeFacetItemsPresent(string $labels, ?string $facet = NULL): void {
-    $labels = $this->explodeCommaSeparatedStepArgument($labels);
+    $labels = $this->explodeDelimitedSeparatedStepArgument($labels);
     $xpath = "a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";
     if ($facet) {
       $xpath = "div[contains(concat(' ', normalize-space(@class), ' '), ' facet-block__content ') and .//h3[text() = '$facet']]//$xpath";
@@ -209,7 +209,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @When I should not see the following facet items :labels
    */
   public function assertContentTypeFacetItemsNotPresent(string $labels): void {
-    $labels = $this->explodeCommaSeparatedStepArgument($labels);
+    $labels = $this->explodeDelimitedSeparatedStepArgument($labels);
 
     $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
@@ -572,7 +572,7 @@ class JoinupSearchContext extends RawDrupalContext {
       return preg_replace('/^\(-\) /', '', $text);
     }, $element->findAll('css', $css));
 
-    $values = $this->explodeCommaSeparatedStepArgument($values);
+    $values = $this->explodeDelimitedSeparatedStepArgument($values);
     Assert::assertEquals(
       $values,
       $found,
@@ -704,7 +704,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @When I should see the following facet summary :labels
    */
   public function assertFacetSummary(string $labels): void {
-    $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
+    $present_labels = $this->explodeDelimitedSeparatedStepArgument($labels);
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
