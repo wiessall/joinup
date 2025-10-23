@@ -1,0 +1,16 @@
+_core:
+  default_config_hash: g1qj6YE5Eg3qUo_nehv65QvqkdOLsXJxcaep1lsNrC8
+langcode: en
+notifications:
+  request:
+    enabled: true
+    subject: 'New OAuth client request from [user:name]'
+    body: "Dear [site:name] Administrator,\r\n\r\nA new OAuth client request has been submitted by [user:name] on [site:name].\r\n\r\nThis is an automated message. Please do not reply to this email.\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
+  approve:
+    enabled: true
+    subject: 'Your OAuth client request has been approved'
+    body: "Dear [user:name],\r\n\r\nWe are pleased to inform you that your OAuth client request on [site:name] has been approved.\r\n\r\nYou can now access your client credentials and begin using the API.\r\n\r\nIf you have any questions, feel free to contact our support team.\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
+  reject:
+    enabled: true
+    subject: 'Your OAuth client request has been rejected'
+    body: "Dear [user:name],\r\n\r\nWe regret to inform you that your OAuth client request on [site:name] could not be approved at this time.\r\n\r\nIf you believe this decision was made in error or would like to discuss further, please reach out to our support team.\r\n\r\nThank you for your understanding.\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
