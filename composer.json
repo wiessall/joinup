@@ -501,7 +501,7 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
             "drupal/simple_oauth": {
-                "SimpleOauthAuthenticationProvider::applies @see https://drupal.org/i/3553759": "resources/patch/php/drupal/simple_oauth/3553759.diff"
+                "SimpleOauthAuthenticationProvider::applies @see https://drupal.org/i/3553759": "resources/patch/php/drupal/simple_oauth/3553759.mr196-note610533.diff"
             },
             "drupal/sitewide_alert": {
                 "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff"
