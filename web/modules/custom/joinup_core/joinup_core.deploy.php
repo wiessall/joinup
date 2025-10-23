@@ -134,9 +134,71 @@ function joinup_core_deploy_200702(): string {
 }
 
 /**
- * Archives solutions having less than 10 members.
+ * Recreate invalid track_usage queue items.
  */
 function joinup_core_deploy_200703(array &$sandbox): string {
+  $db = \Drupal::database();
+  $queue = \Drupal::queue('track_usage');
+  $queue->createQueue();
+  if (!isset($sandbox['item_ids'])) {
+    $sandbox['item_ids'] = $db->select('queue', 'q')
+      ->fields('q', ['item_id'])
+      ->condition('q.name', 'track_usage')
+      ->execute()
+      ->fetchCol();
+    $sandbox['processed'] = 0;
+    $sandbox['recreated'] = 0;
+    $sandbox['total'] = count($sandbox['item_ids']);
+    $bundle_info = \Drupal::service('entity_type.bundle.info')->getAllBundleInfo();
+    $sandbox['bundles'] = array_merge(
+      ...array_map(
+        static fn (string $entity_type_id, array $bundles) =>
+        array_fill_keys(array_keys($bundles), $entity_type_id),
+        array_keys($bundle_info),
+        $bundle_info
+      )
+    );
+  }
+  $itemIds = array_splice($sandbox['item_ids'], 0, 1000);
+  $itemsQuery = $db->select('queue', 'q')
+    ->fields('q', ['item_id', 'data'])
+    ->condition('q.name', 'track_usage')
+    ->condition('q.item_id', $itemIds, 'IN');
+  foreach ($itemsQuery->execute()->fetchAll() as $item) {
+    $unserializedData = unserialize($item->data, ['allowed_classes' => FALSE]);
+    $entityType = $sandbox['bundles'][$unserializedData['type']] ?? NULL;
+    if (
+      $entityType ||
+      !array_key_exists('revision', $unserializedData) ||
+      !is_bool($unserializedData['revision']) ||
+      !is_array($unserializedData['ids'])
+    ) {
+      $db->delete('queue')->condition('item_id', $item->item_id)->execute();
+      $queue->createItem(
+        [
+          'type' => $entityType,
+          'ids' => [$unserializedData['ids']],
+          'revision' => 'loadMultiple',
+          'config' => 'file_visibility',
+        ]
+      );
+      $sandbox['recreated']++;
+    }
+  }
+  $sandbox['processed'] += count($itemIds);
+  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
+  return sprintf(
+    "Processed %s 'track_usage' queue item from %s. Recreated %s items.",
+    $sandbox['processed'],
+    $sandbox['total'],
+    $sandbox['recreated'],
+  );
+}
+
+/**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_200704(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveGroupsWithFewMembers($sandbox);
@@ -152,7 +214,7 @@ function joinup_core_deploy_200703(array &$sandbox): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_200704(array &$sandbox): string {
+function joinup_core_deploy_200705(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archivePotentiallyOutdatedContent($sandbox);
@@ -168,7 +230,7 @@ function joinup_core_deploy_200704(array &$sandbox): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_200705(array &$sandbox): string {
+function joinup_core_deploy_200706(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveSolutionsWithoutReleaseOrDistro($sandbox);
@@ -184,7 +246,7 @@ function joinup_core_deploy_200705(array &$sandbox): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_200706(array &$sandbox): string {
+function joinup_core_deploy_200707(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveGroupsWithoutContent($sandbox);
