@@ -18,7 +18,7 @@ Feature:
 
     When I am not logged in
     And I visit the "Portal Licensing Assistant" "custom page"
-    Then I should see "Portal Licensing Assistant"
+    Then I see h1 span element with title "Portal Licensing Assistant"
     And I should see the link "Learn more about SPDX identifiers"
     And I should see the following filter categories in the correct order:
       | Can        |
