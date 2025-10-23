@@ -265,10 +265,11 @@ class Archiver {
       $sandbox['processed'] = 0;
       $sandbox['total'] = count($sandbox['groupIds']);
     }
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     $groupIds = array_splice($sandbox['groupIds'], 0, 100);
     foreach ($groupIds as $groupId) {
-      $group = $this->entityTypeManager->getStorage('node')->load($groupId);
+      $group = $nodeStorage->load($groupId);
       if (!$group instanceof GroupInterface) {
         continue;
       }
@@ -276,9 +277,21 @@ class Archiver {
         continue;
       }
 
-      $groupContentIds = $group->getGroupContentIds();
-      $activeMembers = $group->getActiveMemberCount();
-      if (array_filter($groupContentIds) && $activeMembers) {
+      $bundles = ['custom_page', 'discussion', 'document', 'event', 'news'];
+      $groupContentIdsRaw = $group->getGroupContentIds();
+      $groupContentNodeIds = array_intersect_key(
+        $groupContentIdsRaw['node'] ?? [],
+        array_combine($bundles, $bundles)
+      );
+      $groupContentIds = array_merge(...array_values($groupContentNodeIds));
+      $notArchivedGroupContentIds = array_filter(
+        $groupContentIds,
+        function ($groupContentId) use ($nodeStorage): bool {
+          $node = $nodeStorage->load($groupContentId);
+          return !$node instanceof ArchivableEntityInterface || !$node->isArchived();
+        },
+      );
+      if (array_filter($notArchivedGroupContentIds)) {
         continue;
       }
 
