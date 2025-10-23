@@ -35,7 +35,7 @@ Feature:
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more events"
-    And I see h1 span element with title "Events"
+    And I should see the text "Events"
 
     # News.
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
@@ -45,7 +45,7 @@ Feature:
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more news"
-    And I see h1 span element with title "News"
+    And I should see the text "News"
 
   Scenario: Authenticated user visiting the landing page.
     Given I am logged in as a user with the authenticated role
