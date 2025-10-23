@@ -84,6 +84,7 @@
         "drupal/monolog": "^3.0",
         "drupal/multivalue_form_element": "^1.0",
         "drupal/node_revision_delete": "^2.0",
+        "drupal/oauth_client": "1.x-dev@dev",
         "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
@@ -175,6 +176,7 @@
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
+        "drupal/restui": "^1.22",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
@@ -497,6 +499,9 @@
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
+            },
+            "drupal/simple_oauth": {
+                "REST routes broken again @see https://www.drupal.org/i/3552854": "resources/patch/php/drupal/simple_oauth/3552854.diff"
             },
             "drupal/sitewide_alert": {
                 "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff"

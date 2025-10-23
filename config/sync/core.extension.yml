@@ -186,6 +186,7 @@ module:
   mysql: 0
   node: 0
   node_revision_delete: 0
+  oauth_client: 0
   oe_authentication: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
