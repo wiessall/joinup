@@ -347,7 +347,7 @@ function custom_page_node_presave(NodeInterface $entity): void {
 
   $original = $entity->original ?? NULL;
   assert($original instanceof CustomPageInterface || $original === NULL);
-  if ($original && $original->isPublished() && !$entity->isPublished() && $entity->isGroupLandingPage()) {
+  if ($original && $original->isPublished() && $entity->isArchived() && $entity->isGroupLandingPage()) {
     throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
   }
 }
