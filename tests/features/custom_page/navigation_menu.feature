@@ -210,7 +210,7 @@ Feature: Navigation menu for custom pages
     When I click "TOCO 1-1" in the "Table of contents outline"
     Then I should see the link "Up" in the "Table of contents outline"
     When I click "Up" in the "Table of contents outline"
-    Then I should see "TOCO 1"
+    And I see h1 span element with title "TOCO 1"
 
   @javascript
   Scenario: Assert cache invalidation of the TOC outline.

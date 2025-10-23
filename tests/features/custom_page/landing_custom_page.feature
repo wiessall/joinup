@@ -16,7 +16,7 @@ Feature: Landing custom page.
 
     When I visit "/dashboard"
     And I click "Custom landing pages"
-    Then I should see "Custom landing pages"
+    And I should see the heading "Custom landing pages"
     And I should see the link "Add custom landing page"
     But I should not see "Early law and jurisprudence"
 
@@ -34,7 +34,7 @@ Feature: Landing custom page.
     #  Page without group should not generate any errors.
     Given I am an anonymous user
     When I visit the "Twelve Tables" "custom page"
-    Then I should see "Twelve Tables"
+    And I see h1 span element with title "Twelve Tables"
 
   @javascript
   Scenario Outline: Limited aliases for landing page
