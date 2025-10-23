@@ -500,9 +500,6 @@
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
-            "drupal/simple_oauth": {
-                "REST routes broken again @see https://www.drupal.org/i/3552854": "resources/patch/php/drupal/simple_oauth/3552854.diff"
-            },
             "drupal/sitewide_alert": {
                 "Cache prevents display of alert @see https://www.drupal.org/i/3543046": "resources/patch/php/drupal/sitewide_alert/3543046.diff"
             },
