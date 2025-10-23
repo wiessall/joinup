@@ -6,7 +6,14 @@ dependencies:
     - field.storage.node.field_attachment
     - node.type.event
   module:
+    - content_translation
     - file
+third_party_settings:
+  content_translation:
+    translation_sync:
+      target_id: target_id
+      display: display
+      description: description
 _core:
   default_config_hash: RLvy_OUfBqVfTKqjHzJ__ul0jSUtqPQt8Q48m7eWlQQ
 id: node.event.field_attachment
