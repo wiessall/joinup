@@ -36,7 +36,6 @@ dependencies:
     - file
     - filter
     - flag
-    - joinup
     - joinup_assessment
     - joinup_community_content
     - joinup_core
@@ -60,6 +59,7 @@ dependencies:
     - meta_entity
     - moderation
     - node
+    - oauth_client
     - og
     - paragraphs_type_permissions
     - private_message
@@ -220,6 +220,7 @@ permissions:
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
+  - 'manage oauth clients'
   - 'manage solutions'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
