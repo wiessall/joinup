@@ -39,10 +39,10 @@ function joinup_distribution_entity_bundle_info_alter(array &$bundles): void {
 }
 
 /**
- * Implements hook_entity_base_field_info_alter().
+ * Implements hook_entity_bundle_field_info_alter().
  */
-function joinup_distribution_entity_base_field_info_alter(array &$fields, EntityTypeInterface $entity_type): void {
-  if ($entity_type->id() === 'node' && !empty($fields['title'])) {
+function joinup_distribution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
+  if ($bundle === 'distribution' && $entity_type->id() === 'node' && !empty($fields['title'])) {
     $fields['title']->addConstraint('UniqueDistributionTitle', []);
   }
 }
@@ -107,7 +107,11 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
  * Implements hook_form_FORM_ID_alter().
  */
 function joinup_distribution_form_node_distribution_form_alter(array &$form, FormStateInterface $formState): void {
-  $parent = \Drupal::routeMatch()->getParameter('node');
+  $route = \Drupal::routeMatch();
+  if ($route->getRouteName() === 'entity.node.content_translation_add') {
+    return;
+  }
+  $parent = $route->getParameter('node');
 
   // Bail out if the solution or release is not present on the route. Since this
   // form is only intended to be used in the context of a solution or  release,
