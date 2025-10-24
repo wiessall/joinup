@@ -281,6 +281,14 @@ content:
       collapsed: true
       revision: false
     third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   provider:
     type: inline_entity_form_simple
     weight: 23
@@ -293,14 +301,6 @@ content:
       collapsible: false
       collapsed: false
       revision: false
-    third_party_settings: { }
-  name:
-    type: string_textfield
-    weight: 21
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   requirement_documents:
     type: file_generic

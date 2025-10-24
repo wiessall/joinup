@@ -386,8 +386,8 @@ content:
 hidden:
   binding_requirement: true
   created: true
-  provider: true
   langcode: true
+  provider: true
   results_in: true
   search_api_excerpt: true
   status: true
