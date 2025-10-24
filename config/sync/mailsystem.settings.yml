@@ -17,3 +17,7 @@ modules:
     none:
       sender: mime_mail
       formatter: mime_mail
+  joinup_api:
+    none:
+      sender: mime_mail
+      formatter: mime_mail
