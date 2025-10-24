@@ -164,6 +164,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Open Source Software Solutions'),
         '#url' => Url::fromRoute('view.eu_oss_catalogue_admin.admin'),
       ],
+      [
+        '#title' => $this->t('OAuth2 Client Requests'),
+        '#url' => Url::fromRoute('view.oauth_client_request.admin_page'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {
