@@ -35,46 +35,26 @@ third_party_settings:
           custom_class_choose: null
           custom_styles: null
           custom_data_attributes: null
-          regions:
-            top:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            first:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            second:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            bottom:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
         components:
           f080f8ad-1aaf-4377-8477-2e1edd777732:
             uuid: f080f8ad-1aaf-4377-8477-2e1edd777732
             region: top
             configuration:
               id: 'field_block:assessment_content:assessment:name'
+              label: Name
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
                 type: string
                 label: above
                 settings:
                   link_to_entity: false
-                third_party_settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
             additional: {  }
           d8de6b29-cc14-4ebc-b5ea-5640a65e7c93:
@@ -82,16 +62,29 @@ third_party_settings:
             region: first
             configuration:
               id: 'field_block:assessment_content:assessment:expression'
+              label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
                 type: entity_reference_entity_view
                 label: above
                 settings:
                   view_mode: default
-                  link: true
-                third_party_settings: {  }
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 1
             additional: {  }
           3741dd00-a7de-4d50-b9f7-344952f8a341:
@@ -99,16 +92,29 @@ third_party_settings:
             region: second
             configuration:
               id: 'field_block:assessment_content:assessment:has_related_service'
+              label: 'Affected service'
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
                 type: entity_reference_entity_view
                 label: above
                 settings:
                   view_mode: default
-                  link: true
-                third_party_settings: {  }
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
             additional: {  }
           4a46a810-83b7-4351-b244-f827e812cbed:
@@ -171,31 +177,6 @@ third_party_settings:
           custom_class_choose: null
           custom_styles: null
           custom_data_attributes: null
-          regions:
-            top:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            first:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            second:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            bottom:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
         components:
           9e434583-c9a2-4674-beb4-5d5730c04ff5:
             uuid: 9e434583-c9a2-4674-beb4-5d5730c04ff5
@@ -223,7 +204,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -254,7 +234,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -270,31 +249,6 @@ third_party_settings:
           custom_class_choose: null
           custom_styles: null
           custom_data_attributes: null
-          regions:
-            top:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            first:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            second:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            bottom:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
         components:
           79a43c20-ad3a-4c2c-86fb-a530b7056f7b:
             uuid: 79a43c20-ad3a-4c2c-86fb-a530b7056f7b
@@ -322,7 +276,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -353,7 +306,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
