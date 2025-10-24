@@ -70,9 +70,6 @@ export default defineConfig({
     {
       name: "mobile-chrome",
       use: { ...devices["Pixel 5"] },
-      // Run mobile after desktop to avoid drush uli being called for the same
-      // user concurrently, which results in one of them failing.
-      dependencies: ["desktop-chrome"],
     },
   ],
 });
