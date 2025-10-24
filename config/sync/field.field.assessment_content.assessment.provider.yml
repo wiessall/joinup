@@ -1,11 +1,11 @@
-uuid: 5a0b38c1-33fe-465e-9e38-2388b8276d2f
+uuid: 5a0b38c1-33fe-465e-9e38-2388b8276d2j
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.assessment_content_type.assessment
     - assessments.assessment_content_type.public_organization
-    - field.storage.assessment_content.is_provided_by
+    - field.storage.assessment_content.provider
   module:
     - rdf_sync
     - tmgmt_content
@@ -16,8 +16,8 @@ third_party_settings:
     target_id:
       predicate: 'http://data.europa.eu/m8g/isProvidedBy'
       type: resource
-id: assessment_content.assessment.is_provided_by
-field_name: is_provided_by
+id: assessment_content.assessment.provider
+field_name: provider
 entity_type: assessment_content
 bundle: assessment
 label: 'Provided by'

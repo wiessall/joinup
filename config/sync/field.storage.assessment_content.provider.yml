@@ -1,11 +1,11 @@
-uuid: 5bae1cf5-eb11-4892-9abd-6f4c9d94ce6a
+uuid: 5bae1cf5-eb11-4892-9abd-6f4c9d94ce6b
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment_content.is_provided_by
-field_name: is_provided_by
+id: assessment_content.provider
+field_name: provider
 entity_type: assessment_content
 type: entity_reference
 settings:

@@ -9,7 +9,7 @@ dependencies:
     - field.field.assessment_content.assessment.binding_requirement
     - field.field.assessment_content.assessment.expression
     - field.field.assessment_content.assessment.has_related_service
-    - field.field.assessment_content.assessment.is_provided_by
+    - field.field.assessment_content.assessment.provider
     - field.field.assessment_content.assessment.name
     - field.field.assessment_content.assessment.requirement_documents
     - field.field.assessment_content.assessment.results_in
@@ -26,7 +26,7 @@ third_party_settings:
       children:
         - name
         - group_page1text1
-        - is_provided_by
+        - provider
         - expression
       label: '1. General information'
       region: content
@@ -288,7 +288,7 @@ content:
       collapsed: true
       revision: false
     third_party_settings: {  }
-  is_provided_by:
+  provider:
     type: inline_entity_form_simple
     weight: 23
     region: content
@@ -300,7 +300,7 @@ content:
       collapsible: false
       collapsed: false
       revision: false
-    third_party_settings: {  }
+    third_party_settings: { }
   name:
     type: string_textfield
     weight: 21
