@@ -52,6 +52,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $this->sanitizeLogAlertsSettings();
     $this->sanitizeEmailConfirmerData();
     $this->sanitizeDownloadEventData();
+    $this->sanitizePrivateMessageEntityData();
   }
 
   /**
@@ -65,6 +66,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $messages[] = dt('Sanitize log alerts settings.');
     $messages[] = dt('Sanitize email confirmer data.');
     $messages[] = dt('Sanitize download event data.');
+    $messages[] = dt('Sanitize private messages data.');
   }
 
   /**
@@ -124,6 +126,15 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   }
 
   /**
+   * Sanitizes private message entity related data.
+   */
+  protected function sanitizePrivateMessageEntityData(): void {
+    $this->sanitizeEntityFieldsData('private_message', [
+      'message',
+    ]);
+  }
+
+  /**
    * Truncates the given table.
    */
   #[CLi\Argument(name: 'tableName', description: 'The table name to truncate.')]
@@ -152,6 +163,9 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       // Generate a sample value from the field definition class.
       $fieldDefinition = BaseFieldDefinition::createFromFieldStorageDefinition($fieldStorageDefinition);
       $sampleValue = $fieldTypeClass::generateSampleValue($fieldDefinition);
+      // Determine a separator based on whether it's a base field.
+      $separator = $fieldStorageDefinition->isBaseField() ? '__' : '_';
+
       $updateFields = match ($fieldType) {
         'email',
         'telephone',
@@ -159,11 +173,11 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
         'string_long',
         'text',
         'text_long' => [
-          $fieldName . '_value' => $sampleValue['value'],
+          $fieldName . $separator . 'value' => substr($sampleValue['value'], 0, 128),
         ],
         'text_with_summary' => [
-          $fieldName . '_value' => $sampleValue['value'],
-          $fieldName . '_summary' => $sampleValue['summary'],
+          $fieldName . $separator . 'value' => substr($sampleValue['value'], 0, 128),
+          $fieldName . $separator . 'summary' => substr($sampleValue['summary'], 0, 128),
         ],
         // Unsupported field type.
         default => throw new \Exception(dt('The @field_type field type is not supported.', ['@field_type' => $fieldType])),
