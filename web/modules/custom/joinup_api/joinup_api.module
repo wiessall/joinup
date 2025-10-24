@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup API module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\joinup_notification\MailContentTypeHeader;
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_api_mail(string $key, array &$message, array $params): void {
+  if ($key !== 'oauth_client_notification') {
+    return;
+  }
+  $message['subject'] = $params['subject'] ?? '';
+  $message['body'][] = $params['body'] ?? '';
+  $message['headers']['Content-Type'] = MailContentTypeHeader::TextPlain->value;
+}
