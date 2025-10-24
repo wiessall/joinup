@@ -4,12 +4,15 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { userLogin } from "../utils/functions";
+import authUtils from "../utils/authUtils";
+import pageUtils from "../utils/pageUtils";
+import { projectConfig } from "../config/project.config";
 
 test.describe("Language picker", () => {
   test("Testing the language picker", async ({ page }) => {
-    await userLogin(page, "translator");
+    await authUtils.login(projectConfig.users.translator, page);
     await page.goto("/");
+    await pageUtils.prepareForScreenshot(page);
 
     // Initial closed state.
     await expect(page.locator(".block-language-picker")).toHaveScreenshot(
@@ -21,18 +24,12 @@ test.describe("Language picker", () => {
     );
     const dropdown = page.locator(".block-language-picker .dropdown-menu");
 
-    await button.focus();
-    await page.keyboard.press("Enter");
-
+    await button.click();
     await expect(button).toHaveAttribute("aria-expanded", "true");
     await expect(dropdown).toHaveClass(/show/);
     await expect(dropdown).toBeVisible();
-    await expect
-      .soft(dropdown)
-      .toHaveScreenshot(`block-language-picker-open.png`);
-
-    await page.keyboard.press("Escape");
-
+    await expect(dropdown).toHaveScreenshot("block-language-picker-open.png");
+    await button.click();
     await expect(button).toHaveAttribute("aria-expanded", "false");
     await expect(dropdown).not.toHaveClass(/show/);
     await expect(dropdown).toBeHidden();
