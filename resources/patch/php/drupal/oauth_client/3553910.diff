@@ -1,12 +1,14 @@
 diff --git a/config/install/oauth_client.settings.yml b/config/install/oauth_client.settings.yml
-index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..3d3b9a495ba0f0f8981f4d076b3a528adef56f5f 100644
+index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..6fb568cd06d13127ea580a0415b238d1f4e3287f 100644
 --- a/config/install/oauth_client.settings.yml
 +++ b/config/install/oauth_client.settings.yml
-@@ -2,13 +2,15 @@ langcode: en
+@@ -1,27 +1,31 @@
+ langcode: en
  notifications:
    request:
-     enabled: false
+-    enabled: false
 -    subject: 'New OAuth client request from [user:name]'
++    enabled: true
 +    subject: 'New OAuth client request from [oauth_client_request:owner] on [site:name]'
      body: |
 -      Dear [site:name] Administrator,
@@ -18,12 +20,14 @@ index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..3d3b9a495ba0f0f8981f4d076b3a528a
 +      - [oauth_client_request:request_reason]
  
 -      This is an automated message. Please do not reply to this email.
-+      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:edit-url].
++      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url].
  
        Best regards,
        The [site:name] Team
-@@ -17,11 +19,13 @@ notifications:
-     enabled: false
+ 
+   approve:
+-    enabled: false
++    enabled: true
      subject: 'Your OAuth client request has been approved'
      body: |
 -      Dear [user:name],
@@ -35,12 +39,16 @@ index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..3d3b9a495ba0f0f8981f4d076b3a528a
 -      You can now access your client credentials and begin using the API.
 +      What is next?
 +      - Visit the [oauth_client_request:owner:client_requests] to view the available list of your clients.
-+      - Visit the [oauth_client_request:edit-url] page to view the client ID and set the client secret.
++      - Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.
  
        If you have any questions, feel free to contact our support team.
  
-@@ -32,11 +36,11 @@ notifications:
-     enabled: false
+@@ -29,14 +33,14 @@ notifications:
+       The [site:name] Team
+ 
+   reject:
+-    enabled: false
++    enabled: true
      subject: 'Your OAuth client request has been rejected'
      body: |
 -      Dear [user:name],
@@ -245,6 +253,19 @@ index 0000000000000000000000000000000000000000..6ea3d249604171e76c0d8b1690c033fe
 +  }
 +
 +}
+diff --git a/src/Form/FormAccessTrait.php b/src/Form/FormAccessTrait.php
+index e92d132ca608da494a3d98f21dcbdf1943acd6b7..94f2e0e56f4549b76764103afd188bd4ecfffdb6 100644
+--- a/src/Form/FormAccessTrait.php
++++ b/src/Form/FormAccessTrait.php
+@@ -41,7 +41,7 @@ trait FormAccessTrait {
+       return $access;
+     }
+ 
+-    $isConfidential = $client->hasField('confidential') && $client->get('confidential')->value;
++    $isConfidential = !$client->get('confidential')->isEmpty() && $client->get('confidential')->first()->getValue()['value'];
+     $isCurrentUser = $user->id() == $this->currentUser()->id();
+     $clientBelongsToUser = $client->get('user_id')->target_id == $user->id();
+ 
 diff --git a/src/Form/OauthClientEditForm.php b/src/Form/OauthClientEditForm.php
 index eca3cd084dd0f55bed3d36c37264c631b56079f0..7c259effb08b5eaa288f266bdd197bdc789ec8f5 100644
 --- a/src/Form/OauthClientEditForm.php
@@ -503,10 +524,10 @@ index d1246ae1cfa2d75763cd787ec6ee3f355e03f99a..00000000000000000000000000000000
 -}
 diff --git a/src/Hook/OauthClientTokenHooks.php b/src/Hook/OauthClientTokenHooks.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..0f53ec9996661c53c2dc83a884995b6ff5c27776
+index 0000000000000000000000000000000000000000..e73461cc40533c524380b840e4a0e783189704bc
 --- /dev/null
 +++ b/src/Hook/OauthClientTokenHooks.php
-@@ -0,0 +1,174 @@
+@@ -0,0 +1,187 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -517,6 +538,7 @@ index 0000000000000000000000000000000000000000..0f53ec9996661c53c2dc83a884995b6f
 +use Drupal\Core\Hook\Attribute\Hook;
 +use Drupal\Core\Render\BubbleableMetadata;
 +use Drupal\Core\Routing\UrlGeneratorInterface;
++use Drupal\Core\Url;
 +use Drupal\user\Entity\User;
 +use Symfony\Component\DependencyInjection\Attribute\Autowire;
 +
@@ -562,9 +584,13 @@ index 0000000000000000000000000000000000000000..0f53ec9996661c53c2dc83a884995b6f
 +            'name' => t('Label'),
 +            'description' => t('The label of the request.'),
 +          ],
-+          'edit-url' => [
-+            'name' => t('Edit URL'),
-+            'description' => t('The URL of the request edit page.'),
++          'request-edit-url' => [
++            'name' => t('Request edit URL'),
++            'description' => t('The URL to edit the request. Usually for the manager to approve or reject the request.'),
++          ],
++          'client-edit-url' => [
++            'name' => t('Client edit URL'),
++            'description' => t('The URL the client to change the the client of the request. Usually for the owner to edit the secret.'),
 +          ],
 +          'client' => [
 +            'name' => t('Client'),
@@ -633,8 +659,16 @@ index 0000000000000000000000000000000000000000..0f53ec9996661c53c2dc83a884995b6f
 +            $replacements[$original] = $request->label();
 +            break;
 +
-+          case 'edit-url':
++          case 'request-edit-url':
 +            $replacements[$original] = $request->toUrl('edit-form')->setAbsolute()->toString();
++            break;
++
++          case 'client-edit-url':
++            $url = Url::fromRoute('oauth_client.edit', [
++              'user' => $request->getUser()->id(),
++              'client' => $request->getClient()->id(),
++            ]);
++            $replacements[$original] = $url->setAbsolute()->toString();
 +            break;
 +
 +          case 'request_reason':
@@ -706,10 +740,10 @@ index 19e883b3d459d16088dc32a1613569f94d77aa00..ec486ae0ce026050e5351af4c421ee38
      $accounts = $userStorage->loadMultiple($uids);
 diff --git a/tests/src/Functional/NotificationFunctionalTest.php b/tests/src/Functional/NotificationFunctionalTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0beb2c7624
+index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c74162063810a03
 --- /dev/null
 +++ b/tests/src/Functional/NotificationFunctionalTest.php
-@@ -0,0 +1,209 @@
+@@ -0,0 +1,223 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -755,6 +789,13 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +   * Tests that no notifications are sent for disabled actions.
 +   */
 +  public function testNoNotificationsWhenDisabled(): void {
++    // Disable all notifications.
++    $config = $this->container->get('config.factory')->getEditable('oauth_client.settings');
++    $config->set('notifications.request.enabled', FALSE);
++    $config->set('notifications.approve.enabled', FALSE);
++    $config->set('notifications.reject.enabled', FALSE);
++    $config->save();
++
 +    $requester = user_load_by_name('requester');
 +    $requesterId = $requester->id();
 +
@@ -803,13 +844,6 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +   * Tests notifications on request creation, approval, and rejection.
 +   */
 +  public function testNotificationsOnRequestApproveReject(): void {
-+    // Enable all notifications.
-+    $config = $this->container->get('config.factory')->getEditable('oauth_client.settings');
-+    $config->set('notifications.request.enabled', TRUE);
-+    $config->set('notifications.approve.enabled', TRUE);
-+    $config->set('notifications.reject.enabled', TRUE);
-+    $config->save();
-+
 +    $requester = user_load_by_name('requester');
 +    $requesterId = $requester->id();
 +
@@ -822,7 +856,8 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +    $page->fillField('Label', 'First');
 +    $page->fillField('Request reason', 'I like the first one.');
 +    $page->pressButton('Save');
-+    $firstId = $this->getRequestByLabel('First')->id();
++    $first = $this->getRequestByLabel('First');
++    $firstId = $first->id();
 +
 +    $managers = ['manager1@example.com', 'manager2@example.com'];
 +    $this->assertNotificationToEmails($managers, [
@@ -855,11 +890,13 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +    $page = $this->getSession()->getPage();
 +    $page->selectFieldOption('status', 'active');
 +    $page->pressButton('Save');
++    // Reload the request to get updated data.
++    $first = $this->getRequestByLabel('First');
 +    $this->assertNotificationToEmails([$requester->getEmail()], [
 +      // The label is mentioned in the email.
 +      'First',
 +      // Part of the edit URL.
-+      "/user/$requesterId/edit/oauth/manage/$firstId",
++      "/user/$requesterId/edit/oauth/client/{$first->getClient()->id()}",
 +      // Part of the user requests URL.
 +      "/user/$requesterId/edit/oauth",
 +    ]);
@@ -875,12 +912,18 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +      'Second',
 +      'You are not permitted',
 +    ]);
++
++    // Assert that the user has access to the client edit URL.
++    $this->drupalLogin($requester);
++    $this->drupalGet("/user/$requesterId/edit/oauth/client/{$first->getClient()->id()}");
++    $this->assertSession()->statusCodeEquals(200);
 +  }
 +
 +  /**
 +   * Returns the latest request created by a given user.
 +   */
 +  protected function getRequestByLabel(string $label): ?OauthClientRequest {
++    $storage = \Drupal::entityTypeManager()->getStorage('oauth_client_request');
 +    $ids = \Drupal::entityQuery('oauth_client_request')
 +      ->accessCheck(FALSE)
 +      ->condition('label', $label)
@@ -890,6 +933,11 @@ index 0000000000000000000000000000000000000000..28a03954cff863780e9142c2c4371b0b
 +    if (!$ids) {
 +      return NULL;
 +    }
++
++    // The entity in the test remains in the static cache between the ::get
++    // calls and the container in the test, so we need to reset it to ensure we
++    // get fresh data from the database.
++    $storage->resetCache($ids);
 +    return OauthClientRequest::load(reset($ids));
 +  }
 +
@@ -978,10 +1026,10 @@ index 0000000000000000000000000000000000000000..ad6f84a50f27da5f5322f17d1cbae9cd
 +
 +}
 diff --git a/tests/src/Functional/OauthClientTest.php b/tests/src/Functional/OauthClientTestOauthClient.php
-similarity index 96%
+similarity index 97%
 rename from tests/src/Functional/OauthClientTest.php
 rename to tests/src/Functional/OauthClientTestOauthClient.php
-index 343560f132527de0e34bc185f860496792c0397b..d8a5bb68150faa300b7960b4c9f3bef7c0048ffb 100644
+index 1d01e74e9d90edd0791997488a2f14f3692e137a..87e3ba0e5d336bd4440a7c00256dabfaa48dcfe6 100644
 --- a/tests/src/Functional/OauthClientTest.php
 +++ b/tests/src/Functional/OauthClientTestOauthClient.php
 @@ -12,7 +12,6 @@ use Drupal\oauth_client\Entity\OauthClientRequestStatus;
@@ -1027,8 +1075,8 @@ index 343560f132527de0e34bc185f860496792c0397b..d8a5bb68150faa300b7960b4c9f3bef7
      // Users they can delete their own request.
      $this->drupalGet(Url::fromRoute('entity.oauth_client_request.delete_form', [
        'user' => $uid,
-@@ -425,16 +434,4 @@ class OauthClientTest extends BrowserTestBase {
-     $assert->fieldExists('Status');
+@@ -481,16 +490,4 @@ class OauthClientTest extends BrowserTestBase {
+     $assert->statusCodeEquals(403);
    }
  
 -  /**
@@ -1245,10 +1293,10 @@ index fe0b36080f4679c1bfd52db47d27b3fe655647fd..4cfd541400ee47a9e2a9e90c25cb9443
  }
 diff --git a/tests/src/Kernel/TokensKernelTest.php b/tests/src/Kernel/TokensKernelTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..aa358c6f082642a999f7c6622586ea89f4706c35
+index 0000000000000000000000000000000000000000..e6a0aedbe1e30bb3c7b551abca517e40ae6b4956
 --- /dev/null
 +++ b/tests/src/Kernel/TokensKernelTest.php
-@@ -0,0 +1,123 @@
+@@ -0,0 +1,130 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -1357,8 +1405,15 @@ index 0000000000000000000000000000000000000000..aa358c6f082642a999f7c6622586ea89
 +    $this->assertSame($expectedCreated, $token->replace('[oauth_client_request:created]', $data, ['clear' => TRUE]));
 +    $this->assertSame($expectedChanged, $token->replace('[oauth_client_request:changed]', $data, ['clear' => TRUE]));
 +
-+    $editUrl = $token->replace('[oauth_client_request:edit-url]', $data, ['clear' => TRUE]);
++    $editUrl = $token->replace('[oauth_client_request:request-edit-url]', $data, ['clear' => TRUE]);
 +    $this->assertSame($editUrl, $request->toUrl('edit-form')->setAbsolute()->toString());
++
++    $request->setStatus(OauthClientRequestStatus::Active)->save();
++    $editUrl = $token->replace('[oauth_client_request:client-edit-url]', $data, ['clear' => TRUE]);
++    $this->assertSame($editUrl, Url::fromRoute('oauth_client.edit', [
++      'user' => $account->id(),
++      'client' => $request->getClient()->id(),
++    ])->setAbsolute()->toString());
 +
 +    // Test user:oauth_client_requests URL generation.
 +    $userRequestsUrl = $token->replace('[oauth_client_request:owner:client_requests]', $data, ['clear' => TRUE]);
