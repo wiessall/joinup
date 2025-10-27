@@ -7,7 +7,7 @@ namespace Drupal\assessments\Form;
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\assessments\Entity\AssessmentContentType;
+use Drupal\assessments\Entity\AssessmentType;
 
 /**
  * Form handler for assessment content type forms.
@@ -37,7 +37,7 @@ final class AssessmentContentTypeForm extends BundleEntityFormBase {
       '#default_value' => $this->entity->id(),
       '#maxlength' => EntityTypeInterface::BUNDLE_MAX_LENGTH,
       '#machine_name' => [
-        'exists' => [AssessmentContentType::class, 'load'],
+        'exists' => [AssessmentType::class, 'load'],
         'source' => ['label'],
       ],
       '#description' => $this->t('A unique machine-readable name for this assessment content type. It must only contain lowercase letters, numbers, and underscores.'),

@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organization
+    - assessments.type.public_organization
     - field.storage.assessment_content.description
   module:
     - rdf_sync
