@@ -143,6 +143,7 @@ Feature: Proposing a collection
     # be able to pick-up a pre-uploaded image when editing the logo as an
     # alternative to the image upload.
     And I select image #3 as collection logo
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
     Then I should see the success message "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
     And the "Just a proposal" collection logo is image #3
