@@ -406,7 +406,12 @@ function joinup_group_node_presave(EntityInterface $entity): void {
     $file_path = $file_system->copy($file_path, 'public://');
     $file = File::create(['uri' => $file_path]);
     $file->save();
-    $entity->set('logo', $file->id());
+    $entity->set('logo',
+      [
+        'target_id' => $file->id(),
+        'alt' => $entity->label(),
+      ]
+    );
   }
 }
 
