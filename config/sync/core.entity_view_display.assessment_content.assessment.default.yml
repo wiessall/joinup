@@ -311,7 +311,7 @@ third_party_settings:
             weight: 0
             additional: {  }
         third_party_settings: {  }
-id: assessment_content.report.default
+id: assessment_content.assessment.default
 targetEntityType: assessment_content
 bundle: assessment
 mode: default
