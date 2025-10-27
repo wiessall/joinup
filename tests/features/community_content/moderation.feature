@@ -398,7 +398,6 @@ Feature: Moderate community content
 
     And I select "Statistics and Analysis" options from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Upload"
     And I fill in "Alternative text" with "The event logo"
     When I press "Propose"
@@ -422,7 +421,6 @@ Feature: Moderate community content
       | field_body:format | content_editor     |
     And I select "Data gathering and processing" options from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Upload"
     And I fill in "Alternative text" with "The event logo"
     When I press "Propose"
