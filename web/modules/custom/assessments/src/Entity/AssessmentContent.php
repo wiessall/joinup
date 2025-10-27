@@ -28,7 +28,7 @@ use Drupal\user\EntityOwnerTrait;
  *     singular = "@count assessment contents",
  *     plural = "@count assessment contents",
  *   ),
- *   bundle_label = @Translation("Assessment content type"),
+ *   bundle_label = @Translation("Assessment type"),
  *   handlers = {
  *     "list_builder" = "Drupal\assessments\AssessmentContentListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
@@ -46,7 +46,7 @@ use Drupal\user\EntityOwnerTrait;
  *   base_table = "assessment_content",
  *   data_table = "assessment_content_field_data",
  *   translatable = TRUE,
- *   admin_permission = "administer assessment_content types",
+ *   admin_permission = "administer assessment types",
  *   entity_keys = {
  *     "id" = "id",
  *     "langcode" = "langcode",

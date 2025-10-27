@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\assessments\Entity\AssessmentType;
 
 /**
- * Form handler for assessment content type forms.
+ * Form handler for assessment type forms.
  */
 final class AssessmentContentTypeForm extends BundleEntityFormBase {
 
@@ -21,14 +21,14 @@ final class AssessmentContentTypeForm extends BundleEntityFormBase {
     $form = parent::form($form, $form_state);
 
     if ($this->operation === 'edit') {
-      $form['#title'] = $this->t('Edit %label assessment content type', ['%label' => $this->entity->label()]);
+      $form['#title'] = $this->t('Edit %label assessment type', ['%label' => $this->entity->label()]);
     }
 
     $form['label'] = [
       '#title' => $this->t('Label'),
       '#type' => 'textfield',
       '#default_value' => $this->entity->label(),
-      '#description' => $this->t('The human-readable name of this assessment content type.'),
+      '#description' => $this->t('The human-readable name of this assessment type.'),
       '#required' => TRUE,
     ];
 
@@ -40,7 +40,7 @@ final class AssessmentContentTypeForm extends BundleEntityFormBase {
         'exists' => [AssessmentType::class, 'load'],
         'source' => ['label'],
       ],
-      '#description' => $this->t('A unique machine-readable name for this assessment content type. It must only contain lowercase letters, numbers, and underscores.'),
+      '#description' => $this->t('A unique machine-readable name for this assessment type. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
     return $this->protectBundleIdElement($form);
@@ -51,8 +51,8 @@ final class AssessmentContentTypeForm extends BundleEntityFormBase {
    */
   protected function actions(array $form, FormStateInterface $form_state): array {
     $actions = parent::actions($form, $form_state);
-    $actions['submit']['#value'] = $this->t('Save assessment content type');
-    $actions['delete']['#value'] = $this->t('Delete assessment content type');
+    $actions['submit']['#value'] = $this->t('Save assessment type');
+    $actions['delete']['#value'] = $this->t('Delete assessment type');
     return $actions;
   }
 
@@ -65,8 +65,8 @@ final class AssessmentContentTypeForm extends BundleEntityFormBase {
     $message_args = ['%label' => $this->entity->label()];
     $this->messenger()->addStatus(
       match($result) {
-        SAVED_NEW => $this->t('The assessment content type %label has been added.', $message_args),
-        SAVED_UPDATED => $this->t('The assessment content type %label has been updated.', $message_args),
+        SAVED_NEW => $this->t('The assessment type %label has been added.', $message_args),
+        SAVED_UPDATED => $this->t('The assessment type %label has been updated.', $message_args),
       }
     );
     $form_state->setRedirectUrl($this->entity->toUrl('collection'));

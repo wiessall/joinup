@@ -1,6 +1,6 @@
 assessments.type.*:
   type: config_entity
-  label: 'Assessment content type config'
+  label: 'Assessment type config'
   mapping:
     id:
       type: string
