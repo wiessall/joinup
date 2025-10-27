@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - field.storage.assessment_content.statement_documents
   module:
     - file
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.statement_documents
+id: assessment_content.report.statement_documents
 field_name: statement_documents
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Statement supporting documents'
 description: ''
 required: false

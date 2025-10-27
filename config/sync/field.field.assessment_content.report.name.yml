@@ -3,17 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - field.storage.assessment_content.name
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.name
+id: assessment_content.report.name
 field_name: name
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: Name
 description: 'A short description of the assessment report.'
 required: true

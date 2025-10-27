@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - assessments.assessment_content_type.expression
     - field.storage.assessment_content.expression
   module:
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.expression
+id: assessment_content.report.expression
 field_name: expression
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
 description: ''
 required: true

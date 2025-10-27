@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - field.storage.assessment_content.requirement_documents
   module:
     - file
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.requirement_documents
+id: assessment_content.report.requirement_documents
 field_name: requirement_documents
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Binding requirements supporting documents'
 description: ''
 required: false

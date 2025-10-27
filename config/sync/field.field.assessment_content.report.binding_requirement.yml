@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - assessments.assessment_content_type.binding_requirement
     - field.storage.assessment_content.binding_requirement
   module:
@@ -16,10 +16,10 @@ third_party_settings:
     target_id:
       predicate: 'http://data.europa.eu/2sa/cav#assesses'
       type: resource
-id: assessment_content.assessment.binding_requirement
+id: assessment_content.report.binding_requirement
 field_name: binding_requirement
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Binding requirement'
 description: ''
 required: true

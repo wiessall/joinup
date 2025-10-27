@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - assessments.assessment_content_type.statement
     - field.storage.assessment_content.results_in
   module:
@@ -16,10 +16,10 @@ third_party_settings:
     target_id:
       predicate: 'http://data.europa.eu/2sa/cav#resultsIn'
       type: resource
-id: assessment_content.assessment.results_in
+id: assessment_content.report.results_in
 field_name: results_in
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Results in'
 description: ''
 required: true

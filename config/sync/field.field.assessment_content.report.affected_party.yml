@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - assessments.assessment_content_type.participation
     - field.storage.assessment_content.affected_party
   module:
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.affected_party
+id: assessment_content.report.affected_party
 field_name: affected_party
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: 'Affected party'
 description: ''
 required: false
