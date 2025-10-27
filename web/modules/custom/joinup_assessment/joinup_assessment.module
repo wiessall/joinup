@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_assessment\Entity\AssessmentReport;
@@ -87,6 +88,31 @@ function joinup_assessment_webform_element_webform_actions_alter(array &$element
     ]),
     '#weight' => 100,
   ];
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ */
+function joinup_assessment_webform_element_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  if ($element['#webform'] === 'assessment' && isset($element['#webform_key']) && $element['#webform_key'] === 'portal_solutions') {
+
+    $search_url = Url::fromRoute('view.search.page_1', [], [
+      'query' => ['f[0]' => 'type:solution'],
+    ]);
+    $link = Link::fromTextAndUrl(t('Search'), $search_url);
+    $link_options = $link->getUrl()->getOptions();
+    $link_options['attributes'] = [
+      'target' => '_blank',
+      'rel' => 'noopener noreferrer',
+    ];
+    $link->getUrl()->setOptions($link_options);
+    $search_link = $link->toString();
+    $element['#title'] = t('Internal Solutions in the Portal (@search_link in the Interoperable Europe Portal)', [
+      '@search_link' => $search_link,
+    ]);
+    $element['#title_display'] = 'before';
+    $element['#allowed_tags'] = ['a', 'span', 'strong', 'em', 'br'];
+  }
 }
 
 /**
