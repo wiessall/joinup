@@ -1,5 +1,5 @@
 diff --git a/config/install/oauth_client.settings.yml b/config/install/oauth_client.settings.yml
-index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..6fb568cd06d13127ea580a0415b238d1f4e3287f 100644
+index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..78b5ac7c6d62b4e400abdb92b33649c1b37a1739 100644
 --- a/config/install/oauth_client.settings.yml
 +++ b/config/install/oauth_client.settings.yml
 @@ -1,27 +1,31 @@
@@ -20,7 +20,7 @@ index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..6fb568cd06d13127ea580a0415b238d1
 +      - [oauth_client_request:request_reason]
  
 -      This is an automated message. Please do not reply to this email.
-+      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url].
++      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]
  
        Best regards,
        The [site:name] Team
@@ -38,7 +38,7 @@ index 96a4694ee78b5487027a9a5bebb9b398fd6be8cb..6fb568cd06d13127ea580a0415b238d1
  
 -      You can now access your client credentials and begin using the API.
 +      What is next?
-+      - Visit the [oauth_client_request:owner:client_requests] to view the available list of your clients.
++      - Visit the [oauth_client_request:owner:client_requests] to view the available list of your requests.
 +      - Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.
  
        If you have any questions, feel free to contact our support team.
@@ -716,34 +716,45 @@ index 0000000000000000000000000000000000000000..e73461cc40533c524380b840e4a0e783
 +
 +}
 diff --git a/src/NotificationSender.php b/src/NotificationSender.php
-index 19e883b3d459d16088dc32a1613569f94d77aa00..ec486ae0ce026050e5351af4c421ee38077faab5 100644
+index 19e883b3d459d16088dc32a1613569f94d77aa00..de1d05f9991924d48ff09e8ab534290a6606a8db 100644
 --- a/src/NotificationSender.php
 +++ b/src/NotificationSender.php
-@@ -151,12 +151,14 @@ final class NotificationSender implements NotificationSenderInterface {
-     $subject = $notification['subject'];
-     $body = $notification['body'];
- 
+@@ -148,19 +148,19 @@ final class NotificationSender implements NotificationSenderInterface {
+    */
+   protected function sendEmailToUsers(OauthClientRequestInterface $entity, array $uids, NotificationType $action): void {
+     $notification = $this->getActionSettings($action);
+-    $subject = $notification['subject'];
+-    $body = $notification['body'];
+-
 -    $replacementsContext = [
 -      'user' => $entity->getUser(),
-+    $data = [
-       'oauth_client_request' => $entity,
-+      'user' => $entity->getUser(),
-+      'oauth_client' => NULL,
-     ];
+-      'oauth_client_request' => $entity,
+-    ];
 -    $subject = $this->token->replace($subject, $replacementsContext, ['clear' => TRUE]);
 -    $body = $this->token->replace($body, $replacementsContext, ['clear' => TRUE]);
-+
-+    $subject = $this->token->replace($subject, $data, ['clear' => TRUE]);
-+    $body = $this->token->replace($body, $data, ['clear' => TRUE]);
- 
+-
      $userStorage = $this->entityTypeManager->getStorage('user');
      $accounts = $userStorage->loadMultiple($uids);
+     foreach ($accounts as $account) {
++      $subject = $notification['subject'];
++      $body = $notification['body'];
++      $data = [
++        'oauth_client_request' => $entity,
++        'user' => $account,
++        'oauth_client' => NULL,
++      ];
++
++      $subject = $this->token->replace($subject, $data, ['clear' => TRUE]);
++      $body = $this->token->replace($body, $data, ['clear' => TRUE]);
+       $to = $account->getEmail();
+       $langcode = $account->getPreferredLangcode() ?: $this->languageManager->getDefaultLanguage()->getId();
+ 
 diff --git a/tests/src/Functional/NotificationFunctionalTest.php b/tests/src/Functional/NotificationFunctionalTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c74162063810a03
+index 0000000000000000000000000000000000000000..0e2dc69a5fed8dc0b1fee246dca6d35afbeb896c
 --- /dev/null
 +++ b/tests/src/Functional/NotificationFunctionalTest.php
-@@ -0,0 +1,223 @@
+@@ -0,0 +1,282 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -754,6 +765,7 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +use Drupal\oauth_client\Entity\OauthClientRequestType;
 +use Drupal\oauth_client\Permission\OauthClientPermissions;
 +use Drupal\simple_oauth\Entity\Oauth2Scope;
++use Drupal\user\UserInterface;
 +
 +/**
 + * Functional tests for OAuth Client notifications (mail sending logic).
@@ -761,6 +773,27 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 + * @group oauth_client
 + */
 +class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
++
++  /**
++   * The requester user.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected UserInterface $requester;
++
++  /**
++   * The first manager user.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected UserInterface $manager1;
++
++  /**
++   * The second manager user.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected UserInterface $manager2;
 +
 +  /**
 +   * {@inheritdoc}
@@ -777,12 +810,12 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +      'scope' => 'scope1',
 +    ])->save();
 +
-+    $this->createUser(
++    $this->requester = $this->createUser(
 +      permissions: [OauthClientPermissions::getUserPermission('type1')],
 +      name: 'requester',
 +    );
-+    $this->createUser(permissions: ['manage oauth clients'], name: 'manager1');
-+    $this->createUser(permissions: ['manage oauth clients'], name: 'manager2');
++    $this->manager1 = $this->createUser(permissions: ['manage oauth clients'], name: 'manager1');
++    $this->manager2 = $this->createUser(permissions: ['manage oauth clients'], name: 'manager2');
 +  }
 +
 +  /**
@@ -844,11 +877,10 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +   * Tests notifications on request creation, approval, and rejection.
 +   */
 +  public function testNotificationsOnRequestApproveReject(): void {
-+    $requester = user_load_by_name('requester');
-+    $requesterId = $requester->id();
++    $requesterId = $this->requester->id();
 +
 +    // Create two requests by the requester via the form.
-+    $this->drupalLogin($requester);
++    $this->drupalLogin($this->requester);
 +
 +    // First request.
 +    $this->drupalGet("/user/$requesterId/edit/oauth/add");
@@ -858,9 +890,10 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +    $page->pressButton('Save');
 +    $first = $this->getRequestByLabel('First');
 +    $firstId = $first->id();
++    $this->assertMailsSent(2);
 +
-+    $managers = ['manager1@example.com', 'manager2@example.com'];
-+    $this->assertNotificationToEmails($managers, [
++    $this->assertNotificationToEmails($this->manager1, [
++      'Dear manager1,',
 +      'First',
 +      'I like the first one.',
 +      // Direct link to the edit form.
@@ -868,6 +901,17 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +      // Part of the management URL.
 +      '/admin/config/services/consumer/oauth-client-request',
 +    ]);
++    $this->assertNotificationToEmails($this->manager2, [
++      'Dear manager2,',
++      'First',
++      'I like the first one.',
++      // Direct link to the edit form.
++      "/user/$requesterId/edit/oauth/manage/$firstId",
++      // Part of the management URL.
++      '/admin/config/services/consumer/oauth-client-request',
++    ]);
++    // Clear captured emails after assertion to isolate subsequent checks.
++    $this->container->get('state')->set('system.test_mail_collector', []);
 +
 +    // Second request.
 +    $this->drupalGet("/user/$requesterId/edit/oauth/add");
@@ -876,13 +920,24 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +    $page->fillField('Request reason', 'I like the second one.');
 +    $page->pressButton('Save');
 +    $secondId = $this->getRequestByLabel('Second')->id();
++    $this->assertMailsSent(2);
 +
-+    $this->assertNotificationToEmails($managers, [
++    $this->assertNotificationToEmails($this->manager1, [
++      'Dear manager1,',
 +      'Second',
 +      'I like the second one.',
 +      "/user/$requesterId/edit/oauth/manage/$secondId",
 +      '/admin/config/services/consumer/oauth-client-request',
 +    ]);
++
++    $this->assertNotificationToEmails($this->manager2, [
++      'Dear manager2,',
++      'Second',
++      'I like the second one.',
++      "/user/$requesterId/edit/oauth/manage/$secondId",
++      '/admin/config/services/consumer/oauth-client-request',
++    ]);
++    $this->container->get('state')->set('system.test_mail_collector', []);
 +
 +    // Approve the first request through the edit form as a manager.
 +    $this->drupalLogin(user_load_by_name('manager1'));
@@ -892,7 +947,9 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +    $page->pressButton('Save');
 +    // Reload the request to get updated data.
 +    $first = $this->getRequestByLabel('First');
-+    $this->assertNotificationToEmails([$requester->getEmail()], [
++    $this->assertMailsSent(1);
++    $this->assertNotificationToEmails($this->requester, [
++      'Dear requester,',
 +      // The label is mentioned in the email.
 +      'First',
 +      // Part of the edit URL.
@@ -900,6 +957,7 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +      // Part of the user requests URL.
 +      "/user/$requesterId/edit/oauth",
 +    ]);
++    $this->container->get('state')->set('system.test_mail_collector', []);
 +
 +    // Reject the second request through the edit form.
 +    $this->drupalGet("/user/$requesterId/edit/oauth/manage/$secondId");
@@ -907,14 +965,16 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +    $page->selectFieldOption('status', 'rejected');
 +    $page->fillField('Reject reason', 'You are not permitted');
 +    $page->pressButton('Save');
-+    $this->assertNotificationToEmails([$requester->getEmail()], [
++    $this->assertMailsSent(1);
++    $this->assertNotificationToEmails($this->requester, [
++      'Dear requester,',
 +      // The label is mentioned in the email.
 +      'Second',
 +      'You are not permitted',
 +    ]);
 +
 +    // Assert that the user has access to the client edit URL.
-+    $this->drupalLogin($requester);
++    $this->drupalLogin($this->requester);
 +    $this->drupalGet("/user/$requesterId/edit/oauth/client/{$first->getClient()->id()}");
 +    $this->assertSession()->statusCodeEquals(200);
 +  }
@@ -942,28 +1002,38 @@ index 0000000000000000000000000000000000000000..a0cfce7f0f96ebeac991adb55c741620
 +  }
 +
 +  /**
++   * Asserts the number of emails sent.
++   *
++   * @param int $count
++   *   The expected number of emails sent.
++   */
++  protected function assertMailsSent(int $count): void {
++    $captured = $this->container->get('state')->get('system.test_mail_collector') ?? [];
++    $this->assertCount($count, $captured, 'Expected number of emails sent.');
++  }
++
++  /**
 +   * Asserts that notification emails were sent to the expected addresses.
 +   *
-+   * @param string[] $emails
-+   *   The expected email addresses.
++   * @param \Drupal\user\UserInterface $recipient
++   *   The recipient of the email.
 +   * @param string[] $textParts
 +   *   The expected text parts that should be contained in each email body.
 +   */
-+  protected function assertNotificationToEmails(array $emails, array $textParts = []): void {
++  protected function assertNotificationToEmails(UserInterface $recipient, array $textParts = []): void {
 +    $captured = $this->container->get('state')->get('system.test_mail_collector') ?? [];
 +    $sentTo = array_map(fn($m) => $m['to'] ?? '', $captured);
-+    sort($sentTo);
-+    sort($emails);
-+    $this->assertSame($emails, $sentTo, 'Notification emails were sent to the expected addresses.');
++    $this->assertTrue(in_array($recipient->getEmail(), $sentTo), 'Notification emails were sent to the expected addresses.');
 +
 +    foreach ($captured as $mail) {
++      if ($mail['to'] !== $recipient->getEmail()) {
++        continue;
++      }
++
 +      foreach ($textParts as $textPart) {
 +        $this->assertStringContainsString($textPart, $mail['body']);
 +      }
 +    }
-+
-+    // Clear captured emails after assertion to isolate subsequent checks.
-+    $this->container->get('state')->set('system.test_mail_collector', []);
 +  }
 +
 +}
