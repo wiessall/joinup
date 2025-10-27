@@ -20,6 +20,7 @@ Feature: Creation of owners through UI
       | E-mail      | larry.joe@example.com                                                                                |
     When I select "EU and European Policies" options from "Topic"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
 
     And I should see the button "Add new owner"
     And I should see the button "Add existing owner"

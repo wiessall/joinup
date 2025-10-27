@@ -23,6 +23,7 @@ Feature: Owner moderation
       | E-mail   | duche.baggins@example.com                                                                     |
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I click the 'Categorisation' tab
     And I select "EU and European Policies" options from "Topic"
 

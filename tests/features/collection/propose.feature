@@ -153,6 +153,7 @@ Feature: Proposing a collection
 
     # Upload also works.
     When I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection

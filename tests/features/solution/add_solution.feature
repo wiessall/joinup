@@ -200,6 +200,7 @@ Feature: Test adding solutions.
     And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
