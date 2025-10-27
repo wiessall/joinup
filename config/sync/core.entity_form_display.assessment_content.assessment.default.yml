@@ -206,7 +206,7 @@ third_party_settings:
         next_button_text: Submit
         required_fields: true
         step_help: ''
-id: assessment_content.report.default
+id: assessment_content.assessment.default
 targetEntityType: assessment_content
 bundle: assessment
 mode: default
