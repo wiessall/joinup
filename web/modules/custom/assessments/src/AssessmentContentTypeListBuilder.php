@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 
 /**
- * Defines a class to build a listing of assessment content type entities.
+ * Defines a class to build a listing of assessment type entities.
  *
  * @see \Drupal\assessments\Entity\AssessmentType
  */
@@ -38,7 +38,7 @@ final class AssessmentContentTypeListBuilder extends ConfigEntityListBuilder {
     $build = parent::render();
 
     $build['table']['#empty'] = $this->t(
-      'No assessment content types available. <a href=":link">Add assessment content type</a>.',
+      'No assessment types available. <a href=":link">Add assessment type</a>.',
       [':link' => Url::fromRoute('entity.assessment_type.add_form')->toString()],
     );
 

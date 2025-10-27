@@ -7,17 +7,17 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 
 /**
- * Defines the Assessment content type configuration entity.
+ * Defines the Assessment type configuration entity.
  *
  * @ConfigEntityType(
  *   id = "assessment_type",
- *   label = @Translation("Assessment content type"),
- *   label_collection = @Translation("Assessment content types"),
- *   label_singular = @Translation("assessment content type"),
- *   label_plural = @Translation("assessment contents types"),
+ *   label = @Translation("Assessment type"),
+ *   label_collection = @Translation("Assessment types"),
+ *   label_singular = @Translation("assessment type"),
+ *   label_plural = @Translation("assessment types"),
  *   label_count = @PluralTranslation(
- *     singular = "@count assessment contents type",
- *     plural = "@count assessment contents types",
+ *     singular = "@count assessment type",
+ *     plural = "@count assessment types",
  *   ),
  *   handlers = {
  *     "form" = {
@@ -30,7 +30,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
- *   admin_permission = "administer assessment_content types",
+ *   admin_permission = "administer assessment types",
  *   bundle_of = "assessment_content",
  *   config_prefix = "type",
  *   entity_keys = {
@@ -59,7 +59,7 @@ final class AssessmentType extends ConfigEntityBundleBase {
   protected string $id;
 
   /**
-   * The human-readable name of the assessment content type.
+   * The human-readable name of the assessment type.
    */
   protected string $label;
 
