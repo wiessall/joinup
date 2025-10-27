@@ -1,0 +1,22 @@
+uuid: 82710408-4200-4283-89b4-c08935ec86c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report.status
+field_name: status
+entity_type: node
+bundle: assessment_report
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,22 @@
+uuid: 240c5583-5ffe-4b7a-a4e7-a0866eeb4937
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+id: node.oss_contractor.promote
+field_name: promote
+entity_type: node
+bundle: oss_contractor
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

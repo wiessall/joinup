@@ -1,0 +1,22 @@
+uuid: 4abc2570-5ad6-468a-b7bc-cb9354028fe8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contact
+id: node.oss_contact.status
+field_name: status
+entity_type: node
+bundle: oss_contact
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

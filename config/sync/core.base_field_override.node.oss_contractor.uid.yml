@@ -1,0 +1,22 @@
+uuid: 881cb366-793f-4f53-b0ad-a6b4fc8144bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+id: node.oss_contractor.uid
+field_name: uid
+entity_type: node
+bundle: oss_contractor
+label: 'User ID'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_id: '0'
+default_value_callback: null
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

@@ -1,0 +1,18 @@
+uuid: 87a76632-a535-470f-8b5b-35c432538bf8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report.created
+field_name: created
+entity_type: node
+bundle: assessment_report
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

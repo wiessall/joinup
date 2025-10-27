@@ -1,0 +1,20 @@
+uuid: e283c243-3c90-4a65-92ed-d89ca6a12751
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report.uid
+field_name: uid
+entity_type: node
+bundle: assessment_report
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getDefaultEntityOwner'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

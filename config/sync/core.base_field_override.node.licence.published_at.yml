@@ -1,0 +1,20 @@
+uuid: 20bb8a10-3da4-476c-ad4c-15aecf2aa234
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.licence
+  module:
+    - publication_date
+id: node.licence.published_at
+field_name: published_at
+entity_type: node
+bundle: licence
+label: 'Published on'
+description: 'Keep the publication timestamp for each node.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: published_at

@@ -1,0 +1,22 @@
+uuid: cc3ac8f1-e359-4ecf-a434-49b1dd894ede
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+id: node.oss_contractor.status
+field_name: status
+entity_type: node
+bundle: oss_contractor
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

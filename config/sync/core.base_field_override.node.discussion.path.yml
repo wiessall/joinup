@@ -1,0 +1,20 @@
+uuid: 0fb1094c-a541-43d5-9e9f-9a1aaa90ed03
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.discussion
+  module:
+    - path
+id: node.discussion.path
+field_name: path
+entity_type: node
+bundle: discussion
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

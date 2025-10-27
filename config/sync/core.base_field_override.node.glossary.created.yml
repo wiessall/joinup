@@ -1,0 +1,18 @@
+uuid: 05517e6f-e207-4160-a895-927efa0f060a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.glossary
+id: node.glossary.created
+field_name: created
+entity_type: node
+bundle: glossary
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

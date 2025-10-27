@@ -1,0 +1,22 @@
+uuid: feca319f-ef43-4a0d-bae7-28eae77f1598
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contact
+id: node.oss_contact.promote
+field_name: promote
+entity_type: node
+bundle: oss_contact
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

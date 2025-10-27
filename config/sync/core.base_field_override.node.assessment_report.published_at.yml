@@ -1,0 +1,20 @@
+uuid: 0a066988-5076-4ab7-8cc8-4ed25a1e269c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+  module:
+    - publication_date
+id: node.assessment_report.published_at
+field_name: published_at
+entity_type: node
+bundle: assessment_report
+label: 'Published on'
+description: 'Keep the publication timestamp for each node.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: published_at

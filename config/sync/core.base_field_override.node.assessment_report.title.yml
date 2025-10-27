@@ -1,0 +1,18 @@
+uuid: b405104f-8a88-47c5-96e7-2707946b12d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.assessment_report
+id: node.assessment_report.title
+field_name: title
+entity_type: node
+bundle: assessment_report
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

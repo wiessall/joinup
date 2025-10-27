@@ -1,0 +1,20 @@
+uuid: 5e8b5210-ee88-4ed6-9677-8e772d9af9b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.oss_contractor
+  module:
+    - metatag
+id: node.oss_contractor.metatag
+field_name: metatag
+entity_type: node
+bundle: oss_contractor
+label: 'Metatags (Hidden field for JSON support)'
+description: 'The computed meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag_computed
