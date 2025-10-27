@@ -67,7 +67,7 @@ final class AssessmentsComposerResource extends ResourceBase {
       return NULL;
     }
     $values = [
-      'type' => 'public_organization',
+      'type' => 'public_organisation',
     ];
     if (isset($data['name'])) {
       $values['name'] = $data['name'];
@@ -238,7 +238,7 @@ final class AssessmentsComposerResource extends ResourceBase {
    *
    * Expected JSON body example:
    * {
-   *   "type": "public_organization", // bundle machine name
+   *   "type": "public_organisation", // bundle machine name
    *   "status": true,
    *   "fields": {
    *     "provided_by": 123,

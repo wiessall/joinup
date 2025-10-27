@@ -81,7 +81,7 @@ reference to `file`.
 * "Initiative, project or action concerned (containing the binding requirements
 to be assessed)" (expression). Entity reference to `expression`.
 * Name (name). Title field.
-* Provided by (provided_by). Entity reference to `public_organization`.
+* Provided by (provided_by). Entity reference to `public_organisation`.
 * Results in (results_in). Entity reference to `statement`.
 * State (state). State field
 * Statement supporting documents (statement_documents). Entity reference to
@@ -123,7 +123,7 @@ Public service (public_service):
   * digital_and_innovation_services
   * international_and_regional_cooperation
 
-Public organization (public_organization):
+Public organization (public_organisation):
 * Type of public sector body (organization_type). List (text) field. Allowed values:
   * local_public_administration
   * regional_public_administration
