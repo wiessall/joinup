@@ -376,8 +376,7 @@
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
                 "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
                 "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
-                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
-                "Deprecated function: strnatcasecmp() @see https://www.drupal.org/i/3553761": "resources/patch/php/drupal/core/3553761.patch"
+                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
