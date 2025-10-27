@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.assessment_content_type.assessment
-    - assessments.assessment_content_type.public_organization
+    - assessments.assessment_content_type.public_organisation
     - field.storage.assessment_content.provider
   module:
     - rdf_sync
@@ -30,7 +30,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      public_organization: public_organization
+      public_organisation: public_organisation
     sort:
       field: _none
       direction: ASC
