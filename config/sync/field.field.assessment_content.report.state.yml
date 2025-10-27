@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.assessment_content_type.report
     - field.storage.assessment_content.state
   module:
     - state_machine
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.state
+id: assessment_content.report.state
 field_name: state
 entity_type: assessment_content
-bundle: assessment
+bundle: report
 label: State
 description: ''
 required: false

@@ -259,7 +259,7 @@ final class AssessmentsComposerResource extends ResourceBase {
     }
 
     $values = [
-      'type' => 'assessment',
+      'type' => 'report',
     ];
 
     // Optional status.
