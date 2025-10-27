@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.agent
+    - assessments.type.agent
     - field.field.assessment_content.agent.agent_type
     - field.field.assessment_content.agent.name
   module:

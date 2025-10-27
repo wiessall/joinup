@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_service
+    - assessments.type.public_service
     - field.storage.assessment_content.spatial
   module:
     - geofield

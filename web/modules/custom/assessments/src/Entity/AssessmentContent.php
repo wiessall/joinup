@@ -57,15 +57,15 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  *   links = {
  *     "collection" = "/admin/content/assessment-content",
- *     "add-form" = "/assessments/add/{assessment_content_type}",
+ *     "add-form" = "/assessments/add/{assessment_type}",
  *     "add-page" = "/assessments/add",
  *     "canonical" = "/assessments/{assessment_content}",
  *     "edit-form" = "/assessments/{assessment_content}/edit",
  *     "delete-form" = "/assessments/{assessment_content}/delete",
  *     "delete-multiple-form" = "/admin/content/assessment-content/delete-multiple",
  *   },
- *   bundle_entity_type = "assessment_content_type",
- *   field_ui_base_route = "entity.assessment_content_type.edit_form",
+ *   bundle_entity_type = "assessment_type",
+ *   field_ui_base_route = "entity.assessment_type.edit_form",
  * )
  */
 class AssessmentContent extends ContentEntityBase implements AssessmentContentInterface, RdfSyncEntityInterface {

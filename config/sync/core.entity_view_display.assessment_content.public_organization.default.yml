@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organization
+    - assessments.type.public_organization
     - field.field.assessment_content.public_organization.country
     - field.field.assessment_content.public_organization.description
     - field.field.assessment_content.public_organization.name

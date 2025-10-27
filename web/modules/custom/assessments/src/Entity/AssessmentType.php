@@ -10,7 +10,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  * Defines the Assessment content type configuration entity.
  *
  * @ConfigEntityType(
- *   id = "assessment_content_type",
+ *   id = "assessment_type",
  *   label = @Translation("Assessment content type"),
  *   label_collection = @Translation("Assessment content types"),
  *   label_singular = @Translation("assessment content type"),
@@ -32,17 +32,17 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *   },
  *   admin_permission = "administer assessment_content types",
  *   bundle_of = "assessment_content",
- *   config_prefix = "assessment_content_type",
+ *   config_prefix = "type",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
  *     "uuid" = "uuid",
  *   },
  *   links = {
- *     "add-form" = "/admin/structure/assessment_content_types/add",
- *     "edit-form" = "/admin/structure/assessment_content_types/manage/{assessment_content_type}",
- *     "delete-form" = "/admin/structure/assessment_content_types/manage/{assessment_content_type}/delete",
- *     "collection" = "/admin/structure/assessment_content_types",
+ *     "add-form" = "/admin/structure/assessment_types/add",
+ *     "edit-form" = "/admin/structure/assessment_types/manage/{assessment_type}",
+ *     "delete-form" = "/admin/structure/assessment_types/manage/{assessment_type}/delete",
+ *     "collection" = "/admin/structure/assessment_types",
  *   },
  *   config_export = {
  *     "id",
@@ -51,7 +51,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *   },
  * )
  */
-final class AssessmentContentType extends ConfigEntityBundleBase {
+final class AssessmentType extends ConfigEntityBundleBase {
 
   /**
    * The machine name of this assessment content type.
