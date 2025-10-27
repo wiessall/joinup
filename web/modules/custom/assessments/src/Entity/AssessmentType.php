@@ -21,11 +21,11 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *   ),
  *   handlers = {
  *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssessmentContentTypeForm",
- *       "edit" = "Drupal\assessments\Form\AssessmentContentTypeForm",
+ *       "add" = "Drupal\assessments\Form\AssessmentTypeForm",
+ *       "edit" = "Drupal\assessments\Form\AssessmentTypeForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *     },
- *     "list_builder" = "Drupal\assessments\AssessmentContentTypeListBuilder",
+ *     "list_builder" = "Drupal\assessments\AssessmentTypeListBuilder",
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },

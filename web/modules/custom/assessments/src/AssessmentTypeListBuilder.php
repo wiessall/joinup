@@ -13,7 +13,7 @@ use Drupal\Core\Url;
  *
  * @see \Drupal\assessments\Entity\AssessmentType
  */
-final class AssessmentContentTypeListBuilder extends ConfigEntityListBuilder {
+final class AssessmentTypeListBuilder extends ConfigEntityListBuilder {
 
   /**
    * {@inheritdoc}
