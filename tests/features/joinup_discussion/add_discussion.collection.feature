@@ -135,7 +135,6 @@ Feature: Discussions added to collections
     # Upload works.
     When I go to the edit form of the "Yellow Zeus" discussion
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Alternative text" with "Alternative logo text"
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
