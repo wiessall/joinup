@@ -36,6 +36,7 @@ Feature: Creation of news through the UI.
     # Check required fields.
     And I attach the file "test.zip" to "Add a new file"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Upload"
     And I press "Publish"
     Then I should see the following lines of text:

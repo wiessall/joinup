@@ -134,6 +134,7 @@ Feature: "Add event" visibility options.
     # Upload works.
     When I go to the edit form of the "The Great Opening" event
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I fill in "Alternative text" with "The Great Opening event logo"
 
     # Picking-up pre-uploaded images works.

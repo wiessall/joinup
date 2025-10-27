@@ -58,6 +58,7 @@ Feature: Collections Overview
       | E-mail      | overviewer@example.com              |
     And I select "Employment and Support Allowance" options from "Topic"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
