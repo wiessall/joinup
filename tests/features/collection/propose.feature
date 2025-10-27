@@ -302,6 +302,7 @@ Feature: Proposing a collection
     Then I should see the inline form error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
     Then I should not see the inline form error message "Invalid or unsafe SVG file."
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection

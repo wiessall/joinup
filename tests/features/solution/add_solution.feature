@@ -24,6 +24,7 @@ Feature: Test adding solutions.
     # Test that the tab doesn't change when an image is uploaded.
     When I click "Additional information"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     Then I should see the text "Logo"
 
     When I click "Solution information"
@@ -307,6 +308,7 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
