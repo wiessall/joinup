@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organization
-    - field.field.assessment_content.public_organization.country
-    - field.field.assessment_content.public_organization.description
-    - field.field.assessment_content.public_organization.name
-    - field.field.assessment_content.public_organization.organisation_type
-id: assessment_content.public_organization.default
+    - assessments.assessment_content_type.public_organisation
+    - field.field.assessment_content.public_organisation.country
+    - field.field.assessment_content.public_organisation.description
+    - field.field.assessment_content.public_organisation.name
+    - field.field.assessment_content.public_organisation.organisation_type
+id: assessment_content.public_organisation.default
 targetEntityType: assessment_content
-bundle: public_organization
+bundle: public_organisation
 mode: default
 content:
   country:
