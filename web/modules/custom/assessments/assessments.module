@@ -90,7 +90,7 @@ function assessments_user_predelete(UserInterface $account): void {
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
   // Change the label of the 'default' bundle of assessment_content entity type.
-  if (isset($bundles['assessment_content']['public_organization'])) {
-    $bundles['assessment_content']['public_organization']['class'] = PublicOrganisation::class;
+  if (isset($bundles['assessment_content']['public_organisation'])) {
+    $bundles['assessment_content']['public_organisation']['class'] = PublicOrganisation::class;
   }
 }
