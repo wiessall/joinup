@@ -25,7 +25,16 @@ function joinup_api_mail(string $key, array &$message, array $params): void {
   if ($key !== 'oauth_client_notification') {
     return;
   }
-  $message['subject'] = $params['subject'] ?? '';
-  $message['body'][] = $params['body'] ?? '';
-  $message['headers']['Content-Type'] = MailContentTypeHeader::TextPlain->value;
+
+  if (!empty($params['context']['subject'])) {
+    $message['subject'] = $params['context']['subject'];
+  }
+  if (!empty($params['context']['message'])) {
+    // Convert plain text to HTML paragraphs.
+    $message['body'][] = _filter_autop($params['context']['message']);
+  }
+
+  // Send as HTML. Symfony_mailer_lite checks params['content_type'], not
+  // the Content-Type header.
+  $message['params']['content_type'] = MailContentTypeHeader::TextHtml->value;
 }

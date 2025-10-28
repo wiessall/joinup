@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_api;
 
-use Drupal\Component\Render\PlainTextOutput;
 use Drupal\oauth_client\Entity\NotificationType;
 use Drupal\oauth_client\Entity\OauthClientRequestInterface;
 use Drupal\oauth_client\NotificationSender as BaseNotificationSender;
 
 /**
- * Sends OAuth client notification emails as plain text.
+ * Sends OAuth client notification emails as HTML.
  *
- * Extends the base NotificationSender to send plain text emails instead of
- * HTML.
+ * Extends the base NotificationSender to send HTML emails.
  */
 final class NotificationSender extends BaseNotificationSender {
 
   /**
    * Sends email to a list of users with token replacements.
    *
-   * Uses joinup_api mail key to send plain text emails.
+   * Uses joinup_api mail key to send HTML emails.
    *
    * @param \Drupal\oauth_client\Entity\OauthClientRequestInterface $entity
    *   The OAuth client request entity.
@@ -31,28 +29,29 @@ final class NotificationSender extends BaseNotificationSender {
    */
   protected function sendEmailToUsers(OauthClientRequestInterface $entity, array $uids, NotificationType $action): void {
     $notification = $this->getActionSettings($action);
-
-    $replacementsContext = [
-      'user' => $entity->getUser(),
-      'oauth_client_request' => $entity,
-    ];
-    $subject = $this->token->replace($notification['subject'], $replacementsContext, ['clear' => TRUE]);
-    $body = $this->token->replace($notification['body'], $replacementsContext, ['clear' => TRUE]);
-
-    // Strip HTML from subject and body to ensure plain text.
-    $subject = PlainTextOutput::renderFromHtml($subject);
-    $body = PlainTextOutput::renderFromHtml($body);
-
     $userStorage = $this->entityTypeManager->getStorage('user');
     $accounts = $userStorage->loadMultiple($uids);
     foreach ($accounts as $account) {
+      $subject = $notification['subject'];
+      $body = $notification['body'];
+      $data = [
+        'oauth_client_request' => $entity,
+        'user' => $account,
+        'oauth_client' => NULL,
+      ];
+
+      $subject = $this->token->replace($subject, $data, ['clear' => TRUE]);
+      $body = $this->token->replace($body, $data, ['clear' => TRUE]);
       $to = $account->getEmail();
       $langcode = $account->getPreferredLangcode() ?: $this->languageManager->getDefaultLanguage()->getId();
 
-      $this->mailManager->mail('joinup_api', 'oauth_client_notification', $to, $langcode, [
-        'subject' => $subject,
-        'body' => $body,
-      ]);
+      $params = [
+        'context' => [
+          'subject' => $subject,
+          'message' => $body,
+        ],
+      ];
+      $this->mailManager->mail('joinup_api', 'oauth_client_notification', $to, $langcode, $params);
     }
   }
 
