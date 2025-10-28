@@ -484,6 +484,9 @@ elements: |-
       '#type': entity_autocomplete
       '#title': 'Internal Solutions in the Portal  '
       '#multiple': true
+      '#description': '<p class="h4">Internal Solutions in the Portal ( <a href="/search?f%5B0%5D=type%3Asolution" target="_blank" rel="noopener noreferrer">Search </a>in the Interoperable Europe Portal)</p>'
+      '#title_display': invisible
+      '#description_display': before
       '#multiple__min_items': 1
       '#multiple__empty_items': 0
       '#multiple__add': false

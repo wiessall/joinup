@@ -91,31 +91,6 @@ function joinup_assessment_webform_element_webform_actions_alter(array &$element
 }
 
 /**
- * Implements hook_webform_element_alter().
- */
-function joinup_assessment_webform_element_alter(array &$element, FormStateInterface $form_state, array $context): void {
-  if ($element['#webform'] === 'assessment' && isset($element['#webform_key']) && $element['#webform_key'] === 'portal_solutions') {
-
-    $search_url = Url::fromRoute('view.search.page_1', [], [
-      'query' => ['f[0]' => 'type:solution'],
-    ]);
-    $link = Link::fromTextAndUrl(t('Search'), $search_url);
-    $link_options = $link->getUrl()->getOptions();
-    $link_options['attributes'] = [
-      'target' => '_blank',
-      'rel' => 'noopener noreferrer',
-    ];
-    $link->getUrl()->setOptions($link_options);
-    $search_link = $link->toString();
-    $element['#title'] = t('Internal Solutions in the Portal (@search_link in the Interoperable Europe Portal)', [
-      '@search_link' => $search_link,
-    ]);
-    $element['#title_display'] = 'before';
-    $element['#allowed_tags'] = ['a', 'span', 'strong', 'em', 'br'];
-  }
-}
-
-/**
  * Implements hook_entity_bundle_info_alter().
  */
 function joinup_assessment_entity_bundle_info_alter(array &$bundles): void {
