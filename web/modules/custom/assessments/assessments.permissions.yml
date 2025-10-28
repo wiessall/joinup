@@ -1,5 +1,5 @@
-administer assessment_content types:
-  title: 'Administer assessment content types'
+administer assessment types:
+  title: 'Administer assessment types'
   description: 'Maintain the types of assessment content entity.'
   restrict access: true
 view assessment_content:

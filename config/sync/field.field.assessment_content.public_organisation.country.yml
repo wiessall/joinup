@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organisation
+    - assessments.type.public_organisation
     - field.storage.assessment_content.country
     - taxonomy.vocabulary.spatial
   module:
