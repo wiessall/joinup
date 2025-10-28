@@ -1,0 +1,12 @@
+joinup_api.api_clients:
+  title: 'API clients'
+  route_name: oauth_client.user
+  base_route: entity.user.canonical
+  weight: 10
+
+joinup_api.api_client_request:
+  title: 'API client request'
+  route_name: view.oauth_client_request.user_requests
+  base_route: entity.user.canonical
+  weight: 20
+

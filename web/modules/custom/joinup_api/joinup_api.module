@@ -10,6 +10,15 @@ declare(strict_types=1);
 use Drupal\joinup_notification\MailContentTypeHeader;
 
 /**
+ * Implements hook_local_tasks_alter().
+ */
+function joinup_api_local_tasks_alter(array &$local_tasks): void {
+  // We remove following local tasks to avoid 2 active links at the same time.
+  unset($local_tasks['oauth_client.user.oauth']);
+  unset($local_tasks['oauth_client.user.oauth_client_request']);
+}
+
+/**
  * Implements hook_mail().
  */
 function joinup_api_mail(string $key, array &$message, array $params): void {
