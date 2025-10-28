@@ -161,7 +161,7 @@ Feature: Subscribing to a solution
 
     When I open the account menu
     And I click "My subscriptions"
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscriptions settings"
     And I should see the text "Some solution to subscribe"
     And the "Save changes" button on the "Some solution to subscribe" subscription card should be disabled
 
