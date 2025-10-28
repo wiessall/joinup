@@ -1,6 +1,6 @@
 default:
   id: assessment_workflow
-  label: 'Assessment content type default'
+  label: 'Assessment type default'
   group: assessment_content
   states:
     draft:
