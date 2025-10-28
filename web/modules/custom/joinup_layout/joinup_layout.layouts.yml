@@ -2,6 +2,7 @@ joinup_layout_group_heading:
   label: 'Joinup group heading'
   path: layouts/group
   template: joinup-layout--group-heading
+  category: Joinup
   default_region: main
   icon_map:
     - [main, aside]
@@ -80,6 +81,7 @@ joinup_layout_oss_heading:
   path: layouts/oss-heading
   template: joinup-layout--oss-heading
   library: joinup_layout/oss_heading
+  category: Joinup
   default_region: second
   icon_map:
     - [ top_left, top_right, indicator ]
@@ -111,6 +113,7 @@ joinup_layout_four_column_grid:
   path: layouts/four-column-grid
   template: joinup-layout--four-column-grid
   library: joinup_layout/four_column_grid
+  category: 'Columns: 4'
   default_region: content
   icon_map:
     - [content]
