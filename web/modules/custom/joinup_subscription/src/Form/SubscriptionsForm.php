@@ -59,7 +59,7 @@ class SubscriptionsForm extends FormBase {
   public function userSubscriptionPage(): RedirectResponse {
     return $this->redirect(
       'joinup_subscription.subscriptions',
-      ['user' => $this->currentUser()->id(),],
+      ['user' => $this->currentUser()->id()],
       [],
       302
     );
