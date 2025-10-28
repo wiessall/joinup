@@ -19,10 +19,10 @@ third_party_settings:
       weight: 0
       format_type: markup
       format_settings:
-        show_empty_fields: 1
-        label_as_html: 0
-        id: ''
         classes: form-wrapper
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
         markup:
           value: '<p><strong>Select the groups of stakeholders to which binding requirement(s) are relevant:</strong></p>'
           format: content_editor
@@ -34,10 +34,10 @@ third_party_settings:
       weight: 2
       format_type: markup
       format_settings:
-        show_empty_fields: 1
-        label_as_html: 0
-        id: ''
         classes: form-wrapper
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
         markup:
           value: '<p>Select the stakeholder’s country</p>'
           format: content_editor
