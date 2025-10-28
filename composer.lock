@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2147f8af55ecb57ca866aad7aaf6133",
+    "content-hash": "a98c9e50699495afc3aabac22213b75e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7339,7 +7339,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/oauth_client.git",
-                "reference": "07f279467f9d222f4722bd95b2bcef395a4a31a9"
+                "reference": "d6c2ff45d2e39ea1c7d64ec5e0245219ab2c1b89"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11",
@@ -7356,8 +7356,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "1.x-dev",
-                    "datestamp": "1760690708",
+                    "version": "1.0.0-alpha1+1-dev",
+                    "datestamp": "1761299535",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
