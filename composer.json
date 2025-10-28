@@ -463,6 +463,9 @@
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
+            "drupal/oauth_client": {
+                "Improve email templates @see https://www.drupal.org/i/3553910": "resources/patch/php/drupal/oauth_client/3553910.diff"
+            },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
             },
