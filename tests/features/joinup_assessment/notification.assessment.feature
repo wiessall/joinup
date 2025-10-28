@@ -18,7 +18,7 @@ Feature: Notification test for the assessment.
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
     When I fill in "Name of your organisation" with "Pink Floyd"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "The Wall"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "The Wall"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
