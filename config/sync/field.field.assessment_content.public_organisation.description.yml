@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.public_organization
+    - assessments.assessment_content_type.public_organisation
     - field.storage.assessment_content.description
   module:
     - rdf_sync
@@ -15,10 +15,10 @@ third_party_settings:
       type: 'xsd:string'
   tmgmt_content:
     excluded: false
-id: assessment_content.public_organization.description
+id: assessment_content.public_organisation.description
 field_name: description
 entity_type: assessment_content
-bundle: public_organization
+bundle: public_organisation
 label: Description
 description: ''
 required: false
