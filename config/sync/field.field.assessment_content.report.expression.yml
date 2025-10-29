@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.report
-    - assessments.assessment_content_type.expression
+    - assessments.type.report
+    - assessments.type.expression
     - field.storage.assessment_content.expression
   module:
     - tmgmt_content

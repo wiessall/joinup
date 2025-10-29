@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.report
+    - assessments.type.report
     - field.field.assessment_content.report.affected_party
     - field.field.assessment_content.report.asset
     - field.field.assessment_content.report.binding_requirement
@@ -311,9 +311,9 @@ third_party_settings:
             weight: 0
             additional: {  }
         third_party_settings: {  }
-id: assessment_content.assessment.default
+id: assessment_content.report.default
 targetEntityType: assessment_content
-bundle: assessment
+bundle: report
 mode: default
 content:
   affected_party:

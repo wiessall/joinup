@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.report
-    - assessments.assessment_content_type.participation
+    - assessments.type.report
+    - assessments.type.participation
     - field.storage.assessment_content.affected_party
   module:
     - tmgmt_content
