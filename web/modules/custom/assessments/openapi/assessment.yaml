@@ -1,0 +1,323 @@
+openapi: 3.0.3
+info:
+  title: Assessment API
+  version: 1.0.0
+  description: |
+    API for submitting Assessment reports and related entities.
+
+    Rules:
+    - Entities are submitted as a single JSON object.
+    - Any nested entry in the structure is an entity reference unless the parent field has ": One of", in which case the subsequent list defines allowed values (enums).
+    - Each entity reference field accepts either:
+      - a UUID string referencing an already existing entity, or
+      - a structured object with the properties described in the schema for that entity.
+servers:
+  - url: /api/assessment-composer
+paths:
+  /assessments:
+    post:
+      summary: Create an Assessment
+      description: Submit a single Assessment JSON object. Entity reference fields accept either a UUID or a fully-structured object, as defined by oneOf in the schemas.
+      operationId: createAssessment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+            examples:
+              asReferences:
+                summary: Submit using UUID references
+                value:
+                  name: Quarterly review
+                  binding_requirement:
+                    - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
+                  provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
+                  results_in:
+                    - "6b8d3f4e-2e24-4c2f-9a32-7f3f2e0e7b9f"
+              asStructured:
+                summary: Submit with structured nested entities
+                value:
+                  name: Quarterly review
+                  binding_requirement:
+                    - documented_in: "https://example.com/law/123"
+                      name: Article 5
+                      expression:
+                        - name: Legal Act 2024
+                          description: Reference to an EU legal expression
+                          document_in: "https://example.com/eli/act"
+                          expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
+                      affects:
+                        - description: Online permit application
+                          spatial: BE
+                          identifier: ps-123
+                          name: Permit Application Service
+                          thematic_area: digital_and_innovation_services
+                      has_participation:
+                        - country: BE
+                          participation_type: national_public_sector_body
+                          agent:
+                            name: Federal Agency of X
+                            agent_type: organisation
+                      asset:
+                        - name: Portal EU
+                          landing_page: "https://portal.example.eu"
+                      documents:
+                        - file_uri: "https://files.example.com/documents/req-1.pdf"
+                  provider:
+                    name: City of Brussels
+                    description: Local authority
+                    organisation_type: local_public_sector_body
+                    country: BE
+                  results_in:
+                    - interpretation: Compliant with conditions
+                      judgement: positive
+                      type: final
+                      documents:
+                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
+      responses:
+        '201':
+          description: Assessment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: created
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                created:
+                  value:
+                    id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
+                    status: created
+                    assessment:
+                      name: Quarterly review
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    # Generic reusable types
+    Uuid:
+      type: string
+      format: uuid
+      description: A UUID reference to an existing entity.
+
+    Iso3166Alpha2:
+      type: string
+      description: ISO-3166 alpha-2 country code
+      minLength: 2
+      maxLength: 2
+      pattern: '^[A-Z]{2}$'
+      example: BE
+
+    Uri:
+      type: string
+      format: uri
+
+    # Entities and their reference-or-object wrappers
+
+    Assessment:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        binding_requirement:
+          description: References to BindingRequirements; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/BindingRequirement'
+        provider:
+          description: Reference to an Organisation, either a UUID or a structured object.
+          oneOf:
+            - $ref: '#/components/schemas/Uuid'
+            - $ref: '#/components/schemas/Organisation'
+        results_in:
+          description: References to Statements; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/Statement'
+
+    BindingRequirement:
+      type: object
+      properties:
+        documented_in:
+          $ref: '#/components/schemas/Uri'
+        name:
+          type: string
+        expression:
+          description: References to Expressions; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/Expression'
+        affects:
+          description: References to PublicServices; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/PublicService'
+        has_participation:
+          description: References to Participations; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/Participation'
+        asset:
+          description: References to Assets; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/Asset'
+        documents:
+          description: References to Files; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/File'
+
+    Expression:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        document_in:
+          $ref: '#/components/schemas/Uri'
+        expression_type:
+          type: string
+          description: One of the allowed expression types.
+          enum:
+            - http://data.europa.eu/eli/ontology#LegalExpression
+            - http://purl.org/vocab/frbr/core#Expression
+
+    PublicService:
+      type: object
+      properties:
+        description:
+          type: string
+        spatial:
+          $ref: '#/components/schemas/Iso3166Alpha2'
+        identifier:
+          type: string
+        name:
+          type: string
+        thematic_area:
+          type: string
+          enum:
+            - core_governance_and_administration
+            - health_and_wellbeing
+            - education_and_research
+            - environment_and_energy
+            - economy_and_employment
+            - social_and_community_services
+            - security_justice_and_emergency_services
+            - transport_and_infrastructure
+            - digital_and_innovation_services
+            - international_and_regional_cooperation
+
+    Participation:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/Iso3166Alpha2'
+        participation_type:
+          type: string
+          enum:
+            - local_public_sector_body
+            - regional_public_sector_body
+            - national_public_sector_body
+            - european_union_institution
+            - european_union_agency
+            - european_union_body
+            - private_businesses
+        agent:
+          description: Reference to an Agent.
+          oneOf:
+            - $ref: '#/components/schemas/Uuid'
+            - $ref: '#/components/schemas/Agent'
+
+    Agent:
+      type: object
+      properties:
+        name:
+          type: string
+        agent_type:
+          type: string
+          enum:
+            - person
+            - organisation
+            - system
+
+    Asset:
+      type: object
+      properties:
+        name:
+          type: string
+        landing_page:
+          $ref: '#/components/schemas/Uri'
+
+    File:
+      type: object
+      properties:
+        file_uri:
+          $ref: '#/components/schemas/Uri'
+
+    Organisation:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        organisation_type:
+          type: string
+          enum:
+            - local_public_sector_body
+            - regional_public_sector_body
+            - national_public_sector_body
+            - european_union_institution
+            - european_union_agency
+            - european_union_body
+        country:
+          $ref: '#/components/schemas/Iso3166Alpha2'
+
+    Statement:
+      type: object
+      properties:
+        interpretation:
+          type: string
+        judgement:
+          type: string
+        type:
+          type: string
+        documents:
+          description: References to Files; allow multiple. Each item may be a UUID or a structured object.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/File'
