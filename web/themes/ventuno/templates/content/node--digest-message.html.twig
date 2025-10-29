@@ -7,7 +7,7 @@
  */
 #}
 {% if content.field_short_title|field_value %}
-  {% set digest_item_title = content.field_short_title|render|striptags|trim %}
+  {% set digest_item_title = content.field_short_title|field_value %}
 {% else %}
   {% set digest_item_title = label %}
 {% endif %}
