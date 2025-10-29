@@ -6,7 +6,6 @@ dependencies:
     - assessments.type.public_service
     - field.field.assessment_content.public_service.description
     - field.field.assessment_content.public_service.identifier
-    - field.field.assessment_content.public_service.name
     - field.field.assessment_content.public_service.spatial
     - field.field.assessment_content.public_service.thematic_area
   module:
