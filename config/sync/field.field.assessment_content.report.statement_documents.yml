@@ -1,21 +1,21 @@
-uuid: a6778d99-bb5c-4fff-b7f7-769dc3afd0a5
+uuid: cd749183-92b5-462f-aaef-2bfe8e81ed19
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - field.storage.assessment_content.requirement_documents
+    - assessments.type.report
+    - field.storage.assessment_content.statement_documents
   module:
     - file
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.requirement_documents
-field_name: requirement_documents
+id: assessment_content.report.statement_documents
+field_name: statement_documents
 entity_type: assessment_content
-bundle: assessment
-label: 'Binding requirements supporting documents'
+bundle: report
+label: 'Statement supporting documents'
 description: ''
 required: false
 translatable: false

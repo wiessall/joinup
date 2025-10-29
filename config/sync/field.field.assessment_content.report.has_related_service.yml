@@ -1,26 +1,21 @@
-uuid: ce34bf8c-3138-4471-b594-dce067a5dd3a
+uuid: f934eef4-5a94-47dc-9528-1cf2c08ddc18
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - assessments.type.binding_requirement
-    - field.storage.assessment_content.binding_requirement
+    - assessments.type.report
+    - assessments.type.public_service
+    - field.storage.assessment_content.has_related_service
   module:
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://data.europa.eu/2sa/cav#assesses'
-      type: resource
-id: assessment_content.assessment.binding_requirement
-field_name: binding_requirement
+id: assessment_content.report.has_related_service
+field_name: has_related_service
 entity_type: assessment_content
-bundle: assessment
-label: 'Binding requirement'
+bundle: report
+label: 'Affected service'
 description: ''
 required: true
 translatable: false
@@ -30,7 +25,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      binding_requirement: binding_requirement
+      public_service: public_service
     sort:
       field: _none
       direction: ASC

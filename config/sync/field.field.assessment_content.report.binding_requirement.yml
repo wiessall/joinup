@@ -1,11 +1,11 @@
-uuid: 852ae0b1-ed38-4cb4-bcf9-6bcc8388be63
+uuid: ce34bf8c-3138-4471-b594-dce067a5dd3a
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - assessments.type.statement
-    - field.storage.assessment_content.results_in
+    - assessments.type.report
+    - assessments.type.binding_requirement
+    - field.storage.assessment_content.binding_requirement
   module:
     - rdf_sync
     - tmgmt_content
@@ -14,13 +14,13 @@ third_party_settings:
     excluded: false
   rdf_sync:
     target_id:
-      predicate: 'http://data.europa.eu/2sa/cav#resultsIn'
+      predicate: 'http://data.europa.eu/2sa/cav#assesses'
       type: resource
-id: assessment_content.assessment.results_in
-field_name: results_in
+id: assessment_content.report.binding_requirement
+field_name: binding_requirement
 entity_type: assessment_content
-bundle: assessment
-label: 'Results in'
+bundle: report
+label: 'Binding requirement'
 description: ''
 required: true
 translatable: false
@@ -30,7 +30,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      statement: statement
+      binding_requirement: binding_requirement
     sort:
       field: _none
       direction: ASC

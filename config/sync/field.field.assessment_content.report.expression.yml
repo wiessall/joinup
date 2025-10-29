@@ -1,26 +1,21 @@
-uuid: 5a0b38c1-33fe-465e-9e38-2388b8276d2j
+uuid: 34f01953-92eb-4f6f-ae07-a25f4e7fd9d3
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - assessments.type.public_organisation
-    - field.storage.assessment_content.provider
+    - assessments.type.report
+    - assessments.type.expression
+    - field.storage.assessment_content.expression
   module:
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://data.europa.eu/m8g/isProvidedBy'
-      type: resource
-id: assessment_content.assessment.provider
-field_name: provider
+id: assessment_content.report.expression
+field_name: expression
 entity_type: assessment_content
-bundle: assessment
-label: 'Provided by'
+bundle: report
+label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
 description: ''
 required: true
 translatable: false
@@ -30,7 +25,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      public_organisation: public_organisation
+      expression: expression
     sort:
       field: _none
       direction: ASC
