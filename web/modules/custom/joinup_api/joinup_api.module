@@ -34,7 +34,5 @@ function joinup_api_mail(string $key, array &$message, array $params): void {
     $message['body'][] = _filter_autop($params['context']['message']);
   }
 
-  // Send as HTML. Symfony_mailer_lite checks params['content_type'], not
-  // the Content-Type header.
-  $message['params']['content_type'] = MailContentTypeHeader::TextHtml->value;
+  $message['headers']['Content-Type'] = MailContentTypeHeader::TextHtml->value;
 }
