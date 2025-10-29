@@ -84,7 +84,7 @@
         "drupal/monolog": "^3.0",
         "drupal/multivalue_form_element": "^1.0",
         "drupal/node_revision_delete": "^2.0",
-        "drupal/oauth_client": "1.x-dev@dev",
+        "drupal/oauth_client": "^1.0@alpha",
         "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
@@ -462,10 +462,6 @@
             },
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
-            },
-            "drupal/oauth_client": {
-                "Improve email templates @see https://www.drupal.org/i/3553910": "resources/patch/php/drupal/oauth_client/3553910.diff",
-                "Allow NotificationSender to be extended @see https://www.drupal.org/i/3554232": "resources/patch/php/drupal/oauth_client/3554232.diff"
             },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
