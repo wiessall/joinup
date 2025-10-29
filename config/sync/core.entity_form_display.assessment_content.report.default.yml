@@ -3,18 +3,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - field.field.assessment_content.assessment.affected_party
-    - field.field.assessment_content.assessment.asset
-    - field.field.assessment_content.assessment.binding_requirement
-    - field.field.assessment_content.assessment.expression
-    - field.field.assessment_content.assessment.has_related_service
-    - field.field.assessment_content.assessment.provider
-    - field.field.assessment_content.assessment.name
-    - field.field.assessment_content.assessment.requirement_documents
-    - field.field.assessment_content.assessment.results_in
-    - field.field.assessment_content.assessment.state
-    - field.field.assessment_content.assessment.statement_documents
+    - assessments.type.report
+    - field.field.assessment_content.report.affected_party
+    - field.field.assessment_content.report.asset
+    - field.field.assessment_content.report.binding_requirement
+    - field.field.assessment_content.report.expression
+    - field.field.assessment_content.report.has_related_service
+    - field.field.assessment_content.report.provider
+    - field.field.assessment_content.report.name
+    - field.field.assessment_content.report.requirement_documents
+    - field.field.assessment_content.report.results_in
+    - field.field.assessment_content.report.state
+    - field.field.assessment_content.report.statement_documents
   module:
     - field_group
     - file
@@ -206,9 +206,9 @@ third_party_settings:
         next_button_text: Submit
         required_fields: true
         step_help: ''
-id: assessment_content.assessment.default
+id: assessment_content.report.default
 targetEntityType: assessment_content
-bundle: assessment
+bundle: report
 mode: default
 content:
   affected_party:

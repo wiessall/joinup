@@ -1,23 +1,23 @@
-uuid: 34f01953-92eb-4f6f-ae07-a25f4e7fd9d3
+uuid: 17b23a06-ce24-4aa7-83ec-139b467e4af8
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - assessments.type.expression
-    - field.storage.assessment_content.expression
+    - assessments.type.report
+    - assessments.type.participation
+    - field.storage.assessment_content.affected_party
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.expression
-field_name: expression
+id: assessment_content.report.affected_party
+field_name: affected_party
 entity_type: assessment_content
-bundle: assessment
-label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
+bundle: report
+label: 'Affected party'
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -25,7 +25,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      expression: expression
+      participation: participation
     sort:
       field: _none
       direction: ASC

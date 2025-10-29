@@ -1,23 +1,28 @@
-uuid: 17b23a06-ce24-4aa7-83ec-139b467e4af8
+uuid: 852ae0b1-ed38-4cb4-bcf9-6bcc8388be63
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.assessment
-    - assessments.type.participation
-    - field.storage.assessment_content.affected_party
+    - assessments.type.report
+    - assessments.type.statement
+    - field.storage.assessment_content.results_in
   module:
+    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment_content.assessment.affected_party
-field_name: affected_party
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2sa/cav#resultsIn'
+      type: resource
+id: assessment_content.report.results_in
+field_name: results_in
 entity_type: assessment_content
-bundle: assessment
-label: 'Affected party'
+bundle: report
+label: 'Results in'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -25,7 +30,7 @@ settings:
   handler: 'default:assessment_content'
   handler_settings:
     target_bundles:
-      participation: participation
+      statement: statement
     sort:
       field: _none
       direction: ASC
