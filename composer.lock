@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3342ec3f8fffe30a8716aa633270bfd3",
+    "content-hash": "9949134fc3786d29155fa51ff147e3b3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7335,11 +7335,17 @@
         },
         {
             "name": "drupal/oauth_client",
-            "version": "dev-1.x",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/oauth_client.git",
-                "reference": "d6c2ff45d2e39ea1c7d64ec5e0245219ab2c1b89"
+                "reference": "1.0.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/oauth_client-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "6c79b3c8c83b8eec81f572cb5be815116b0c0220"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11",
@@ -7352,12 +7358,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "1.0.0-alpha1+1-dev",
-                    "datestamp": "1761299535",
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1761738675",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -27841,7 +27844,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
-        "drupal/oauth_client": 20,
+        "drupal/oauth_client": 15,
         "drupal/poll": 15,
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
