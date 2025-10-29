@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\assessments\AssessmentContentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
@@ -74,6 +75,7 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
   use EntityCreationTrait;
   use EntityOwnerTrait;
   use RdfSyncEntityTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -172,6 +174,15 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
       ->setDescription(t('The time that the assessment content was last edited.'));
 
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label(): string {
+    return $this->get('name')?->value ?? $this->t('Assessment #@id', [
+      '@id' => $this->id(),
+    ])->render();
   }
 
 }
