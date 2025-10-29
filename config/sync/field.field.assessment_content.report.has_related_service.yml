@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.report
-    - assessments.assessment_content_type.public_service
+    - assessments.type.report
+    - assessments.type.public_service
     - field.storage.assessment_content.has_related_service
   module:
     - tmgmt_content

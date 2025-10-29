@@ -38,7 +38,7 @@ final class AssessmentContentAccessControlHandler extends EntityAccessControlHan
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
-    return AccessResult::allowedIfHasPermissions($account, ['create assessment_content', 'administer assessment_content types'], 'OR');
+    return AccessResult::allowedIfHasPermissions($account, ['create assessment_content', 'administer assessment types'], 'OR');
   }
 
 }
