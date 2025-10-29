@@ -9,7 +9,7 @@
 {% if content.field_short_title|field_value %}
   {% set digest_item_title = content.field_short_title|field_value %}
 {% else %}
-  {% set digest_item_title = label %}
+  {% set digest_item_title = label|field_value %}
 {% endif %}
 
 {% if content.field_news_logo|field_value %}
