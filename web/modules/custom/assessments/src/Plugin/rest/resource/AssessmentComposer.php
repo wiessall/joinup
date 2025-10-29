@@ -24,6 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "assessments_composer",
   label: new TranslatableMarkup("Assessment composer"),
   uri_paths: [
+    "canonical" => "/api/assessments-composer/{assessment_composer}",
     "create" => "/api/assessments-composer",
   ],
 )]
@@ -60,10 +61,29 @@ class AssessmentComposer extends ResourceBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('assessments'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
     );
+  }
+
+  /**
+   * Responds to a GET request.
+   *
+   * @param string $assessment_composer
+   *   The assessment composer name.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   A 404 response if the assessment composer does not exist or the
+   *  assessment array.
+   */
+  public function get(string $assessment_composer): ResourceResponse {
+    $assessment = $this->entityTypeManager->getStorage('assessment_content')->loadByProperties(['uuid' => $assessment_composer]);
+    if (!$assessment) {
+      return new ResourceResponse(['error' => 'Assessment composer not found.'], 404);
+    }
+    return new ResourceResponse($assessment);
   }
 
   /**
@@ -124,11 +144,9 @@ class AssessmentComposer extends ResourceBase {
 
     // Collect nested classes inside binding_requirements
     $expressions = [];
-    $public_services = [];
+    $publicServices = [];
     $participations = [];
-    $agents = [];
     $assets = [];
-    $files = [];
 
     foreach ($asList($data['binding_requirement'] ?? []) as $br) {
       // Skip if $br is a UUID string.
@@ -138,68 +156,71 @@ class AssessmentComposer extends ResourceBase {
 
       // expression: list of UUIDs or Expression objects
       foreach ($asList($br['expression'] ?? []) as $expr) {
-        $expressions[] = $expr;
+        $expressions[] = [
+          'name' => $expr['name'],
+          'description' => $expr['description'],
+          'document_in' => $expr['document_in'],
+          'expression_type' => $expr['expression_type'],
+        ];
       }
+      $expressions = $this->createEntities('expression', $expressions);
 
       // affects: list of UUIDs or PublicService objects
       foreach ($asList($br['affects'] ?? []) as $ps) {
-        $public_services[] = $ps;
+        $publicServices[] = [
+          'description' => $ps['description'],
+          'identifier' => $ps['identifier'],
+          'name' => $ps['name'],
+          'thematic_area' => $ps['thematic_area'],
+        ];
       }
+      $publicServices = $this->createEntities('public_service', $publicServices);
 
       // has_participation: list of UUIDs or Participation objects
       foreach ($asList($br['has_participation'] ?? []) as $part) {
-        $participations[] = $part;
-        // If structured, try to collect nested Agent reference.
-        if (is_array($part) && array_key_exists('agent', $part)) {
-          $agents[] = $part['agent'];
-        }
+        $participations[] = [
+          'country' => $part['country'],
+          'participation_type' => $part['participation_type'],
+        ];
       }
+      $participations = $this->createEntities('participation', $participations);
 
       // asset: list of UUIDs or Asset objects
       foreach ($asList($br['asset'] ?? []) as $asset) {
-        $assets[] = $asset;
+        $assets[] = [
+          'name' => $asset['name'],
+          'landing_page' => $asset['landing_page'],
+        ];
       }
-
-      // documents: list of UUIDs or File objects
-      foreach ($asList($br['documents'] ?? []) as $doc) {
-        $files[] = $doc;
-      }
+      $assets = $this->createEntities('asset', $assets);
     }
 
-    // Collect files from statements
-    foreach ($statements as $st) {
-      if (!is_array($st)) {
-        continue;
-      }
-      foreach ($asList($st['documents'] ?? []) as $doc) {
-        $files[] = $doc;
-      }
-    }
+    $assessmentReport = [
+      'name' => $data['name'],
+      'created' => REQUEST_TIME,
+      'uid' => $this->currentUser->id(),
+      'state' => 'under_review',
+      'binding_requirement' => array_map(fn ($br) => $br->id(), $bindingRequirements),
+      'affected_party' => array_map(fn ($ps) => $ps->id(), $participations),
+      'has_related_service' => array_map(fn ($ps) => $ps->id(), $publicServices),
+      'asset' => array_map(fn ($asset) => $asset->id(), $assets),
+      'expression' => array_map(fn ($expr) => $expr->id(), $expressions),
+      'provider' => array_map(fn ($org) => $org->id(), $providers),
+      'results_in' => array_map(fn ($st) => $st->id(), $statements),
+    ];
+    $assessmentReport = $this->createEntities('assessment', [$assessmentReport]);
 
-    $createdEntities = [];
-
-
-    // Build result with extracted groups for downstream processing.
-    $result = [
-      'status' => 'under_review',
-      'message' => 'Assessment composer received the payload.',
-      'received' => $data,
-      'extracted' => [
-        'assessment' => $assessment,
-        'binding_requirements' => $bindingRequirements,
-        'provider' => $provider,
-        'statements' => $statements,
-        'expressions' => $expressions,
-        'public_services' => $public_services,
-        'participations' => $participations,
-        'agents' => $agents,
-        'assets' => $assets,
-        'files' => $files,
-      ],
-      // TODO: In the next step, map UUIDs vs structured objects and persist.
+    $createdEntities = [
+      'assessment' => $assessmentReport[0]->uuid(),
+      'binding_requirements' => array_map(fn ($br) => $br->uuid(), $bindingRequirements),
+      'providers' => array_map(fn ($org) => $org->uuid(), $providers),
+      'statements' => array_map(fn ($st) => $st->uuid(), $statements),
+      'expressions' => array_map(fn ($expr) => $expr->uuid(), $expressions),
+      'public_services' => array_map(fn ($ps) => $ps->uuid(), $publicServices),
+      'participations' => array_map(fn ($part) => $part->uuid(), $participations),
     ];
 
-    $response = new ResourceResponse($result, 201);
+    $response = new ResourceResponse($createdEntities, 201);
     $response->addCacheableDependency((new CacheableMetadata())->setCacheMaxAge(0));
     return $response;
   }
@@ -219,7 +240,7 @@ class AssessmentComposer extends ResourceBase {
   protected function createEntities(string $bundle, array $entitiesData): array {
     $entities = [];
     foreach ($entitiesData as $entityData) {
-      $entity = $this->entityTypeManager->getStorage('assessment')->create(
+      $entity = $this->entityTypeManager->getStorage('assessment_content')->create(
         ['type' => $bundle, 'created' => REQUEST_TIME, 'uid' => $this->currentUser->id()] + $entityData
       );
       $entity->save();
@@ -239,7 +260,7 @@ class AssessmentComposer extends ResourceBase {
    *   The assessment entity.
    */
   protected function getAssessmentReport(string $name): Assessment {
-    return $this->entityTypeManager->getStorage('assessment')->create([
+    return $this->entityTypeManager->getStorage('assessment_content')->create([
       'type' => 'assessment',
       'name' => $name,
       'created' => REQUEST_TIME,
