@@ -5,7 +5,6 @@ dependencies:
   config:
     - assessments.type.binding_requirement
     - field.field.assessment_content.binding_requirement.documented_in
-    - field.field.assessment_content.binding_requirement.name
   module:
     - link
 id: assessment_content.binding_requirement.default

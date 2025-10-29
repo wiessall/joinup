@@ -7,7 +7,6 @@ dependencies:
     - field.field.assessment_content.expression.description
     - field.field.assessment_content.expression.documented_in
     - field.field.assessment_content.expression.expression_type
-    - field.field.assessment_content.expression.name
   module:
     - link
 id: assessment_content.expression.default

@@ -5,7 +5,6 @@ dependencies:
   config:
     - assessments.type.agent
     - field.field.assessment_content.agent.agent_type
-    - field.field.assessment_content.agent.name
 id: assessment_content.agent.default
 targetEntityType: assessment_content
 bundle: agent

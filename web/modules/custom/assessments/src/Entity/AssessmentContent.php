@@ -51,7 +51,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "id" = "id",
  *     "langcode" = "langcode",
  *     "bundle" = "type",
- *     "label" = "id",
+ *     "label" = "name",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
  *   },
@@ -93,6 +93,19 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Name'))
+      ->setDescription(t('The name or short description.'))
+      ->setRequired(TRUE)
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)
@@ -102,7 +115,7 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
         'settings' => [
           'display_label' => FALSE,
         ],
-        'weight' => 0,
+        'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [

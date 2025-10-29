@@ -21,6 +21,14 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
   participant_type:
     type: list_default
     label: above
