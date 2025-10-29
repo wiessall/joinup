@@ -23,11 +23,11 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
   public function __construct(
-    readonly protected CountryManagerInterface $countryManager,
+    protected readonly CountryManagerInterface $countryManager,
     #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
     #[Autowire(service: 'Drupal\joinup_oss_catalogue\ParamConverter\CatalogueSourceConverter')]
-    protected CatalogueSourceConverter $converter,
+    protected readonly CatalogueSourceConverter $converter,
   ) {}
 
   /**
