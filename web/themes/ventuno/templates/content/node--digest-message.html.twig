@@ -7,7 +7,7 @@
  */
 #}
 {% if content.field_short_title|field_value %}
-  {% set digest_item_title = content.field_short_title %}
+  {% set digest_item_title = content.field_short_title|render|striptags|trim %}
 {% else %}
   {% set digest_item_title = label %}
 {% endif %}
@@ -31,7 +31,7 @@
     </tr>
     <tr>
       <td style="padding: 5px 0 0 0;">
-        <p class="fs-lg fw-bold"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title|render|striptags|trim }}</a></p>
+        <p class="fs-lg fw-bold"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a></p>
         {{ digest_item_body }}
       </td>
     </tr>
