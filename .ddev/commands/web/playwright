@@ -1,3 +1,16 @@
-#!/bin/sh
+#!/bin/bash
+# ddev playwright
 
-npx playwright "$@"
+case "$1" in
+  setup)
+    echo "[Playwright] Setting up test environment..."
+    drush en default_content joinup_test_content -y
+    ;;
+  teardown)
+    echo "[Playwright] Reverting test environment..."
+    drush pmu default_content joinup_test_content -y
+    ;;
+  *)
+    npx playwright "$@"
+    ;;
+esac

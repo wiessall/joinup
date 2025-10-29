@@ -42,7 +42,7 @@
        href="{{ _url }}"
        title="{{ _label|render|striptags|trim }}"></a>
 
-    <div class="tile__body d-flex flex-column justify-content-between">
+    <div class="tile__body d-flex flex-column">
       {%- if _info -%}
         <div class="fs-sm d-flex align-items-center justify-content-start my-2 text-dark">
           <svg class="tile__info-icon bi icon--xs me-1">
@@ -83,8 +83,8 @@
       {%- endif -%}
     </div>
 
-    <div class="tile__footer tile__action p-3">
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
+    <div class="tile__footer tile__action px-3 pb-3">
+      <div class="d-flex flex-wrap align-items-center justify-content-end">
         <div data-joinup-card-stats class="d-flex align-items-center fs-xs text-dark">
           {%- for key, data in _extra_data -%}
             {%- if key != 'flag_interoperability' -%}
