@@ -28,6 +28,23 @@ class AssessmentComposerResourceTest extends KernelTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Install entity schema for assessments module.
+    $this->installEntitySchema('assessment_content');
+    $this->installEntitySchema('user');
+    $this->installSchema('system', ['sequences']);
+    $this->installSchema('user', ['users_data']);
+    $this->installConfig(['assessments']);
+    $this->installConfig(['system']);
+  }
+
+  /**
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testPostStructuredPayload(): void {
