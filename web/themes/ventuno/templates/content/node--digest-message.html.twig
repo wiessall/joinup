@@ -31,7 +31,7 @@
     </tr>
     <tr>
       <td style="padding: 5px 0 0 0;">
-        <p class="fs-lg fw-bold"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a></p>
+        <p class="fs-lg fw-bold"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title|striptags|trim }}</a></p>
         {{ digest_item_body }}
       </td>
     </tr>
