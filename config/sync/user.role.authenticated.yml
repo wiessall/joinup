@@ -24,6 +24,8 @@ dependencies:
     - node.type.event
     - node.type.news
     - node.type.owner
+    - oauth_client.type.authenticated_user_api
+    - rest.resource.discussion_comment
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
@@ -41,11 +43,14 @@ dependencies:
     - media
     - meta_entity
     - node
+    - oauth_client
     - paragraphs
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rest
     - search_api_autocomplete
+    - simple_oauth
     - sitewide_alert
     - sparql_endpoint
     - state_machine_permissions
@@ -159,6 +164,8 @@ permissions:
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
   - 'propose collection content'
+  - 'request authenticated_user_api oauth2 client'
+  - 'restful post discussion_comment'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
