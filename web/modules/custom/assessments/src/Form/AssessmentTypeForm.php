@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Drupal\assessment\Form;
+namespace Drupal\assessments\Form;
 
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\assessment\Entity\AssessmentType;
+use Drupal\assessments\Entity\AssessmentType;
 
 /**
  * Form handler for assessment type forms.

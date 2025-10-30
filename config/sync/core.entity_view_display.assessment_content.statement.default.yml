@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.statement
+    - assessments.type.statement
     - field.field.assessment_content.statement.interpretation
     - field.field.assessment_content.statement.judgement
     - field.field.assessment_content.statement.statement_type

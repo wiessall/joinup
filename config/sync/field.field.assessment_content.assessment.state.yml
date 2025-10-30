@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.assessment
+    - assessments.type.assessment
     - field.storage.assessment_content.state
   module:
     - state_machine

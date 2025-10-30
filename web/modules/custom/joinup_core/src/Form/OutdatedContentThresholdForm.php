@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -20,11 +21,12 @@ class OutdatedContentThresholdForm extends ConfigFormBase {
   use AutowireTrait;
 
   public function __construct(
-    readonly ConfigFactoryInterface $config_factory,
+    ConfigFactoryInterface $config_factory,
+    TypedConfigManagerInterface $typed_config_manager,
     readonly EntityTypeBundleInfoInterface $bundleInfo,
     readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typed_config_manager);
   }
 
   /**
