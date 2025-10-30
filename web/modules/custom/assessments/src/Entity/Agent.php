@@ -7,6 +7,6 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the agent bundle entity class.
  */
-final class Agent extends AssessmentContent {
+final class Agent extends Assessment {
 
 }

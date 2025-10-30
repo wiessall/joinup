@@ -1,0 +1,32 @@
+uuid: 513ce5a1-faf9-4fd6-b271-892ae2463c6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.storage.assessment.documented_in
+  module:
+    - link
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    uri:
+      predicate: 'http://data.europa.eu/2sa/cav#documentedIn'
+      type: resource
+id: assessment.expression.documented_in
+field_name: documented_in
+entity_type: assessment
+bundle: expression
+label: 'If applicable, provide a link to the initiative, project or action concerned'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 17
+field_type: link

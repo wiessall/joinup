@@ -7,4 +7,4 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the public service entity class.
  */
-final class PublicService extends AssessmentContent {}
+final class PublicService extends Assessment {}

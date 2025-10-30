@@ -7,7 +7,7 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the publicorganization entity class.
  */
-final class PublicOrganisation extends AssessmentContent {
+final class PublicOrganisation extends Assessment {
 
   /**
    * Returns an array of institution options.

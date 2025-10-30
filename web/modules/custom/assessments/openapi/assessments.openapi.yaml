@@ -3,7 +3,7 @@ info:
   title: Assessments API
   version: 1.0.0
   description: |
-    API for listing and creating Assessments (assessment_content). This reflects the current structure described in the module README.
+    API for listing and creating Assessments (assessment). This reflects the current structure described in the module README.
 servers:
   - url: /
 paths:
