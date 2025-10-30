@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc97973d3eecf594608cb3a9b3eafaa3",
+    "content-hash": "5ab90468771f767b5f2ef969a558c30a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7379,6 +7379,77 @@
             "time": "2025-01-03T10:53:20+00:00"
         },
         {
+            "name": "drupal/oauth_client",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/oauth_client.git",
+                "reference": "1.0.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/oauth_client-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "6c79b3c8c83b8eec81f572cb5be815116b0c0220"
+            },
+            "require": {
+                "drupal/core": "^10.4 || ^11",
+                "drupal/simple_oauth": "^6.0",
+                "ext-sodium": "*",
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "drush/drush": "^12 || ^13.5.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1761738675",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/user/3603980",
+                    "email": "clau.cristea@gmail.com"
+                },
+                {
+                    "name": "andras_szilagyi",
+                    "homepage": "https://www.drupal.org/user/1217938"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
+                    "name": "huzooka",
+                    "homepage": "https://www.drupal.org/user/281301"
+                },
+                {
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
+                }
+            ],
+            "description": "User enrollment for OAuth2 consumer apps",
+            "homepage": "https://www.drupal.org/project/oauth_client",
+            "support": {
+                "source": "https://git.drupalcode.org/project/oauth_client"
+            }
+        },
+        {
             "name": "drupal/og",
             "version": "2.0.0-alpha1",
             "source": {
@@ -12635,22 +12706,22 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "5.5.0",
+            "version": "5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "a835af59b030d3f2967725697cf88300f579088e"
+                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/a835af59b030d3f2967725697cf88300f579088e",
-                "reference": "a835af59b030d3f2967725697cf88300f579088e",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/bb3e9f21e4196e8afc41def81ef649c164bca25e",
+                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
@@ -12692,7 +12763,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/5.5.0"
+                "source": "https://github.com/lcobucci/jwt/tree/5.6.0"
             },
             "funding": [
                 {
@@ -12704,7 +12775,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-01-26T21:29:45+00:00"
+            "time": "2025-10-17T11:30:53+00:00"
         },
         {
             "name": "league/commonmark",
@@ -27818,6 +27889,7 @@
         "drupal/flag": 10,
         "drupal/masquerade": 5,
         "drupal/mimemail": 15,
+        "drupal/oauth_client": 15,
         "drupal/poll": 15,
         "drupal/private_message": 15,
         "drupal/private_message_flood": 15,
