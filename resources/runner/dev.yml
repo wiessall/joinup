@@ -15,6 +15,7 @@ dev:
     - page_manager_ui
     - stage_file_proxy
     - views_ui
+    - restui
 
 commands:
 
