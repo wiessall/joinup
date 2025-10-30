@@ -27,6 +27,7 @@ module:
   config: 0
   config_ignore: 0
   config_translation: 0
+  consumers: 0
   contact_form: 0
   contact_information: 0
   contextual: 0
@@ -93,6 +94,7 @@ module:
   inline_form_errors: 0
   interoperable_europe: 0
   isa2_analytics: 0
+  joinup_api: 0
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
@@ -184,6 +186,7 @@ module:
   mysql: 0
   node: 0
   node_revision_delete: 0
+  oauth_client: 0
   oe_authentication: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
@@ -240,6 +243,7 @@ module:
   search_api_spellcheck: 0
   serialization: 0
   simple_multistep: 0
+  simple_oauth: 0
   simple_sitemap: 0
   sitewide_alert: 0
   sitewide_alert_block: 0

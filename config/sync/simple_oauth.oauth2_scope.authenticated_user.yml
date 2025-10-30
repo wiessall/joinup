@@ -1,0 +1,22 @@
+uuid: e98a378c-d2bb-4293-86c4-59e36eb02fb5
+langcode: en
+status: true
+dependencies: {  }
+id: authenticated_user
+name: authenticated_user
+description: 'Scope for authenticated users to access API resources'
+grant_types:
+  refresh_token:
+    status: true
+    description: ''
+  client_credentials:
+    status: true
+    description: ''
+  authorization_code:
+    status: true
+    description: ''
+umbrella: false
+parent: _none
+granularity_id: role
+granularity_configuration:
+  role: authenticated
