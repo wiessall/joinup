@@ -180,7 +180,8 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
    * {@inheritdoc}
    */
   public function label(): string {
-    return $this->get('name')?->value ?? $this->t('Assessment #@id', [
+    return $this->get('name')?->value ?? $this->t('@bundle #@id', [
+      '@bundle' => $this->type->entity->label(),
       '@id' => $this->id(),
     ])->render();
   }
