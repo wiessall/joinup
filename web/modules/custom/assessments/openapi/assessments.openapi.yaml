@@ -8,12 +8,93 @@ info:
     You may pass the entity references as IDs or as structured objects.
 servers:
   - url: /api/assessments/v1
+security:
+  - oauth2: []
 paths:
+  /oauth/token:
+    post:
+      summary: Obtain OAuth2 access token (Client Credentials)
+      description: Issue an access token using OAuth 2.0 Client Credentials flow.
+      operationId: oauthToken
+      servers:
+        - url: /
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [grant_type, client_id, client_secret]
+              properties:
+                grant_type:
+                  type: string
+                  enum: [client_credentials]
+                  description: Must be 'client_credentials'
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scope:
+                  type: string
+                  description: Optional space-delimited scopes
+            example:
+              grant_type: client_credentials
+              client_id: your_client_id
+              client_secret: your_client_secret
+              scope: read write
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [access_token, token_type, expires_in]
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: Bearer
+                  expires_in:
+                    type: integer
+                    format: int32
+                  scope:
+                    type: string
+              example:
+                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                token_type: Bearer
+                expires_in: 3600
+                scope: read write
+        '400':
+          description: Invalid client credentials or request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  error_description:
+                    type: string
+              example:
+                error: invalid_client
+                error_description: Client authentication failed
   /assessment/create:
     post:
       summary: Create an Assessment
       description: Submit a single Assessment JSON object. Entity reference fields accept either a ID or a fully-structured object, as defined by oneOf in the schemas.
       operationId: createAssessment
+      security:
+        - oauth2: []
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Bearer access token. Format: 'Bearer <access_token>'."
+          required: true
+          schema:
+            type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
       requestBody:
         required: true
         content:
@@ -103,6 +184,13 @@ paths:
                   error:
                     type: string
 components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth/token
+          scopes: {}
   schemas:
     # Generic reusable types
     ID:
