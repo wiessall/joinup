@@ -24,8 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: "assessments_composer",
   label: new TranslatableMarkup("Assessment composer"),
   uri_paths: [
-    "canonical" => "/api/assessments-composer/{assessment_composer}",
-    "create" => "/api/assessments-composer",
+    "create" => "/api/assessments/v1/assessment/create",
   ],
 )]
 class AssessmentComposer extends ResourceBase {

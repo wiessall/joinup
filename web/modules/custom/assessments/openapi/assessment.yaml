@@ -5,16 +5,11 @@ info:
   description: |
     API for submitting Assessment reports and related entities.
 
-    Rules:
-    - Entities are submitted as a single JSON object.
-    - Any nested entry in the structure is an entity reference unless the parent field has ": One of", in which case the subsequent list defines allowed values (enums).
-    - Each entity reference field accepts either:
-      - a UUID string referencing an already existing entity, or
-      - a structured object with the properties described in the schema for that entity.
+    You may pass the entity references as UUIDs or as structured objects.
 servers:
-  - url: /api/assessment-composer
+  - url: /api/assessments/v1
 paths:
-  /assessments:
+  /assessment/create:
     post:
       summary: Create an Assessment
       description: Submit a single Assessment JSON object. Entity reference fields accept either a UUID or a fully-structured object, as defined by oneOf in the schemas.
@@ -131,7 +126,7 @@ components:
 
     Assessment:
       type: object
-      required: [name]
+      required: [ name ]
       properties:
         name:
           type: string
