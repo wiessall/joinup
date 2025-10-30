@@ -5,14 +5,14 @@ info:
   description: |
     API for submitting Assessment reports and related entities.
 
-    You may pass the entity references as UUIDs or as structured objects.
+    You may pass the entity references as IDs or as structured objects.
 servers:
   - url: /api/assessments/v1
 paths:
   /assessment/create:
     post:
       summary: Create an Assessment
-      description: Submit a single Assessment JSON object. Entity reference fields accept either a UUID or a fully-structured object, as defined by oneOf in the schemas.
+      description: Submit a single Assessment JSON object. Entity reference fields accept either a ID or a fully-structured object, as defined by oneOf in the schemas.
       operationId: createAssessment
       requestBody:
         required: true
@@ -22,7 +22,7 @@ paths:
               $ref: '#/components/schemas/Assessment'
             examples:
               asReferences:
-                summary: Submit using UUID references
+                summary: Submit using ID references
                 value:
                   name: Quarterly review
                   binding_requirement:
@@ -80,7 +80,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    format: uuid
+                    format: id
                   status:
                     type: string
                     example: created
@@ -105,10 +105,10 @@ paths:
 components:
   schemas:
     # Generic reusable types
-    Uuid:
+    ID:
       type: string
-      format: uuid
-      description: A UUID reference to an existing entity.
+      format: string
+      description: An ID reference to an existing entity.
 
     Iso3166Alpha2:
       type: string
@@ -131,23 +131,23 @@ components:
         name:
           type: string
         binding_requirement:
-          description: References to BindingRequirements; allow multiple. Each item may be a UUID or a structured object.
+          description: References to BindingRequirements; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/BindingRequirement'
         provider:
-          description: Reference to an Organisation, either a UUID or a structured object.
+          description: Reference to an Organisation, either an ID or a structured object.
           oneOf:
-            - $ref: '#/components/schemas/Uuid'
+            - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Organisation'
         results_in:
-          description: References to Statements; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Statements; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/Statement'
 
     BindingRequirement:
@@ -158,39 +158,39 @@ components:
         name:
           type: string
         expression:
-          description: References to Expressions; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Expressions; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/Expression'
         affects:
-          description: References to PublicServices; allow multiple. Each item may be a UUID or a structured object.
+          description: References to PublicServices; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/PublicService'
         has_participation:
-          description: References to Participations; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Participations; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/Participation'
         asset:
-          description: References to Assets; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Assets; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/Asset'
         documents:
-          description: References to Files; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/File'
 
     Expression:
@@ -252,7 +252,7 @@ components:
         agent:
           description: Reference to an Agent.
           oneOf:
-            - $ref: '#/components/schemas/Uuid'
+            - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Agent'
 
     Agent:
@@ -310,9 +310,9 @@ components:
         type:
           type: string
         documents:
-          description: References to Files; allow multiple. Each item may be a UUID or a structured object.
+          description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/Uuid'
+              - $ref: '#/components/schemas/ID'
               - $ref: '#/components/schemas/File'
