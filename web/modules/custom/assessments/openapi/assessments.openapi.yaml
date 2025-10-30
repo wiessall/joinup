@@ -5,7 +5,14 @@ info:
   description: |
     API for submitting Assessment reports and related entities.
 
-    You may pass the entity references as IDs or as structured objects.
+    In order to be able to access the API, you need to request an OAuth2 client
+    from your profile. Please, head to the
+    [profile page](https://joinup.ec.europa.eu/user/edit/oauth) and request a
+    client. Once approved, you will be able to set the secret for your client
+    and use it to obtain an access token.
+
+    After you obtain the access token, you can use it to create assessment
+    reports.
 servers:
   - url: /api/assessments/v1
 security:
