@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - assessments.assessment_content_type.participation
+    - assessments.type.participation
     - field.field.assessment_content.participation.country
     - field.field.assessment_content.participation.participant_type
   module:

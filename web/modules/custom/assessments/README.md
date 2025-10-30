@@ -68,7 +68,7 @@ is final.
 
 ## Current structure of fields
 
-The current structure of fields in the assessment content type is as follows:
+The current structure of fields in the assessment type is as follows:
 
 Assessment (assessment):
 * Affected party (affected_party). Entity reference to `participation`.
