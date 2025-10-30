@@ -1,0 +1,50 @@
+_core:
+  default_config_hash: g1qj6YE5Eg3qUo_nehv65QvqkdOLsXJxcaep1lsNrC8
+langcode: en
+notifications:
+  request:
+    enabled: true
+    subject: 'New OAuth client request from [oauth_client_request:owner] on [site:name]'
+    body: |
+      Dear [user:name],
+
+      A new OAuth client request has been submitted by [oauth_client_request:owner] on [site:name] with the following request details:
+      - [oauth_client_request:label]
+      - [oauth_client_request:request_reason]
+
+      You may see the pending requests at [oauth_client:client_requests] or directly take action on the request at [oauth_client_request:request-edit-url]
+
+      Best regards,
+      The [site:name] Team
+
+  approve:
+    enabled: true
+    subject: 'Your OAuth client request has been approved'
+    body: |
+      Dear [oauth_client_request:owner],
+
+      We are pleased to inform you that your OAuth client request, [oauth_client_request:label], has been approved.
+
+      What is next?
+      - Visit the [oauth_client_request:owner:client_requests] to view the available list of your client requests.
+      - Visit the [oauth_client_request:client-edit-url] page to view the client ID and set the client secret.
+
+      If you have any questions, feel free to contact our support team.
+
+      Best regards,
+      The [site:name] Team
+
+  reject:
+    enabled: true
+    subject: 'Your OAuth client request has been rejected'
+    body: |
+      Dear [oauth_client_request:owner],
+
+      We regret to inform you that your OAuth client request, [oauth_client_request:label], could not be approved at this time.
+
+      The reason for the rejection is: [oauth_client_request:reject_reason]
+
+      Thank you for your understanding.
+
+      Best regards,
+      The [site:name] Team
