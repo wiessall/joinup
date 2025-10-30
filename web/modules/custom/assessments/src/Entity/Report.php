@@ -7,4 +7,4 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the report bundle entity class.
  */
-final class Report extends AssessmentContent {}
+final class Report extends Assessment {}
