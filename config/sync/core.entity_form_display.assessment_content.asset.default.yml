@@ -5,7 +5,6 @@ dependencies:
   config:
     - assessments.type.asset
     - field.field.assessment_content.asset.landing_page
-    - field.field.assessment_content.asset.name
   module:
     - link
 id: assessment_content.asset.default

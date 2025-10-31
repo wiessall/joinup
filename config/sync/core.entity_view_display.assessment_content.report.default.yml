@@ -10,7 +10,6 @@ dependencies:
     - field.field.assessment_content.report.expression
     - field.field.assessment_content.report.has_related_service
     - field.field.assessment_content.report.provider
-    - field.field.assessment_content.report.name
     - field.field.assessment_content.report.requirement_documents
     - field.field.assessment_content.report.results_in
     - field.field.assessment_content.report.state
