@@ -1,0 +1,29 @@
+uuid: bcd21bbd-b929-44a1-abc9-29f13cf2427e
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.statement
+    - field.storage.assessment.judgement
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://data.europa.eu/2sa/cav#judgement'
+      type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
+id: assessment.statement.judgement
+field_name: judgement
+entity_type: assessment
+bundle: statement
+label: Judgement
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

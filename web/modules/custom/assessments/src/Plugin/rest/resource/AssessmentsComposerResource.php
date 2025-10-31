@@ -82,8 +82,8 @@ final class AssessmentsComposerResource extends ResourceBase {
     $values['uid'] = $this->currentUser->id() ?: 0;
     $values['created'] = time();
 
-    $storage = $this->entityTypeManager->getStorage('assessment_content');
-    // In this simplified model sub-entities are also assessment_content
+    $storage = $this->entityTypeManager->getStorage('assessment');
+    // In this simplified model sub-entities are also assessment
     // bundles.
     $entity = $storage->create($values);
     $entity->save();
@@ -103,7 +103,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
@@ -121,7 +121,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
@@ -139,7 +139,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
@@ -157,7 +157,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
@@ -175,7 +175,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
@@ -193,16 +193,16 @@ final class AssessmentsComposerResource extends ResourceBase {
         $values[$k] = $data[$k];
       }
     }
-    $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+    $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
     $entity->save();
     return (int) $entity->id();
   }
 
   /**
-   * GET: Returns a list of assessment_content entities with basic fields.
+   * GET: Returns a list of assessment entities with basic fields.
    */
   public function get(): ResourceResponse {
-    $storage = $this->entityTypeManager->getStorage('assessment_content');
+    $storage = $this->entityTypeManager->getStorage('assessment');
     $ids = $storage->getQuery()
       ->accessCheck(TRUE)
       ->range(0, 50)
@@ -220,7 +220,7 @@ final class AssessmentsComposerResource extends ResourceBase {
         'changed' => (int) $entity->getChangedTime(),
         'links' => [
           'self' => $entity->toUrl('canonical', ['absolute' => TRUE])->toString(),
-          'rest' => '/entity/assessment_content/' . $entity->id(),
+          'rest' => '/entity/assessment/' . $entity->id(),
         ],
       ];
     }
@@ -234,7 +234,7 @@ final class AssessmentsComposerResource extends ResourceBase {
   }
 
   /**
-   * POST: Creates a new assessment_content entity.
+   * POST: Creates a new assessment entity.
    *
    * Expected JSON body example:
    * {
@@ -374,13 +374,13 @@ final class AssessmentsComposerResource extends ResourceBase {
     }
 
     try {
-      $entity = $this->entityTypeManager->getStorage('assessment_content')->create($values);
+      $entity = $this->entityTypeManager->getStorage('assessment')->create($values);
       $entity->save();
     }
     catch (\Throwable $e) {
       // Surface validation errors in a consistent way.
       $message = $e->getMessage();
-      $this->logger->error('Failed to create assessment_content: @m', ['@m' => $message]);
+      $this->logger->error('Failed to create assessment: @m', ['@m' => $message]);
       throw new HttpException(400, 'Could not create assessment: ' . $message);
     }
 
