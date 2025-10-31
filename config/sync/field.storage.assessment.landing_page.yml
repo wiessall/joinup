@@ -1,0 +1,19 @@
+uuid: d3f3c314-8f34-45a3-998d-e4792a1752fe
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - link
+id: assessment.landing_page
+field_name: landing_page
+entity_type: assessment
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

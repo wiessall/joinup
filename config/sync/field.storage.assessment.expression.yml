@@ -1,0 +1,19 @@
+uuid: 35a137df-8c64-4d01-9b23-782384d06eef
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment.expression
+field_name: expression
+entity_type: assessment
+type: entity_reference
+settings:
+  target_type: assessment
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

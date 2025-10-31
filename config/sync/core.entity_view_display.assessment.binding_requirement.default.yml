@@ -1,0 +1,41 @@
+uuid: ead3ff49-f93d-4421-b73f-fdcb82f3a6ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.binding_requirement
+    - field.field.assessment.binding_requirement.documented_in
+  module:
+    - link
+id: assessment.binding_requirement.default
+targetEntityType: assessment
+bundle: binding_requirement
+mode: default
+content:
+  documented_in:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  search_api_excerpt: true
+  status: true
+  uid: true
+  uri: true
