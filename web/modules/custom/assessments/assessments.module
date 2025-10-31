@@ -16,22 +16,22 @@ use Drupal\user\UserInterface;
  */
 function assessments_theme(): array {
   return [
-    'assessment_content' => ['render element' => 'elements'],
+    'assessment' => ['render element' => 'elements'],
   ];
 }
 
 /**
- * Prepares variables for assessment content templates.
+ * Prepares variables for assessment templates.
  *
- * Default template: assessment-content.html.twig.
+ * Default template: assessment.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
- *   - elements: An associative array containing the assessment content
+ *   - elements: An associative array containing the assessment
  *     information and any fields attached to the entity.
  *   - attributes: HTML attributes for the containing element.
  */
-function template_preprocess_assessment_content(array &$variables): void {
+function template_preprocess_assessment(array &$variables): void {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
@@ -44,27 +44,27 @@ function template_preprocess_assessment_content(array &$variables): void {
 function assessments_user_cancel($edit, UserInterface $account, $method): void {
   switch ($method) {
     case 'user_cancel_block_unpublish':
-      // Unpublish assessment contents.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
-      $assessment_content_ids = $storage->getQuery()
+      // Unpublish assessments.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+      $assessment_ids = $storage->getQuery()
         ->condition('uid', $account->id())
         ->condition('status', 1)
         ->accessCheck(FALSE)
         ->execute();
-      foreach ($storage->loadMultiple($assessment_content_ids) as $assessment_content) {
-        $assessment_content->set('status', FALSE)->save();
+      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
+        $assessment->set('status', FALSE)->save();
       }
       break;
 
     case 'user_cancel_reassign':
-      // Anonymize assessment contents.
-      $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
-      $assessment_content_ids = $storage->getQuery()
+      // Anonymize assessments.
+      $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+      $assessment_ids = $storage->getQuery()
         ->condition('uid', $account->id())
         ->accessCheck(FALSE)
         ->execute();
-      foreach ($storage->loadMultiple($assessment_content_ids) as $assessment_content) {
-        $assessment_content->setOwnerId(0)->save();
+      foreach ($storage->loadMultiple($assessment_ids) as $assessment) {
+        $assessment->setOwnerId(0)->save();
       }
       break;
   }
@@ -74,14 +74,14 @@ function assessments_user_cancel($edit, UserInterface $account, $method): void {
  * Implements hook_ENTITY_TYPE_predelete() for user entities.
  */
 function assessments_user_predelete(UserInterface $account): void {
-  // Delete assessment contents that belong to this account.
-  $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
-  $assessment_content_ids = $storage->getQuery()
+  // Delete assessments that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('assessment');
+  $assessment_ids = $storage->getQuery()
     ->condition('uid', $account->id())
     ->accessCheck(FALSE)
     ->execute();
   $storage->delete(
-    $storage->loadMultiple($assessment_content_ids)
+    $storage->loadMultiple($assessment_ids)
   );
 }
 
@@ -89,8 +89,8 @@ function assessments_user_predelete(UserInterface $account): void {
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
-  // Change the label of the 'default' bundle of assessment_content entity type.
-  if (isset($bundles['assessment_content']['public_organisation'])) {
-    $bundles['assessment_content']['public_organisation']['class'] = PublicOrganisation::class;
+  // Change the label of the 'default' bundle of assessment entity type.
+  if (isset($bundles['assessment']['public_organisation'])) {
+    $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
 }

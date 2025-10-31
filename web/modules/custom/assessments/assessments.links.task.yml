@@ -1,19 +1,19 @@
-entity.assessment_content.view:
+entity.assessment.view:
   title: 'View'
-  route_name: entity.assessment_content.canonical
-  base_route: entity.assessment_content.canonical
-entity.assessment_content.edit_form:
+  route_name: entity.assessment.canonical
+  base_route: entity.assessment.canonical
+entity.assessment.edit_form:
   title: 'Edit'
-  route_name: entity.assessment_content.edit_form
-  base_route: entity.assessment_content.canonical
-entity.assessment_content.delete_form:
+  route_name: entity.assessment.edit_form
+  base_route: entity.assessment.canonical
+entity.assessment.delete_form:
   title: 'Delete'
-  route_name: entity.assessment_content.delete_form
-  base_route: entity.assessment_content.canonical
+  route_name: entity.assessment.delete_form
+  base_route: entity.assessment.canonical
   weight: 10
-entity.assessment_content.collection:
+entity.assessment.collection:
   title: 'Assessment entities'
-  route_name: entity.assessment_content.collection
+  route_name: entity.assessment.collection
   base_route: system.admin_content
   weight: 10
 entity.assessment_type.edit_form:

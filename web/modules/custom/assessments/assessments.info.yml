@@ -5,7 +5,8 @@ package: Custom
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:options
-  - drupal:inline_entity_form
-  - drupal:rdf_sync
-  - drupal:joinup_rdf
   - drupal:rest
+  - inline_entity_form:inline_entity_form
+  - joinup:joinup_api
+  - joinup:joinup_rdf
+  - rdf_sync:rdf_sync
