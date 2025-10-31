@@ -1,0 +1,41 @@
+uuid: 23974a5f-231d-43da-8338-b52c93b0a409
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_organisation
+    - field.field.assessment.public_organisation.country
+    - field.field.assessment.public_organisation.description
+    - field.field.assessment.public_organisation.organisation_type
+id: assessment.public_organisation.default
+targetEntityType: assessment
+bundle: public_organisation
+mode: default
+content:
+  country:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  organisation_type:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  description: true
+  langcode: true
+  status: true
+  uid: true
+  uri: true

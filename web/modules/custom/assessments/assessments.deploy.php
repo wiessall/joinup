@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 function assessments_deploy_200700(): void {
   $entity_type_manager = \Drupal::entityTypeManager();
-  $storage = $entity_type_manager->getStorage('assessment_content');
+  $storage = $entity_type_manager->getStorage('assessment');
 
   $institutions = [
     'european_union_institution' => [

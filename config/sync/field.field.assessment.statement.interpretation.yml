@@ -1,0 +1,30 @@
+uuid: c9fb5cbf-092c-4e00-8d28-ccc2e78e122a
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.statement
+    - field.storage.assessment.interpretation
+  module:
+    - options
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    value:
+      predicate: 'http://data.europa.eu/2sa/cav#interpretation'
+      type: 'xsd:integer'
+id: assessment.statement.interpretation
+field_name: interpretation
+entity_type: assessment
+bundle: statement
+label: Interpretation
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

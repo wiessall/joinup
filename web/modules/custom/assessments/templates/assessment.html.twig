@@ -18,50 +18,7 @@
     {{ title_prefix }}
     {{ title_suffix }}
   {% endif %}
-
-  {# Build 3 columns, first is the content creator (uid) and the status (status),
-  2nd is creation date and changed date and 3rd is the field organization (organization).
-  Bootstrap based theme. #}
-  {# Bootstrap table version of the 3-column layout #}
-  <table class="table table-bordered table-striped mb-3">
-    <tbody>
-    <tr>
-      <td>
-        {% if content.uid %}
-          <div class="mb-1">{{ content.uid }}</div>
-        {% endif %}
-        {% if content.status %}
-          <div>{{ content.status }}</div>
-        {% endif %}
-      </td>
-      <td>
-        {% if content.created %}
-          <div class="mb-1">{{ content.created }}</div>
-        {% endif %}
-        {% if content.changed %}
-          <div>{{ content.changed }}</div>
-        {% endif %}
-      </td>
-      <td>
-        {% if content.organization %}
-          {{ content.organization }}
-        {% endif %}
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  {# Two columns, one the Binding requirements (requirement) and the other is the statements (statements) #}
-  <div class="row mb-3">
-    <div class="col-md-6">
-      {% if content.requirement %}
-        {{ content.requirement }}
-      {% endif %}
-    </div>
-    <div class="col-md-6">
-      {% if content.statements %}
-        {{ content.statements }}
-      {% endif %}
-    </div>
-  </div>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
 </article>

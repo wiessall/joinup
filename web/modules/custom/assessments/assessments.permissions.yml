@@ -1,12 +1,12 @@
 administer assessment types:
   title: 'Administer assessment types'
-  description: 'Maintain the types of assessment content entity.'
+  description: 'Maintain the types of assessment entity.'
   restrict access: true
-view assessment_content:
-  title: 'View assessment content'
-edit assessment_content:
-  title: 'Edit assessment content'
-delete assessment_content:
-  title: 'Delete assessment content'
-create assessment_content:
-  title: 'Create assessment content'
+view assessment:
+  title: 'View assessment'
+edit assessment:
+  title: 'Edit assessment'
+delete assessment:
+  title: 'Delete assessment'
+create assessment:
+  title: 'Create assessment'

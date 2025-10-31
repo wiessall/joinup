@@ -31,7 +31,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     },
  *   },
  *   admin_permission = "administer assessment types",
- *   bundle_of = "assessment_content",
+ *   bundle_of = "assessment",
  *   config_prefix = "type",
  *   entity_keys = {
  *     "id" = "id",
