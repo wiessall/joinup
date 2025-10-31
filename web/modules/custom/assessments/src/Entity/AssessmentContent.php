@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\assessments\AssessmentContentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
@@ -51,7 +52,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "id" = "id",
  *     "langcode" = "langcode",
  *     "bundle" = "type",
- *     "label" = "id",
+ *     "label" = "name",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
  *   },
@@ -74,6 +75,7 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
   use EntityCreationTrait;
   use EntityOwnerTrait;
   use RdfSyncEntityTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -93,6 +95,19 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Name'))
+      ->setDescription(t('The name or short description.'))
+      ->setRequired(TRUE)
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)
@@ -102,7 +117,7 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
         'settings' => [
           'display_label' => FALSE,
         ],
-        'weight' => 0,
+        'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
@@ -159,6 +174,16 @@ class AssessmentContent extends ContentEntityBase implements AssessmentContentIn
       ->setDescription(t('The time that the assessment content was last edited.'));
 
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label(): string {
+    return $this->get('name')?->value ?? $this->t('@bundle #@id', [
+      '@bundle' => $this->type->entity->label(),
+      '@id' => $this->id(),
+    ])->render();
   }
 
 }

@@ -16,7 +16,7 @@ final class AssessmentContentListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader(): array {
-    $header['id'] = $this->t('ID');
+    $header['id'] = $this->t('Name');
     $header['status'] = $this->t('Status');
     $header['bundle'] = $this->t('Type');
     $header['uid'] = $this->t('Author');
