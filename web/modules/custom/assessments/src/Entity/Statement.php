@@ -7,4 +7,4 @@ namespace Drupal\assessments\Entity;
 /**
  * Defines the statement entity class.
  */
-final class Statement extends AssessmentContent {}
+final class Statement extends Assessment {}

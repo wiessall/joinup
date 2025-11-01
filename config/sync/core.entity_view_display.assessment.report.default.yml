@@ -1,0 +1,393 @@
+uuid: 40a4e747-ea8d-4d47-90f3-7f3c6a37f188
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+    - field.field.assessment.report.affected_party
+    - field.field.assessment.report.asset
+    - field.field.assessment.report.binding_requirement
+    - field.field.assessment.report.expression
+    - field.field.assessment.report.has_related_service
+    - field.field.assessment.report.provider
+    - field.field.assessment.report.requirement_documents
+    - field.field.assessment.report.results_in
+    - field.field.assessment.report.state
+    - field.field.assessment.report.statement_documents
+  module:
+    - file
+    - joinup_layout
+    - layout_builder
+    - options
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+        components:
+          f080f8ad-1aaf-4377-8477-2e1edd777732:
+            uuid: f080f8ad-1aaf-4377-8477-2e1edd777732
+            region: top
+            configuration:
+              id: 'field_block:assessment:assessment:name'
+              label: Name
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          d8de6b29-cc14-4ebc-b5ea-5640a65e7c93:
+            uuid: d8de6b29-cc14-4ebc-b5ea-5640a65e7c93
+            region: first
+            configuration:
+              id: 'field_block:assessment:assessment:expression'
+              label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          3741dd00-a7de-4d50-b9f7-344952f8a341:
+            uuid: 3741dd00-a7de-4d50-b9f7-344952f8a341
+            region: second
+            configuration:
+              id: 'field_block:assessment:assessment:has_related_service'
+              label: 'Affected service'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          4a46a810-83b7-4351-b244-f827e812cbed:
+            uuid: 4a46a810-83b7-4351-b244-f827e812cbed
+            region: second
+            configuration:
+              id: 'field_block:assessment:assessment:affected_party'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          f84e4b89-ed1d-4d9d-9889-8c7cf2ec65ee:
+            uuid: f84e4b89-ed1d-4d9d-9889-8c7cf2ec65ee
+            region: first
+            configuration:
+              id: 'field_block:assessment:assessment:asset'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: true
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          a021c64e-a5dd-4a5c-a62e-b7f98e2e24ba:
+            uuid: a021c64e-a5dd-4a5c-a62e-b7f98e2e24ba
+            region: first
+            configuration:
+              id: 'field_block:assessment:assessment:state'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: list_default
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+        components:
+          9e434583-c9a2-4674-beb4-5d5730c04ff5:
+            uuid: 9e434583-c9a2-4674-beb4-5d5730c04ff5
+            region: first
+            configuration:
+              id: 'field_block:assessment:assessment:binding_requirement'
+              label: 'Binding requirement'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          7e7f2ece-eb35-4ea2-b07c-170de883d9a7:
+            uuid: 7e7f2ece-eb35-4ea2-b07c-170de883d9a7
+            region: second
+            configuration:
+              id: 'field_block:assessment:assessment:requirement_documents'
+              label: 'Binding requirements supporting documents'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_twocol_60_40
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+        components:
+          79a43c20-ad3a-4c2c-86fb-a530b7056f7b:
+            uuid: 79a43c20-ad3a-4c2c-86fb-a530b7056f7b
+            region: first
+            configuration:
+              id: 'field_block:assessment:assessment:results_in'
+              label: 'Results in'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          71210540-27f5-4b3d-aceb-48c605d657f0:
+            uuid: 71210540-27f5-4b3d-aceb-48c605d657f0
+            region: second
+            configuration:
+              id: 'field_block:assessment:assessment:statement_documents'
+              label: 'Statement supporting documents'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+id: assessment.report.default
+targetEntityType: assessment
+bundle: report
+mode: default
+content:
+  affected_party:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  asset:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  expression:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  has_related_service:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  requirement_documents:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: first
+  statement_documents:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  binding_requirement: true
+  created: true
+  langcode: true
+  provider: true
+  results_in: true
+  search_api_excerpt: true
+  status: true
+  uid: true

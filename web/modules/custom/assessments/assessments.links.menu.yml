@@ -1,11 +1,11 @@
-entity.assessment_content_type.collection:
-  title: 'Assessment content types'
-  description: 'Manage and CRUD actions on Assessment content type.'
+entity.assessment_type.collection:
+  title: 'Assessment types'
+  description: 'Manage Assessment type config entities.'
   parent: system.admin_structure
-  route_name: entity.assessment_content_type.collection
+  route_name: entity.assessment_type.collection
 
-entity.assessment_content.collection:
+entity.assessment.collection:
   title: 'Assessment entities'
   description: 'List of assessment entities.'
-  route_name: entity.assessment_content.collection
+  route_name: entity.assessment.collection
   parent: system.admin_content

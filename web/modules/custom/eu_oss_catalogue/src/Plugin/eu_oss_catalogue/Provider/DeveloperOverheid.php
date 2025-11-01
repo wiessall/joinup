@@ -164,10 +164,7 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
     $this->fetched = [];
     try {
       $response = $this->httpClient->get(static::ENDPOINT);
-
-      // Fix not valid data.
-      $responseData = str_replace('""publiccode_url":', '", "publiccode_url":', (string) $response->getBody());
-      $responseData = Json::decode($responseData);
+      $responseData = Json::decode((string) $response->getBody());
     }
     catch (\Exception $exception) {
       throw new ProviderFetchException(

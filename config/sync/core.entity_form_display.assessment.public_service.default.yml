@@ -1,0 +1,43 @@
+uuid: 29ed5069-97a9-49ba-b10d-bedda858e195
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.public_service
+    - field.field.assessment.public_service.description
+    - field.field.assessment.public_service.identifier
+    - field.field.assessment.public_service.spatial
+    - field.field.assessment.public_service.thematic_area
+  module:
+    - tagify
+id: assessment.public_service.default
+targetEntityType: assessment
+bundle: public_service
+mode: default
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  thematic_area:
+    type: tagify_select_widget
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  description: true
+  identifier: true
+  langcode: true
+  spatial: true
+  status: true
+  uid: true
+  uri: true
