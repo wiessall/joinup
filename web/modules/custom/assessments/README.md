@@ -147,3 +147,42 @@ Statement (statement):
   * semantic_interoperability
   * technical_interoperability
 
+## Process of saving data from API
+
+Data incoming from the API is processed by the individual models. When the API
+retrieves the data, it passes it to the Assessment model, which is the main
+model of the Assessment entity type.
+
+For each child entity, the Assessment model passes the data to the respective
+child model. Each model holds references to the child entities.
+
+The above happens by calling the
+`\Drupal\assessments\Model\AssessmentModelInterface::process` method from the
+Assessment model. This method is called recursively for each child entity while
+the appropriate portion of data is passed into them.
+
+When all data are processed, each structured class from the API has been
+consumed and converted into values in the Assessment model. The model classes
+maintain the structure of the schema until the data is ready to be saved in the
+database.
+
+The next phase starts with the
+`\Drupal\assessments\Model\AssessmentModelInterface::validate` method. This
+method validates the data and returns an array of errors. Like the `::process`
+method, this method is called recursively for each child entity. At the end of
+the validation, the model classes are ready to be saved in the database.
+
+If any errors are found, they are returned to the Resource plugin. The Resource
+plugin then returns the errors to the API.
+
+If no errors are found, the saving phase starts with the
+`\Drupal\assessments\Model\AssessmentModelInterface::save` method. This method
+saves the data in the database. Like the `::process` and `::validate` methods,
+this method is called recursively for each child entity. At the end of the
+saving phase, all data are saved in the database.
+
+Each saving phase returns the entity ID of the saved entity. The parent is
+responsible for storing and returning the IDs to the parent. At the end of the
+saving phase, all entity IDs are returned to the Assessment Model. The
+Assessment Model is then responsible for converting the schema model into the
+Drupal entity.

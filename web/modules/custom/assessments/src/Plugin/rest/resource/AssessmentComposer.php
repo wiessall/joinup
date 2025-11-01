@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Drupal\assessments\Plugin\rest\resource;
 
 use Drupal\assessments\Entity\Assessment;
-use Drupal\assessments\Entity\AssessmentContent;
-use Drupal\assessments\Entity\Asset;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -65,24 +63,6 @@ class AssessmentComposer extends ResourceBase {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
     );
-  }
-
-  /**
-   * Responds to a GET request.
-   *
-   * @param string $assessment_composer
-   *   The assessment composer name.
-   *
-   * @return \Drupal\rest\ResourceResponse
-   *   A 404 response if the assessment composer does not exist or the
-   *  assessment array.
-   */
-  public function get(string $assessment_composer): ResourceResponse {
-    $assessment = $this->entityTypeManager->getStorage('assessment_content')->loadByProperties(['uuid' => $assessment_composer]);
-    if (!$assessment) {
-      return new ResourceResponse(['error' => 'Assessment composer not found.'], 404);
-    }
-    return new ResourceResponse($assessment);
   }
 
   /**
