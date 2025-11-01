@@ -1,0 +1,25 @@
+uuid: 3154661c-d290-47aa-a4db-c5fae757e82f
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.participation
+    - field.storage.assessment.participant_type
+  module:
+    - options
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.participation.participant_type
+field_name: participant_type
+entity_type: assessment
+bundle: participation
+label: 'Participant type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

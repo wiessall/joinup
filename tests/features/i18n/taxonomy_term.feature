@@ -22,4 +22,3 @@ Feature:  The translator is able to translate taxonomy terms.
     When I click "Swedish"
     Then I should see the heading "Komplett lösning"
     And I should see "Artifact (product, tool, or digital service)."
-    And I take a screenshot

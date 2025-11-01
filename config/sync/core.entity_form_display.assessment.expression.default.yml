@@ -1,0 +1,40 @@
+uuid: b0c80cd7-9f48-47de-9d44-c5a04683d577
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.expression
+    - field.field.assessment.expression.description
+    - field.field.assessment.expression.documented_in
+    - field.field.assessment.expression.expression_type
+  module:
+    - link
+id: assessment.expression.default
+targetEntityType: assessment
+bundle: expression
+mode: default
+content:
+  documented_in:
+    type: link_default
+    weight: 1
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  description: true
+  expression_type: true
+  langcode: true
+  status: true
+  uid: true
+  uri: true

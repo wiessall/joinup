@@ -1,0 +1,67 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present an assessment entity.
+ *
+ * This template is used when viewing a canonical assessment page,
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.label'.
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_assessment()
+ */
+#}
+<article{{ attributes }}>
+  {% if view_mode != 'full' %}
+    {{ title_prefix }}
+    {{ title_suffix }}
+  {% endif %}
+
+  {# Build 3 columns, first is the content creator (uid) and the status (status),
+  2nd is creation date and changed date and 3rd is the field organization (organization).
+  Bootstrap based theme. #}
+  {# Bootstrap table version of the 3-column layout #}
+  <table class="table table-bordered table-striped mb-3">
+    <tbody>
+    <tr>
+      <td>
+        {% if content.uid %}
+          <div class="mb-1">{{ content.uid }}</div>
+        {% endif %}
+        {% if content.status %}
+          <div>{{ content.status }}</div>
+        {% endif %}
+      </td>
+      <td>
+        {% if content.created %}
+          <div class="mb-1">{{ content.created }}</div>
+        {% endif %}
+        {% if content.changed %}
+          <div>{{ content.changed }}</div>
+        {% endif %}
+      </td>
+      <td>
+        {% if content.organization %}
+          {{ content.organization }}
+        {% endif %}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  {# Two columns, one the Binding requirements (requirement) and the other is the statements (statements) #}
+  <div class="row mb-3">
+    <div class="col-md-6">
+      {% if content.requirement %}
+        {{ content.requirement }}
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      {% if content.statements %}
+        {{ content.statements }}
+      {% endif %}
+    </div>
+  </div>
+</article>

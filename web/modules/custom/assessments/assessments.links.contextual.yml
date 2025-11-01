@@ -1,10 +1,10 @@
-entity.assessment_content.edit_form:
-  route_name: entity.assessment_content.edit_form
-  group: assessment_content
+entity.assessment.edit_form:
+  route_name: entity.assessment.edit_form
+  group: assessment
   title: 'Edit'
 
-entity.assessment_content.delete_form:
-  route_name: entity.assessment_content.delete_form
-  group: assessment_content
+entity.assessment.delete_form:
+  route_name: entity.assessment.delete_form
+  group: assessment
   title: 'Delete'
   weight: 10
