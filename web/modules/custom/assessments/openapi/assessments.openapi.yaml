@@ -7,7 +7,7 @@ info:
 
     In order to be able to access the API, you need to request an OAuth2 client
     from your profile. Please, head to the
-    [profile page](https://joinup.ec.europa.eu/user/edit/oauth) and request a
+    [profile page](/user/edit/oauth) and request a
     client. Once approved, you will be able to set the secret for your client
     and use it to obtain an access token.
 
@@ -48,14 +48,10 @@ paths:
                   type: string
                 client_secret:
                   type: string
-                scope:
-                  type: string
-                  description: Optional space-delimited scopes
             example:
               grant_type: client_credentials
               client_id: your_client_id
               client_secret: your_client_secret
-              scope: read write
       responses:
         '200':
           description: Access token response
@@ -94,6 +90,61 @@ paths:
               example:
                 error: invalid_client
                 error_description: Client authentication failed
+  /api/assessments/v1/assessment/{id}:
+    get:
+      summary: Get an Assessment by ID
+      description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
+      operationId: getAssessment
+      security:
+        - oauth2: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Assessment ID (UUID)
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          description: "Bearer access token. Format: 'Bearer <access_token>'."
+          required: true
+          schema:
+            type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: Assessment fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
+                    status: ok
+                    assessment:
+                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
+                      name: Quarterly review
+        '404':
+          description: Assessment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /assessment/create:
     post:
       summary: Create an Assessment
@@ -175,7 +226,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    format: id
+                    format: uuid
                   status:
                     type: string
                     example: created
@@ -187,6 +238,7 @@ paths:
                     id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                     status: created
                     assessment:
+                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                       name: Quarterly review
         '400':
           description: Invalid request
@@ -230,6 +282,10 @@ components:
       type: object
       required: [ name ]
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         binding_requirement:
@@ -255,6 +311,10 @@ components:
     BindingRequirement:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         documented_in:
           $ref: '#/components/schemas/Uri'
         name:
@@ -298,6 +358,10 @@ components:
     Expression:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         description:
@@ -314,6 +378,10 @@ components:
     PublicService:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         description:
           type: string
         spatial:
@@ -339,6 +407,10 @@ components:
     Participation:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         country:
           $ref: '#/components/schemas/Iso3166Alpha2'
         participation_type:
@@ -360,6 +432,10 @@ components:
     Agent:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         agent_type:
@@ -372,6 +448,10 @@ components:
     Asset:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         landing_page:
@@ -380,12 +460,20 @@ components:
     File:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         file_uri:
           $ref: '#/components/schemas/Uri'
 
     Organisation:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         description:
@@ -405,6 +493,10 @@ components:
     Statement:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         interpretation:
           type: string
         judgement:
