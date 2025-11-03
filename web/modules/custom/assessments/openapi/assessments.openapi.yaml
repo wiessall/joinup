@@ -14,8 +14,14 @@ info:
     After you obtain the access token, you can use it to create assessment
     reports.
 servers:
-  - url: /api/assessments/v1
+  - url: https://joinup.ddev.local
+    description: Local development server
+  - url: https://interoperable-europe.ec.europa.eu
+    description: Production server
 security:
+  # @todo When the assessment client type and scopes are defined in the
+  #   project, set up the security requirements accordingly.
+  # @see https://swagger.io/docs/specification/v3_0/authentication/
   - oauth2: []
 paths:
   /oauth/token:
@@ -24,7 +30,8 @@ paths:
       description: Issue an access token using OAuth 2.0 Client Credentials flow.
       operationId: oauthToken
       servers:
-        - url: /
+        - url: https://interoperable-europe.ec.europa.eu
+        - url: https://joinup.ddev.local
       requestBody:
         required: true
         content:
