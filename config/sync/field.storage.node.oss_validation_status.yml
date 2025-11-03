@@ -10,17 +10,8 @@ field_name: oss_validation_status
 entity_type: node
 type: list_string
 settings:
-  allowed_values:
-    -
-      value: valid
-      label: valid
-    -
-      value: invalid
-      label: invalid
-    -
-      value: unknown
-      label: unknown
-  allowed_values_function: ''
+  allowed_values: {  }
+  allowed_values_function: 'Drupal\eu_oss_catalogue\Entity\ValidationStatus::getValues'
 module: options
 locked: false
 cardinality: 1
