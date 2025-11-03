@@ -22,7 +22,7 @@ security:
   # @todo When the assessment client type and scopes are defined in the
   #   project, set up the security requirements accordingly.
   # @see https://swagger.io/docs/specification/v3_0/authentication/
-  - oauth2: []
+  - oauth2: [ ]
 paths:
   /oauth/token:
     post:
@@ -30,24 +30,28 @@ paths:
       description: Issue an access token using OAuth 2.0 Client Credentials flow.
       operationId: oauthToken
       servers:
-        - url: https://interoperable-europe.ec.europa.eu
         - url: https://joinup.ddev.local
+        - url: https://interoperable-europe.ec.europa.eu
       requestBody:
         required: true
         content:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required: [grant_type, client_id, client_secret]
+              required: [ grant_type, client_id, client_secret ]
               properties:
                 grant_type:
                   type: string
-                  enum: [client_credentials]
+                  enum: [ client_credentials ]
                   description: Must be 'client_credentials'
                 client_id:
                   type: string
+                  description: The OAuth2 client identifier as seen in your
+                    profile page's OAuth2 clients section.
                 client_secret:
                   type: string
+                  description: The OAuth2 client secret you set when your
+                    client is approved.
             example:
               grant_type: client_credentials
               client_id: your_client_id
@@ -59,44 +63,31 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [access_token, token_type, expires_in]
+                required: [ access_token, token_type, expires_in ]
                 properties:
-                  access_token:
-                    type: string
                   token_type:
                     type: string
                     example: Bearer
+                  access_token:
+                    type: string
+                    description: The OAuth2 access token to be used in
+                      authenticated requests as a Bearer token.
                   expires_in:
                     type: integer
                     format: int32
-                  scope:
-                    type: string
               example:
-                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 token_type: Bearer
-                expires_in: 3600
-                scope: read write
-        '400':
-          description: Invalid client credentials or request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  error_description:
-                    type: string
-              example:
-                error: invalid_client
-                error_description: Client authentication failed
+                expires_in: 300
+                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Unauthorized
   /api/assessments/v1/assessment/{id}:
     get:
       summary: Get an Assessment by ID
       description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
       operationId: getAssessment
       security:
-        - oauth2: []
+        - oauth2: [ ]
       parameters:
         - in: path
           name: id
@@ -148,10 +139,13 @@ paths:
   /assessment/create:
     post:
       summary: Create an Assessment
-      description: Submit a single Assessment JSON object. Entity reference fields accept either a ID or a fully-structured object, as defined by oneOf in the schemas.
+      description: Submit a single Assessment JSON object. Some referred
+        objects (such as provider, binding_requirement, asset) can be either
+        reused by passing their ID, or created by passing a fully-structured
+        object, as defined by oneOf in the schemas.
       operationId: createAssessment
       security:
-        - oauth2: []
+        - oauth2: [ ]
       parameters:
         - in: header
           name: Authorization
@@ -175,7 +169,11 @@ paths:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                   provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
                   results_in:
-                    - "6b8d3f4e-2e24-4c2f-9a32-7f3f2e0e7b9f"
+                    - interpretation: Compliant with conditions
+                      judgement: positive
+                      type: organisational_interoperability
+                      documents:
+                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
               asStructured:
                 summary: Submit with structured nested entities
                 value:
@@ -213,9 +211,41 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: final
+                      type: organisational_interoperability
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
+                    - interpretation: Requires follow-up
+                      judgement: conditional
+                      type: technical_interoperability
+              mixed:
+                summary: Submit with a mix of references and structured entities
+                value:
+                  name: Quarterly review
+                  binding_requirement:
+                    - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
+                    - documented_in: "https://example.com/law/123"
+                      name: Article 5
+                      expression:
+                        - name: Legal Act 2024
+                          description: Reference to an EU legal expression
+                          document_in: "https://example.com/eli/act"
+                          expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
+                        - "7c9e1f5a-3d6b-4e8f-9c3a-2b1f4e5d6c7b"
+                      affects:
+                        - description: Online permit application
+                          spatial: BE
+                          identifier: ps-123
+                          name: Permit Application Service
+                          thematic_area: digital_and_innovation_services
+                  provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
+                  results_in:
+                    - interpretation: Compliant with conditions
+                      judgement: positive
+                      type: legal_interoperability
+                      documents:
+                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
+                    - interpretation: Requires follow-up
+                      judgement: conditional
       responses:
         '201':
           description: Assessment created
@@ -256,12 +286,12 @@ components:
       flows:
         clientCredentials:
           tokenUrl: /oauth/token
-          scopes: {}
+          scopes: { }
   schemas:
     # Generic reusable types
     ID:
       type: string
-      format: string
+      format: uuid
       description: An ID reference to an existing entity.
 
     Iso3166Alpha2:
@@ -301,12 +331,11 @@ components:
             - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Organisation'
         results_in:
-          description: References to Statements; allow multiple. Each item may be an ID or a structured object.
+          description: References to Statements; allow multiple. Each item is a
+            structured object.
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/Statement'
+            $ref: '#/components/schemas/Statement'
 
     BindingRequirement:
       type: object
@@ -503,6 +532,11 @@ components:
           type: string
         type:
           type: string
+          enum:
+            - legal_interoperability
+            - organisational_interoperability
+            - semantic_interoperability
+            - technical_interoperability
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
