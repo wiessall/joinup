@@ -41,3 +41,7 @@ services:
   eu_oss_catalogue.git_remote.api_guesser:
     class: Drupal\eu_oss_catalogue\ApiGuesser
   Drupal\eu_oss_catalogue\ApiGuesserInterface: '@eu_oss_catalogue.git_remote.api_guesser'
+
+  eu_oss_catalogue.publiccode_validator:
+    class: Drupal\eu_oss_catalogue\Validator\PublicCodeValidator
+  Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface: '@eu_oss_catalogue.publiccode_validator'
