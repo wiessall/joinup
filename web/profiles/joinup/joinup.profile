@@ -16,4 +16,3 @@ function joinup_install_tasks_alter(&$tasks, $install_state): void {
   unset($tasks['install_import_translations']);
   unset($tasks['install_finish_translations']);
 }
-
