@@ -1,36 +1,31 @@
-uuid: 852ae0b1-ed38-4cb4-bcf9-6bcc8388be63
+uuid: 42c99e2d-5756-49dc-a9c8-d1ae608fd18a
 langcode: en
 status: true
 dependencies:
   config:
+    - assessments.assessment_statement_type.technical_interoperability
     - assessments.type.report
-    - assessments.type.statement
-    - field.storage.assessment.results_in
+    - field.storage.assessment.technical_interoperability
   module:
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://data.europa.eu/2sa/cav#resultsIn'
-      type: resource
-id: assessment.report.results_in
-field_name: results_in
+id: assessment.report.technical_interoperability
+field_name: technical_interoperability
 entity_type: assessment
 bundle: report
-label: 'Results in'
+label: 'Identified effects on cross-border technical interoperability'
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:assessment'
+  handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      statement: statement
+      technical_interoperability: technical_interoperability
     sort:
       field: _none
       direction: ASC
