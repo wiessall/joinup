@@ -25,7 +25,7 @@ default:
       label: Require updates
       from: [review]
       to: draft
-    approve:
-      label: Approve
+    publish:
+      label: Publish report
       from: [review]
       to: published
