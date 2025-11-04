@@ -15,7 +15,9 @@ use Drupal\Core\File\FileSystemInterface;
 function joinup_api_install(): void {
   $fileSystem = \Drupal::service('file_system');
   $directory = 'private://simple_oauth';
-  $fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
+  if (!$fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+    throw new \RuntimeException("Directory $directory cannot be created or it's not writable.");
+  }
   $keygen = \Drupal::service('simple_oauth.key.generator');
   $keygen->generateKeys($directory);
 }
