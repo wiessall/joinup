@@ -12,9 +12,6 @@ default:
     published:
       label: Published
       published: true
-    rejected:
-      label: Rejected
-      published: false
   transitions:
     save_draft:
       label: Save as Draft
@@ -28,7 +25,3 @@ default:
       label: Approve
       from: [review]
       to: published
-    reject:
-      label: Reject
-      from: [review]
-      to: rejected
