@@ -39,7 +39,7 @@ class PublicCodeValidatorTest extends UnitTestCase {
   public function testValidPublicCodeYaml(): void {
     $ffiEnabled = ini_get('ffi.enable');
     if ($ffiEnabled === 'preload') {
-      $this->markTestSkipped('FFI must be enabled (not just preload) to run this test.');
+      throw new \RuntimeException('FFI must be enabled (not just preload) to run this test.');
     }
 
     $yamlContent = <<<YAML
