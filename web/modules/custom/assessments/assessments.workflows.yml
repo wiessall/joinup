@@ -21,6 +21,10 @@ default:
       label: Submit for Review
       from: [draft]
       to: review
+    require_updates:
+      label: Require updates
+      from: [review]
+      to: draft
     approve:
       label: Approve
       from: [review]
