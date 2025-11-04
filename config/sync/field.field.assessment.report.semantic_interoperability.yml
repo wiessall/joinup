@@ -1,0 +1,34 @@
+uuid: 89d1d912-36bc-41c7-b97a-8b2a6eab2a32
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.assessment_statement_type.semantic_interoperability
+    - assessments.type.report
+    - field.storage.assessment.semantic_interoperability
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.report.semantic_interoperability
+field_name: semantic_interoperability
+entity_type: assessment
+bundle: report
+label: 'Identified effects on cross-border semantic interoperability'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_statement'
+  handler_settings:
+    target_bundles:
+      semantic_interoperability: semantic_interoperability
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

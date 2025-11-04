@@ -86,6 +86,28 @@ function assessments_user_predelete(UserInterface $account): void {
 }
 
 /**
+ * Implements hook_entity_bundle_info().
+ */
+function assessments_entity_bundle_info(): array {
+  return [
+    'assessment_statement' => [
+      'legal_interoperability' => [
+        'label' => t('Legal interoperability'),
+      ],
+      'organisational_interoperability' => [
+        'label' => t('Organisational interoperability'),
+      ],
+      'semantic_interoperability' => [
+        'label' => t('Semantic interoperability'),
+      ],
+      'technical_interoperability' => [
+        'label' => t('Technical interoperability'),
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {

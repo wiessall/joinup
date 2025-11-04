@@ -1,0 +1,8 @@
+uuid: e76c5ebc-ceab-4354-a299-1c0395179edc
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: technical_interoperability
+label: 'Technical interoperability'

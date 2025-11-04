@@ -1,18 +1,18 @@
-uuid: 734008e5-9eb3-4d87-b1a0-7167e01812d6
+uuid: cebb69da-6587-4947-bcba-980536d93b44
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.results_in
-field_name: results_in
+id: assessment.semantic_interoperability
+field_name: semantic_interoperability
 entity_type: assessment
 type: entity_reference
 settings:
-  target_type: assessment
+  target_type: assessment_statement
 module: core
 locked: false
-cardinality: -1
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

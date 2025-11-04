@@ -1,0 +1,8 @@
+uuid: 63e51350-7a58-4710-9cbd-4c0f01f74bd2
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: legal_interoperability
+label: 'Legal interoperability'
