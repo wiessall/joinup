@@ -30,10 +30,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
- *   provider = "assessment_statement",
+ *   provider = "assessments",
  *   admin_permission = "administer assessment statement types",
  *   bundle_of = "assessment_statement",
- *   config_prefix = "type",
+ *   config_prefix = "assessment_statement_type",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",

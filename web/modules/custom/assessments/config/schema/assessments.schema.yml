@@ -9,7 +9,7 @@ assessments.type.*:
       type: label
       label: 'Label'
 
-assessment_statement_type.*:
+assessments.assessment_statement_type.*:
   type: config_entity
   label: 'Assessment statement type config'
   mapping:
