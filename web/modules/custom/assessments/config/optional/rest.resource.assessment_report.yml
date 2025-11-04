@@ -1,5 +1,5 @@
-id: assessments.composer
-plugin_id: 'assessments.composer'
+id: assessment_report
+plugin_id: 'assessment_report'
 granularity: method
 configuration:
   GET:

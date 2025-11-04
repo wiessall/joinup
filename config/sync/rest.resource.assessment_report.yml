@@ -1,0 +1,24 @@
+uuid: a6e0907e-deb8-4137-ada0-03cbf16908d2
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - serialization
+    - simple_oauth
+    - user
+id: assessment_report
+plugin_id: assessment_report
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2
+      - cookie
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2

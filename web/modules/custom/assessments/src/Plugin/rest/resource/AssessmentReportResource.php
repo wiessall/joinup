@@ -18,8 +18,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * Provides a REST Resource for composing assessments.
  *
  * @RestResource(
- *   id = "assessments:composer",
- *   label = @Translation("Assessments composer"),
+ *   id = "assessment_report",
+ *   label = @Translation("Assessment report"),
  *   serialization_class = "Drupal\\Core\\Entity\\Entity",
  *   uri_paths = {
  *     "canonical" = "/api/assessments",
@@ -27,10 +27,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *   }
  * )
  */
-final class AssessmentsComposerResource extends ResourceBase {
+final class AssessmentReportResource extends ResourceBase {
 
   /**
-   * Constructs a new AssessmentsComposerResource object.
+   * Constructs a new AssessmentReportResource object.
    */
   public function __construct(
     array $configuration,
