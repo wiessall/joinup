@@ -15,7 +15,7 @@ id: node.oss_solution.oss_validation_status
 field_name: oss_validation_status
 entity_type: node
 bundle: oss_solution
-label: 'Current validation status'
+label: 'Validation status'
 description: ''
 required: true
 translatable: false
