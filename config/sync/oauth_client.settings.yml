@@ -16,6 +16,7 @@ notifications:
 
       Best regards,
       The [site:name] Team
+
   approve:
     enabled: true
     subject: 'Your OAuth client request has been approved'
@@ -32,6 +33,7 @@ notifications:
 
       Best regards,
       The [site:name] Team
+
   reject:
     enabled: true
     subject: 'Your OAuth client request has been rejected'
