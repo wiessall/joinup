@@ -11,7 +11,6 @@ enum ValidationStatus: string {
 
   case Valid = 'valid';
   case Invalid = 'invalid';
-  case Unknown = 'unknown';
 
   /**
    * Returns the enum cases suitable for validation status.
