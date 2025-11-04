@@ -32,6 +32,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
+ *   provider = "assessments",
  *   admin_permission = "administer assessment statements",
  *   base_table = "assessment_statement",
  *   data_table = "assessment_statement_field_data",
