@@ -1,8 +1,0 @@
-uuid: daf0dc4c-90d9-4a46-841c-222c12f96cc5
-langcode: en
-status: true
-dependencies:
-  module:
-    - assessments
-id: semantic_interoperability
-label: 'Semantic interoperability'
