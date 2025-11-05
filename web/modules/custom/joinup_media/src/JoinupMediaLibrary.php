@@ -27,11 +27,11 @@ class JoinupMediaLibrary extends MediaLibrary {
   public function __construct(
     array $configuration,
     string $plugin_id,
-    readonly CKEditor5PluginDefinition $plugin_definition,
-    readonly EntityTypeManagerInterface $entityTypeManager,
+    CKEditor5PluginDefinition $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
     protected readonly JoinupGroupManagerInterface $groupManager,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager);
   }
 
   /**
