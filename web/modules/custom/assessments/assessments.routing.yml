@@ -1,0 +1,7 @@
+assessments.api_docs:
+  path: '/api/assessments/v1'
+  defaults:
+    _controller: '\Drupal\assessments\Controller\AssessmentsApiController::apiDocs'
+    _title: 'Assessments API Documentation'
+  requirements:
+    _user_is_logged_in: 'TRUE'
