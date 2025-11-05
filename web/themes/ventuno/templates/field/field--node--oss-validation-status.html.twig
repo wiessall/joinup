@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Template for validation_status field.
+ */
+#}
+{% set validation_status %}
+  {{- element|render|lower -}}
+{% endset %}
+<span class="oss-validation-status-val is-{{ validation_status }} fw-bold">
+  {{ 'publiccode.yml is @validation_status'|t({'@validation_status': validation_status}) }}
+</span>
