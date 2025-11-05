@@ -30,6 +30,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
       'view' => AccessResult::allowedIfHasPermission($account, 'view assessment'),
       'update' => AccessResult::allowedIfHasPermission($account, 'edit assessment'),
       'delete' => AccessResult::allowedIfHasPermission($account, 'delete assessment'),
+      'moderate' => AccessResult::allowedIfHasPermission($account, 'moderate assessment report'),
       default => AccessResult::neutral(),
     };
   }
