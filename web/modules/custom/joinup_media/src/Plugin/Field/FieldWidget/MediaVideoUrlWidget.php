@@ -38,9 +38,9 @@ class MediaVideoUrlWidget extends InlineEntityFormSimple {
     FieldDefinitionInterface $field_definition,
     array $settings,
     array $third_party_settings,
-    readonly EntityTypeBundleInfoInterface $entity_type_bundle_info,
-    readonly EntityTypeManagerInterface $entity_type_manager,
-    readonly EntityDisplayRepositoryInterface $entity_display_repository,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityDisplayRepositoryInterface $entity_display_repository,
     protected readonly OgContextInterface $ogContext,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_bundle_info, $entity_type_manager, $entity_display_repository);
