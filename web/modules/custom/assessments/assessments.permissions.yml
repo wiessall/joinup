@@ -10,3 +10,9 @@ delete assessment:
   title: 'Delete assessment'
 create assessment:
   title: 'Create assessment'
+bypass assessment report moderation:
+  title: 'Bypass assessment report moderation'
+  description: 'Create assessment reports directly in published state without moderation.'
+moderate assessment report:
+  title: 'Moderate assessment report'
+  description: 'Moderate assessment reports submitted for review.'
