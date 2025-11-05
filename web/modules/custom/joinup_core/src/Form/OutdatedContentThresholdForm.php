@@ -23,8 +23,8 @@ class OutdatedContentThresholdForm extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     TypedConfigManagerInterface $typed_config_manager,
-    readonly EntityTypeBundleInfoInterface $bundleInfo,
-    readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeBundleInfoInterface $bundleInfo,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($config_factory, $typed_config_manager);
   }

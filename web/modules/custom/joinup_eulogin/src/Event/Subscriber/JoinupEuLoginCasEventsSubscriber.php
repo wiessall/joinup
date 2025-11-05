@@ -23,7 +23,6 @@ use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -43,24 +42,18 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   protected ImmutableConfig $casSettings;
 
-  /**
-   * The current request.
-   */
-  protected Request $currentRequest;
-
   public function __construct(
-    readonly ConfigFactoryInterface $configFactory,
+    protected readonly ConfigFactoryInterface $configFactory,
     protected readonly UserDataInterface $userData,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    readonly RequestStack $requestStack,
+    protected readonly RequestStack $requestStack,
     protected readonly MessengerInterface $messenger,
     protected readonly StateInterface $state,
     #[Autowire(service: 'externalauth.authmap')]
     protected readonly Authmap $authmap,
   ) {
-    $this->settings = $configFactory->get('oe_authentication.settings');
-    $this->casSettings = $configFactory->get('cas.settings');
-    $this->currentRequest = $requestStack->getCurrentRequest();
+    $this->settings = $this->configFactory->get('oe_authentication.settings');
+    $this->casSettings = $this->configFactory->get('cas.settings');
   }
 
   /**
@@ -273,7 +266,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public function setRedirectAndStatusOnNewAccount(CasPostLoginEvent $event): void {
     if ($event->getCasPropertyBag()->hasAttribute('newAccountRegistered')) {
       $url = $event->getAccount()->toUrl('edit-form');
-      $this->currentRequest->query->set('destination', $url->toString());
+      $this->requestStack->getCurrentRequest()?->query->set('destination', $url->toString());
       $this->messenger->addStatus(
         $this->t('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!')
       );

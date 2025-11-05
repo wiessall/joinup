@@ -23,8 +23,8 @@ class JoinupLicenceCompatibilityRulePluginManager extends DefaultPluginManager {
 
   public function __construct(
     \Traversable $namespaces,
-    readonly CacheBackendInterface $cache_backend,
-    readonly ModuleHandlerInterface $module_handler,
+    CacheBackendInterface $cache_backend,
+    ModuleHandlerInterface $module_handler,
   ) {
     parent::__construct(
       'Plugin/JoinupLicenceCompatibilityRule',
