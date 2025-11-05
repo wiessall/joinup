@@ -444,21 +444,6 @@ third_party_settings:
                     template_suggestion: ''
             weight: 1
             additional: {  }
-          7abe1705-ebbf-4112-a3b7-3b6b309ab027:
-            uuid: 7abe1705-ebbf-4112-a3b7-3b6b309ab027
-            region: second
-            configuration:
-              id: 'field_block:node:oss_solution:oss_validation_status'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: list_default
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 4
-            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
