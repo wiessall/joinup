@@ -7,27 +7,15 @@ namespace Drupal\joinup_community_content\Controller;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
-use Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler;
 use Drupal\joinup_group\Controller\GroupNodeController;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
-use Drupal\og\OgAccessInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides controllers for community content.
  */
 class CommunityContentController extends GroupNodeController {
-
-  public function __construct(
-    #[Autowire(service: 'og.access')]
-    readonly OgAccessInterface $og_access,
-    #[Autowire(service: 'joinup_community_content.community_content_workflow_access')]
-    readonly CommunityContentWorkflowAccessControlHandler $workflowAccessControlHandler,
-  ) {
-    parent::__construct($og_access);
-  }
 
   /**
    * Handles access to the content add form through RDF entity pages.

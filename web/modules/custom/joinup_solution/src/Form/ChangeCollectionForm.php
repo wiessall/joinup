@@ -38,12 +38,12 @@ class ChangeCollectionForm extends FormBase {
   protected $logger;
 
   public function __construct(
-    readonly PrivateTempStoreFactory $privateTempStoreFactory,
+    PrivateTempStoreFactory $temp_store_factory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly SelectionPluginManagerInterface $selectionPluginManager,
     LoggerChannelFactoryInterface $loggerFactory,
   ) {
-    $this->tempStore = $privateTempStoreFactory->get('change_collection');
+    $this->tempStore = $temp_store_factory->get('change_collection');
     $this->logger = $loggerFactory->get('joinup');
   }
 

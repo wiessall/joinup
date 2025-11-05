@@ -37,7 +37,7 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
     mixed $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
-    readonly QueueFactory $queue_factory,
+    QueueFactory $queue_factory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->groupContentQueue = $queue_factory->get('joinup_group:group_content_update');
