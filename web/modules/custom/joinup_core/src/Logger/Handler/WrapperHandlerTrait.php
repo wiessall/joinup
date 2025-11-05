@@ -21,8 +21,8 @@ trait WrapperHandlerTrait {
   protected array $settings;
 
   public function __construct(
-    readonly string $type,
-    readonly StateInterface $state,
+    string $type,
+    StateInterface $state,
     protected readonly ?LockBackendInterface $lockBackend = NULL,
   ) {
     $this->settings = $state->get('joinup.log_alerts', [$type => []])[$type] + static::getDefaultSettings();

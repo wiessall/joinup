@@ -20,7 +20,7 @@ class TourMenuLink extends MenuLinkDefault {
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    readonly StaticMenuLinkOverridesInterface $static_override,
+    StaticMenuLinkOverridesInterface $static_override,
     protected readonly TourHelperInterface $tourHelper,
     protected readonly ResettableStackedRouteMatchInterface $currentRouteMatch,
   ) {

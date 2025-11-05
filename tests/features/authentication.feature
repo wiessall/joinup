@@ -45,6 +45,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
+      | api/assessments/v1                                  |
       | collection/portal/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
@@ -61,6 +62,7 @@ Feature: User authentication
 
     Examples:
       | path               |
+      | api/assessments/v1 |
       | collections        |
       | propose/collection |
       | user               |
