@@ -1,1 +1,27 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the organisation model class (public_organisation).&#10 */&#10class OrganisationModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'public_organisation';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'name' => $this->data['name'] ?? NULL,&#10      // API uses organisation_type; field is organization_type in Joinup.&#10      'organization_type' => $this->data['organisation_type'] ?? ($this->data['organization_type'] ?? NULL),&#10      'country' => $this->data['country'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the organisation model class (public_organisation).
+ */
+class OrganisationModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'public_organisation';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'name' => $this->data['name'] ?? NULL,
+      // API uses organisation_type; field is organization_type in Joinup.
+      'organization_type' => $this->data['organisation_type'] ?? ($this->data['organization_type'] ?? NULL),
+      'country' => $this->data['country'] ?? NULL,
+    ];
+  }
+
+}

@@ -1,1 +1,25 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the participation model class.&#10 */&#10class ParticipationModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'participation';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'country' => $this->data['country'] ?? NULL,&#10      'participation_type' => $this->data['participation_type'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the participation model class.
+ */
+class ParticipationModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'participation';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'country' => $this->data['country'] ?? NULL,
+      'participation_type' => $this->data['participation_type'] ?? NULL,
+    ];
+  }
+
+}

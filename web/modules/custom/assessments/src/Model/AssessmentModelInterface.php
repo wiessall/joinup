@@ -1,1 +1,34 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the assessment model interface.&#10 */&#10interface AssessmentModelInterface {&#10&#10  /**&#10   * Processes the data of the entity.&#10   *&#10   * This should also call the processing of the child entities.&#10   */&#10  public function process(): void;&#10&#10  /**&#10   * Validates the data of the entity.&#10   *&#10   * @return array&#10   *   A list of validation errors.&#10   */&#10  public function validate(): array;&#10&#10  /**&#10   * Saves the entity.&#10   *&#10   * This should also call the saving of the child entities first.&#10   */&#10  public function save(): void;&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the assessment model interface.
+ */
+interface AssessmentModelInterface {
+
+  /**
+   * Processes the data of the entity.
+   *
+   * This should also call the processing of the child entities.
+   */
+  public function process(): void;
+
+  /**
+   * Validates the data of the entity.
+   *
+   * @return array
+   *   A list of validation errors.
+   */
+  public function validate(): array;
+
+  /**
+   * Saves the entity.
+   *
+   * This should also call the saving of the child entities first.
+   */
+  public function save(): void;
+
+}

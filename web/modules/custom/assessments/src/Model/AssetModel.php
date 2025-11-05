@@ -1,1 +1,25 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the asset model class.&#10 */&#10class AssetModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'asset';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'name' => $this->data['name'] ?? NULL,&#10      'landing_page' => $this->data['landing_page'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the asset model class.
+ */
+class AssetModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'asset';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'name' => $this->data['name'] ?? NULL,
+      'landing_page' => $this->data['landing_page'] ?? NULL,
+    ];
+  }
+
+}

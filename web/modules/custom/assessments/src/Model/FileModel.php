@@ -1,1 +1,24 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the file reference model class (logical file object with URI).&#10 */&#10class FileModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'file';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'file_uri' => $this->data['file_uri'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the file reference model class (logical file object with URI).
+ */
+class FileModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'file';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'file_uri' => $this->data['file_uri'] ?? NULL,
+    ];
+  }
+
+}

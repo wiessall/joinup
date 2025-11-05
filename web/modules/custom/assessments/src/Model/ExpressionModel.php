@@ -1,1 +1,28 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the expression model class.&#10 */&#10class ExpressionModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'expression';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'name' => $this->data['name'] ?? NULL,&#10      'description' => $this->data['description'] ?? NULL,&#10      // Accept both keys from API/README.&#10      'documented_in' => $this->data['documented_in'] ?? ($this->data['document_in'] ?? NULL),&#10      'expression_type' => $this->data['expression_type'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the expression model class.
+ */
+class ExpressionModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'expression';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'name' => $this->data['name'] ?? NULL,
+      'description' => $this->data['description'] ?? NULL,
+      // Accept both keys from API/README.
+      'documented_in' => $this->data['documented_in'] ?? ($this->data['document_in'] ?? NULL),
+      'expression_type' => $this->data['expression_type'] ?? NULL,
+    ];
+  }
+
+}
