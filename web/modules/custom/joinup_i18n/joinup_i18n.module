@@ -10,16 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Template\Attribute;
 
 /**
- * Implements hook_install_tasks_alter().
- */
-function joinup_i18n_install_tasks_alter(array &$tasks, array $install_state): void {
-  // Do not download UI and config translations at installation time.
-  unset($tasks['install_config_download_translations']);
-  unset($tasks['install_import_translations']);
-  unset($tasks['install_finish_translations']);
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function joinup_i18n_module_implements_alter(array &$implementations, string $hook): void {

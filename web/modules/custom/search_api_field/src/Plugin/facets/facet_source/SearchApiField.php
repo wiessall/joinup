@@ -53,9 +53,9 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
   public function __construct(
     array $configuration,
     string $plugin_id,
-    readonly array $plugin_definition,
-    readonly QueryTypePluginManager $query_type_plugin_manager,
-    readonly QueryHelper $search_results_cache,
+    array $plugin_definition,
+    QueryTypePluginManager $query_type_plugin_manager,
+    QueryHelper $search_results_cache,
     protected readonly RequestStack $requestStack,
     protected readonly CurrentPathStack $currentPathStack,
   ) {

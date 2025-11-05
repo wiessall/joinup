@@ -11,20 +11,12 @@ use Drupal\oe_webtools_analytics\Event\AnalyticsEvent;
 use Drupal\og\OgContextInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Subscriber that acts on visitor analytics being collected for reporting.
  */
 readonly class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
-
-  /**
-   * The current request.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected Request $currentRequest;
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -33,7 +25,6 @@ readonly class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
     #[Autowire(service: 'og.context')]
     protected OgContextInterface $ogContext,
   ) {
-    $this->currentRequest = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -91,11 +82,12 @@ readonly class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    if ($keys = $this->currentRequest->get('keys')) {
+    $current_request = $this->requestStack->getCurrentRequest();
+    if ($keys = $current_request?->get('keys')) {
       $search_data = $event->getSearch();
       // Resolve malformed UTF-8 characters, possibly incorrectly encoded.
       $search_data->setKeyword(mb_convert_encoding($keys, 'UTF-8', 'UTF-8'));
-      if ($total_rows = $this->currentRequest->attributes->get('total_rows')) {
+      if ($total_rows = $current_request->attributes->get('total_rows')) {
         $search_data->setCount($total_rows);
       }
     }

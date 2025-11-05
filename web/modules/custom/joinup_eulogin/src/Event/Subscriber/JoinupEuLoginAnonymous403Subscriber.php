@@ -19,8 +19,8 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
 
   public function __construct(
-    readonly AccountInterface $currentUser,
-    readonly StateInterface $state,
+    protected readonly AccountInterface $currentUser,
+    protected readonly StateInterface $state,
   ) {}
 
   /**

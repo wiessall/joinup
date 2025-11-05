@@ -230,7 +230,6 @@ module:
   replicate_ui: 0
   responsive_image: 0
   rest: 0
-  restui: 0
   role_delegation: 0
   schema_article: 0
   schema_digital_document: 0
