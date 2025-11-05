@@ -162,8 +162,6 @@ permissions:
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
   - 'propose collection content'
-  - 'request authenticated_user_api oauth2 client'
-  - 'restful post discussion_comment'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
