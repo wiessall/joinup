@@ -16,9 +16,11 @@ final class AssessmentStatementListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader(): array {
-    $header['id'] = $this->t('Name');
+    $header['label'] = $this->t('Name');
     $header['bundle'] = $this->t('Type');
-    return $header + parent::buildHeader();
+    $header['judgement'] = $this->t('Judgement');
+    $header['interpretation'] = $this->t('Interpretation');
+    return $header;
   }
 
   /**
@@ -26,9 +28,11 @@ final class AssessmentStatementListBuilder extends EntityListBuilder {
    */
   public function buildRow(EntityInterface $entity): array {
     /** @var \Drupal\assessments\AssessmentInterface $entity */
-    $row['id'] = $entity->toLink();
+    $row['id'] = $entity->id();
     $row['bundle'] = $entity->bundle();
-    return $row + parent::buildRow($entity);
+    $row['judgement'] = $entity->get('judgement')->value;
+    $row['interpretation'] = $entity->get('interpretation')->value;
+    return $row;
   }
 
 }

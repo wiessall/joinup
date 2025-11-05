@@ -1,8 +1,0 @@
-uuid: 8b240b35-f7cb-471d-8f2c-c953fe6bdf8a
-langcode: en
-status: true
-dependencies:
-  module:
-    - assessments
-id: organisational_interoperability
-label: 'Organisational interoperability'

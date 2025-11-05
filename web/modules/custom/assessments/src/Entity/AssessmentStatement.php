@@ -23,16 +23,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   ),
  *   handlers = {
  *     "list_builder" = "Drupal\assessments\AssessmentStatementListBuilder",
- *     "form" = {
- *       "add" = "Drupal\assessments\Form\AssessmentStatementForm",
- * *     "edit" = "Drupal\assessments\Form\AssessmentStatementForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm"
- *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
- *   provider = "assessments",
  *   admin_permission = "administer assessment statements",
  *   base_table = "assessment_statement",
  *   data_table = "assessment_statement_field_data",
@@ -43,13 +37,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   },
  *   links = {
  *      "collection" = "/admin/content/assessment-statement",
- *      "add-form" = "/assessment-statements/add/{assessment_statement_type}",
- *      "add-page" = "/assessment-statements/add",
- *      "canonical" = "/assessment-statements/{assessment_statement}",
- *      "edit-form" = "/assessment-statements/{assessment_statement}/edit",
- *      "delete-form" = "/assessment-statements/{assessment_statement}/delete",
- *      "delete-multiple-form" =
- *   "/admin/content/assessment-statement/delete-multiple",
  *    },
  *   bundle_entity_type = "assessment_statement_type",
  *   field_ui_base_route = "entity.assessment_statement_type.edit_form",
@@ -106,6 +93,13 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label(): string {
+    return $this->id();
   }
 
 }
