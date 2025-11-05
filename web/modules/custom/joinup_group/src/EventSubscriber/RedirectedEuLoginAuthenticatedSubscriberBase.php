@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -30,16 +29,10 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
 
   use StringTranslationTrait;
 
-  /**
-   * The current request.
-   */
-  protected Request $currentRequest;
-
   public function __construct(
     protected readonly TimeInterface $time,
-    readonly RequestStack $request_stack,
+    protected readonly RequestStack $requestStack,
   ) {
-    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -66,7 +59,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
   public function onPostLogin(CasPostLoginEvent $event): void {
     try {
       if ($destination = $this->getRedirectDestination($event)) {
-        $this->currentRequest->query->set('destination', $destination);
+        $this->requestStack->getCurrentRequest()?->query->set('destination', $destination);
         // Stop the propagation in order to prevent other downstream subscribers
         // to set a different redirect destination.
         $event->stopPropagation();
@@ -108,7 +101,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    */
   protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     // By default, read the destination from the current request.
-    return $this->currentRequest->query->get('destination');
+    return $this->requestStack->getCurrentRequest()?->query->get('destination');
   }
 
   /**
