@@ -27,7 +27,7 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
