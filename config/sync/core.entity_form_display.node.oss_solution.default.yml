@@ -38,6 +38,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
@@ -95,7 +96,7 @@ third_party_settings:
       label: 'European Public Services data (publiccode.yml, ecc.)'
       region: content
       parent_name: ''
-      weight: 8
+      weight: 9
       format_type: details
       format_settings:
         classes: ''
@@ -115,7 +116,7 @@ third_party_settings:
       label: 'Git Data'
       region: content
       parent_name: ''
-      weight: 7
+      weight: 8
       format_type: details
       format_settings:
         classes: ''
@@ -124,6 +125,22 @@ third_party_settings:
         open: false
         description: ''
         required_fields: true
+    group_validation:
+      children:
+        - oss_validation_status
+      label: Validation
+      region: content
+      parent_name: ''
+      weight: 7
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
 id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
@@ -131,7 +148,7 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -144,7 +161,7 @@ content:
     third_party_settings: {  }
   oss_archived:
     type: boolean_checkbox
-    weight: 19
+    weight: 20
     region: content
     settings:
       display_label: true
@@ -159,7 +176,7 @@ content:
     third_party_settings: {  }
   oss_categories:
     type: entity_reference_autocomplete
-    weight: 42
+    weight: 41
     region: content
     settings:
       match_operator: CONTAINS
@@ -421,13 +438,19 @@ content:
     third_party_settings: {  }
   oss_used_by:
     type: entity_reference_autocomplete
-    weight: 43
+    weight: 42
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  oss_validation_status:
+    type: options_select
+    weight: 22
+    region: content
+    settings: {  }
     third_party_settings: {  }
   oss_vitality_index:
     type: number
@@ -438,38 +461,38 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 15
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 13
+    weight: 14
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   published_at:
     type: publication_date_timestamp
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   simple_sitemap:
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 18
+    weight: 19
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 14
+    weight: 15
     region: content
     settings:
       display_label: true
@@ -483,13 +506,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 9
+    weight: 10
     region: content
     settings:
       match_operator: CONTAINS
@@ -498,7 +521,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 17
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }

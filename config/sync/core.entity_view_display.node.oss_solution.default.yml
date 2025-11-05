@@ -38,6 +38,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
@@ -46,6 +47,8 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
+    - options
+    - user
 third_party_settings:
   layout_builder:
     enabled: true
@@ -858,12 +861,39 @@ third_party_settings:
                     template_suggestion: ''
             weight: 1
             additional: {  }
+          95d14214-a271-458c-a71f-c1f434363833:
+            uuid: 95d14214-a271-458c-a71f-c1f434363833
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_validation_status'
+              label: 'Validation status'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: list_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 10
+            additional: {  }
         third_party_settings: {  }
 id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
 mode: default
-content: {  }
+content:
+  oss_validation_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: second
 hidden:
   description: true
   langcode: true
