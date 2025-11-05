@@ -49,7 +49,10 @@ final class AssessmentHtmlRouteProvider extends AdminHtmlRouteProvider {
         ->setRequirement('_entity_access', "{$entity_type_id}.moderate")
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
-          $entity_type_id => ['type' => 'entity:' . $entity_type_id],
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id,
+            'bundle' => ['report'],
+          ],
         ]);
 
       return $route;
