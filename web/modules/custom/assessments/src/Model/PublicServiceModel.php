@@ -1,1 +1,25 @@
-<?php&#10&#10declare(strict_types=1);&#10&#10namespace Drupal\assessments\Model;&#10&#10/**&#10 * Defines the public service model class.&#10 */&#10class PublicServiceModel extends AssessmentModelBase implements AssessmentModelInterface {&#10&#10  public function process(): void {}&#10&#10  protected function bundle(): string {&#10    return 'public_service';&#10  }&#10&#10  protected function getEntityValues(): array {&#10    return [&#10      'name' => $this->data['name'] ?? NULL,&#10      'thematic_area' => $this->data['thematic_area'] ?? NULL,&#10    ];&#10  }&#10&#10}&#10
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Model;
+
+/**
+ * Defines the public service model class.
+ */
+class PublicServiceModel extends AssessmentModelBase implements AssessmentModelInterface {
+
+  public function process(): void {}
+
+  protected function bundle(): string {
+    return 'public_service';
+  }
+
+  protected function getEntityValues(): array {
+    return [
+      'name' => $this->data['name'] ?? NULL,
+      'thematic_area' => $this->data['thematic_area'] ?? NULL,
+    ];
+  }
+
+}
