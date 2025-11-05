@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
+use EasyRdf\Literal\Boolean;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -115,14 +116,53 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function alterSpatial(PrepareVocabularyGraphEvent $event): void {
-    if ($event->vid === 'spatial') {
-      $graph = $event->getGraph();
+    if ($event->vid !== 'spatial') {
+      return;
+    }
+
+    RdfNamespace::set('at', 'http://publications.europa.eu/ontology/authority/');
+    $graph = $event->getGraph();
+
+    foreach ($graph->resources() as $resource) {
       // Remove deprecated countries from the country list. See ISAICP-3442.
-      foreach ($graph->resources() as $resource) {
-        if ($graph->hasProperty($resource, 'http://publications.europa.eu/ontology/authority/end.use')) {
+      if ($graph->hasProperty($resource, 'at:deprecated')) {
+        if ($graph->getLiteral($resource, 'at:deprecated')->getValue() === 'true') {
           $graph->deleteEntireResource($resource);
           continue;
         }
+      }
+
+      // Remove a special entry, called 'Provisional data'.
+      if ($resource->getUri() === 'http://publications.europa.eu/resource/authority/country/OP_DATPRO') {
+        $graph->deleteEntireResource($resource);
+        continue;
+      }
+
+      // Keep only countries, remove territories.
+      $countryConcept = new Resource('http://publications.europa.eu/resource/authority/country/0001');
+      if (!$resource->hasProperty('skos:inScheme', $countryConcept)) {
+        $graph->deleteEntireResource($resource);
+        continue;
+      }
+
+      // Determine the EU membership status.
+      $euMemberConcept = new Resource('http://publications.europa.eu/resource/authority/country/0005');
+      $isEuMember = $resource->hasProperty('skos:inScheme', $euMemberConcept);
+      $graph->addLiteral($resource, 'http://publications.europa.eu/resource/authority/country/0005', new Boolean($isEuMember));
+
+      if ($graph->hasProperty($resource, 'skos:notation')) {
+        $notations = $resource->all('skos:notation');
+        foreach ($notations as $notation) {
+          $dataTypeUri = $notation->getDatatypeUri();
+          if (isset($dataTypeUri) && $dataTypeUri === 'http://publications.europa.eu/ontology/euvoc#ISO_3166_1_ALPHA_2') {
+            // We use the data type only to provide a predicate, but we
+            // normalized back in NormalizeSubscriber::normalizeCountries()
+            // @see \Drupal\joinup_taxonomy\EventSubscriber\NormalizeSubscriber::normalizeCountries()
+            $graph->addLiteral($resource, $dataTypeUri, new Literal($notation->getValue()));
+            break;
+          }
+        }
+
         $graph->addType($resource, 'http://purl.org/dc/terms/Location');
       }
     }
