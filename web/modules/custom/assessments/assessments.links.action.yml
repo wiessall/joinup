@@ -9,15 +9,3 @@ assessment.add_page:
   route_name: entity.assessment.add_page
   appears_on:
     - entity.assessment.collection
-
-assessment_statement_type_add:
-  title: 'Add assessment statement type'
-  route_name: entity.assessment_statement_type.add_form
-  appears_on:
-    - entity.assessment_statement_type.collection
-
-assessment_statement.add_page:
-  title: 'Add assessment statement'
-  route_name: entity.assessment_statement.add_page
-  appears_on:
-    - entity.assessment_statement.collection
