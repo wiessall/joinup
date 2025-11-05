@@ -38,9 +38,9 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
     #[Autowire(service: 'logger.channel.eu_oss_catalogue')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly FileSystemInterface $fileSystem,
-    readonly ConfigFactoryInterface $configFactory,
+    ConfigFactoryInterface $config_factory,
   ) {
-    $this->config = $configFactory->get('eu_oss_vitality_index.settings');
+    $this->config = $config_factory->get('eu_oss_vitality_index.settings');
   }
 
   /**
