@@ -14,7 +14,7 @@ text:
   -
     value: |
       <p>Submitted on @assessment:changed, by @assessment:user</p>
-      <p>Please <a href="@site:base-url/collection/assessments/assessment-reports/@assessment:id/moderate">moderate</a> the submission</p>
+      <p>Please <a href="@assessment:moderate_url">moderate</a> the submission</p>
     format: full_html
 settings:
   'token options':

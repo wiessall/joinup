@@ -14,7 +14,6 @@ text:
   -
     value: |
       <p>Your submitted assessment report has been approved and is now published at @assessment:report_url</p>
-      <p>You can check all published assessments at @assessment:reports_url</p>
     format: full_html
 settings:
   'token options':
