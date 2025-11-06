@@ -74,14 +74,9 @@ final class AssessmentModerationForm extends ContentEntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
 
-    /** @var \Drupal\assessments\AssessmentInterface $assessment */
-    $assessment = $this->entity;
-    $current_state = $assessment->get('state')->value;
-
     $triggering_element = $form_state->getTriggeringElement();
     $target_state = $triggering_element['#state_id'] ?? NULL;
-
-    if ($current_state !== 'review' || $target_state !== 'draft') {
+    if ($target_state !== 'draft') {
       return;
     }
 
@@ -97,21 +92,19 @@ final class AssessmentModerationForm extends ContentEntityForm {
   public function save(array $form, FormStateInterface $form_state): int {
     /** @var \Drupal\assessments\AssessmentInterface $assessment */
     $assessment = $this->entity;
-    $previous_state = $assessment->get('state')->value;
 
     $result = parent::save($form, $form_state);
 
     $new_state = $assessment->get('state')->value;
     $reason = trim((string) $form_state->getValue('reason', ''));
 
-    // Handle state transitions: show messages and dispatch events.
-    if ($new_state === 'published' && $previous_state !== 'published') {
+    if ($new_state === 'published') {
       $this->messenger()
         ->addStatus($this->t('The assessment report has been published.'));
       $event = new AssessmentReportEvent($assessment);
       $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_PUBLISHED);
     }
-    elseif ($new_state === 'draft' && $previous_state === 'review') {
+    elseif ($new_state === 'draft') {
       $this->messenger()
         ->addStatus($this->t('The submitter has been notified that updates are required.'));
       $event = new AssessmentReportEvent($assessment, $reason);
