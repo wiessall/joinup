@@ -27,8 +27,8 @@ namespace Drupal\custom_page\ProxyClass {
       protected $service;
 
       public function __construct(
-          readonly ContainerInterface $container,
-          readonly string $drupalProxyOriginalServiceId,
+          protected readonly ContainerInterface $container,
+          protected readonly string $drupalProxyOriginalServiceId,
         ) {}
 
         /**

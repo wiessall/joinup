@@ -5,4 +5,20 @@ package: Joinup
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:default_content
+  - cas_mock_server:cas_mock_server
   - joinup_test:joinup_test
+
+default_content:
+  file:
+    - d97f57af-1e14-4f58-9825-eb33c7e1bb31
+  node:
+    - 3ca6b44e-a7ed-4fc5-869d-cc98c7dbcd8c
+    - 84547db5-c4db-4f9e-9b06-ae241369de9a
+    - b21e753e-5708-4923-b554-a66af649eccf
+    - fc99c508-84dc-4646-a112-5b37bff6f2a7
+  user:
+    - 822d66ba-0910-414e-9330-bd702632eb5d
+    - 5064d97b-0f69-4ebc-af02-3c7bd6e29691
+    - 27811b4f-182d-4ba8-972d-4e6979a9eb04
+    - 890196fa-5576-48f2-b83c-f0364f6e262e
+    - c278319f-790f-47c3-9e0b-9b2478439a09

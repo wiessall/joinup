@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Controller;
 
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -18,8 +16,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class UnpublishedContentPageController extends ControllerBase {
 
   public function __construct(
-    protected readonly BlockManagerInterface $block_plugin_manager,
-    protected readonly RendererInterface $renderer,
     #[Autowire(service: 'joinup_group.group_manager')]
     protected readonly JoinupGroupManagerInterface $group_manager,
   ) {}
