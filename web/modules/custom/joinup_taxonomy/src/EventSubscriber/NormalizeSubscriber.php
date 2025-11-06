@@ -6,6 +6,8 @@ namespace Drupal\joinup_taxonomy\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
+use EasyRdf\Literal;
+use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -22,32 +24,60 @@ class NormalizeSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       RdfSyncNormalizeEvent::class => [
-        ['addLocationTypeToCountry'],
+        ['normalizeCountries'],
         ['convertKeywords'],
       ],
     ];
   }
 
   /**
-   * Adds the dc:Location type to countries.
-   *
-   * Languages are required to be of type http://purl.org/dc/terms/Location but
-   * are listed as http://www.w3.org/2004/02/skos/core#Concept which is also
-   * correct. Add the type <http://purl.org/dc/terms/Location> for each language
-   * for the 'spatial' vocabulary terms.
+   * Adds additional normalization to country terms.
    *
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
    *   The event object.
-   *
-   * @see https://webgate.ec.europa.eu/CITnet/jira/browse/ISAICP-4566
    */
-  public function addLocationTypeToCountry(RdfSyncNormalizeEvent $event): void {
-    if ($event->getEntity()->bundle() === 'spatial') {
-      $normalizedArray = $event->getNormalizedArray();
-      $subject = key($normalizedArray);
-      $normalizedArray[$subject]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource('http://purl.org/dc/terms/Location'))->toRdfPhp();
-      $event->setNormalizedArray($normalizedArray);
+  public function normalizeCountries(RdfSyncNormalizeEvent $event): void {
+    $term = $event->getEntity();
+    if ($term->bundle() !== 'spatial') {
+      return;
     }
+
+    $normalizedArray = $event->getNormalizedArray();
+    $subject = key($normalizedArray);
+
+    // Add the dc:Location type to countries. Countries are required to be of
+    // type dc:Location but are listed as skos:Concept which is also correct.
+    // Add the type dc:Location> for each country.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4566
+    $normalizedArray[$subject]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource('http://purl.org/dc/terms/Location'))->toRdfPhp();
+
+    // Move the country code as skos:notation.
+    RdfNamespace::set('euvoc', 'http://publications.europa.eu/ontology/euvoc#');
+    $code = $term->get('code');
+    if (!$code->isEmpty()) {
+      $value = new Literal(value: $code->value, datatype: 'http://publications.europa.eu/ontology/euvoc#ISO_3166_1_ALPHA_2');
+      $normalizedArray[$subject]['http://www.w3.org/2004/02/skos/core#notation'][] = $value->toRdfPhp();
+    }
+    // This is a convenience mapping which existed only to map the field.
+    unset($normalizedArray[$subject]['http://publications.europa.eu/ontology/euvoc#ISO_3166_1_ALPHA_2']);
+
+    // Add country top concepts.
+    $value = $normalizedArray[$subject]['http://publications.europa.eu/resource/authority/country/0005'][0]['value'] ?? NULL;
+    $isEuMember = $value === 'true';
+    foreach (['', '0001', '0005'] as $item) {
+      if ($item === '0005' && !$isEuMember) {
+        continue;
+      }
+
+      $uri = rtrim('http://publications.europa.eu/resource/authority/country/' . $item, '/');
+      $reference = (new Resource($uri))->toRdfPhp();
+      $normalizedArray[$subject]['http://www.w3.org/2004/02/skos/core#inScheme'][] = $reference;
+      $normalizedArray[$subject]['http://www.w3.org/2004/02/skos/core#topConceptOf'][] = $reference;
+    }
+    // This is a convenience mapping which existed only to map the field.
+    unset($normalizedArray[$subject]['http://publications.europa.eu/resource/authority/country/0005']);
+
+    $event->setNormalizedArray($normalizedArray);
   }
 
   /**
