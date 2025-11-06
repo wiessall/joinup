@@ -3,10 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - message.template.assessment_report_require_updates
-id: message.assessment_report_require_updates.default
+    - message.template.assessment_report_updates
+id: message.assessment_report_updates.default
 targetEntityType: message
-bundle: assessment_report_require_updates
+bundle: assessment_report_updates
 mode: default
 content: {  }
 hidden: {  }
