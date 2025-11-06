@@ -202,6 +202,8 @@ module:
   oe_webtools_maps: 0
   og: 0
   og_menu: 0
+  openapi_ui: 0
+  openapi_ui_swagger: 0
   options: 0
   other_view_filter: 0
   owner: 0

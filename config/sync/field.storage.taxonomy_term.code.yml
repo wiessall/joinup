@@ -1,15 +1,17 @@
-uuid: a2bad882-f442-41bf-9e4d-eb670c901160
+uuid: 26df214d-e2b0-4662-8ad8-d61fd302f6aa
 langcode: en
 status: true
 dependencies:
   module:
-    - assessments
-id: assessment.judgement
-field_name: judgement
-entity_type: assessment
-type: string_long
+    - taxonomy
+id: taxonomy_term.code
+field_name: code
+entity_type: taxonomy_term
+type: string
 settings:
+  max_length: 2
   case_sensitive: false
+  is_ascii: false
 module: core
 locked: false
 cardinality: 1
