@@ -4,70 +4,58 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Form;
 
+use Drupal\assessments\Event\AssessmentReportEvent;
+use Drupal\assessments\NotificationEvents;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Form handler for the assessment moderation form.
  */
 final class AssessmentModerationForm extends ContentEntityForm {
 
+  public function __construct(
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    EntityRepositoryInterface $entityRepository,
+    EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+    TimeInterface $time,
+  ) {
+    parent::__construct($entityRepository, $entityTypeBundleInfo, $time);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new self(
+      $container->get('event_dispatcher'),
+      $container->get('entity.repository'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time'),
+    );
+  }
+
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    /** @var \Drupal\assessments\AssessmentInterface $assessment */
-    $assessment = $this->entity;
+    $form = parent::buildForm($form, $form_state);
 
-    $form['#title'] = $this->t('Moderate assessment report: @label', [
-      '@label' => $assessment->label(),
-    ]);
+    $actions_weight = $form['actions']['#weight'] ?? 100;
 
-    // Render the assessment entity in view mode (read-only).
-    $view_builder = $this->entityTypeManager->getViewBuilder('assessment');
-    $form['assessment_display'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Assessment report'),
-      '#open' => TRUE,
-      '#weight' => -10,
-    ];
-    $form['assessment_display']['content'] = $view_builder->view($assessment);
-
-    // Build parent form to get the state field widget.
-    $parent_form = parent::buildForm($form, $form_state);
-
-    // Extract only the state field from parent form.
-    if (isset($parent_form['state'])) {
-      $form['state'] = $parent_form['state'];
-      $form['state']['#weight'] = 10;
-    }
-
-    // Add the reason field (non-entity field).
     $form['reason'] = [
       '#type' => 'textarea',
       '#title' => $this->t('What updates are needed?'),
       '#description' => $this->t('Provide feedback to the submitter about what needs to be updated.'),
-      '#states' => [
-        'visible' => [
-          ':input[name="state[0][value]"]' => ['value' => 'draft'],
-        ],
-        'required' => [
-          ':input[name="state[0][value]"]' => ['value' => 'draft'],
-        ],
-      ],
-      '#weight' => 15,
+      '#weight' => $actions_weight,
     ];
 
-    // Add submit button.
-    $form['actions'] = [
-      '#type' => 'actions',
-      '#weight' => 20,
-    ];
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Submit'),
-      '#button_type' => 'primary',
-    ];
+    $form['actions']['#weight'] = $actions_weight + 1;
 
     return $form;
   }
@@ -78,14 +66,20 @@ final class AssessmentModerationForm extends ContentEntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
 
-    $state = $form_state->getValue(['state', 0, 'value']);
+    /** @var \Drupal\assessments\AssessmentInterface $assessment */
+    $assessment = $this->entity;
+    $current_state = $assessment->get('state')->value;
 
-    // When transitioning to draft (require updates), reason is required.
-    if ($state === 'draft') {
-      $reason = trim((string) $form_state->getValue('reason', ''));
-      if (empty($reason)) {
-        $form_state->setErrorByName('reason', $this->t('When requesting updates, you must provide a reason.'));
-      }
+    $triggering_element = $form_state->getTriggeringElement();
+    $target_state = $triggering_element['#state_id'] ?? NULL;
+
+    if ($current_state !== 'review' || $target_state !== 'draft') {
+      return;
+    }
+
+    $reason = trim((string) $form_state->getValue('reason', ''));
+    if (empty($reason)) {
+      $form_state->setErrorByName('reason', $this->t('When requesting updates, you must provide a reason.'));
     }
   }
 
@@ -96,27 +90,28 @@ final class AssessmentModerationForm extends ContentEntityForm {
     /** @var \Drupal\assessments\AssessmentInterface $assessment */
     $assessment = $this->entity;
     $previous_state = $assessment->get('state')->value;
-    $new_state = $form_state->getValue(['state', 0, 'value']);
 
     $result = parent::save($form, $form_state);
 
-    // Determine the action taken and send appropriate notifications.
+    $new_state = $assessment->get('state')->value;
+    $reason = trim((string) $form_state->getValue('reason', ''));
+
+    // Handle state transitions: show messages and dispatch events.
     if ($new_state === 'published' && $previous_state !== 'published') {
-      // Published the report.
-      $this->messenger()->addStatus($this->t('The assessment report has been published.'));
-      // @todo Send notification to submitter about publication.
+      $this->messenger()
+        ->addStatus($this->t('The assessment report has been published.'));
+      $event = new AssessmentReportEvent($assessment);
+      $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_PUBLISHED);
     }
-    elseif ($new_state === 'draft' && $previous_state !== 'draft') {
-      // Requested updates.
-      $reason = trim((string) $form_state->getValue('reason', ''));
-      $message = $this->t('The submitter has been notified that updates are required.');
-      $this->messenger()->addStatus($message);
-      // @todo Send notification to submitter with reason.
-      // @todo Store reason for notification (could be added as a field).
-      unset($reason);
+    elseif ($new_state === 'draft' && $previous_state === 'review') {
+      $this->messenger()
+        ->addStatus($this->t('The submitter has been notified that updates are required.'));
+      $event = new AssessmentReportEvent($assessment, $reason);
+      $this->eventDispatcher->dispatch($event, NotificationEvents::ASSESSMENT_REPORT_REQUIRE_UPDATES);
     }
     else {
-      $this->messenger()->addStatus($this->t('The assessment report has been updated.'));
+      $this->messenger()
+        ->addStatus($this->t('The assessment report has been updated.'));
     }
 
     $form_state->setRedirectUrl($assessment->toUrl('collection'));
