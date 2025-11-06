@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - filter.format.full_html
-template: assessment_report_require_updates
+template: assessment_report_updates
 label: 'Assessment Reports: require updates'
 description: 'The assessment report requires updates from the submitter'
 text:
