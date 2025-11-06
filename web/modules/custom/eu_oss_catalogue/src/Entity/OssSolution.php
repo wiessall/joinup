@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Entity;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
+use Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface;
 use Drupal\node\Entity\Node;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
@@ -83,6 +84,14 @@ class OssSolution extends Node implements OssSolutionInterface {
     }
     $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
     return $publicCodeYamlContent;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setValidationResult(PublicCodeValidationResultInterface $validationResult): self {
+    throw new \RuntimeException('Not implemented');
+    return $this;
   }
 
 }

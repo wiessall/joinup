@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Entity;
 
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -71,5 +72,15 @@ interface OssSolutionInterface extends NodeInterface {
    *   NULL if the field is empty.
    */
   public function getPubliccodeYaml(): ?string;
+
+  /**
+   * Updates validation result of the OSS solution.
+   *
+   * @param \Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface $validationResult
+   *   A validation result object.
+   *
+   * @return $this
+   */
+  public function setValidationResult(PublicCodeValidationResultInterface $validationResult): self;
 
 }
