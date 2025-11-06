@@ -30,7 +30,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
- *   provider = "assessments",
  *   admin_permission = "administer assessment statement types",
  *   bundle_of = "assessment_statement",
  *   config_prefix = "assessment_statement_type",
