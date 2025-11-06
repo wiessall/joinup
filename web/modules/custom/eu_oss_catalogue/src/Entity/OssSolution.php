@@ -72,4 +72,17 @@ class OssSolution extends Node implements OssSolutionInterface {
     return $this->get('oss_git_url')->first()->getValue()['uri'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPubliccodeYaml(): ?string {
+    $field = $this->get(static::PUBLICCODE_YAML_FIELD);
+    \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
+    if ($field->isEmpty()) {
+      return NULL;
+    }
+    $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
+    return $publicCodeYamlContent;
+  }
+
 }

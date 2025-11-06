@@ -13,6 +13,13 @@ use Drupal\node\NodeInterface;
 interface OssSolutionInterface extends NodeInterface {
 
   /**
+   * Name of the field storing the raw publiccode.yml file content.
+   *
+   * @const string
+   */
+  public const string PUBLICCODE_YAML_FIELD = 'oss_publiccode_yml_content';
+
+  /**
    * Appends a new provider to the source field.
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
@@ -55,5 +62,14 @@ interface OssSolutionInterface extends NodeInterface {
    *   The repository URL.
    */
   public function getUrl(): string;
+
+  /**
+   * Returns the publiccode yaml content.
+   *
+   * @return ?string
+   *   The content of the first item in the pupliccode.yml content field, or
+   *   NULL if the field is empty.
+   */
+  public function getPubliccodeYaml(): ?string;
 
 }
