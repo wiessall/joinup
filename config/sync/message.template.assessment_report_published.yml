@@ -12,7 +12,7 @@ text:
     value: 'Your assessment report has been published'
     format: full_html
   -
-    value: "<p>Your submitted assessment report has been approved and is now published at @assessment:report_url</p>\r\n"
+    value: "<p>Your submitted assessment report has been approved and is now <a href=\"@assessment:report_url\">published</a>.</p>\r\n"
     format: full_html
 settings:
   'token options':
