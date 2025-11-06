@@ -44,6 +44,14 @@ final class AssessmentModerationForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    /** @var \Drupal\assessments\AssessmentInterface $assessment */
+    $assessment = $this->entity;
+
+    if ($assessment->bundle() !== 'report' || $assessment->get('state')->value !== 'review') {
+      $this->messenger()->addError($this->t('This assessment report is not available for moderation.'));
+      return [];
+    }
+
     $form = parent::buildForm($form, $form_state);
 
     $actions_weight = $form['actions']['#weight'] ?? 100;
