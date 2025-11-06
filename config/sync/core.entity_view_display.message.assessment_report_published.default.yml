@@ -1,0 +1,23 @@
+uuid: e89613bb-7542-454b-a5dd-2fe8ea0d3603
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_published
+id: message.assessment_report_published.default
+targetEntityType: message
+bundle: assessment_report_published
+mode: default
+content:
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  partial_1:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
