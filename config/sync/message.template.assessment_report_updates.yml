@@ -12,11 +12,7 @@ text:
     value: 'Your assessment report needs updates'
     format: full_html
   -
-    value: |
-      <p>Your submitted assessment report has been reviewed but the moderator has requested some changes.</p>
-      <p>Moderator feedback:</p>
-      <p><em>@assessment:require_update_reason</em></p>
-      <p>Please <a href="@assessment:edit_url">edit</a> your report and address the issues mentioned above. Submit the report again once everything is resolved.</p>
+    value: "<p>Your submitted assessment report has been reviewed but the moderator has requested some changes.</p>\r\n<p>Moderator feedback:</p>\r\n<p><em>@assessment:require_update_reason</em></p>\r\n<p>Please <a href=\"@assessment:edit_url\">edit</a> your report and address the issues mentioned above. Submit the report again once everything is resolved.</p>\r\n"
     format: full_html
 settings:
   'token options':
