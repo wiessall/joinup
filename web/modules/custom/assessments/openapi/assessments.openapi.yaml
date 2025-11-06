@@ -25,6 +25,8 @@ paths:
       summary: Get an Assessment by ID
       description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
       operationId: getAssessment
+      tags:
+        - Assessments
       security:
         - oauth2: [ ]
       parameters:
