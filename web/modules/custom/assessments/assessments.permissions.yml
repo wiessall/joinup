@@ -10,3 +10,11 @@ delete assessment:
   title: 'Delete assessment'
 create assessment:
   title: 'Create assessment'
+administer assessment statement types:
+  title: 'Administer assessment statement types'
+  description: 'Maintain the types of assessment statement type entity.'
+  restrict access: true
+administer assessment statements:
+  title: 'Administer assessment statements'
+  description: 'Maintain the types of assessment statement entity.'
+  restrict access: true

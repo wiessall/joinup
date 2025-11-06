@@ -1,15 +1,15 @@
-uuid: a2bad882-f442-41bf-9e4d-eb670c901160
+uuid: 2244db80-4dea-48d8-a21e-9104fcd6e020
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.judgement
-field_name: judgement
+id: assessment.organisational_interoperability
+field_name: organisational_interoperability
 entity_type: assessment
-type: string_long
+type: entity_reference
 settings:
-  case_sensitive: false
+  target_type: assessment_statement
 module: core
 locked: false
 cardinality: 1
