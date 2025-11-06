@@ -451,15 +451,33 @@ third_party_settings:
             region: aside
             configuration:
               id: 'field_block:node:oss_solution:oss_validation_errors'
+              label: 'Validation errors'
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                type: text_default
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 4
+                type: joinup_core_more_in_modal
+                label: hidden
+                settings:
+                  max_items_to_show: 0
+                  modal_link_label_single: 'Show item'
+                  modal_link_label_multiple: 'Show all @count items'
+                  modal_view_mode: modal
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 6
             additional: {  }
         third_party_settings: {  }
       -

@@ -50,6 +50,7 @@ dependencies:
     - joinup_oss_catalogue
     - layout_builder
     - template_suggestion
+    - text
     - user
 third_party_settings:
   layout_builder:
@@ -91,6 +92,13 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
+  oss_validation_errors:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   description: true
   langcode: true
@@ -131,7 +139,6 @@ hidden:
   oss_software_version: true
   oss_source: true
   oss_source_hash: true
-  oss_validation_errors: true
   oss_validation_status: true
   oss_vitality_index: true
   oss_vitality_index_range: true
