@@ -32,6 +32,8 @@ paths:
       summary: Obtain OAuth2 access token (Client Credentials)
       description: Issue an access token using OAuth 2.0 Client Credentials flow.
       operationId: oauthToken
+      tags:
+        - Authentication
       requestBody:
         required: true
         content:
