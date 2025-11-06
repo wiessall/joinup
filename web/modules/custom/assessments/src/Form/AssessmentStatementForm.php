@@ -34,9 +34,6 @@ class AssessmentStatementForm extends ContentEntityForm {
         $this->messenger()->addStatus($this->t('The assessment statement %label has been updated.', $message_args));
         $this->logger('assessments')->notice('The assessment statement %label has been updated.', $logger_args);
         break;
-
-      default:
-        throw new \LogicException('Could not save the entity.');
     }
 
     $form_state->setRedirectUrl($this->entity->toUrl());
