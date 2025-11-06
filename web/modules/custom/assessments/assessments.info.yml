@@ -8,5 +8,6 @@ dependencies:
   - drupal:rest
   - inline_entity_form:inline_entity_form
   - joinup:joinup_api
+  - joinup:joinup_notification
   - joinup:joinup_rdf
   - rdf_sync:rdf_sync
