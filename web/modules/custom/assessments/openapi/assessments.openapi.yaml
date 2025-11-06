@@ -73,6 +73,9 @@ paths:
                   error:
                     type: string
   /assessment/create:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
     post:
       summary: Create an Assessment
       description: Submit a single Assessment JSON object. Some referred
