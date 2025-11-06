@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -23,6 +24,28 @@ class AssessmentContext extends RawDrupalContext {
   use EntityTrait;
   use TestingEntitiesTrait;
   use UtilityTrait;
+
+  /**
+   * Programmatically creates assessment contents.
+   *
+   * Table format:
+   * | name   | <field n>       |
+   * | <name> | <field n value> |
+   *
+   * @param string $type
+   *   The bundle machine name.
+   * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
+   *   The table with the data for the fields of the assessment.
+   *
+   * @Given :type assessments:
+   */
+  public function createAssessments(string $type, TableNode $assessmentsTable): void {
+    foreach ($assessmentsTable->getHash() as $assessmentHash) {
+      $assessment = (object) $assessmentHash;
+      $assessment->type = $type;
+      $this->entityCreate('assessment', $assessment);
+    }
+  }
 
   /**
    * Navigates to the latest assessment webform submission.
