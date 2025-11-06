@@ -202,6 +202,8 @@ module:
   oe_webtools_maps: 0
   og: 0
   og_menu: 0
+  openapi_ui: 0
+  openapi_ui_swagger: 0
   options: 0
   other_view_filter: 0
   owner: 0
@@ -230,7 +232,6 @@ module:
   replicate_ui: 0
   responsive_image: 0
   rest: 0
-  restui: 0
   role_delegation: 0
   schema_article: 0
   schema_digital_document: 0

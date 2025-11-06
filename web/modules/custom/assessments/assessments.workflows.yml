@@ -1,7 +1,7 @@
 default:
   id: assessment_workflow
-  label: 'Assessment type default'
-  group: assessment
+  label: 'Assessments'
+  group: assessments
   states:
     draft:
       label: Draft
@@ -12,9 +12,6 @@ default:
     published:
       label: Published
       published: true
-    rejected:
-      label: Rejected
-      published: false
   transitions:
     save_draft:
       label: Save as Draft
@@ -24,11 +21,11 @@ default:
       label: Submit for Review
       from: [draft]
       to: review
-    approve:
-      label: Approve
+    require_updates:
+      label: Require updates
+      from: [review]
+      to: draft
+    publish:
+      label: Publish report
       from: [review]
       to: published
-    reject:
-      label: Reject
-      from: [review]
-      to: rejected
