@@ -12,9 +12,7 @@ text:
     value: 'New assessment report to be reviewed'
     format: full_html
   -
-    value: |
-      <p>Submitted on @assessment:changed, by @assessment:user</p>
-      <p>Please <a href="@assessment:moderate_url">moderate</a> the submission</p>
+    value: "<p>Submitted on @assessment:changed, by @assessment:user</p>\r\n<p>Please <a href=\"@assessment:moderate_url\">moderate</a> the submission</p>\r\n"
     format: full_html
 settings:
   'token options':
