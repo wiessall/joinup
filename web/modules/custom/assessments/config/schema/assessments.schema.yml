@@ -9,5 +9,16 @@ assessments.type.*:
       type: label
       label: 'Label'
 
+assessments.assessment_statement_type.*:
+  type: config_entity
+  label: 'Assessment statement type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+
 assessments.type.*.third_party.rdf_sync:
   type: rdf_sync.bundle_mapping
