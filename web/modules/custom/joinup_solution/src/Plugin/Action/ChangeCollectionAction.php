@@ -37,7 +37,7 @@ class ChangeCollectionAction extends ActionBase implements ContainerFactoryPlugi
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    readonly PrivateTempStoreFactory $private_tempstore_factory,
+    PrivateTempStoreFactory $private_tempstore_factory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->tempStore = $private_tempstore_factory->get('change_collection');
