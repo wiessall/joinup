@@ -1,0 +1,10 @@
+services:
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  Drupal\assessments\AssessmentReportNotificationInterface:
+    class: Drupal\assessments\AssessmentReportNotification
+
+  Drupal\assessments\EventSubscriber\AssessmentReportNotificationSubscriber: { }
