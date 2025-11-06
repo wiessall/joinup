@@ -1,0 +1,24 @@
+uuid: 9f093748-2d3d-4f99-b0e6-640ef13c1679
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: assessment_report_submitted_for_review
+label: 'Assessment Reports: submitted for review'
+description: 'A new assessment report has been submitted for moderator review'
+text:
+  -
+    value: 'New assessment report to be reviewed'
+    format: full_html
+  -
+    value: |
+      <p>Submitted on @assessment:changed, by @assessment:user</p>
+      <p>Please <a href="@site:base-url/collection/assessments/assessment-reports/@assessment:id/moderate">moderate</a> the submission</p>
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': false
+  purge_override: false
+  purge_methods: {  }
