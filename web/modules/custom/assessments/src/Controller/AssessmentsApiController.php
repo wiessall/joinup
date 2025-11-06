@@ -29,6 +29,12 @@ class AssessmentsApiController extends ControllerBase {
 
     $schema = Yaml::decode(file_get_contents($openapi_file));
 
+    if (isset($schema['paths']['/token']['$ref'])) {
+      // For some reason, the relative path to oauth2.openapi.yaml is messed up
+      // when rendering via controller. Override with a full URL.
+      $schema['paths']['/token']['$ref'] = $GLOBALS['base_url'] . '/modules/custom/joinup_api/openapi/oauth2.openapi.yaml#/paths/~1token';
+    }
+
     return [
       'api_docs' => [
         '#type' => 'openapi_ui',
