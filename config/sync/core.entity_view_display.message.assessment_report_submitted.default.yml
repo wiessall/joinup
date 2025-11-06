@@ -1,12 +1,12 @@
-uuid: 9041d33c-c8d2-4598-b28d-d584a9f0b6a7
+uuid: 0b9d848d-522e-40bd-be83-2eebeb348a2f
 langcode: en
 status: true
 dependencies:
   config:
-    - message.template.assessment_report_require_updates
-id: message.assessment_report_require_updates.default
+    - message.template.assessment_report_submitted
+id: message.assessment_report_submitted.default
 targetEntityType: message
-bundle: assessment_report_require_updates
+bundle: assessment_report_submitted
 mode: default
 content:
   partial_0:

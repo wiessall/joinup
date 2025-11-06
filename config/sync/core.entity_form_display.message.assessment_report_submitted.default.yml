@@ -1,0 +1,12 @@
+uuid: 6dbb5b66-c557-4cef-94f9-14f74660515b
+langcode: en
+status: true
+dependencies:
+  config:
+    - message.template.assessment_report_submitted
+id: message.assessment_report_submitted.default
+targetEntityType: message
+bundle: assessment_report_submitted
+mode: default
+content: {  }
+hidden: {  }

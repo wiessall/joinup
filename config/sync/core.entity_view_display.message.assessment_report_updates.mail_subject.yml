@@ -4,16 +4,16 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_subject
-    - message.template.assessment_report_require_updates
+    - message.template.assessment_report_updates
   module:
     - layout_builder
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: message.assessment_report_require_updates.mail_subject
+id: message.assessment_report_updates.mail_subject
 targetEntityType: message
-bundle: assessment_report_require_updates
+bundle: assessment_report_updates
 mode: mail_subject
 content:
   partial_0:
