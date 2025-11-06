@@ -24,7 +24,7 @@ security:
   # @see https://swagger.io/docs/specification/v3_0/authentication/
   - oauth2: [ ]
 paths:
-  /oauth/token:
+  /token:
     servers:
       - url: /oauth
         description: OAuth2 endpoint

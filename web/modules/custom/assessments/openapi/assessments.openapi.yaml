@@ -15,9 +15,12 @@ security:
   # @see https://swagger.io/docs/specification/v3_0/authentication/
   - oauth2: [ ]
 paths:
-  /oauth/token:
-    $ref: "../../joinup_api/openapi/oauth2.openapi.yaml#/paths/~1oauth~1token"
-  /api/assessments/v1/assessment/{id}:
+  /token:
+    $ref: "../../joinup_api/openapi/oauth2.openapi.yaml#/paths/~1token"
+  /assessment/{id}:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
     get:
       summary: Get an Assessment by ID
       description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
@@ -83,6 +86,8 @@ paths:
         reused by passing their ID, or created by passing a fully-structured
         object, as defined by oneOf in the schemas.
       operationId: createAssessment
+      tags:
+        - Assessments
       security:
         - oauth2: [ ]
       parameters:
