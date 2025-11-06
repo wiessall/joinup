@@ -58,12 +58,19 @@ class EuOssCatalogueValidator extends QueueWorkerBase implements ContainerFactor
     $solution->setNewRevision(FALSE);
     $solution
       ->setSyncing(TRUE)
-      ->setValidity($validationResult->isValid())
-      ->setErrors($validationResult->getErrors())
+      ->setValidationResult($validationResult)
       ->save();
   }
 
-
+  /**
+   * Loads the OSS solution object.
+   *
+   * @param string|int $identifier
+   *   The identifier of the OSS solution object.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   The OSS solution object, or NULL if it cannot be found.
+   */
   protected function getOssSolution(string|int $identifier): ?OssSolutionInterface {
     static $ossSolutionStorage;
     if (!$ossSolutionStorage instanceof ContentEntityStorageInterface) {
