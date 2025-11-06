@@ -1,0 +1,33 @@
+uuid: dec4ab8e-3262-496c-ac30-bc7a91fcf10a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.eu_member
+    - taxonomy.vocabulary.spatial
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    value:
+      predicate: 'http://publications.europa.eu/resource/authority/country/0005'
+      type: 'xsd:boolean'
+id: taxonomy_term.spatial.eu_member
+field_name: eu_member
+entity_type: taxonomy_term
+bundle: spatial
+label: 'European Union member state'
+description: 'Whether the country is member of the European Union'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean
