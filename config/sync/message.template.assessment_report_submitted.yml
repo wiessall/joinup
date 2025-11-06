@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - filter.format.full_html
-template: assessment_report_submitted_for_review
+template: assessment_report_submitted
 label: 'Assessment Reports: submitted for review'
 description: 'A new assessment report has been submitted for moderator review'
 text:
