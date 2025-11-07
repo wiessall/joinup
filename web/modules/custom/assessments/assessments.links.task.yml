@@ -24,3 +24,8 @@ entity.assessment_type.collection:
   title: 'List'
   route_name: entity.assessment_type.collection
   base_route: entity.assessment_type.collection
+entity.assessment_statement.collection:
+  title: 'Assessment statement entities'
+  route_name: entity.assessment_statement.collection
+  base_route: system.admin_content
+  weight: 10
