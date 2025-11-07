@@ -157,19 +157,22 @@ class MoreInModalFormatter extends FormatterBase {
           'field' => $items->getName(),
         ],
       );
+    $renderable['#more_link_title'] = $modalLinkLabel;
+    $renderable['#more_link_url'] = $url;
+    $renderable['#more_link_attributes'] = [
+      'rel' => 'nofollow',
+      'class' => ['joinup-modal__link', 'use-ajax'],
+      'data-ajax-http-method' => 'GET',
+      'data-dialog-options' => Json::encode(['width' => 800]),
+      'data-dialog-type' => 'modal',
+      'data-joinup-modal' => TRUE,
+    ];
     $renderable[$maxItemsToShow] = [
       '#type' => 'link',
       '#title' => $modalLinkLabel,
       '#url' => $url,
       '#attached' => ['library' => ['core/drupal.dialog.ajax']],
-      '#attributes' => [
-        'rel' => 'nofollow',
-        'class' => ['joinup-modal', 'use-ajax'],
-        'data-ajax-http-method' => 'GET',
-        'data-dialog-options' => Json::encode(['width' => 800]),
-        'data-dialog-type' => 'modal',
-        'data-joinup-modal' => TRUE,
-      ],
+      '#attributes' => $renderable['#more_link_attributes'],
     ];
 
     return $renderable;
