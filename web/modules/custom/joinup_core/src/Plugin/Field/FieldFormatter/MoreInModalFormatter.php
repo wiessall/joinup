@@ -142,7 +142,7 @@ class MoreInModalFormatter extends FormatterBase {
     }
 
     // Add a class for the show all modal link's field item.
-    $renderable['#items'][$maxItemsToShow]->_attributes = ['data-modal-link' => TRUE];
+    $renderable['#items'][$maxItemsToShow]->_attributes = ['class' => ['field__item--joinup-modal']];
     $renderable['#theme'] = 'field__with_modal_link';
     // If the entity is new, we cannot render the field accordingly . because
     // the entity does not have ID. This might happen on Layout Builder UI.
