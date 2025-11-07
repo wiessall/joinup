@@ -35,7 +35,6 @@ Feature: User role management
     And I go to "/admin/people"
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
-      | Administrator              |
       | Assessment reporter        |
       | Authenticated user         |
       | Developer                  |
