@@ -4,77 +4,72 @@ info:
   version: 1.0.0
   description: |
     API for submitting Assessment reports and related entities.
-
-    In order to be able to access the API, you need to request an OAuth2 client
-    from your profile. Please, head to the
-    [profile page](https://joinup.ec.europa.eu/user/edit/oauth) and request a
-    client. Once approved, you will be able to set the secret for your client
-    and use it to obtain an access token.
-
-    After you obtain the access token, you can use it to create assessment
-    reports.
 servers:
-  - url: /api/assessments/v1
+  - url: https://joinup.ddev.local
+    description: Local development server
+  - url: https://interoperable-europe.ec.europa.eu
+    description: Production server
 security:
-  - oauth2: []
+  # @todo When the assessment client type and scopes are defined in the
+  #   project, set up the security requirements accordingly.
+  # @see https://swagger.io/docs/specification/v3_0/authentication/
+  - oauth2: [ ]
 paths:
-  /oauth/token:
-    post:
-      summary: Obtain OAuth2 access token (Client Credentials)
-      description: Issue an access token using OAuth 2.0 Client Credentials flow.
-      operationId: oauthToken
-      servers:
-        - url: /
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              required: [grant_type, client_id, client_secret]
-              properties:
-                grant_type:
-                  type: string
-                  enum: [client_credentials]
-                  description: Must be 'client_credentials'
-                client_id:
-                  type: string
-                client_secret:
-                  type: string
-                scope:
-                  type: string
-                  description: Optional space-delimited scopes
-            example:
-              grant_type: client_credentials
-              client_id: your_client_id
-              client_secret: your_client_secret
-              scope: read write
+  /token:
+    $ref: "../../joinup_api/openapi/oauth2.openapi.yaml#/paths/~1token"
+  /assessment/{id}:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get an Assessment by ID
+      description: Returns an Assessment. The shape matches the POST response, with UUID `id` fields on the root and on each nested entity schema.
+      operationId: getAssessment
+      tags:
+        - Assessments
+      security:
+        - oauth2: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Assessment ID (UUID)
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          description: "Bearer access token. Format: 'Bearer <access_token>'."
+          required: true
+          schema:
+            type: string
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
       responses:
         '200':
-          description: Access token response
+          description: Assessment fetched
           content:
             application/json:
               schema:
                 type: object
-                required: [access_token, token_type, expires_in]
                 properties:
-                  access_token:
+                  id:
                     type: string
-                  token_type:
+                    format: uuid
+                  status:
                     type: string
-                    example: Bearer
-                  expires_in:
-                    type: integer
-                    format: int32
-                  scope:
-                    type: string
-              example:
-                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                token_type: Bearer
-                expires_in: 3600
-                scope: read write
-        '400':
-          description: Invalid client credentials or request
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
+                    status: ok
+                    assessment:
+                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
+                      name: Quarterly review
+        '404':
+          description: Assessment not found
           content:
             application/json:
               schema:
@@ -82,18 +77,21 @@ paths:
                 properties:
                   error:
                     type: string
-                  error_description:
-                    type: string
-              example:
-                error: invalid_client
-                error_description: Client authentication failed
   /assessment/create:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
     post:
       summary: Create an Assessment
-      description: Submit a single Assessment JSON object. Entity reference fields accept either a ID or a fully-structured object, as defined by oneOf in the schemas.
+      description: Submit a single Assessment JSON object. Some referred
+        objects (such as provider, binding_requirement, asset) can be either
+        reused by passing their ID, or created by passing a fully-structured
+        object, as defined by oneOf in the schemas.
       operationId: createAssessment
+      tags:
+        - Assessments
       security:
-        - oauth2: []
+        - oauth2: [ ]
       parameters:
         - in: header
           name: Authorization
@@ -117,7 +115,11 @@ paths:
                     - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
                   provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
                   results_in:
-                    - "6b8d3f4e-2e24-4c2f-9a32-7f3f2e0e7b9f"
+                    - interpretation: Compliant with conditions
+                      judgement: positive
+                      type: organisational_interoperability
+                      documents:
+                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
               asStructured:
                 summary: Submit with structured nested entities
                 value:
@@ -155,9 +157,41 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: final
+                      type: organisational_interoperability
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
+                    - interpretation: Requires follow-up
+                      judgement: conditional
+                      type: technical_interoperability
+              mixed:
+                summary: Submit with a mix of references and structured entities
+                value:
+                  name: Quarterly review
+                  binding_requirement:
+                    - "4f2f7c40-2e8b-4a7a-9f04-4a37bb7a0e9e"
+                    - documented_in: "https://example.com/law/123"
+                      name: Article 5
+                      expression:
+                        - name: Legal Act 2024
+                          description: Reference to an EU legal expression
+                          document_in: "https://example.com/eli/act"
+                          expression_type: "http://data.europa.eu/eli/ontology#LegalExpression"
+                        - "7c9e1f5a-3d6b-4e8f-9c3a-2b1f4e5d6c7b"
+                      affects:
+                        - description: Online permit application
+                          spatial: BE
+                          identifier: ps-123
+                          name: Permit Application Service
+                          thematic_area: digital_and_innovation_services
+                  provider: "b2c63c0d-3f57-4db6-8e92-6a8f3f50e1a1"
+                  results_in:
+                    - interpretation: Compliant with conditions
+                      judgement: positive
+                      type: legal_interoperability
+                      documents:
+                        - file_uri: "https://files.example.com/documents/statement-1.pdf"
+                    - interpretation: Requires follow-up
+                      judgement: conditional
       responses:
         '201':
           description: Assessment created
@@ -168,7 +202,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    format: id
+                    format: uuid
                   status:
                     type: string
                     example: created
@@ -180,6 +214,7 @@ paths:
                     id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                     status: created
                     assessment:
+                      id: "9f9d7a69-0a6b-4a7c-9c02-5a8834c9a123"
                       name: Quarterly review
         '400':
           description: Invalid request
@@ -197,12 +232,12 @@ components:
       flows:
         clientCredentials:
           tokenUrl: /oauth/token
-          scopes: {}
+          scopes: { }
   schemas:
     # Generic reusable types
     ID:
       type: string
-      format: string
+      format: uuid
       description: An ID reference to an existing entity.
 
     Iso3166Alpha2:
@@ -223,6 +258,10 @@ components:
       type: object
       required: [ name ]
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         binding_requirement:
@@ -238,16 +277,19 @@ components:
             - $ref: '#/components/schemas/ID'
             - $ref: '#/components/schemas/Organisation'
         results_in:
-          description: References to Statements; allow multiple. Each item may be an ID or a structured object.
+          description: References to Statements; allow multiple. Each item is a
+            structured object.
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/ID'
-              - $ref: '#/components/schemas/Statement'
+            $ref: '#/components/schemas/Statement'
 
     BindingRequirement:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         documented_in:
           $ref: '#/components/schemas/Uri'
         name:
@@ -291,6 +333,10 @@ components:
     Expression:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         description:
@@ -307,6 +353,10 @@ components:
     PublicService:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         description:
           type: string
         spatial:
@@ -332,6 +382,10 @@ components:
     Participation:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         country:
           $ref: '#/components/schemas/Iso3166Alpha2'
         participation_type:
@@ -353,6 +407,10 @@ components:
     Agent:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         agent_type:
@@ -365,6 +423,10 @@ components:
     Asset:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         landing_page:
@@ -373,12 +435,20 @@ components:
     File:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         file_uri:
           $ref: '#/components/schemas/Uri'
 
     Organisation:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         name:
           type: string
         description:
@@ -398,12 +468,21 @@ components:
     Statement:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         interpretation:
           type: string
         judgement:
           type: string
         type:
           type: string
+          enum:
+            - legal_interoperability
+            - organisational_interoperability
+            - semantic_interoperability
+            - technical_interoperability
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
