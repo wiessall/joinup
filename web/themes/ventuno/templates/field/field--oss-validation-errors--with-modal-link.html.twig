@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Template for OSS publiccode.yml validation errors' field modal link.
+ */
+#}
+<a href="{{ more_link_url }}" {{ more_link_attributes|without('href') }}>
+  {#
+    @todo Choose and put an icon here, pick an accessible link text for screen
+     reader users.
+  #}
+  {{ 'Show publiccode.yml violations'|trans }}
+</a>
