@@ -5,10 +5,10 @@ info:
   description: |
     API for submitting Assessment reports and related entities.
 servers:
-  - url: https://joinup.ddev.local
-    description: Local development server
-  - url: https://interoperable-europe.ec.europa.eu
-    description: Production server
+  - url: /oauth
+    description: OAuth2 endpoint
+  - url: /api/assessments/v1
+    description: Assessments API endpoint
 security:
   # @todo When the assessment client type and scopes are defined in the
   #   project, set up the security requirements accordingly.
