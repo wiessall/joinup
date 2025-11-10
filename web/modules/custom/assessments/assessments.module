@@ -111,7 +111,6 @@ function assessments_entity_bundle_info(): array {
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
-  // Change the label of the 'default' bundle of assessment entity type.
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
