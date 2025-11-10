@@ -122,14 +122,24 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
  * Implements hook_views_pre_render().
  */
 function assessments_views_pre_render(ViewExecutable $view): void {
+  // Instead of false we want to show an empty string.
+  // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
   if ($view->id() == 'assessments_rest') {
+    $results = $view->result;
     if ($view->current_display === 'public_organisation') {
-      $results = $view->result;
       foreach ($results as $result) {
         if (empty($result->_entity->description->getValue())) {
-          // Instead of false we want to show an empty string.
-          // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
           $result->_entity->description->setValue(['']);
+        }
+        if (empty($result->_entity->country->getValue())) {
+          $result->_entity->country->setValue(['']);
+        }
+      }
+    }
+    elseif ($view->current_display === 'asset') {
+      foreach ($results as $result) {
+        if (empty($result->_entity->landing_page->getValue())) {
+          $result->_entity->landing_page->setValue(['']);
         }
       }
     }
