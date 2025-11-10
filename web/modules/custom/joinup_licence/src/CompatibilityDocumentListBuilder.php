@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CompatibilityDocumentListBuilder extends EntityListBuilder {
 
   public function __construct(
-    readonly EntityTypeInterface $entity_type,
+    EntityTypeInterface $entity_type,
     EntityStorageInterface $storage,
     protected $redirectDestination,
     protected readonly JoinupLicenceCompatibilityRulePluginManager $pluginManager,

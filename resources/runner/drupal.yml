@@ -241,6 +241,7 @@ drupal:
           'update',
           'upgrade_status',
           'views_ui',
+          'restui',
         ];
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
