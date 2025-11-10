@@ -56,7 +56,7 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
    *   in case no cookie is set, or the cookie contains invalid data.
    */
   protected function getContactInformation(): ?ContactInformationInterface {
-    if ($contact_information_id = $this->currentRequest->cookies->get($this->getCookieName())) {
+    if ($contact_information_id = $this->requestStack->getCurrentRequest()?->cookies->get($this->getCookieName())) {
       // @todo This was changed from node to node during the migration of
       //   groups which means that there is no test for it?
       /** @var \Drupal\Core\Entity\ContentEntityInterface $contact_information */
