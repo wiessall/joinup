@@ -4,11 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.field.assessment.report.affected_party
-    - field.field.assessment.report.asset
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.expression
-    - field.field.assessment.report.has_related_service
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
@@ -18,277 +14,30 @@ dependencies:
     - field.field.assessment.report.statement_documents
     - field.field.assessment.report.technical_interoperability
   module:
-    - field_group
     - file
     - inline_entity_form
     - joinup_workflow
-third_party_settings:
-  field_group:
-    group_general_information:
-      children:
-        - name
-        - group_page1text1
-        - provider
-        - expression
-      label: '1. General information'
-      region: content
-      parent_name: ''
-      weight: 0
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: false
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
-    group_binding_requirements:
-      children:
-        - group_page2help
-        - has_related_service
-        - group_assessment_requirements
-        - binding_requirement
-        - affected_party
-      label: '2. Binding requirements'
-      region: content
-      parent_name: ''
-      weight: 1
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: true
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
-    group_statements:
-      children:
-        - group_assessments_statements
-      label: '3. Results'
-      region: content
-      parent_name: ''
-      weight: 2
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: true
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
-    group_page1text1:
-      children: {  }
-      label: Page1Text1
-      region: content
-      parent_name: group_general_information
-      weight: 22
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<div><h4>Union entity or public sector body which is providing the report.</h4></div>'
-          format: content_editor
-    group_page2help:
-      children: {  }
-      label: Page2Help
-      region: content
-      parent_name: group_binding_requirements
-      weight: 4
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<div><p>This section collects information on the assessed binding requirements.</p><p>The concept of ‘Binding requirements’ is defined in Article 2(15) IEA as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and</li><li>which has an effect on cross-border interoperability.</li></ul><p>For more information please consult the guidelines.</p></div><div><h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA.</p><p>‘<em>Digital services provided by Union entities or public sector bodies to one another or to natural or legal persons in the Union, and requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ – Article 2(2) IEA</p></div>'
-          format: content_editor
-    group_assessment_requirements:
-      children: {  }
-      label: 'Assessment requirements'
-      region: content
-      parent_name: group_binding_requirements
-      weight: 6
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<h4>Identification of binding requirements assessed</h4><p>List the binding requirement(s) assessed.</p>'
-          format: content_editor
-    group_assessments_statements:
-      children:
-        - legal_interoperability
-        - organisational_interoperability
-        - semantic_interoperability
-        - technical_interoperability
-      label: 'Assessments statements'
-      region: content
-      parent_name: group_statements
-      weight: 20
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<div><h2>Identified effects on cross-border interoperability</h2></div><div><p>The Interoperable Europe Act requires the identification of effects on cross-border interoperability, i.e., on the legal, organisational, semantic and technical interoperability of digital public services that exchange data across borders.</p><p>Taking the EIF as the main starting point for your assessment means considering the extent to which the proposed requirements enable or hinder interoperability. This could also show whether additional requirements are needed. As explained above, it is necessary to keep in mind that <strong>the assessment does not need to show the way towards full interoperability, but it should help detect ways towards </strong><em><strong>more </strong></em><strong>interoperability.</strong></p><p>Please tick the most appropriate and provide a brief description.</p></div>'
-          format: content_editor
-    group_supporting_documents:
-      children:
-        - requirement_documents
-        - statement_documents
-        - state
-      label: '4. Supporting documents'
-      region: content
-      parent_name: ''
-      weight: 4
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: true
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
-    group_relevant_assets:
-      children:
-        - asset
-      label: '3. Relevant assets'
-      region: content
-      parent_name: ''
-      weight: 3
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: true
-        back_button_text: Back
-        next_button_text: Next
-        step_help: ''
-    group_review:
-      children: {  }
-      label: Review
-      region: hidden
-      parent_name: ''
-      weight: 20
-      format_type: form_step
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        show_step_title: true
-        step_description: ''
-        back_button_show: true
-        back_button_text: Back
-        next_button_text: Submit
-        required_fields: true
-        step_help: ''
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
 mode: default
 content:
-  affected_party:
-    type: inline_entity_form_simple
-    weight: 8
-    region: content
-    settings:
-      form_mode: default
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: false
-      revision: false
-    third_party_settings: {  }
-  asset:
-    type: inline_entity_form_complex
-    weight: 5
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Relevant asset'
-      label_plural: 'Relevant assets'
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
-      removed_reference: optional
-    third_party_settings: {  }
   binding_requirement:
     type: inline_entity_form_simple
-    weight: 7
+    weight: 2
     region: content
     settings:
       form_mode: default
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: true
-      revision: false
-    third_party_settings: {  }
-  expression:
-    type: inline_entity_form_simple
-    weight: 24
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: Expression
-      label_plural: Expressions
-      collapsible: false
-      collapsed: true
-      revision: false
-    third_party_settings: {  }
-  has_related_service:
-    type: inline_entity_form_simple
-    weight: 5
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Affected service'
-      label_plural: 'Affected services'
       collapsible: false
       collapsed: true
       revision: false
     third_party_settings: {  }
   legal_interoperability:
     type: inline_entity_form_simple
-    weight: 25
+    weight: 3
     region: content
     settings:
       form_mode: default
@@ -301,7 +50,7 @@ content:
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 21
+    weight: 0
     region: content
     settings:
       size: 60
@@ -309,7 +58,7 @@ content:
     third_party_settings: {  }
   organisational_interoperability:
     type: inline_entity_form_simple
-    weight: 26
+    weight: 4
     region: content
     settings:
       form_mode: default
@@ -322,7 +71,7 @@ content:
     third_party_settings: {  }
   provider:
     type: inline_entity_form_simple
-    weight: 23
+    weight: 1
     region: content
     settings:
       form_mode: default
@@ -335,14 +84,14 @@ content:
     third_party_settings: {  }
   requirement_documents:
     type: file_generic
-    weight: 4
+    weight: 7
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   semantic_interoperability:
     type: inline_entity_form_simple
-    weight: 27
+    weight: 5
     region: content
     settings:
       form_mode: default
@@ -355,21 +104,21 @@ content:
     third_party_settings: {  }
   state:
     type: state_machine_buttons
-    weight: 6
+    weight: 9
     region: content
     settings:
       use_transition_label: 0
     third_party_settings: {  }
   statement_documents:
     type: file_generic
-    weight: 5
+    weight: 8
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   technical_interoperability:
     type: inline_entity_form_simple
-    weight: 28
+    weight: 6
     region: content
     settings:
       form_mode: default

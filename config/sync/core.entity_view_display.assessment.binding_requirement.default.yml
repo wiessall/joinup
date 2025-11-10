@@ -4,14 +4,38 @@ status: true
 dependencies:
   config:
     - assessments.type.binding_requirement
+    - field.field.assessment.binding_requirement.affected_party
+    - field.field.assessment.binding_requirement.asset
     - field.field.assessment.binding_requirement.documented_in
+    - field.field.assessment.binding_requirement.expression
+    - field.field.assessment.binding_requirement.has_related_service
+    - field.field.assessment.binding_requirement.requirement_documents
   module:
+    - file
     - link
 id: assessment.binding_requirement.default
 targetEntityType: assessment
 bundle: binding_requirement
 mode: default
 content:
+  affected_party:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  asset:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
   documented_in:
     type: link
     label: above
@@ -24,6 +48,24 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  expression:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  has_related_service:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
   name:
     type: string
     label: above
@@ -31,6 +73,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  requirement_documents:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 5
     region: content
 hidden:
   created: true
