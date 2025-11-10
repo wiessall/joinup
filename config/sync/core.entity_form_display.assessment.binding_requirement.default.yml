@@ -11,42 +11,9 @@ dependencies:
     - field.field.assessment.binding_requirement.has_related_service
     - field.field.assessment.binding_requirement.requirement_documents
   module:
-    - field_group
     - file
     - inline_entity_form
     - link
-third_party_settings:
-  field_group:
-    group_requirement_name:
-      children: {  }
-      label: 'Requirement Name'
-      region: content
-      parent_name: ''
-      weight: 0
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<p><strong>Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>'
-          format: content_editor
-    group_requirement_documented_in:
-      children: {  }
-      label: 'Requirement Documented in'
-      region: content
-      parent_name: ''
-      weight: 2
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<p><strong>Provide a legal reference for the binding requirement, if available&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>'
-          format: content_editor
 id: assessment.binding_requirement.default
 targetEntityType: assessment
 bundle: binding_requirement
