@@ -370,7 +370,6 @@
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
-                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/3098560.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
