@@ -11,24 +11,25 @@
 {% set h1_attributes = create_attribute().addClass(['page-title__title']) %}
 
 {% set classes = [
-  'page-title__title', 'h1',
+  'page-title__title',
   additional_content.hide_title ? 'visually-hidden'
 ] %}
 
 {% if title %}
   <div class="page-title page__title-wrapper my-4">
-    <h1 class="visually-hidden">{{ additional_content.parent_page_title }} / {{ title|striptags }} </h1>
-    <span{{ h1_attributes.addClass(classes) }}>
-      {{ title }}
-      {% if permalink %}
-        <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
-          {{ pattern('icon', {
-            name: 'link-45deg',
-            size: 'm'
-          }) }}
-        </a>
-      {% endif %}
-    </span>
+    <h1{{ h1_attributes.addClass(classes) }}>
+      <span>
+        {{ title|striptags }}
+        {% if permalink %}
+          <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+            {{ pattern('icon', {
+              name: 'link-45deg',
+              size: 'm'
+            }) }}
+          </a>
+        {% endif %}
+      </span>
+    </h1>
 
     <div class="page-title__details mb-4">
       {% if additional_content.is_archived %}
