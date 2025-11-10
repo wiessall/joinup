@@ -1,0 +1,28 @@
+uuid: fa3014bb-c01b-4ed0-b8e6-ef0dc67e1a0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_validation_errors
+    - filter.format.plain_text
+    - node.type.oss_solution
+  module:
+    - text
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.oss_solution.oss_validation_errors
+field_name: oss_validation_errors
+entity_type: node
+bundle: oss_solution
+label: 'Validation errors'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long
