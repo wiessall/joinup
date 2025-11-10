@@ -51,7 +51,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    */
   protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     if ($group = $this->getGroup()) {
-      $wasModal = $this->currentRequest->cookies->get(static::MODAL_SUBSCRIBE_COOKIE_NAME);
+      $wasModal = $this->requestStack->getCurrentRequest()?->cookies->get(static::MODAL_SUBSCRIBE_COOKIE_NAME);
       setcookie(static::MODAL_SUBSCRIBE_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
@@ -97,7 +97,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    *   set, or the cookie contains invalid data.
    */
   protected function getGroup(): ?GroupInterface {
-    if ($group_id = $this->currentRequest->cookies->get($this->getCookieName())) {
+    if ($group_id = $this->requestStack->getCurrentRequest()?->cookies->get($this->getCookieName())) {
       $group = $this->entityTypeManager->getStorage('node')->load($group_id);
       if ($group instanceof GroupInterface) {
         return $group;
