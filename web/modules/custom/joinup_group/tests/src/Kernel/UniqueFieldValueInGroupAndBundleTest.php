@@ -7,6 +7,7 @@ namespace Drupal\Tests\joinup_group\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\entity_test\EntityTestHelper;
 
 /**
  * Tests the UniqueFieldValueInGroupAndBundle constraint.
@@ -54,15 +55,15 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
     $this->installEntitySchema('user');
 
     // Create two group bundles.
-    entity_test_create_bundle('group');
-    entity_test_create_bundle('other_group');
+    EntityTestHelper::createBundle('group');
+    EntityTestHelper::createBundle('other_group');
     $this->container->get('config.factory')->getEditable('og.settings')
       ->set('groups.entity_test', ['group', 'other_group'])
       ->save();
 
     // Create two group content bundles.
-    entity_test_create_bundle('group_content', 'Group 1');
-    entity_test_create_bundle('other_group_content', 'Group 2');
+    EntityTestHelper::createBundle('group_content', 'Group 1');
+    EntityTestHelper::createBundle('other_group_content', 'Group 2');
 
     // Create groups.
     $this->group['group1'] = EntityTest::create(['type' => 'group']);
