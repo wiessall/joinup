@@ -43,6 +43,28 @@ final class ResourceParser implements ResourceParserInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getEntityValidationErrors(): array {
+    $errors = [];
+    foreach ($this->models as $model) {
+      $entity = \Drupal::entityTypeManager()
+        ->getStorage('assessment')
+        ->create($model->getEntityValues());
+
+      $entity_errors = $entity->validate();
+      if ($entity_errors->count() > 0) {
+        foreach ($entity_errors as $error) {
+          $errors[] = [
+            'message' => $error->getMessage(),
+          ];
+        }
+      }
+    }
+    return $errors;
+  }
+
+  /**
    * Returns an array from a single value.
    *
    * @param array|string|null $entry

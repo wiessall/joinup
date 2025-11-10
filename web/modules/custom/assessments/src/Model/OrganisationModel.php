@@ -12,6 +12,13 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'organisation';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'name',

@@ -15,6 +15,13 @@ class BindingRequirementModel extends AssessmentModelBase implements AssessmentM
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'binding_requirement';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'documented_in',

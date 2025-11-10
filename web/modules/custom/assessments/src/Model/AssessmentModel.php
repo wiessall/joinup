@@ -12,6 +12,13 @@ class AssessmentModel extends AssessmentModelBase implements AssessmentModelInte
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'assessment';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return ['name'];
   }

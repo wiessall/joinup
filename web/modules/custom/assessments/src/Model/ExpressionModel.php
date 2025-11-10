@@ -12,6 +12,13 @@ class ExpressionModel extends AssessmentModelBase implements AssessmentModelInte
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'expression';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'name',
