@@ -1,23 +1,23 @@
-uuid: a1167c58-33f4-4d28-92eb-8fe13cb915cf
+uuid: 442b3151-a210-4a25-b859-a6f5d617d2f5
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.report
-    - assessments.type.asset
-    - field.storage.assessment.asset
+    - assessments.type.binding_requirement
+    - assessments.type.public_service
+    - field.storage.assessment.has_related_service
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.asset
-field_name: asset
+id: assessment.binding_requirement.has_related_service
+field_name: has_related_service
 entity_type: assessment
-bundle: report
-label: Asset
+bundle: binding_requirement
+label: 'Affected service'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -25,7 +25,7 @@ settings:
   handler: 'default:assessment'
   handler_settings:
     target_bundles:
-      asset: asset
+      public_service: public_service
     sort:
       field: _none
       direction: ASC

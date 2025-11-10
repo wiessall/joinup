@@ -4,11 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.field.assessment.report.affected_party
-    - field.field.assessment.report.asset
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.expression
-    - field.field.assessment.report.has_related_service
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
@@ -382,42 +378,6 @@ targetEntityType: assessment
 bundle: report
 mode: default
 content:
-  affected_party:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  asset:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 4
-    region: content
-  expression:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  has_related_service:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
   legal_interoperability:
     type: entity_reference_label
     label: above

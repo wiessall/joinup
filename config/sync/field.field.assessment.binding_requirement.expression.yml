@@ -1,21 +1,21 @@
-uuid: f934eef4-5a94-47dc-9528-1cf2c08ddc18
+uuid: 695ab04a-97ed-40cc-9b18-095d82152a90
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.report
-    - assessments.type.public_service
-    - field.storage.assessment.has_related_service
+    - assessments.type.binding_requirement
+    - assessments.type.expression
+    - field.storage.assessment.expression
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.has_related_service
-field_name: has_related_service
+id: assessment.binding_requirement.expression
+field_name: expression
 entity_type: assessment
-bundle: report
-label: 'Affected service'
+bundle: binding_requirement
+label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
 description: ''
 required: true
 translatable: false
@@ -25,7 +25,7 @@ settings:
   handler: 'default:assessment'
   handler_settings:
     target_bundles:
-      public_service: public_service
+      expression: expression
     sort:
       field: _none
       direction: ASC
