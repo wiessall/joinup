@@ -10,94 +10,106 @@ namespace Drupal\assessments\Model;
 abstract class AssessmentModelBase implements AssessmentModelInterface{
 
   /**
-   * Raw payload data for this model (structured object or UUID string wrapped upstream).
+   * The generated or existing entity ID.
+   *
+   * @var string
    */
-  public function __construct(protected array $data) {}
+  protected string $entityId;
 
   /**
-   * If this model references an existing entity by UUID, store it here.
+   * Indicates whether the entity is new or not.
+   *
+   * @var bool
    */
-  protected ?string $existingUuid = NULL;
+  protected bool $isNew = TRUE;
 
   /**
-   * Internal created entity ID after save.
+   * The parent model.
+   *
+   * @var \Drupal\assessments\Model\AssessmentModelInterface|null
    */
-  protected ?string $createdId = NULL;
+  protected ?AssessmentModelInterface $parent;
 
   /**
-   * Returns the bundle of the assessment_content entity.
+   * A parsed array of entity values.
+   *
+   * @var array
+   */
+  protected array $entityValues = [];
+
+  /**
+   * An array of validation errors.
+   *
+   * @var array
+   */
+  protected array $errors = [];
+
+  public function __construct(array $data = [], ?AssessmentModelInterface $parent = NULL) {
+    if (in_array('id', $this->getAllowedResourceProperties()) && !empty($data['id'])) {
+      $this->isNew = FALSE;
+    }
+    else {
+      $this->isNew = TRUE;
+    }
+
+    foreach ($data as $key => $value) {
+      if (in_array($key, $this->getAllowedResourceProperties())) {
+        $this->entityValues[$key] = $value;
+      }
+      elseif (!in_array($key, $this->getReferencedEntityProperties())) {
+        $this->errors[] = "Invalid property: {$key}";
+      }
+    }
+
+    $this->parent = $parent;
+  }
+
+  /**
+   * Returns a list of allowed resource incoming API properties.
+   *
+   * @return array{string}
+   *   An array of allowed resource properties.
+   */
+  abstract protected function getAllowedResourceProperties(): array;
+
+  /**
+   * Returns the ID of the entity, either new or existing.
    *
    * @return string
-   *   The bundle machine name.
+   *   The entity ID.
    */
-  abstract protected function bundle(): string;
+  public function getEntityId(): string {
+    return $this->entityId;
+  }
 
   /**
-   * Extracts the entity values from the data.
+   * Returns an initialized instance of the appropriate model.
    *
-   * @return array
-   *   The entity values.
+   * @param array $data
+   *   The data to be parsed.
+   * @param \Drupal\assessments\Model\AssessmentModelInterface|null $parent
+   *   The parent model.
+   * @param string $type
+   *   The type of the model.
+   *
+   * @return \Drupal\assessments\Model\AssessmentModelInterface
+   *   The initialized model.
    */
-  abstract protected function getEntityValues(): array;
+  public static function createFromContext(array $data, ?AssessmentModelInterface $parent = NULL, string $type = 'assessment'): AssessmentModelInterface {
+    // @todo Move to the interface as a constant.
+    $mapping = [
+      'affects' => PublicServiceModel::class,
+      'assessment' => AssessmentModel::class,
+      'asset' => AssetModel::class,
+      'binding_requirement' => BindingRequirementModel::class,
+      'documents' => DocumentModel::class,
+      'expression' => ExpressionModel::class,
+      'has_participation' => ParticipationModel::class,
+      'organisation' => OrganisationModel::class,
+      'results_in' => StatementModel::class,
+    ];
 
-  /**
-   * Loads an existing entity by UUID if possible.
-   */
-  protected function loadExistingByUuid(?string $uuid): ?\Drupal\Core\Entity\EntityInterface {
-    if (!$uuid) {
-      return NULL;
-    }
-    $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
-    $result = $storage->loadByProperties(['uuid' => $uuid]);
-    if ($result) {
-      return reset($result) ?: NULL;
-    }
-    return NULL;
-  }
-
-  /**
-   * Returns the saved entity id (if any).
-   */
-  public function getSavedId(): ?string {
-    return $this->createdId;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validate(): array {
-    // If this represents an existing entity by UUID, skip creation validation.
-    if (!empty($this->data['_uuid'])) {
-      $entity = $this->loadExistingByUuid($this->data['_uuid']);
-      if ($entity) {
-        return [];
-      }
-    }
-
-    $entity = \Drupal::entityTypeManager()->getStorage('assessment_content')->create([
-      'type' => $this->bundle(),
-    ] + $this->getEntityValues());
-    return $entity->validate();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function save(): void {
-    // If payload references an existing entity via _uuid, try loading it and return.
-    if (!empty($this->data['_uuid'])) {
-      $existing = $this->loadExistingByUuid($this->data['_uuid']);
-      if ($existing) {
-        $this->createdId = (string) $existing->id();
-        return;
-      }
-    }
-
-    $values = ['type' => $this->bundle(), 'created' => REQUEST_TIME, 'uid' => \Drupal::currentUser()->id()] + $this->getEntityValues();
-    $storage = \Drupal::entityTypeManager()->getStorage('assessment_content');
-    $entity = $storage->create($values);
-    $entity->save();
-    $this->createdId = (string) $entity->id();
+    return new $mapping[$type]($data, $parent);
   }
 
 }

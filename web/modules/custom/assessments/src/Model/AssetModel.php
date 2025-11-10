@@ -9,17 +9,21 @@ namespace Drupal\assessments\Model;
  */
 class AssetModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
-  protected function bundle(): string {
-    return 'asset';
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'name',
+      'landing_page',
+    ];
   }
 
-  protected function getEntityValues(): array {
-    return [
-      'name' => $this->data['name'] ?? NULL,
-      'landing_page' => $this->data['landing_page'] ?? NULL,
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function getReferencedEntityProperties(): array {
+    return [];
   }
 
 }

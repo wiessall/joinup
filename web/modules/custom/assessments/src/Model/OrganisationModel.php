@@ -9,19 +9,23 @@ namespace Drupal\assessments\Model;
  */
 class OrganisationModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
-  protected function bundle(): string {
-    return 'public_organisation';
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'name',
+      'description',
+      'organisation_type',
+      'country',
+    ];
   }
 
-  protected function getEntityValues(): array {
-    return [
-      'name' => $this->data['name'] ?? NULL,
-      // API uses organisation_type; field is organization_type in Joinup.
-      'organization_type' => $this->data['organisation_type'] ?? ($this->data['organization_type'] ?? NULL),
-      'country' => $this->data['country'] ?? NULL,
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function getReferencedEntityProperties(): array {
+    return [];
   }
 
 }
