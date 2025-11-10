@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_validation_errors
     - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
@@ -49,6 +50,7 @@ dependencies:
     - joinup_oss_catalogue
     - layout_builder
     - template_suggestion
+    - text
     - user
 third_party_settings:
   layout_builder:
@@ -89,6 +91,13 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 0
+    region: content
+  oss_validation_errors:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   description: true

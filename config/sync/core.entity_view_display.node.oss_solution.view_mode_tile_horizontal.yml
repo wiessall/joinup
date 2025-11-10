@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_validation_errors
     - field.field.node.oss_solution.oss_validation_status
     - field.field.node.oss_solution.oss_vitality_index
     - field.field.node.oss_solution.oss_vitality_index_range
@@ -159,6 +160,7 @@ hidden:
   oss_source: true
   oss_source_hash: true
   oss_used_by: true
+  oss_validation_errors: true
   oss_validation_status: true
   oss_vitality_index: true
   oss_vitality_index_range: true

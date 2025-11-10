@@ -18,12 +18,17 @@
     label_display == 'visually_hidden' ? 'visually-hidden',
   ]
 %}
+{%
+  set item_classes = item_classes|default([
+    'field__item'
+  ])
+%}
 
 {% if label_hidden %}
   {% if multiple %}
     <div{{ attributes.addClass(classes) }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        <div{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</div>
       {% endfor %}
     </div>
   {% else %}
@@ -34,13 +39,15 @@
 {% else %}
   <div{{ attributes.addClass(classes) }}>
     <div{{ title_attributes.addClass(title_classes) }}>
-      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
+      {% block label -%}
+        {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
+      {%- endblock %}
     </div>
     {% if multiple %}
     <div class="field__items">
       {% endif %}
       {% for item in items %}
-        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+        <div{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</div>
       {% endfor %}
       {% if multiple %}
     </div>
