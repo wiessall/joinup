@@ -264,7 +264,6 @@
     "extra": {
         "drupal-lenient": {
             "allowed-list": [
-                "drupal/file_url",
                 "drupal/other_view_filter"
             ]
         },
