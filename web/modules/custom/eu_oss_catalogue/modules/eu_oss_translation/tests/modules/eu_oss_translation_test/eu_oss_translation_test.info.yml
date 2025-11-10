@@ -1,7 +1,7 @@
 name: 'EU OSS Translation Test'
 type: module
 description: 'Test module to mock eTranslation service.'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ">=10.0"
 package: Testing
 dependencies:
   - drupal:tmgmt
