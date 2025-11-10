@@ -17,6 +17,7 @@ Feature: User role management
     And I click "People" in the "Administration toolbar" region
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
+      | Assessment reporter        |
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
@@ -36,6 +37,7 @@ Feature: User role management
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
       | Administrator              |
+      | Assessment reporter        |
       | Authenticated user         |
       | Developer                  |
       | Licence manager            |
