@@ -3075,7 +3075,7 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Finds span with h1 class and some text.
+   * Finds h1 with a span and some text.
    *
    * @param string $title
    *   Title of header link.
@@ -3093,7 +3093,7 @@ class JoinupContext extends RawDrupalContext {
         $this->getSession(),
         'link',
         'css',
-        '.h1:not(a.h1)'
+        'h1 span'
       );
     }
   }
