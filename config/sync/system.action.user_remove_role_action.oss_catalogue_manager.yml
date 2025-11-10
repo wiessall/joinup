@@ -1,0 +1,14 @@
+uuid: e4522a1f-98ea-4eb7-b333-ae2b97280329
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.oss_catalogue_manager
+  module:
+    - user
+id: user_remove_role_action.oss_catalogue_manager
+label: 'Remove the OSS Catalogue Manager role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: oss_catalogue_manager
