@@ -26,10 +26,6 @@ third_party_settings:
       status: false
       settings:
         age: 0
-label_singular: 'open source software contact'
-label_plural: 'open source software contacts'
-label_count:
-  - !!binary MSBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0A0Bjb3VudCBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0cw==
 name: 'Open Source Software Contact'
 type: oss_contact
 description: 'An open source software contact'
@@ -37,3 +33,7 @@ help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false
+label_singular: 'open source software contact'
+label_plural: 'open source software contacts'
+label_count:
+  - !!binary MSBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0A0Bjb3VudCBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBjb250YWN0cw==

@@ -252,10 +252,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             placeholder: 'Start typing to search…'
           is_grouped: false
           group_info:
@@ -301,10 +297,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
             min_placeholder: ''
             max_placeholder: ''
             placeholder: ''
