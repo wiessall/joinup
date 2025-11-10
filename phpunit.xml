@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         bootstrap="vendor/weitzman/drupal-test-traits/src/bootstrap.php"
-         colors="true"
-         beStrictAboutTestsThatDoNotTestAnything="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutChangesToGlobalState="true"
-         failOnWarning="true"
-         printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
-         verbose="true"
-         processIsolation="true"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    bootstrap="vendor/weitzman/drupal-test-traits/src/bootstrap.php"
+    colors="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutChangesToGlobalState="true"
+    failOnWarning="true"
+    processIsolation="true"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+    cacheDirectory=".phpunit.cache"
+>
   <php>
     <!-- Set error reporting to E_ALL. -->
     <ini name="error_reporting" value="32767"/>
@@ -47,6 +46,21 @@
         ['chrome', null, 'http://localhost:4444/wd/hub']").
     -->
   </php>
+
+  <extensions>
+    <!-- Functional tests HTML output logging. -->
+    <!-- For documentation check See web/core/phpunit.xml.dist -->
+    <bootstrap class="Drupal\TestTools\Extension\HtmlLogging\HtmlOutputLogger">
+      <parameter name="outputDirectory" value="sites/simpletest/browser_output"/>
+      <parameter name="verbose" value="true"/>
+    </bootstrap>
+    <!-- Debug dump() printer. -->
+    <bootstrap class="Drupal\TestTools\Extension\Dump\DebugDump">
+      <parameter name="colors" value="true"/>
+      <parameter name="printCaller" value="true"/>
+    </bootstrap>
+  </extensions>
+
   <testsuites>
     <testsuite name="unit">
       <directory>web/modules/custom/**/tests/src/Unit</directory>
@@ -68,10 +82,4 @@
       <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
     </testsuite>
   </testsuites>
-  <listeners>
-    <listener class="\Drupal\Tests\Listeners\DrupalListener"/>
-  </listeners>
-  <extensions>
-    <extension class="Joinup\PhpUnit\Hooks\DrupalSettingsHook"/>
-  </extensions>
 </phpunit>
