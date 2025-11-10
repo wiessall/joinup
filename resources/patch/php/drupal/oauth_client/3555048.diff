@@ -37,17 +37,10 @@ index 0000000000000000000000000000000000000000..2262c6918db4d416d65c6548d33ba6a2
 +    settings:
 +      filter_url_length: 72
 diff --git a/oauth_client.module b/oauth_client.module
-index 3c4a53008daee1251b4539e596d6c08c8c3a6b9b..bd0ef7fbeadd9f761da02552875de049a9f273a2 100644
+index 3c4a53008daee1251b4539e596d6c08c8c3a6b9b..3174b51467cfcde3c01ff7eb4ed2b1a35b292933 100644
 --- a/oauth_client.module
 +++ b/oauth_client.module
-@@ -7,11 +7,14 @@
- 
- declare(strict_types=1);
- 
-+use Drupal\Core\Form\FormStateInterface;
-+use Drupal\Core\Access\AccessResultInterface;
-+use Drupal\Core\Session\AccountInterface;
- use Drupal\Core\Entity\EntityInterface;
+@@ -11,7 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
  use Drupal\Core\Hook\Attribute\LegacyHook;
  use Drupal\Core\Render\BubbleableMetadata;
  use Drupal\oauth_client\Entity\OauthClientRequestInterface;
@@ -56,7 +49,7 @@ index 3c4a53008daee1251b4539e596d6c08c8c3a6b9b..bd0ef7fbeadd9f761da02552875de049
  use Drupal\oauth_client\Hook\OauthClientEntityDeleteHandler;
  use Drupal\oauth_client\Hook\OauthClientTokenHooks;
  
-@@ -34,7 +37,7 @@ function oauth_client_entity_delete(EntityInterface $entity): void {
+@@ -34,7 +34,7 @@ function oauth_client_entity_delete(EntityInterface $entity): void {
   */
  #[LegacyHook]
  function oauth_client_oauth_client_request_insert(OauthClientRequestInterface $entity): void {
@@ -65,7 +58,7 @@ index 3c4a53008daee1251b4539e596d6c08c8c3a6b9b..bd0ef7fbeadd9f761da02552875de049
  }
  
  /**
-@@ -44,7 +47,7 @@ function oauth_client_oauth_client_request_insert(OauthClientRequestInterface $e
+@@ -44,7 +44,7 @@ function oauth_client_oauth_client_request_insert(OauthClientRequestInterface $e
   */
  #[LegacyHook]
  function oauth_client_oauth_client_request_update(OauthClientRequestInterface $entity): void {
@@ -74,34 +67,6 @@ index 3c4a53008daee1251b4539e596d6c08c8c3a6b9b..bd0ef7fbeadd9f761da02552875de049
  }
  
  /**
-@@ -68,3 +71,27 @@ function oauth_client_token_info(): array {
- function oauth_client_tokens(string $type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
-   return \Drupal::service(OauthClientTokenHooks::class)->tokens($type, $tokens, $data, $options, $bubbleable_metadata);
- }
-+
-+/**
-+ * Implements hook_ENTITY_TYPE_access() for filter_format.
-+ *
-+ * @phpstan-ignore-next-line as Attribute class
-+ *   Drupal\Core\Hook\Attribute\LegacyHook does not exist.
-+ */
-+#[LegacyHook]
-+function oauth_client_filter_format_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-+  return \Drupal::service(OauthClientHooks::class)
-+    ->filterFormatAccess($entity, $operation, $account);
-+}
-+
-+/**
-+ * Implements hook_form_FORM_ID_alter() for filter_admin_overview.
-+ *
-+ * @phpstan-ignore-next-line as Attribute class
-+ *   Drupal\Core\Hook\Attribute\LegacyHook does not exist.
-+ */
-+#[LegacyHook]
-+function oauth_client_form_filter_admin_overview_alter(array &$form, FormStateInterface $form_state): void {
-+  \Drupal::service(OauthClientHooks::class)
-+    ->formFilterAdminOverviewAlter($form, $form_state);
-+}
 diff --git a/oauth_client.services.yml b/oauth_client.services.yml
 index b81835102f3d427cd2c7172fe9afa9b1254e463a..6e4fa219862c3d17384b6f713c542a0dbd6a28f2 100644
 --- a/oauth_client.services.yml
@@ -116,25 +81,22 @@ index b81835102f3d427cd2c7172fe9afa9b1254e463a..6e4fa219862c3d17384b6f713c542a0d
    Drupal\oauth_client\Hook\OauthClientTokenHooks: {}
  
 diff --git a/src/Controller/OauthClientRequestAddController.php b/src/Controller/OauthClientRequestAddController.php
-index 8e1d97f358508c572b596c6ac5aaea3a65d5b5bc..55779d8d8559709577a715db04d35f731f50285f 100644
+index 8e1d97f358508c572b596c6ac5aaea3a65d5b5bc..3933b67e3563fe3a7f2b38ca56c3c2a66d10dbad 100644
 --- a/src/Controller/OauthClientRequestAddController.php
 +++ b/src/Controller/OauthClientRequestAddController.php
-@@ -39,10 +39,17 @@ class OauthClientRequestAddController extends ControllerBase {
+@@ -39,10 +39,13 @@ class OauthClientRequestAddController extends ControllerBase {
        // It's a redirect.
        return $response;
      }
 -
 -    // Add the missing route parameter.
+-    foreach ($response['#bundles'] as $bundle) {
 +    // Add the missing route parameter and format descriptions.
-     foreach ($response['#bundles'] as $bundle) {
++    foreach ($response['#bundles'] as &$bundle) {
        $bundle['add_link']->getUrl()->setRouteParameter('user', $user->id());
 +      // Format non-empty string descriptions with oauth_client_minimal.
-+      if (!empty($bundle['description']) && is_string($bundle['description']) && trim($bundle['description']) !== '') {
-+        $bundle['description'] = [
-+          '#type' => 'processed_text',
-+          '#text' => $bundle['description'],
-+          '#format' => 'oauth_client_minimal',
-+        ];
++      if (!empty($bundle['description'])) {
++        $bundle['description'] = check_markup($bundle['description'], 'oauth_client_minimal');
 +      }
      }
  
@@ -199,24 +161,13 @@ index 4e4a0b9fb33d40a3e7e9a734674dcefd0701bc25..59405a39c4aedcab3d656bf14fc8ae9c
  
    /**
 diff --git a/src/Hook/OauthClientConsumerHooks.php b/src/Hook/OauthClientHooks.php
-similarity index 61%
+similarity index 96%
 rename from src/Hook/OauthClientConsumerHooks.php
 rename to src/Hook/OauthClientHooks.php
-index cc8effd33052b1a98edb76565d3213fc92776a89..04c1de6151fce2a1c23f2ea69eec900a2ef8a18f 100644
+index cc8effd33052b1a98edb76565d3213fc92776a89..2aeae48647f0008506ff01d57c587feace5bbe60 100644
 --- a/src/Hook/OauthClientConsumerHooks.php
 +++ b/src/Hook/OauthClientHooks.php
-@@ -4,16 +4,20 @@ declare(strict_types=1);
- 
- namespace Drupal\oauth_client\Hook;
- 
-+use Drupal\Core\Access\AccessResult;
-+use Drupal\Core\Access\AccessResultInterface;
- use Drupal\Core\Entity\EntityInterface;
-+use Drupal\Core\Form\FormStateInterface;
- use Drupal\Core\Hook\Attribute\Hook;
-+use Drupal\Core\Session\AccountInterface;
- use Drupal\oauth_client\Entity\OauthClientRequestInterface;
- use Drupal\oauth_client\Entity\OauthClientRequestStatus;
+@@ -11,9 +11,9 @@ use Drupal\oauth_client\Entity\OauthClientRequestStatus;
  use Drupal\oauth_client\Service\OauthClientConsumerService;
  
  /**
@@ -228,41 +179,6 @@ index cc8effd33052b1a98edb76565d3213fc92776a89..04c1de6151fce2a1c23f2ea69eec900a
  
    public function __construct(
      protected OauthClientConsumerService $oauthClientConsumerService,
-@@ -73,4 +77,34 @@ class OauthClientConsumerHooks {
-     }
-   }
- 
-+  /**
-+   * Controls access to the oauth_client_minimal filter format.
-+   *
-+   * Denies all access to the oauth_client_minimal text format except 'use'.
-+   */
-+  public function filterFormatAccess(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-+    // Only restrict access to our internal format.
-+    if ($entity->id() !== 'oauth_client_minimal') {
-+      return AccessResult::neutral();
-+    }
-+
-+    // Allow the format to be used programmatically.
-+    if ($operation === 'use') {
-+      return AccessResult::neutral();
-+    }
-+
-+    // Deny all other operations (view, update, delete).
-+    return AccessResult::forbidden('The OAuth Client Minimal format is for internal use only.');
-+  }
-+
-+  /**
-+   * Hides the oauth_client_minimal format from the text formats list.
-+   */
-+  public function formFilterAdminOverviewAlter(array &$form, FormStateInterface $form_state): void {
-+    // Hide the oauth_client_minimal format from the overview.
-+    if (isset($form['formats']['oauth_client_minimal'])) {
-+      $form['formats']['oauth_client_minimal']['#access'] = FALSE;
-+    }
-+  }
-+
- }
 diff --git a/tests/src/Functional/BundleDescriptionFormattingTest.php b/tests/src/Functional/BundleDescriptionFormattingTest.php
 new file mode 100644
 index 0000000000000000000000000000000000000000..5671d846ba3475e07e6051d99e8ed0f30c9ecb07
