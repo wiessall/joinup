@@ -83,6 +83,23 @@ abstract class AssessmentModelBase implements AssessmentModelInterface{
   }
 
   /**
+   * Returns the bundle of the Drupal side entity that is related to the model.
+   *
+   * @return string
+   *   The entity bundle.
+   */
+  abstract public function getEntityBundle(): string;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityValues(): array {
+    $values = $this->entityValues;
+    $values['type'] = $this->getEntityBundle();
+    return $values;
+  }
+
+  /**
    * Returns an initialized instance of the appropriate model.
    *
    * @param array $data

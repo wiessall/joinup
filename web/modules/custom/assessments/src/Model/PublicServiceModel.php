@@ -12,6 +12,13 @@ class PublicServiceModel extends AssessmentModelBase implements AssessmentModelI
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'public_service';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'description',

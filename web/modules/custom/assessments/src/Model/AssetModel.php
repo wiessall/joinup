@@ -12,6 +12,13 @@ class AssetModel extends AssessmentModelBase implements AssessmentModelInterface
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'asset';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'name',

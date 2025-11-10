@@ -85,8 +85,9 @@ class AssessmentReportResource extends ResourceBase {
 
     $processor = \Drupal::service('assessments.resource_parser');
     $processor->parseInbound($data);
+    $validationErrors = $processor->getEntityValidationErrors();
 
-    $response = new ResourceResponse([], 201);
+    $response = new ResourceResponse($validationErrors, 201);
     $response->addCacheableDependency((new CacheableMetadata())->setCacheMaxAge(0));
     return $response;
   }
@@ -100,7 +101,7 @@ class AssessmentReportResource extends ResourceBase {
    *   The entities data to create assets from. Each index is an array of
    *   entity values.
    *
-   * @return \Drupal\assessments\Entity\AssessmentContent[]
+   * @return \Drupal\assessments\Entity\Assessment[]
    *   The created entities.
    */
   protected function createEntities(string $bundle, array $entitiesData): array {

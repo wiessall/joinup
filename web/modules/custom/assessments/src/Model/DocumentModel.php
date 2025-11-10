@@ -12,6 +12,13 @@ class DocumentModel extends AssessmentModelBase implements AssessmentModelInterf
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'document';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'file_uri',

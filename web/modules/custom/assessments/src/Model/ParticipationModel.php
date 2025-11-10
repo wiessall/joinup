@@ -12,6 +12,13 @@ class ParticipationModel extends AssessmentModelBase implements AssessmentModelI
   /**
    * {@inheritdoc}
    */
+  public function getEntityBundle(): string {
+    return 'participation';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getAllowedResourceProperties(): array {
     return [
       'country',
