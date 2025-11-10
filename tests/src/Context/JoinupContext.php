@@ -3086,7 +3086,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function iSeeH1SpanElement(string $title): void {
     $page = $this->getSession()->getPage();
-    $link = $page->find('css', '.h1:not(a.h1)');
+    $link = $page->find('css', 'h1 span');
 
     if (!$link || strpos($link->getText(), $title) === FALSE) {
       throw new ElementNotFoundException(
