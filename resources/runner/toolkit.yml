@@ -37,10 +37,24 @@ toolkit:
   test:
     phpunit:
       commands:
+        before:
+          - task: run
+            command: drupal:settings
+            arguments:
+              - phpunit
         after:
           - { task: exec, command: "${drush.bin} en default_content joinup_test_content -y" }
           - { task: exec, command: "SELENIUM_REMOTE_URL=$WEBDRIVER_URL ./node_modules/.bin/playwright test" }
           - { task: exec, command: "${drush.bin} pmu default_content joinup_test_content -y" }
+          - task: run
+            command: drupal:settings
+            arguments:
+              - site-clean
+          - task: exec
+            command: |
+              ${drush.bin} en default_content joinup_test_content -y
+              SELENIUM_REMOTE_URL=$WEBDRIVER_URL ./node_modules/.bin/playwright test --retries=3
+              ${drush.bin} pmu default_content joinup_test_content -y
           # To resolve issues, inspect $raw_violations using xdebug breakpoints in:
           # @see \Drupal\config_inspector\Commands\InspectorCommands::inspect
           - { task: exec, command: "${drush.bin} config:inspect --only-error --detail --list-constraints" }
