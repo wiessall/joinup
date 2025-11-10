@@ -129,7 +129,7 @@
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.7",
         "drupal/views_block_area": "^2.0",
-        "drupal/views_bulk_operations": "^4",
+        "drupal/views_bulk_operations": "4.3.4",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.3",
