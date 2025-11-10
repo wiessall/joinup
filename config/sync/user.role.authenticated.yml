@@ -28,6 +28,7 @@ dependencies:
     - search_api_autocomplete.search.search_oss_catalogue
     - taxonomy.vocabulary.tags
   module:
+    - assessments
     - collection
     - comment
     - contextual
@@ -69,6 +70,7 @@ permissions:
   - 'access user profiles'
   - 'cancel account'
   - 'cancel own vote'
+  - 'create assessment report'
   - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
@@ -127,6 +129,7 @@ permissions:
   - 'delete paragraph content video'
   - 'edit any polls'
   - 'edit behavior plugin settings'
+  - 'edit own assessment report'
   - 'edit own comments'
   - 'edit own contact_information content'
   - 'edit own custom_page content'
@@ -207,6 +210,7 @@ permissions:
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
   - 'view media'
+  - 'view own assessment report'
   - 'view own unpublished content'
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'
