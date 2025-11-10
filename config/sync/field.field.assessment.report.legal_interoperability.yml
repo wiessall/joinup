@@ -1,0 +1,33 @@
+uuid: 2b6e5027-dc29-4537-9994-055e2f400313
+langcode: en
+status: true
+dependencies:
+  config:
+    - assessments.type.report
+    - field.storage.assessment.legal_interoperability
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: assessment.report.legal_interoperability
+field_name: legal_interoperability
+entity_type: assessment
+bundle: report
+label: 'Identified effects on cross-border legal interoperability'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:assessment_statement'
+  handler_settings:
+    target_bundles:
+      legal_interoperability: legal_interoperability
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

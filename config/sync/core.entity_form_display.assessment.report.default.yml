@@ -9,11 +9,14 @@ dependencies:
     - field.field.assessment.report.binding_requirement
     - field.field.assessment.report.expression
     - field.field.assessment.report.has_related_service
+    - field.field.assessment.report.legal_interoperability
+    - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
     - field.field.assessment.report.requirement_documents
-    - field.field.assessment.report.results_in
+    - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
     - field.field.assessment.report.statement_documents
+    - field.field.assessment.report.technical_interoperability
   module:
     - field_group
     - file
@@ -69,7 +72,6 @@ third_party_settings:
     group_statements:
       children:
         - group_assessments_statements
-        - results_in
       label: '3. Results'
       region: content
       parent_name: ''
@@ -132,7 +134,11 @@ third_party_settings:
           value: '<h4>Identification of binding requirements assessed</h4><p>List the binding requirement(s) assessed.</p>'
           format: content_editor
     group_assessments_statements:
-      children: {  }
+      children:
+        - legal_interoperability
+        - organisational_interoperability
+        - semantic_interoperability
+        - technical_interoperability
       label: 'Assessments statements'
       region: content
       parent_name: group_statements
@@ -280,6 +286,19 @@ content:
       collapsed: true
       revision: false
     third_party_settings: {  }
+  legal_interoperability:
+    type: inline_entity_form_simple
+    weight: 25
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 21
@@ -287,6 +306,19 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  organisational_interoperability:
+    type: inline_entity_form_simple
+    weight: 26
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
   provider:
     type: inline_entity_form_simple
@@ -308,9 +340,9 @@ content:
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-  results_in:
+  semantic_interoperability:
     type: inline_entity_form_simple
-    weight: 21
+    weight: 27
     region: content
     settings:
       form_mode: default
@@ -318,7 +350,7 @@ content:
       label_singular: ''
       label_plural: ''
       collapsible: false
-      collapsed: true
+      collapsed: false
       revision: false
     third_party_settings: {  }
   state:
@@ -334,6 +366,19 @@ content:
     region: content
     settings:
       progress_indicator: throbber
+    third_party_settings: {  }
+  technical_interoperability:
+    type: inline_entity_form_simple
+    weight: 28
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
 hidden:
   created: true

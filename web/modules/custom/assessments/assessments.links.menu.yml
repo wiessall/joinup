@@ -9,3 +9,15 @@ entity.assessment.collection:
   description: 'List of assessment entities.'
   route_name: entity.assessment.collection
   parent: system.admin_content
+
+entity.assessment_statement_type.collection:
+  title: 'Assessment statement types'
+  description: 'Manage Assessment statement type config entities.'
+  parent: system.admin_structure
+  route_name: entity.assessment_statement_type.collection
+
+entity.assessment_statement.collection:
+  title: 'Assessment statement entities'
+  description: 'List of assessment entities.'
+  route_name: entity.assessment_statement.collection
+  parent: system.admin_content
