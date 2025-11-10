@@ -33,6 +33,7 @@ dependencies:
     - dashboard
     - entity_legal
     - entityqueue
+    - eu_oss_catalogue
     - field_permissions
     - file
     - filter
@@ -47,7 +48,6 @@ dependencies:
     - joinup_licence
     - joinup_log
     - joinup_newsletter
-    - joinup_oss_catalogue
     - joinup_reports
     - joinup_search
     - joinup_security
@@ -101,6 +101,7 @@ permissions:
   - 'administer footer-european-commission menu items'
   - 'administer footer-follow-us menu items'
   - 'administer footer-help-and-support menu items'
+  - 'administer joinup oss catalogue'
   - 'administer navbar menu items'
   - 'administer nodes'
   - 'administer organic groups'
@@ -214,7 +215,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit terms in tags'
-  - 'eu oss catalogue log'
   - 'feature entity'
   - 'flag interoperability'
   - 'manage custom landing pages'
