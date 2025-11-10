@@ -887,6 +887,7 @@ third_party_settings:
                   fallback_field_id: oss_validation_status
                   fallback_field_formatter_id: list_default
                   fallback_field_formatter_settings: {  }
+                  reset_theme: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
