@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Install, update, install functionality for Joinup API module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Implements hook_install().
+ */
+function joinup_api_install(): void {
+  $fileSystem = \Drupal::service('file_system');
+  $directory = 'private://simple_oauth';
+  $fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+  $keygen = \Drupal::service('simple_oauth.key.generator');
+  $keygen->generateKeys($fileSystem->realpath($directory));
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function joinup_api_requirements($phase): array {
+  $requirements = [];
+
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  $config = \Drupal::config('simple_oauth.settings');
+  $privateKey = $config->get('private_key');
+  $publicKey = $config->get('public_key');
+
+  $fileSystem = \Drupal::service('file_system');
+
+  $privateKeyPath = $fileSystem->realpath($privateKey);
+  $publicKeyPath = $fileSystem->realpath($publicKey);
+  $requirements['simple_oauth_keys'] = [
+    'title' => t('Simple OAuth keys'),
+    'value' => t('OK'),
+    'description' => t('Both private and public keys are present.'),
+    'severity' => REQUIREMENT_OK,
+  ];
+
+  if (!file_exists($privateKeyPath)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth private key'),
+      'value' => t('Missing'),
+      'description' => t('The private key does not exist at @path.', ['@path' => $privateKeyPath]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  if (!file_exists($publicKeyPath)) {
+    $requirements['simple_oauth_keys'] = [
+      'title' => t('Simple OAuth public key'),
+      'value' => t('Missing'),
+      'description' => t('The public key does not exist at @path.', ['@path' => $publicKeyPath]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+    return $requirements;
+  }
+
+  return $requirements;
+}

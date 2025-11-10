@@ -37,12 +37,12 @@ class DeleteGroupMembership extends DeleteOgMembership {
   public function __construct(
     array $configuration,
     string $plugin_id,
-    readonly array $plugin_definition,
-    readonly OgAccessInterface $og_access,
-    readonly PrivateTempStoreFactory $privateTempStoreFactory,
+    array $plugin_definition,
+    OgAccessInterface $og_access,
+    PrivateTempStoreFactory $temp_store_factory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $og_access);
-    $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
+    $this->privateTempStore = $temp_store_factory->get('joinup_group.og_membership_delete_action');
   }
 
   /**

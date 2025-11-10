@@ -48,12 +48,12 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
   public function __construct(
     array $configuration,
     string $plugin_id,
-    readonly array $plugin_definition,
-    readonly PrivateTempStoreFactory $tempStoreFactory,
+    array $plugin_definition,
+    PrivateTempStoreFactory $temp_store_factory,
     protected readonly AccountInterface $currentUser,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
+    $this->tempStore = $temp_store_factory->get('joinup_transfer_group_ownership');
   }
 
   /**
