@@ -8,7 +8,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\datetime_range\DateTimeRangeConstantsInterface;
+use Drupal\datetime_range\DateTimeRangeDisplayOptions;
 use Drupal\datetime_range\Plugin\Field\FieldFormatter\DateRangePlainFormatter;
 
 /**
@@ -51,13 +51,13 @@ class DateTileFormatter extends DateRangePlainFormatter {
       }
 
       if ($this->startDateIsDisplayed()) {
-        $elements[$delta][DateTimeRangeConstantsInterface::START_DATE] = $this->buildTileDate($start_date);
+        $elements[$delta][DateTimeRangeDisplayOptions::StartDate->value] = $this->buildTileDate($start_date);
       }
       if ($this->startDateIsDisplayed() && $this->endDateIsDisplayed()) {
         $elements[$delta]['separator'] = ['#plain_text' => ' ' . $separator . ' '];
       }
       if ($this->endDateIsDisplayed()) {
-        $elements[$delta][DateTimeRangeConstantsInterface::END_DATE] = $this->buildTileDate($end_date);
+        $elements[$delta][DateTimeRangeDisplayOptions::EndDate->value] = $this->buildTileDate($end_date);
       }
     }
 
