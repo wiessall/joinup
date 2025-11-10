@@ -1,0 +1,29 @@
+uuid: 52dfcef9-91c3-4e3b-a673-c02440be4620
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.code
+    - taxonomy.vocabulary.spatial
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://publications.europa.eu/ontology/euvoc#ISO_3166_1_ALPHA_2'
+      type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.spatial.code
+field_name: code
+entity_type: taxonomy_term
+bundle: spatial
+label: 'Country code'
+description: 'ISO 3166-1 alpha-2 two-letter country code'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
