@@ -178,6 +178,11 @@ drupal:
       }
     sections:
       Main settings: |
+        # Remove this once all modules have Drupal 11 compatible versions. This
+        # will happen when the composer.json `extra.drupal-lenient.allowed-list`
+        # property becomes is empty.
+        $settings['extension_discovery_ignore_core_version_requirement'] = TRUE;
+
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
           $env_file = "{$app_root}/../.env.pipeline";
