@@ -379,7 +379,6 @@
                 "File widget with multiple values may duplicate empty items": "resources/patch/php/drupal/core/3276280.diff",
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
                 "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
-                "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
                 "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
                 "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff"
             },
