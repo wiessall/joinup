@@ -44,7 +44,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\node\NodeForm;
+use Drupal\node\Form\NodeForm;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
 use Drupal\og\OgGroupAudienceHelperInterface;
