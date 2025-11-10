@@ -23,8 +23,8 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
   private const string ADMIN_PERMISSION = 'administer comments';
 
   public function __construct(
-    readonly EntityTypeInterface $entity_type,
-    readonly OgAccessInterface $ogAccess,
+    EntityTypeInterface $entity_type,
+    protected readonly OgAccessInterface $ogAccess,
   ) {
     parent::__construct($entity_type);
   }
