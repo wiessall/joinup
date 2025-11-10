@@ -57,3 +57,6 @@
 /debug/
 /.twig-cs-fixer.cache
 /.phpstan.neon
+
+# Automatically created by DDEV but not used.
+/recipes/
