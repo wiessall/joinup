@@ -1,0 +1,12 @@
+uuid: 676533e4-05b7-4aef-a0f6-4cc5f3f1e1da
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment_reporter
+label: 'Assessment reporter'
+weight: 0
+is_admin: false
+permissions:
+  - 'bypass assessment report moderation'
