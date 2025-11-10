@@ -4,11 +4,7 @@ status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.field.assessment.report.affected_party
-    - field.field.assessment.report.asset
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.expression
-    - field.field.assessment.report.has_related_service
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
@@ -216,37 +212,6 @@ targetEntityType: assessment
 bundle: report
 mode: default
 content:
-  affected_party:
-    type: inline_entity_form_simple
-    weight: 8
-    region: content
-    settings:
-      form_mode: default
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: false
-      revision: false
-    third_party_settings: {  }
-  asset:
-    type: inline_entity_form_complex
-    weight: 5
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Relevant asset'
-      label_plural: 'Relevant assets'
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
-      removed_reference: optional
-    third_party_settings: {  }
   binding_requirement:
     type: inline_entity_form_simple
     weight: 7
@@ -256,32 +221,6 @@ content:
       override_labels: false
       label_singular: ''
       label_plural: ''
-      collapsible: false
-      collapsed: true
-      revision: false
-    third_party_settings: {  }
-  expression:
-    type: inline_entity_form_simple
-    weight: 24
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: Expression
-      label_plural: Expressions
-      collapsible: false
-      collapsed: true
-      revision: false
-    third_party_settings: {  }
-  has_related_service:
-    type: inline_entity_form_simple
-    weight: 5
-    region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Affected service'
-      label_plural: 'Affected services'
       collapsible: false
       collapsed: true
       revision: false

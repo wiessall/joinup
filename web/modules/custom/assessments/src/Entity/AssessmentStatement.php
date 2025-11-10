@@ -7,6 +7,7 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the Assessment statement entity.
@@ -53,21 +54,13 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setLabel(t('Judgement'))
       ->setDescription(t('The judgement statement.'))
       ->setTranslatable(TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'string_textarea',
-        'weight' => 0,
-        'settings' => [
-          'rows' => 3,
-          'placeholder' => '',
-        ],
-      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'text_default',
         'weight' => 0,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['interpretation'] = BaseFieldDefinition::create('list_integer')
       ->setLabel(t('Interpretation'))
@@ -80,17 +73,25 @@ final class AssessmentStatement extends ContentEntityBase {
           -1 => 'Negative',
         ],
       ])
-      ->setDisplayOptions('form', [
-        'type' => 'options_select',
-        'weight' => 1,
-      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'list_default',
         'weight' => 1,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
+    $fields['landing_page'] = BaseFieldDefinition::create('uri')
+      ->setLabel(t('Statement supporting document'))
+      ->setDescription(t('The landing page for the document.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'uri_link',
+        'weight' => 2,
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     return $fields;
   }

@@ -1,9 +1,9 @@
-uuid: 17b23a06-ce24-4aa7-83ec-139b467e4af8
+uuid: c188e945-2b59-4c9b-804f-cf54aa56f6e3
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.report
+    - assessments.type.binding_requirement
     - assessments.type.participation
     - field.storage.assessment.affected_party
   module:
@@ -11,10 +11,10 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.affected_party
+id: assessment.binding_requirement.affected_party
 field_name: affected_party
 entity_type: assessment
-bundle: report
+bundle: binding_requirement
 label: 'Affected party'
 description: ''
 required: false
