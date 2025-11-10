@@ -9,17 +9,24 @@ namespace Drupal\assessments\Model;
  */
 class PublicServiceModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
-  protected function bundle(): string {
-    return 'public_service';
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'description',
+      'spatial',
+      'identifier',
+      'name',
+      'thematic_area',
+    ];
   }
 
-  protected function getEntityValues(): array {
-    return [
-      'name' => $this->data['name'] ?? NULL,
-      'thematic_area' => $this->data['thematic_area'] ?? NULL,
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function getReferencedEntityProperties(): array {
+    return [];
   }
 
 }

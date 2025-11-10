@@ -9,17 +9,21 @@ namespace Drupal\assessments\Model;
  */
 class ParticipationModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
-  protected function bundle(): string {
-    return 'participation';
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'country',
+      'participation_type',
+    ];
   }
 
-  protected function getEntityValues(): array {
-    return [
-      'country' => $this->data['country'] ?? NULL,
-      'participation_type' => $this->data['participation_type'] ?? NULL,
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function getReferencedEntityProperties(): array {
+    return [];
   }
 
 }

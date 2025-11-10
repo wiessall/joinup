@@ -36,7 +36,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
     parent::setUp();
 
     // Install entity schema for assessments module.
-    $this->installEntitySchema('assessment_content');
+    $this->installEntitySchema('assessment');
     $this->installEntitySchema('user');
     $this->installSchema('system', ['sequences']);
     $this->installSchema('user', ['users_data']);
@@ -48,7 +48,96 @@ class AssessmentComposerResourceTest extends KernelTestBase {
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testPostStructuredPayload(): void {
+
+    // UI
     $payload = [
+      'name' => 'Quarterly review',
+      'expression' => [
+        [
+          'id' => '2',
+        ],
+        [
+          'id' => '3',
+        ],
+      ],
+      'binding_requirement' => [
+        [
+          'documented_in' => 'https://example.com/law/123',
+          'name' => 'Article 5',
+        ],
+        'binding_requirement' => [
+          [
+            'documented_in' => 'https://example.com/law/123',
+            'name' => 'Article 7','expression' => [
+          ],
+       ];
+
+    // API
+    $payload = [
+      'name' => 'Quarterly review',
+
+      'binding_requirement' => [
+        [
+          'documented_in' => 'https://example.com/law/123',
+          'name' => 'Article 5',
+          'expression' => [
+          [
+            'id' => '2',
+          ],
+
+        ],
+          [
+            'documented_in' => 'https://example.com/law/234',
+            'name' => 'Article 7','expression' => [
+            [
+              'id' => '3',
+            ],
+          ],
+
+          ];
+
+    $payload = [
+      'name' => 'Quarterly review',
+
+      'binding_requirement' => [
+        [
+          'documented_in' => 'https://example.com/law/123',
+          'name' => 'Article 5',
+          'expression' => [
+          [
+            'id' => '2',
+          ],
+          [
+            'id' => '3',
+          ],
+        ],
+        ],
+        'binding_requirement' => [
+        [
+          'documented_in' => 'https://example.com/law/123',
+          'name' => 'Article 7',
+          'expression' => [
+          [
+            'id' => '2',
+          ],
+          [
+            'id' => '3',
+          ],
+        ],
+
+        ];
+
+
+
+
+
+
+
+
+
+
+
+          $payload = [
       'name' => 'Quarterly review',
       'binding_requirement' => [
         [
@@ -58,7 +147,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
             [
               'name' => 'Legal Act 2024',
               'description' => 'Reference to an EU legal expression',
-              'document_in' => 'https://example.com/eli/act',
+              'documented_in' => 'https://example.com/eli/act',
               'expression_type' => 'http://data.europa.eu/eli/ontology#LegalExpression',
             ],
           ],
@@ -75,10 +164,6 @@ class AssessmentComposerResourceTest extends KernelTestBase {
             [
               'country' => 'BE',
               'participation_type' => 'national_public_sector_body',
-              'agent' => [
-                'name' => 'Federal Agency of X',
-                'agent_type' => 'organisation',
-              ],
             ],
           ],
           'asset' => [
@@ -179,7 +264,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
     $manager = \Drupal::service('plugin.manager.rest');
 
     // Create the plugin instance as the container-aware plugin via manager.
-    $plugin = $manager->createInstance('assessments_composer', []);
+    $plugin = $manager->createInstance('assessment_report', []);
 
     // Call the resource's post() method directly with the decoded body.
     // @phpstan-ignore-next-line Method is defined on the plugin class.

@@ -9,25 +9,22 @@ namespace Drupal\assessments\Model;
  */
 class StatementModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
   /**
    * {@inheritdoc}
    */
-  protected function bundle(): string {
-    return 'statement';
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'interpretation',
+      'judgement',
+      'type',
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getEntityValues(): array {
-    return [
-      'interpretation' => $this->data['interpretation'] ?? NULL,
-      'judgement' => $this->data['judgement'] ?? NULL,
-      // The API uses `type`, but field is `statement_type` in Joinup.
-      'statement_type' => $this->data['statement_type'] ?? ($this->data['type'] ?? NULL),
-    ];
+  public function getReferencedEntityProperties(): array {
+    return ['documents'];
   }
 
 }

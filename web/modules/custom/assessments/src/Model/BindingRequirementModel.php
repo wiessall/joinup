@@ -12,22 +12,26 @@ use Drupal\assessments\Model\AssessmentModelInterface;
  */
 class BindingRequirementModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
   /**
    * {@inheritdoc}
    */
-  protected function bundle(): string {
-    return 'binding_requirement';
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'documented_in',
+      'name',
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getEntityValues(): array {
+  public function getReferencedEntityProperties(): array {
     return [
-      'name' => $this->data['name'] ?? NULL,
-      'documented_in' => $this->data['documented_in'] ?? NULL,
+      'expression',
+      'affects',
+      'has_participation',
+      'asset',
+      'documents',
     ];
   }
 

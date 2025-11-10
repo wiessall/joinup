@@ -10,25 +10,13 @@ namespace Drupal\assessments\Model;
 interface AssessmentModelInterface {
 
   /**
-   * Processes the data of the entity.
+   * Returns a list of referenced entity properties.
    *
-   * This should also call the processing of the child entities.
-   */
-  public function process(): void;
-
-  /**
-   * Validates the data of the entity.
+   * This will be used both to navigate down to the children elements and to
+   * validate invalid keys.
    *
    * @return array
-   *   A list of validation errors.
    */
-  public function validate(): array;
-
-  /**
-   * Saves the entity.
-   *
-   * This should also call the saving of the child entities first.
-   */
-  public function save(): void;
+  public function getReferencedEntityProperties(): array;
 
 }

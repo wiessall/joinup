@@ -1,0 +1,7 @@
+services:
+
+  _defaults:
+    autowire: true
+
+  assessments.resource_parser:
+    class: Drupal\assessments\ResourceParser

@@ -9,20 +9,23 @@ namespace Drupal\assessments\Model;
  */
 class ExpressionModel extends AssessmentModelBase implements AssessmentModelInterface {
 
-  public function process(): void {}
-
-  protected function bundle(): string {
-    return 'expression';
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAllowedResourceProperties(): array {
+    return [
+      'name',
+      'description',
+      'documented_in',
+      'expression_type',
+    ];
   }
 
-  protected function getEntityValues(): array {
-    return [
-      'name' => $this->data['name'] ?? NULL,
-      'description' => $this->data['description'] ?? NULL,
-      // Accept both keys from API/README.
-      'documented_in' => $this->data['documented_in'] ?? ($this->data['document_in'] ?? NULL),
-      'expression_type' => $this->data['expression_type'] ?? NULL,
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function getReferencedEntityProperties(): array {
+    return [];
   }
 
 }
