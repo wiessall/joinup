@@ -151,11 +151,7 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: field_fallback_formatter
-          settings:
-            main_field_formatter_id: joinup_core_more_in_modal
-            main_field_formatter_settings:
-              link_to_entity: 0
-            fallback_field_id: name
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -301,11 +297,7 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: field_fallback_formatter
-          settings:
-            main_field_formatter_id: joinup_core_more_in_modal
-            main_field_formatter_settings:
-              link_to_entity: 0
-            fallback_field_id: name
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -597,11 +589,7 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: field_fallback_formatter
-          settings:
-            main_field_formatter_id: joinup_core_more_in_modal
-            main_field_formatter_settings:
-              link_to_entity: 0
-            fallback_field_id: name
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
