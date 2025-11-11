@@ -140,7 +140,7 @@ function assessments_views_pre_render(ViewExecutable $view): void {
         else {
           $term_id = $result->_entity->country->getValue()[0]['target_id'];
           $term = Term::load($term_id);
-          $code = $term->get('code')->value ?? '';
+          $code = $term?->get('code')->value ?? '';
           $result->_entity->country->setValue([$code]);
         }
       }
