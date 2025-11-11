@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\assessments\Entity\Assessment;
-use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 /**
  * Tests the assessment access control handler.
@@ -15,6 +16,8 @@ use Drupal\user\Entity\User;
  * @coversDefaultClass \Drupal\assessments\AssessmentAccessControlHandler
  */
 class AssessmentAccessTest extends KernelTestBase {
+
+  use UserCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -94,16 +97,16 @@ class AssessmentAccessTest extends KernelTestBase {
     $this->installStateField();
 
     // Create test roles with their permissions.
-    $this->createRoleWithPermissions('moderator', [
+    $this->createRole([
       'moderate assessment report',
       'bypass assessment report moderation',
       'access content',
-    ]);
+    ], 'moderator', ucfirst(str_replace('_', ' ', 'moderator')));
 
-    $this->createRoleWithPermissions('assessment_reporter', [
+    $this->createRole([
       'bypass assessment report moderation',
       'create assessment report',
-    ]);
+    ], 'assessment_reporter', ucfirst(str_replace('_', ' ', 'assessment_reporter')));
 
     // Create a dummy user first to ensure test users don't get UID 1
     // (which has special bypass permissions in Drupal).
@@ -153,8 +156,8 @@ class AssessmentAccessTest extends KernelTestBase {
   /**
    * Tests view access for published assessment reports.
    *
-   * View in published state is allowed for "view own assessment report"
-   * OR "moderate assessment report" permission.
+   * View in published state is allowed for "access content",
+   * "view own assessment report" OR "moderate assessment report" permission.
    *
    * @covers ::checkAccess
    * @covers ::checkViewAccess
@@ -171,8 +174,8 @@ class AssessmentAccessTest extends KernelTestBase {
     // Admin can always view.
     $this->assertTrue($assessment->access('view', $this->admin));
 
-    // User with only 'access content' cannot view published reports.
-    $this->assertFalse($assessment->access('view', $this->contentAccessUser));
+    // User with only 'access content' can view published reports.
+    $this->assertTrue($assessment->access('view', $this->contentAccessUser));
 
     // User without any permissions cannot view.
     $noAccessUser = $this->createUser([]);
@@ -362,106 +365,18 @@ class AssessmentAccessTest extends KernelTestBase {
    * @return \Drupal\user\UserInterface
    *   The created user.
    */
-  protected function createUserWithRole(string $role_id, array $permissions = []): User {
-    $values = [
-      'name' => $this->randomMachineName(),
-      'status' => 1,
-    ];
-
-    $user = User::create($values);
-    $user->save();
-
+  protected function createUserWithRole(string $role_id, array $permissions = []): UserInterface {
+    // If permissions are provided, create a user with an ad-hoc role.
     if (!empty($permissions)) {
-      $role = \Drupal::entityTypeManager()
-        ->getStorage('user_role')
-        ->create([
-          'id' => $role_id . '_' . $this->randomMachineName(),
-          'label' => $role_id,
-        ]);
-      $role->save();
-
-      foreach ($permissions as $permission) {
-        $role->grantPermission($permission);
-      }
-      $role->save();
-      $role_id = $role->id();
+      return $this->createUser($permissions);
     }
 
+    // Otherwise, create a user and assign the existing role.
+    $user = $this->createUser([]);
     $user->addRole($role_id);
     $user->save();
 
     return $user;
-  }
-
-  /**
-   * Creates a user with the given permissions.
-   *
-   * @param array $permissions
-   *   Array of permission names.
-   *
-   * @return \Drupal\user\UserInterface
-   *   The created user.
-   */
-  protected function createUser(array $permissions = []): User {
-    $values = [
-      'name' => $this->randomMachineName(),
-      'status' => 1,
-    ];
-
-    $user = User::create($values);
-    $user->save();
-
-    if ($permissions) {
-      $role = $this->createRole($permissions);
-      $user->addRole($role);
-      $user->save();
-    }
-
-    return $user;
-  }
-
-  /**
-   * Creates a role with the given permissions.
-   *
-   * @param string $role_id
-   *   The role ID.
-   * @param array $permissions
-   *   Array of permission names.
-   *
-   * @return string
-   *   The role ID.
-   */
-  protected function createRoleWithPermissions(string $role_id, array $permissions): string {
-    $role = \Drupal::entityTypeManager()
-      ->getStorage('user_role')
-      ->create([
-        'id' => $role_id,
-        'label' => ucfirst(str_replace('_', ' ', $role_id)),
-      ]);
-    $role->save();
-
-    foreach ($permissions as $permission) {
-      $role->grantPermission($permission);
-    }
-    $role->save();
-
-    return $role_id;
-  }
-
-  /**
-   * Creates a role with the given permissions and returns the role ID.
-   *
-   * @param array $permissions
-   *   Array of permission names.
-   *
-   * @return string
-   *   The role ID.
-   */
-  protected function createRole(array $permissions): string {
-    return $this->createRoleWithPermissions(
-      $this->randomMachineName(),
-      $permissions
-    );
   }
 
   /**
