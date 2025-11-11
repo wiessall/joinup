@@ -48,13 +48,14 @@
   </php>
 
   <extensions>
+    <bootstrap class="Joinup\PhpUnit\Extension\JoinupExtension"/>
+
     <!-- Functional tests HTML output logging. -->
     <!-- For documentation check See web/core/phpunit.xml.dist -->
     <bootstrap class="Drupal\TestTools\Extension\HtmlLogging\HtmlOutputLogger">
       <parameter name="outputDirectory" value="sites/simpletest/browser_output"/>
       <parameter name="verbose" value="true"/>
     </bootstrap>
-    <!-- Debug dump() printer. -->
     <bootstrap class="Drupal\TestTools\Extension\Dump\DebugDump">
       <parameter name="colors" value="true"/>
       <parameter name="printCaller" value="true"/>
