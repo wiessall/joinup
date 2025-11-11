@@ -168,6 +168,38 @@ fi
 
 echo "[INFO] Go version: $(go version)"
 
+# Check if gcc is available (required for CGO compilation)
+if ! command -v gcc &> /dev/null; then
+    echo "[INFO] gcc not found, attempting to install build tools..."
+
+    # Detect package manager and install gcc
+    if command -v apt-get &> /dev/null; then
+        echo "[INFO] Installing build-essential via apt-get..."
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update -qq && apt-get install -y -qq build-essential
+    elif command -v yum &> /dev/null; then
+        echo "[INFO] Installing gcc via yum..."
+        yum install -y -q gcc gcc-c++ make
+    elif command -v apk &> /dev/null; then
+        echo "[INFO] Installing build-base via apk..."
+        apk add --no-cache build-base
+    else
+        echo "[ERROR] Could not detect package manager to install gcc."
+        echo "[ERROR] Please install gcc manually:"
+        echo "[ERROR]   - Debian/Ubuntu: apt-get install build-essential"
+        echo "[ERROR]   - RedHat/CentOS: yum install gcc gcc-c++ make"
+        echo "[ERROR]   - Alpine: apk add build-base"
+        exit 1
+    fi
+
+    # Verify installation
+    if ! command -v gcc &> /dev/null; then
+        echo "[ERROR] gcc installation failed"
+        exit 1
+    fi
+    echo "[INFO] gcc installed successfully"
+fi
+
 # Fix go.mod version format to ensure compatibility
 if [ -f "$VENDOR_DIR/go-src/go.mod" ]; then
     echo "[INFO] Normalizing go.mod version format..."
