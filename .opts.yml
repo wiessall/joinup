@@ -22,6 +22,7 @@ php_version: 8.3
 extra_pkgs:
   - php8.3-apcu
   - php8.3-ffi
+  - gcc
   - git
 
 mysql_version: "8.0"
