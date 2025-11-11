@@ -60,10 +60,11 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   protected function checkViewAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
     $is_owner = $entity->getOwnerId() == $account->id();
 
-    // Published assessments: viewable by anyone with view or moderate
-    // permission.
+    // Published assessments: viewable by anyone with access content, view or
+    // moderate permission.
     if ($state === 'published') {
       return AccessResult::allowedIfHasPermissions($account, [
+        'access content',
         'view own assessment report',
         'moderate assessment report',
       ], 'OR')
