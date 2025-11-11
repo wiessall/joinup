@@ -11,6 +11,7 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "bfabio/publiccode-parser-php": "^1.0",
         "bitbucket/client": "^4.5",
         "cfpinto/graphql": "^2.0",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
@@ -254,11 +255,13 @@
     "scripts": {
         "post-install-cmd": [
             "Joinup\\composer\\ComposerPatches::validate",
-            "./scripts/composer/post_install"
+            "./scripts/composer/post_install",
+            "./scripts/composer/build_publiccode_binaries"
         ],
         "post-update-cmd": [
             "Joinup\\composer\\ComposerPatches::validate",
-            "./scripts/composer/post_update"
+            "./scripts/composer/post_update",
+            "./scripts/composer/build_publiccode_binaries"
         ]
     },
     "extra": {
@@ -566,6 +569,9 @@
             },
             "weitzman/logintrait": {
                 "LoginTrait::drupalLogout() @see https://gitlab.com/weitzman/logintrait/-/issues/2": "resources/patch/php/weitzman/logintrait/3.patch"
+            },
+            "bfabio/publiccode-parser-php": {
+                "Add multi-platform support for Linux ARM64, macOS Intel, and macOS Apple Silicon. @see https://github.com/bfabio/publiccode-parser-php/issues/23": "resources/patch/php/bfabio/publiccode-parser-php/24.diff"
             }
         },
         "artifacts": {
