@@ -8,7 +8,8 @@ VENDOR_LIB="$VENDOR_DIR/lib"
 ARCH=$(uname -m)
 OS=$(uname -s)
 
-# Minimum required Go version
+# Go version configuration (should match Dockerfile.go)
+GO_VERSION="1.25.4"
 MIN_GO_MAJOR=1
 MIN_GO_MINOR=21
 
@@ -28,7 +29,7 @@ get_binary_name() {
             if [[ "$os_lower" == "darwin" ]]; then
                 echo "libpubliccode-parser-darwin-amd64.so"
             else
-                echo "libpubliccode-parser.so"
+                echo "libpubliccode-parser-linux-amd64.so"
             fi
             ;;
         *)
@@ -41,21 +42,20 @@ get_binary_name() {
 # Get Go download URL based on architecture and OS
 get_go_download_url() {
     local os_lower=$(echo "$OS" | tr '[:upper:]' '[:lower:]')
-    local go_version="1.23.3"
 
     case "$ARCH" in
         aarch64|arm64)
             if [[ "$os_lower" == "darwin" ]]; then
-                echo "https://go.dev/dl/go${go_version}.darwin-arm64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-arm64.tar.gz"
             else
-                echo "https://go.dev/dl/go${go_version}.linux-arm64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz"
             fi
             ;;
         x86_64|amd64)
             if [[ "$os_lower" == "darwin" ]]; then
-                echo "https://go.dev/dl/go${go_version}.darwin-amd64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-amd64.tar.gz"
             else
-                echo "https://go.dev/dl/go${go_version}.linux-amd64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
             fi
             ;;
         *)
@@ -139,6 +139,10 @@ if command -v go &> /dev/null; then
         rm /tmp/go.tar.gz
         export PATH=/usr/local/go/bin:$PATH
         echo "[INFO] Go upgraded successfully"
+        # Re-detect version after upgrade
+        GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+        GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+        GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
     fi
 else
     echo "[INFO] Go is not installed. Installing..."
@@ -156,9 +160,45 @@ else
     rm /tmp/go.tar.gz
     export PATH=/usr/local/go/bin:$PATH
     echo "[INFO] Go installed successfully"
+    # Detect version after installation
+    GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+    GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+    GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
 fi
 
 echo "[INFO] Go version: $(go version)"
+
+# Check if gcc is available (required for CGO compilation)
+if ! command -v gcc &> /dev/null; then
+    echo "[INFO] gcc not found, attempting to install build tools..."
+
+    # Detect package manager and install gcc
+    if command -v apt-get &> /dev/null; then
+        echo "[INFO] Installing build-essential via apt-get..."
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update -qq && apt-get install -y -qq build-essential file
+    elif command -v yum &> /dev/null; then
+        echo "[INFO] Installing gcc via yum..."
+        yum install -y -q gcc gcc-c++ make file
+    elif command -v apk &> /dev/null; then
+        echo "[INFO] Installing build-base via apk..."
+        apk add --no-cache build-base file
+    else
+        echo "[ERROR] Could not detect package manager to install gcc."
+        echo "[ERROR] Please install gcc manually:"
+        echo "[ERROR]   - Debian/Ubuntu: apt-get install build-essential"
+        echo "[ERROR]   - RedHat/CentOS: yum install gcc gcc-c++ make"
+        echo "[ERROR]   - Alpine: apk add build-base"
+        exit 1
+    fi
+
+    # Verify installation
+    if ! command -v gcc &> /dev/null; then
+        echo "[ERROR] gcc installation failed"
+        exit 1
+    fi
+    echo "[INFO] gcc installed successfully"
+fi
 
 # Fix go.mod version format to ensure compatibility
 if [ -f "$VENDOR_DIR/go-src/go.mod" ]; then
@@ -210,6 +250,8 @@ echo ""
 echo "Generated binaries:"
 ls -lh "$VENDOR_LIB"/*.so
 echo ""
-echo "Binary architecture:"
-file "$VENDOR_LIB/$BINARY_NAME"
-echo ""
+if command -v file &> /dev/null; then
+    echo "Binary architecture:"
+    file "$VENDOR_LIB/$BINARY_NAME"
+    echo ""
+fi
