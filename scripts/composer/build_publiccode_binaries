@@ -28,7 +28,7 @@ get_binary_name() {
             if [[ "$os_lower" == "darwin" ]]; then
                 echo "libpubliccode-parser-darwin-amd64.so"
             else
-                echo "libpubliccode-parser.so"
+                echo "libpubliccode-parser-linux-amd64.so"
             fi
             ;;
         *)
