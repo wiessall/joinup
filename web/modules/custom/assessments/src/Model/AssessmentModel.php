@@ -34,4 +34,16 @@ class AssessmentModel extends AssessmentModelBase implements AssessmentModelInte
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'name',
+      'binding_requirement',
+      'provided_by',
+      'results_in',
+    ];
+  }
+
 }

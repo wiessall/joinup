@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\rest\resource;
 
-use Drupal\assessments\Entity\Assessment;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\Entity\Assessment;
 use Drupal\rest\Attribute\RestResource;
-use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -74,8 +74,6 @@ class AssessmentReportResource extends ResourceBase {
    *
    * @param array $data
    *   The decoded JSON payload.
-   *
-   * @return \Drupal\rest\ResourceResponse
    */
   public function post(array $data): ResourceResponse {
     // Basic validation: ensure we got a single object with a name field as per schema.
@@ -153,4 +151,3 @@ class AssessmentReportResource extends ResourceBase {
   }
 
 }
-

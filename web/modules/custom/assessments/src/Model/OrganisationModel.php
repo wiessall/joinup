@@ -32,7 +32,10 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
    * {@inheritdoc}
    */
   public function getReferencedEntityProperties(): array {
-    return [];
+    return [
+      'name',
+      'description',
+    ];
   }
 
 }

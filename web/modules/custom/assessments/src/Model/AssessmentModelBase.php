@@ -7,7 +7,7 @@ namespace Drupal\assessments\Model;
 /**
  * Defines the assessment model base class.
  */
-abstract class AssessmentModelBase implements AssessmentModelInterface{
+abstract class AssessmentModelBase implements AssessmentModelInterface {
 
   /**
    * The generated or existing entity ID.
@@ -65,14 +65,6 @@ abstract class AssessmentModelBase implements AssessmentModelInterface{
   }
 
   /**
-   * Returns a list of allowed resource incoming API properties.
-   *
-   * @return array{string}
-   *   An array of allowed resource properties.
-   */
-  abstract protected function getAllowedResourceProperties(): array;
-
-  /**
    * Returns the ID of the entity, either new or existing.
    *
    * @return string
@@ -81,6 +73,22 @@ abstract class AssessmentModelBase implements AssessmentModelInterface{
   public function getEntityId(): string {
     return $this->entityId;
   }
+
+  /**
+   * Returns a list of allowed resource incoming API properties.
+   *
+   * @return array{string}
+   *   An array of allowed resource properties.
+   */
+  abstract protected function getAllowedResourceProperties(): array;
+
+  /**
+   * Returns a list of required resource incoming API properties.
+   *
+   * @return array{string}
+   *   An array of required resource properties.
+   */
+  abstract protected function getRequiredResourceProperties(): array;
 
   /**
    * Returns the bundle of the Drupal side entity that is related to the model.

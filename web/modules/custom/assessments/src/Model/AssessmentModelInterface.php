@@ -14,8 +14,6 @@ interface AssessmentModelInterface {
    *
    * This will be used both to navigate down to the children elements and to
    * validate invalid keys.
-   *
-   * @return array
    */
   public function getReferencedEntityProperties(): array;
 
