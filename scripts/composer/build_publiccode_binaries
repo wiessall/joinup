@@ -176,13 +176,13 @@ if ! command -v gcc &> /dev/null; then
     if command -v apt-get &> /dev/null; then
         echo "[INFO] Installing build-essential via apt-get..."
         export DEBIAN_FRONTEND=noninteractive
-        apt-get update -qq && apt-get install -y -qq build-essential
+        apt-get update -qq && apt-get install -y -qq build-essential file
     elif command -v yum &> /dev/null; then
         echo "[INFO] Installing gcc via yum..."
-        yum install -y -q gcc gcc-c++ make
+        yum install -y -q gcc gcc-c++ make file
     elif command -v apk &> /dev/null; then
         echo "[INFO] Installing build-base via apk..."
-        apk add --no-cache build-base
+        apk add --no-cache build-base file
     else
         echo "[ERROR] Could not detect package manager to install gcc."
         echo "[ERROR] Please install gcc manually:"
@@ -250,6 +250,8 @@ echo ""
 echo "Generated binaries:"
 ls -lh "$VENDOR_LIB"/*.so
 echo ""
-echo "Binary architecture:"
-file "$VENDOR_LIB/$BINARY_NAME"
-echo ""
+if command -v file &> /dev/null; then
+    echo "Binary architecture:"
+    file "$VENDOR_LIB/$BINARY_NAME"
+    echo ""
+fi
