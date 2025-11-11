@@ -32,4 +32,13 @@ class DocumentModel extends AssessmentModelBase implements AssessmentModelInterf
     return [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'file_uri',
+    ];
+  }
+
 }

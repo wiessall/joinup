@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\Component\Uuid\Php;
 use Drupal\assessments\Model\AssessmentModel;
 use Drupal\assessments\Model\AssessmentModelInterface;
-use \Drupal\Component\Uuid\Php;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**

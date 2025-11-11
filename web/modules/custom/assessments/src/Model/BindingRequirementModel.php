@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Model;
 
-use Drupal\assessments\Model\AssessmentModelBase;
-use Drupal\assessments\Model\AssessmentModelInterface;
-
 /**
  * Defines the binding requirement model class.
  */
@@ -39,6 +36,16 @@ class BindingRequirementModel extends AssessmentModelBase implements AssessmentM
       'has_participation',
       'asset',
       'documents',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'name',
+      'affects',
     ];
   }
 

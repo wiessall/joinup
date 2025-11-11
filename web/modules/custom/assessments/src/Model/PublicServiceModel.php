@@ -36,4 +36,15 @@ class PublicServiceModel extends AssessmentModelBase implements AssessmentModelI
     return [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'description',
+      'identifier',
+      'name',
+    ];
+  }
+
 }

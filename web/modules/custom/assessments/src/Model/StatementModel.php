@@ -34,4 +34,15 @@ class StatementModel extends AssessmentModelBase implements AssessmentModelInter
     return ['documents'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'interpretation',
+      'judgement',
+      'type',
+    ];
+  }
+
 }

@@ -32,6 +32,9 @@ class AssessmentComposerResourceTest extends KernelTestBase {
    */
   protected $defaultTheme = 'stark';
 
+  /**
+   *
+   */
   protected function setUp(): void {
     parent::setUp();
 
@@ -158,7 +161,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
    * Tests invalid payload (array of objects instead of a single object).
    */
   public function testPostInvalidPayload(): void {
-    $invalid = [ [ 'name' => 'Wrong root type' ] ];
+    $invalid = [['name' => 'Wrong root type']];
 
     $response = $this->invokeResourcePost($invalid);
     $this->assertSame(400, $response->getStatusCode());
@@ -184,4 +187,5 @@ class AssessmentComposerResourceTest extends KernelTestBase {
 
     return $response;
   }
+
 }

@@ -33,4 +33,14 @@ class AssetModel extends AssessmentModelBase implements AssessmentModelInterface
     return [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'name',
+      'description',
+    ];
+  }
+
 }

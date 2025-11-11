@@ -21,6 +21,7 @@ class ParticipationModel extends AssessmentModelBase implements AssessmentModelI
    */
   protected function getAllowedResourceProperties(): array {
     return [
+      'name',
       'country',
       'participation_type',
     ];
@@ -31,6 +32,15 @@ class ParticipationModel extends AssessmentModelBase implements AssessmentModelI
    */
   public function getReferencedEntityProperties(): array {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [
+      'name',
+    ];
   }
 
 }
