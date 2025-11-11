@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_subscription\Form;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -22,6 +24,7 @@ use Drupal\joinup_subscription\Plugin\Field\FieldType\EntityBundlePairItem;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides a Joinup subscription form.
@@ -44,6 +47,40 @@ class SubscriptionsForm extends FormBase {
    */
   public function getFormId(): string {
     return 'joinup_subscription_my_subscriptions';
+  }
+
+  /**
+   * Redirects users to their profile subscription page.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Returns a redirect to the profile subscription form of the currently
+   *   logged in user.
+   */
+  public function userSubscriptionPage(): RedirectResponse {
+    return $this->redirect(
+      'joinup_subscription.subscriptions',
+      ['user' => $this->currentUser()->id()],
+      [],
+      302
+    );
+  }
+
+  /**
+   * Provides an access check callback for the subscriptions route.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\user\UserInterface $user
+   *   The user whose subscriptions are being viewed.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function access(AccountInterface $current_user, UserInterface $user): AccessResultInterface {
+    // User admins are allowed, or users can view their own subscriptions.
+    return AccessResult::allowedIfHasPermission($current_user, 'administer users')
+      ->orIf(AccessResult::allowedIf($user->id() == $current_user->id()))
+      ->addCacheContexts(['user']);
   }
 
   /**
