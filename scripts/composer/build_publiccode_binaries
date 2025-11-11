@@ -8,8 +8,8 @@ VENDOR_LIB="$VENDOR_DIR/lib"
 ARCH=$(uname -m)
 OS=$(uname -s)
 
-# Minimum required Go version
-GO_VERSION="1.23.3"
+# Go version configuration (should match Dockerfile.go)
+GO_VERSION="1.25.4"
 MIN_GO_MAJOR=1
 MIN_GO_MINOR=21
 
@@ -139,6 +139,10 @@ if command -v go &> /dev/null; then
         rm /tmp/go.tar.gz
         export PATH=/usr/local/go/bin:$PATH
         echo "[INFO] Go upgraded successfully"
+        # Re-detect version after upgrade
+        GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+        GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+        GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
     fi
 else
     echo "[INFO] Go is not installed. Installing..."
@@ -156,6 +160,10 @@ else
     rm /tmp/go.tar.gz
     export PATH=/usr/local/go/bin:$PATH
     echo "[INFO] Go installed successfully"
+    # Detect version after installation
+    GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+    GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+    GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
 fi
 
 echo "[INFO] Go version: $(go version)"
