@@ -13,6 +13,9 @@ webimage_extra_packages:
     - zstd
     # Required by python2.
     - mime-support
+    # Required for building publiccode-parser-php binaries with CGO.
+    - build-essential
+    - wget
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Interoperable Europe Portal code runs
