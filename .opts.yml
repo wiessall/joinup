@@ -23,7 +23,7 @@ extra_pkgs:
   - php8.3-apcu
   - php8.3-ffi
   - git
-  - go
+  - golang-go
 
 mysql_version: "8.0"
 mydumper: True
