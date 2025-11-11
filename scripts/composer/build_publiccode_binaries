@@ -9,6 +9,7 @@ ARCH=$(uname -m)
 OS=$(uname -s)
 
 # Minimum required Go version
+GO_VERSION="1.23.3"
 MIN_GO_MAJOR=1
 MIN_GO_MINOR=21
 
@@ -41,21 +42,20 @@ get_binary_name() {
 # Get Go download URL based on architecture and OS
 get_go_download_url() {
     local os_lower=$(echo "$OS" | tr '[:upper:]' '[:lower:]')
-    local go_version="1.23.3"
 
     case "$ARCH" in
         aarch64|arm64)
             if [[ "$os_lower" == "darwin" ]]; then
-                echo "https://go.dev/dl/go${go_version}.darwin-arm64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-arm64.tar.gz"
             else
-                echo "https://go.dev/dl/go${go_version}.linux-arm64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz"
             fi
             ;;
         x86_64|amd64)
             if [[ "$os_lower" == "darwin" ]]; then
-                echo "https://go.dev/dl/go${go_version}.darwin-amd64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-amd64.tar.gz"
             else
-                echo "https://go.dev/dl/go${go_version}.linux-amd64.tar.gz"
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
             fi
             ;;
         *)
