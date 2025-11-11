@@ -332,10 +332,15 @@ drupal:
           $settings['memcache']['servers'] = array_fill_keys(explode(',', $memcache_hosts), 'default');
         }
       Custom error handler: |
-        $settings['error_page']['uuid'] = TRUE;
-        $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
-        set_error_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleError']);
-        set_exception_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleException']);
+        # Do not register the error handlers when running tests.
+        # @see \Drupal\Core\Test\TestRunnerKernel::boot()
+        # @see \Joinup\PhpUnit\EventHandler\JoinupStartedSubscriber::notify()
+        if (defined('DO_NOT_REGISTER_ERROR_HANDLER')) {
+          $settings['error_page']['uuid'] = TRUE;
+          $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
+          set_error_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleError']);
+          set_exception_handler(['Drupal\error_page\ErrorPageErrorHandler', 'handleException']);
+        }
       OpenEuropa Newsroom Newsletter Mock: |
         $config['oe_newsroom_newsletter.subscriber']['class'] = 'Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber';
       OpenEuropa Newsroom Newsletter Settings: |
