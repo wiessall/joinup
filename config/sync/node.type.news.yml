@@ -10,6 +10,10 @@ third_party_settings:
     parent: ''
 _core:
   default_config_hash: E4GjQRdiw2kt8jVrFFoDXOpeYUp2K693bzUZ4IEYNCU
+label_singular: news
+label_plural: news
+label_count:
+  no_count_capitalize: !!binary TmV3cwNOZXdz
 name: News
 type: news
 description: null
@@ -17,7 +21,3 @@ help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false
-label_singular: news
-label_plural: news
-label_count:
-  no_count_capitalize: !!binary TmV3cwNOZXdz
