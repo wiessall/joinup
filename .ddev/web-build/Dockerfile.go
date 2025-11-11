@@ -1,12 +1,11 @@
 ## Install Go for building publiccode-parser-php binaries
 # Version should match GO_VERSION in scripts/composer/build_publiccode_binaries
+# Note: wget and build-essential are installed via webimage_extra_packages in config.yaml
 
 ARG GO_VERSION=1.25.4
 ARG TARGETARCH
 
-RUN apt-get update && apt-get install -y wget \
-    && rm -rf /var/lib/apt/lists/*
-
+# Download and install Go
 RUN ARCH=$(dpkg --print-architecture) \
     && if [ "$ARCH" = "arm64" ]; then GO_ARCH="arm64"; \
        elif [ "$ARCH" = "amd64" ]; then GO_ARCH="amd64"; \

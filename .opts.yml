@@ -24,6 +24,8 @@ extra_pkgs:
   - php8.3-ffi
   - gcc
   - git
+  - wget
+  - build-essential
 
 mysql_version: "8.0"
 mydumper: True
