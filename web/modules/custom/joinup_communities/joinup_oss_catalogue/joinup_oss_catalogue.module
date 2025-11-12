@@ -77,15 +77,14 @@ function template_preprocess_catalogue_source(array &$variables): void {
  * Implements hook_node_access().
  */
 function joinup_oss_catalogue_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  // Allow users with 'administer joinup oss catalogue' permission to view
-  // unpublished OSS solutions.
-  if ($entity instanceof OssSolutionInterface && $operation === 'view' && !$entity->isPublished() && $account->hasPermission('administer joinup oss catalogue')) {
-    return AccessResult::allowed()
-      ->addCacheableDependency($entity)
-      ->cachePerPermissions();
+  if (!$entity instanceof OssSolutionInterface || $operation !== 'view' || $entity->isPublished()) {
+    return AccessResult::neutral();
   }
 
-  return AccessResult::neutral();
+  // Allow users with 'administer joinup oss catalogue' permission to view
+  // unpublished OSS solutions.
+  return AccessResult::allowedIfHasPermission($account, 'administer joinup oss catalogue')
+    ->addCacheableDependency($entity);
 }
 
 /**
