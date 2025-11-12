@@ -63,6 +63,7 @@ Feature:
     And I press "Create contact information"
     And I click "Additional information"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Save"
