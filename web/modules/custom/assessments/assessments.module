@@ -23,6 +23,36 @@ function assessments_theme(): array {
 }
 
 /**
+ * Implements hook_entity_extra_field_info().
+ */
+function assessments_entity_extra_field_info(): array {
+  return [
+    'assessment' => [
+      'report' => [
+        'form' => [
+          'cross_border' => [
+            'label' => t('Cross border type'),
+            'description' => t('Identified effects on cross-border interoperability'),
+            'weight' => 0,
+          ],
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function assessments_form_assessment_report_edit_form_alter(array &$form, FormStateInterface $formState): void {
+  $form['cross_border'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h3',
+    '#value' => t('Identified effects on cross-border interoperability'),
+  ];
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function assessments_form_layout_paragraphs_component_form_alter(array &$form, FormStateInterface $formState): void {
