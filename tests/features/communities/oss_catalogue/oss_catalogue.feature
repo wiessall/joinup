@@ -39,6 +39,7 @@ Feature:
     Then I should see the heading "Olympus"
 
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
+    Then the available options in the "Action" select should be "-- Select action --,Unpublish with all translations,Publish with all translations"
     And the "EU OSS Catalogue administration" table should contain the following columns:
       | Title   | URL | Short description       | Source Catalogue  | Languages | Published |
       | Olympus |     | Foo's short description | Developers Italia | EN        | No        |
