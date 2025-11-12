@@ -68,7 +68,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
         'view own assessment report',
         'moderate assessment report',
       ], 'OR')
-        ->cachePerPermissions()
         ->addCacheableDependency($entity);
     }
 
@@ -81,7 +80,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     }
 
     return AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
-      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
@@ -109,7 +107,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     // Owners can update only in draft state with edit permission.
     if ($state === 'draft' && $entity->getOwnerId() == $account->id()) {
       return AccessResult::allowedIfHasPermission($account, 'edit own assessment report')
-        ->cachePerPermissions()
         ->cachePerUser()
         ->addCacheableDependency($entity);
     }
@@ -134,7 +131,6 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   protected function checkDeleteAccess(EntityInterface $entity, AccountInterface $account): AccessResultInterface {
     // Only moderators can delete in any state.
     return AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
-      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
@@ -152,16 +148,14 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
 
     // Published state requires bypass moderation permission.
     if ($target_state === 'published') {
-      return AccessResult::allowedIfHasPermission($account, 'bypass assessment report moderation')
-        ->cachePerPermissions();
+      return AccessResult::allowedIfHasPermission($account, 'bypass assessment report moderation');
     }
 
     // Draft state requires create or moderate permission.
     return AccessResult::allowedIfHasPermissions($account, [
       'create assessment report',
       'moderate assessment report',
-    ], 'OR')
-      ->cachePerPermissions();
+    ], 'OR');
   }
 
 }
