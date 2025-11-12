@@ -44,6 +44,8 @@ Feature:
       | Title   | URL | Short description       | Source Catalogue  | Languages | Published |
       | Olympus |     | Foo's short description | Developers Italia | EN        | No        |
 
+    When I visit "/admin/content/eu-oss-catalogue/log"
+
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description | oss_git_description   | status    | oss_release_date |
