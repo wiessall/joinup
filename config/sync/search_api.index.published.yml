@@ -9,6 +9,7 @@ dependencies:
     - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
     - field.storage.node.body
+    - field.storage.node.classification
     - field.storage.node.contact
     - field.storage.node.description
     - field.storage.node.field_event_agenda
@@ -143,6 +144,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  classification:
+    label: 'Solution classification'
+    datasource_id: 'entity:node'
+    property_path: classification
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.classification
   contact_title:
     label: 'Related Contact » Title'
     datasource_id: 'entity:node'
