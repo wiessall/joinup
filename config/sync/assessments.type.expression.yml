@@ -9,5 +9,9 @@ third_party_settings:
     type: 'http://purl.org/vocab/frbr/core#Expression'
     uri_plugin: null
     fields: {  }
+label_singular: expression
+label_plural: expressions
+label_count:
+  - "@count expression\03@count expressions"
 id: expression
 label: Expression
