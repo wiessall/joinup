@@ -355,26 +355,28 @@ class AssessmentAccessTest extends KernelTestBase {
   }
 
   /**
-   * Creates a user with the given role.
+   * Creates a user with the given role or permissions.
    *
-   * @param string $role_id
-   *   The role ID.
-   * @param array $permissions
-   *   Optional array of permissions if creating a custom role.
+   * @param string|null $role_id
+   *   The role ID to assign, or NULL if using permissions.
+   * @param array|null $permissions
+   *   Array of permissions to create an ad-hoc role, or NULL if using role_id.
    *
    * @return \Drupal\user\UserInterface
    *   The created user.
    */
-  protected function createUserWithRole(string $role_id, array $permissions = []): UserInterface {
+  protected function createUserWithRole(?string $role_id, ?array $permissions = NULL): UserInterface {
     // If permissions are provided, create a user with an ad-hoc role.
-    if (!empty($permissions)) {
+    if ($permissions !== NULL && !empty($permissions)) {
       return $this->createUser($permissions);
     }
 
     // Otherwise, create a user and assign the existing role.
     $user = $this->createUser([]);
-    $user->addRole($role_id);
-    $user->save();
+    if ($role_id !== NULL) {
+      $user->addRole($role_id);
+      $user->save();
+    }
 
     return $user;
   }
