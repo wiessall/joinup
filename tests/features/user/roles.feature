@@ -25,6 +25,7 @@ Feature: User role management
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
+      | OSS Catalogue Manager      |
 
     Given I am logged in as "Rick Rolls"
     And I click "People" in the "Administration toolbar" region
@@ -47,6 +48,7 @@ Feature: User role management
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
+      | OSS Catalogue Manager      |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.
