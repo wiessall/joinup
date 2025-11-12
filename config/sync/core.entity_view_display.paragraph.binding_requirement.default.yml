@@ -1,40 +1,39 @@
-uuid: ead3ff49-f93d-4421-b73f-fdcb82f3a6ca
+uuid: 64c952f0-aae3-436c-bd34-6cf3f66b5571
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.binding_requirement
-    - field.field.assessment.binding_requirement.affected_party
-    - field.field.assessment.binding_requirement.asset
-    - field.field.assessment.binding_requirement.documented_in
-    - field.field.assessment.binding_requirement.expression
-    - field.field.assessment.binding_requirement.has_related_service
-    - field.field.assessment.binding_requirement.requirement_documents
+    - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.asset
+    - field.field.paragraph.binding_requirement.documented_in
+    - field.field.paragraph.binding_requirement.expression
+    - field.field.paragraph.binding_requirement.has_related_service
+    - field.field.paragraph.binding_requirement.name
+    - field.field.paragraph.binding_requirement.requirement_documents
+    - paragraphs.paragraphs_type.binding_requirement
   module:
     - file
     - link
-id: assessment.binding_requirement.default
-targetEntityType: assessment
+id: paragraph.binding_requirement.default
+targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
   affected_party:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  asset:
+    type: entity_reference_label
+    label: above
+    settings:
       link: true
     third_party_settings: {  }
     weight: 3
-    region: content
-  asset:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 4
     region: content
   documented_in:
     type: link
@@ -46,25 +45,23 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 5
     region: content
   expression:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  has_related_service:
+    type: entity_reference_label
+    label: above
+    settings:
       link: true
     third_party_settings: {  }
     weight: 2
-    region: content
-  has_related_service:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 1
     region: content
   name:
     type: string
@@ -72,7 +69,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 6
     region: content
   requirement_documents:
     type: file_default
@@ -80,12 +77,7 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
 hidden:
-  created: true
-  langcode: true
   search_api_excerpt: true
-  status: true
-  uid: true
-  uri: true

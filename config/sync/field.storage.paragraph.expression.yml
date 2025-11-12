@@ -1,12 +1,13 @@
-uuid: 6f9e5d45-0ae7-41ba-9472-95d4c08a6b2b
+uuid: e30fcb19-bcc7-416f-86d4-82d268efcd8b
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.asset
-field_name: asset
-entity_type: assessment
+    - paragraphs
+id: paragraph.expression
+field_name: expression
+entity_type: paragraph
 type: entity_reference
 settings:
   target_type: assessment

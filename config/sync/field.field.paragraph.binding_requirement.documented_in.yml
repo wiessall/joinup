@@ -1,24 +1,19 @@
-uuid: 2c2eca6d-14a4-402c-a3fe-780ecee198e5
+uuid: 20ba9f45-62c6-4bb3-8330-a74897381687
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.binding_requirement
-    - field.storage.assessment.documented_in
+    - field.storage.paragraph.documented_in
+    - paragraphs.paragraphs_type.binding_requirement
   module:
     - link
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    uri:
-      predicate: 'http://data.europa.eu/2sa/cav#documentedIn'
-      type: 'xsd:anyURI'
-id: assessment.binding_requirement.documented_in
+id: paragraph.binding_requirement.documented_in
 field_name: documented_in
-entity_type: assessment
+entity_type: paragraph
 bundle: binding_requirement
 label: 'Documented in'
 description: ''
@@ -28,5 +23,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   title: 0
-  link_type: 17
+  link_type: 16
 field_type: link

@@ -1,16 +1,18 @@
-uuid: e001ded4-032c-4f21-a1a1-2f9ceb2c6317
+uuid: 4c000cb6-64b4-487e-ab80-406887feabc0
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
+    - entity_reference_revisions
+    - paragraphs
 id: assessment.binding_requirement
 field_name: binding_requirement
 entity_type: assessment
-type: entity_reference
+type: entity_reference_revisions
 settings:
-  target_type: assessment
-module: core
+  target_type: paragraph
+module: entity_reference_revisions
 locked: false
 cardinality: -1
 translatable: true
