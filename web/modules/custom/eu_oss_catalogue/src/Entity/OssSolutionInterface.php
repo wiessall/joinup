@@ -18,7 +18,21 @@ interface OssSolutionInterface extends NodeInterface {
    *
    * @const string
    */
-  public const string PUBLICCODE_YAML_FIELD = 'oss_publiccode_yml_content';
+  const string PUBLICCODE_YAML_FIELD = 'oss_publiccode_yml_content';
+
+  /**
+   * Name of the field storing the validity of the solution's publiccode.yml.
+   *
+   * @const string
+   */
+  const string PUBLICCODE_VALIDATION_STATUS_FIELD = 'oss_validation_status';
+
+  /**
+   * Field storing the standard violations of the solution's publiccode.yml.
+   *
+   * @const string
+   */
+  const string PUBLICCODE_VALIDATION_ERRORS_FIELD = 'oss_validation_errors';
 
   /**
    * Appends a new provider to the source field.
