@@ -74,6 +74,21 @@ function template_preprocess_catalogue_source(array &$variables): void {
 }
 
 /**
+ * Implements hook_node_access().
+ */
+function joinup_oss_catalogue_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // Allow users with 'administer joinup oss catalogue' permission to view
+  // unpublished OSS solutions.
+  if ($entity instanceof OssSolutionInterface && $operation === 'view' && !$entity->isPublished() && $account->hasPermission('administer joinup oss catalogue')) {
+    return AccessResult::allowed()
+      ->addCacheableDependency($entity)
+      ->cachePerPermissions();
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
  * Implements hook_block_access().
  */
 function joinup_oss_catalogue_block_access(BlockInterface $block, string $operation, AccountInterface $account): AccessResultInterface {
