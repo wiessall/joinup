@@ -1,6 +1,8 @@
 assessments.type.*:
-  type: config_entity
+  type: bundle_entity_with_plural_labels
   label: 'Assessment type config'
+  constraints:
+    FullyValidatable: ~
   mapping:
     id:
       type: string
