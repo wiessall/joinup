@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\assessments\Entity\AssessmentReport;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\user\UserInterface;
@@ -19,6 +20,17 @@ function assessments_theme(): array {
   return [
     'assessment' => ['render element' => 'elements'],
   ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function assessments_form_layout_paragraphs_component_form_alter(array &$form, FormStateInterface $formState): void {
+  $paragraph = $formState->getFormObject()->getEntity();
+  if ($paragraph->bundle() === 'binding_requirement') {
+    // We use layout paragraphs, but we use everytime the 1 column layout.
+    $form['layout_paragraphs']['#access'] = FALSE;
+  }
 }
 
 /**
