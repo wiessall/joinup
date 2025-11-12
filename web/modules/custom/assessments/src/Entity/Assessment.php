@@ -69,7 +69,7 @@ use Drupal\user\EntityOwnerTrait;
  *   field_ui_base_route = "entity.assessment_type.edit_form",
  * )
  */
-class Assessment extends ContentEntityBase implements AssessmentInterface, RdfSyncEntityInterface {
+class Assessment extends ContentEntityBase implements AssessmentInterface {
 
   use EntityChangedTrait;
   use EntityCreationTrait;

@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\Core\Render\Element;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\user\UserInterface;
@@ -111,6 +112,9 @@ function assessments_entity_bundle_info(): array {
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
+  if (isset($bundles['assessment']['report'])) {
+    $bundles['assessment']['report']['class'] = AssessmentReport::class;
+  }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
