@@ -7,15 +7,24 @@ namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Queue worker to validate publiccode.yml of OSS solutions.
+ *
+ * This queue is used only once, at the initial deploayment of the validation.
  */
-class EuOssCatalogueValidator extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+#[QueueWorker(
+  id: 'eu_oss_catalogue_publiccode_validator',
+  title: new TranslatableMarkup('EU OSS Catalogue validator for publiccode.yml'),
+  cron: ['time' => 60],
+)]
+class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
     array $configuration,
@@ -44,18 +53,22 @@ class EuOssCatalogueValidator extends QueueWorkerBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $solution = $this->getOssSolution($data['id']);
+    $solution = $this->getOssSolution($data['solution_id']);
     if (!$solution) {
       return;
     }
 
     // Validate.
     $publiccode = $solution->getPubliccodeYaml();
-    assert(is_string($publiccode));
+    if (!is_string($publiccode)) {
+      // Nothing to validate.
+      return;
+    }
     $validationResult = $this->publicCodeValidator->validate($publiccode);
 
     // Save current validation result to the OSS solution object.
     $solution->setNewRevision(FALSE);
+    $solution->skip_notification = TRUE;
     $solution
       ->setSyncing(TRUE)
       ->setValidationResult($validationResult)

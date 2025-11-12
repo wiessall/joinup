@@ -90,8 +90,9 @@ class OssSolution extends Node implements OssSolutionInterface {
    * {@inheritdoc}
    */
   public function setValidationResult(PublicCodeValidationResultInterface $validationResult): self {
-    throw new \RuntimeException('Not implemented');
-    return $this;
+    $status = $validationResult->isValid() ? ValidationStatus::Valid : ValidationStatus::Invalid;
+    return $this->set(static::PUBLICCODE_VALIDATION_STATUS_FIELD, $status->value)
+      ->set(static::PUBLICCODE_VALIDATION_ERRORS_FIELD, $validationResult->getErrors());
   }
 
 }

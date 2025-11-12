@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\ContentEntityStorageInterface;
+
 /**
  * Fix webform configuration validation errors and clean control characters.
  */
@@ -190,5 +192,28 @@ function joinup_core_deploy_200703(array &$sandbox): string {
     $sandbox['processed'],
     $sandbox['total'],
     $sandbox['recreated'],
+  );
+}
+
+/**
+ * Queue OSS solutions to be validated.
+ */
+function joinup_core_deploy_200704(): string {
+  $queue = \Drupal::queue('eu_oss_catalogue_publiccode_validator');
+  $queue->createQueue();
+  $solutionStorage = \Drupal::service('entity_type.manager')->getStorage('node');
+  \assert($solutionStorage instanceof ContentEntityStorageInterface);
+  $solutionIds = \Drupal::entityQuery('node')->accessCheck(FALSE)->condition('type', 'oss_solution')->execute();
+
+  array_walk(
+    $solutionIds,
+    function (string|int $solutionId) use ($queue): void {
+      $queue->createItem(['solution_id' => $solutionId]);
+    },
+  );
+
+  return sprintf(
+    "Queued %s OSS solutions to be validated.",
+    count($solutionIds)
   );
 }
