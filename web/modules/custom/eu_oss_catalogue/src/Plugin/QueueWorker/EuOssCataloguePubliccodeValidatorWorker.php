@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 
+use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -32,6 +34,7 @@ class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements
     $plugin_definition,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly PublicCodeValidatorInterface $publicCodeValidator,
+    protected readonly LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -46,14 +49,15 @@ class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('eu_oss_catalogue.publiccode_validator'),
+      $container->get('logger.channel.eu_oss_catalogue'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function processItem($data): void {
-    $solution = $this->getOssSolution($data['solution_id']);
+  public function processItem(mixed $data): void {
+    $solution = $this->getOssSolution($data);
     if (!$solution) {
       return;
     }
@@ -61,7 +65,13 @@ class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements
     // Validate.
     $publiccode = $solution->getPubliccodeYaml();
     if (!is_string($publiccode)) {
-      // Nothing to validate.
+      $this->logger->warning(
+        "OSS solution validation was skipped for OSS solution @solution (@url): publiccode.yml field was empty",
+        [
+          '@solution' => $solution->label(),
+          '@url' => $solution->toUrl()->toString(),
+        ],
+      );
       return;
     }
     $validationResult = $this->publicCodeValidator->validate($publiccode);
@@ -69,33 +79,64 @@ class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements
     // Save current validation result to the OSS solution object.
     $solution->setNewRevision(FALSE);
     $solution->skip_notification = TRUE;
-    $solution
-      ->setSyncing(TRUE)
-      ->setValidationResult($validationResult)
-      ->save();
+    try {
+      $solution
+        ->setSyncing(TRUE)
+        ->setValidationResult($validationResult)
+        ->save();
+    }
+    catch (\Exception $e) {
+      $this->logger->error(
+        "Exception when trying to save validation results to solution '@solution' (@url): @error",
+        [
+          '@solution' => $solution->label(),
+          '@url' => $solution->toUrl()->toString(),
+          '@error' => $e->getMessage(),
+        ],
+      );
+    }
   }
 
   /**
    * Loads the OSS solution object.
    *
-   * @param string|int $identifier
-   *   The identifier of the OSS solution object.
+   * @param mixed $data
+   *   The queue item data, containing the OSS solution ID at the "solution_id"
+   *   key.
    *
    * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
    *   The OSS solution object, or NULL if it cannot be found.
    */
-  protected function getOssSolution(string|int $identifier): ?OssSolutionInterface {
+  protected function getOssSolution(mixed $data): ?OssSolutionInterface {
     static $ossSolutionStorage;
     if (!$ossSolutionStorage instanceof ContentEntityStorageInterface) {
       $ossSolutionStorage = $this->entityTypeManager->getStorage('node');
       \assert($ossSolutionStorage instanceof ContentEntityStorageInterface);
     }
 
-    $solution = $ossSolutionStorage->load($identifier);
-    if (!$solution) {
+    if (
+      empty($data) ||
+      intval((string) $data) !== (int) $data
+    ) {
+      $this->logger->warning(
+        "OSS solution validation queue item was invalid: @data",
+        [
+          '@data' => Variable::export($data),
+        ],
+      );
       return NULL;
     }
-    \assert($solution instanceof OssSolutionInterface);
+
+    $solution = $ossSolutionStorage->load($data);
+    if (!$solution instanceof OssSolutionInterface) {
+      $this->logger->warning(
+        "OSS Solution with ID @id cannot be found",
+        [
+          '@id' => $data,
+        ],
+      );
+      return NULL;
+    }
     return $solution;
   }
 
