@@ -8,7 +8,6 @@ dependencies:
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
-    - field.field.assessment.report.requirement_documents
     - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
     - field.field.assessment.report.statement_documents
@@ -402,14 +401,6 @@ content:
     third_party_settings: {  }
     weight: 9
     region: first
-  requirement_documents:
-    type: file_default
-    label: above
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
-    weight: 5
-    region: content
   semantic_interoperability:
     type: entity_reference_label
     label: above

@@ -21,10 +21,11 @@ third_party_settings:
     group_tabs:
       children:
         - group_general
+        - group_initiatives
         - group_assets
         - group_related_services
         - group_affected_parties
-        - group_initiatives
+        - group_documents
       label: Tabs
       region: content
       parent_name: ''
@@ -41,7 +42,6 @@ third_party_settings:
       children:
         - name
         - documented_in
-        - requirement_documents
       label: General
       region: content
       parent_name: group_tabs
@@ -109,7 +109,23 @@ third_party_settings:
       label: Initiatives
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 10
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_documents:
+      children:
+        - requirement_documents
+      label: Documents
+      region: content
+      parent_name: group_tabs
+      weight: 40
       format_type: tab
       format_settings:
         classes: ''
