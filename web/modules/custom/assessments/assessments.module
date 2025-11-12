@@ -34,6 +34,23 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
+  $url = $variables['url'];
+  $layoutParagraphsLayout = \Drupal::service('layout_paragraphs.tempstore_repository')
+    ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
+
+  $entity = $layoutParagraphsLayout?->getEntity();
+  if ($entity instanceof AssessmentReport) {
+    $fieldName = $layoutParagraphsLayout?->getFieldName();
+    if ($fieldName === 'binding_requirement') {
+      $variables['title'] = t('New binding requirement');
+    }
+  }
+}
+
+/**
  * Prepares variables for assessment templates.
  *
  * Default template: assessment.html.twig.
