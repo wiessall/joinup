@@ -20,6 +20,7 @@ Feature: User role management
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
+      | OSS Catalogue Manager      |
       | Administrator              |
       | Developer                  |
       | Interoperability validator |
@@ -41,6 +42,7 @@ Feature: User role management
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
+      | OSS Catalogue Manager      |
       | Interoperability validator |
 
   Scenario: Verify options available to the moderator.
