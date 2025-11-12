@@ -208,7 +208,7 @@ function joinup_core_deploy_200704(): string {
   array_walk(
     $solutionIds,
     function (string|int $solutionId) use ($queue): void {
-      $queue->createItem(['solution_id' => $solutionId]);
+      $queue->createItem($solutionId);
     },
   );
 
