@@ -12,7 +12,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
 
