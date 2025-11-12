@@ -1,19 +1,19 @@
-uuid: 442b3151-a210-4a25-b859-a6f5d617d2f5
+uuid: 675c7b3b-4403-416c-9461-7391050eba4b
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.binding_requirement
     - assessments.type.public_service
-    - field.storage.assessment.has_related_service
+    - field.storage.paragraph.has_related_service
+    - paragraphs.paragraphs_type.binding_requirement
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.binding_requirement.has_related_service
+id: paragraph.binding_requirement.has_related_service
 field_name: has_related_service
-entity_type: assessment
+entity_type: paragraph
 bundle: binding_requirement
 label: 'Affected service'
 description: ''

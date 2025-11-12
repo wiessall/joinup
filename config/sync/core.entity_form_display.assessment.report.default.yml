@@ -17,23 +17,23 @@ dependencies:
     - file
     - inline_entity_form
     - joinup_workflow
+    - layout_paragraphs
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
 mode: default
 content:
   binding_requirement:
-    type: inline_entity_form_simple
+    type: layout_paragraphs
     weight: 2
     region: content
     settings:
-      form_mode: default
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      collapsible: false
-      collapsed: true
-      revision: false
+      view_mode: default
+      preview_view_mode: default
+      form_display_mode: default
+      nesting_depth: 0
+      require_layouts: 1
+      empty_message: ''
     third_party_settings: {  }
   legal_interoperability:
     type: inline_entity_form_simple

@@ -1,23 +1,23 @@
-uuid: 695ab04a-97ed-40cc-9b18-095d82152a90
+uuid: bb7bd1c1-8cf4-4dd1-9881-fb91f289ee13
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.binding_requirement
-    - assessments.type.expression
-    - field.storage.assessment.expression
+    - assessments.type.asset
+    - field.storage.paragraph.asset
+    - paragraphs.paragraphs_type.binding_requirement
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.binding_requirement.expression
-field_name: expression
-entity_type: assessment
+id: paragraph.binding_requirement.asset
+field_name: asset
+entity_type: paragraph
 bundle: binding_requirement
-label: 'Initiative, project or action concerned (containing the binding requirements to be assessed)'
+label: Asset
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -25,7 +25,7 @@ settings:
   handler: 'default:assessment'
   handler_settings:
     target_bundles:
-      expression: expression
+      asset: asset
     sort:
       field: _none
       direction: ASC
