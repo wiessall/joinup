@@ -129,7 +129,7 @@ Feature: Collection membership administration
 
     When I am logged in as "Cam Bridge"
     When I click the "My subscriptions" link from the email sent to "Cam Bridge"
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscription settings"
 
   Scenario: Reject a membership
     Given I am logged in as "Lisa Cuddy"
