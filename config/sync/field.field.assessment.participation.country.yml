@@ -16,7 +16,7 @@ id: assessment.participation.country
 field_name: country
 entity_type: assessment
 bundle: participation
-label: Country
+label: 'Stakeholder’s countries'
 description: ''
 required: false
 translatable: false
