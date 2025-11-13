@@ -100,11 +100,6 @@ class Assessment extends ContentEntityBase implements AssessmentInterface {
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'string',
-        'weight' => 0,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
