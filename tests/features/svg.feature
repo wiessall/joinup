@@ -21,7 +21,7 @@ Feature: Test SVG attachments.
       | Invalid or unsafe SVG file.                         |
 
     But I attach the file "simple.svg" to "Add file"
-    When I fill in "Alternative text" with "Example SVG"
+    When I fill in "Alternative text" with "Example SVG" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
 
     When I press "Insert selected" in the "Modal buttons" region
