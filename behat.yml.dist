@@ -80,6 +80,7 @@
   - Drupal\joinup\Context\MetaEntityContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
+  - Drupal\joinup\Context\OauthClientContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
