@@ -44,7 +44,8 @@ class TransitionPermissionGuard implements GuardInterface {
       return TRUE;
     }
 
-    if ($this->currentUser->hasPermission($entity->getEntityType()->getAdminPermission())) {
+    $admin_permission = $entity->getEntityType()->getAdminPermission();
+    if ($admin_permission && $this->currentUser->hasPermission($admin_permission)) {
       return TRUE;
     }
 
