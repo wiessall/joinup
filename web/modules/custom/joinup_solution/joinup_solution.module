@@ -188,7 +188,8 @@ function joinup_solution_form_node_solution_edit_form_alter(array &$form, FormSt
  *   joinup_workflow.
  */
 function joinup_solution_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
-  if ($account->hasPermission($entity->getEntityType()->getAdminPermission())) {
+  $admin_permission = $entity->getEntityType()->getAdminPermission();
+  if ($admin_permission && $account->hasPermission($admin_permission)) {
     return AccessResult::neutral();
   }
   if ($entity->bundle() != 'solution') {
