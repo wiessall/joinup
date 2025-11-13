@@ -1,0 +1,14 @@
+uuid: b3736760-f200-47f9-ab11-b876fb81815d
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_oauth.oauth2_scope.assessments
+id: assessments
+label: 'Assessments operations'
+description: "The OAuth2 client allows to post, via API, interoperability assessments, an instrument introduced by the <a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A52022PC0720\">Interoperable Europe Act</a>. Learn more at the <a href=\"/collection/assessments\">Interoperability assessments space</a>.\r\n\r\nRead the <a href=\"/api/assessments/v1\">API endpoint documentation</a>."
+grant_type:
+  client_credentials:
+    enabled: true
+    settings: {  }
+scope: assessments
