@@ -1,0 +1,9 @@
+uuid: e39993c9-ee98-4168-91ad-4af33d668f81
+langcode: en
+status: true
+dependencies: {  }
+id: assessment_reporter
+label: 'Assessment reporter'
+weight: -2
+is_admin: null
+permissions: {  }
