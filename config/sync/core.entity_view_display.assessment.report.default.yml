@@ -8,6 +8,7 @@ dependencies:
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
+    - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
     - field.field.assessment.report.statement_documents
@@ -16,6 +17,7 @@ dependencies:
     - file
     - joinup_layout
     - layout_builder
+    - link
     - options
 third_party_settings:
   layout_builder:
@@ -227,6 +229,26 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 7
             additional: {  }
+          345d3df9-eb86-4680-86e8-8fea56a19ea8:
+            uuid: 345d3df9-eb86-4680-86e8-8fea56a19ea8
+            region: first
+            configuration:
+              id: 'field_block:assessment:report:relevant_report'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 8
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: joinup_layout_twocol_60_40
@@ -400,6 +422,18 @@ content:
       link: true
     third_party_settings: {  }
     weight: 9
+    region: first
+  relevant_report:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 12
     region: first
   semantic_interoperability:
     type: entity_reference_label
