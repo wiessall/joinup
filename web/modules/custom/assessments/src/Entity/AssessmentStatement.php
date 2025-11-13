@@ -99,7 +99,7 @@ final class AssessmentStatement extends ContentEntityBase {
   /**
    * {@inheritdoc}
    */
-  public function label(): string {
+  public function label(): ?string {
     return $this->id();
   }
 
