@@ -338,9 +338,10 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     return $access->addCacheContexts(['og_role']);
   }
 
+  $admin_permission = $entity->getEntityType()->getAdminPermission();
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
-    || $account->hasPermission($entity->getEntityType()->getAdminPermission())
+    || $admin_permission && $account->hasPermission($admin_permission)
     || $operation !== 'view'
   ) {
     return AccessResult::neutral()->cachePerPermissions();
