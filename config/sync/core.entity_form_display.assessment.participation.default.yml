@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - assessments.type.participation
-    - field.field.assessment.participation.country
     - field.field.assessment.participation.participant_type
+    - field.field.assessment.participation.stakeholder_country
   module:
     - entity_form_field_label
     - oe_bootstrap_theme_helper
@@ -15,20 +15,6 @@ targetEntityType: assessment
 bundle: participation
 mode: default
 content:
-  country:
-    type: tagify_select_widget
-    weight: 3
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      placeholder: 'Select or start typing...'
-    third_party_settings:
-      entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
-        new_description: ''
-        rewrite_description: 0
   participant_type:
     type: options_buttons
     weight: 1
@@ -42,6 +28,20 @@ content:
         rewrite_description: 0
       oe_bootstrap_theme_helper:
         switch: false
+  stakeholder_country:
+    type: tagify_select_widget
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
 hidden:
   created: true
   langcode: true
