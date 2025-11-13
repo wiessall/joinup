@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.domain
     - facets.facet.group
     - facets.facet.interoperable_flag
     - facets.facet.spatial_coverage
@@ -55,3 +56,9 @@ facets:
     separator: ', '
     show_count: false
     weight: -5
+  domain:
+    checked: true
+    label: Domain
+    separator: ', '
+    show_count: false
+    weight: 0
