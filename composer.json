@@ -473,7 +473,8 @@
             },
             "drupal/oauth_client": {
                 "Improve test coverage @see https://www.drupal.org/i/3553991": "resources/patch/php/drupal/oauth_client/3553991.diff",
-                "Minimal text formatting for OAuth2 client request type description @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048.diff"
+                "Minimal text formatting for OAuth2 client request type description @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048.diff",
+                "Dual OauthClientRequestForm behaviour @see https://www.drupal.org/i/3557380": "resources/patch/php/drupal/oauth_client/3557380.diff"
             },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
