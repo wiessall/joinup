@@ -81,7 +81,6 @@ Feature: Subscribing to community content in collections and solutions
       | Deflected rays         |
 
     And the email sent to jpluminet with subject "Interoperable Europe Portal: Daily digest message" contains the following lines of text:
-      | Daily digest message                                                                          |
       | Dear Jean-Pierre,                                                                             |
       | New content published in Black hole imaging                                                   |
       | Active galactic nuclei                                                                        |

@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\joinup_core\Archiver;
 
 /**
  * Fix webform configuration validation errors and clean control characters.
@@ -196,9 +197,73 @@ function joinup_core_deploy_200703(array &$sandbox): string {
 }
 
 /**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_200704(array &$sandbox): string {
+  $archiver = \Drupal::service(Archiver::class);
+  assert($archiver instanceof Archiver);
+  $archiver->archiveGroupsWithFewMembers($sandbox);
+
+  return sprintf(
+    "Archived %s from %s items of %s total.",
+    $sandbox['archived'],
+    $sandbox['processed'],
+    $sandbox['total'],
+  );
+}
+
+/**
+ * Archives content which wasn't updated in the last 3 years.
+ */
+function joinup_core_deploy_200705(array &$sandbox): string {
+  $archiver = \Drupal::service(Archiver::class);
+  assert($archiver instanceof Archiver);
+  $archiver->archivePotentiallyOutdatedContent($sandbox);
+
+  return sprintf(
+    "Archived %s from %s items of %s total.",
+    $sandbox['archived'],
+    $sandbox['processed'],
+    $sandbox['total'],
+  );
+}
+
+/**
+ * Archives solutions which have no releases or distributions.
+ */
+function joinup_core_deploy_200706(array &$sandbox): string {
+  $archiver = \Drupal::service(Archiver::class);
+  assert($archiver instanceof Archiver);
+  $archiver->archiveSolutionsWithoutReleaseOrDistro($sandbox);
+
+  return sprintf(
+    "Archived %s from %s items of %s total.",
+    $sandbox['archived'],
+    $sandbox['processed'],
+    $sandbox['total'],
+  );
+}
+
+/**
+ * Archives groups without group content.
+ */
+function joinup_core_deploy_200707(array &$sandbox): string {
+  $archiver = \Drupal::service(Archiver::class);
+  assert($archiver instanceof Archiver);
+  $archiver->archiveGroupsWithoutContent($sandbox);
+
+  return sprintf(
+    "Archived %s from %s items of %s total.",
+    $sandbox['archived'],
+    $sandbox['processed'],
+    $sandbox['total'],
+  );
+}
+
+/**
  * Queue OSS solutions to be validated.
  */
-function joinup_core_deploy_200704(): string {
+function joinup_core_deploy_200708(): string {
   $queue = \Drupal::queue('eu_oss_catalogue_publiccode_validator');
   $queue->createQueue();
   $solutionStorage = \Drupal::service('entity_type.manager')->getStorage('node');
