@@ -91,7 +91,7 @@ third_party_settings:
     group_affected_parties:
       children:
         - affected_party
-      label: 'Affected parties'
+      label: 'Affected stakeholders'
       region: content
       parent_name: group_tabs
       weight: 20
