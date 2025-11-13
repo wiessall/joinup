@@ -1,0 +1,257 @@
+#!/bin/bash
+# Build publiccode-parser-php binaries for all supported architectures
+# This script compiles the Go-based parser library for the current system architecture
+set -e
+
+VENDOR_DIR="vendor/bfabio/publiccode-parser-php"
+VENDOR_LIB="$VENDOR_DIR/lib"
+ARCH=$(uname -m)
+OS=$(uname -s)
+
+# Go version configuration (should match Dockerfile.go)
+GO_VERSION="1.25.4"
+MIN_GO_MAJOR=1
+MIN_GO_MINOR=21
+
+# Determine binary name based on architecture and OS
+get_binary_name() {
+    local os_lower=$(echo "$OS" | tr '[:upper:]' '[:lower:]')
+
+    case "$ARCH" in
+        aarch64|arm64)
+            if [[ "$os_lower" == "darwin" ]]; then
+                echo "libpubliccode-parser-darwin-arm64.so"
+            else
+                echo "libpubliccode-parser-linux-arm64.so"
+            fi
+            ;;
+        x86_64|amd64)
+            if [[ "$os_lower" == "darwin" ]]; then
+                echo "libpubliccode-parser-darwin-amd64.so"
+            else
+                echo "libpubliccode-parser-linux-amd64.so"
+            fi
+            ;;
+        *)
+            echo "ERROR: Unsupported architecture: $ARCH" >&2
+            exit 1
+            ;;
+    esac
+}
+
+# Get Go download URL based on architecture and OS
+get_go_download_url() {
+    local os_lower=$(echo "$OS" | tr '[:upper:]' '[:lower:]')
+
+    case "$ARCH" in
+        aarch64|arm64)
+            if [[ "$os_lower" == "darwin" ]]; then
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-arm64.tar.gz"
+            else
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz"
+            fi
+            ;;
+        x86_64|amd64)
+            if [[ "$os_lower" == "darwin" ]]; then
+                echo "https://go.dev/dl/go${GO_VERSION}.darwin-amd64.tar.gz"
+            else
+                echo "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
+            fi
+            ;;
+        *)
+            echo "ERROR: Unsupported architecture for Go download: $ARCH" >&2
+            return 1
+            ;;
+    esac
+}
+
+BINARY_NAME=$(get_binary_name)
+
+# Check if package exists
+if [ ! -d "$VENDOR_DIR" ]; then
+    echo "[INFO] publiccode-parser-php not found in vendor directory, skipping build"
+    exit 0
+fi
+
+# Check if binary already exists
+if [ -f "$VENDOR_LIB/$BINARY_NAME" ]; then
+    echo "[INFO] Binary already exists: $BINARY_NAME"
+    exit 0
+fi
+
+echo ""
+echo "=========================================="
+echo "Building publiccode-parser-php binary"
+echo "=========================================="
+echo "Operating System: $OS"
+echo "Architecture: $ARCH"
+echo "Target Binary: $BINARY_NAME"
+echo ""
+
+# Check if go-src directory exists
+if [ ! -d "$VENDOR_DIR/go-src" ]; then
+    echo "[ERROR] go-src directory not found in vendor package"
+    echo "[ERROR] This package version may not include source code for building"
+    exit 1
+fi
+
+# Function to download file
+download_file() {
+    local url=$1
+    local output=$2
+    echo "[INFO] Downloading from: $url"
+
+    if command -v wget &> /dev/null; then
+        wget -q "$url" -O "$output"
+    elif command -v curl &> /dev/null; then
+        curl -sSL "$url" -o "$output"
+    else
+        echo "[ERROR] Neither wget nor curl found. Please install one of them."
+        exit 1
+    fi
+}
+
+# Ensure Go is installed and meets minimum version requirements
+export PATH=/usr/local/go/bin:$HOME/go/bin:$PATH
+
+if command -v go &> /dev/null; then
+    GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+    GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+    GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
+
+    if [ "$GO_MAJOR" -gt "$MIN_GO_MAJOR" ] ||
+       ([ "$GO_MAJOR" -eq "$MIN_GO_MAJOR" ] && [ "$GO_MINOR" -ge "$MIN_GO_MINOR" ]); then
+        echo "[INFO] Using Go $GO_VERSION"
+    else
+        echo "[INFO] Current Go version ($GO_VERSION) is below minimum required (${MIN_GO_MAJOR}.${MIN_GO_MINOR})"
+        echo "[INFO] Upgrading Go installation..."
+        GO_URL=$(get_go_download_url)
+        download_file "$GO_URL" /tmp/go.tar.gz
+
+        if command -v sudo &> /dev/null; then
+            sudo rm -rf /usr/local/go
+            sudo tar -C /usr/local -xzf /tmp/go.tar.gz
+        else
+            rm -rf /usr/local/go
+            tar -C /usr/local -xzf /tmp/go.tar.gz
+        fi
+
+        rm /tmp/go.tar.gz
+        export PATH=/usr/local/go/bin:$PATH
+        echo "[INFO] Go upgraded successfully"
+        # Re-detect version after upgrade
+        GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+        GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+        GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
+    fi
+else
+    echo "[INFO] Go is not installed. Installing..."
+    GO_URL=$(get_go_download_url)
+    download_file "$GO_URL" /tmp/go.tar.gz
+
+    if command -v sudo &> /dev/null; then
+        sudo rm -rf /usr/local/go
+        sudo tar -C /usr/local -xzf /tmp/go.tar.gz
+    else
+        rm -rf /usr/local/go
+        tar -C /usr/local -xzf /tmp/go.tar.gz
+    fi
+
+    rm /tmp/go.tar.gz
+    export PATH=/usr/local/go/bin:$PATH
+    echo "[INFO] Go installed successfully"
+    # Detect version after installation
+    GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+    GO_MAJOR=$(echo "$GO_VERSION" | cut -d. -f1)
+    GO_MINOR=$(echo "$GO_VERSION" | cut -d. -f2)
+fi
+
+echo "[INFO] Go version: $(go version)"
+
+# Check if gcc is available (required for CGO compilation)
+if ! command -v gcc &> /dev/null; then
+    echo "[INFO] gcc not found, attempting to install build tools..."
+
+    # Detect package manager and install gcc
+    if command -v apt-get &> /dev/null; then
+        echo "[INFO] Installing build-essential via apt-get..."
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update -qq && apt-get install -y -qq build-essential file
+    elif command -v yum &> /dev/null; then
+        echo "[INFO] Installing gcc via yum..."
+        yum install -y -q gcc gcc-c++ make file
+    elif command -v apk &> /dev/null; then
+        echo "[INFO] Installing build-base via apk..."
+        apk add --no-cache build-base file
+    else
+        echo "[ERROR] Could not detect package manager to install gcc."
+        echo "[ERROR] Please install gcc manually:"
+        echo "[ERROR]   - Debian/Ubuntu: apt-get install build-essential"
+        echo "[ERROR]   - RedHat/CentOS: yum install gcc gcc-c++ make"
+        echo "[ERROR]   - Alpine: apk add build-base"
+        exit 1
+    fi
+
+    # Verify installation
+    if ! command -v gcc &> /dev/null; then
+        echo "[ERROR] gcc installation failed"
+        exit 1
+    fi
+    echo "[INFO] gcc installed successfully"
+fi
+
+# Fix go.mod version format to ensure compatibility
+if [ -f "$VENDOR_DIR/go-src/go.mod" ]; then
+    echo "[INFO] Normalizing go.mod version format..."
+    # Handle patch versions in go.mod (e.g., 1.24.5 -> 1.24)
+    sed -i.bak 's/^go \([0-9]\+\.[0-9]\+\)\.[0-9]\+$/go \1/' "$VENDOR_DIR/go-src/go.mod" 2>/dev/null || \
+        sed -i '' 's/^go \([0-9]\+\.[0-9]\+\)\.[0-9]\+$/go \1/' "$VENDOR_DIR/go-src/go.mod" 2>/dev/null || true
+
+    # Ensure compatibility with installed Go version
+    GOMOD_VERSION=$(grep -E '^go [0-9]+\.[0-9]+' "$VENDOR_DIR/go-src/go.mod" | awk '{print $2}')
+    INSTALLED_VERSION="${GO_MAJOR}.${GO_MINOR}"
+
+    if [ "$GOMOD_VERSION" != "$INSTALLED_VERSION" ]; then
+        echo "[INFO] Updating go.mod from $GOMOD_VERSION to $INSTALLED_VERSION"
+        sed -i.bak "s/^go ${GOMOD_VERSION}/go ${INSTALLED_VERSION}/" "$VENDOR_DIR/go-src/go.mod" 2>/dev/null || \
+            sed -i '' "s/^go ${GOMOD_VERSION}/go ${INSTALLED_VERSION}/" "$VENDOR_DIR/go-src/go.mod" 2>/dev/null || true
+    fi
+
+    rm -f "$VENDOR_DIR/go-src/go.mod.bak"
+fi
+
+# Build binary for current architecture
+echo "[INFO] Building binary for $ARCH..."
+cd "$VENDOR_DIR/go-src"
+
+# Download Go module dependencies
+echo "[INFO] Downloading Go module dependencies..."
+go mod download
+
+# Compile the shared library
+echo "[INFO] Compiling shared library..."
+CGO_ENABLED=1 go build -buildmode=c-shared \
+    -o "../lib/$BINARY_NAME" \
+    publiccode-parser-wrapper.go
+
+cd - > /dev/null
+
+# Verify build success
+if [ ! -f "$VENDOR_LIB/$BINARY_NAME" ]; then
+    echo "[ERROR] Build failed: binary was not created"
+    exit 1
+fi
+
+echo ""
+echo "=========================================="
+echo "Build completed successfully"
+echo "=========================================="
+echo ""
+echo "Generated binaries:"
+ls -lh "$VENDOR_LIB"/*.so
+echo ""
+if command -v file &> /dev/null; then
+    echo "Binary architecture:"
+    file "$VENDOR_LIB/$BINARY_NAME"
+    echo ""
+fi

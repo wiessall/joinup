@@ -1,0 +1,241 @@
+diff --git a/.github/workflows/packagist.yml b/.github/workflows/packagist.yml
+index 4300229..7558fac 100644
+--- a/.github/workflows/packagist.yml
++++ b/.github/workflows/packagist.yml
+@@ -20,19 +20,32 @@ jobs:
+         with:
+           go-version: "1.24"
+ 
+-      - name: Build shared library
+-        run: make build
++      - name: Install cross-compilation tools
++        run: |
++          sudo apt-get update
++          sudo apt-get install -y gcc-aarch64-linux-gnu
++
++      - name: Build shared libraries for all platforms
++        run: |
++          # Build Linux AMD64 (native)
++          make build-linux-amd64
++
++          # Build Linux ARM64 (cross-compile)
++          make build-linux-arm64
++
++          # Build macOS Apple Silicon (cross-compile)
++          make build-darwin-arm64
+ 
+       - run: |
+-          if ! git diff --quiet -- lib/libpubliccode-parser.so; then
++          if ! git diff --quiet -- lib/; then
+             git config user.name "${GITHUB_ACTOR}"
+             git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+ 
+-            git add lib/libpubliccode-parser.*
+-            git commit -m "ci: update lib/libpubliccode-parser.so [skip ci]"
++            git add lib/
++            git commit -m "ci: update shared libraries [skip ci]"
+             git push
+           else
+-            echo "No changes in lib/libpubliccode-parser.so"
++            echo "No changes in lib/"
+           fi
+ 
+       - name: Update Packagist
+diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+index f88b5b3..9f3c30e 100644
+--- a/.github/workflows/test.yml
++++ b/.github/workflows/test.yml
+@@ -6,7 +6,22 @@ on:
+ 
+ jobs:
+   test:
+-    runs-on: ubuntu-latest
++    runs-on: ${{ matrix.os }}
++    strategy:
++      fail-fast: false
++      matrix:
++        include:
++          - os: ubuntu-24.04
++            platform: linux-amd64
++            php-version: "8.3"
++          - os: ubuntu-24.04-arm
++            platform: linux-arm64
++            php-version: "8.3"
++          - os: macos-latest
++            platform: darwin-arm64
++            php-version: "8.3"
++
++    name: Test on ${{ matrix.platform }} (PHP ${{ matrix.php-version }})
+ 
+     steps:
+       - name: Checkout code
+@@ -14,14 +29,16 @@ jobs:
+ 
+       - name: Setup PHP
+         uses: shivammathur/setup-php@v2
++        with:
++          php-version: ${{ matrix.php-version }}
+ 
+       - name: Setup Go
+         uses: actions/setup-go@v6
+         with:
+           go-version: "1.24"
+ 
+-      - name: Build shared library
+-        run: make build
++      - name: Build shared library for platform
++        run: make build-${{ matrix.platform }}
+ 
+       - name: Validate composer.json
+         run: composer validate --strict
+@@ -41,11 +58,14 @@ jobs:
+           go build -C go-src -o "$GITHUB_WORKSPACE/bin/publiccode-parser" \
+             github.com/italia/publiccode-parser-go/v5/publiccode-parser
+ 
+-      - run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
++      - name: Add bin to PATH
++        run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+ 
+-      - run: |
++      - name: Download test fixtures
++        run: |
+           VERSION=$(go list -C go-src -m -f '{{.Version}}' github.com/italia/publiccode-parser-go/v5)
+           git clone --depth 1 --branch $VERSION https://github.com/italia/publiccode-parser-go.git /tmp/publiccode-parser-go
+           mv /tmp/publiccode-parser-go/testdata/* tests/fixtures/testdata/
+ 
+-      - run: composer run test
++      - name: Run tests
++        run: composer run test
+diff --git a/Makefile b/Makefile
+index 2c25372..e1e2f59 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,19 +2,29 @@ LIBRARY_NAME=libpubliccode-parser
+ 
+ LIB_DIR=lib
+ 
+-LIBRARY=$(LIB_DIR)/$(LIBRARY_NAME).so
++.PHONY: all build-all build-linux-amd64 build-linux-arm64 build-darwin-arm64 clean
+ 
+-.PHONY: all build clean deps
++all: build-all
+ 
+-all: build
++# Build all platform variants
++build-all: build-linux-amd64 build-linux-arm64 build-darwin-arm64
++	@echo "All platforms built successfully"
+ 
+-build:
++build-linux-amd64:
+ 	mkdir -p $(LIB_DIR)
+-	cd go-src && CGO_ENABLED=1 go build -buildmode=c-shared -o ../$(LIBRARY) publiccode-parser-wrapper.go
++	cd go-src && GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -buildmode=c-shared -o ../$(LIB_DIR)/$(LIBRARY_NAME)-linux-amd64.so publiccode-parser-wrapper.go
++	@echo "Built Linux AMD64"
++
++build-linux-arm64:
++	mkdir -p $(LIB_DIR)
++	cd go-src && GOOS=linux GOARCH=arm64 CGO_ENABLED=1 CC=aarch64-linux-gnu-gcc go build -buildmode=c-shared -o ../$(LIB_DIR)/$(LIBRARY_NAME)-linux-arm64.so publiccode-parser-wrapper.go
++	@echo "Built Linux ARM64"
++
++build-darwin-arm64:
++	mkdir -p $(LIB_DIR)
++	cd go-src && GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -buildmode=c-shared -o ../$(LIB_DIR)/$(LIBRARY_NAME)-darwin-arm64.dylib publiccode-parser-wrapper.go
++	@echo "Built macOS ARM64"
+ 
+ clean:
+ 	go clean
+ 	rm -rf $(LIB_DIR)
+-
+-install: build
+-	cp $(LIBRARY) /usr/local/lib/
+diff --git a/README.md b/README.md
+index 366fe39..dbaee6e 100644
+--- a/README.md
++++ b/README.md
+@@ -10,7 +10,13 @@ You can install the package via composer:
+ composer require bfabio/publiccode-parser-php
+ ```
+ 
+-It only supports Linux x86_64 for now.
++### Supported Platforms
++
++This library supports the following platforms:
++
++- **Linux x86-64** (AMD64) - Fully supported
++- **Linux ARM64** (aarch64) - Fully supported
++- **macOS Apple Silicon** (ARM64/M1/M2/M3/M4) - Fully supported
+ 
+ ## Usage
+ 
+diff --git a/src/Parser.php b/src/Parser.php
+index a3f4955..01d8157 100644
+--- a/src/Parser.php
++++ b/src/Parser.php
+@@ -149,7 +149,12 @@ private function getFFI(): FFI
+      */
+     private function findLibrary(): string
+     {
+-        $libraryName = 'libpubliccode-parser.so';
++        $os = $this->detectOS();
++        $arch = $this->detectArchitecture();
++        $ext = $os === 'darwin' ? 'dylib' : 'so';
++
++        $libraryName = "libpubliccode-parser-{$os}-{$arch}.{$ext}";
++
+         $possiblePaths = [
+             __DIR__ . '/',
+             __DIR__ . '/../lib/',
+@@ -165,7 +170,52 @@ private function findLibrary(): string
+             }
+         }
+ 
+-        throw new ParserException('libpubliccode-parser.so not found');
++        throw new ParserException(
++            "libpubliccode-parser library not found for platform: {$os}-{$arch}. " .
++            "Searched for: {$libraryName}",
++        );
++    }
++
++    /**
++     * Detect operating system
++     *
++     * @return 'linux'|'darwin'
++     * @throws ParserException
++     */
++    private function detectOS(): string
++    {
++        $osFamily = PHP_OS_FAMILY;
++
++        if ($osFamily === 'Linux') {
++            return 'linux';
++        }
++
++        if ($osFamily === 'Darwin') {
++            return 'darwin';
++        }
++
++        throw new ParserException("Unsupported operating system: {$osFamily}");
++    }
++
++    /**
++     * Detect CPU architecture
++     *
++     * @return 'amd64'|'arm64'
++     * @throws ParserException
++     */
++    private function detectArchitecture(): string
++    {
++        $machine = php_uname('m');
++
++        if (in_array($machine, ['x86_64', 'amd64', 'AMD64'], true)) {
++            return 'amd64';
++        }
++
++        if (in_array($machine, ['arm64', 'aarch64', 'ARM64'], true)) {
++            return 'arm64';
++        }
++
++        throw new ParserException("Unsupported architecture: {$machine}");
+     }
+ 
+     /**
