@@ -168,7 +168,7 @@ function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTyp
  */
 function joinup_release_node_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
   $admin_permission = $release->getEntityType()->getAdminPermission();
-  if (!$release instanceof ReleaseInterface || $admin_permission && $account->hasPermission($admin_permission)) {
+  if (!$release instanceof ReleaseInterface || ($admin_permission && $account->hasPermission($admin_permission))) {
     return AccessResult::neutral();
   }
 
