@@ -54,13 +54,21 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setLabel(t('Judgement'))
       ->setDescription(t('The judgement statement.'))
       ->setTranslatable(TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textarea',
+        'weight' => 1,
+        'settings' => [
+          'rows' => 3,
+          'placeholder' => '',
+        ],
+      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 1,
       ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['interpretation'] = BaseFieldDefinition::create('list_integer')
       ->setLabel(t('Interpretation'))
@@ -73,22 +81,34 @@ final class AssessmentStatement extends ContentEntityBase {
           -1 => 'Negative',
         ],
       ])
+      ->setDisplayOptions('form', [
+        'type' => 'options_buttons',
+        'weight' => 0,
+      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'list_default',
-        'weight' => 1,
+        'weight' => 0,
       ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
-    $fields['landing_page'] = BaseFieldDefinition::create('uri')
+    $fields['landing_page'] = BaseFieldDefinition::create('file')
       ->setLabel(t('Statement supporting document'))
-      ->setDescription(t('The landing page for the document.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'uri_link',
         'weight' => 2,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'file_generic',
+        'weight' => 2,
+        'settings' => [
+          'progress_indicator' => 'throbber',
+          'display_field' => FALSE,
+          'default_upload_location' => 'public://assessment-statements',
+        ],
       ])
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE);

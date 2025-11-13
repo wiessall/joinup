@@ -183,3 +183,10 @@
     margin-bottom: 1.5rem;
   }
 }
+
+#edit-legal-interoperability .form-check,
+#edit-organisational-interoperability .form-check,
+#edit-semantic-interoperability .form-check,
+#edit-technical-interoperability .form-check {
+  display: inline-block;
+}
