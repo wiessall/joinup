@@ -1,0 +1,104 @@
+{#
+/**
+ * @file
+ * Template for binding_requirement with top panel + collapsible details,
+ * wrapped in a Bootstrap container.
+ */
+#}
+
+  {% set classes = [
+    'paragraph',
+    'paragraph--' ~ paragraph.bundle|clean_class,
+    'card',
+    'border',
+    'shadow-sm',
+    'mb-3',
+    'p-3',
+  ] %}
+  {% block paragraph %}
+    <div{{ attributes.addClass(classes) }}>
+      <div class="card-body pb-2">
+        <div class="row align-items-start">
+          <div class="col-md-6">
+            <h5 class="mb-1">
+              {% if content.documented_in.0['#url'] %}
+                "{{ content.name }}" {{ 'documented in'|t }}
+                <a href="{{ content.documented_in.0['#url'] }}"
+                   class="text-decoration-none">{{ content.documented_in.0['#url'] }}</a>
+              {% else %}
+                {{ content.name }}
+              {% endif %}
+            </h5>
+
+            {% if content.description %}
+              <div class="text-muted small">
+                {{ content.description }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% if content.expression %}
+            <div class="col-md-6">
+              <div class="border rounded p-2 bg-light h-100">
+                <div class="fw-bold small text-uppercase text-muted mb-1">
+                  As defined in the initiatives
+                </div>
+                <div class="small">
+                  {{ content.expression }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+      <details class="mt-2">
+        <summary class="p-2 bg-light border-top small text-muted">
+          Show full requirement details
+        </summary>
+
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% if content.affected_party %}
+              <div class="col">
+                <div class="border rounded p-2 h-100">
+                  <div class="fw-bold mb-1">Affected party</div>
+                  <div
+                    class="small text-muted">{{ content.affected_party }}</div>
+                </div>
+              </div>
+            {% endif %}
+            {% if content.has_related_service %}
+              <div class="col">
+                <div class="border rounded p-2 h-100">
+                  <div class="fw-bold mb-1">Related service</div>
+                  <div
+                    class="small text-muted">{{ content.has_related_service }}</div>
+                </div>
+              </div>
+            {% endif %}
+            {% if content.asset %}
+              <div class="col">
+                <div class="border rounded p-2 h-100">
+                  <div class="fw-bold mb-1">Asset</div>
+                  <div class="small text-muted">{{ content.asset }}</div>
+                </div>
+              </div>
+            {% endif %}
+            {% if content.requirement_documents %}
+              <div class="col">
+                <div class="border rounded p-2 h-100">
+                  <div class="fw-bold mb-1">Documents</div>
+                  <ul class="list-unstyled small mb-0">
+                    {{ content.requirement_documents }}
+                  </ul>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+  {% endblock %}
