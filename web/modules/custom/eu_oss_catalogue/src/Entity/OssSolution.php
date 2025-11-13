@@ -76,14 +76,12 @@ class OssSolution extends Node implements OssSolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPubliccodeYaml(): ?string {
+  public function getPublicCodeYaml(): ?string {
     $field = $this->get(static::PUBLICCODE_YAML_FIELD);
     \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
-    if ($field->isEmpty()) {
-      return NULL;
-    }
-    $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
-    return $publicCodeYamlContent;
+    return $field->isEmpty()
+      ? NULL
+      : $field->first()->getValue()[$field->first()->mainPropertyName()];
   }
 
   /**
