@@ -88,7 +88,7 @@ class MoreInModalFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function view(FieldItemListInterface $items, $langcode = NULL): array {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $entity = $items->getEntity();
     $modalLinkLabel = $this->formatPlural(
       $items->count(),
@@ -176,14 +176,6 @@ class MoreInModalFormatter extends FormatterBase {
     ];
 
     return $renderable;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function viewElements(FieldItemListInterface $items, $langcode): array {
-    // Unused method, but the interface forces to implement it.
-    return [];
   }
 
   /**
