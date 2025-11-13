@@ -16,7 +16,7 @@ field_name: participant_type
 entity_type: assessment
 bundle: participation
 label: 'Participant type'
-description: ''
+description: 'Select the groups of stakeholders to which binding requirement(s) are relevant'
 required: false
 translatable: false
 default_value: {  }
