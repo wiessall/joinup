@@ -79,13 +79,13 @@ interface OssSolutionInterface extends NodeInterface {
   public function getUrl(): string;
 
   /**
-   * Returns the publiccode yaml content.
+   * Returns the publiccode.yaml content.
    *
    * @return ?string
    *   The content of the first item in the pupliccode.yml content field, or
    *   NULL if the field is empty.
    */
-  public function getPubliccodeYaml(): ?string;
+  public function getPublicCodeYaml(): ?string;
 
   /**
    * Updates validation result of the OSS solution.

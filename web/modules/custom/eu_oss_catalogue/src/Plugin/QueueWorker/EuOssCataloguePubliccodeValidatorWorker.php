@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Queue worker to validate publiccode.yml of OSS solutions.
  *
- * This queue is used only once, at the initial deploayment of the validation.
+ * This queue is used only once, at the initial deployment of the validation.
  */
 #[QueueWorker(
   id: 'eu_oss_catalogue_publiccode_validator',
@@ -63,7 +63,7 @@ class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements
     }
 
     // Validate.
-    $publiccode = $solution->getPubliccodeYaml();
+    $publiccode = $solution->getPublicCodeYaml();
     if (!is_string($publiccode)) {
       $this->logger->warning(
         "OSS solution validation was skipped for OSS solution @solution (@url): publiccode.yml field was empty",
