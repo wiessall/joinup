@@ -36,6 +36,8 @@ Feature: Creation of owners through UI
     Then I should see "Acme"
     And I should see the link "Company"
 
+    And I fill in "Alternative text" with "Alternative logo text"
+
     # Edit.
     When I press "Edit" at the "Owner" field
     And I fill in "Name" with "Acme Inc."
