@@ -59,7 +59,7 @@ third_party_settings:
     group_assets:
       children:
         - asset
-      label: Assets
+      label: 'Interoperability solutions'
       region: content
       parent_name: group_tabs
       weight: 20
