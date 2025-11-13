@@ -75,7 +75,7 @@ third_party_settings:
     group_related_services:
       children:
         - has_related_service
-      label: 'Related services'
+      label: 'Trans-European digital public services'
       region: content
       parent_name: group_tabs
       weight: 20
