@@ -7,6 +7,8 @@ dependencies:
     - field.field.assessment.participation.country
     - field.field.assessment.participation.participant_type
   module:
+    - entity_form_field_label
+    - oe_bootstrap_theme_helper
     - tagify
 id: assessment.participation.default
 targetEntityType: assessment
@@ -20,14 +22,26 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      placeholder: ''
-    third_party_settings: {  }
+      placeholder: 'Select or start typing...'
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   participant_type:
     type: options_buttons
     weight: 1
     region: content
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 1
+        new_description: ''
+        rewrite_description: 0
+      oe_bootstrap_theme_helper:
+        switch: false
 hidden:
   created: true
   langcode: true
