@@ -341,7 +341,7 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
   $admin_permission = $entity->getEntityType()->getAdminPermission();
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
-    || $admin_permission && $account->hasPermission($admin_permission)
+    || ($admin_permission && $account->hasPermission($admin_permission))
     || $operation !== 'view'
   ) {
     return AccessResult::neutral()->cachePerPermissions();
