@@ -1,7 +1,7 @@
 From 06a0862aac3bd62108aeb6542217cfa2f6567d05 Mon Sep 17 00:00:00 2001
 From: Alexandre Dias <alex.jm.dias@gmail.com>
 Date: Mon, 27 Mar 2023 17:54:27 +0100
-Subject: [PATCH 1/5] Check if svg is valid.
+Subject: [PATCH 1/6] Check if svg is valid.
 
 ---
  svg_image.module | 19 +++++++++++++++++++
@@ -48,7 +48,7 @@ GitLab
 From 780572ca72626210cb7c75b38bbdd0cbe756adfc Mon Sep 17 00:00:00 2001
 From: Alexandre Dias <alex.jm.dias@gmail.com>
 Date: Tue, 28 Mar 2023 14:56:25 +0100
-Subject: [PATCH 2/5] Fix check svg error.
+Subject: [PATCH 2/6] Fix check svg error.
 
 ---
  svg_image.module | 7 ++++---
@@ -81,7 +81,7 @@ GitLab
 From 36eeb3cbf5117ec06d317d477e8c4e0f0bf36d3e Mon Sep 17 00:00:00 2001
 From: Claudiu Cristea <7931-claudiucristea@users.noreply.drupalcode.org>
 Date: Tue, 17 Jun 2025 07:17:36 +0000
-Subject: [PATCH 3/5] Check that file exists
+Subject: [PATCH 3/6] Check that file exists
 
 ---
  svg_image.module | 2 +-
@@ -107,7 +107,7 @@ GitLab
 From dae470cdc1fa01c1665e8462d8f81e7ef71ff883 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Thu, 13 Nov 2025 09:23:19 +0100
-Subject: [PATCH 4/5] Remove hook hook_file_validate()
+Subject: [PATCH 4/6] Remove hook hook_file_validate()
 
 ---
  svg_image.module | 17 -----------------
@@ -146,7 +146,7 @@ GitLab
 From 3c59d116d96d96fb19914cc2749c488a5df6a354 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Thu, 13 Nov 2025 14:15:18 +0100
-Subject: [PATCH 5/5] Add SvgFileValidationSubscriber
+Subject: [PATCH 5/6] Add SvgFileValidationSubscriber
 
 ---
  .../SvgFileValidationSubscriber.php           | 81 +++++++++++++++++++
@@ -253,5 +253,31 @@ index 0000000..2c4d0fd
 +    class: Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber
 +    tags:
 +      - { name: event_subscriber }
+-- 
+GitLab
+
+
+From 4653694d3aaa253aa611b2da7ee7045ded69fd75 Mon Sep 17 00:00:00 2001
+From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
+Date: Thu, 13 Nov 2025 14:35:25 +0100
+Subject: [PATCH 6/6] Update SvgFileValidationSubscriber
+
+---
+ src/EventSubscriber/SvgFileValidationSubscriber.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
+index c40bbf2..d3aeb88 100644
+--- a/src/EventSubscriber/SvgFileValidationSubscriber.php
++++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
+@@ -31,7 +31,7 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
+      */
+     public function onFileValidate(FileValidationEvent $event): void
+     {
+-        $file = $event->getFile();
++        $file = $event->file;
+ 
+         if ($file->getMimeType() !== 'image/svg+xml') {
+             return;
 -- 
 GitLab
