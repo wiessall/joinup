@@ -31,7 +31,7 @@ third_party_settings:
       label: Tabs
       region: content
       parent_name: ''
-      weight: 4
+      weight: 5
       format_type: tabs
       format_settings:
         classes: ''
@@ -111,7 +111,7 @@ mode: default
 content:
   binding_requirement:
     type: layout_paragraphs
-    weight: 2
+    weight: 3
     region: content
     settings:
       view_mode: default
@@ -122,7 +122,7 @@ content:
       empty_message: ''
     third_party_settings: {  }
   cross_border:
-    weight: 3
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -175,7 +175,7 @@ content:
     third_party_settings: {  }
   relevant_report:
     type: conditional_link
-    weight: 5
+    weight: 2
     region: content
     settings:
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
