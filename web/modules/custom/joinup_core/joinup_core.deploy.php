@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\joinup_core\Archiver;
 
 /**
@@ -257,28 +256,5 @@ function joinup_core_deploy_200707(array &$sandbox): string {
     $sandbox['archived'],
     $sandbox['processed'],
     $sandbox['total'],
-  );
-}
-
-/**
- * Queue OSS solutions to be validated.
- */
-function joinup_core_deploy_200708(): string {
-  $queue = \Drupal::queue('eu_oss_catalogue_publiccode_validator');
-  $queue->createQueue();
-  $solutionStorage = \Drupal::service('entity_type.manager')->getStorage('node');
-  \assert($solutionStorage instanceof ContentEntityStorageInterface);
-  $solutionIds = \Drupal::entityQuery('node')->accessCheck(FALSE)->condition('type', 'oss_solution')->execute();
-
-  array_walk(
-    $solutionIds,
-    function (string|int $solutionId) use ($queue): void {
-      $queue->createItem($solutionId);
-    },
-  );
-
-  return sprintf(
-    "Queued %s OSS solutions to be validated.",
-    count($solutionIds)
   );
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
+namespace Drupal\joinup_oss_catalogue\Plugin\QueueWorker;
 
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
@@ -22,11 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * This queue is used only once, at the initial deployment of the validation.
  */
 #[QueueWorker(
-  id: 'eu_oss_catalogue_publiccode_validator',
-  title: new TranslatableMarkup('EU OSS Catalogue validator for publiccode.yml'),
+  id: 'joinup_oss_catalogue_publiccode_validator',
+  title: new TranslatableMarkup('Joinup OSS Catalogue validator for publiccode.yml'),
   cron: ['time' => 60],
 )]
-class EuOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   public function __construct(
     array $configuration,
