@@ -68,10 +68,13 @@ language:
   - name: English
 spatial:
   - name: Belgium
+    eu_member: true
   - name: Switzerland
   - name: 'European Union'
   - name: Luxembourg
+    eu_member: true
   - name: Greece
+    eu_member: true
 file_type:
   - name: 'ZIP'
     mime_type: 'application/zip'

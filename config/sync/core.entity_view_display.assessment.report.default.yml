@@ -9,11 +9,14 @@ dependencies:
     - field.field.assessment.report.binding_requirement
     - field.field.assessment.report.expression
     - field.field.assessment.report.has_related_service
+    - field.field.assessment.report.legal_interoperability
+    - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
     - field.field.assessment.report.requirement_documents
-    - field.field.assessment.report.results_in
+    - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
     - field.field.assessment.report.statement_documents
+    - field.field.assessment.report.technical_interoperability
   module:
     - file
     - joinup_layout
@@ -164,6 +167,70 @@ third_party_settings:
                 settings: {  }
                 third_party_settings: {  }
             weight: 3
+            additional: {  }
+          2c3b9fc3-11fe-42fa-858c-45494acbd706:
+            uuid: 2c3b9fc3-11fe-42fa-858c-45494acbd706
+            region: first
+            configuration:
+              id: 'field_block:assessment:report:legal_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          1cab8a06-da34-4ce7-b91b-c01cbb911e2c:
+            uuid: 1cab8a06-da34-4ce7-b91b-c01cbb911e2c
+            region: first
+            configuration:
+              id: 'field_block:assessment:report:organisational_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
+          2b8c6992-1709-4976-a0c3-19ba23d9b1db:
+            uuid: 2b8c6992-1709-4976-a0c3-19ba23d9b1db
+            region: first
+            configuration:
+              id: 'field_block:assessment:report:semantic_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 6
+            additional: {  }
+          b266bbbc-2983-4c36-95ed-255c4619cf08:
+            uuid: b266bbbc-2983-4c36-95ed-255c4619cf08
+            region: first
+            configuration:
+              id: 'field_block:assessment:report:technical_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 7
             additional: {  }
         third_party_settings: {  }
       -
@@ -351,6 +418,14 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  legal_interoperability:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: first
   name:
     type: string
     label: above
@@ -359,6 +434,14 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  organisational_interoperability:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
+    region: first
   requirement_documents:
     type: file_default
     label: above
@@ -367,6 +450,14 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
+  semantic_interoperability:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: first
   state:
     type: list_default
     label: above
@@ -382,12 +473,19 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
+  technical_interoperability:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 11
+    region: first
 hidden:
   binding_requirement: true
   created: true
   langcode: true
   provider: true
-  results_in: true
   search_api_excerpt: true
   status: true
   uid: true

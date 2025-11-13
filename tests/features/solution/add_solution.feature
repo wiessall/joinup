@@ -24,6 +24,7 @@ Feature: Test adding solutions.
     # Test that the tab doesn't change when an image is uploaded.
     When I click "Additional information"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     Then I should see the text "Logo"
 
     When I click "Solution information"
@@ -200,6 +201,7 @@ Feature: Test adding solutions.
     And I press "Add remote file URL"
     And I fill in "resources[1][subform][remote_file_url][0][uri]" with "http://example.com/guzzle"
     And I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I check "I have read and agreed to the Terms of Agreement"
     And I press "Propose"
@@ -306,6 +308,7 @@ Feature: Test adding solutions.
     And I click "Additional information"
     Then I remove the first file from "Logo"
     And I select image #2 as solution logo
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Confirm"
     And I press "Publish"
     Then the "Cleaning solution" solution logo is image #2
