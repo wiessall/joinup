@@ -236,8 +236,8 @@ Feature:
       | Romanian,     |
       | Scots Gaelic, |
     And I should not see the text "There is an error"
-    But I should see the link "Show publiccode.yml violations"
-    When I click "Show publiccode.yml violations"
+    But I should see the link "publiccode.yml is invalid"
+    When I click "publiccode.yml is invalid"
     Then a modal should open
     And I should see the text "There is an error"
 
