@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_oss_catalogue\Plugin\QueueWorker;
 
 use Drupal\Component\Utility\Variable;
-use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
+use Drupal\Core\Queue\DelayedRequeueException;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -66,6 +66,12 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
     $publiccode = $solution->getPublicCodeYaml();
     $validationResult = $this->publicCodeValidator->validate($publiccode);
 
+    // Make sure that the publiccode.yml of the current OSS solution wasn't
+    // updated since we started the validation. If it was updated, we re-queue
+    // the current item.
+    if ($publiccode !== $this->getOssSolution($data)->getPublicCodeYaml()) {
+      throw new DelayedRequeueException();
+    }
     // Save current validation result to the OSS solution object.
     $solution->setNewRevision(FALSE);
     $solution->skip_notification = TRUE;
@@ -98,12 +104,6 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
    *   The OSS solution object, or NULL if it cannot be found.
    */
   protected function getOssSolution(mixed $data): ?OssSolutionInterface {
-    static $ossSolutionStorage;
-    if (!$ossSolutionStorage instanceof ContentEntityStorageInterface) {
-      $ossSolutionStorage = $this->entityTypeManager->getStorage('node');
-      \assert($ossSolutionStorage instanceof ContentEntityStorageInterface);
-    }
-
     if (
       empty($data) ||
       intval((string) $data) !== (int) $data
@@ -117,7 +117,8 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
       return NULL;
     }
 
-    $solution = $ossSolutionStorage->load($data);
+    // Always load the actual active revision, avoiding cache.
+    $solution = $this->entityTypeManager->getStorage('node')->loadUnchanged($data);
     if (!$solution instanceof OssSolutionInterface) {
       $this->logger->warning(
         "OSS Solution with ID @id cannot be found",
