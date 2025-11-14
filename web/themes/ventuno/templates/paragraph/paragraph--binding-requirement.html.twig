@@ -41,7 +41,7 @@
             <div class="col-md-6">
               <div class="border rounded p-2 bg-light h-100">
                 <div class="fw-bold small text-uppercase text-muted mb-1">
-                  As defined in the initiatives
+                  {{ 'As defined in the initiatives'|t }}
                 </div>
                 <div class="small">
                   {{ content.expression }}
@@ -53,7 +53,7 @@
 
       </div>
       <details class="mt-2">
-        <summary class="p-2 bg-light border-top small text-muted">
+        <summary class="p-2 small text-muted">
           {{ details_text }}
         </summary>
 
@@ -62,7 +62,7 @@
             {% if not (paragraph.affected_party.isEmpty == true) and content.affected_party is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
-                  <div class="fw-bold mb-1">Affected party</div>
+                  <div class="fw-bold mb-1">{{ 'Affected party'|t }}</div>
                   <div
                     class="small text-muted">{{ content.affected_party }}</div>
                 </div>
@@ -71,7 +71,7 @@
             {% if not (paragraph.has_related_service.isEmpty == true) and content.has_related_service is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
-                  <div class="fw-bold mb-1">Related service</div>
+                  <div class="fw-bold mb-1">{{ 'Related service'|t }}</div>
                   <div
                     class="small text-muted">{{ content.has_related_service }}</div>
                 </div>
@@ -80,7 +80,7 @@
             {% if not (paragraph.asset.isEmpty == true) and content.asset is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
-                  <div class="fw-bold mb-1">Asset</div>
+                  <div class="fw-bold mb-1">{{ 'Asset'|t }}</div>
                   <div class="small text-muted">{{ content.asset }}</div>
                 </div>
               </div>
@@ -88,7 +88,7 @@
             {% if not (paragraph.requirement_documents.isEmpty == true) and content.requirement_documents is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
-                  <div class="fw-bold mb-1">Documents</div>
+                  <div class="fw-bold mb-1">{{ 'Documents'|t }}</div>
                   <ul class="list-unstyled small mb-0">
                     {{ content.requirement_documents }}
                   </ul>

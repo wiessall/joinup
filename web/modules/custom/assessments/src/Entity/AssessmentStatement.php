@@ -63,7 +63,7 @@ final class AssessmentStatement extends ContentEntityBase {
         ],
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'text_default',
         'weight' => 1,
       ])
@@ -86,7 +86,7 @@ final class AssessmentStatement extends ContentEntityBase {
         'weight' => 0,
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'list_default',
         'weight' => 0,
       ])
@@ -101,7 +101,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setSetting('uri_scheme', 'public')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'uri_link',
         'weight' => 2,
       ])
