@@ -23,7 +23,7 @@ Feature:
       | paragraph_block | <calendar type> |
 
     #  Start from Wed Jan 15 2020 11:00:00 GMT+0000
-    When I visit "/collection/portal/events-calendar?calendar_timestamp=1579086000"
+    When I visit "/collection/portal-support/events-calendar?calendar_timestamp=1579086000"
     Then I should see the link "TechWizards Summit"
     And I should not see the link "<previous event>"
     And I should not see the link "<next event>"
@@ -33,7 +33,7 @@ Feature:
     And I should not see the link "<next event>"
 
     #  Start again from Wed Jan 15 2020 11:00:00 GMT+0000
-    When I visit "/collection/portal/events-calendar?calendar_timestamp=1579086000"
+    When I visit "/collection/portal-support/events-calendar?calendar_timestamp=1579086000"
     And I click "Next"
     Then I should see the link "<next event>"
     And I should not see the link "<previous event>"
