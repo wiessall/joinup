@@ -18,5 +18,5 @@
     {{ title_prefix }}
     {{ title_suffix }}
   {% endif %}
-  <span class="full-width"><em>{{ content.name|render|striptags }}</em>, {{ 'a'|t }} {{ content.organisation_type|render|striptags }} {{ 'from'|t }} {{ content.country|render|striptags }}</span>
+  <span class="full-width"><em>{{ content.name[0]|render|striptags }}</em>, {{ 'a'|t }} {{ content.organisation_type[0]|render|striptags }} {{ 'from'|t }} {{ content.country[0]|render|striptags }}</span>
 </article>
