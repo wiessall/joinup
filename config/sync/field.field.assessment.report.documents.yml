@@ -1,21 +1,21 @@
-uuid: cd749183-92b5-462f-aaef-2bfe8e81ed19
+uuid: 0c97973a-7c1f-4216-a1ea-185690119ccd
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.statement_documents
+    - field.storage.assessment.documents
   module:
     - file
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.statement_documents
-field_name: statement_documents
+id: assessment.report.documents
+field_name: documents
 entity_type: assessment
 bundle: report
-label: 'Statement supporting documents'
+label: 'Assessment supporting documents'
 description: ''
 required: false
 translatable: false
@@ -25,7 +25,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: '[date:custom:Y]-[date:custom:m]'
-  file_extensions: 'txt doc docx pdf ppt pptx zip rar xls xlsx'
+  file_extensions: 'txt doc docx pdf ppt pptx xls xlsx'
   max_filesize: ''
   description_field: false
   description_field_required: false
