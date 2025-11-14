@@ -18,7 +18,7 @@ Feature:
   Scenario Outline: User can navigate through events
     Given custom_page content:
       | title           | collection | abstract        |
-      | Events calendar | The Portal | events calendar |
+      | Events calendar | Portal support | events calendar |
     And I append "events_calendar" to "field_paragraphs_body" field in "node" entity with following "Events calendar" title:
       | paragraph_block | <calendar type> |
 
