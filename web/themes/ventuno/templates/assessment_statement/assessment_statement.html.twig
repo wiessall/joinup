@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present an assessment statement entity.
+ *
+ * This template is used when viewing a canonical assessment statement page,
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.label'.
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_assessment()
+ */
+#}
+<article{{ attributes }}>
+  {% if view_mode != 'full' %}
+    {{ title_prefix }}
+    {{ title_suffix }}
+  {% endif %}
+  {% if content %}
+    {#
+    The following fields exist in the statement:
+      * judgement
+      * interpretation
+      * landing_page
+      * assessment_statement.bundle
+    #}
+
+  {% endif %}
+</article>
