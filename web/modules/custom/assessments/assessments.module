@@ -80,6 +80,21 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
     $fieldName = $layoutParagraphsLayout?->getFieldName();
     if ($fieldName === 'binding_requirement') {
       $variables['title'] = t('New binding requirement');
+
+      $routeParams = $url->getRouteParameters();
+      $queryParams = $url->getOption('query') ?: [];
+      // Hide component selection buttons inside layout regions for
+      // binding_requirement field. Only hide if this is inside a region
+      // (has parent_uuid AND region parameters). Keep the root-level
+      // "Add section" buttons visible.
+      if (
+          isset($routeParams['layout_paragraphs_layout']) &&
+          $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
+          isset($queryParams['parent_uuid']) &&
+          isset($queryParams['region'])
+      ) {
+        $variables['attributes']['class'][] = 'visually-hidden';
+      }
     }
   }
 }
