@@ -108,6 +108,7 @@ final class AssessmentStatement extends ContentEntityBase {
           'progress_indicator' => 'throbber',
           'display_field' => FALSE,
           'default_upload_location' => 'public://assessment-statements',
+          'file_extensions' => 'pdf doc docx xls xlsx',
         ],
       ])
       ->setDisplayConfigurable('form', FALSE)
