@@ -64,16 +64,6 @@ class JoinupOssCataloguePubliccodeValidatorWorker extends QueueWorkerBase implem
 
     // Validate.
     $publiccode = $solution->getPublicCodeYaml();
-    if (!is_string($publiccode)) {
-      $this->logger->warning(
-        "OSS solution validation was skipped for OSS solution @solution (@url): publiccode.yml field was empty",
-        [
-          '@solution' => $solution->label(),
-          '@url' => $solution->toUrl()->toString(),
-        ],
-      );
-      return;
-    }
     $validationResult = $this->publicCodeValidator->validate($publiccode);
 
     // Save current validation result to the OSS solution object.
