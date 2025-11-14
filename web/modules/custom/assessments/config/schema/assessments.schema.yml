@@ -13,3 +13,14 @@ assessments.type.*:
 
 assessments.type.*.third_party.rdf_sync:
   type: rdf_sync.bundle_mapping
+
+field.widget.settings.conditional_link:
+  type: mapping
+  label: Link with confirmation widget settings
+  mapping:
+    condition:
+      type: string
+      label: Condition
+    default_option:
+      type: string
+      label: Default option

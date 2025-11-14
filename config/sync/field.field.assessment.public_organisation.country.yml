@@ -28,7 +28,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'views'
+  handler: views
   handler_settings:
     view:
       view_name: eu_countries
