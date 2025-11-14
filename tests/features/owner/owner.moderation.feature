@@ -35,6 +35,8 @@ Feature: Owner moderation
     When I press "Create owner"
     Then I should see "EU healthy movement"
 
+    And I fill in "Alternative text" with "Alternative logo text"
+
     # Save the collection to finalise the creation of the owner entity.
     When I press "Propose"
     Then I should see the heading "The healthy food European project"

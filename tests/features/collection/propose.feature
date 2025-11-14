@@ -143,6 +143,7 @@ Feature: Proposing a collection
     # be able to pick-up a pre-uploaded image when editing the logo as an
     # alternative to the image upload.
     And I select image #3 as collection logo
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
     Then I should see the success message "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
     And the "Just a proposal" collection logo is image #3
@@ -153,6 +154,7 @@ Feature: Proposing a collection
 
     # Upload also works.
     When I attach the file "logo.png" to "Logo"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
@@ -301,6 +303,7 @@ Feature: Proposing a collection
     Then I should see the inline form error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
     Then I should not see the inline form error message "Invalid or unsafe SVG file."
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Propose"
     Then I should see the heading "SVG API example"
     And I should own the "SVG API example" collection
