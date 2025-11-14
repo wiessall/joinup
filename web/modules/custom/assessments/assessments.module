@@ -125,7 +125,7 @@ function template_preprocess_assessment_statement(array &$variables): void {
  * Implements hook_theme_suggestions_HOOK().
  */
 function assessments_theme_suggestions_assessment(array $variables): array {
-  $suggestions = array();
+  $suggestions = [];
   $assessment = $variables['elements']['#assessment'];
   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
 
