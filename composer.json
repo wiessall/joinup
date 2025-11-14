@@ -464,7 +464,8 @@
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
             "drupal/oauth_client": {
-                "Improve test coverage (and fix missing insert hook on core v10) @see https://drupal.org/i/3553991": "resources/patch/php/drupal/oauth_client/3553991-1de5a07411.diff"
+                "Improve test coverage (and fix missing insert hook on core v10) @see https://drupal.org/i/3553991": "resources/patch/php/drupal/oauth_client/3553991-1de5a07411.diff",
+                "OAuth clients created by managers are not shown on the target user’s client page @see https://drupal.org/i/3557887": "resources/patch/php/drupal/oauth_client/3557887-58f81379.diff"
             },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"

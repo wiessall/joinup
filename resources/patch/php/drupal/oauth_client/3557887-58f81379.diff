@@ -1,0 +1,96 @@
+diff --git a/src/Controller/OauthClientUserController.php b/src/Controller/OauthClientUserController.php
+index aaa92cd1cce08a038137623fd15cd27023067dd7..1557397e8800296aead12ca2b939d5682379ed81 100644
+--- a/src/Controller/OauthClientUserController.php
++++ b/src/Controller/OauthClientUserController.php
+@@ -29,8 +29,8 @@ class OauthClientUserController extends ControllerBase {
+     $args = ['@name' => $user->getDisplayName()];
+ 
+     $storage = $this->entityTypeManager()->getStorage('consumer');
+-    $clientIds = $storage->getQuery()->accessCheck(FALSE)
+-      ->condition('owner_id', $user->id())
++    $clientIds = $storage->getQuery()
++      ->accessCheck()
+       ->condition('user_id', $user->id())
+       ->condition('confidential', TRUE)
+       ->sort('label')
+diff --git a/tests/src/Functional/OauthClientTest.php b/tests/src/Functional/OauthClientTest.php
+index d940015250bf327b7c0ddb5f6db2d0231d343bf7..65e0b94e7d05d0bb44854ffbefca0b30792e309d 100644
+--- a/tests/src/Functional/OauthClientTest.php
++++ b/tests/src/Functional/OauthClientTest.php
+@@ -397,6 +397,76 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     return $this->httpClient->post($url, $options);
+   }
+ 
++  /**
++   * Tests manager can create and manage OAuth client requests.
++   */
++  public function testManagerAccess(): void {
++    $assert = $this->assertSession();
++    $page = $this->getSession()->getPage();
++    $manager = user_load_by_name('manager');
++    $qualified = user_load_by_name('qualified');
++
++    // Login as manager.
++    $this->drupalLogin($manager);
++
++    // A manager can access other users client/request pages.
++    $this->drupalGet("user/{$qualified->id()}/edit/oauth_requests");
++    $assert->statusCodeEquals(200);
++    $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $qualified->id()]));
++    $assert->statusCodeEquals(200);
++
++    // A manager can create a request on behalf of another user.
++    $this->drupalGet(Url::fromRoute('entity.oauth_client_request.add_page', ['user' => $qualified->id()]));
++    $assert->statusCodeEquals(200);
++    $assert->linkExists('Type 1');
++    $assert->linkExists('Type 2');
++    $page->clickLink('Type 1');
++    $page->fillField('Label', 'Created by manager for qualified user');
++    $page->pressButton('Save');
++    $assert->statusMessageContains('New OAuth client request Created by manager for qualified user has been created.', 'status');
++    $assert->addressEquals("user/{$qualified->id()}/edit/oauth_requests");
++    $assert->pageTextContains('Created by manager for qualified user');
++
++    // Assert created request entity.
++    $request = $this->getLatestRequestByAuthor($manager->id());
++    $this->assertSame('Created by manager for qualified user', $request->label());
++    $this->assertSame($manager->id(), $request->getOwnerId());
++    $this->assertSame($qualified->id(), $request->getUser()->id());
++    $this->assertSame(OauthClientRequestStatus::Active, $request->getStatus());
++
++    // Assert created client entity.
++    $client = $request->getClient();
++    $this->assertNotEmpty($client);
++    $this->assertSame($manager->id(), $client->getOwnerId());
++    $this->assertSame($qualified->id(), $client->get('user_id')->target_id);
++    $this->assertSame('Created by manager for qualified user', $client->label());
++    $this->assertEquals([['value' => 'client_credentials']], $client->get('grant_types')->getValue());
++    $this->assertEquals([['scope_id' => 'scope1']], $client->get('scopes')->getValue());
++    $this->assertEquals('1', $client->get('confidential')->value);
++
++    // Ensure the client is functional.
++    $client->set('secret', 'valid');
++    $client->save();
++    $this->assertOauth2TokenOk($client, 'valid');
++
++    // Check request delete access.
++    $this->drupalGet(Url::fromRoute('entity.oauth_client_request.delete_form', [
++      'user' => $qualified->id(),
++      'oauth_client_request' => $request->id(),
++    ]));
++    $assert->statusCodeEquals(200);
++
++    // The client should be listed on the other user's clients page.
++    $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $qualified->id()]));
++    $assert->pageTextContains('Created by manager for qualified user');
++
++    // Check edit/delete client page access.
++    $this->drupalGet(Url::fromRoute('oauth_client.edit', ['user' => $qualified->id(), 'client' => $client->id()]));
++    $assert->statusCodeEquals(200);
++    $this->drupalGet(Url::fromRoute('oauth_client.delete', ['user' => $qualified->id(), 'client' => $client->id()]));
++    $assert->statusCodeEquals(200);
++  }
++
+   /**
+    * Tests the admin OAuth2 client request view.
+    */
