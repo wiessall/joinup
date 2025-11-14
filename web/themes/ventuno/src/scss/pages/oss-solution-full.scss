@@ -332,6 +332,19 @@
     }
   }
 
+  .oss-validation-status-val {
+    &.is-valid {
+      &::before {
+        @include get-bootstrap-icon("check-circle-fill", $success);
+      }
+    }
+    &.is-invalid {
+      &::before {
+        @include get-bootstrap-icon("exclamation-circle-fill", $danger);
+      }
+    }
+  }
+
   .oss-solution__oss-screenshots {
     padding: $spacer;
     background-color: $light;
