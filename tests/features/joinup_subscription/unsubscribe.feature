@@ -74,7 +74,7 @@ Feature: Unsubscribe from collections
       | Greg's foxhole                                                                                                                                                               |
 
     When I click "Cancel"
-    Then I should see the heading "My subscriptions"
+    Then I should see the heading "Subscription settings"
 
     When I click "Unsubscribe from all"
     And I press "Confirm"
