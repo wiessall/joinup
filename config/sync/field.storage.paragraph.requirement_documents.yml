@@ -1,13 +1,13 @@
-uuid: 81281817-346b-4544-91a8-ef7ad24956d5
+uuid: d629738f-e0ad-4e0a-b818-ab8ae91de6b4
 langcode: en
 status: true
 dependencies:
   module:
-    - assessments
     - file
-id: assessment.requirement_documents
+    - paragraphs
+id: paragraph.requirement_documents
 field_name: requirement_documents
-entity_type: assessment
+entity_type: paragraph
 type: file
 settings:
   target_type: file

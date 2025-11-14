@@ -1,12 +1,13 @@
-uuid: 35a137df-8c64-4d01-9b23-782384d06eef
+uuid: 98e26ca4-59e4-411b-8c67-38e575554d5e
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.expression
-field_name: expression
-entity_type: assessment
+    - paragraphs
+id: paragraph.has_related_service
+field_name: has_related_service
+entity_type: paragraph
 type: entity_reference
 settings:
   target_type: assessment

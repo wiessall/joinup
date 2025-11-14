@@ -1,0 +1,241 @@
+uuid: b86214b2-88aa-47de-a192-096b66a404cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.asset
+    - field.field.paragraph.binding_requirement.documented_in
+    - field.field.paragraph.binding_requirement.expression
+    - field.field.paragraph.binding_requirement.has_related_service
+    - field.field.paragraph.binding_requirement.name
+    - field.field.paragraph.binding_requirement.requirement_documents
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - entity_form_field_label
+    - field_group
+    - file
+    - inline_entity_form
+    - link
+third_party_settings:
+  field_group:
+    group_tabs:
+      children:
+        - group_general
+        - group_initiatives
+        - group_assets
+        - group_related_services
+        - group_affected_parties
+        - group_documents
+      label: Tabs
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: horizontal
+        width_breakpoint: 640
+    group_general:
+      children:
+        - name
+        - documented_in
+      label: General
+      region: content
+      parent_name: group_tabs
+      weight: 1
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_assets:
+      children:
+        - asset
+      label: 'Interoperability solutions'
+      region: content
+      parent_name: group_tabs
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_related_services:
+      children:
+        - has_related_service
+      label: 'Trans-European digital public services'
+      region: content
+      parent_name: group_tabs
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_affected_parties:
+      children:
+        - affected_party
+      label: 'Affected stakeholders'
+      region: content
+      parent_name: group_tabs
+      weight: 20
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_initiatives:
+      children:
+        - expression
+      label: Initiatives
+      region: content
+      parent_name: group_tabs
+      weight: 10
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_documents:
+      children:
+        - requirement_documents
+      label: Documents
+      region: content
+      parent_name: group_tabs
+      weight: 40
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+id: paragraph.binding_requirement.default
+targetEntityType: paragraph
+bundle: binding_requirement
+mode: default
+content:
+  affected_party:
+    type: inline_entity_form_simple
+    weight: 5
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Affected party'
+      label_plural: 'Affected parties'
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  asset:
+    type: inline_entity_form_complex
+    weight: 3
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'relevant asset'
+      label_plural: 'relevant assets'
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: keep
+    third_party_settings: {  }
+  documented_in:
+    type: link_default
+    weight: 20
+    region: content
+    settings:
+      placeholder_url: 'Type a URL such as https://example.com'
+      placeholder_title: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: 'Provide a legal reference for the binding requirement, if available'
+        rewrite_description: 1
+  expression:
+    type: inline_entity_form_simple
+    weight: 6
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: Expression
+      label_plural: Expressions
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  has_related_service:
+    type: inline_entity_form_simple
+    weight: 4
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'Affected service'
+      label_plural: 'Affected services'
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+  layout_paragraphs_fields:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings:
+      entity_form_field_label:
+        new_label: Description
+        rewrite_label: 1
+        new_description: 'Provide a short description or a title for the binding requirements for the purpose of referring back to the specific requiremen'
+        rewrite_description: 1
+  requirement_documents:
+    type: file_generic
+    weight: 30
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
