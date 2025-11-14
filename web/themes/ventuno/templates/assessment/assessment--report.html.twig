@@ -2,15 +2,6 @@
 /**
  * @file
  * Default theme implementation to present an assessment entity.
- *
- * This template is used when viewing a canonical assessment page,
- *
- * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
- *   print a subset such as 'content.label'.
- * - attributes: HTML attributes for the container element.
- *
- * @see template_preprocess_assessment()
  */
 #}
 <article{{ attributes }}>
@@ -18,6 +9,7 @@
     {{ title_prefix }}
     {{ title_suffix }}
   {% endif %}
+
   <div class="page-title__details">
     <span class="page-title__detail">{{ 'Submitted by'|t }}&nbsp;{{ content.uid }}</span>
     <span class="page-title__detail">{{ 'on'|t }}&nbsp;{{ content.created }},</span>
@@ -30,20 +22,26 @@
     {{ content.binding_requirement }}
   {% endif %}
 
-  {# Some pretty preparation before presenting the resulst. #}
-  <h2 class="heading-d mt-3">{{ 'Identified effects on cross-border interoperability'|t }}</h2>
+  <h2 class="heading-d mt-4">{{ 'Results'|t }}</h2>
 
-  {# For each of the legal_interoperability, organisational_interoperability, semantic_interoperability, technical_interoperability, print the entity if exists #}
-  {% for section in [
-    'legal_interoperability',
-    'organisational_interoperability',
-    'semantic_interoperability',
-    'technical_interoperability',
-  ] %}
-    {% if not (assessment[section].isEmpty == true) and content[section] is defined %}
-      {{ content[section] }}
-    {% endif %}
-  {% endfor %}
+  {# ------------------------------ #}
+  {# Results in a 2-column grid     #}
+  {# ------------------------------ #}
+  <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
 
+    {% for section in [
+      'legal_interoperability',
+      'organisational_interoperability',
+      'semantic_interoperability',
+      'technical_interoperability',
+    ] %}
+      {% if not (assessment[section].isEmpty == true) and content[section] is defined %}
+        <div class="col">
+          {{ content[section] }}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
 
 </article>

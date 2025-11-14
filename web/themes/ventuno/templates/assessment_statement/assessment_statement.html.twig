@@ -1,31 +1,64 @@
 {#
 /**
  * @file
- * Default theme implementation to present an assessment statement entity.
+ * Bootstrap card layout for an assessment_statement entity.
  *
- * This template is used when viewing a canonical assessment statement page,
- *
- * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
- *   print a subset such as 'content.label'.
- * - attributes: HTML attributes for the container element.
- *
- * @see template_preprocess_assessment()
+ * Variables:
+ * - content.judgement
+ * - content.interpretation
+ * - content.landing_page
+ * - content['#bundle']
  */
 #}
-<article{{ attributes }}>
-  {% if view_mode != 'full' %}
-    {{ title_prefix }}
-    {{ title_suffix }}
-  {% endif %}
-  {% if content %}
-    {#
-    The following fields exist in the statement:
-      * judgement
-      * interpretation
-      * landing_page
-      * assessment_statement.bundle
-    #}
 
-  {% endif %}
+{% set classes = [
+  'assessment-statement',
+  'card',
+  'border',
+  'shadow-sm',
+  'mb-3',
+  'p-3'
+] %}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="card-body pb-2">
+
+    <div class="row align-items-start">
+      <div class="col-md-8">
+
+        <h5 class="mb-1 text-primary text-capitalize">
+          {{ content['#bundle']|clean_class|replace({'_':' '}) }}
+        </h5>
+
+        <div class="text-muted small">
+          {% if content.interpretation %}
+            {{ 'Has a ' }}
+            <strong>{{ content.interpretation|render|striptags }}</strong>{{ ' interpretation' }}
+          {% endif %}
+          {% if content.landing_page|render|striptags %}
+            {{ 'supported by the following documents'|t }}:&nbsp;
+            {{ content.landing_page }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <details class="mt-2">
+    <summary class="p-2 small text-muted">
+      {{ 'Judgement'|t }}
+    </summary>
+
+    <div class="card-body">
+
+      {% if content.judgement %}
+        <div class="border rounded p-2 bg-white">
+          <div class="small text-muted">
+            {{ content.judgement }}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </details>
+
 </article>
