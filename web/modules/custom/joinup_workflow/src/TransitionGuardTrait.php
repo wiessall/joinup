@@ -37,7 +37,8 @@ trait TransitionGuardTrait {
    */
   public function allowedByPermission(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity, bool $checkOwnerPermission = TRUE, bool $checkGroupPermission = TRUE, ?GroupInterface $group = NULL): bool {
     \assert(property_exists($this, 'currentUser'), 'currentUser property is missing');
-    if ($this->currentUser->hasPermission($entity->getEntityType()->getAdminPermission())) {
+    $admin_permission = $entity->getEntityType()->getAdminPermission();
+    if ($admin_permission && $this->currentUser->hasPermission($admin_permission)) {
       return TRUE;
     }
 
