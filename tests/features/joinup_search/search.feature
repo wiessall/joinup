@@ -67,6 +67,15 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
 
+    # Check "Solution function" filter
+    When I click "Clear filters"
+    Then I should not see "Solution function"
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I should see "Solution function"
+    When I check "Defense (1)"
+    Then I should see the "Spherification" tile
+    And I should not see the "Foam" tile
+
     # Launch a text search.
     When I click "Clear filters"
     Then I focus on the search input
