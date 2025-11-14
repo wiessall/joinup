@@ -8,11 +8,13 @@ dependencies:
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
+    - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
     - field.field.assessment.report.statement_documents
     - field.field.assessment.report.technical_interoperability
   module:
+    - assessments
     - field_group
     - file
     - inline_entity_form
@@ -29,7 +31,7 @@ third_party_settings:
       label: Tabs
       region: content
       parent_name: ''
-      weight: 30
+      weight: 5
       format_type: tabs
       format_settings:
         classes: ''
@@ -109,7 +111,7 @@ mode: default
 content:
   binding_requirement:
     type: layout_paragraphs
-    weight: 20
+    weight: 3
     region: content
     settings:
       view_mode: default
@@ -120,7 +122,7 @@ content:
       empty_message: ''
     third_party_settings: {  }
   cross_border:
-    weight: 25
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -160,7 +162,7 @@ content:
     third_party_settings: {  }
   provider:
     type: inline_entity_form_simple
-    weight: 10
+    weight: 1
     region: content
     settings:
       form_mode: default
@@ -170,6 +172,16 @@ content:
       collapsible: false
       collapsed: false
       revision: false
+    third_party_settings: {  }
+  relevant_report:
+    type: conditional_link
+    weight: 2
+    region: content
+    settings:
+      condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
+      default_option: 'no'
+      placeholder_url: 'An absolute URI to the target assessment even if it is within The Portal.'
+      placeholder_title: ''
     third_party_settings: {  }
   semantic_interoperability:
     type: inline_entity_form_simple
@@ -186,14 +198,14 @@ content:
     third_party_settings: {  }
   state:
     type: state_machine_buttons
-    weight: 90
+    weight: 7
     region: content
     settings:
       use_transition_label: 0
     third_party_settings: {  }
   statement_documents:
     type: file_generic
-    weight: 80
+    weight: 6
     region: content
     settings:
       progress_indicator: throbber
