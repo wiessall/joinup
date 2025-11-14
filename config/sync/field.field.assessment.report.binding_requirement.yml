@@ -1,39 +1,122 @@
-uuid: ce34bf8c-3138-4471-b594-dce067a5dd3a
+uuid: 4e361527-0c4c-4cd8-b8ec-df37fbb2443f
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - assessments.type.binding_requirement
     - field.storage.assessment.binding_requirement
+    - paragraphs.paragraphs_type.binding_requirement
   module:
-    - rdf_sync
+    - entity_reference_revisions
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    target_id:
-      predicate: 'http://data.europa.eu/2sa/cav#assesses'
-      type: resource
 id: assessment.report.binding_requirement
 field_name: binding_requirement
 entity_type: assessment
 bundle: report
-label: 'Binding requirement'
+label: 'Binding requirements'
 description: ''
 required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:assessment'
+  handler: 'default:paragraph'
   handler_settings:
     target_bundles:
       binding_requirement: binding_requirement
-    sort:
-      field: _none
-      direction: ASC
-    auto_create: false
-    auto_create_bundle: ''
-field_type: entity_reference
+    negate: 0
+    target_bundles_drag_drop:
+      accordion:
+        weight: 32
+        enabled: false
+      accordion_item:
+        weight: 33
+        enabled: false
+      binding_requirement:
+        weight: 31
+        enabled: true
+      block:
+        weight: 34
+        enabled: false
+      call_to_action:
+        weight: 35
+        enabled: false
+      carousel:
+        weight: 36
+        enabled: false
+      configurable_listing:
+        weight: 37
+        enabled: false
+      content_listing:
+        weight: 38
+        enabled: false
+      entity_reference:
+        weight: 39
+        enabled: false
+      events_calendar:
+        weight: 40
+        enabled: false
+      github_feed:
+        weight: 41
+        enabled: false
+      heading:
+        weight: 42
+        enabled: false
+      iframe:
+        weight: 43
+        enabled: false
+      image:
+        weight: 44
+        enabled: false
+      image_gallery:
+        weight: 45
+        enabled: false
+      json_map:
+        weight: 46
+        enabled: false
+      layout:
+        weight: 47
+        enabled: false
+      poll:
+        weight: 48
+        enabled: false
+      quote:
+        weight: 49
+        enabled: false
+      resource_file:
+        weight: 50
+        enabled: false
+      resource_link:
+        weight: 51
+        enabled: false
+      simple_paragraph:
+        weight: 52
+        enabled: false
+      social_media:
+        weight: 53
+        enabled: false
+      table_of_contents:
+        weight: 54
+        enabled: false
+      testimony:
+        weight: 55
+        enabled: false
+      text:
+        weight: 56
+        enabled: false
+      tile:
+        weight: 57
+        enabled: false
+      tiles:
+        weight: 58
+        enabled: false
+      video:
+        weight: 59
+        enabled: false
+      webform:
+        weight: 60
+        enabled: false
+field_type: entity_reference_revisions

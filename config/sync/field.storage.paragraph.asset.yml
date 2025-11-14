@@ -1,12 +1,13 @@
-uuid: c3850bb5-a520-4c87-ade8-ed805243848a
+uuid: 4659a81e-585b-4493-93b0-faae82d5565f
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.has_related_service
-field_name: has_related_service
-entity_type: assessment
+    - paragraphs
+id: paragraph.asset
+field_name: asset
+entity_type: paragraph
 type: entity_reference
 settings:
   target_type: assessment

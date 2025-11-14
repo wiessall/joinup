@@ -1,10 +1,10 @@
-uuid: b202aa9b-9596-4b68-a414-e30fe6380fef
+uuid: db2d8415-f84e-4552-b007-19feacea1385
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.participation
-    - field.storage.assessment.country
+    - field.storage.assessment.stakeholder_country
     - taxonomy.vocabulary.spatial
     - views.view.eu_countries
   module:
@@ -12,18 +12,18 @@ dependencies:
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.participation.country
-field_name: country
+id: assessment.participation.stakeholder_country
+field_name: stakeholder_country
 entity_type: assessment
 bundle: participation
-label: Country
+label: 'Stakeholder’s countries'
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'views'
+  handler: views
   handler_settings:
     view:
       view_name: eu_countries

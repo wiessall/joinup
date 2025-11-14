@@ -38,3 +38,22 @@ function ventuno_preprocess(array &$variables): void {
   $variables['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
   $variables['#attached']['drupalSettings']['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
 }
+
+/**
+ * Implements hook_preprocess_paragraph__binding_requirement().
+ */
+function ventuno_preprocess_paragraph__binding_requirement(array &$variables): void {
+  $details_text = [];
+  foreach ([
+    'affected_party' => ['prefix' => 'affecting', 'suffix' => 'stakeholders'],
+    'has_related_service' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
+    'asset' => ['prefix' => 'related to', 'suffix' => 'assets'],
+    'requirement_documents' => ['prefix' => 'supported by', 'suffix' => 'documents'],
+  ] as $field => $data) {
+    $count = isset($variables['content'][$field]['#items']) ? $variables['content'][$field]['#items']->count() : 0;
+    if ($count) {
+      $details_text[] = $data['prefix'] . ' ' . $count . ' ' . $data['suffix'];
+    }
+  }
+  $variables['details_text'] = ucfirst(implode(', ', $details_text));
+}
