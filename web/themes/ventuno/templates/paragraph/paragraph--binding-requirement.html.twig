@@ -59,7 +59,7 @@
 
         <div class="card-body">
           <div class="row row-cols-1 row-cols-md-2 g-3">
-            {% if content.affected_party %}
+            {% if not (paragraph.affected_party.isEmpty == true) and content.affected_party is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">Affected party</div>
@@ -68,7 +68,7 @@
                 </div>
               </div>
             {% endif %}
-            {% if content.has_related_service %}
+            {% if not (paragraph.has_related_service.isEmpty == true) and content.has_related_service is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">Related service</div>
@@ -77,7 +77,7 @@
                 </div>
               </div>
             {% endif %}
-            {% if content.asset %}
+            {% if not (paragraph.asset.isEmpty == true) and content.asset is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">Asset</div>
@@ -85,7 +85,7 @@
                 </div>
               </div>
             {% endif %}
-            {% if content.requirement_documents %}
+            {% if not (paragraph.requirement_documents.isEmpty == true) and content.requirement_documents is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">Documents</div>

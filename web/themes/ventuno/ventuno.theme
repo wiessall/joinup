@@ -50,7 +50,7 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
     'asset' => ['prefix' => 'related to', 'suffix' => 'assets'],
     'requirement_documents' => ['prefix' => 'supported by', 'suffix' => 'documents'],
   ] as $field => $data) {
-    $count = $variables['content'][$field]['#items']?->count() ?? 0;
+    $count = isset($variables['content'][$field]['#items']) ? $variables['content'][$field]['#items']->count() : 0;
     $details_text[] = $data['prefix'] . ' ' . $count . ' ' . $data['suffix'];
   }
   $variables['details_text'] = ucfirst(implode(', ', $details_text));
