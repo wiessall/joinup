@@ -35,7 +35,14 @@ class PublicCodeValidator implements PublicCodeValidatorInterface {
   /**
    * {@inheritdoc}
    */
-  public function validate(string $yamlContent): PublicCodeValidationResultInterface {
+  public function validate(?string $yamlContent): PublicCodeValidationResultInterface {
+    if (is_null($yamlContent)) {
+      return new PublicCodeValidationResult(
+        isValid: FALSE,
+        errors: ['publiccode.yml is missing'],
+        publicCode: NULL,
+      );
+    }
     try {
       // Configure parser.
       $config = new ParserConfig();

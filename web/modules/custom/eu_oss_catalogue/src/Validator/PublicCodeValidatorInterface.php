@@ -12,12 +12,12 @@ interface PublicCodeValidatorInterface {
   /**
    * Validates a publiccode.yml YAML string.
    *
-   * @param string $yamlContent
+   * @param string|null $yamlContent
    *   The YAML content to validate.
    *
    * @return \Drupal\eu_oss_catalogue\Validator\PublicCodeValidationResultInterface
    *   The validation result.
    */
-  public function validate(string $yamlContent): PublicCodeValidationResultInterface;
+  public function validate(?string $yamlContent): PublicCodeValidationResultInterface;
 
 }
