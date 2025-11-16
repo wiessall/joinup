@@ -63,14 +63,38 @@ final class ResourceParser implements ResourceParserInterface {
   }
 
   public function generateEntityChain(AssessmentModelInterface $parent = NULL): array {
+    // Start from the root assessment model when no parent is provided.
     if ($parent === NULL) {
       $parent = $this->assessmentReport;
     }
 
-    // First, descend recursively to create all child entities.
-    foreach ($parent->getReferencedEntityProperties() as $property) {
+    $violations = [];
 
+    // Recurse into child models first (post-order traversal).
+    foreach ($this->models as $model) {
+      if ($model->getParent() === $parent) {
+        $violations = array_merge($violations, $this->generateEntityChain($model));
+      }
     }
+
+    // Create (but do not save) the entity for the current model.
+    $storage = $this->entityTypeManager->getStorage($parent->getEntityTypeId());
+    $entity = $storage->create($parent->getEntityValues());
+
+    // Keep the created entity in the chain for potential later use.
+    $this->entities[] = $entity;
+
+    // Validate the entity and collect violations.
+    $entity_errors = $entity->validate();
+    if ($entity_errors->count() > 0) {
+      foreach ($entity_errors as $error) {
+        $violations[] = [
+          'message' => $error->getMessage(),
+        ];
+      }
+    }
+
+    return $violations;
   }
 
   /**
