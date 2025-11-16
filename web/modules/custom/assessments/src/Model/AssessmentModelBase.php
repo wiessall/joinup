@@ -31,6 +31,13 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
   protected ?AssessmentModelInterface $parent;
 
   /**
+   * An array of child models.
+   *
+   * @var \Drupal\assessments\Model\AssessmentModelInterface[]
+   */
+  protected array $children = [];
+
+  /**
    * A parsed array of entity values.
    *
    * @var array
@@ -75,6 +82,36 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
   }
 
   /**
+   * Returns the parent model.
+   *
+   * @return \Drupal\assessments\Model\AssessmentModelInterface|null
+   *   The parent model or NULL.
+   */
+  public function getParent(): ?AssessmentModelInterface {
+    return $this->parent;
+  }
+
+  /**
+   * Returns the child models.
+   *
+   * @return \Drupal\assessments\Model\AssessmentModelInterface[]
+   *   An array of child models.
+   */
+  public function getChildren(): array {
+    return $this->children;
+  }
+
+  /**
+   * Adds a child model.
+   *
+   * @param \Drupal\assessments\Model\AssessmentModelInterface $child
+   *   The child model to add.
+   */
+  public function addChild(AssessmentModelInterface $child): void {
+    $this->children[] = $child;
+  }
+
+  /**
    * Returns a list of allowed resource incoming API properties.
    *
    * @return array{string}
@@ -89,6 +126,14 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
    *   An array of required resource properties.
    */
   abstract protected function getRequiredResourceProperties(): array;
+
+  /**
+   * Returns the entity type ID of entity to be created.
+   *
+   * @return string
+   *   The entity type ID.
+   */
+  abstract public function getEntityTypeId(): string;
 
   /**
    * Returns the bundle of the Drupal side entity that is related to the model.
