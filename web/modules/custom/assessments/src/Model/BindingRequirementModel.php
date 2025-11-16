@@ -12,6 +12,13 @@ class BindingRequirementModel extends AssessmentModelBase implements AssessmentM
   /**
    * {@inheritdoc}
    */
+  public function getEntityTypeId(): string {
+    return 'paragraph';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getEntityBundle(): string {
     return 'binding_requirement';
   }

@@ -12,6 +12,13 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
   /**
    * {@inheritdoc}
    */
+  public function getEntityTypeId(): string {
+    return 'assessment';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getEntityBundle(): string {
     return 'organisation';
   }
@@ -36,6 +43,13 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
       'name',
       'description',
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRequiredResourceProperties(): array {
+    return [];
   }
 
 }

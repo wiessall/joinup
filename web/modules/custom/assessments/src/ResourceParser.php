@@ -7,6 +7,7 @@ namespace Drupal\assessments;
 use Drupal\Component\Uuid\Php;
 use Drupal\assessments\Model\AssessmentModel;
 use Drupal\assessments\Model\AssessmentModelInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -21,7 +22,22 @@ final class ResourceParser implements ResourceParserInterface {
    */
   protected array $models;
 
+  /**
+   * The assessment report model.
+   *
+   * @var \Drupal\assessments\Model\AssessmentModelInterface
+   */
+  protected AssessmentModelInterface $assessmentReport;
+
+  /**
+   * The entity chain.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface[]
+   */
+  protected array $entities = [];
+
   public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'uuid')]
     protected Php $uuid,
   ) {}
@@ -32,6 +48,10 @@ final class ResourceParser implements ResourceParserInterface {
   public function parseInbound(array $data, ?AssessmentModelInterface $parent = NULL, string $type = 'assessment'): void {
     // Initialize an assessment model.
     $model = AssessmentModel::createFromContext($data, $parent, $type);
+    if ($type === 'assessment') {
+      $this->assessmentReport = $model;
+    }
+
     $this->models[] = $model;
     foreach ($model->getReferencedEntityProperties() as $key) {
       if (isset($data[$key])) {
@@ -39,6 +59,17 @@ final class ResourceParser implements ResourceParserInterface {
           $this->parseInbound($subentry, $model, $key);
         }
       }
+    }
+  }
+
+  public function generateEntityChain(AssessmentModelInterface $parent = NULL): array {
+    if ($parent === NULL) {
+      $parent = $this->assessmentReport;
+    }
+
+    // First, descend recursively to create all child entities.
+    foreach ($parent->getReferencedEntityProperties() as $property) {
+
     }
   }
 

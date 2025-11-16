@@ -83,7 +83,11 @@ class AssessmentReportResource extends ResourceBase {
 
     $processor = \Drupal::service('assessments.resource_parser');
     $processor->parseInbound($data);
-    $validationErrors = $processor->getEntityValidationErrors();
+    if ($validationErrors = $processor->getEntityValidationErrors()) {
+      return new ResourceResponse(['errors' => $validationErrors], 400);
+    }
+
+    $processor->generateEntityChain();
 
     $response = new ResourceResponse($validationErrors, 201);
     $response->addCacheableDependency((new CacheableMetadata())->setCacheMaxAge(0));
