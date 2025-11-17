@@ -19,7 +19,7 @@ use Bfabio\PublicCodeParser\ParserConfig;
 class PublicCodeValidator implements PublicCodeValidatorInterface {
 
   public function __construct(
-    protected bool $disableNetwork = TRUE,
+    protected bool $disableNetwork,
   ) {}
 
   /**
