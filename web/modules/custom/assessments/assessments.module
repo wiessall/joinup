@@ -11,7 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -195,5 +197,43 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function assessments_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() == 'assessments_rest') {
+    $results = $view->result;
+    if ($view->current_display === 'public_organisation') {
+      foreach ($results as $result) {
+        // Instead of false we want to show an empty string.
+        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
+        if (empty($result->_entity->description->getValue())) {
+          $result->_entity->description->setValue(['']);
+        }
+        if (empty($result->_entity->country->getValue())) {
+          $result->_entity->country->setValue(['']);
+        }
+        // Instead of country term ID we want to send the two letters
+        // of the country.
+        else {
+          $term_id = $result->_entity->country->getValue()[0]['target_id'];
+          $term = Term::load($term_id);
+          $code = $term?->get('code')->value ?? '';
+          $result->_entity->country->setValue([$code]);
+        }
+      }
+    }
+    elseif ($view->current_display === 'asset') {
+      foreach ($results as $result) {
+        // Instead of false we want to show an empty string.
+        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
+        if (empty($result->_entity->landing_page->getValue())) {
+          $result->_entity->landing_page->setValue(['']);
+        }
+      }
+    }
   }
 }
