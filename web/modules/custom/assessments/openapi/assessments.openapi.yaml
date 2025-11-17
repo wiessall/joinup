@@ -225,6 +225,87 @@ paths:
                 properties:
                   error:
                     type: string
+  /asset:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get all Assessments of type Asset
+      description: Returns all Assets. The shape matches the POST response, with UUID `id` fields on the root.
+      operationId: getAssets
+      tags:
+        - Assessments
+        - Assets
+      security:
+        - oauth2: [ ]
+      responses:
+        '200':
+          description: Assets fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      name: "Asset 1"
+                      landing_page: "https://example.com/asset1"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      name: "Asset 2"
+                      landing_page: "https://example.com/asset2"
+
+  /public-organisation:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get all Assessments of type Public Organisation
+      description: Returns all Public Organisations. The shape matches the POST response, with UUID `id` fields on the root.
+      operationId: getPublicOrganisation
+      tags:
+        - Assessments
+        - Public Organisations
+      security:
+        - oauth2: [ ]
+      responses:
+        '200':
+          description: Public Organisations fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      name: "Public Organisation 1"
+                      description": "Description 2"
+                      "organisation_type": "local_public_sector_body"
+                      country: "PT"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      name: "Public Organisation 2"
+                      description": ""
+                      "organisation_type": "national_public_sector_body"
+                      country: ""
 components:
   securitySchemes:
     oauth2:

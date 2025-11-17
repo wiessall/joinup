@@ -327,7 +327,7 @@ Feature:
     And I select the "Agreement of usage" row
     And I select "Move to other group" from "Action"
     And I press "Apply to selected items"
-    And I fill in "Select the destination collection or solution" with "The Portal"
+    And I fill in "Select the destination collection or solution" with "Portal support"
     And I press "Apply"
     And I wait for the batch process to finish
     Then I should see the error message "Custom page Agreement of usage was not moved because it is set as the code of conduct."
