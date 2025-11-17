@@ -94,7 +94,7 @@ Feature: Featuring content site-wide
     Then I should see the following tiles in the correct order:
       | <featured>     |
       | <unfeatured>   |
-      # The Portal collection in installed by default.
+      # Portal support collection in installed by default.
       # @see \joinup_test_install()
       | <extra entity> |
     And I should not see the contextual link "Feature" in the "<featured>" tile
@@ -137,5 +137,5 @@ Feature: Featuring content site-wide
 
     Examples:
       | featured                      | unfeatured                  | extra entity | label      | content type |
-      | Tidy Neutron                  | Reborn Eternal Gamma        | The Portal   | Collection | collection   |
+      | Tidy Neutron                  | Reborn Eternal Gamma        | Portal support  | Collection | collection   |
       | Opensource neutron generators | Gamma-sensible spectroscopy |              | Solution   | solution     |
