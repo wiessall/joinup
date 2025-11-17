@@ -125,10 +125,9 @@ final class ConditionalLinkWidget extends LinkWidget {
     $values = parent::massageFormValues($values, $form, $form_state);
 
     // Retrieve the "add_link" checkbox from the full form state.
-    $fieldName = $this->fieldDefinition->getName();
-    $fieldInput = $form_state->getValue($fieldName);
+    $fieldInput = $form_state->getUserInput();
     // $fieldInput is expected to contain 'add_link' and 'widget'.
-    $allowLinks = !empty($fieldInput['add_link']);
+    $allowLinks = $fieldInput['add_link'] === 'yes';
     if (!$allowLinks) {
       foreach ($values as &$value) {
         $value['uri'] = NULL;

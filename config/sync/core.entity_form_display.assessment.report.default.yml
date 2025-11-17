@@ -5,13 +5,13 @@ dependencies:
   config:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
+    - field.field.assessment.report.documents
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic_interoperability
     - field.field.assessment.report.state
-    - field.field.assessment.report.statement_documents
     - field.field.assessment.report.technical_interoperability
   module:
     - assessments
@@ -126,6 +126,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  documents:
+    type: file_generic
+    weight: 41
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
   legal_interoperability:
     type: inline_entity_form_simple
     weight: 10
@@ -202,13 +209,6 @@ content:
     region: content
     settings:
       use_transition_label: 0
-    third_party_settings: {  }
-  statement_documents:
-    type: file_generic
-    weight: 6
-    region: content
-    settings:
-      progress_indicator: throbber
     third_party_settings: {  }
   technical_interoperability:
     type: inline_entity_form_simple

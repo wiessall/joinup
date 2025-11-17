@@ -15,14 +15,14 @@ mode: default
 content:
   participant_type:
     type: list_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
   stakeholder_country:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }

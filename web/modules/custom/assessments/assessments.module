@@ -19,6 +19,7 @@ use Drupal\user\UserInterface;
 function assessments_theme(): array {
   return [
     'assessment' => ['render element' => 'elements'],
+    'assessment_statement' => ['render element' => 'elements'],
   ];
 }
 
@@ -115,6 +116,39 @@ function template_preprocess_assessment(array &$variables): void {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
+}
+
+/**
+ * Prepares variables for assessment_statement templates.
+ *
+ * Default template: assessment_statement.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the assessment
+ *     information and any fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment_statement(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function assessments_theme_suggestions_assessment(array $variables): array {
+  $suggestions = [];
+  $assessment = $variables['elements']['#assessment'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+
+  $suggestions[] = 'assessment__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $assessment->bundle();
+  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
+
+  return $suggestions;
 }
 
 /**
