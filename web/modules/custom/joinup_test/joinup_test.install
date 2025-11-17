@@ -94,15 +94,15 @@ function joinup_test_install($is_syncing): void {
       'type' => 'collection',
       'uuid' => JoinupCollectionHelper::JOINUP_COLLECTION_UUID,
       'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
-      'title' => 'The Portal',
+      'title' => 'Portal support',
       'field_state' => 'published',
       'field_topic' => \Drupal::getContainer()->get('topic')->getTopicByName('demography'),
       'created' => strtotime('2015-01-01 08:00'),
       'changed' => strtotime('2015-01-01 08:00'),
       'published_at' => strtotime('2015-01-01 08:00'),
-      'abstract' => 'The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme.',
+      'abstract' => 'Portal support is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme.',
       'description' => [
-        'value' => 'The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. The Portal is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
+        'value' => 'Portal support is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. Portal support is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
         'format' => 'content_editor',
       ],
       'contact' => $nodeStorage->create([

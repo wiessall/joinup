@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b90b2675b25316e36f9b78743f1d6aa",
+    "content-hash": "771d8ac2ab2523d841ade111ce522ad8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7385,17 +7385,17 @@
         },
         {
             "name": "drupal/oauth_client",
-            "version": "1.0.0-alpha2",
+            "version": "1.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/oauth_client.git",
-                "reference": "1.0.0-alpha2"
+                "reference": "1.0.0-alpha3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/oauth_client-1.0.0-alpha2.zip",
-                "reference": "1.0.0-alpha2",
-                "shasum": "6c79b3c8c83b8eec81f572cb5be815116b0c0220"
+                "url": "https://ftp.drupal.org/files/projects/oauth_client-1.0.0-alpha3.zip",
+                "reference": "1.0.0-alpha3",
+                "shasum": "d8044e6e9318004ac0713e87bf6af8916efd09fb"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11",
@@ -7409,8 +7409,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha2",
-                    "datestamp": "1761738675",
+                    "version": "1.0.0-alpha3",
+                    "datestamp": "1763390515",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7438,6 +7438,10 @@
                 {
                     "name": "dimilias",
                     "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
+                    "name": "herved",
+                    "homepage": "https://www.drupal.org/user/2197136"
                 },
                 {
                     "name": "huzooka",
