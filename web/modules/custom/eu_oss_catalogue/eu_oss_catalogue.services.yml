@@ -1,5 +1,5 @@
 parameters:
-  eu_oss_catalogue.disable_network: false
+  eu_oss_catalogue.disable_network: true
 
 services:
 
