@@ -445,6 +445,11 @@ paragraph__events_calendar:
     theme:
       assets/css/paragraph--events-calendar.min.css: { minified: true }
 
+paragraph__iframe:
+  css:
+    theme:
+      assets/css/paragraph--iframe.min.css: { minified: true }
+
 private-message:
   css:
     theme:

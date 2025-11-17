@@ -46,7 +46,7 @@ Feature: User authentication
       | admin/tmgmt/settings                                |
       | announcements                                       |
       | api/assessments/v1                                  |
-      | collection/portal/revisions                         |
+      | collection/portal-support/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |
@@ -100,7 +100,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
-      | collection/portal/revisions                         |
+      | collection/portal-support/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |

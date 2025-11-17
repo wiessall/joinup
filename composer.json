@@ -472,12 +472,6 @@
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
             },
-            "drupal/oauth_client": {
-                "Improve test coverage @see https://www.drupal.org/i/3553991": "resources/patch/php/drupal/oauth_client/3553991.diff",
-                "Minimal text formatting for OAuth2 client request type description @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048.diff",
-                "Dual OauthClientRequestForm behaviour @see https://www.drupal.org/i/3557380": "resources/patch/php/drupal/oauth_client/3557380.diff",
-                "Implement field constraint to restrict request status transitions @see https://www.drupal.org/i/3555196": "resources/patch/php/drupal/oauth_client/3555196.diff"
-            },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"
             },
