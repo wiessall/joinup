@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 #[RestResource(
   id: "assessment_report",
-  label: new TranslatableMarkup("Assessment report resource"),
+  label: new TranslatableMarkup("Assessment report"),
   uri_paths: [
     "create" => "/api/assessments/v1/assessment/create",
   ],
