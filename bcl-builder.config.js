@@ -357,6 +357,10 @@ module.exports = {
           dest: "paragraph--events-calendar.min.css",
         },
         {
+          entry: "components/paragraphs/paragraph--iframe.scss",
+          dest: "paragraph--iframe.min.css",
+        },
+        {
           entry: "components/releases.scss",
           dest: "releases.min.css",
         },
