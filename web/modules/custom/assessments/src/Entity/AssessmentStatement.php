@@ -63,7 +63,7 @@ final class AssessmentStatement extends ContentEntityBase {
         ],
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'text_default',
         'weight' => 1,
       ])
@@ -86,7 +86,7 @@ final class AssessmentStatement extends ContentEntityBase {
         'weight' => 0,
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'list_default',
         'weight' => 0,
       ])
@@ -95,9 +95,13 @@ final class AssessmentStatement extends ContentEntityBase {
 
     $fields['landing_page'] = BaseFieldDefinition::create('file')
       ->setLabel(t('Statement supporting document'))
+      ->setDescription(t('The supporting document for the assessment statement.'))
+      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
+      ->setSetting('file_directory', 'assessment-statements')
+      ->setSetting('uri_scheme', 'public')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'uri_link',
         'weight' => 2,
       ])
@@ -107,7 +111,6 @@ final class AssessmentStatement extends ContentEntityBase {
         'settings' => [
           'progress_indicator' => 'throbber',
           'display_field' => FALSE,
-          'default_upload_location' => 'public://assessment-statements',
         ],
       ])
       ->setDisplayConfigurable('form', FALSE)
