@@ -104,7 +104,7 @@ final class ResourceParser implements ResourceParserInterface {
     $errors = [];
     foreach ($this->models as $model) {
       $entity = \Drupal::entityTypeManager()
-        ->getStorage('assessment')
+        ->getStorage($model->getEntityTypeId())
         ->create($model->getEntityValues());
 
       $entity_errors = $entity->validate();
