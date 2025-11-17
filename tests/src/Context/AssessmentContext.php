@@ -43,7 +43,8 @@ class AssessmentContext extends RawDrupalContext {
     foreach ($assessmentsTable->getHash() as $assessmentHash) {
       $assessment = (object) $assessmentHash;
       $assessment->type = $type;
-      $this->entityCreate('assessment', $assessment);
+      $this->parseEntityFields('assessment', $assessment);
+      $this->getDriver()->createEntity('assessment', $assessment);
     }
   }
 

@@ -232,25 +232,4 @@ trait EntityTrait {
     return $base_path . $entity->toUrl($rel, $options)->toString();
   }
 
-  /**
-   * Create an entity.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   * @param \stdClass $entity
-   *   An object containing the entity properties and fields as properties.
-   *
-   * @return \stdClass
-   *   The created entity.
-   *
-   * @see \Drupal\joinup\Traits\TestingEntitiesTrait::cleanTestingEntities()
-   */
-  public function entityCreate(string $entity_type, \stdClass $entity): \stdClass {
-    $this->parseEntityFields($entity_type, $entity);
-    $saved = $this->getDriver()->createEntity($entity_type, $entity);
-    // Allow removal of created entities, see cleanTestingEntities().
-    $this->entities[$entity_type][$saved->id] = $entity;
-    return $saved;
-  }
-
 }
