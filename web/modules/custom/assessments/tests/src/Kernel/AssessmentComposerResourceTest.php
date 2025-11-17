@@ -20,6 +20,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'paragraphs',
     'system',
     'user',
     'serialization',
