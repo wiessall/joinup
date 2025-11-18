@@ -220,6 +220,27 @@ object.
 The list retrieved in the previous step is queued using Drupal Queue API, to
 be processed later, on cron run.
 
+#### Publiccode.yml validation
+
+Before creating or updating an OSS Solution, the publiccode.yml content is
+validated against the standard schema using `PublicCodeValidatorInterface`.
+
+The validation uses the [bfabio/publiccode-parser-php](https://github.com/bfabio/publiccode-parser-php)
+library, which requires the PHP FFI extension.
+
+**For new solutions:**
+- If publiccode.yml is invalid, the solution is **rejected** (not created)
+- Validation errors are logged to `joinup_log`
+
+**For existing solutions (updates):**
+- If publiccode.yml becomes invalid, the solution data is **not updated**
+- Only tracking fields (timestamps, source hash) are updated
+- Validation errors are logged to `joinup_log`
+- The existing solution remains accessible with its previous valid data
+
+This ensures data quality and prevents invalid or corrupted metadata from
+entering the catalogue.
+
 #### Consuming the queue
 
 A queue worker plugin consumes the queue by calling using the `eu_oss_catalogue`
