@@ -10,15 +10,15 @@ Feature: Tests membership to Interoperable Europe Portal collection.
     collection and I cannot leave.
 
     Given I am logged in as a user with the member role of the "An arbitrary collection" collection
-    Then I am member of "The Portal" collection
+    Then I am member of "Portal support" collection
 
     And I go to the homepage of the "An arbitrary collection" collection
     Then I should see the link "Leave this collection"
 
-    When I go to the homepage of the "The Portal" collection
+    When I go to the homepage of the "Portal support" collection
     Then I should not see the link "Leave this collection"
 
-    When I am about to leave the "The Portal" collection
+    When I am about to leave the "Portal support" collection
     Then I should get an access denied error
 
   Scenario: As a moderator I am able to revoke the membership of a user to any
@@ -31,8 +31,8 @@ Feature: Tests membership to Interoperable Europe Portal collection.
     And the following collection user membership:
       | collection              | user |
       | An arbitrary collection | joe  |
-    Then user "joe" is member of "The Portal" collection
-    And user "jane" is member of "The Portal" collection
+    Then user "joe" is member of "Portal support" collection
+    And user "jane" is member of "Portal support" collection
 
     Given I am logged in as a user with the moderator role
     And I am on the members page of "An arbitrary collection"
@@ -47,5 +47,5 @@ Feature: Tests membership to Interoperable Europe Portal collection.
     When I press "Confirm"
     Then I should see the success message "The member joe has been deleted from the 'An arbitrary collection' collection."
 
-    Given I am on the members page of "The Portal"
+    Given I am on the members page of "Portal support"
     Then the available options in the "Action" select should not include the "Delete the selected membership(s)" options
