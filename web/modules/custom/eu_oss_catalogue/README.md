@@ -117,23 +117,32 @@ provide the module's functionality.
 
 #### The Provider
 
-Each provider plugin is responsible in fetching data from certain source called
-_provider_.
+Each provider plugin is responsible for fetching data from a specific source called
+a _provider_.
 
-At the moment the following 2 provider plugins are implemented (as wip):
+The module currently supports the following providers:
 
-- Developers Italia: Italian National OSS Catalogue,
-by https://developers.italia.it website
-- Open CoDE: German National OSS Catalogue,
-by https://opencode.de website. (GitLab (self hosted))
+**National Catalogues:**
+- **Open Code Belgium** (BE) - Belgian OSS Catalogue
+- **Developers Italia** (IT) - Italian National OSS Catalogue
+- **Offentligkod.se** (SE) - Swedish National Catalogue
+- **Awesome CodeGouvFr** (FR) - French National Catalogue
+- **Developer Overheid** (NL) - Dutch National OSS Catalogue
+- **Avoinkoodi.fi** (FI) - Finnish OSS Catalogue
 
-These plugin type allows to fetch data from any source by defining its own
-logic. The only constraint is that data fetched by the plugin should be an
-array of array items. Each item is a structured array, following the same
-schema. The plugin is responsible also for the consistency validity of the data
-that is fetched.
+**Hosting Platforms:**
+- **Code Europa EU** - European Commission OSS Catalogue (GitLab self-hosted)
+- **Open CoDE** - German National OSS Catalogue (GitLab self-hosted)
 
-Each provider plugin must designate a _parser_ plugin in their annotation block.
+**Other:**
+- **Custom** - Solutions not part of any national catalogue
+
+These plugin types allow fetching data from any source by defining custom logic.
+The only constraint is that data fetched by the plugin must be an array of items,
+where each item is a structured array following the same schema. The plugin is
+responsible for data consistency and validity.
+
+Each provider plugin must designate a _parser_ plugin in their attribute definition.
 
 #### The Parser
 
