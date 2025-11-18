@@ -288,3 +288,22 @@ You can trigger manually OSS catalogue queue worker:
 ```bash
 ./vendor/bin/drush queue:run eu_oss_catalogue
 ```
+
+### Validation Commands
+
+The module provides commands to validate publiccode.yml files against the standard schema.
+
+Validate the publiccode.yml of an OSS solution node:
+```bash
+./vendor/bin/drush eu-oss:validate-node <NODE_ID>
+```
+
+Validate publiccode.yml content from a URL:
+```bash
+./vendor/bin/drush eu-oss:validate-url <URL>
+```
+
+Example:
+```bash
+./vendor/bin/drush eu-oss:validate-url https://raw.githubusercontent.com/example/repo/main/publiccode.yml
+```
