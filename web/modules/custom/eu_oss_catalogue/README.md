@@ -79,11 +79,33 @@ type of federated source.
 
 ## Install & configure
 
-TBD...
+### GitHub Access Token
+
+For fetching data from GitHub repositories, configure an access token in your `settings.php` file:
+
+```php
+$settings['eu_oss_catalogue']['platform_github']['access_token'] = 'your_github_token_here';
+```
+
+### Hosting Platform Configuration
+
+Configure custom hosting platforms (GitLab instances, GitHub Enterprise, etc.) through the Drupal admin interface:
+
+`/admin/config/eu-oss-catalogue/hosting-platform`
+
+### Cron Configuration
+
+The module uses Drupal's cron system to process the queue of fetched solutions. Ensure cron is running regularly:
+
+```bash
+./vendor/bin/drush cron
+```
 
 ## Usage
 
-TBD...
+The module provides Drush commands to fetch OSS solutions from various national catalogues and hosting platforms. Fetched data is queued and processed via cron, creating or updating OSS Solution nodes.
+
+See the "Triggering the process" section below for detailed command examples.
 
 ## Internal Architecture
 
@@ -152,12 +174,8 @@ platform, such as GitHub, GitLab, BitBucket, etc.
 
 ##### GitHub
 
-GitHub API calls are authenticated. You should obtain an access token and store
-it in the `settings.php` file:
-
-```php
-$settings['eu_oss_catalogue']['platform_github']['access_token'] = '...';
-```
+GitHub API calls are authenticated. See the "Install & configure" section for
+access token configuration.
 
 ##### GitLab
 
