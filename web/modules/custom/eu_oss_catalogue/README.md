@@ -241,11 +241,19 @@ Drupal node entity storage.
 
 #### Removing dead OSS Solutions
 
-TBD (based on discussion from DDD2023 Vienna, we queue an item with the list of
-fetched solutions and their provider. Then the worker looks at each solution. If
-the provider is the sole provider in `oss_source` field, it archives the node.
-Otherwise, it removes that provider form `oss_source`). The assumption should be
-verified again.
+After all solutions are fetched and queued, a cleanup operation is automatically
+queued. The cleanup process identifies OSS Solutions that were previously imported
+from a provider but are no longer present in the latest fetch.
+
+For each identified solution, the queue worker performs the following:
+- Removes the provider from the solution's `oss_source` field
+- If the provider was the sole source (solution has no other providers), the
+  solution is **archived** (marked with `oss_archived = 1`)
+- If the solution has other providers remaining in `oss_source`, it remains
+  active with only the removed provider excluded
+
+This ensures that solutions removed from a national catalogue are properly handled
+while preserving solutions that exist in multiple catalogues.
 
 ### Triggering the process
 
