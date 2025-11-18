@@ -228,27 +228,21 @@ from the command line.
 Example:
 
 Run the following, to fetch from
+[Open Code Belgium](https://www.imio.be) (Belgian OSS Catalogue)
+```bash
+./vendor/bin/drush eu-oss:fetch imio
+```
+
+Run the following, to fetch from
 [Developers Italia (Italian National OSS Catalogue)](https://developers.italia.it)
 ```bash
 ./vendor/bin/drush eu-oss:fetch developers_italia
 ```
 
 Run the following, to fetch from
-[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+[Offentligkod.se](https://offentligkod.se) (Swedish National Catalogue)
 ```bash
-./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
-```
-
-Run the following, to fetch from
-[Code Europa EU (European Commission OSS Catalogue)](https://code.europa.eu)
-```bash
-./vendor/bin/drush eu-oss:fetch hosting_platform:code_europa_eu
-```
-
-Run the following, to fetch from
-[Developer Overheid](https://developer.overheid.nl)
-```bash
-./vendor/bin/drush eu-oss:fetch developer_overheid
+./vendor/bin/drush eu-oss:fetch offentligkod_se
 ```
 
 Run the following, to fetch from
@@ -258,9 +252,32 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
+[Developer Overheid](https://developer.overheid.nl)
+```bash
+./vendor/bin/drush eu-oss:fetch developer_overheid
+```
+
+Run the following, to fetch from
 [Avoinkoodi.fi](http://avoinkoodi.fi)
 ```bash
 ./vendor/bin/drush eu-oss:fetch avoinkoodi_fi
+```
+
+Run the following, to fetch from
+[Code Europa EU (European Commission OSS Catalogue)](https://code.europa.eu)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:code_europa_eu
+```
+
+Run the following, to fetch from
+[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
+```
+
+Run the following, to fetch from Other (custom solutions not part of any catalogue):
+```bash
+./vendor/bin/drush eu-oss:fetch custom:other
 ```
 
 This command queries the configured provider endpoints, fetches the data
