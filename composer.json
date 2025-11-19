@@ -534,8 +534,6 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
-                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
-                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff",
                 "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
             },
             "gitonomy/gitlib": {
