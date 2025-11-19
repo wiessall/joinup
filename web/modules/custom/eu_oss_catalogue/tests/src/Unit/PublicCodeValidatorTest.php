@@ -27,8 +27,7 @@ class PublicCodeValidatorTest extends UnitTestCase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->validator = new PublicCodeValidator();
-    $this->validator->setDisableNetwork(TRUE);
+    $this->validator = new PublicCodeValidator(disableNetwork: TRUE);
   }
 
   /**

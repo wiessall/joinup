@@ -18,19 +18,9 @@ use Bfabio\PublicCodeParser\ParserConfig;
  */
 class PublicCodeValidator implements PublicCodeValidatorInterface {
 
-  /**
-   * Disable network checks.
-   *
-   * @var bool
-   */
-  protected bool $disableNetwork = FALSE;
-
-  /**
-   * Sets whether to disable network checks.
-   */
-  public function setDisableNetwork(bool $disable): void {
-    $this->disableNetwork = $disable;
-  }
+  public function __construct(
+    protected bool $disableNetwork,
+  ) {}
 
   /**
    * {@inheritdoc}
