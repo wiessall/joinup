@@ -6,7 +6,6 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Attribute\EuOssCatalogueResolver;
 use Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface;
@@ -25,12 +24,9 @@ class MetadataContentResolver extends DefaultResolver implements EuOssCatalogueR
    * {@inheritdoc}
    */
   public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
-    if (empty($metadata)) {
-      $value = [];
-    }
-    else {
-      $value[LanguageInterface::LANGCODE_DEFAULT] = [Yaml::encode($metadata)];
-    }
+    // Store the original YAML content to preserve formatting and data types.
+    // Avoids issues like date strings being converted to timestamps.
+    $value[LanguageInterface::LANGCODE_DEFAULT] = [$project->files['publiccodeYml'] ?? NULL];
   }
 
 }
