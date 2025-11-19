@@ -34,6 +34,7 @@ Feature:
     And I press "Update"
 
     And I wait for CSS animations to finish
+    And I wait for slick carousel ".slick--optionset--image-gallery" to be ready
     And I should have the following images on the page in this order
       | logo.png   |
       | topic.png  |
