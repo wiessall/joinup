@@ -6,10 +6,7 @@ Feature:
   I need to be able to configure community content listing
 
   Background:
-    Given user:
-      | Username | jimmy7892                       |
-      | E-mail   | jimmy.nine@ec-europa.example.eu |
-    And collection content:
+    Given collection content:
       | title      | logo     |
       | Nintendo64 | logo.png |
     And news content:
@@ -18,13 +15,10 @@ Feature:
     And discussion content:
       | title                           | collection | content                 |
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. |
-    And the following collection user membership:
-      | collection | user      | roles       |
-      | Nintendo64 | jimmy7892 | facilitator |
 
   @javascript
   Scenario: Configure content listing with filters and reordering
-    Given I am logged in as jimmy7892
+    Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -64,7 +58,7 @@ Feature:
 
   @javascript
   Scenario: Content type facets filter displayed items
-    Given I am logged in as jimmy7892
+    Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
 
@@ -110,7 +104,7 @@ Feature:
 
   @javascript
   Scenario: Empty filter validation error
-    Given I am logged in as jimmy7892
+    Given I am logged in as a moderator
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Empty filter test"
@@ -133,7 +127,7 @@ Feature:
     And custom_page content:
       | title   | collection |
       | Forests | Nintendo64 |
-    And I am logged in as jimmy7892
+    And I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Forests" "custom page"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
@@ -172,7 +166,7 @@ Feature:
     And custom_page content:
       | title | collection | abstract |
       | Bikes | Nintendo64 | N/A      |
-    And I am logged in as jimmy7892
+    And I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Bikes" "custom page"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
