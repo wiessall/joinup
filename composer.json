@@ -543,9 +543,6 @@
             "openeuropa/oe_authentication": {
                 "Missing langcode in oe_authentication.settings @see https://github.com/openeuropa/oe_authentication/issues/229": "resources/patch/php/openeuropa/oe_authentication/230.diff"
             },
-            "openeuropa/oe_webtools": {
-                "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"
-            },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/m4tthumphrey/php-gitlab-api/726.diff"
