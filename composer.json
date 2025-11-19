@@ -402,7 +402,8 @@
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3-note490206.diff"
             },
             "drupal/entity_form_field_label": {
-                "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff"
+                "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
+                "Illegal argument NULL @see https://www.drupal.org/i/3558750": "resources/patch/php/drupal/entity_form_field_label/3558750.diff"
             },
             "drupal/email_contact": {
                 "Use AjaxHelperTrait::isAjax() to fix modal behavior for non-Ajax requests. @see https://www.drupal.org/i/3546736": "resources/patch/php/drupal/email_contact/3546736.diff"
