@@ -517,7 +517,6 @@
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff",
                 "Tagify placeholder is not translatable @see https://www.drupal.org/i/3547609": "resources/patch/php/drupal/tagify/3547609.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
