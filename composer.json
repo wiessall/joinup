@@ -505,9 +505,6 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
             },
-            "drupal/stage_file_proxy": {
-                "Wrong regex constraint for origin in stage_file_proxy.settings @see https://www.drupal.org/i/3525876": "resources/patch/php/drupal/stage_file_proxy/3525876.diff"
-            },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff",
                 "Fatal error and deprecated code: StateFieldBuilder. @see https://www.drupal.org/project/state_machine/issues/3542871": "resources/patch/php/drupal/state_machine/3542871.diff"
