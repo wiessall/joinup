@@ -1,3 +1,6 @@
+parameters:
+  eu_oss_catalogue.disable_network: true
+
 services:
 
   _defaults:
@@ -44,4 +47,6 @@ services:
 
   eu_oss_catalogue.publiccode_validator:
     class: Drupal\eu_oss_catalogue\Validator\PublicCodeValidator
+    arguments:
+      - '%eu_oss_catalogue.disable_network%'
   Drupal\eu_oss_catalogue\Validator\PublicCodeValidatorInterface: '@eu_oss_catalogue.publiccode_validator'
