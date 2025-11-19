@@ -881,7 +881,6 @@ display:
               action_id: views_bulk_operations_delete_entity
               preconfiguration:
                 label_override: Delete
-          force_selection_info: false
         fid:
           id: fid
           table: file_managed
