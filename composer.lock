@@ -21957,17 +21957,17 @@
         },
         {
             "name": "drupal/cas_mock_server",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/cas_mock_server.git",
-                "reference": "2.0.3"
+                "reference": "2.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.3.zip",
-                "reference": "2.0.3",
-                "shasum": "314cc2dd3706c3a9843efc1db1b03aacb49573e5"
+                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-2.0.4.zip",
+                "reference": "2.0.4",
+                "shasum": "2ba33a287c2c087c543e17dc8de698353537e108"
             },
             "require": {
                 "drupal/core": ">=9.3"
@@ -21983,8 +21983,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.3",
-                    "datestamp": "1762884839",
+                    "version": "2.0.4",
+                    "datestamp": "1763583295",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
