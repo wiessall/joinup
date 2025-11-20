@@ -13,7 +13,7 @@ use Drupal\Core\Entity\ContentEntityStorageInterface;
 /**
  * Queue OSS solutions to be validated.
  */
-function joinup_oss_catalogue_deploy_200700(): string {
+function joinup_oss_catalogue_deploy_200800(): string {
   $queue = \Drupal::queue('joinup_oss_catalogue_publiccode_validator');
   $queue->createQueue();
   $solutionStorage = \Drupal::service('entity_type.manager')->getStorage('node');
@@ -36,7 +36,7 @@ function joinup_oss_catalogue_deploy_200700(): string {
 /**
  * Force re-fetch for solutions with invalid release date format.
  */
-function joinup_oss_catalogue_deploy_200701(): string {
+function joinup_oss_catalogue_deploy_200801(): string {
   $database = \Drupal::database();
 
   $query = $database->select('node__oss_release_date', 'rd');
