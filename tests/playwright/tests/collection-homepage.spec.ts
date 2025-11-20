@@ -8,7 +8,7 @@ import pageUtils from "../utils/pageUtils";
 
 test.describe("Collection homepage", () => {
   test("Collection homepage components", async ({ page }) => {
-    await page.goto("/collection/portal");
+    await page.goto("/collection/portal-support");
     await pageUtils.waitForWebtools(page);
 
     await expect(page.locator("header.joinup-navbar")).toHaveScreenshot(

@@ -1,12 +1,12 @@
-uuid: ffcf6900-5b99-44fb-9166-5045707619aa
+uuid: 1303b496-18c1-40b0-9cec-c503dfa5a6fc
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
     - file
-id: assessment.statement_documents
-field_name: statement_documents
+id: assessment.documents
+field_name: documents
 entity_type: assessment
 type: file
 settings:
