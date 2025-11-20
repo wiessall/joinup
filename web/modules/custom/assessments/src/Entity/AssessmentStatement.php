@@ -7,6 +7,7 @@ namespace Drupal\assessments\Entity;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the Assessment statement entity.
@@ -55,16 +56,16 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
-        'weight' => 0,
+        'weight' => 1,
         'settings' => [
           'rows' => 3,
           'placeholder' => '',
         ],
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 1,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -81,16 +82,39 @@ final class AssessmentStatement extends ContentEntityBase {
         ],
       ])
       ->setDisplayOptions('form', [
-        'type' => 'options_select',
-        'weight' => 1,
+        'type' => 'options_buttons',
+        'weight' => 0,
       ])
       ->setDisplayOptions('view', [
-        'label' => 'above',
+        'label' => 'hidden',
         'type' => 'list_default',
-        'weight' => 1,
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
+
+    $fields['landing_page'] = BaseFieldDefinition::create('file')
+      ->setLabel(t('Statement supporting document'))
+      ->setDescription(t('The supporting document for the assessment statement.'))
+      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
+      ->setSetting('file_directory', 'assessment-statements')
+      ->setSetting('uri_scheme', 'public')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'uri_link',
+        'weight' => 2,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'file_generic',
+        'weight' => 2,
+        'settings' => [
+          'progress_indicator' => 'throbber',
+          'display_field' => FALSE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     return $fields;
   }
@@ -98,7 +122,7 @@ final class AssessmentStatement extends ContentEntityBase {
   /**
    * {@inheritdoc}
    */
-  public function label(): string {
+  public function label(): ?string {
     return $this->id();
   }
 

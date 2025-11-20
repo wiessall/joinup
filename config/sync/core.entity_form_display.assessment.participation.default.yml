@@ -4,63 +4,46 @@ status: true
 dependencies:
   config:
     - assessments.type.participation
-    - field.field.assessment.participation.country
     - field.field.assessment.participation.participant_type
+    - field.field.assessment.participation.stakeholder_country
   module:
-    - field_group
+    - entity_form_field_label
     - tagify
-third_party_settings:
-  field_group:
-    group_participant_type:
-      children: {  }
-      label: 'Participant type'
-      region: content
-      parent_name: ''
-      weight: 0
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<p><strong>Select the groups of stakeholders to which binding requirement(s) are relevant:</strong></p>'
-          format: content_editor
-    group_participant_country:
-      children: {  }
-      label: 'Participant country'
-      region: content
-      parent_name: ''
-      weight: 2
-      format_type: markup
-      format_settings:
-        classes: form-wrapper
-        show_empty_fields: true
-        id: ''
-        label_as_html: false
-        markup:
-          value: '<p>Select the stakeholder’s country</p>'
-          format: content_editor
 id: assessment.participation.default
 targetEntityType: assessment
 bundle: participation
 mode: default
 content:
-  country:
+  participant_type:
     type: tagify_select_widget
-    weight: 3
+    weight: 1
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: ''
-    third_party_settings: {  }
-  participant_type:
-    type: options_buttons
-    weight: 1
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 1
+        new_description: ''
+        rewrite_description: 0
+      oe_bootstrap_theme_helper:
+        switch: false
+  stakeholder_country:
+    type: tagify_select_widget
+    weight: 4
     region: content
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      placeholder: 'Select or start typing...'
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
 hidden:
   created: true
   langcode: true
