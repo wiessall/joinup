@@ -8,6 +8,7 @@ dependencies:
     - field.field.assessment.report.documents
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
+    - field.field.assessment.report.other_interoperability
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
     - field.field.assessment.report.semantic_interoperability
@@ -28,6 +29,7 @@ third_party_settings:
         - group_organisational
         - group_semantic
         - group_technical
+        - group_other
       label: Tabs
       region: content
       parent_name: ''
@@ -104,6 +106,22 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
+    group_other:
+      children:
+        - other_interoperability
+      label: Other
+      region: content
+      parent_name: group_tabs
+      weight: 50
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
 id: assessment.report.default
 targetEntityType: assessment
 bundle: report
@@ -128,7 +146,7 @@ content:
     third_party_settings: {  }
   documents:
     type: file_generic
-    weight: 41
+    weight: 8
     region: content
     settings:
       progress_indicator: throbber
@@ -167,6 +185,24 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
+  other_interoperability:
+    type: inline_entity_form_simple
+    weight: 7
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   provider:
     type: inline_entity_form_simple
     weight: 1
@@ -187,6 +223,8 @@ content:
     settings:
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
       default_option: 'no'
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   semantic_interoperability:
     type: inline_entity_form_simple
@@ -203,7 +241,7 @@ content:
     third_party_settings: {  }
   state:
     type: state_machine_buttons
-    weight: 7
+    weight: 6
     region: content
     settings:
       use_transition_label: 0
