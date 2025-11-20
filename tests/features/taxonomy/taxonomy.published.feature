@@ -2,8 +2,8 @@
 Feature: Publication status of keywords depends on the status of the parent.
 
   Scenario: Keywords publication management.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the "Portal support" collection
     And I click "Add solution"
     And I fill in the following:
       | Title       | ASDF solution    |
@@ -71,8 +71,8 @@ Feature: Publication status of keywords depends on the status of the parent.
 
   @javascript
   Scenario: Unpublished keywords are not available in the autocomplete.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the "Portal support" collection
     And I open the plus button menu
     And I click "Add news"
     # Keywords from the testing_terms.yml are used.
@@ -87,7 +87,7 @@ Feature: Publication status of keywords depends on the status of the parent.
     Given I go to the "some unpublished tag" keyword
     Then I should see the heading "Sign in to continue"
 
-    When I am logged in as a facilitator of the "The Portal" collection
+    When I am logged in as a facilitator of the "Portal support" collection
     And I go to the "some unpublished tag" keyword
     Then I should get an access denied error
 

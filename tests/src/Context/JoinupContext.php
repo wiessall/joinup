@@ -3098,45 +3098,4 @@ class JoinupContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Asserts that a given county has an expected country code.
-   *
-   * @param string $country
-   *   The country name.
-   * @param string $code
-   *   The expected country code.
-   *
-   * @Then the :country country code should be :code
-   */
-  public function assertCountryCode(string $country, string $code): void {
-    $term = $this->getEntityByLabel('taxonomy_term', $country, 'spatial');
-    Assert::assertSame($code, $term->get('code')->value);
-  }
-
-  /**
-   * Asserts that a country is a European Union member state.
-   *
-   * @param string $country
-   *   The country name.
-   *
-   * @Then :country is member of the European Union
-   */
-  public function assertMemberEu(string $country): void {
-    $term = $this->getEntityByLabel('taxonomy_term', $country, 'spatial');
-    Assert::assertTrue((bool) $term->get('eu_member')->value);
-  }
-
-  /**
-   * Asserts that a country is not a European Union member state.
-   *
-   * @param string $country
-   *   The country name.
-   *
-   * @Then :country is not member of the European Union
-   */
-  public function assertNotMemberEu(string $country): void {
-    $term = $this->getEntityByLabel('taxonomy_term', $country, 'spatial');
-    Assert::assertFalse((bool) $term->get('eu_member')->value);
-  }
-
 }
