@@ -223,8 +223,6 @@ content:
     settings:
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
       default_option: 'no'
-      placeholder_url: ''
-      placeholder_title: ''
     third_party_settings: {  }
   semantic_interoperability:
     type: inline_entity_form_simple
