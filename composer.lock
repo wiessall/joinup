@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90be8c5a2cc3985f0522135421766a40",
+    "content-hash": "1d62adb15116939b51ebf5b279bdab00",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4120,6 +4120,55 @@
             }
         },
         {
+            "name": "drupal/entity_form_field_label",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_form_field_label.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_form_field_label-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "3088e2bc0ed24089708ee9992a8946cb14707e1f"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1746391968",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Sineok",
+                    "homepage": "https://www.drupal.org/user/3426613",
+                    "email": "n.sineok@gmail.com"
+                }
+            ],
+            "description": "Add an ability to change a displayed label for a entity field.",
+            "homepage": "https://www.drupal.org/project/entity_form_field_label",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/entity_form_field_label",
+                "issues": "https://www.drupal.org/project/issues/entity_form_field_label"
+            }
+        },
+        {
             "name": "drupal/entity_legal",
             "version": "4.1.0-alpha1",
             "source": {
@@ -4953,51 +5002,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/field_group",
                 "issues": "https://www.drupal.org/project/issues/field_group"
-            }
-        },
-        {
-            "name": "drupal/field_group_markup",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/field_group_markup.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group_markup-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "4e5859c975061ba7012c8aed0b25514b4ea26d8c"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10",
-                "drupal/field_group": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1667186287",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "dieuwe",
-                    "homepage": "https://www.drupal.org/user/1536006"
-                }
-            ],
-            "description": "Provides a markup field group display formatter.",
-            "homepage": "https://www.drupal.org/project/field_group_markup",
-            "support": {
-                "source": "https://git.drupalcode.org/project/field_group_markup"
             }
         },
         {

@@ -1,0 +1,16 @@
+uuid: ef76148c-0afb-4b3e-90b6-f0d684744eb6
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_paragraphs
+id: binding_requirement
+label: 'Binding requirement'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins:
+  layout_paragraphs:
+    enabled: true
+    available_layouts:
+      layout_onecol: 'One column'

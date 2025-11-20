@@ -1,0 +1,27 @@
+uuid: 20ba9f45-62c6-4bb3-8330-a74897381687
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.documented_in
+    - paragraphs.paragraphs_type.binding_requirement
+  module:
+    - link
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: paragraph.binding_requirement.documented_in
+field_name: documented_in
+entity_type: paragraph
+bundle: binding_requirement
+label: Link
+description: 'Provide a legal reference for the binding requirement, if available'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

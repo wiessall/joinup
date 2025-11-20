@@ -20,8 +20,8 @@ id: assessment.public_service.thematic_area
 field_name: thematic_area
 entity_type: assessment
 bundle: public_service
-label: 'Thematic area'
-description: ''
+label: Functions
+description: 'Specify the concerned function of trans-European digital public service(s)'
 required: false
 translatable: false
 default_value: {  }
