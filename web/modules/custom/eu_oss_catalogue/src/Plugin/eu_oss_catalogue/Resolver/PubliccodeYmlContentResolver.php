@@ -12,13 +12,13 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 
 /**
- * Metadata content resolver.
+ * Publiccode YML content resolver.
  */
 #[EuOssCatalogueResolver(
-  id: "metadata_content",
-  label: new TranslatableMarkup("Metadata content")
+  id: "publiccode_yml_content",
+  label: new TranslatableMarkup("Publiccode YML content")
 )]
-class MetadataContentResolver extends DefaultResolver implements EuOssCatalogueResolverInterface {
+class PubliccodeYmlContentResolver extends DefaultResolver implements EuOssCatalogueResolverInterface {
 
   /**
    * {@inheritdoc}
