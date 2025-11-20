@@ -34,11 +34,11 @@ async function logout(page: Page): Promise<void> {
  * Note: This uses the login form instead of drush uli on purpose; to avoid
  * concurrency issues when multiple tests log in as the same user.
  *
- * @param {{ email: string, password: string }} user - The user credentials (see `drupalConfig.users`).
+ * @param {{ name: string, email: string, password: string }} user - The user credentials (see `drupalConfig.users`).
  * @param {Page} page - Playwright page instance.
  */
 async function login(
-  user: { email: string; password: string },
+  user: { name: string; email: string; password: string },
   page: Page,
 ): Promise<void> {
   await logout(page);
