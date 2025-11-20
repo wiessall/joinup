@@ -1,7 +1,7 @@
 From 06a0862aac3bd62108aeb6542217cfa2f6567d05 Mon Sep 17 00:00:00 2001
 From: Alexandre Dias <alex.jm.dias@gmail.com>
 Date: Mon, 27 Mar 2023 17:54:27 +0100
-Subject: [PATCH 1/8] Check if svg is valid.
+Subject: [PATCH 1/9] Check if svg is valid.
 
 ---
  svg_image.module | 19 +++++++++++++++++++
@@ -48,7 +48,7 @@ GitLab
 From 780572ca72626210cb7c75b38bbdd0cbe756adfc Mon Sep 17 00:00:00 2001
 From: Alexandre Dias <alex.jm.dias@gmail.com>
 Date: Tue, 28 Mar 2023 14:56:25 +0100
-Subject: [PATCH 2/8] Fix check svg error.
+Subject: [PATCH 2/9] Fix check svg error.
 
 ---
  svg_image.module | 7 ++++---
@@ -81,7 +81,7 @@ GitLab
 From 36eeb3cbf5117ec06d317d477e8c4e0f0bf36d3e Mon Sep 17 00:00:00 2001
 From: Claudiu Cristea <7931-claudiucristea@users.noreply.drupalcode.org>
 Date: Tue, 17 Jun 2025 07:17:36 +0000
-Subject: [PATCH 3/8] Check that file exists
+Subject: [PATCH 3/9] Check that file exists
 
 ---
  svg_image.module | 2 +-
@@ -107,7 +107,7 @@ GitLab
 From dae470cdc1fa01c1665e8462d8f81e7ef71ff883 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Thu, 13 Nov 2025 09:23:19 +0100
-Subject: [PATCH 4/8] Remove hook hook_file_validate()
+Subject: [PATCH 4/9] Remove hook hook_file_validate()
 
 ---
  svg_image.module | 17 -----------------
@@ -146,7 +146,7 @@ GitLab
 From 3c59d116d96d96fb19914cc2749c488a5df6a354 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Thu, 13 Nov 2025 14:15:18 +0100
-Subject: [PATCH 5/8] Add SvgFileValidationSubscriber
+Subject: [PATCH 5/9] Add SvgFileValidationSubscriber
 
 ---
  .../SvgFileValidationSubscriber.php           | 81 +++++++++++++++++++
@@ -260,7 +260,7 @@ GitLab
 From 4653694d3aaa253aa611b2da7ee7045ded69fd75 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Thu, 13 Nov 2025 14:35:25 +0100
-Subject: [PATCH 6/8] Update SvgFileValidationSubscriber
+Subject: [PATCH 6/9] Update SvgFileValidationSubscriber
 
 ---
  src/EventSubscriber/SvgFileValidationSubscriber.php | 2 +-
@@ -286,7 +286,7 @@ GitLab
 From 6f896725e8fba46c80a564560ceb2193576dab12 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Fri, 14 Nov 2025 08:15:28 +0100
-Subject: [PATCH 7/8] Update SvgFileValidationSubscriber
+Subject: [PATCH 7/9] Update SvgFileValidationSubscriber
 
 ---
  .../SvgFileValidationSubscriber.php           | 28 ++++++++++---------
@@ -378,7 +378,7 @@ GitLab
 From a7da4f1b7c6740989e1556c815743079cc71ab08 Mon Sep 17 00:00:00 2001
 From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
 Date: Mon, 17 Nov 2025 08:37:05 +0100
-Subject: [PATCH 8/8] Format code
+Subject: [PATCH 8/9] Format code
 
 ---
  .../SvgFileValidationSubscriber.php           | 112 +++++++++---------
@@ -514,5 +514,163 @@ index db5987d..cd9013d 100644
 +  }
  
  }
+-- 
+GitLab
+
+
+From 24e876b6d7a62b0c0adf5d58d72595b5f8d06451 Mon Sep 17 00:00:00 2001
+From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
+Date: Thu, 20 Nov 2025 12:29:25 +0100
+Subject: [PATCH 9/9] Add tests
+
+---
+ .../Unit/SvgFileValidationSubscriberTest.php  | 138 ++++++++++++++++++
+ 1 file changed, 138 insertions(+)
+ create mode 100644 tests/src/Unit/SvgFileValidationSubscriberTest.php
+
+diff --git a/tests/src/Unit/SvgFileValidationSubscriberTest.php b/tests/src/Unit/SvgFileValidationSubscriberTest.php
+new file mode 100644
+index 0000000..95870a1
+--- /dev/null
++++ b/tests/src/Unit/SvgFileValidationSubscriberTest.php
+@@ -0,0 +1,138 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\svg_image\Unit\EventSubscriber;
++
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\Tests\UnitTestCase;
++use Drupal\file\FileInterface;
++use Drupal\file\Validation\FileValidationEvent;
++use Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber;
++use Symfony\Component\Validator\ConstraintViolationList;
++
++/**
++ * Test class for SvgFileValidationSubscriber.
++ *
++ * @group svg_image
++ */
++final class SvgFileValidationSubscriberTest extends UnitTestCase {
++
++  /**
++   * Creates a FileValidationEvent with a fresh violation list.
++   */
++  private function createEvent(FileInterface $file): FileValidationEvent {
++    return new FileValidationEvent($file, new ConstraintViolationList());
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $container = new ContainerBuilder();
++    $container->set('string_translation', $this->getStringTranslationStub());
++    \Drupal::setContainer($container);
++  }
++
++  /**
++   * Only svg files are validated.
++   */
++  public function testNonSvgIsIgnored(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/png');
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    $this->assertCount(0, $event->violations);
++  }
++
++  /**
++   * Violation for missing file.
++   */
++  public function testMissingFileAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn('/path/does/not/exist.svg');
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('does not exist', (string) $event->violations[0]->getMessage());
++  }
++
++  /**
++   * Violation for unreadable file.
++   */
++  public function testUnreadableFileAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    // Create unreadable temp file.
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    chmod($tmp, 0000);
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    chmod($tmp, 0644);
++    unlink($tmp);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('Unable to read', (string) $event->violations[0]->getMessage());
++  }
++
++  /**
++   * No violations for valid svg file.
++   */
++  public function testValidSvgHasNoViolations(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    file_put_contents($tmp, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    unlink($tmp);
++
++    // Sanitizer should not find issues in a simple valid SVG.
++    $this->assertCount(0, $event->violations);
++  }
++
++  /**
++   * Violation for invalid svg file.
++   */
++  public function testInvalidSvgAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    file_put_contents($tmp, '<svg><script>alert(1)</script></svg>');
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    unlink($tmp);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('Invalid or unsafe SVG', (string) $event->violations[0]->getMessage());
++  }
++
++}
 -- 
 GitLab
