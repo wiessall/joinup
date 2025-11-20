@@ -146,4 +146,4 @@ Statement (statement):
   * organisational_interoperability
   * semantic_interoperability
   * technical_interoperability
-
+  * other_interoperability
