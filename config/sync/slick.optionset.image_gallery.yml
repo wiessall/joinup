@@ -17,7 +17,7 @@ options:
     lazyLoad: ondemand
     respondTo: slider
     rows: 0
-    slidesToShow: 1
+    slidesToShow: 1.0
     speed: 300
     swipeToSlide: true
     cssEase: 'cubic-bezier(0.3, 0.8, 0.5, 0.9)'
