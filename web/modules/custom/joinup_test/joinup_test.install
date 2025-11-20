@@ -13,6 +13,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\Entity\File as FileEntity;
 use Drupal\file\FileInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\pathauto\PathautoState;
 use Drupal\taxonomy\TermInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
@@ -120,6 +121,10 @@ function joinup_test_install($is_syncing): void {
         'uri' => $fileSystem->copy($logoSourceRealPath, 'public://'),
         'status' => FileInterface::STATUS_PERMANENT,
       ]),
+      'path' => [
+        'alias' => '/collection/portal-support',
+        'pathauto' => PathautoState::SKIP,
+      ],
     ]);
     $collection->save();
 
