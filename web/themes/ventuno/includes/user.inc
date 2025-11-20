@@ -26,8 +26,11 @@ function ventuno_preprocess_user(array &$variables): void {
     if (!$user->get('field_user_business_title')->isEmpty()) {
       $business_title = $user->get('field_user_business_title')->value;
     }
-    if (!$user->get('field_user_nationality')->isEmpty() && !$user->get('field_user_nationality')->isEmpty()) {
-      $nationality = t('Country of origin: @country', ['@country' => $user->get('field_user_nationality')->entity->label()]);
+    if (!$user->get('field_user_nationality')->isEmpty()) {
+      $nationality_entity = $user->get('field_user_nationality')->entity;
+      if ($nationality_entity) {
+        $nationality = t('Country of origin: @country', ['@country' => $nationality_entity->label()]);
+      }
     }
 
     if ($business_title && $nationality) {
