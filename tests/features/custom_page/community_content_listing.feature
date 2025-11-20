@@ -1,7 +1,6 @@
 @api @group-d
 Feature:
   In order to make it easy to browse to specific content
-  As a moderator
   As a facilitator
   I need to be able to configure community content listing
 
@@ -104,7 +103,7 @@ Feature:
 
   @javascript
   Scenario: Empty filter validation error
-    Given I am logged in as a moderator
+    Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Empty filter test"
