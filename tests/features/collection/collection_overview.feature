@@ -30,7 +30,7 @@ Feature: Collections Overview
       # Created in 8:31am.
       | E-health          |
       # Created 2015-01-01 08:00am.
-      | The Portal        |
+      | Portal support       |
 
     When I am an anonymous user
     And I visit the collection overview page

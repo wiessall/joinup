@@ -34,28 +34,22 @@ readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInte
    */
   public static function getSubscribedEvents(): array {
     return [
-      NotificationEvents::NODE_CREATE => ['notifyOnCommunityContentCreation', 'notifyOnGroupEntityCrudOperation'],
-      NotificationEvents::NODE_UPDATE => ['notifyOnCommunityContentPublication', 'notifyOnGroupEntityCrudOperation'],
+      NotificationEvents::NODE_CREATE => [['notifyOnCollectionContentCreation']],
+      NotificationEvents::NODE_UPDATE => [['notifyOnCollectionContentPublication']],
     ];
   }
 
   /**
    * Notifies subscribed users when new community content is published.
-   *
-   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
-   *   The event object.
    */
-  public function notifyOnCommunityContentCreation(NotificationEvent $event): void {
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $event->getEntity();
-
-    // Only notify if the newly created content is published.
-    if (!$entity instanceof CollectionContentInterface || !$entity->isPublished()) {
+  public function notifyOnCollectionContentCreation(NotificationEvent $event): void {
+    $entity = $this->getEligibleEntity($event);
+    if (!$entity) {
       return;
     }
 
-    // Ignore archived content.
-    if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    // Only notify if the newly created content is published.
+    if (!$entity->isPublished()) {
       return;
     }
 
@@ -64,21 +58,15 @@ readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInte
 
   /**
    * Notifies subscribed users when existing community content is published.
-   *
-   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
-   *   The event object.
    */
-  public function notifyOnCommunityContentPublication(NotificationEvent $event): void {
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $event->getEntity();
-
-    // Only notify if the content is being published for the first time.
-    if (!$entity instanceof CollectionContentInterface || !$entity->isPublished() || empty($entity->original) || $entity->original->isPublished() || !$this->isFirstPublishedRevision($entity)) {
+  public function notifyOnCollectionContentPublication(NotificationEvent $event): void {
+    $entity = $this->getEligibleEntity($event);
+    if (!$entity) {
       return;
     }
 
-    // Ignore archived content.
-    if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    // Only notify if the content is being published for the first time.
+    if (!$entity->isPublished() || empty($entity->original) || $entity->original->isPublished() || !$this->isFirstPublishedRevision($entity)) {
       return;
     }
 
@@ -86,52 +74,33 @@ readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInte
   }
 
   /**
-   * Notifies subscribed users when a new solution is added to the collection.
-   *
-   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
-   *   The event object.
+   * Returns the entity if it qualifies for notification, NULL otherwise.
    */
-  public function notifyOnGroupEntityCrudOperation(NotificationEvent $event): void {
-    // Ignore content that does not belong to a group, and content that is not
-    // published.
+  private function getEligibleEntity(NotificationEvent $event): ?CollectionContentInterface {
     $entity = $event->getEntity();
-    if (!$entity instanceof GroupContentInterface) {
-      return;
-    }
 
-    // Ignore unpublished content.
-    if (!$entity instanceof EntityPublishedInterface || !$entity->isPublished()) {
-      return;
+    if (!$entity instanceof CollectionContentInterface) {
+      return NULL;
     }
 
     // Ignore archived content.
     if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
-      return;
+      return NULL;
     }
 
-    // We only want to include content in the digest on initial publication, not
-    // when existing or previously published content is updated or re-published.
-    // Only keep content that is newly created or is not yet published.
-    // Note: the `->hasPublished` check is a hack that can be removed once we
-    // have revisionable RDF entities.
-    // @see joinup_notification_rdf_entity_presave()
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6481
-    if ($entity->hasPublished) {
-      return;
-    }
-
-    // Avoid including orphaned group content in the digest.
+    // Ignore orphaned group content.
     if (!$entity->hasGroup()) {
-      return;
+      return NULL;
     }
 
     // Ignore content that is not approved for inclusion in digest messages.
-    $subscribable_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()]['node'] ?? [];
-    if (!in_array($entity->bundle(), $subscribable_bundles)) {
-      return;
+    $group_bundle = $entity->getGroup()->bundle();
+    $subscribable_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group_bundle]['node'] ?? [];
+    if (!in_array($entity->bundle(), $subscribable_bundles, TRUE)) {
+      return NULL;
     }
 
-    $this->sendMessage($entity);
+    return $entity;
   }
 
   /**

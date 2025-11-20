@@ -109,10 +109,10 @@ Feature: Administer media.
     Given there are no preexisting log records on the site
     And the following "Image" media:
       | name                               | image      | alt            | group      | revision         | uuid        |
-      | The Image in Shaping of disruption | simple.svg | A simple image | The Portal | 2016-07-10T13:00 | abcde-12345 |
+      | The Image in Shaping of disruption | simple.svg | A simple image | Portal support | 2016-07-10T13:00 | abcde-12345 |
 
-    When I am logged in as a "facilitator" of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    When I am logged in as a "facilitator" of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I click "Add discussion" in the plus button menu
 
     Then I fill in the following:
@@ -164,7 +164,7 @@ Feature: Administer media.
   Scenario: Media are rendered correctly for releases and distributions.
     Given the following "Image" media:
       | name                               | image      | alt            | group      | revision         | uuid        |
-      | The Image in Shaping of disruption | simple.svg | A simple image | The Portal | 2016-07-10T13:00 | abcde-12345 |
+      | The Image in Shaping of disruption | simple.svg | A simple image | Portal support | 2016-07-10T13:00 | abcde-12345 |
     And solution content:
       | title         | description |
       | Some solution | Meh...      |

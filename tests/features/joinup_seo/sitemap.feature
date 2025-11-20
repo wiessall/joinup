@@ -63,7 +63,7 @@ Feature:
     Given I run cron
     And I visit "/sitemap.xml"
     Then I should see the absolute urls of the following content entities:
-      | The Portal                       |
+      | Portal support                      |
       | Sitemap collection published     |
       | Sitemap solution published       |
       | Sitemap custom page of published |

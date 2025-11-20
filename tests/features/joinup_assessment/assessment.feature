@@ -411,8 +411,8 @@ Feature: Assessments
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     And assessment_report content:
       | title         | state     | created              | organization         | collection                         |
-      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization | The Portal                         |
-      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization | The Portal                         |
+      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization | Portal support                        |
+      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization | Portal support                        |
       | Assessment 3  | published | 2020-01-03T00:00:00Z | default organization | Interoperability assessments space |
       | Assessment 4  | published | 2020-01-04T00:00:00Z | default organization | Interoperability assessments space |
       | Assessment 5  | published | 2020-01-05T00:00:00Z | default organization | Interoperability assessments space |

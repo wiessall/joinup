@@ -47,7 +47,7 @@
         "drupal/entity_print": "^2.15",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.1@beta",
-        "drupal/facets": "^3.0.1",
+        "drupal/facets": "3.0.1",
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
@@ -55,7 +55,6 @@
         "drupal/field_formatter_range": "^1.1",
         "drupal/field_group": "4.0.0 as 3.6",
         "drupal/field_permissions": "^1.1",
-        "drupal/file_url": "~2.0",
         "drupal/file_visibility": "^1.0",
         "drupal/flag": "^4.0@beta",
         "drupal/geocoder": "^4.4",
@@ -84,7 +83,7 @@
         "drupal/monolog": "^3.0",
         "drupal/multivalue_form_element": "^1.0",
         "drupal/node_revision_delete": "^2.0",
-        "drupal/oauth_client": "^1.0@alpha",
+        "drupal/oauth_client": "^1.0",
         "drupal/og": "^2.0",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
@@ -95,7 +94,7 @@
         "drupal/poll": "^2.0@alpha",
         "drupal/private_message": "^4.0@alpha",
         "drupal/private_message_flood": "^2.0@alpha",
-        "drupal/publication_date": "^3.0",
+        "drupal/publication_date": "3.0.0",
         "drupal/purge_users": "^4.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_sync": "^1.0",
@@ -106,11 +105,10 @@
         "drupal/schema_digital_document": "^1.1",
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
-        "drupal/search_api": "^1.27",
+        "drupal/search_api": "1.38.0",
         "drupal/search_api_autocomplete": "^1.10",
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
-        "drupal/simple_block": "^1.3",
         "drupal/simple_multistep": "^2.1",
         "drupal/simple_oauth": "^6.0",
         "drupal/simple_sitemap": "^4.0",
@@ -166,7 +164,7 @@
         "ext-libxml": "*",
         "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
-        "drupal/cas_mock_server": "^2.0",
+        "drupal/cas_mock_server": "2.0.2",
         "drupal/coder": "^8.3",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_inspector": "^2.1",
@@ -507,9 +505,6 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Field templating and multiple value fields not functioning as expected @see https://www.drupal.org/i/3122406": "resources/patch/php/drupal/social_media_links/3122406.patch"
             },
-            "drupal/stage_file_proxy": {
-                "Wrong regex constraint for origin in stage_file_proxy.settings @see https://www.drupal.org/i/3525876": "resources/patch/php/drupal/stage_file_proxy/3525876.diff"
-            },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff",
                 "Fatal error and deprecated code: StateFieldBuilder. @see https://www.drupal.org/project/state_machine/issues/3542871": "resources/patch/php/drupal/state_machine/3542871.diff"
@@ -522,7 +517,6 @@
             },
             "drupal/tagify": {
                 "Improve hierarchical dropdown with a better appearance. @see https://www.drupal.org/project/tagify/issues/3508891": "resources/patch/php/drupal/tagify/3508891.diff",
-                "Update tagify libraries. @see https://www.drupal.org/i/3544578": "resources/patch/php/drupal/tagify/3544578.diff",
                 "Tagify placeholder is not translatable @see https://www.drupal.org/i/3547609": "resources/patch/php/drupal/tagify/3547609.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
@@ -540,8 +534,6 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
-                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch",
-                "Exception thrown when trying to submit element / wrapper attributes with invalid string @see https://www.drupal.org/i/3526756": "resources/patch/php/drupal/webform/3526756.diff",
                 "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
             },
             "gitonomy/gitlib": {
@@ -550,9 +542,6 @@
             },
             "openeuropa/oe_authentication": {
                 "Missing langcode in oe_authentication.settings @see https://github.com/openeuropa/oe_authentication/issues/229": "resources/patch/php/openeuropa/oe_authentication/230.diff"
-            },
-            "openeuropa/oe_webtools": {
-                "Fix fatal error: Cannot use object of type stdClass as array. @see https://github.com/openeuropa/oe_webtools/pull/281": "resources/patch/php/openeuropa/oe_webtools/281.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
