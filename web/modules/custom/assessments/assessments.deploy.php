@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Create EU institutions as public_organisation assessment entities.
  */
-function assessments_deploy_200700(): void {
+function assessments_deploy_200800(): void {
   $entity_type_manager = \Drupal::entityTypeManager();
   $storage = $entity_type_manager->getStorage('assessment');
 

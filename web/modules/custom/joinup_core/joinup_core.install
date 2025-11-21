@@ -26,3 +26,21 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Remove configuration for the removed discussion_comment REST resource.
+ */
+function joinup_core_update_200800(): string {
+  // The webform_update_8648 updates roles with a given permission. The
+  // developer role, being an admin, has all permissions so it tries to grant
+  // them a new permission. This triggers a series of events that collects all
+  // permissions according to all providers, one of which is the rest module.
+  // The removed discussion_comment REST resource is still registered there
+  // during the update process, causing a plugin not found exception, as the
+  // class does not exist yet. To avoid this, we delete the configuration here
+  // before  the rest module collects permissions.
+  $config_to_delete = 'rest.resource.discussion_comment';
+  $config_to_delete = \Drupal::configFactory()->getEditable($config_to_delete);
+  $config_to_delete->delete();
+  return 'Configuration for the removed discussion_comment REST resource has been deleted.';
+}
