@@ -1679,6 +1679,23 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Delete a term programmatically.
+   *
+   * @param string $vocabulary_name
+   *   The name of the vocabulary.
+   * @param string $term_name
+   *   The term name.
+   *
+   * @Given I delete the :vocabulary_name term :term_name
+   */
+  public function deleteTermByName(string $vocabulary_name, string $term_name): void {
+    /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
+    $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $vocabulary_name);
+    $term = $this->getEntityByLabel('taxonomy_term', $term_name, $vocabulary->id());
+    $term->delete();
+  }
+
+  /**
    * Creates testing media items.
    *
    * You need to provide media types which you want to create.

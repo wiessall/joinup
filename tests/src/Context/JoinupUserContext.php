@@ -352,24 +352,4 @@ class JoinupUserContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Sets an orphaned nationality reference on a user.
-   *
-   * This simulates the scenario where a user has a reference to a taxonomy
-   * term that no longer exists, which can happen when terms are deleted.
-   * This is a regression test for errors in ventuno_preprocess_user().
-   *
-   * @param string $username
-   *   The username.
-   *
-   * @Given the user :username has an orphaned nationality reference
-   */
-  public function setOrphanedNationalityReference(string $username): void {
-    $user = $this->getUserByName($username);
-    // Set a reference to a non-existent taxonomy term ID.
-    // Using a high number that's unlikely to exist.
-    $user->set('field_user_nationality', ['target_id' => 999999]);
-    $user->save();
-  }
-
 }
