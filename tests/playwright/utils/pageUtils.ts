@@ -14,7 +14,6 @@ async function waitForWebtools(page: Page): Promise<void> {
   await page.waitForFunction(
     // @ts-expect-error $wt is injected by Webtools.
     () => typeof window.$wt === "undefined" || window.$wt.inProgress === false,
-    30000,
   );
 }
 
