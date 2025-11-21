@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface;
+use Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsTrait;
 
 /**
  * Defines the Assessment type configuration entity.
@@ -48,10 +50,15 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "id",
  *     "label",
  *     "uuid",
+ *     "label_singular",
+ *     "label_plural",
+ *     "label_count",
  *   },
  * )
  */
-final class AssessmentType extends ConfigEntityBundleBase {
+final class AssessmentType extends ConfigEntityBundleBase implements EntityBundleWithPluralLabelsInterface {
+
+  use EntityBundleWithPluralLabelsTrait;
 
   /**
    * The machine name of this assessment content type.
