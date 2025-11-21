@@ -351,10 +351,14 @@ Feature: User profile
 
   # Regression test for ticket ISAICP-10510.
   Scenario: User profile with orphaned nationality reference does not cause errors
+    Given spatial terms:
+      | name    |
+      | Valeron |
     Given users:
-      | Username      | E-mail                    | First name | Family name | Business title      |
-      | Jane Doe      | jane.doe@example.com      | Jane       | Doe         | Software Engineer   |
-    And the user "Jane Doe" has an orphaned nationality reference
+      | Username      | E-mail                    | First name | Family name | Business title      | Nationality |
+      | Jane Doe      | jane.doe@example.com      | Jane       | Doe         | Software Engineer   | Valeron     |
+    # Delete the term we just created, leaving a stale reference in the user.
+    And I delete the "Spatial" term "Valeron"
 
     # Visit search results where users are rendered in tile view mode
     # This is where the bug would occur - in ventuno_preprocess_user() for tile view modes
