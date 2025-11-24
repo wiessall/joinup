@@ -13,7 +13,7 @@ test.describe("Solution homepage components", () => {
     await page.goto(
       "/collection/portal-support/solution/information-sharing-protocols",
     );
-    await pageUtils.waitForWebtools(page);
+    await pageUtils.prepareForScreenshot(page);
 
     await expect(page.locator(".region-header")).toHaveScreenshot(
       `group-header-${user}.png`,
