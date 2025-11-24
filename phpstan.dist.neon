@@ -1,4 +1,5 @@
 parameters:
+    level: 1
     customRulesetUsed: true
     reportUnmatchedIgnoredErrors: false
     drupal:
@@ -17,5 +18,9 @@ parameters:
         - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
         - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
+    ignoreErrors:
+      # new static() is a best practice in Drupal, so we cannot fix that.
+      - "#^Unsafe usage of new static#"
+
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php
