@@ -5,15 +5,16 @@ dependencies:
   config:
     - field.field.paragraph.binding_requirement.affected_party
     - field.field.paragraph.binding_requirement.asset
+    - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
     - field.field.paragraph.binding_requirement.has_related_service
-    - field.field.paragraph.binding_requirement.name
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - file
     - link
+    - text
 id: paragraph.binding_requirement.default
 targetEntityType: paragraph
 bundle: binding_requirement
@@ -34,6 +35,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 3
+    region: content
+  description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
     region: content
   documented_in:
     type: link
@@ -76,14 +84,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 2
-    region: content
-  name:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 6
     region: content
   requirement_documents:
     type: file_default
