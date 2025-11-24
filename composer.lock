@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b228112959d79ee883da5b16506481e0",
+    "content-hash": "49ee80e309b71958af5d8c680d5f7059",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2197,22 +2197,22 @@
         },
         {
             "name": "drupal/babel",
-            "version": "1.0.0-alpha6",
+            "version": "1.0.0-alpha7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/babel.git",
-                "reference": "1.0.0-alpha6"
+                "reference": "1.0.0-alpha7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha6.zip",
-                "reference": "1.0.0-alpha6",
-                "shasum": "7ec1e402122698c9d14e04f4e979b78c3896a217"
+                "url": "https://ftp.drupal.org/files/projects/babel-1.0.0-alpha7.zip",
+                "reference": "1.0.0-alpha7",
+                "shasum": "97712b8f761f5fd78f88be5df4c895a258adf1c8"
             },
             "require": {
                 "drupal/core": "^10.4 || ^11.1",
                 "ext-pdo": "*",
-                "phpoffice/phpspreadsheet": "^4.4"
+                "phpoffice/phpspreadsheet": "^5.0"
             },
             "require-dev": {
                 "drush/drush": "^12 || ^13"
@@ -2220,8 +2220,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha6",
-                    "datestamp": "1759248213",
+                    "version": "1.0.0-alpha7",
+                    "datestamp": "1763730247",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
