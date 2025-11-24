@@ -12,7 +12,7 @@ parameters:
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
-        - "#^Unsafe usage of new static#"
+        - '#^Unsafe usage of new static#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
         - tests/src/*
