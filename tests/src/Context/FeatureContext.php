@@ -407,6 +407,7 @@ class FeatureContext extends RawDrupalContext {
       // Check the list.
       foreach ($imageFilenameList as $index => $filename) {
         if (
+          !isset($imageList[$index]) ||
           !$imageList[$index] instanceof NodeElement ||
           !$this->imageSourceMatches($filename, $imageList[$index])
         ) {
