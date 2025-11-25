@@ -8,6 +8,10 @@ dependencies:
   module:
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2sa/cav#resultsIn'
+      type: resource
   tmgmt_content:
     excluded: false
 id: assessment.report.legal
