@@ -342,7 +342,7 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
     }
   }
 
-  if (isset($author)) {
+  if ($author) {
     return $view_builder->view($author, 'inline');
   }
   else {

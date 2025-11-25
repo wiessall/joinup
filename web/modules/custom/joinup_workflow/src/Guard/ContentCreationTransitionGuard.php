@@ -6,6 +6,7 @@ namespace Drupal\joinup_workflow\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -32,7 +33,7 @@ readonly class ContentCreationTransitionGuard implements GuardInterface {
     }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $entity->getGroup();
-    if (empty($group)) {
+    if (!$group instanceof GroupInterface) {
       return FALSE;
     }
 

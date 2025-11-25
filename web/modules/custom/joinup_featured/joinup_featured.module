@@ -134,7 +134,6 @@ function _joinup_featured_preprocess_entity_tiles(array &$variables): void {
     return;
   }
 
-  /** @var \Drupal\Core\Entity\ContentEntityBase $entity */
   $entity = $variables[$variables['elements']['#entity_type']] ?? NULL;
   if (empty($entity)) {
     return;

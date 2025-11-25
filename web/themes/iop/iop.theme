@@ -210,6 +210,7 @@ function _iop_preprocess_news_event_tile(&$variables): void {
  */
 function iop_preprocess_page_title(array &$variables): void {
   $entity = $variables['entity'] ?? NULL;
+  $link = NULL;
   if ($entity instanceof NewsInterface || $entity instanceof EventInterface) {
     $listing = match ($entity->bundle()) {
       'news' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::NEWS_LISTING),

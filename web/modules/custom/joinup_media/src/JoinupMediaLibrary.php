@@ -52,6 +52,10 @@ class JoinupMediaLibrary extends MediaLibrary {
    */
   public function getDynamicPluginConfig(array $static_plugin_config, EditorInterface $editor): array {
     $dynamic_plugin_config = parent::getDynamicPluginConfig($static_plugin_config, $editor);
+    $media_library_opener_id = '';
+    $media_library_allowed_types = [];
+    $media_library_selected_type = '';
+    $media_library_remaining = 0;
 
     if (!$group = $this->groupManager->getGroupFromContext()) {
       // Only act in the context of a group.

@@ -27,7 +27,10 @@ class SearchApiFieldDeriver extends FacetSourceDeriverBase {
     EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,
     TranslationInterface $stringTranslation,
-  ) {}
+  ) {
+    $this->entityTypeManager = $entityTypeManager;
+    $this->stringTranslation = $stringTranslation;
+  }
 
   /**
    * {@inheritdoc}

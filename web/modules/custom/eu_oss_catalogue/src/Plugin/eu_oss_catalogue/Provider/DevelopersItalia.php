@@ -78,7 +78,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected int $numberOfProvidedSolutions = 0;
 
-  public function __construct(
+  final public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
@@ -170,6 +170,9 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected function doFetch(): void {
     $next = '';
+    $response = NULL;
+    $exception = NULL;
+    $read = NULL;
 
     do {
       $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=false';

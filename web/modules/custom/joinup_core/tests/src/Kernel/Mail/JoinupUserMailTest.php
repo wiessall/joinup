@@ -30,7 +30,6 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
       _user_mail_notify(
         'password_reset',
         \Drupal::entityTypeManager()->getStorage('user')->load(1),
-        'en',
       )
     );
 

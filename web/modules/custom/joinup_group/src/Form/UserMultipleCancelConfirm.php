@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\user\Form\UserMultipleCancelConfirm as CoreUserMultipleCancelConfirm;
@@ -48,7 +49,7 @@ class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
     foreach (Element::children($form['accounts']) as $user_id) {
       /** @var \Drupal\user\Entity\User $account */
       $account = $this->userStorage->load($user_id);
-      if (empty($account)) {
+      if (!$account instanceof AccountInterface) {
         throw new \RuntimeException("User with id {$user_id} was not found.");
       }
       $groups = $this->groupManager->getGroupsWhereSoleOwner($account);
