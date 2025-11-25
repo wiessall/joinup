@@ -5,7 +5,7 @@ dependencies:
   config:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.documents
+    - field.field.assessment.report.document
     - field.field.assessment.report.legal_interoperability
     - field.field.assessment.report.organisational_interoperability
     - field.field.assessment.report.other_interoperability
@@ -19,7 +19,6 @@ dependencies:
     - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
-    - file
     - joinup_slick
     - layout_builder
     - link
@@ -67,13 +66,13 @@ content:
         template_suggestion: ''
     weight: 2
     region: content
-  documents:
-    type: file_default
+  document:
+    type: entity_reference_label
     label: above
     settings:
-      use_description_as_link_text: true
+      link: true
     third_party_settings: {  }
-    weight: 6
+    weight: 13
     region: content
   legal_interoperability:
     type: entity_reference_entity_view
