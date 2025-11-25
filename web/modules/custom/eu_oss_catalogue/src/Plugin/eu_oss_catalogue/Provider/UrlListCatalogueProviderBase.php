@@ -190,9 +190,12 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         }
       }
       catch (HostingPlatformFetchException $exception) {
-        // Collect provider fetch exceptions, and throw them at the end of the
-        // fetch operation.
-        $collectedExceptions[] = $exception->getMessage();
+        $message = sprintf(
+          'Hosting platform %s failed: %s',
+          $baseUrl,
+          $exception->getMessage()
+        );
+        $collectedExceptions[] = $message;
       }
     }
 
