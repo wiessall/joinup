@@ -37,7 +37,6 @@ class GlossaryTerm extends Node implements GlossaryTermInterface {
    * {@inheritdoc}
    */
   public function getSummary(): string {
-    /** @var \Drupal\text\Plugin\Field\FieldType\TextWithSummaryItem $field_item */
     $field_item = $this->getFirstItem('field_glossary_definition');
 
     // The definition is a required field so it should normally be present on

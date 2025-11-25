@@ -118,7 +118,7 @@ class DownloadTrackingController extends ControllerBase {
     $paragraph_id = array_key_first($paragraph);
     $distribution = $this->getDistributionByParagraphId($paragraph_id);
 
-    if (empty($distribution)) {
+    if (!$distribution instanceof DistributionInterface) {
       return AccessResult::forbidden();
     }
 

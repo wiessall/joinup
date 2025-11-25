@@ -143,7 +143,7 @@ class TypeWidget extends WidgetPluginBase {
 
       $children_markup = [];
       foreach ($children as $child) {
-        $children_markup[] = $this->buildChild($child);
+        $children_markup[] = $this->buildResultItem($child);
       }
 
       $classes[] = 'expanded';

@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   country: "NL",
   description: new TranslatableMarkup("Developer Overheid is the Dutch National Catalogue, one central location for OSS Solutions developed by and for Dutch government organizations."),
 )]
-class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
+final class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
   /**
    * Dutch catalogue endpoint.
@@ -85,11 +85,11 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
@@ -129,12 +129,19 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
           // Try to use "publiccode.yaml".
           if (isset($project->files['publiccodeYaml'])) {
             $values = $project->toArray();
-            $values['files']['publiccodeYml'] = $values['files']['publiccodeYaml'];
             unset($values['files']['publiccodeYaml']);
-            yield new Project(...$values);
+            $values['files']['publiccodeYml'] = $project->files['publiccodeYaml'];
+            yield new Project(
+              name: $values['name'],
+              namespace: $values['namespace'],
+              platform: $values['platform'],
+              url: $values['url'],
+              defaultBranch: $values['defaultBranch'],
+              files: $values['files']
+            );
+
             continue;
           }
-
           yield $project;
         }
       }

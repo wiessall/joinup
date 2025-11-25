@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -109,7 +110,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
     $membership = $this->entityTypeManager->getStorage('og_membership')->load($membership_id);
     $group = $membership->getGroup();
     $user = $membership->getOwner();
-    if (empty($group) || empty($user)) {
+    if (empty($group) || !$user instanceof UserInterface) {
       // The group and/or the user are not available which means that the
       // membership is orphaned and will be removed in the next cron run.
       return;

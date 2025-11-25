@@ -151,6 +151,7 @@ function joinup_distribution_preprocess_node(array &$variables): void {
 function joinup_distribution_preprocess_views_view_field(array &$variables): void {
   $view = $variables['view'];
   $field = $variables['field'];
+  $storages = [];
   if ($view->storage->id() !== 'distribution_downloads' || $view->current_display !== 'page' || $field->field !== 'parent_entity_id') {
     return;
   }

@@ -123,6 +123,7 @@ class IndexDistributionData extends ProcessorPluginBase {
       }
 
       if (!empty($distribution->getResources())) {
+        $url = NULL;
         foreach ($distribution->getResources() as $resource) {
           if ($resource instanceof LinkItemInterface) {
             $url = $resource->uri;

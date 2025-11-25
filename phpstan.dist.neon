@@ -19,6 +19,13 @@ parameters:
         - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
         - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
+        - web/modules/custom/github_feed/src/Plugin/Field/FieldFormatter/GitHubFeedDefaultFormatter.php
+        - web/modules/custom/joinup_group_content_management/src/Plugin/Action/StateActionBase.php
+        - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
+        - web/modules/custom/joinup_test/tests/src/Traits/ConfigTestTrait.php
+        - web/modules/custom/joinup_tiles/joinup_tiles.module
+        - web/modules/custom/search_api_field/src/Plugin/Field/FieldType/SearchItem.php
+        - web/sites/default/default.settings.php
 
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php
