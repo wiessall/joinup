@@ -218,6 +218,9 @@ function assessments_entity_bundle_info(): array {
       'technical_interoperability' => [
         'label' => t('Technical interoperability'),
       ],
+      'other_interoperability' => [
+        'label' => t('Other interoperability'),
+      ],
     ],
   ];
 }
