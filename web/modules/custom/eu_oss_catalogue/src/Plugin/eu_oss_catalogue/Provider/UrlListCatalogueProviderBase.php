@@ -266,15 +266,13 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
         $this->processResponseData($value, $endpointConfig);
       }
       catch (\Exception $exception) {
-        // Log the exception as error, but let the loop continue.
-        $this->logger->error(
-          "Exception when fetching / processing endpoint '@endpoint' of @catalogue-label: @message",
-          [
-            '@endpoint' => $endpointUrl,
-            '@catalogue-label' => (string) $this->getPluginLabel(),
-            '@message' => $exception->getMessage(),
-          ],
+        $message = sprintf(
+          'Endpoint %s failed for %s catalogue: %s',
+          $endpointUrl,
+          $this->getPluginLabel(),
+          $exception->getMessage()
         );
+        throw new ProviderFetchException($message, 0, $exception);
       }
     }
   }
