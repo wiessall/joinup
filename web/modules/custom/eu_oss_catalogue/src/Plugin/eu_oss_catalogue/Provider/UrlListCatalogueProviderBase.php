@@ -164,8 +164,8 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    if (!isset($this->fetched) && !$this->requestData()) {
-      return [];
+    if (!isset($this->fetched)) {
+      $this->requestData();
     }
 
     $collectedExceptions = [];
@@ -245,13 +245,10 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
   /**
    * Requests data.
    *
-   * @return bool
-   *   If the process was successful.
-   *
    * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  private function requestData(): bool {
+  private function requestData(): void {
     $this->fetched = [];
 
     foreach ($this->getEndpoints() as $endpointConfig) {
@@ -266,9 +263,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           throw new \Exception("The configured root keys don't exist on the decoded response.");
         }
         $this->numberOfItems += count($value);
-        if (!$this->processResponseData($value, $endpointConfig)) {
-          return FALSE;
-        }
+        $this->processResponseData($value, $endpointConfig);
       }
       catch (\Exception $exception) {
         // Log the exception as error, but let the loop continue.
@@ -280,12 +275,8 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
             '@message' => $exception->getMessage(),
           ],
         );
-
-        return FALSE;
       }
     }
-
-    return TRUE;
   }
 
   /**
@@ -330,11 +321,8 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
    *   Response data.
    * @param array{apiUrl: string, rootKeys: array<string>, urlKeys: array<string>} $endpointConfig
    *   The config of the current endpoint.
-   *
-   * @return bool
-   *   If the process was successful.
    */
-  private function processResponseData(array $responseData, array $endpointConfig): bool {
+  private function processResponseData(array $responseData, array $endpointConfig): void {
     foreach ($responseData as $row) {
       if (!is_array($row)) {
         $this->logger->warning('Solution item in API response got from @endpoint-url is not an object or list.');
@@ -350,7 +338,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'No URL property found at an item in @catalogue-label catalogue provider.',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       if (!is_string($rawUrl)) {
@@ -358,7 +346,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'Wrong data type at the URL property of an item in @catalogue-label catalogue provider: @url-export',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       $apiGuess = $this->apiGuesser->getHostingPlatformApi($rawUrl);
@@ -367,7 +355,7 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
           'Cannot determine hosting platform for the repository with @solution-repo-url provided by the @catalogue-label catalogue.',
           $logContext,
         );
-        return FALSE;
+        continue;
       }
 
       $gitUri = GitUri::fromUriString($rawUrl);
@@ -382,8 +370,6 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
       $this->fetched[$apiGuess->baseUrl]['projects'][$namespace][] = $name;
       $this->fetchedUrls[] = $gitUri->getUri();
     }
-
-    return TRUE;
   }
 
   /**
