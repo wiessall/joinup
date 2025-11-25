@@ -51,12 +51,12 @@ function joinup_slick_field_formatter_third_party_settings_form(FormatterInterfa
  * Implements hook_field_formatter_settings_summary_alter().
  */
 function joinup_slick_field_formatter_settings_summary_alter(array &$summary, $context): void {
-    $formatter = $context['formatter'];
-    $optionsetId = $formatter->getThirdPartySetting('joinup_slick', 'preset');
-    if (!empty($optionsetId)) {
-      $optionset = \Drupal::entityTypeManager()
-        ->getStorage('slick')
-        ->load($optionsetId);
+  $formatter = $context['formatter'];
+  $optionsetId = $formatter->getThirdPartySetting('joinup_slick', 'preset');
+  if (!empty($optionsetId)) {
+    $optionset = \Drupal::entityTypeManager()
+      ->getStorage('slick')
+      ->load($optionsetId);
     if ($optionset) {
       $summary[] = t('Slick carousel: %slick-optionset-label', [
         '%slick-optionset-label' => $optionset->label(),
