@@ -9,7 +9,6 @@ dependencies:
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
-    - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - allowed_formats
