@@ -15,7 +15,7 @@ assessments.type.*.third_party.rdf_sync:
   type: rdf_sync.bundle_mapping
 
 field.widget.settings.conditional_link:
-  type: mapping
+  type: field.widget.settings.link_default
   label: Link with confirmation widget settings
   mapping:
     condition:
