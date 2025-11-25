@@ -140,7 +140,7 @@ paths:
                           thematic_area: digital_and_innovation_services
                       has_participation:
                         - country: BE
-                          participation_type: national_public_sector_body
+                          participant_type: national_public_sector_body
                           agent:
                             name: Federal Agency of X
                             agent_type: organisation
@@ -469,7 +469,7 @@ components:
           readOnly: true
         country:
           $ref: '#/components/schemas/Iso3166Alpha2'
-        participation_type:
+        participant_type:
           type: string
           enum:
             - local_public_sector_body

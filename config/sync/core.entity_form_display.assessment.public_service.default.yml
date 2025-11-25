@@ -55,12 +55,7 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       placeholder: 'Select or start typing...'
-    third_party_settings:
-      entity_form_field_label:
-        new_label: ''
-        rewrite_label: 0
-        new_description: ''
-        rewrite_description: 0
+    third_party_settings: {  }
 hidden:
   created: true
   identifier: true
