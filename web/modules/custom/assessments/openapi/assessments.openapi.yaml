@@ -555,16 +555,22 @@ components:
           readOnly: true
         interpretation:
           type: string
+          description: The interpretation of the statement.
+          enum:
+            - positive
+            - neutral
+            - negative
         judgement:
           type: string
         type:
           type: string
+          description: Type of identified effects on cross-border interoperability
           enum:
-            - legal_interoperability
-            - organisational_interoperability
-            - semantic_interoperability
-            - technical_interoperability
-            - other_interoperability
+            - legal
+            - organisational
+            - semantic
+            - technical
+            - other
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array
