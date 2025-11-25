@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49ee80e309b71958af5d8c680d5f7059",
+    "content-hash": "5419f96ef97efa966c6174f67c67ff19",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -27792,12 +27792,6 @@
             "version": "4.0.0.0",
             "alias": "3.6",
             "alias_normalized": "3.6.0.0"
-        },
-        {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "5.2.0.0",
-            "alias": "4.5.0",
-            "alias_normalized": "4.5.0.0"
         }
     ],
     "minimum-stability": "dev",
