@@ -564,6 +564,7 @@ components:
             - organisational_interoperability
             - semantic_interoperability
             - technical_interoperability
+            - other_interoperability
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array

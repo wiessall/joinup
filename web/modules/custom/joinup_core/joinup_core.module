@@ -567,13 +567,3 @@ function joinup_core_field_widget_inline_entity_form_complex_form_alter(array &$
     }
   }
 }
-
-/**
- * Implements hook_update_dependencies().
- */
-function joinup_core_update_dependencies(): array {
-  $dependencies['webform']['8648'] = [
-    'joinup_core' => '200800',
-  ];
-  return $dependencies;
-}
