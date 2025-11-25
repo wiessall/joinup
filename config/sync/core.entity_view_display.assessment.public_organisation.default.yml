@@ -11,6 +11,7 @@ dependencies:
     - entity_form_field_label
     - options
     - template_suggestion
+    - text
 id: assessment.public_organisation.default
 targetEntityType: assessment
 bundle: public_organisation
@@ -27,7 +28,14 @@ content:
         rewrite_label: 0
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 3
+    region: content
+  description:
+    type: text_default
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
   name:
     type: string
@@ -42,11 +50,10 @@ content:
     label: visually_hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
 hidden:
   created: true
-  description: true
   langcode: true
   search_api_excerpt: true
   status: true
