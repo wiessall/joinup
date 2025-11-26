@@ -107,7 +107,7 @@ Expression (expression):
 Participation (participation):
 * Country (country). List (text) field. Allowed values are the ISO 3166-1
 alpha-2 country codes.
-* Participation type (participation_type). List (text) field.
+* Participation type (participant_type). List (text) field.
 
 Public service (public_service):
 * Name (name). Title field.
