@@ -1,36 +1,17 @@
-uuid: 2854199c-c580-4dc3-b1ad-df3d22b74c79
+uuid: 1ab92dc2-6b3e-4fb2-8912-c9728ef221a7
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-    - options
+    - taxonomy
 id: assessment.organisation_type
 field_name: organisation_type
 entity_type: assessment
-type: list_string
+type: entity_reference
 settings:
-  allowed_values:
-    -
-      value: local_public_sector_body
-      label: 'Local public sector body'
-    -
-      value: regional_public_sector_body
-      label: 'Regional public sector body'
-    -
-      value: national_public_sector_body
-      label: 'National public sector body'
-    -
-      value: european_union_institution
-      label: 'European Union institution'
-    -
-      value: european_union_agency
-      label: 'European Union agency'
-    -
-      value: european_union_body
-      label: 'European Union body'
-  allowed_values_function: ''
-module: options
+  target_type: taxonomy_term
+module: core
 locked: false
 cardinality: 1
 translatable: true
