@@ -1,11 +1,11 @@
-uuid: cebb69da-6587-4947-bcba-980536d93b45
+uuid: cb4bf44e-8acc-487e-8ab2-0f4ba180c413
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.other_interoperability
-field_name: other_interoperability
+id: assessment.legal
+field_name: legal
 entity_type: assessment
 type: entity_reference
 settings:

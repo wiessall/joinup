@@ -1,20 +1,20 @@
-uuid: 2b6e5027-dc29-4537-9994-055e2f400313
+uuid: 89d1d912-36bc-41c7-b97a-8b2a6eab2a32
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.legal_interoperability
+    - field.storage.assessment.semantic
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.legal_interoperability
-field_name: legal_interoperability
+id: assessment.report.semantic
+field_name: semantic
 entity_type: assessment
 bundle: report
-label: 'Identified effects on cross-border legal interoperability'
+label: 'Identified effects on cross-border semantic interoperability'
 description: ''
 required: false
 translatable: false
@@ -24,7 +24,7 @@ settings:
   handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      legal_interoperability: legal_interoperability
+      semantic: semantic
     sort:
       field: _none
       direction: ASC
