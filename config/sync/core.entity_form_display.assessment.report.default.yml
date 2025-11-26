@@ -212,15 +212,16 @@ content:
       override_labels: true
       label_singular: 'Public service'
       label_plural: 'Public services'
-      collapsible: false
-      collapsed: false
-      revision: false
       allow_new: true
       allow_existing: true
       match_operator: CONTAINS
       allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
       conditional_fields:
-        - trigger_field: organisation_type
+        -
+          trigger_field: organisation_type
           target_field: country
           hide_when_values:
             - european_union_institution
