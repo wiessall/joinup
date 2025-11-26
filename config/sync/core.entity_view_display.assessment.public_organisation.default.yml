@@ -5,13 +5,11 @@ dependencies:
   config:
     - assessments.type.public_organisation
     - field.field.assessment.public_organisation.country
-    - field.field.assessment.public_organisation.description
     - field.field.assessment.public_organisation.organisation_type
   module:
     - entity_form_field_label
     - options
     - template_suggestion
-    - text
 id: assessment.public_organisation.default
 targetEntityType: assessment
 bundle: public_organisation
@@ -29,13 +27,6 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 3
-    region: content
-  description:
-    type: text_default
-    label: visually_hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
     region: content
   name:
     type: string
