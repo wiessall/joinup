@@ -1,12 +1,14 @@
-uuid: 85dfdc82-3fef-405a-9bff-5b209afa3894
+uuid: d7da675f-6337-4165-aca0-f21edf2543ee
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.public_organisation
     - field.storage.assessment.description
+    - filter.format.plain_text
   module:
     - rdf_sync
+    - text
     - tmgmt_content
 third_party_settings:
   rdf_sync:
@@ -21,9 +23,11 @@ entity_type: assessment
 bundle: public_organisation
 label: Description
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: string_long
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long
