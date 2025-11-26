@@ -111,6 +111,9 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDescription(t('The document that supports this assessment statement.'))
       ->setSetting('target_type', 'assessment')
       ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'target_bundles' => ['document' => 'document'],
+      ])
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form',
