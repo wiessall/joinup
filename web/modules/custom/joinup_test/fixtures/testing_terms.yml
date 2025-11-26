@@ -267,6 +267,8 @@ tags:
 assess_provider_type:
   - name: European Union institution
     id: european_union_institution
+  - name: European Union body
+    id: european_union_body
 assess_participant_type:
   - name: Local public sector body
     id: local_public_sector_body
