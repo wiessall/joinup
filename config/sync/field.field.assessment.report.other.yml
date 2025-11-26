@@ -1,20 +1,20 @@
-uuid: 89d1d912-36bc-41c7-b97a-8b2a6eab2a32
+uuid: 89d1d912-36bc-41c7-b97a-8b2a6eab2a33
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.semantic_interoperability
+    - field.storage.assessment.other
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.semantic_interoperability
-field_name: semantic_interoperability
+id: assessment.report.other
+field_name: other
 entity_type: assessment
 bundle: report
-label: 'Identified effects on cross-border semantic interoperability'
+label: 'Other identified effects on cross-border interoperability'
 description: ''
 required: false
 translatable: false
@@ -24,7 +24,7 @@ settings:
   handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      semantic_interoperability: semantic_interoperability
+      other: other
     sort:
       field: _none
       direction: ASC

@@ -206,19 +206,19 @@ function assessments_user_predelete(UserInterface $account): void {
 function assessments_entity_bundle_info(): array {
   return [
     'assessment_statement' => [
-      'legal_interoperability' => [
+      'legal' => [
         'label' => t('Legal interoperability'),
       ],
-      'organisational_interoperability' => [
+      'organisational' => [
         'label' => t('Organisational interoperability'),
       ],
-      'semantic_interoperability' => [
+      'semantic' => [
         'label' => t('Semantic interoperability'),
       ],
-      'technical_interoperability' => [
+      'technical' => [
         'label' => t('Technical interoperability'),
       ],
-      'other_interoperability' => [
+      'other' => [
         'label' => t('Other interoperability'),
       ],
     ],
