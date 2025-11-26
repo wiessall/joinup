@@ -25,7 +25,7 @@ Feature: Assessment Report Entity Management
 
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
-    And I select "Austria" from "Country"
+    And I select "Greece" from "Country"
     And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
     And I fill in "Description" with "The Austrian Ministry responsible for digital transformation and e-government initiatives"
     And I select the radio button "Yes"
@@ -99,10 +99,10 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from Austria |
-      | The report has been connected to the following previous/relevant reports        |
-      | https://interoperable-europe.ec.europa.eu/report                                |
-      | documented in https://interoperable-europe.ec.europa.eu/general                 |
+      | Austrian Ministry of Digital Affairs, a European Union institution from Greece |
+      | The report has been connected to the following previous/relevant reports       |
+      | https://interoperable-europe.ec.europa.eu/report                               |
+      | documented in https://interoperable-europe.ec.europa.eu/general                |
 
     # Edit test.
     When I go to the edit form of the "Test Assessment Report 2025" assessment
@@ -112,6 +112,6 @@ Feature: Assessment Report Entity Management
 
     # Delete test.
     When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
-    Then I should see the heading "Sign in to continue"
+    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
