@@ -1,0 +1,33 @@
+diff --git a/inline_entity_form.module b/inline_entity_form.module
+index 92588284e01fad3195fda53c27de83373bbdf164..9e239e8d9e41bf82b351141ae6bdd3b583b0d040 100644
+--- a/inline_entity_form.module
++++ b/inline_entity_form.module
+@@ -217,7 +217,10 @@ function inline_entity_form_open_form(array $form, FormStateInterface $form_stat
+   $form_state->setRebuild();
+ 
+   // Get the current form values.
+-  $parents = array_merge($element['#field_parents'], [$element['#field_name']]);
++  $parents = $element['#field_parents'] ?? [];
++  if (!empty($element['#field_name'])) {
++    $parents[] = $element['#field_name'];
++  }
+   $form_values = NestedArray::getValue($form_state->getUserInput(), $parents);
+ 
+   $triggering_element = $form_state->getTriggeringElement();
+diff --git a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
+index bd176e0b2387a26fcf020379bbdef0a104a83b4d..28ea08879f9af260e8fcf278fb7a2ef8b73a779a 100644
+--- a/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
++++ b/src/Plugin/Field/FieldWidget/InlineEntityFormComplex.php
+@@ -729,8 +729,10 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
+     if (empty($values) && !empty($widget_state['form'])) {
+       if ($widget_state['form'] == 'add') {
+         $element = NestedArray::getValue($form, [$field_name, 'widget', 'form']);
+-        $entity = $element['inline_entity_form']['#entity'];
+-        $values[] = ['entity' => $entity];
++        if ($element && isset($element['inline_entity_form']['#entity'])) {
++          $entity = $element['inline_entity_form']['#entity'];
++          $values[] = ['entity' => $entity];
++        }
+       }
+       elseif ($widget_state['form'] == 'ief_add_existing') {
+         $parent = NestedArray::getValue($form, [$field_name, 'widget', 'form']);
