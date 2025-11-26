@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 
 /**
  * Defines the Assessment statement entity.
@@ -136,6 +138,19 @@ final class AssessmentStatement extends ContentEntityBase {
    */
   public function label(): ?string {
     return $this->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage): void {
+    parent::preSave($storage);
+
+    // An RDF mapping is needed for the statement type because we cannot map the
+    // bundle. The 'type' is kept in sync with the bundle value.
+    $tid = \Drupal::service(AssessmentVocabularyHelper::class)
+      ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
+    $this->set('type', $tid);
   }
 
 }
