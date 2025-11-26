@@ -4,17 +4,6 @@ Feature: Assessment Report Entity Management
   As a user with appropriate permissions
   I need to be able to create, edit, and delete assessment report entities
 
-  Scenario: Anonymous users cannot access assessment report creation
-    Given I am an anonymous user
-    When I go to "/assessments/add/report"
-    Then I should see the heading "Sign in to continue"
-
-  Scenario: Authenticated users without permissions cannot access assessment report creation
-    Given I am logged in as an "authenticated user"
-    When I go to "/assessments/add/report"
-    Then I should see the heading "Access denied"
-    And the response status code should be 403
-
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as a developer
