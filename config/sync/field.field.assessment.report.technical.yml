@@ -1,20 +1,20 @@
-uuid: 89d1d912-36bc-41c7-b97a-8b2a6eab2a33
+uuid: 42c99e2d-5756-49dc-a9c8-d1ae608fd18a
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.other_interoperability
+    - field.storage.assessment.technical
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.other_interoperability
-field_name: other_interoperability
+id: assessment.report.technical
+field_name: technical
 entity_type: assessment
 bundle: report
-label: 'Other identified effects on cross-border interoperability'
+label: 'Identified effects on cross-border technical interoperability'
 description: ''
 required: false
 translatable: false
@@ -24,7 +24,7 @@ settings:
   handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      other_interoperability: other_interoperability
+      technical: technical
     sort:
       field: _none
       direction: ASC
