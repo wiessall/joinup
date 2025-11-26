@@ -98,3 +98,8 @@ Feature: Assessment Report Entity Management
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
+    And I should see the following lines of text:
+      | Austrian Ministry of Digital Affairs, a European Union institution from Austria |
+      | The report has been connected to the following previous/relevant reports        |
+      | https://interoperable-europe.ec.europa.eu/report                                |
+      | documented in https://interoperable-europe.ec.europa.eu/general                 |
