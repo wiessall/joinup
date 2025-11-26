@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\Field\FieldWidget;
 
+use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\Attribute\FieldWidget;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Widget for entity references with conditional field visibility support.
@@ -38,6 +47,65 @@ use Drupal\inline_entity_form\Plugin\Field\FieldWidget\InlineEntityFormComplex;
   field_types: ['entity_reference'],
 )]
 final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
+
+  /**
+   * The logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected LoggerChannelInterface $logger;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    array $third_party_settings,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityDisplayRepositoryInterface $entity_display_repository,
+    ModuleHandlerInterface $module_handler,
+    $selection_manager,
+    protected Yaml $serialization,
+    LoggerChannelFactoryInterface $loggerFactory,
+  ) {
+    parent::__construct(
+      $plugin_id,
+      $plugin_definition,
+      $field_definition,
+      $settings,
+      $third_party_settings,
+      $entity_type_bundle_info,
+      $entity_type_manager,
+      $entity_display_repository,
+      $module_handler,
+      $selection_manager
+    );
+    $this->logger = $loggerFactory->get('assessments');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['third_party_settings'],
+      $container->get('entity_type.bundle.info'),
+      $container->get('entity_type.manager'),
+      $container->get('entity_display.repository'),
+      $container->get('module_handler'),
+      $container->get('plugin.manager.entity_reference_selection'),
+      $container->get('serialization.yaml'),
+      $container->get('logger.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -151,7 +219,7 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
 
       // Handle the "edit existing" form structure.
       if (isset($child['entities']) && is_array($child['entities'])) {
-        foreach ($child['entities'] as $entity_delta => &$entity_element) {
+        foreach ($child['entities'] as &$entity_element) {
           if (isset($entity_element['form']['inline_entity_form']['#process'])) {
             $entity_element['form']['inline_entity_form']['#conditional_rules'] = $rules;
             $entity_element['form']['inline_entity_form']['#process'][] = [
@@ -236,7 +304,6 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
       $targetField = $rule['target_field'] ?? NULL;
       $hideWhenValues = $rule['hide_when_values'] ?? [];
       $showWhenValues = $rule['show_when_values'] ?? [];
-      $clearWhenHidden = $rule['clear_when_hidden'] ?? TRUE;
 
       if (!$triggerField || !$targetField) {
         continue;
@@ -322,7 +389,7 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
   protected static function buildStates(
     string $triggerSelector,
     array $hideWhenValues,
-    array $showWhenValues
+    array $showWhenValues,
   ): array {
     $states = [];
 
@@ -404,7 +471,7 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
       return $values;
     }
 
-    foreach ($values as $delta => &$value) {
+    foreach ($values as &$value) {
       if (!isset($value['entity']) || !is_object($value['entity'])) {
         continue;
       }
@@ -451,11 +518,11 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
     }
 
     try {
-      $parsed = \Drupal::service('serialization.yaml')->decode($yaml);
+      $parsed = $this->serialization->decode($yaml);
       return is_array($parsed) ? $parsed : [];
     }
     catch (\Exception $e) {
-      \Drupal::logger('assessments')->error(
+      $this->logger->error(
         'Failed to parse conditional field rules YAML: @message',
         ['@message' => $e->getMessage()]
       );
@@ -478,7 +545,7 @@ final class InlineEntityConditionalFormComplex extends InlineEntityFormComplex {
     }
 
     try {
-      return \Drupal::service('serialization.yaml')->encode($rules);
+      return $this->serialization->encode($rules);
     }
     catch (\Exception $e) {
       return '';
