@@ -103,3 +103,15 @@ Feature: Assessment Report Entity Management
       | The report has been connected to the following previous/relevant reports        |
       | https://interoperable-europe.ec.europa.eu/report                                |
       | documented in https://interoperable-europe.ec.europa.eu/general                 |
+
+    # Edit test.
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I press "Save"
+    Then I should see the heading "Test Assessment Report 2025 v2"
+
+    # Delete test.
+    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
+    Then I should see the heading "Sign in to continue"
+    When I press "Delete"
+    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
