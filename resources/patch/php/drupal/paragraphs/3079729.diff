@@ -1,0 +1,57 @@
+diff --git a/src/Entity/Paragraph.php b/src/Entity/Paragraph.php
+index 55e65e4fb5d3126eb0deb2b566029ce810f18868..eeca7ea78faade8e62e88dfcbc10043945431235 100644
+--- a/src/Entity/Paragraph.php
++++ b/src/Entity/Paragraph.php
+@@ -23,6 +23,7 @@ use Drupal\Core\TypedData\TranslatableInterface;
+ use Drupal\field\Entity\FieldStorageConfig;
+ use Drupal\entity_reference_revisions\EntityNeedsSaveTrait;
+ use Drupal\field\FieldConfigInterface;
++use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
+ use Drupal\paragraphs\ParagraphAccessControlHandler;
+ use Drupal\paragraphs\ParagraphInterface;
+ use Drupal\paragraphs\ParagraphStorageSchema;
+@@ -496,6 +497,27 @@ class Paragraph extends ContentEntityBase implements ParagraphInterface {
+     return $fields;
+   }
+ 
++   /**
++   * Duplicates files on paragraph duplication.
++   */
++  private function duplicateFiles($field) {
++    // Get the FileRepository service.
++    $file_repository = \Drupal::service('file.repository');
++    foreach ($field->getIterator() as $fileItem) {
++      $fileEntity = $fileItem->entity;
++
++      // Skip if the file entity doesn't exist.
++      if (!$fileEntity) {
++        continue;
++      }
++
++      $destination_dir = $fileItem->getUploadLocation();
++      // Copy the file.
++      $copiedEntity = $file_repository->copy($fileEntity, $destination_dir);
++      $fileItem->entity = $copiedEntity;
++    }
++  }
++
+   /**
+   * {@inheritdoc}
+   */
+@@ -503,11 +525,14 @@ class Paragraph extends ContentEntityBase implements ParagraphInterface {
+    $duplicate = parent::createDuplicate();
+    // Loop over entity fields and duplicate nested paragraphs.
+    foreach ($duplicate->getFields() as $fieldItemList) {
+-     if ($fieldItemList instanceof EntityReferenceFieldItemListInterface && $fieldItemList->getSetting('target_type') === $this->getEntityTypeId()) {
++     if (get_class($fieldItemList) == FileFieldItemList::class) {
++       $this->duplicateFiles($fieldItemList);
++     }
++     elseif ($fieldItemList instanceof EntityReferenceFieldItemListInterface) {
+        foreach ($fieldItemList as $delta => $item) {
+          // Duplicate child paragraphs, remove when requiring 10.2+.
+          // @see \Drupal\paragraphs\Hook\EntityHooks::duplicate()
+-         if ($item->entity && !$item->entity->isNew()) {
++         if ($item->entity) {
+            $fieldItemList[$delta] = $item->entity->createDuplicate();
+          }
+        }
