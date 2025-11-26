@@ -213,39 +213,3 @@ function joinup_paragraphs_entity_view(array &$build, EntityInterface $entity, E
     $build['resource_file'] = $entity->get('resource_file')->view('tracker');
   }
 }
-
-/**
- * Implements hook_ENTITY_TYPE_duplicate().
- */
-function joinup_paragraphs_paragraph_duplicate(ParagraphInterface $original, ParagraphInterface $duplicate): void {
-  // Duplicate file entities in file fields to prevent shared file references.
-  foreach ($duplicate->getFields() as $field_item_list) {
-    $field_definition = $field_item_list->getFieldDefinition();
-
-    // Only process file and image fields.
-    if (!in_array($field_definition->getType(), ['file', 'image'], TRUE)) {
-      continue;
-    }
-
-    // Skip if the field is empty.
-    if ($field_item_list->isEmpty()) {
-      continue;
-    }
-
-    // Duplicate each file entity.
-    foreach ($field_item_list as $delta => $item) {
-      if ($item->entity) {
-        /** @var \Drupal\file\FileInterface $original_file */
-        $original_file = $item->entity;
-
-        // Create a duplicate of the file entity.
-        /** @var \Drupal\file\FileInterface $duplicated_file */
-        $duplicated_file = $original_file->createDuplicate();
-        $duplicated_file->save();
-
-        // Update the field item to reference the new file.
-        $field_item_list[$delta]->target_id = $duplicated_file->id();
-      }
-    }
-  }
-}
