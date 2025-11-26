@@ -117,7 +117,7 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: organisational_interoperability
+                      type: organisational
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
               asStructured:
@@ -157,12 +157,12 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: organisational_interoperability
+                      type: organisational
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
                     - interpretation: Requires follow-up
                       judgement: conditional
-                      type: technical_interoperability
+                      type: technical
               mixed:
                 summary: Submit with a mix of references and structured entities
                 value:
@@ -187,7 +187,7 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: legal_interoperability
+                      type: legal
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
                     - interpretation: Requires follow-up
