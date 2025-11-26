@@ -263,3 +263,8 @@ tags:
   - name: 'games'
   - name: 'some unpublished tag'
     status: 0
+assess_provider_type:
+  - name: European Union institution
+    id: european_union_institution
+  - name: European Union body
+    id: european_union_body
