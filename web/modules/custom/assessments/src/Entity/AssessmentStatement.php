@@ -70,15 +70,14 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['interpretation'] = BaseFieldDefinition::create('list_integer')
+    $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Interpretation'))
       ->setDescription(t('The interpretation of the statement.'))
       ->setTranslatable(FALSE)
-      ->setSettings([
-        'allowed_values' => [
-          1 => 'Positive',
-          0 => 'Neutral',
-          -1 => 'Negative',
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'assess_statement_interpretation' => 'assess_statement_interpretation',
         ],
       ])
       ->setDisplayOptions('form', [
@@ -87,11 +86,24 @@ final class AssessmentStatement extends ContentEntityBase {
       ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'list_default',
+        'type' => 'entity_reference_label',
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
+
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Type'))
+      ->setDescription(t('The statement interoperability type.'))
+      ->setTranslatable(FALSE)
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'assess_statement_type' => 'assess_statement_type',
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['landing_page'] = BaseFieldDefinition::create('file')
       ->setLabel(t('Statement supporting document'))
