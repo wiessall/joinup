@@ -26,14 +26,14 @@ class CustomOther extends UrlListCatalogueProviderBase {
    */
   public function defaultConfiguration(): array {
     return [
-        'endpoints' => [
+      'endpoints' => [
           [
             'apiUrl' => 'https://code.europa.eu/eu-oss-catalogue/conf/-/raw/main/projects.json',
             'rootKeys' => ['projects'],
             'urlKeys' => ['url'],
           ],
-        ],
-      ] + parent::defaultConfiguration();
+      ],
+    ] + parent::defaultConfiguration();
   }
 
 }
