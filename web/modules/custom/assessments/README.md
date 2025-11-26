@@ -142,8 +142,8 @@ Statement (statement):
   * 0
   * 1
 * Statement type (statement_type). List (text) field. Allowed values:
-  * legal_interoperability
-  * organisational_interoperability
-  * semantic_interoperability
-  * technical_interoperability
-  * other_interoperability
+  * legal
+  * organisational
+  * semantic
+  * technical
+  * other

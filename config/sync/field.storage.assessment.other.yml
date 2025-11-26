@@ -1,11 +1,11 @@
-uuid: cebb69da-6587-4947-bcba-980536d93b44
+uuid: cebb69da-6587-4947-bcba-980536d93b45
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.semantic_interoperability
-field_name: semantic_interoperability
+id: assessment.other
+field_name: other
 entity_type: assessment
 type: entity_reference
 settings:
