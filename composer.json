@@ -62,7 +62,7 @@
         "drupal/honeypot": "~2",
         "drupal/iframe": "^3.0",
         "drupal/image_library_widget": "^2.0",
-        "drupal/imagecache_external": "^3.0",
+        "drupal/imagecache_external": "3.0.5",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.5",
