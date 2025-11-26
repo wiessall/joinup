@@ -43,11 +43,11 @@
   <h2 class="heading-d mt-4">{{ 'Results'|t }}</h2>
   <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
     {% for section in [
-      'legal_interoperability',
-      'organisational_interoperability',
-      'semantic_interoperability',
-      'technical_interoperability',
-      'other_interoperability',
+      'legal',
+      'organisational',
+      'semantic',
+      'technical',
+      'other',
     ] %}
       {% if not (assessment[section].isEmpty == true) and content[section] is defined %}
         <div class="col">
