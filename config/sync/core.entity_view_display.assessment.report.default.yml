@@ -6,14 +6,14 @@ dependencies:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
     - field.field.assessment.report.document
-    - field.field.assessment.report.legal_interoperability
-    - field.field.assessment.report.organisational_interoperability
-    - field.field.assessment.report.other_interoperability
+    - field.field.assessment.report.legal
+    - field.field.assessment.report.organisational
+    - field.field.assessment.report.other
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
-    - field.field.assessment.report.semantic_interoperability
+    - field.field.assessment.report.semantic
     - field.field.assessment.report.state
-    - field.field.assessment.report.technical_interoperability
+    - field.field.assessment.report.technical
   module:
     - entity_form_field_label
     - entity_reference_revisions
@@ -74,7 +74,7 @@ content:
     third_party_settings: {  }
     weight: 13
     region: content
-  legal_interoperability:
+  legal:
     type: entity_reference_entity_view
     label: above
     settings:
@@ -91,7 +91,7 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  organisational_interoperability:
+  organisational:
     type: entity_reference_entity_view
     label: above
     settings:
@@ -100,7 +100,7 @@ content:
     third_party_settings: {  }
     weight: 8
     region: content
-  other_interoperability:
+  other:
     type: entity_reference_entity_view
     label: above
     settings:
@@ -144,7 +144,7 @@ content:
         template_suggestion: ''
     weight: 3
     region: content
-  semantic_interoperability:
+  semantic:
     type: entity_reference_entity_view
     label: above
     settings:
@@ -160,7 +160,7 @@ content:
     third_party_settings: {  }
     weight: 12
     region: content
-  technical_interoperability:
+  technical:
     type: entity_reference_entity_view
     label: above
     settings:
