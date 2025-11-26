@@ -8,16 +8,15 @@ dependencies:
     - field.storage.assessment.country
     - field.storage.assessment.description
     - field.storage.assessment.landing_page
-    - field.storage.assessment.organisation_type
+    - field.storage.taxonomy_term.id
   module:
     - assessments
     - field_fallback_formatter
-    - joinup_core
     - json_field
     - link
-    - options
     - rest
     - serialization
+    - taxonomy
     - user
 id: assessments_rest
 label: 'Assessments REST'
@@ -221,7 +220,12 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        organisation_type:
+          id: organisation_type
+          table: assessment__organisation_type
+          field: organisation_type
+          plugin_id: standard
       header: {  }
       footer: {  }
       display_extenders:
@@ -727,11 +731,11 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        organisation_type:
-          id: organisation_type
-          table: assessment__organisation_type
-          field: organisation_type
-          relationship: none
+        id:
+          id: id
+          table: taxonomy_term__id
+          field: id
+          relationship: organisation_type
           group_type: group
           admin_label: ''
           plugin_id: field
@@ -777,8 +781,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: list_default
-          settings: {  }
+          type: string
+          settings:
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -921,17 +926,28 @@ display:
             description:
               alias: ''
               raw_output: true
-            organisation_type:
-              alias: ''
+            id:
+              alias: organisation_type
               raw_output: true
             country:
               alias: ''
               raw_output: true
       defaults:
         title: false
+        relationships: false
         fields: false
         filters: false
         filter_groups: false
+      relationships:
+        organisation_type:
+          id: organisation_type
+          table: assessment__organisation_type
+          field: organisation_type
+          relationship: none
+          group_type: group
+          admin_label: 'organisation_type: Taxonomy term'
+          plugin_id: standard
+          required: true
       display_description: ''
       display_extenders:
         metatag_display_extender:
@@ -948,4 +964,4 @@ display:
       tags:
         - 'config:field.storage.assessment.country'
         - 'config:field.storage.assessment.description'
-        - 'config:field.storage.assessment.organisation_type'
+        - 'config:field.storage.taxonomy_term.id'
