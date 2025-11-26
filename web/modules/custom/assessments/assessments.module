@@ -247,9 +247,6 @@ function assessments_views_pre_render(ViewExecutable $view): void {
       foreach ($results as $result) {
         // Instead of false we want to show an empty string.
         // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->description->getValue())) {
-          $result->_entity->description->setValue(['']);
-        }
         if (empty($result->_entity->get('country')->getValue())) {
           $result->_entity->get('country')->setValue(['']);
         }
