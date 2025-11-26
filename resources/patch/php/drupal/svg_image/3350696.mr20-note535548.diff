@@ -1,408 +1,29 @@
-From 06a0862aac3bd62108aeb6542217cfa2f6567d05 Mon Sep 17 00:00:00 2001
-From: Alexandre Dias <alex.jm.dias@gmail.com>
-Date: Mon, 27 Mar 2023 17:54:27 +0100
-Subject: [PATCH 1/9] Check if svg is valid.
-
----
- svg_image.module | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/svg_image.module b/svg_image.module
-index 838030e..05fc6ab 100644
---- a/svg_image.module
-+++ b/svg_image.module
-@@ -9,6 +9,7 @@ use Drupal\file\Entity\File;
- use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageFormatter;
- use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageUrlFormatter;
- use Drupal\svg_image\Plugin\Field\FieldWidget\SvgImageWidget;
-+use enshrined\svgSanitize\Sanitizer;
- 
- /**
-  * Implements hook_config_schema_info_alter().
-@@ -132,3 +133,21 @@ function svg_image_get_image_file_dimensions(File $file) {
- function svg_image_is_file_svg(File $file) {
-   return $file->getMimeType() === 'image/svg+xml';
- }
-+
-+/**
-+ * Implements hook_file_validate().
-+ */
-+function svg_image_file_validate(File $file): array {
-+  $errors = [];
-+  if (svg_image_is_file_svg($file)) {
-+    $svg_content = file_get_contents($file->getFileUri());
-+    $sanitizer = new Sanitizer();
-+
-+    if (!$sanitizer->minify($svg_content)) {
-+      // If the SVG is not valid or cannot be sanitized, return an error.
-+      $errors[] = t('Invalid or unsafe SVG file.');
-+    }
-+  }
-+
-+  return $errors;
-+}
--- 
-GitLab
-
-
-From 780572ca72626210cb7c75b38bbdd0cbe756adfc Mon Sep 17 00:00:00 2001
-From: Alexandre Dias <alex.jm.dias@gmail.com>
-Date: Tue, 28 Mar 2023 14:56:25 +0100
-Subject: [PATCH 2/9] Fix check svg error.
-
----
- svg_image.module | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/svg_image.module b/svg_image.module
-index 05fc6ab..a0b9459 100644
---- a/svg_image.module
-+++ b/svg_image.module
-@@ -140,11 +140,12 @@ function svg_image_is_file_svg(File $file) {
- function svg_image_file_validate(File $file): array {
-   $errors = [];
-   if (svg_image_is_file_svg($file)) {
--    $svg_content = file_get_contents($file->getFileUri());
-+    $svgContent = file_get_contents($file->getFileUri());
-     $sanitizer = new Sanitizer();
-+    $sanitizer->sanitize($svgContent);
- 
--    if (!$sanitizer->minify($svg_content)) {
--      // If the SVG is not valid or cannot be sanitized, return an error.
-+    // If the SVG is not valid or cannot be sanitized, return an error.
-+    if ($sanitizer->getXmlIssues()) {
-       $errors[] = t('Invalid or unsafe SVG file.');
-     }
-   }
--- 
-GitLab
-
-
-From 36eeb3cbf5117ec06d317d477e8c4e0f0bf36d3e Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <7931-claudiucristea@users.noreply.drupalcode.org>
-Date: Tue, 17 Jun 2025 07:17:36 +0000
-Subject: [PATCH 3/9] Check that file exists
-
----
- svg_image.module | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/svg_image.module b/svg_image.module
-index a0b9459..afbb467 100644
---- a/svg_image.module
-+++ b/svg_image.module
-@@ -131,7 +131,7 @@ function svg_image_get_image_file_dimensions(File $file) {
-  *   TRUE if is SVG, FALSE otherwise.
-  */
- function svg_image_is_file_svg(File $file) {
--  return $file->getMimeType() === 'image/svg+xml';
-+  return file_exists($file->getFileUri()) && $file->getMimeType() === 'image/svg+xml';
- }
- 
- /**
--- 
-GitLab
-
-
-From dae470cdc1fa01c1665e8462d8f81e7ef71ff883 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Thu, 13 Nov 2025 09:23:19 +0100
-Subject: [PATCH 4/9] Remove hook hook_file_validate()
-
----
- svg_image.module | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/svg_image.module b/svg_image.module
-index afbb467..534c969 100644
---- a/svg_image.module
-+++ b/svg_image.module
-@@ -134,21 +134,4 @@ function svg_image_is_file_svg(File $file) {
-   return file_exists($file->getFileUri()) && $file->getMimeType() === 'image/svg+xml';
- }
- 
--/**
-- * Implements hook_file_validate().
-- */
--function svg_image_file_validate(File $file): array {
--  $errors = [];
--  if (svg_image_is_file_svg($file)) {
--    $svgContent = file_get_contents($file->getFileUri());
--    $sanitizer = new Sanitizer();
--    $sanitizer->sanitize($svgContent);
--
--    // If the SVG is not valid or cannot be sanitized, return an error.
--    if ($sanitizer->getXmlIssues()) {
--      $errors[] = t('Invalid or unsafe SVG file.');
--    }
--  }
- 
--  return $errors;
--}
--- 
-GitLab
-
-
-From 3c59d116d96d96fb19914cc2749c488a5df6a354 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Thu, 13 Nov 2025 14:15:18 +0100
-Subject: [PATCH 5/9] Add SvgFileValidationSubscriber
-
----
- .../SvgFileValidationSubscriber.php           | 81 +++++++++++++++++++
- svg_image.services.yml                        |  5 ++
- 2 files changed, 86 insertions(+)
- create mode 100644 src/EventSubscriber/SvgFileValidationSubscriber.php
- create mode 100644 svg_image.services.yml
 
 diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
 new file mode 100644
-index 0000000..c40bbf2
+index 0000000000000000000000000000000000000000..cd9013dbca7badef4a48ad70ffbafef455d20698
 --- /dev/null
 +++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
-@@ -0,0 +1,81 @@
+@@ -0,0 +1,83 @@
 +<?php
++
++declare(strict_types=1);
 +
 +namespace Drupal\svg_image\EventSubscriber;
 +
++use Drupal\Core\StringTranslation\StringTranslationTrait;
 +use Drupal\file\Validation\FileValidationEvent;
-+use enshrined\svgSanitize\Sanitizer;
 +use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 +use Symfony\Component\Validator\ConstraintViolation;
++use enshrined\svgSanitize\Sanitizer;
 +
 +/**
 + * Event subscriber for validating uploaded SVG files.
 + */
-+final class SvgFileValidationSubscriber implements EventSubscriberInterface
-+{
-+
-+    /**
-+     * {@inheritdoc}
-+     */
-+    public static function getSubscribedEvents(): array
-+    {
-+        return [
-+            FileValidationEvent::class => 'onFileValidate',
-+        ];
-+    }
-+
-+    /**
-+     * Adds custom validation for SVG uploads.
-+     *
-+     * @param \Drupal\file\Validation\FileValidationEvent $event
-+     *   The file validation event.
-+     */
-+    public function onFileValidate(FileValidationEvent $event): void
-+    {
-+        $file = $event->getFile();
-+
-+        if ($file->getMimeType() !== 'image/svg+xml') {
-+            return;
-+        }
-+
-+        $uri = $file->getFileUri();
-+        if (!file_exists($uri)) {
-+            $event->getViolations()->add(new ConstraintViolation(
-+                t('The uploaded SVG file does not exist.'),
-+                '',
-+                [],
-+                $file,
-+                'file',
-+                $uri
-+            ));
-+            return;
-+        }
-+
-+        $svg_content = @file_get_contents($uri);
-+        if ($svg_content === FALSE) {
-+            $event->getViolations()->add(new ConstraintViolation(
-+                t('Unable to read the uploaded SVG file.'),
-+                '',
-+                [],
-+                $file,
-+                'file',
-+                $uri
-+            ));
-+            return;
-+        }
-+
-+        $sanitizer = new Sanitizer();
-+        $sanitizer->sanitize($svg_content);
-+
-+        if ($sanitizer->getXmlIssues()) {
-+            $event->getViolations()->add(new ConstraintViolation(
-+                t('Invalid or unsafe SVG file.'),
-+                '',
-+                [],
-+                $file,
-+                'file',
-+                $uri
-+            ));
-+        }
-+    }
-+
-+}
-diff --git a/svg_image.services.yml b/svg_image.services.yml
-new file mode 100644
-index 0000000..2c4d0fd
---- /dev/null
-+++ b/svg_image.services.yml
-@@ -0,0 +1,5 @@
-+services:
-+  svg_image.svg_file_validation_subscriber:
-+    class: Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber
-+    tags:
-+      - { name: event_subscriber }
--- 
-GitLab
-
-
-From 4653694d3aaa253aa611b2da7ee7045ded69fd75 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Thu, 13 Nov 2025 14:35:25 +0100
-Subject: [PATCH 6/9] Update SvgFileValidationSubscriber
-
----
- src/EventSubscriber/SvgFileValidationSubscriber.php | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
-index c40bbf2..d3aeb88 100644
---- a/src/EventSubscriber/SvgFileValidationSubscriber.php
-+++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
-@@ -31,7 +31,7 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
-      */
-     public function onFileValidate(FileValidationEvent $event): void
-     {
--        $file = $event->getFile();
-+        $file = $event->file;
- 
-         if ($file->getMimeType() !== 'image/svg+xml') {
-             return;
--- 
-GitLab
-
-
-From 6f896725e8fba46c80a564560ceb2193576dab12 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Fri, 14 Nov 2025 08:15:28 +0100
-Subject: [PATCH 7/9] Update SvgFileValidationSubscriber
-
----
- .../SvgFileValidationSubscriber.php           | 28 ++++++++++---------
- 1 file changed, 15 insertions(+), 13 deletions(-)
-
-diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
-index d3aeb88..db5987d 100644
---- a/src/EventSubscriber/SvgFileValidationSubscriber.php
-+++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
-@@ -1,23 +1,26 @@
- <?php
- 
-+declare(strict_types=1);
-+
- namespace Drupal\svg_image\EventSubscriber;
- 
-+use Drupal\Core\StringTranslation\StringTranslationTrait;
- use Drupal\file\Validation\FileValidationEvent;
--use enshrined\svgSanitize\Sanitizer;
- use Symfony\Component\EventDispatcher\EventSubscriberInterface;
- use Symfony\Component\Validator\ConstraintViolation;
-+use enshrined\svgSanitize\Sanitizer;
- 
- /**
-  * Event subscriber for validating uploaded SVG files.
-  */
--final class SvgFileValidationSubscriber implements EventSubscriberInterface
--{
 +final class SvgFileValidationSubscriber implements EventSubscriberInterface {
 +
-+    use StringTranslationTrait;
- 
-     /**
-      * {@inheritdoc}
-      */
--    public static function getSubscribedEvents(): array
--    {
-+    public static function getSubscribedEvents(): array {
-         return [
-             FileValidationEvent::class => 'onFileValidate',
-         ];
-@@ -29,8 +32,7 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
-      * @param \Drupal\file\Validation\FileValidationEvent $event
-      *   The file validation event.
-      */
--    public function onFileValidate(FileValidationEvent $event): void
--    {
-+    public function onFileValidate(FileValidationEvent $event): void {
-         $file = $event->file;
- 
-         if ($file->getMimeType() !== 'image/svg+xml') {
-@@ -39,8 +41,8 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
- 
-         $uri = $file->getFileUri();
-         if (!file_exists($uri)) {
--            $event->getViolations()->add(new ConstraintViolation(
--                t('The uploaded SVG file does not exist.'),
-+            $event->violations->add(new ConstraintViolation(
-+                $this->t('The uploaded SVG file does not exist.'),
-                 '',
-                 [],
-                 $file,
-@@ -52,8 +54,8 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
- 
-         $svg_content = @file_get_contents($uri);
-         if ($svg_content === FALSE) {
--            $event->getViolations()->add(new ConstraintViolation(
--                t('Unable to read the uploaded SVG file.'),
-+            $event->violations->add(new ConstraintViolation(
-+                $this->t('Unable to read the uploaded SVG file.'),
-                 '',
-                 [],
-                 $file,
-@@ -67,8 +69,8 @@ final class SvgFileValidationSubscriber implements EventSubscriberInterface
-         $sanitizer->sanitize($svg_content);
- 
-         if ($sanitizer->getXmlIssues()) {
--            $event->getViolations()->add(new ConstraintViolation(
--                t('Invalid or unsafe SVG file.'),
-+            $event->violations->add(new ConstraintViolation(
-+                $this->t('Invalid or unsafe SVG file.'),
-                 '',
-                 [],
-                 $file,
--- 
-GitLab
-
-
-From a7da4f1b7c6740989e1556c815743079cc71ab08 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Mon, 17 Nov 2025 08:37:05 +0100
-Subject: [PATCH 8/9] Format code
-
----
- .../SvgFileValidationSubscriber.php           | 112 +++++++++---------
- 1 file changed, 56 insertions(+), 56 deletions(-)
-
-diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
-index db5987d..cd9013d 100644
---- a/src/EventSubscriber/SvgFileValidationSubscriber.php
-+++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
-@@ -15,69 +15,69 @@ use enshrined\svgSanitize\Sanitizer;
-  */
- final class SvgFileValidationSubscriber implements EventSubscriberInterface {
- 
--    use StringTranslationTrait;
 +  use StringTranslationTrait;
- 
--    /**
--     * {@inheritdoc}
--     */
--    public static function getSubscribedEvents(): array {
--        return [
--            FileValidationEvent::class => 'onFileValidate',
--        ];
--    }
++
 +  /**
 +   * {@inheritdoc}
 +   */
@@ -411,15 +32,7 @@ index db5987d..cd9013d 100644
 +      FileValidationEvent::class => 'onFileValidate',
 +    ];
 +  }
- 
--    /**
--     * Adds custom validation for SVG uploads.
--     *
--     * @param \Drupal\file\Validation\FileValidationEvent $event
--     *   The file validation event.
--     */
--    public function onFileValidate(FileValidationEvent $event): void {
--        $file = $event->file;
++
 +  /**
 +   * Adds custom validation for SVG uploads.
 +   *
@@ -428,26 +41,11 @@ index db5987d..cd9013d 100644
 +   */
 +  public function onFileValidate(FileValidationEvent $event): void {
 +    $file = $event->file;
- 
--        if ($file->getMimeType() !== 'image/svg+xml') {
--            return;
--        }
++
 +    if ($file->getMimeType() !== 'image/svg+xml') {
 +      return;
 +    }
- 
--        $uri = $file->getFileUri();
--        if (!file_exists($uri)) {
--            $event->violations->add(new ConstraintViolation(
--                $this->t('The uploaded SVG file does not exist.'),
--                '',
--                [],
--                $file,
--                'file',
--                $uri
--            ));
--            return;
--        }
++
 +    $uri = $file->getFileUri();
 +    if (!file_exists($uri)) {
 +      $event->violations->add(new ConstraintViolation(
@@ -460,19 +58,7 @@ index db5987d..cd9013d 100644
 +        ));
 +      return;
 +    }
- 
--        $svg_content = @file_get_contents($uri);
--        if ($svg_content === FALSE) {
--            $event->violations->add(new ConstraintViolation(
--                $this->t('Unable to read the uploaded SVG file.'),
--                '',
--                [],
--                $file,
--                'file',
--                $uri
--            ));
--            return;
--        }
++
 +    $svg_content = @file_get_contents($uri);
 +    if ($svg_content === FALSE) {
 +      $event->violations->add(new ConstraintViolation(
@@ -485,22 +71,10 @@ index db5987d..cd9013d 100644
 +        ));
 +      return;
 +    }
- 
--        $sanitizer = new Sanitizer();
--        $sanitizer->sanitize($svg_content);
++
 +    $sanitizer = new Sanitizer();
 +    $sanitizer->sanitize($svg_content);
- 
--        if ($sanitizer->getXmlIssues()) {
--            $event->violations->add(new ConstraintViolation(
--                $this->t('Invalid or unsafe SVG file.'),
--                '',
--                [],
--                $file,
--                'file',
--                $uri
--            ));
--        }
++
 +    if ($sanitizer->getXmlIssues()) {
 +      $event->violations->add(new ConstraintViolation(
 +            $this->t('Invalid or unsafe SVG file.'),
@@ -510,27 +84,35 @@ index db5987d..cd9013d 100644
 +            'file',
 +            $uri
 +        ));
-     }
++    }
 +  }
- 
++
++}
+diff --git a/svg_image.module b/svg_image.module
+index 838030e94438e597e6f0f3ff1e0f8fb60bb6393a..f807ba97162e9af55246b6c536990f9a14ca17f0 100644
+--- a/svg_image.module
++++ b/svg_image.module
+@@ -130,5 +130,5 @@ function svg_image_get_image_file_dimensions(File $file) {
+  *   TRUE if is SVG, FALSE otherwise.
+  */
+ function svg_image_is_file_svg(File $file) {
+-  return $file->getMimeType() === 'image/svg+xml';
++  return file_exists($file->getFileUri()) && $file->getMimeType() === 'image/svg+xml';
  }
--- 
-GitLab
-
-
-From 24e876b6d7a62b0c0adf5d58d72595b5f8d06451 Mon Sep 17 00:00:00 2001
-From: "micha.jakubowski" <micha.jakubowski@ffwagency.com>
-Date: Thu, 20 Nov 2025 12:29:25 +0100
-Subject: [PATCH 9/9] Add tests
-
----
- .../Unit/SvgFileValidationSubscriberTest.php  | 138 ++++++++++++++++++
- 1 file changed, 138 insertions(+)
- create mode 100644 tests/src/Unit/SvgFileValidationSubscriberTest.php
-
+diff --git a/svg_image.services.yml b/svg_image.services.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..2c4d0fd854218e8b323cd8383ba87b57ece347ad
+--- /dev/null
++++ b/svg_image.services.yml
+@@ -0,0 +1,5 @@
++services:
++  svg_image.svg_file_validation_subscriber:
++    class: Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber
++    tags:
++      - { name: event_subscriber }
 diff --git a/tests/src/Unit/SvgFileValidationSubscriberTest.php b/tests/src/Unit/SvgFileValidationSubscriberTest.php
 new file mode 100644
-index 0000000..95870a1
+index 0000000000000000000000000000000000000000..95870a1420b36d0a54428c02ea153e4d416eefb5
 --- /dev/null
 +++ b/tests/src/Unit/SvgFileValidationSubscriberTest.php
 @@ -0,0 +1,138 @@
@@ -672,5 +254,3 @@ index 0000000..95870a1
 +  }
 +
 +}
--- 
-GitLab
