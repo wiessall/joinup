@@ -12,7 +12,7 @@ entity.assessment.delete_form:
   base_route: entity.assessment.canonical
   weight: 10
 entity.assessment.collection:
-  title: 'Assessment entities'
+  title: 'Assessments'
   route_name: entity.assessment.collection
   base_route: system.admin_content
   weight: 10
@@ -25,7 +25,7 @@ entity.assessment_type.collection:
   route_name: entity.assessment_type.collection
   base_route: entity.assessment_type.collection
 entity.assessment_statement.collection:
-  title: 'Assessment statement entities'
+  title: 'Assessment statements'
   route_name: entity.assessment_statement.collection
   base_route: system.admin_content
   weight: 10

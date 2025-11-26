@@ -14,6 +14,10 @@ use Drupal\assessments\AssessmentVocabularyHelper;
 /**
  * Defines the Assessment statement entity.
  *
+ * Bundles of this entity type are defined in code.
+ *
+ * @see assessments_entity_bundle_info()
+ *
  * @ContentEntityType(
  *   id = "assessment_statement",
  *   label = @Translation("Assessment statement"),
@@ -41,8 +45,6 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *   links = {
  *      "collection" = "/admin/content/assessment-statement",
  *    },
- *   bundle_entity_type = "assessment_statement_type",
- *   field_ui_base_route = "entity.assessment_statement_type.edit_form",
  * )
  */
 final class AssessmentStatement extends ContentEntityBase {
