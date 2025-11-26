@@ -24,3 +24,34 @@ field.widget.settings.conditional_link:
     default_option:
       type: string
       label: Default option
+
+field.widget.settings.inline_entity_conditional_form_complex:
+  type: field.widget.settings.inline_entity_form_complex
+  label: Inline entity form with conditional fields widget settings
+  mapping:
+    conditional_fields:
+      type: sequence
+      label: Conditional field rules
+      sequence:
+        type: mapping
+        label: Conditional rule
+        mapping:
+          trigger_field:
+            type: string
+            label: Trigger field
+          target_field:
+            type: string
+            label: Target field
+          hide_when_values:
+            type: sequence
+            label: Hide when values
+            sequence:
+              type: string
+          show_when_values:
+            type: sequence
+            label: Show when values
+            sequence:
+              type: string
+          clear_when_hidden:
+            type: boolean
+            label: Clear when hidden
