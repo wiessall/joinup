@@ -1,38 +1,256 @@
+
+diff --git a/src/EventSubscriber/SvgFileValidationSubscriber.php b/src/EventSubscriber/SvgFileValidationSubscriber.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..cd9013dbca7badef4a48ad70ffbafef455d20698
+--- /dev/null
++++ b/src/EventSubscriber/SvgFileValidationSubscriber.php
+@@ -0,0 +1,83 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\svg_image\EventSubscriber;
++
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++use Drupal\file\Validation\FileValidationEvent;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++use Symfony\Component\Validator\ConstraintViolation;
++use enshrined\svgSanitize\Sanitizer;
++
++/**
++ * Event subscriber for validating uploaded SVG files.
++ */
++final class SvgFileValidationSubscriber implements EventSubscriberInterface {
++
++  use StringTranslationTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function getSubscribedEvents(): array {
++    return [
++      FileValidationEvent::class => 'onFileValidate',
++    ];
++  }
++
++  /**
++   * Adds custom validation for SVG uploads.
++   *
++   * @param \Drupal\file\Validation\FileValidationEvent $event
++   *   The file validation event.
++   */
++  public function onFileValidate(FileValidationEvent $event): void {
++    $file = $event->file;
++
++    if ($file->getMimeType() !== 'image/svg+xml') {
++      return;
++    }
++
++    $uri = $file->getFileUri();
++    if (!file_exists($uri)) {
++      $event->violations->add(new ConstraintViolation(
++            $this->t('The uploaded SVG file does not exist.'),
++            '',
++            [],
++            $file,
++            'file',
++            $uri
++        ));
++      return;
++    }
++
++    $svg_content = @file_get_contents($uri);
++    if ($svg_content === FALSE) {
++      $event->violations->add(new ConstraintViolation(
++            $this->t('Unable to read the uploaded SVG file.'),
++            '',
++            [],
++            $file,
++            'file',
++            $uri
++        ));
++      return;
++    }
++
++    $sanitizer = new Sanitizer();
++    $sanitizer->sanitize($svg_content);
++
++    if ($sanitizer->getXmlIssues()) {
++      $event->violations->add(new ConstraintViolation(
++            $this->t('Invalid or unsafe SVG file.'),
++            '',
++            [],
++            $file,
++            'file',
++            $uri
++        ));
++    }
++  }
++
++}
 diff --git a/svg_image.module b/svg_image.module
-index 838030e94438e597e6f0f3ff1e0f8fb60bb6393a..afbb46770bdf64b614eecfd653f93b14f4cbdbcd 100644
+index 838030e94438e597e6f0f3ff1e0f8fb60bb6393a..f807ba97162e9af55246b6c536990f9a14ca17f0 100644
 --- a/svg_image.module
 +++ b/svg_image.module
-@@ -9,6 +9,7 @@ use Drupal\file\Entity\File;
- use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageFormatter;
- use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageUrlFormatter;
- use Drupal\svg_image\Plugin\Field\FieldWidget\SvgImageWidget;
-+use enshrined\svgSanitize\Sanitizer;
- 
- /**
-  * Implements hook_config_schema_info_alter().
-@@ -130,5 +131,24 @@ function svg_image_get_image_file_dimensions(File $file) {
+@@ -130,5 +130,5 @@ function svg_image_get_image_file_dimensions(File $file) {
   *   TRUE if is SVG, FALSE otherwise.
   */
  function svg_image_is_file_svg(File $file) {
 -  return $file->getMimeType() === 'image/svg+xml';
 +  return file_exists($file->getFileUri()) && $file->getMimeType() === 'image/svg+xml';
-+}
+ }
+diff --git a/svg_image.services.yml b/svg_image.services.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..2c4d0fd854218e8b323cd8383ba87b57ece347ad
+--- /dev/null
++++ b/svg_image.services.yml
+@@ -0,0 +1,5 @@
++services:
++  svg_image.svg_file_validation_subscriber:
++    class: Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber
++    tags:
++      - { name: event_subscriber }
+diff --git a/tests/src/Unit/SvgFileValidationSubscriberTest.php b/tests/src/Unit/SvgFileValidationSubscriberTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..95870a1420b36d0a54428c02ea153e4d416eefb5
+--- /dev/null
++++ b/tests/src/Unit/SvgFileValidationSubscriberTest.php
+@@ -0,0 +1,138 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\svg_image\Unit\EventSubscriber;
++
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\Tests\UnitTestCase;
++use Drupal\file\FileInterface;
++use Drupal\file\Validation\FileValidationEvent;
++use Drupal\svg_image\EventSubscriber\SvgFileValidationSubscriber;
++use Symfony\Component\Validator\ConstraintViolationList;
 +
 +/**
-+ * Implements hook_file_validate().
++ * Test class for SvgFileValidationSubscriber.
++ *
++ * @group svg_image
 + */
-+function svg_image_file_validate(File $file): array {
-+  $errors = [];
-+  if (svg_image_is_file_svg($file)) {
-+    $svgContent = file_get_contents($file->getFileUri());
-+    $sanitizer = new Sanitizer();
-+    $sanitizer->sanitize($svgContent);
++final class SvgFileValidationSubscriberTest extends UnitTestCase {
 +
-+    // If the SVG is not valid or cannot be sanitized, return an error.
-+    if ($sanitizer->getXmlIssues()) {
-+      $errors[] = t('Invalid or unsafe SVG file.');
-+    }
++  /**
++   * Creates a FileValidationEvent with a fresh violation list.
++   */
++  private function createEvent(FileInterface $file): FileValidationEvent {
++    return new FileValidationEvent($file, new ConstraintViolationList());
 +  }
 +
-+  return $errors;
- }
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $container = new ContainerBuilder();
++    $container->set('string_translation', $this->getStringTranslationStub());
++    \Drupal::setContainer($container);
++  }
++
++  /**
++   * Only svg files are validated.
++   */
++  public function testNonSvgIsIgnored(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/png');
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    $this->assertCount(0, $event->violations);
++  }
++
++  /**
++   * Violation for missing file.
++   */
++  public function testMissingFileAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn('/path/does/not/exist.svg');
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('does not exist', (string) $event->violations[0]->getMessage());
++  }
++
++  /**
++   * Violation for unreadable file.
++   */
++  public function testUnreadableFileAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    // Create unreadable temp file.
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    chmod($tmp, 0000);
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    chmod($tmp, 0644);
++    unlink($tmp);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('Unable to read', (string) $event->violations[0]->getMessage());
++  }
++
++  /**
++   * No violations for valid svg file.
++   */
++  public function testValidSvgHasNoViolations(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    file_put_contents($tmp, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    unlink($tmp);
++
++    // Sanitizer should not find issues in a simple valid SVG.
++    $this->assertCount(0, $event->violations);
++  }
++
++  /**
++   * Violation for invalid svg file.
++   */
++  public function testInvalidSvgAddsViolation(): void {
++    $subscriber = new SvgFileValidationSubscriber();
++
++    $tmp = tempnam(sys_get_temp_dir(), 'svg');
++    file_put_contents($tmp, '<svg><script>alert(1)</script></svg>');
++
++    $file = $this->createMock(FileInterface::class);
++    $file->method('getMimeType')->willReturn('image/svg+xml');
++    $file->method('getFileUri')->willReturn($tmp);
++
++    $event = $this->createEvent($file);
++    $subscriber->onFileValidate($event);
++
++    unlink($tmp);
++
++    $this->assertCount(1, $event->violations);
++    $this->assertStringContainsString('Invalid or unsafe SVG', (string) $event->violations[0]->getMessage());
++  }
++
++}
