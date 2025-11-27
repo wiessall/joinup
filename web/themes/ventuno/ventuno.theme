@@ -13,6 +13,14 @@ foreach (glob(__DIR__ . '/includes/*.inc') as $filename) {
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function ventuno_theme_registry_alter(&$theme_registry): void {
+  // Add header_attributes variable to table.
+  $theme_registry['table']['variables']['header_attributes'] = [];
+}
+
+/**
  * Implements hook_theme().
  */
 function ventuno_theme(array $existing, string $type, string $theme, string $path): array {

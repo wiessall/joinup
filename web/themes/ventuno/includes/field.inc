@@ -63,10 +63,6 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       foreach ($variables['table']['#rows'] as &$value_row) {
         $value_row['data'][1]['data']['uri']['#title'] = $label;
       }
-      // Remove table header for this very specific case to avoid redundancy.
-      if ($variables['element']['#id'] === 'edit-field-event-online-location') {
-        unset($variables['table']['#header']);
-      }
     }
 
     // Set first input 'id' as 'for' attribute for table label.
@@ -77,6 +73,19 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
         ]);
         break;
       }
+    }
+
+    // Visually hide table header for specific fields.
+    $fields = [
+      // Node: event.
+      'field_event_online_location',
+      // Paragraph: binding_requirement.
+      'expression',
+      'has_related_service',
+      'affected_party',
+    ];
+    if (\in_array($variables['element']['#field_name'], $fields)) {
+      $variables['table']['#header_attributes']['class'][] = 'visually-hidden';
     }
   }
 
