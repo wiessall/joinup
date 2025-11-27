@@ -121,7 +121,6 @@ final class CocEntityCrudHandler implements CocEntityCrudHandlerInterface {
    * {@inheritdoc}
    */
   public function onGroupSettingsDelete(MetaEntityInterface $metaEntity): void {
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $metaEntity->getTargetEntity();
     if (!$group instanceof GroupInterface) {
       // This can happen when the deletion of the meta entity is the result of

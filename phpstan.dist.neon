@@ -26,6 +26,8 @@ parameters:
         - web/modules/custom/joinup_tiles/joinup_tiles.module
         - web/modules/custom/search_api_field/src/Plugin/Field/FieldType/SearchItem.php
         - web/sites/default/default.settings.php
+        - web/modules/custom/joinup_distribution/joinup_distribution.module
+        - web/modules/custom/search_api_field/src/Plugin/facets/facet_source/SearchApiFieldDeriver.php
 
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php

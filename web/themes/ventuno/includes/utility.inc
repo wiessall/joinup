@@ -20,6 +20,7 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Performs smart trimming on the provided string.
@@ -342,7 +343,7 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
     }
   }
 
-  if ($author) {
+  if ($author instanceof UserInterface) {
     return $view_builder->view($author, 'inline');
   }
   else {

@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   country: "NL",
   description: new TranslatableMarkup("Developer Overheid is the Dutch National Catalogue, one central location for OSS Solutions developed by and for Dutch government organizations."),
 )]
-final class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
+class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
   /**
    * Dutch catalogue endpoint.

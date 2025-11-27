@@ -31,7 +31,6 @@ readonly class ContentCreationTransitionGuard implements GuardInterface {
       // blocked.
       return TRUE;
     }
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $entity->getGroup();
     if (!$group instanceof GroupInterface) {
       return FALSE;

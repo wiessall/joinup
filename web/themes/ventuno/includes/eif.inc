@@ -15,12 +15,11 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_node__solution__eif_perspective(array &$variables): void {
-  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $variables['node'];
   if (!$solution instanceof SolutionInterface) {
     return;
   }
-  /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
+
   $meta_entity = $solution->eif_perspective->entity;
   if (!$meta_entity instanceof MetaEntityInterface) {
     return;

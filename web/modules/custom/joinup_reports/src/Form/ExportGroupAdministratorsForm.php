@@ -8,9 +8,11 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_reports\ExportBatchedDataFormBase;
+use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -106,11 +108,14 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    *   The batch context.
    */
   public function collectMembershipData(string $membership_id, array &$context): void {
-    /** @var \Drupal\og\OgMembershipInterface $membership */
     $membership = $this->entityTypeManager->getStorage('og_membership')->load($membership_id);
+    if (!$membership instanceof OgMembershipInterface) {
+      return;
+    }
+
     $group = $membership->getGroup();
     $user = $membership->getOwner();
-    if (empty($group) || !$user instanceof UserInterface) {
+    if (!$group instanceof ContentEntityInterface || !$user instanceof UserInterface) {
       // The group and/or the user are not available which means that the
       // membership is orphaned and will be removed in the next cron run.
       return;
