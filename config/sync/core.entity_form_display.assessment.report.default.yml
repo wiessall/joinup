@@ -209,7 +209,7 @@ content:
         new_description: ''
         rewrite_description: 0
   provider:
-    type: inline_entity_conditional_form_complex
+    type: provided_by_widget
     weight: 1
     region: content
     settings:
@@ -224,15 +224,6 @@ content:
       collapsible: false
       collapsed: false
       revision: false
-      conditional_fields:
-        -
-          trigger_field: organisation_type
-          target_field: country
-          hide_when_values:
-            - european_union_institution
-            - european_union_agency
-            - european_union_body
-          clear_when_hidden: true
     third_party_settings: {  }
   relevant_report:
     type: conditional_link
