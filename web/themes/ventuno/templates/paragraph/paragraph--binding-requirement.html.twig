@@ -22,11 +22,11 @@
           <div class="col-md-6">
             <h5 class="mb-1">
               {% if content.documented_in.0['#url'] %}
-                "{{ content.name }}" {{ 'documented in'|t }}
+                "{{ content.description }}" {{ 'documented in'|t }}
                 <a href="{{ content.documented_in.0['#url'] }}"
                    class="text-decoration-none">{{ content.documented_in.0['#url'] }}</a>
               {% else %}
-                {{ content.name }}
+                {{ content.description }}
               {% endif %}
             </h5>
 

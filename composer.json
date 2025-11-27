@@ -334,11 +334,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/babel": {
-                "Performance @see https://www.drupal.org/i/3548484": "resources/patch/php/drupal/babel/3548484.mr60-note597337.diff",
-                "Form not refreshed with \"Filter\" after translation outside Babel @see https://drupal.org/i/3549355": "resources/patch/php/drupal/babel/3549355-ef0d52abab.diff",
-                "Button to copy the source over translation @see https://www.drupal.org/i/3543063": "resources/patch/php/drupal/babel/3543063-eb6fec4ee7.diff"
-            },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff"
             },
@@ -382,7 +377,8 @@
                 "Odd behaviour with tabs on validation failure": "resources/patch/php/drupal/core/3508418.diff",
                 "Violation property path not properly tracked @see https://www.drupal.org/project/drupal/issues/3229493": "resources/patch/php/drupal/core/3229493.patch",
                 "Remove the automatic cron run from the installer. @see https://www.drupal.org/i/2422681": "resources/patch/php/drupal/core/2422681.diff",
-                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff"
+                "Link widget placeholder_url should use label @see https://www.drupal.org/i/3547582": "resources/patch/php/drupal/core/3547582.diff",
+                "Installing from existing config causes massive cache.config population and slow installs @see https://www.drupal.org/i/3559030": "resources/patch/php/drupal/core/3559030.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -473,6 +469,9 @@
             },
             "drupal/mimemail": {
                 "Errors when sending a mail with files @see https://www.drupal.org/project/mimemail/issues/2904611": "resources/patch/php/drupal/mimemail/mimemail_attachment_errors-2904611-55.patch"
+            },
+            "drupal/oauth_client": {
+                "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff"
             },
             "drupal/og": {
                 "[regression] MembershipManager::getMembership since 1.0.0-alpha11": "resources/patch/php/drupal/og/3524972.diff"

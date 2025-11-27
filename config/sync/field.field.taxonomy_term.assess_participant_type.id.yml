@@ -1,20 +1,20 @@
-uuid: f02d1d2b-4692-4b33-b12b-e48523de6d3d
+uuid: f1180593-6c94-443e-8232-47739e3a6a72
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.name
-    - paragraphs.paragraphs_type.binding_requirement
+    - field.storage.taxonomy_term.id
+    - taxonomy.vocabulary.assess_participant_type
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: paragraph.binding_requirement.name
-field_name: name
-entity_type: paragraph
-bundle: binding_requirement
-label: Name
+id: taxonomy_term.assess_participant_type.id
+field_name: id
+entity_type: taxonomy_term
+bundle: assess_participant_type
+label: Identifier
 description: ''
 required: true
 translatable: false

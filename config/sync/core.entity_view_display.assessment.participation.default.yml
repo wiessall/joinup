@@ -6,18 +6,31 @@ dependencies:
     - assessments.type.participation
     - field.field.assessment.participation.participant_type
     - field.field.assessment.participation.stakeholder_country
-  module:
-    - options
 id: assessment.participation.default
 targetEntityType: assessment
 bundle: participation
 mode: default
 content:
   participant_type:
-    type: list_default
+    type: entity_reference_label
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: false
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
   stakeholder_country:

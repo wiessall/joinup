@@ -1,16 +1,16 @@
-uuid: b8903b01-26f4-4ee9-b668-08e22ed67a4d
+uuid: 59978f69-de5f-478a-9618-a9aab9dd1f40
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
+    - text
 id: assessment.description
 field_name: description
 entity_type: assessment
-type: string_long
-settings:
-  case_sensitive: false
-module: core
+type: text_long
+settings: {  }
+module: text
 locked: false
 cardinality: 1
 translatable: true

@@ -1,7 +1,10 @@
 services:
 
   _defaults:
+    autoconfigure: true
     autowire: true
+
+  Drupal\assessments\AssessmentVocabularyHelper: {}
 
   assessments.resource_parser:
     class: Drupal\assessments\ResourceParser

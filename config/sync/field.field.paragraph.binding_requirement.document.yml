@@ -1,30 +1,31 @@
-uuid: 2b6e5027-dc29-4537-9994-055e2f400313
+uuid: 6583786c-b4c0-49fc-9e69-c1e57bfd58b4
 langcode: en
 status: true
 dependencies:
   config:
-    - assessments.type.report
-    - field.storage.assessment.legal_interoperability
+    - assessments.type.document
+    - field.storage.paragraph.document
+    - paragraphs.paragraphs_type.binding_requirement
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.legal_interoperability
-field_name: legal_interoperability
-entity_type: assessment
-bundle: report
-label: 'Identified effects on cross-border legal interoperability'
+id: paragraph.binding_requirement.document
+field_name: document
+entity_type: paragraph
+bundle: binding_requirement
+label: 'Binding requirements supporting documents'
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:assessment_statement'
+  handler: 'default:assessment'
   handler_settings:
     target_bundles:
-      legal_interoperability: legal_interoperability
+      document: document
     sort:
       field: _none
       direction: ASC

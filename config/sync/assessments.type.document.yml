@@ -1,0 +1,9 @@
+uuid: 5fd0df67-4a77-4edd-93d3-085afb17c379
+langcode: en
+status: true
+dependencies: {  }
+label_singular: null
+label_plural: null
+label_count: null
+id: document
+label: Document
