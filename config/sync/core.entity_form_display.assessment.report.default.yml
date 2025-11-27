@@ -5,7 +5,7 @@ dependencies:
   config:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.documents
+    - field.field.assessment.report.document
     - field.field.assessment.report.legal
     - field.field.assessment.report.organisational
     - field.field.assessment.report.other
@@ -17,7 +17,6 @@ dependencies:
   module:
     - assessments
     - field_group
-    - file
     - inline_entity_form
     - joinup_workflow
     - layout_paragraphs
@@ -144,12 +143,18 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  documents:
-    type: file_generic
-    weight: 8
+  document:
+    type: inline_entity_form_simple
+    weight: 51
     region: content
     settings:
-      progress_indicator: throbber
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
   legal:
     type: inline_entity_form_simple
@@ -234,6 +239,8 @@ content:
     weight: 2
     region: content
     settings:
+      placeholder_url: ''
+      placeholder_title: ''
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
       default_option: 'no'
     third_party_settings: {  }
