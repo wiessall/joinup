@@ -4,14 +4,14 @@ status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.technical_interoperability
+    - field.storage.assessment.technical
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.technical_interoperability
-field_name: technical_interoperability
+id: assessment.report.technical
+field_name: technical
 entity_type: assessment
 bundle: report
 label: 'Identified effects on cross-border technical interoperability'
@@ -24,7 +24,7 @@ settings:
   handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      technical_interoperability: technical_interoperability
+      technical: technical
     sort:
       field: _none
       direction: ASC

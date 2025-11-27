@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -40,8 +41,22 @@ class AssessmentContext extends RawDrupalContext {
    * @Given :type assessments:
    */
   public function createAssessments(string $type, TableNode $assessmentsTable): void {
-    foreach ($assessmentsTable->getHash() as $assessmentHash) {
-      $assessment = (object) $assessmentHash;
+    foreach ($assessmentsTable->getHash() as $assessment) {
+      $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+
+      $fieldVocabMap = [
+        'public_organisation' => ['organisation_type' => 'assess_provider_type'],
+        'participation' => ['participant_type' => 'assess_participant_type'],
+        'public_service' => ['thematic_area' => 'assess_public_service_area'],
+      ];
+
+      foreach ($fieldVocabMap[$type] ?? [] as $fieldName => $vid) {
+        if (isset($assessment[$fieldName])) {
+          $assessment[$fieldName] = $vocabHelper->getTermFromIdentifier($vid, $assessment[$fieldName])->label();
+        }
+      }
+      $assessment = (object) $assessment;
+
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);
