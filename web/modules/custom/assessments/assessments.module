@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\taxonomy\Entity\Term;
@@ -206,23 +207,16 @@ function assessments_user_predelete(UserInterface $account): void {
  */
 function assessments_entity_bundle_info(): array {
   return [
-    'assessment_statement' => [
-      'legal' => [
-        'label' => t('Legal interoperability'),
+    'assessment_statement' => array_map(
+      fn (TranslatableMarkup $label): array => ['label' => $label],
+      [
+        'legal' => t('Legal interoperability'),
+        'organisational'  => t('Organisational interoperability'),
+        'semantic' => t('Semantic interoperability'),
+        'technical' => t('Technical interoperability'),
+        'other' => t('Other interoperability'),
       ],
-      'organisational' => [
-        'label' => t('Organisational interoperability'),
-      ],
-      'semantic' => [
-        'label' => t('Semantic interoperability'),
-      ],
-      'technical' => [
-        'label' => t('Technical interoperability'),
-      ],
-      'other' => [
-        'label' => t('Other interoperability'),
-      ],
-    ],
+    ),
   ];
 }
 
@@ -236,6 +230,35 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
   }
+
+  $rdfSync = [
+    'type' => 'http://data.europa.eu/2sa/cav#Statement',
+    'uri_plugin' => 'default',
+    'fields' => [
+      'interpretation' => [
+        'target_id' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#interpretation',
+          'type' => 'resource',
+        ],
+      ],
+      'judgement' => [
+        'value' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#judgement',
+          'type' => NULL,
+        ],
+      ],
+      'statement_type' => [
+        'target_id' => [
+          'predicate' => 'http://data.europa.eu/2sa/cav#type',
+          'type' => 'resource',
+        ],
+      ],
+    ],
+  ];
+
+  array_walk($bundles['assessment_statement'], function (array &$info) use ($rdfSync): void {
+    $info['rdf_sync'] = $rdfSync;
+  });
 }
 
 /**
