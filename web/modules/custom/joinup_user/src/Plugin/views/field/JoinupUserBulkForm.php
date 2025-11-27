@@ -110,7 +110,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
       foreach ($selected as $bulkFormKey) {
         $entity = $this->loadEntityFromBulkFormKey($bulkFormKey);
         // Skip execution if current entity does not exist.
-        if ($entity instanceof EntityInterface) {
+        if (!$entity instanceof EntityInterface) {
           continue;
         }
         // Skip execution if the user did not have access.
