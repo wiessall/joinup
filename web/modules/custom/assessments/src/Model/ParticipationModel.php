@@ -19,7 +19,7 @@ class ParticipationModel extends AssessmentModelBase implements AssessmentModelI
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'participation';
   }
 

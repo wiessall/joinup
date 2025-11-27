@@ -19,7 +19,7 @@ class DocumentModel extends AssessmentModelBase implements AssessmentModelInterf
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'document';
   }
 

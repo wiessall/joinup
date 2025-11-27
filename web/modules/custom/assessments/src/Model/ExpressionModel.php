@@ -19,7 +19,7 @@ class ExpressionModel extends AssessmentModelBase implements AssessmentModelInte
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'expression';
   }
 
