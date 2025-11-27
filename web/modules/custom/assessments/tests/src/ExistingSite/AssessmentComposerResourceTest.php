@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Kernel tests for the Assessment Composer REST resource.
@@ -14,39 +14,7 @@ use Drupal\rest\ResourceResponse;
  * its post() method with decoded JSON payloads that mirror the examples in
  * idlocal/test.http, avoiding the need to exercise HTTP routing or OAuth.
  */
-class AssessmentComposerResourceTest extends KernelTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'paragraphs',
-    'system',
-    'user',
-    'serialization',
-    'rest',
-    'assessments',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   *
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    // Install entity schema for assessments module.
-    $this->installEntitySchema('assessment');
-    $this->installEntitySchema('user');
-    $this->installSchema('system', ['sequences']);
-    $this->installSchema('user', ['users_data']);
-    $this->installConfig(['assessments']);
-    $this->installConfig(['system']);
-  }
+class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests posting a structured payload returns 201 and echoes the data.
@@ -87,11 +55,6 @@ class AssessmentComposerResourceTest extends KernelTestBase {
               'landing_page' => 'https://portal.example.eu',
             ],
           ],
-          'documents' => [
-            [
-              'file_uri' => 'https://files.example.com/documents/req-1.pdf',
-            ],
-          ],
         ],
       ],
       'provider' => [
@@ -104,12 +67,7 @@ class AssessmentComposerResourceTest extends KernelTestBase {
         [
           'interpretation' => 'Compliant with conditions',
           'judgement' => 'positive',
-          'type' => 'final',
-          'documents' => [
-            [
-              'file_uri' => 'https://files.example.com/documents/statement-1.pdf',
-            ],
-          ],
+          'type' => 'legal',
         ],
       ],
     ];
