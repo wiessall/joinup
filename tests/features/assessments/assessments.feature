@@ -42,7 +42,7 @@ Feature: Assessment Report Entity Management
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
-    And I select "Education and Research" from "has_related_service[0][inline_entity_form][thematic_area][]" in the "Modal content" region
+    And I select "Core governance and administration" from "has_related_service[0][inline_entity_form][thematic_area][]" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
     And I select "Local public sector body" from "affected_party[0][inline_entity_form][participant_type][]" in the "Modal content" region
