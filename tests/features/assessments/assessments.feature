@@ -27,14 +27,17 @@ Feature: Assessment Report Entity Management
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
+    And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
     And I press "Add new relevant asset" in the "Modal content" region
     And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
     Then I press "Create relevant asset" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
@@ -44,6 +47,9 @@ Feature: Assessment Report Entity Management
     When I click "Affected stakeholders" in the "Modal content" region
     And I select "Local public sector body" from "affected_party[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+
+    When I click "Documents" in the "Modal content" region
+    And I attach the file "text.pdf" to "Add a new file"
 
     Then I press "Save" in the "Modal buttons" region
 
@@ -68,6 +74,9 @@ Feature: Assessment Report Entity Management
 #    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
 #    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
 
+    # Assessment supporting documents
+    And I attach the file "text.pdf" to "Add a new file"
+
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
@@ -75,6 +84,7 @@ Feature: Assessment Report Entity Management
       | Austrian Ministry of Digital Affairs, a European Union institution from Greece |
       | The report has been connected to the following previous/relevant reports       |
       | https://interoperable-europe.ec.europa.eu/report                               |
+      | documented in https://interoperable-europe.ec.europa.eu/general                |
 
     # Edit test.
 #    When I go to the edit form of the "Test Assessment Report 2025" assessment
