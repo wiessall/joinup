@@ -19,7 +19,7 @@ class BindingRequirementModel extends AssessmentModelBase implements AssessmentM
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'binding_requirement';
   }
 

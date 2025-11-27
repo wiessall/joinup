@@ -13,14 +13,17 @@ class StatementModel extends AssessmentModelBase implements AssessmentModelInter
    * {@inheritdoc}
    */
   public function getEntityTypeId(): string {
-    return 'assessment';
+    return 'assessment_statement';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
-    return 'statement';
+  public function getEntityBundle(array $context = []): string {
+    if (!isset($context['type'])) {
+      return 'other';
+    }
+    return $context['type'];
   }
 
   /**

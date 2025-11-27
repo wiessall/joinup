@@ -141,7 +141,7 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
    * @return string
    *   The entity bundle.
    */
-  abstract public function getEntityBundle(): string;
+  abstract public function getEntityBundle(array $context = []): string;
 
   /**
    * {@inheritdoc}

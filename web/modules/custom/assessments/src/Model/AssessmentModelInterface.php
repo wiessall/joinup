@@ -16,8 +16,11 @@ interface AssessmentModelInterface {
 
   /**
    * Returns the entity bundle.
+   *
+   * @param array $context
+   *   Relevant context to pass to the bundle resolver.
    */
-  public function getEntityBundle(): string;
+  public function getEntityBundle(array $context = []): string;
 
   /**
    * Returns the entity values.

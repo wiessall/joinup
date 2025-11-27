@@ -111,7 +111,7 @@ final class ResourceParser implements ResourceParserInterface {
       if ($entity_errors->count() > 0) {
         foreach ($entity_errors as $error) {
           $errors[] = [
-            'message' => $error->getMessage(),
+            'message' => 'Property path: ' . $error->getPropertyPath() . ', Error: ' . $error->getMessage(),
           ];
         }
       }

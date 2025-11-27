@@ -19,7 +19,7 @@ class AssetModel extends AssessmentModelBase implements AssessmentModelInterface
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'asset';
   }
 

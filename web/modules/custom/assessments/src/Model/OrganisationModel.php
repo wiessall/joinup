@@ -19,7 +19,7 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
   /**
    * {@inheritdoc}
    */
-  public function getEntityBundle(): string {
+  public function getEntityBundle(array $context = []): string {
     return 'organisation';
   }
 
