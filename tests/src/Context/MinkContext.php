@@ -89,36 +89,25 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function assertSelectRadioByName(string $label, string $name): void {
     $page = $this->getSession()->getPage();
-
-    // Find all radio buttons with the given name attribute.
     $radios = $page->findAll('css', sprintf('input[type="radio"][name="%s"]', $name));
 
     if (empty($radios)) {
       throw new \Exception(sprintf('No radio buttons found with name "%s" on the page %s', $name, $this->getSession()->getCurrentUrl()));
     }
 
-    $target_radio = NULL;
     foreach ($radios as $radio) {
-      $radio_id = $radio->getAttribute('id');
-      if (!$radio_id) {
+      if (!$radio_id = $radio->getAttribute('id')) {
         continue;
       }
 
       $label_element = $page->find('css', sprintf('label[for="%s"]', $radio_id));
-      if (!$label_element || trim($label_element->getText()) !== $label) {
-        continue;
+      if ($label_element && trim($label_element->getText()) === $label) {
+        $radio->selectOption($radio->getAttribute('value'));
+        return;
       }
-
-      $target_radio = $radio;
-      break;
     }
 
-    if (!$target_radio) {
-      throw new \Exception(sprintf('Radio button with label "%s" and name "%s" was not found on the page %s', $label, $name, $this->getSession()->getCurrentUrl()));
-    }
-
-    $value = $target_radio->getAttribute('value');
-    $target_radio->selectOption($value);
+    throw new \Exception(sprintf('Radio button with label "%s" and name "%s" was not found on the page %s', $label, $name, $this->getSession()->getCurrentUrl()));
   }
 
   /**
