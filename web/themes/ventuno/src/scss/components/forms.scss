@@ -199,10 +199,12 @@
   }
 }
 
-#edit-legal-interoperability .form-check,
-#edit-organisational-interoperability .form-check,
-#edit-semantic-interoperability .form-check,
-#edit-technical-interoperability .form-check,
-#edit-other-interoperability .form-check {
-  display: inline-block;
+[data-drupal-selector="assessment-report-edit-form"] {
+  #edit-legal .form-check,
+  #edit-organisational .form-check,
+  #edit-semantic .form-check,
+  #edit-technical .form-check,
+  #edit-other .form-check {
+    display: inline-block;
+  }
 }

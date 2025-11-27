@@ -5,11 +5,9 @@ dependencies:
   config:
     - assessments.type.public_organisation
     - field.field.assessment.public_organisation.country
-    - field.field.assessment.public_organisation.description
     - field.field.assessment.public_organisation.organisation_type
   module:
     - entity_form_field_label
-    - options
     - template_suggestion
 id: assessment.public_organisation.default
 targetEntityType: assessment
@@ -27,7 +25,7 @@ content:
         rewrite_label: 0
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 3
     region: content
   name:
     type: string
@@ -38,15 +36,20 @@ content:
     weight: 0
     region: content
   organisation_type:
-    type: list_default
+    type: entity_reference_label
     label: visually_hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      link: false
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
 hidden:
   created: true
-  description: true
   langcode: true
   search_api_excerpt: true
   status: true
