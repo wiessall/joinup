@@ -5,8 +5,8 @@ dependencies:
   module:
     - assessments
     - views_bulk_operations
-id: assessment_types
-label: 'Assessment types'
+id: assessments_admin
+label: 'Assessments admin'
 module: views
 description: ''
 tag: ''
@@ -650,13 +650,17 @@ display:
           row_class: ''
           default_row_class: true
           columns:
-            name: name
+            views_bulk_operations_bulk_form: views_bulk_operations_bulk_form
             id: id
+            status: status
+            type: type
+            uid: uid
+            created: created
+            changed: changed
+            operations: operations
           default: '-1'
           info:
-            name:
-              sortable: false
-              default_sort_order: asc
+            views_bulk_operations_bulk_form:
               align: ''
               separator: ''
               empty_column: false
@@ -664,6 +668,46 @@ display:
             id:
               sortable: false
               default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            status:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            uid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            created:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            changed:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
               align: ''
               separator: ''
               empty_column: false
@@ -692,7 +736,10 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: 0
       contexts:
