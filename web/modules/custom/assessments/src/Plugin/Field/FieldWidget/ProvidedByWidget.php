@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Entity\Query\QueryInterface;
-use Drupal\views\Views;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,11 +40,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class ProvidedByWidget extends WidgetBase {
 
   /**
-   * The entity type manager.
+   * The logger channel.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
+  protected LoggerChannelInterface $logger;
 
   /**
    * {@inheritdoc}
@@ -53,10 +55,11 @@ final class ProvidedByWidget extends WidgetBase {
     FieldDefinitionInterface $field_definition,
     array $settings,
     array $third_party_settings,
-    EntityTypeManagerInterface $entity_type_manager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerChannelFactoryInterface $loggerFactory,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
-    $this->entityTypeManager = $entity_type_manager;
+    $this->logger = $loggerFactory->get('assessments');
   }
 
   /**
@@ -70,6 +73,7 @@ final class ProvidedByWidget extends WidgetBase {
       $configuration['settings'],
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
+      $container->get('logger.factory'),
     );
   }
 
@@ -546,7 +550,7 @@ final class ProvidedByWidget extends WidgetBase {
     }
     catch (\Exception $e) {
       // Fallback: Return empty options if field not available.
-      \Drupal::logger('assessments')->error('Failed to load organisation type options: @message', [
+      $this->logger->error('Failed to load organisation type options: @message', [
         '@message' => $e->getMessage(),
       ]);
     }
@@ -612,7 +616,7 @@ final class ProvidedByWidget extends WidgetBase {
     }
     catch (\Exception $e) {
       // Fallback: Return empty options if field not available.
-      \Drupal::logger('assessments')->error('Failed to load country options: @message', [
+      $this->logger->error('Failed to load country options: @message', [
         '@message' => $e->getMessage(),
       ]);
     }
@@ -655,7 +659,7 @@ final class ProvidedByWidget extends WidgetBase {
       }
     }
     catch (\Exception $e) {
-      \Drupal::logger('assessments')->error('Failed to load options from Views handler: @message', [
+      $this->logger->error('Failed to load options from Views handler: @message', [
         '@message' => $e->getMessage(),
       ]);
     }
@@ -866,7 +870,7 @@ final class ProvidedByWidget extends WidgetBase {
             ];
           }
           catch (\Exception $e) {
-            \Drupal::logger('assessments')->error('Failed to create organisation: @message', ['@message' => $e->getMessage()]);
+            $this->logger->error('Failed to create organisation: @message', ['@message' => $e->getMessage()]);
           }
         }
         continue;
@@ -882,10 +886,6 @@ final class ProvidedByWidget extends WidgetBase {
   public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state): void {
     // Temporarily remove filter settings to prevent validation errors
     // with newly created entities.
-    $fieldName = $this->fieldDefinition->getName();
-    $fieldState = static::getWidgetState($form['#parents'], $fieldName, $form_state);
-
-    // Store original settings.
     $originalSettings = $this->getSettings();
 
     // Call parent to extract values.
@@ -948,7 +948,7 @@ final class ProvidedByWidget extends WidgetBase {
       return (int) $this->buildOrganisationQuery($type, $country)->count()->execute();
     }
     catch (\Exception $e) {
-      \Drupal::logger('assessments')->error('Failed to count organisations: @message', ['@message' => $e->getMessage()]);
+      $this->logger->error('Failed to count organisations: @message', ['@message' => $e->getMessage()]);
       return 0;
     }
   }
@@ -972,7 +972,7 @@ final class ProvidedByWidget extends WidgetBase {
       return $this->entityTypeManager->getStorage('assessment')->loadMultiple($entityIds);
     }
     catch (\Exception $e) {
-      \Drupal::logger('assessments')->error('Failed to load organisations: @message', ['@message' => $e->getMessage()]);
+      $this->logger->error('Failed to load organisations: @message', ['@message' => $e->getMessage()]);
       return [];
     }
   }
