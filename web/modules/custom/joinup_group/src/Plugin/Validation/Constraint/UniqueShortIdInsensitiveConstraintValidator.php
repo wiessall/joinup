@@ -33,7 +33,7 @@ class UniqueShortIdInsensitiveConstraintValidator extends ConstraintValidator im
     }
 
     // Short ID has cardinality 1. Does not need to iterate over other deltas.
-    $value = $items->first()?->getValue()['value'];
+    $value = $items->first()?->getValue()['value'] ?? NULL;
     if (!$value) {
       return;
     }

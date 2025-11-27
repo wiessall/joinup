@@ -78,7 +78,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected int $numberOfProvidedSolutions = 0;
 
-  final public function __construct(
+  public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,

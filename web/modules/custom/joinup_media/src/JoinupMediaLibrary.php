@@ -52,10 +52,6 @@ class JoinupMediaLibrary extends MediaLibrary {
    */
   public function getDynamicPluginConfig(array $static_plugin_config, EditorInterface $editor): array {
     $dynamic_plugin_config = parent::getDynamicPluginConfig($static_plugin_config, $editor);
-    $media_library_opener_id = '';
-    $media_library_allowed_types = [];
-    $media_library_selected_type = '';
-    $media_library_remaining = 0;
 
     if (!$group = $this->groupManager->getGroupFromContext()) {
       // Only act in the context of a group.
@@ -65,12 +61,11 @@ class JoinupMediaLibrary extends MediaLibrary {
     // Reverse engineering: Restore the MediaLibraryState object.
     $query_string = parse_url($dynamic_plugin_config['drupalMedia']['libraryURL'], PHP_URL_QUERY);
     parse_str($query_string, $query);
-    /** @var string $media_library_opener_id */
-    /** @var string[] $media_library_allowed_types */
-    /** @var string $media_library_selected_type */
-    /** @var int $media_library_remaining */
-    /** @var array $media_library_opener_parameters */
-    extract($query);
+    $media_library_opener_id         = $query['media_library_opener_id'] ?? NULL;
+    $media_library_allowed_types     = $query['media_library_allowed_types'] ?? [];
+    $media_library_selected_type     = $query['media_library_selected_type'] ?? NULL;
+    $media_library_remaining         = $query['media_library_remaining'] ?? NULL;
+    $media_library_opener_parameters = $query['media_library_opener_parameters'] ?? [];
 
     // Add the group ID to be passed to the media library.
     $media_library_opener_parameters['group_id'] = $group->id();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
 use Drupal\joinup_notification\MailContentTypeHeader;
+use Drupal\user\UserInterface;
 
 /**
  * Tests user password reset email.
@@ -26,12 +27,10 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
    * Tests user password reset email.
    */
   public function testUserResetEmail(): void {
-    $this->assertTrue(
-      _user_mail_notify(
-        'password_reset',
-        \Drupal::entityTypeManager()->getStorage('user')->load(1),
-      )
-    );
+    $user = \Drupal::entityTypeManager()->getStorage('user')->load(1);
+    \assert($user instanceof UserInterface);
+    $result = (bool) _user_mail_notify('password_reset', $user);
+    $this->assertTrue($result);
 
     $this->assertEquals(
       [

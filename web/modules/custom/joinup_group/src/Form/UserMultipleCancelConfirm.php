@@ -47,7 +47,6 @@ class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
     // if they are sole owners of groups.
     $build = [];
     foreach (Element::children($form['accounts']) as $user_id) {
-      /** @var \Drupal\user\Entity\User $account */
       $account = $this->userStorage->load($user_id);
       if (!$account instanceof AccountInterface) {
         throw new \RuntimeException("User with id {$user_id} was not found.");
