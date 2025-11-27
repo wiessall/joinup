@@ -27,8 +27,8 @@ class JoinupContentState extends State {
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    readonly EntityTypeManagerInterface $entity_type_manager,
-    readonly EntityFieldManagerInterface $entity_field_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityFieldManagerInterface $entity_field_manager,
     protected readonly WorkflowManagerInterface $workflowManager,
     protected readonly StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper,
   ) {

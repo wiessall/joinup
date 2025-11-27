@@ -125,7 +125,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -156,7 +155,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -1005,7 +1003,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 2
@@ -1052,7 +1049,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 3
@@ -1196,7 +1192,7 @@ third_party_settings:
             content:
               region_id: null
               region_class_choose: null
-              region_classes: 'p-4 rounded-3 bg-light'
+              region_classes: ''
               region_styles: null
               region_data: null
         components:
@@ -1226,7 +1222,6 @@ third_party_settings:
                   joinup_slick:
                     preset: ''
                     field_label: true
-                    custom_label: ''
                   template_suggestion:
                     template_suggestion: documentation
             weight: 0

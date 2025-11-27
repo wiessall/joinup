@@ -317,6 +317,13 @@ menu--og--navigation:
     - core/once
     - ventuno/priority-plus
 
+duplicate-id-fixer:
+  js:
+    assets/js/duplicate-id-fixer.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+
 modals:
   css:
     theme:
@@ -437,6 +444,11 @@ paragraph__events_calendar:
   css:
     theme:
       assets/css/paragraph--events-calendar.min.css: { minified: true }
+
+paragraph__iframe:
+  css:
+    theme:
+      assets/css/paragraph--iframe.min.css: { minified: true }
 
 private-message:
   css:

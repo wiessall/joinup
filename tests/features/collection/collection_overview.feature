@@ -30,7 +30,7 @@ Feature: Collections Overview
       # Created in 8:31am.
       | E-health          |
       # Created 2015-01-01 08:00am.
-      | The Portal        |
+      | Portal support       |
 
     When I am an anonymous user
     And I visit the collection overview page
@@ -62,6 +62,7 @@ Feature: Collections Overview
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
+    And I fill in "Alternative text" with "Alternative logo text"
     And I press "Publish"
     Then I visit the "Colonies in space" collection
     Then I should see the text "Colonies in space"

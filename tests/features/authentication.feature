@@ -45,7 +45,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
-      | collection/portal/revisions                         |
+      | collection/portal-support/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |
@@ -53,7 +53,6 @@ Feature: User authentication
       | node/add                                            |
       | outdated-content-threshold                          |
       | propose/collection                                  |
-      | propose/solution                                    |
       | user/subscriptions                                  |
 
   Scenario Outline: Authenticated user can access pages they are authorized to
@@ -99,14 +98,13 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
-      | collection/portal/revisions                         |
+      | collection/portal-support/revisions                         |
       | dashboard                                           |
       | dashboard/private-message-report                    |
       | licence                                             |
       | media/add                                           |
       | node/add                                            |
       | outdated-content-threshold                          |
-      | propose/solution                                    |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
     Given I am logged in as a user with the "authenticated" role
@@ -165,7 +163,6 @@ Feature: User authentication
       | admin/tmgmt/sources                                 |
       | admin/tmgmt/translators                             |
       | node/add                                            |
-      | propose/solution                                    |
 
   Scenario Outline: Administrator can access pages they are authorized to
     Given I am logged in as a user with the "administrator" role

@@ -10,36 +10,36 @@ Feature: Custom page workflow transitions.
       | Mickey Mouse | mickey.mouse@example.com |
     And the following collection user memberships:
       | collection | user         | roles       |
-      | The Portal | Mickey Mouse | facilitator |
+      | Portal support | Mickey Mouse | facilitator |
     And custom_page content:
       | title          | collection | state     |
-      | Silent Echo v2 | The Portal | published |
+      | Silent Echo v2 | Portal support | published |
 
     When I am logged in as "Mickey Mouse"
     And I go to the edit form of the "Silent Echo v2" "custom page"
     And I fill in "Title" with "Silent Echo – Reborn"
     And I press "Save new draft"
-    Then I should see the heading "Silent Echo v2"
+    And I see h1 span element with title "Silent Echo v2"
 
     When I go to the edit form of the "Silent Echo v2" "custom page"
     Then the "Title" field should contain "Silent Echo – Reborn"
     And I fill in "Title" with "Silent Echo Extended"
     And I press "Save as draft"
-    Then I should see the heading "Silent Echo v2"
+    And I see h1 span element with title "Silent Echo v2"
 
     When I go to the edit form of the "Silent Echo v2" "custom page"
     Then the "Title" field should contain "Silent Echo Extended"
     And I press "Publish"
-    Then I should see the heading "Silent Echo Extended"
+    And I see h1 span element with title "Silent Echo Extended"
 
   Scenario: Test unpublish transition makes page unavailable to end users
     Given custom_page content:
       | title       | collection | state     |
-      | Help Center | The Portal | published |
+      | Help Center | Portal support | published |
 
     When I am an anonymous user
     And I go to the "Help Center" custom_page
-    Then I should see the heading "Help Center"
+    And I see h1 span element with title "Help Center"
 
     When I am logged in as a moderator
     And I go to the edit form of the "Help Center" "custom page"

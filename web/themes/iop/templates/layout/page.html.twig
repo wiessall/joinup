@@ -71,19 +71,21 @@
   {% if page_header %}
     {{ attach_library('iop/page-header') }}
     <div class="page-header py-5 text-center" role="complementary" aria-label="{{ 'Page header'|t }}">
-      <{{ page_header.has_heading ? 'h1' : 'span' }} class="page-header__title">
+      <span class="page-header__title">
         {{ page_header.title }}
-      </{{ page_header.has_heading ? 'h1' : 'span' }}>
-    </div>
-  {% endif %}
-
-  {% if page.content_top %}
-    <div class="container">
-      {{ page.content_top }}
+      </span>
     </div>
   {% endif %}
 
   <div class="content container mb-5">
+    {% block page_content_top %}
+      {% if page.content_top %}
+        <div class="region-content-top justify-content-end position-relative d-flex my-3">
+          {{ page.content_top }}
+        </div>
+      {% endif %}
+    {% endblock %}
+
     <main role="main">
       <div id="main-content" tabindex="-1"></div>
       <div class="layout-content">

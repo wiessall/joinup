@@ -1,0 +1,18 @@
+uuid: 408a4721-ac42-4a42-a6a3-202d0e7661f9
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.eu_member
+field_name: eu_member
+entity_type: taxonomy_term
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

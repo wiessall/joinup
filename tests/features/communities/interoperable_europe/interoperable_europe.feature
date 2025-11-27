@@ -24,30 +24,28 @@ Feature:
     # Test other pages.
     When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
-    And I should see the heading "Initiatives"
+    And I see h1 span element with title "Initiatives"
     And I should see the heading "Join our community!"
 
     # Event.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
     Then the page should be rendered using the "Interoperable Europe" theme
     And I should see the text "Event"
-    And I should not see the heading "Event"
     And I should see the link "more events"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more events"
-    Then I should see the heading "Events"
+    And I should see the text "Events"
 
     # News.
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
     Then the page should be rendered using the "Interoperable Europe" theme
     And I should see the text "News"
-    And I should not see the heading "News"
     And I should see the link "more news"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more news"
-    Then I should see the heading "News"
+    And I should see the text "News"
 
   Scenario: Authenticated user visiting the landing page.
     Given I am logged in as a user with the authenticated role

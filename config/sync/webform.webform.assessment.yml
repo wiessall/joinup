@@ -24,6 +24,12 @@ elements: |-
       '#type': processed_text
       '#text': '<p>This section collects general information on your interoperability assessment.</p>'
       '#format': content_editor
+    short_title:
+      '#type': textfield
+      '#title': 'Short title'
+      '#description': '<p>This will be used as the title of the published report. Maximum 200 characters.</p>'
+      '#maxlength': 200
+      '#required': true
     report_provider:
       '#type': processed_text
       '#prefix': '<p>&nbsp;</p>'
@@ -180,15 +186,21 @@ elements: |-
       '#prefix': '<p>&nbsp;</p>'
       '#text': '<h2>Initiative, project or action concerned (containing the binding requirements to be assessed)</h2>'
       '#format': content_editor
-    initiative:
-      '#type': textfield
-      '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed:'
-      '#maxlength': 1024
-      '#required': true
-      '#admin_title': 'Initiative, project, action'
-    initiative_link:
-      '#type': textfield
-      '#title': 'If applicable, provide a link to the initiative, project or action concerned:'
+    initiatives:
+      '#type': webform_custom_composite
+      '#title': Initiatives
+      '#multiple__header': false
+      '#multiple__sorting': false
+      '#multiple__add': false
+      '#multiple__add_more_input': false
+      '#element':
+        initiative:
+          '#type': textfield
+          '#required': true
+          '#title': 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
+        initiative_link:
+          '#type': textfield
+          '#title': 'If applicable, provide a link to the initiative, project or action concerned'
     previous_assessments:
       '#type': radios
       '#title': 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
@@ -472,6 +484,9 @@ elements: |-
       '#type': entity_autocomplete
       '#title': 'Internal Solutions in the Portal  '
       '#multiple': true
+      '#description': '<p class="h4">Internal Solutions in the Portal (<a href="/search?f%5B0%5D=type%3Asolution" target="_blank" rel="noopener noreferrer">Search</a> in the Interoperable Europe Portal)</p>'
+      '#title_display': invisible
+      '#description_display': before
       '#multiple__min_items': 1
       '#multiple__empty_items': 0
       '#multiple__add': false

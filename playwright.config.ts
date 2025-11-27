@@ -16,12 +16,12 @@ export default defineConfig({
   globalTeardown: require.resolve(path.resolve(baseDir, "global-teardown")),
   // Run tests in files in parallel.
   fullyParallel: true,
-  // Fail the build on CI if you accidentally left test.only in the source code.
-  forbidOnly: !!process.env.CI,
-  // Retry on CI only.
-  retries: process.env.CI ? 2 : 0,
-  // Opt out of parallel tests on CI.
-  workers: process.env.CI ? 1 : undefined,
+  // Fail the build on gitlab/CI if you accidentally left test.only in the source code.
+  forbidOnly: !!process.env.GITLAB_CI,
+  // Retry on gitlab/CI only.
+  retries: process.env.GITLAB_CI ? 3 : 0,
+  // Opt out of parallel tests on gitlab/CI.
+  workers: process.env.GITLAB_CI ? 1 : undefined,
   // Reporter to use. See https://playwright.dev/docs/test-reporters
   reporter: [
     [
@@ -70,9 +70,6 @@ export default defineConfig({
     {
       name: "mobile-chrome",
       use: { ...devices["Pixel 5"] },
-      // Run mobile after desktop to avoid drush uli being called for the same
-      // user concurrently, which results in one of them failing.
-      dependencies: ["desktop-chrome"],
     },
   ],
 });

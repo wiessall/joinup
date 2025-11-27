@@ -34,7 +34,7 @@ class UpcomingEventsSortOverwriteSubscriber implements EventSubscriberInterface 
   public function queryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
 
-    $facets = _joinup_get_facets_by_facet_source_id('search_api:views_page__content_overview__page_1');
+    $facets = _joinup_event_get_facets_by_facet_source_id('search_api:views_page__content_overview__page_1');
 
     // No further processing is needed if we are not filtering on events.
     if (!isset($facets['content_bundle']) || !$facets['content_bundle']->isActiveValue('event')) {

@@ -14,7 +14,8 @@ Feature: Assessments
     And I should see the heading "Online form for Assessments"
 
     # 1st page.
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Short title" with "Short title"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
     Then I should see the inline form error message "Type of public sector body field is required."
@@ -68,11 +69,11 @@ Feature: Assessments
 
     Given I am logged in as "Notify moderator"
     And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
-    Then I should see the heading "Assessment Pioneer in making automobiles"
+    Then I should see "Pioneer in making automobiles"
 
     When I select the radio button "Publish report"
     And I press "Submit"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the success message containing "The assessment submission report has been created: Assessment report #"
     And the following email should have been sent:
       | recipient | Regular                                                                               |
@@ -108,7 +109,6 @@ Feature: Assessments
       | Type of public sector body European Union agency                                                                                        |
       | Select your Agency Eurojust                                                                                                             |
       | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
-      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
       | 2. Binding requirements                                                                                                                 |
       | The binding requirements identified concern: {Empty}                                                                                    |
@@ -155,7 +155,7 @@ Feature: Assessments
       | You have already submitted this webform. View your previous submission.                                       |
       | You're about to fill a new assessment questionnaire. The form is prefilled with your previous submitted data. |
     # New submission is prefilled with values from previous submission.
-    And the "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" field should contain "Pioneer in making automobiles"
+    And the "Provide the name of the initiative, project or action containing the binding requirements to be assessed" field should contain "Pioneer in making automobiles"
 
     When I click "View your previous submission"
     Then I should see the following lines of text:
@@ -163,7 +163,6 @@ Feature: Assessments
       | Type of public sector body European Union agency                                                                                        |
       | Select your Agency Eurojust                                                                                                             |
       | Provide the name of the initiative, project or action containing the binding requirements to be assessed: Pioneer in making automobiles |
-      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                                                   |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No                                |
       | 2. Binding requirements                                                                                                                 |
       | The binding requirements identified concern: {Empty}                                                                                    |
@@ -187,7 +186,7 @@ Feature: Assessments
 
     Then I mark all emails as read
     When I move backward one page
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Abbey Road"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Abbey Road"
     And I select the radio button "No"
     And I press "Next"
 
@@ -217,7 +216,7 @@ Feature: Assessments
     And I click the link from email sent to "Notify moderator" with subject "Assessment submission (Complete)"
     And the cache has been cleared
     And I reload the page
-    And I should see "Assessment Abbey Road"
+    And I should see "Abbey Road"
     When I select the radio button "Require updates"
     And I fill in "What updates are needed?" with "Please drastically reconsider this form. I mean it!"
     And I press "Submit"
@@ -233,7 +232,7 @@ Feature: Assessments
     # User is able to edit a 'Require updates' submission.
     Given I am logged in as "Regular"
     And I click the link from email sent to "Regular" with subject "Your assessment needs updates"
-    When I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Let It Be"
+    When I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Let It Be"
     And I press "Next"
     And I press "Next"
     And I press "Next"
@@ -249,7 +248,7 @@ Feature: Assessments
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
     When I fill in "Name of your organisation" with "Pink Floyd"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "The Wall"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "The Wall"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
@@ -283,7 +282,6 @@ Feature: Assessments
       | Select your country Luxembourg                                                                                     |
       | Name of your organisation Pink Floyd                                                                               |
       | Provide the name of the initiative, project or action containing the binding requirements to be assessed: The Wall |
-      | If applicable, provide a link to the initiative, project or action concerned: {Empty}                              |
       | Can this assessment be linked to previous assessments or related assessments at EU or national level? No           |
       | 2. Binding requirements                                                                                            |
       | The binding requirements identified concern: {Empty}                                                               |
@@ -299,10 +297,10 @@ Feature: Assessments
       | Solutions not in the Portal (link) {Empty}                                                                         |
       | Have you discovered any remaining barriers to cross-border interoperability? No                                    |
       | 4. Supporting documents                                                                                            |
-      | Binding requirements supporting documents                                                                                               |
-      | empty_pdf.pdf                                                                                                                           |
-      | General Assessment supporting documents                                                                                                 |
-      | empty_pdf1.pdf                                                                                                                          |
+      | Binding requirements supporting documents                                                                          |
+      | empty_pdf.pdf                                                                                                      |
+      | General Assessment supporting documents                                                                            |
+      | empty_pdf1.pdf                                                                                                     |
       | Please add any other comment you would like to share. {Empty}                                                      |
 
     # Check that attachments are publicly available.
@@ -321,7 +319,8 @@ Feature: Assessments
     Then I should see the heading "Online form for Assessments"
 
     # 1st page.
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Short title" with "Short title"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select "<public_sector_body>" from "Type of public sector body"
     And I select "<institution_name>" from "<institution>"
     And I select the radio button "No"
@@ -358,9 +357,10 @@ Feature: Assessments
     Then I should not see the link "Download PDF" in the "Content" region
 
     # 1st page.
+    And I fill in "Short title" with "Short title"
     And I select "European Union agency" from "Type of public sector body"
     And I select "Eurojust" from "Select your Agency"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "Pioneer in making automobiles"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
@@ -405,14 +405,14 @@ Feature: Assessments
   Scenario: Assessment reports are listed in a distinct page and in search.
     Given I am an anonymous user
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
     And assessment_report content:
       | title         | state     | created              | organization         | collection                         |
-      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization | The Portal                         |
-      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization | The Portal                         |
+      | Assessment 1  | published | 2020-01-01T00:00:00Z | default organization | Portal support                        |
+      | Assessment 2  | published | 2020-01-02T00:00:00Z | default organization | Portal support                        |
       | Assessment 3  | published | 2020-01-03T00:00:00Z | default organization | Interoperability assessments space |
       | Assessment 4  | published | 2020-01-04T00:00:00Z | default organization | Interoperability assessments space |
       | Assessment 5  | published | 2020-01-05T00:00:00Z | default organization | Interoperability assessments space |
@@ -425,7 +425,7 @@ Feature: Assessments
       | Assessment 12 | published | 2020-01-12T00:00:00Z | default organization | Interoperability assessments space |
 
     When I go to the "Assessment reports" custom_page
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should not see the link "My assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
@@ -450,7 +450,7 @@ Feature: Assessments
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
       | content_listing:value | a:7:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:-1;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:33:"organization\|default organization";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
     When I go to the "Custom assessments" custom_page
-    Then I should see the heading "Custom assessments"
+    And I see h1 span element with title "Custom assessments"
     And I should see the following tiles in the correct order:
       | Assessment 12 |
       | Assessment 11 |
@@ -483,7 +483,12 @@ Feature: Assessments
 
     When I am logged in as a moderator
     When I go to "/collection/assessments/assessment-reports"
-    Then I should see the heading "Assessment reports"
+    And I see h1 span element with title "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
     And I should not see the text "There are no published assessment reports yet. You can add one by filling this questionnaire"
+    Then I set "short_title" as "Short title" for "Assessment 12" assessment_report submission
+    Then I go to "/collection/assessments/assessment-reports"
+    And I should not see "Assessment 12"
+    And I should see "Short title"
+    And I should see "default organization"
