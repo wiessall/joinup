@@ -78,39 +78,6 @@ class MinkContext extends DrupalExtensionMinkContext {
   }
 
   /**
-   * Selects a radio button by name attribute and label.
-   *
-   * @param string $label
-   *   The label of the radio button.
-   * @param string $name
-   *   The name attribute of the radio button.
-   *
-   * @When I select the radio button :label with the name :name
-   */
-  public function assertSelectRadioByName(string $label, string $name): void {
-    $page = $this->getSession()->getPage();
-    $radios = $page->findAll('css', sprintf('input[type="radio"][name="%s"]', $name));
-
-    if (empty($radios)) {
-      throw new \Exception(sprintf('No radio buttons found with name "%s" on the page %s', $name, $this->getSession()->getCurrentUrl()));
-    }
-
-    foreach ($radios as $radio) {
-      if (!$radio_id = $radio->getAttribute('id')) {
-        continue;
-      }
-
-      $label_element = $page->find('css', sprintf('label[for="%s"]', $radio_id));
-      if ($label_element && trim($label_element->getText()) === $label) {
-        $radio->selectOption($radio->getAttribute('value'));
-        return;
-      }
-    }
-
-    throw new \Exception(sprintf('Radio button with label "%s" and name "%s" was not found on the page %s', $label, $name, $this->getSession()->getCurrentUrl()));
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function assertRegionPressButton($button, $region): void {
