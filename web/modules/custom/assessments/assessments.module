@@ -206,19 +206,19 @@ function assessments_user_predelete(UserInterface $account): void {
 function assessments_entity_bundle_info(): array {
   return [
     'assessment_statement' => [
-      'legal_interoperability' => [
+      'legal' => [
         'label' => t('Legal interoperability'),
       ],
-      'organisational_interoperability' => [
+      'organisational' => [
         'label' => t('Organisational interoperability'),
       ],
-      'semantic_interoperability' => [
+      'semantic' => [
         'label' => t('Semantic interoperability'),
       ],
-      'technical_interoperability' => [
+      'technical' => [
         'label' => t('Technical interoperability'),
       ],
-      'other_interoperability' => [
+      'other' => [
         'label' => t('Other interoperability'),
       ],
     ],
@@ -247,19 +247,16 @@ function assessments_views_pre_render(ViewExecutable $view): void {
       foreach ($results as $result) {
         // Instead of false we want to show an empty string.
         // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->description->getValue())) {
-          $result->_entity->description->setValue(['']);
-        }
-        if (empty($result->_entity->country->getValue())) {
-          $result->_entity->country->setValue(['']);
+        if (empty($result->_entity->get('country')->getValue())) {
+          $result->_entity->get('country')->setValue(['']);
         }
         // Instead of country term ID we want to send the two letters
         // of the country.
         else {
-          $term_id = $result->_entity->country->getValue()[0]['target_id'];
+          $term_id = $result->_entity->get('country')->getValue()[0]['target_id'];
           $term = Term::load($term_id);
           $code = $term?->get('code')->value ?? '';
-          $result->_entity->country->setValue([$code]);
+          $result->_entity->get('country')->setValue([$code]);
         }
       }
     }
@@ -267,8 +264,8 @@ function assessments_views_pre_render(ViewExecutable $view): void {
       foreach ($results as $result) {
         // Instead of false we want to show an empty string.
         // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->landing_page->getValue())) {
-          $result->_entity->landing_page->setValue(['']);
+        if (empty($result->_entity->get('landing_page')->getValue())) {
+          $result->_entity->get('landing_page')->setValue(['']);
         }
       }
     }

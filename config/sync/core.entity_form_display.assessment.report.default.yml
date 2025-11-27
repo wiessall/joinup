@@ -5,19 +5,18 @@ dependencies:
   config:
     - assessments.type.report
     - field.field.assessment.report.binding_requirement
-    - field.field.assessment.report.documents
-    - field.field.assessment.report.legal_interoperability
-    - field.field.assessment.report.organisational_interoperability
-    - field.field.assessment.report.other_interoperability
+    - field.field.assessment.report.document
+    - field.field.assessment.report.legal
+    - field.field.assessment.report.organisational
+    - field.field.assessment.report.other
     - field.field.assessment.report.provider
     - field.field.assessment.report.relevant_report
-    - field.field.assessment.report.semantic_interoperability
+    - field.field.assessment.report.semantic
     - field.field.assessment.report.state
-    - field.field.assessment.report.technical_interoperability
+    - field.field.assessment.report.technical
   module:
     - assessments
     - field_group
-    - file
     - inline_entity_form
     - joinup_workflow
     - layout_paragraphs
@@ -44,7 +43,7 @@ third_party_settings:
         width_breakpoint: 640
     group_legal:
       children:
-        - legal_interoperability
+        - legal
       label: Legal
       region: content
       parent_name: group_tabs
@@ -60,7 +59,7 @@ third_party_settings:
         required_fields: true
     group_organisational:
       children:
-        - organisational_interoperability
+        - organisational
       label: Organisational
       region: content
       parent_name: group_tabs
@@ -76,7 +75,7 @@ third_party_settings:
         required_fields: true
     group_semantic:
       children:
-        - semantic_interoperability
+        - semantic
       label: Semantic
       region: content
       parent_name: group_tabs
@@ -92,7 +91,7 @@ third_party_settings:
         required_fields: true
     group_technical:
       children:
-        - technical_interoperability
+        - technical
       label: Technical
       region: content
       parent_name: group_tabs
@@ -108,7 +107,7 @@ third_party_settings:
         required_fields: true
     group_other:
       children:
-        - other_interoperability
+        - other
       label: Other
       region: content
       parent_name: group_tabs
@@ -144,14 +143,20 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  documents:
-    type: file_generic
-    weight: 8
+  document:
+    type: inline_entity_form_simple
+    weight: 51
     region: content
     settings:
-      progress_indicator: throbber
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
-  legal_interoperability:
+  legal:
     type: inline_entity_form_simple
     weight: 10
     region: content
@@ -172,7 +177,7 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  organisational_interoperability:
+  organisational:
     type: inline_entity_form_simple
     weight: 10
     region: content
@@ -185,7 +190,7 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
-  other_interoperability:
+  other:
     type: inline_entity_form_simple
     weight: 7
     region: content
@@ -221,10 +226,12 @@ content:
     weight: 2
     region: content
     settings:
+      placeholder_url: ''
+      placeholder_title: ''
       condition: 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
       default_option: 'no'
     third_party_settings: {  }
-  semantic_interoperability:
+  semantic:
     type: inline_entity_form_simple
     weight: 10
     region: content
@@ -244,7 +251,7 @@ content:
     settings:
       use_transition_label: 0
     third_party_settings: {  }
-  technical_interoperability:
+  technical:
     type: inline_entity_form_simple
     weight: 10
     region: content
