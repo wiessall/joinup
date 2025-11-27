@@ -28,8 +28,6 @@ content:
         rewrite_label: 1
         new_description: ''
         rewrite_description: 0
-      oe_bootstrap_theme_helper:
-        switch: false
   stakeholder_country:
     type: tagify_select_widget
     weight: 4
