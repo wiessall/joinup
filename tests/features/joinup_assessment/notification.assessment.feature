@@ -14,10 +14,11 @@ Feature: Notification test for the assessment.
     And I am logged in as "AA owner"
     When I am at "/collection/assessments/assessment-reports/questionnaire"
     # 1st page.
+    And I fill in "Short title" with "Short title"
     When I select "National public sector body" from "Type of public sector body"
     When I select "Luxembourg" from "Select your country"
     When I fill in "Name of your organisation" with "Pink Floyd"
-    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "The Wall"
+    And I fill in "Provide the name of the initiative, project or action containing the binding requirements to be assessed" with "The Wall"
     And I select the radio button "No"
     And I press "Next"
     # 2nd page.
@@ -42,7 +43,7 @@ Feature: Notification test for the assessment.
     # collection.
     And I click "My subscriptions"
     Then I should see the text "Assessment report" in the "Interoperability assessments space" card
-    But I should not see the text "Assessment report" in the "The Portal" card
+    But I should not see the text "Assessment report" in the "Portal support" card
 
     Given I am logged in as "AA Notify moderator"
     And I click the link from email sent to "AA Notify moderator" with subject "Assessment submission (Complete)"

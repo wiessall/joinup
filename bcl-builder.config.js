@@ -60,6 +60,7 @@ module.exports = {
         "ajax-throbber.js",
         "alert.js",
         "checkbox.js",
+        "duplicate-id-fixer.js",
         "navbar-hover-dropdown.js",
         "mmenu-nav.js",
         "explore-block.js",
@@ -354,6 +355,10 @@ module.exports = {
         {
           entry: "components/paragraphs/paragraph--events-calendar.scss",
           dest: "paragraph--events-calendar.min.css",
+        },
+        {
+          entry: "components/paragraphs/paragraph--iframe.scss",
+          dest: "paragraph--iframe.min.css",
         },
         {
           entry: "components/releases.scss",

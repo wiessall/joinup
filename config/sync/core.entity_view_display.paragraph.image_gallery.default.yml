@@ -40,7 +40,6 @@ content:
       joinup_slick:
         preset: image_gallery
         field_label: false
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 1

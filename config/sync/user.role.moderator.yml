@@ -36,7 +36,6 @@ dependencies:
     - file
     - filter
     - flag
-    - joinup
     - joinup_assessment
     - joinup_community_content
     - joinup_core
@@ -60,6 +59,7 @@ dependencies:
     - meta_entity
     - moderation
     - node
+    - oauth_client
     - og
     - paragraphs_type_permissions
     - private_message
@@ -87,7 +87,6 @@ permissions:
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
-  - 'access messages overview'
   - 'access site-wide business log'
   - 'access taxonomy overview'
   - 'access toolbar'
@@ -214,7 +213,6 @@ permissions:
   - 'edit terms in tags'
   - 'eu oss catalogue log'
   - 'feature entity'
-  - 'filter membership overview'
   - 'flag interoperability'
   - 'manage assessments'
   - 'manage custom landing pages'
@@ -222,8 +220,8 @@ permissions:
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
+  - 'manage oauth clients'
   - 'manage solutions'
-  - 'moderate entity parents'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'

@@ -43,7 +43,7 @@ Feature: Github feed paragraph tests.
     And I fill in "Number of items" with "5" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Catalogue of paragraphs"
+    And I see h1 span element with title "Catalogue of paragraphs"
     And I should see the heading "Issues (5)"
     And I should see the link "Issues"
     And I should not see the heading "Comments (5)"
@@ -69,7 +69,7 @@ Feature: Github feed paragraph tests.
     And I fill in "Repository" with "https://github.com/some/repository" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    Then I should see the heading "Catalogue of paragraphs"
+    And I see h1 span element with title "Catalogue of paragraphs"
 
     Examples:
       | group      |

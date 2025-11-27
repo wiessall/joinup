@@ -386,7 +386,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       throw new \Exception("Invalid number of e-mail sent. Expected $count, sent " . count($mails));
     }
     if ($recipients) {
-      $expected_recipients = $this->explodeCommaSeparatedStepArgument($recipients);
+      $expected_recipients = $this->explodeDelimitedSeparatedStepArgument($recipients);
       $actual_recipients = array_unique(array_map(
         fn(array $mail): string => $mail['to'],
         $mails,

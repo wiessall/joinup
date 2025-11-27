@@ -65,13 +65,10 @@ class ContactFormController extends ControllerBase {
     $contact_message = $this->entityTypeManager()->getStorage('message')->create([
       'template' => 'contact_form_submission',
     ]);
-    $entity_form = $this->entityFormBuilder()->getForm($contact_message);
-    $flattened = [];
-    array_walk_recursive($entity_form['field_contact_category']['widget']['#options'],
-      function ($value, $key) use (&$flattened): void {
-        $flattened[$key] = $value;
-      });
-    return array_key_exists($category, $flattened);
+    $allowed_values = $contact_message->getFieldDefinition('field_contact_category')
+      ->getSetting('allowed_values');
+
+    return array_key_exists($category, $allowed_values);
   }
 
   /**

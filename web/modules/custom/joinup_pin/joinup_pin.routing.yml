@@ -1,0 +1,35 @@
+joinup_pin.pin_entity:
+  path: '/pin/group/{entity_type}/{entity}/add/{group}'
+  defaults:
+    _controller: '\Drupal\joinup_pin\Controller\PinEntityController::pin'
+    _title: 'Pin'
+  requirements:
+    _custom_access: '\Drupal\joinup_pin\Controller\PinEntityController::pinAccess'
+    _csrf_token: 'TRUE'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+      group:
+        type: entity:node
+        bundle:
+          - collection
+          - solution
+
+joinup_pin.unpin_entity:
+  path: '/pin/group/{entity_type}/{entity}/remove/{group}'
+  defaults:
+    _controller: '\Drupal\joinup_pin\Controller\PinEntityController::unpin'
+    _title: 'Unpin'
+  requirements:
+    _custom_access: '\Drupal\joinup_pin\Controller\PinEntityController::unpinAccess'
+    _csrf_token: 'TRUE'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+      group:
+        type: entity:node
+        bundle:
+          - collection
+          - solution

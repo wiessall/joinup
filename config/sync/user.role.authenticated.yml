@@ -41,11 +41,14 @@ dependencies:
     - media
     - meta_entity
     - node
+    - oauth_client
     - paragraphs
     - paragraphs_type_permissions
     - poll
     - private_message
+    - rest
     - search_api_autocomplete
+    - simple_oauth
     - sitewide_alert
     - sparql_endpoint
     - state_machine_permissions

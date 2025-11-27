@@ -48,6 +48,42 @@ class JavascriptContext extends RawDrupalContext {
   }
 
   /**
+   * Waits for Slick carousel to initialize and all images to load.
+   *
+   * @param string $selector
+   *   The CSS selector for the slick carousel.
+   *
+   * @Then I wait for slick carousel :selector to be ready
+   */
+  public function iWaitForSlickCarousel(string $selector): void {
+    $this->waitForElement('css', $selector);
+
+    // Wait for carousel to be initialized.
+    $this->waitUntil(function () use ($selector) {
+      $initialized = $this->getSession()->evaluateScript(
+        "return document.querySelector('$selector') && " .
+        "(document.querySelector('$selector').classList.contains('slick--initialized') || " .
+        "document.querySelector('$selector').classList.contains('slick-initialized'))"
+      );
+      return $initialized;
+    }, 5000, 'Slick carousel not initialized');
+
+    // Wait for all images in non-cloned slides to load.
+    $this->waitUntil(function () use ($selector) {
+      $allLoaded = $this->getSession()->evaluateScript(
+        "(function() {" .
+        "  const images = document.querySelectorAll('$selector .slick-slide:not(.slick-cloned) img');" .
+        "  if (images.length === 0) return false;" .
+        "  return Array.from(images).every(img => img.complete && img.naturalHeight > 0);" .
+        "})()"
+      );
+      return $allLoaded;
+    }, 5000, 'Slick carousel images not loaded');
+
+    $this->waitForCssAnimations();
+  }
+
+  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception

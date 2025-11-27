@@ -11,6 +11,8 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -159,6 +161,49 @@ class AssessmentContext extends RawDrupalContext {
       'entity_id' => $this->getLatestSubmissionId(),
     ]);
     $this->visitPath($url->toString());
+  }
+
+  /**
+   * Creates submission if not exist and updates selected submission data.
+   *
+   * @param string $fieldName
+   *   Webform field name.
+   * @param string $value
+   *   New value for webform field.
+   * @param string $assessment
+   *   Title of assessment_report entity.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *
+   * @When I set :fieldName as :value for :assessment assessment_report submission
+   */
+  public function setFieldValueForAssesmentSubmission(string $fieldName, string $value, string $assessment): void {
+    $assessment_report = $this->getEntityByLabel('node', $assessment);
+    $submission = $assessment_report->submission->entity ?? $this->createSubmissionForAssessmentReport($assessment);
+    $submission->setData([$fieldName => $value]);
+    $submission->save();
+  }
+
+  /**
+   * Creates new submission for assessment_report entity.
+   *
+   * @param string $assessment_report_title
+   *   Assessment report title.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function createSubmissionForAssessmentReport(string $assessment_report_title): WebformSubmissionInterface {
+    $webform = Webform::load(AssessmentInterface::WEBFORM_ID);
+    $submission = WebformSubmission::create([
+      'webform_id' => $webform->id(),
+      'uid' => \Drupal::currentUser()->id(),
+      'remote_addr' => \Drupal::request()->getClientIp(),
+    ]);
+    $submission->save();
+    $assessment_report = $this->getEntityByLabel('node', $assessment_report_title);
+    $assessment_report->set('submission', $submission);
+    $assessment_report->save();
+    return $submission;
   }
 
 }
