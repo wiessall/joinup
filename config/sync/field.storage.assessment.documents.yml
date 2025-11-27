@@ -1,16 +1,20 @@
-uuid: e50ef0ff-ce85-47c3-bf15-e6ef44e4141f
+uuid: 1303b496-18c1-40b0-9cec-c503dfa5a6fc
 langcode: en
 status: true
 dependencies:
   module:
     - assessments
-id: assessment.document
-field_name: document
+    - file
+id: assessment.documents
+field_name: documents
 entity_type: assessment
-type: entity_reference
+type: file
 settings:
-  target_type: assessment
-module: core
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file
 locked: false
 cardinality: -1
 translatable: true
