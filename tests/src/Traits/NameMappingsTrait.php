@@ -331,6 +331,7 @@ trait NameMappingsTrait {
   protected function entityTypeAliases(): array {
     return [
       'announcement' => 'message',
+      'assessment' => 'assessment',
       'collection' => 'node',
       'contact information' => 'node',
       'contact_information' => 'node',
@@ -366,6 +367,7 @@ trait NameMappingsTrait {
    */
   protected function bundleAliases(): array {
     return [
+      'assessment' => 'report',
       'collection' => 'collection',
       'contact information' => 'contact_information',
       'custom page' => 'custom_page',
