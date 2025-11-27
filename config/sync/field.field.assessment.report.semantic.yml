@@ -4,14 +4,14 @@ status: true
 dependencies:
   config:
     - assessments.type.report
-    - field.storage.assessment.semantic_interoperability
+    - field.storage.assessment.semantic
   module:
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-id: assessment.report.semantic_interoperability
-field_name: semantic_interoperability
+id: assessment.report.semantic
+field_name: semantic
 entity_type: assessment
 bundle: report
 label: 'Identified effects on cross-border semantic interoperability'
@@ -24,7 +24,7 @@ settings:
   handler: 'default:assessment_statement'
   handler_settings:
     target_bundles:
-      semantic_interoperability: semantic_interoperability
+      semantic: semantic
     sort:
       field: _none
       direction: ASC

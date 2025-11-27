@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
 
 /**
  * Defines the Assessment statement entity.
+ *
+ * Bundles of this entity type are defined in code.
+ *
+ * @see assessments_entity_bundle_info()
  *
  * @ContentEntityType(
  *   id = "assessment_statement",
@@ -39,8 +45,6 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
  *   links = {
  *      "collection" = "/admin/content/assessment-statement",
  *    },
- *   bundle_entity_type = "assessment_statement_type",
- *   field_ui_base_route = "entity.assessment_statement_type.edit_form",
  * )
  */
 final class AssessmentStatement extends ContentEntityBase {
@@ -70,15 +74,14 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['interpretation'] = BaseFieldDefinition::create('list_integer')
+    $fields['interpretation'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Interpretation'))
       ->setDescription(t('The interpretation of the statement.'))
       ->setTranslatable(FALSE)
-      ->setSettings([
-        'allowed_values' => [
-          1 => 'Positive',
-          0 => 'Neutral',
-          -1 => 'Negative',
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'assess_statement_interpretation' => 'assess_statement_interpretation',
         ],
       ])
       ->setDisplayOptions('form', [
@@ -87,34 +90,54 @@ final class AssessmentStatement extends ContentEntityBase {
       ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'list_default',
+        'type' => 'entity_reference_label',
         'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['landing_page'] = BaseFieldDefinition::create('file')
-      ->setLabel(t('Statement supporting document'))
-      ->setDescription(t('The supporting document for the assessment statement.'))
-      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
-      ->setSetting('file_directory', 'assessment-statements')
-      ->setSetting('uri_scheme', 'public')
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'uri_link',
-        'weight' => 2,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'file_generic',
-        'weight' => 2,
-        'settings' => [
-          'progress_indicator' => 'throbber',
-          'display_field' => FALSE,
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Type'))
+      ->setDescription(t('The statement interoperability type.'))
+      ->setTranslatable(FALSE)
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'assess_statement_type' => 'assess_statement_type',
         ],
       ])
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE);
+
+    // Reference to the assessment document bundle.
+    $fields['landing_page'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Statement supporting document'))
+      ->setDescription(t('The document that supports this assessment statement.'))
+      ->setSetting('target_type', 'assessment')
+      ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'target_bundles' => ['document' => 'document'],
+      ])
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayOptions('form', [
+        'type' => 'inline_entity_form',
+        'weight' => 2,
+        'settings' => [
+          'form_mode' => 'default',
+          'allow_new' => TRUE,
+          'allow_existing' => FALSE,
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'entity_reference_label',
+        'weight' => 2,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }
@@ -124,6 +147,19 @@ final class AssessmentStatement extends ContentEntityBase {
    */
   public function label(): ?string {
     return $this->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage): void {
+    parent::preSave($storage);
+
+    // An RDF mapping is needed for the statement type because we cannot map the
+    // bundle. The 'type' is kept in sync with the bundle value.
+    $tid = \Drupal::service(AssessmentVocabularyHelper::class)
+      ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
+    $this->set('type', $tid);
   }
 
 }
