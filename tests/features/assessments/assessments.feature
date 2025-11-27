@@ -10,13 +10,12 @@ Feature: Assessment Report Entity Management
     And I go to "/assessments/add/report"
 
     When I press "Save"
-    Then I should see the error message "5 errors have been found: NameType of public sector bodyOrganisation nameDescriptionBinding requirements"
+    Then I should see the error message "4 errors have been found: NameType of public sector bodyOrganisation nameBinding requirements"
 
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I select "Greece" from "Country"
     And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
-    And I fill in "Description" with "The Austrian Ministry responsible for digital transformation and e-government initiatives"
     And I select the radio button "Yes"
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
@@ -24,7 +23,7 @@ Feature: Assessment Report Entity Management
     When I click "New binding requirement"
     And a modal should open
     And I press "Save" in the "Modal buttons" region
-    And I should see the text "5 errors have been found: NameDescriptionNameDescriptionDescription" in the "Modal content" region
+    And I should see the text "4 errors have been found: NameNameDescriptionDescription" in the "Modal content" region
 
     When I click "General" in the "Modal content" region
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
@@ -43,7 +42,6 @@ Feature: Assessment Report Entity Management
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
-    And I fill in "has_related_service[0][inline_entity_form][description][0][value]" with "Cross-border authentication service for European citizens" in the "Modal content" region
     And I select "Education and Research" from "has_related_service[0][inline_entity_form][thematic_area][]" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
@@ -51,35 +49,35 @@ Feature: Assessment Report Entity Management
     And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Documents" in the "Modal content" region
-    And I attach the file "empty_pdf.pdf" to "Add a new file" in the "Modal content" region
+    And I fill in "document[0][inline_entity_form][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/landing/page" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
-    And I select "1" from "legal_interoperability[0][inline_entity_form][interpretation]"
-    And I fill in "legal_interoperability[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
-    And I attach the file "empty_pdf.pdf" to "edit-legal-interoperability-0-inline-entity-form-landing-page-0-upload"
+    And I select the radio button "Beneficial" with the id "legal[0][inline_entity_form][interpretation]"
+    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
+    And I attach the file "empty_pdf.pdf" to "edit-legal-0-inline-entity-form-landing-page-0-upload"
 
     When I click "Organisational" in the "Content" region
-    And I select "0" from "organisational_interoperability[0][inline_entity_form][interpretation]"
-    And I fill in "organisational_interoperability[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
-    And I attach the file "empty_pdf.pdf" to "edit-organisational-interoperability-0-inline-entity-form-landing-page-0-upload"
+    And I select the radio button "Negligible" with the id "organisational[0][inline_entity_form][interpretation]"
+    And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
+    And I attach the file "empty_pdf.pdf" to "edit-organisational-0-inline-entity-form-landing-page-0-upload"
 
     When I click "Semantic" in the "Content" region
-    And I select "1" from "semantic_interoperability[0][inline_entity_form][interpretation]"
-    And I fill in "semantic_interoperability[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
-    And I attach the file "empty_pdf.pdf" to "edit-semantic-interoperability-0-inline-entity-form-landing-page-0-upload"
+    And I select the radio button "Beneficial" with the id "semantic[0][inline_entity_form][interpretation]"
+    And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
+    And I attach the file "empty_pdf.pdf" to "edit-semantic-0-inline-entity-form-landing-page-0-upload"
 
     When I click "Technical" in the "Content" region
-    And I select "1" from "technical_interoperability[0][inline_entity_form][interpretation]"
-    And I fill in "technical_interoperability[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
-    And I attach the file "empty_pdf.pdf" to "edit-technical-interoperability-0-inline-entity-form-landing-page-0-upload"
+    And I select the radio button "Beneficial" with the id "technical[0][inline_entity_form][interpretation]"
+    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    And I attach the file "empty_pdf.pdf" to "edit-technical-0-inline-entity-form-landing-page-0-upload"
 
     When I click "Other" in the "Content" region
-    And I select "-1" from "other_interoperability[0][inline_entity_form][interpretation]"
-    And I fill in "other_interoperability[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
-    And I attach the file "empty_pdf.pdf" to "edit-other-interoperability-0-inline-entity-form-landing-page-0-upload"
+    And I select the radio button "Risky" with the id "other[0][inline_entity_form][interpretation]"
+    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    And I attach the file "empty_pdf.pdf" to "edit-other-0-inline-entity-form-landing-page-0-upload"
 
     # Assessment supporting documents
     And I attach the file "empty_pdf.pdf" to "edit-documents-0-upload"
