@@ -18,6 +18,7 @@ use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -170,27 +171,27 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected function doFetch(): void {
     $next = '';
-    $response = NULL;
-    $exception = NULL;
-    $read = NULL;
 
     do {
       $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=false';
       try {
         $response = $this->httpClient->get($endpointUrl);
-        $read = Json::decode($response->getBody()->getContents());
       }
-      catch (\Exception $exception) {
-      }
-      if (isset($exception) || $response->getStatusCode() >= 400) {
-        $message = $exception?->getMessage() ?? $response->getReasonPhrase();
-        throw new ProviderFetchException(
-          $message,
-          0,
-          $exception ?? NULL
-        );
+      catch (GuzzleException $e) {
+        throw new ProviderFetchException('HTTP request failed: ' . $e->getMessage(), 0, $e);
       }
 
+      $status = $response->getStatusCode();
+      if ($status >= 400) {
+        throw new ProviderFetchException($response->getReasonPhrase(), $status);
+      }
+
+      $read = Json::decode($response->getBody()->getContents());
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new ProviderFetchException('Invalid JSON received from provider: ' . json_last_error_msg());
+      }
+
+      // @todo Ideally we should also add some extra validation on $read here...
       $this->numberOfProvidedSolutions += count($read['data']);
       foreach ($read['data'] as $newItem) {
         $projectInfo = self::ENDPOINT . '/' . $newItem['id'];

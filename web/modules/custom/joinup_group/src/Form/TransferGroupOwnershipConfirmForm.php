@@ -126,7 +126,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return Url::fromRoute('devel.configs_list');
+    return Url::fromRoute('entity.node.member_overview');
   }
 
   /**

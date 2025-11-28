@@ -34,5 +34,6 @@ function joinup_tiles_theme(array $existing, string $type, string $theme, string
  *   - rows: An array of row items. Each row is an array of content.
  */
 function template_preprocess_joinup_tiles(array &$variables): void {
+  // @phpstan-ignore-next-line  Function template_preprocess_views_view_unformatted not found.
   template_preprocess_views_view_unformatted($variables);
 }

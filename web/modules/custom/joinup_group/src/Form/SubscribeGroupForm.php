@@ -314,10 +314,9 @@ class SubscribeGroupForm extends FormBase {
           ->save();
       }
 
-      if ($subscribe) {
+      if ($subscribe && $membership instanceof OgMembershipInterface) {
         $membership = $this->subscribe($membership);
-        $is_pending = ($membership instanceof OgMembershipInterface && $membership->isPending());
-        $message = $is_pending ?
+        $message = $membership->isPending() ?
           $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
           $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
         $this->messenger()->addStatus($message);
