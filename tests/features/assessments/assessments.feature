@@ -49,7 +49,7 @@ Feature: Assessment Report Entity Management
     And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
 
     When I click "Documents" in the "Modal content" region
-    And I fill in "document[0][inline_entity_form][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/landing/page" in the "Modal content" region
+    And I attach the file "text.pdf" to "Add a new file"
 
     Then I press "Save" in the "Modal buttons" region
 
@@ -75,7 +75,7 @@ Feature: Assessment Report Entity Management
 #    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
 
     # Assessment supporting documents
-    And I fill in "document[0][inline_entity_form][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/assessment/supporting"
+    And I attach the file "text.pdf" to "Add a new file"
 
     When I press "Save"
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
