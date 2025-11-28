@@ -178,7 +178,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         $response = $this->httpClient->get($endpointUrl);
       }
       catch (GuzzleException $e) {
-        throw new ProviderFetchException('HTTP request failed: ' . $e->getMessage(), 0, $e);
+        throw new ProviderFetchException($e->getMessage(), 0, $e);
       }
 
       $status = $response->getStatusCode();
