@@ -39,6 +39,7 @@ trait ConfigTestTrait {
    *   If the passed configuration name is invalid.
    */
   protected function getConfigData(string $config_name): array {
+    // @phpstan-ignore-next-line
     $config_sync_dir = realpath($this->root . '/../config/sync');
     $file_path = "{$config_sync_dir}/{$config_name}.yml";
     if (!file_exists($file_path) || !is_readable($file_path)) {
