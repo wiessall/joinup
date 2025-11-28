@@ -9,6 +9,10 @@ dependencies:
   module:
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/m8g/thematicArea'
+      type: resource
   tmgmt_content:
     excluded: false
 id: assessment.public_service.thematic_area
