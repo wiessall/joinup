@@ -40,7 +40,7 @@ use Drupal\user\EntityOwnerTrait;
  *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "assessment",
