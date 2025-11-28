@@ -18,14 +18,13 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
   /**
    * {@inheritdoc}
    */
-  protected function getAddFormRoute(EntityTypeInterface $entity_type) {
+  protected function getAddFormRoute(EntityTypeInterface $entity_type): Route|null {
     $route = parent::getAddFormRoute($entity_type);
 
     if (!$route instanceof Route) {
       return $route;
     }
 
-    // Override the title callback.
     $route->setDefault('_title_callback', [self::class, 'addBundleTitle']);
 
     return $route;
@@ -41,10 +40,10 @@ class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
    * @param string $bundle_parameter
    *   The name of the route parameter that holds the bundle.
    *
-   * @return string
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The title for the entity add page.
    */
-  public static function addBundleTitle(RouteMatchInterface $route_match, $entity_type_id, $bundle_parameter): TranslatableMarkup {
+  public static function addBundleTitle(RouteMatchInterface $route_match, string $entity_type_id, string $bundle_parameter): TranslatableMarkup {
     $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type_id);
     $bundle = $route_match->getRawParameter($bundle_parameter);
     return t('Create @bundle', ['@bundle' => $bundles[$bundle]['label_singular']]);
