@@ -57,7 +57,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
           ],
         ],
       ],
-      'provider' => [
+      'provided_by' => [
         'name' => 'City of Brussels',
         'description' => 'Local authority',
         'organisation_type' => 'local_public_sector_body',
