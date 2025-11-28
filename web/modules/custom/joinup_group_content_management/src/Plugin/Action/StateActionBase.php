@@ -73,7 +73,6 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
     }
 
     foreach ($objects as $entity) {
-      // @phpstan-ignore-next-line invoked with 1 parameter, 0 required.
       $this->execute($entity);
     }
 
@@ -87,6 +86,11 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
       ]),
     ];
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  abstract public function execute(?NodeInterface $node = NULL): void;
 
   /**
    * Check if action can be executed on the entity.
