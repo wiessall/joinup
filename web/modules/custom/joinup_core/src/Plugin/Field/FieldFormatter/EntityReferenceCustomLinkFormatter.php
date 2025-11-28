@@ -190,7 +190,6 @@ class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
    */
   protected function getQueryParameters(EntityInterface $entity): array {
     $setting = $this->getSetting('query_parameters');
-    $query_parameters = explode("\n", $setting);
     if ($setting === NULL || $setting === '') {
       return [];
     }

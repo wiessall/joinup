@@ -67,12 +67,13 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
         '#theme' => 'item_list',
         '#items' => $messages,
       ];
-      $this->messenger()
-        ->addMessage($this->renderer->render($list), MessengerInterface::TYPE_ERROR);
+      // @phpstan-ignore-next-line
+      $this->messenger()->addMessage($this->renderer->render($list), MessengerInterface::TYPE_ERROR);
       return [];
     }
 
     foreach ($objects as $entity) {
+      // @phpstan-ignore-next-line invoked with 1 parameter, 0 required.
       $this->execute($entity);
     }
 

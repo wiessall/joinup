@@ -128,18 +128,12 @@ class DeveloperOverheid extends EuOssCatalogueProviderPluginBase {
 
           // Try to use "publiccode.yaml".
           if (isset($project->files['publiccodeYaml'])) {
+            /** @var array{files: array<string, mixed>} $values */
             $values = $project->toArray();
+            $values['files']['publiccodeYml'] = $values['files']['publiccodeYaml'] ?? NULL;
             unset($values['files']['publiccodeYaml']);
-            $values['files']['publiccodeYml'] = $project->files['publiccodeYaml'];
-            yield new Project(
-              name: $values['name'],
-              namespace: $values['namespace'],
-              platform: $values['platform'],
-              url: $values['url'],
-              defaultBranch: $values['defaultBranch'],
-              files: $values['files']
-            );
-
+            // @phpstan-ignore-next-line parameter.missing
+            yield new Project(...$values);
             continue;
           }
           yield $project;

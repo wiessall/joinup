@@ -12,6 +12,7 @@ parameters:
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
         - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
+        # new static() is a best practice in Drupal, so we cannot fix that.
         - '#^Unsafe usage of new static#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
@@ -19,15 +20,8 @@ parameters:
         - web/modules/custom/joinup_core/src/PathProcessor/ModalRouteProcessor.php
         - web/modules/custom/joinup_test/modules/joinup_test_time/src/Datetime/TestTime.php
         - web/modules/custom/joinup_test/src/Plugin/ServiceMock/GitHubCom.php
-        - web/modules/custom/github_feed/src/Plugin/Field/FieldFormatter/GitHubFeedDefaultFormatter.php
-        - web/modules/custom/joinup_group_content_management/src/Plugin/Action/StateActionBase.php
         - web/modules/custom/joinup_stats/src/Event/Subscriber/RefreshCachedFieldsEventSubscriber.php
-        - web/modules/custom/joinup_test/tests/src/Traits/ConfigTestTrait.php
-        - web/modules/custom/joinup_tiles/joinup_tiles.module
-        - web/modules/custom/search_api_field/src/Plugin/Field/FieldType/SearchItem.php
         - web/sites/default/default.settings.php
-        - web/modules/custom/joinup_distribution/joinup_distribution.module
-        - web/modules/custom/search_api_field/src/Plugin/facets/facet_source/SearchApiFieldDeriver.php
 
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php

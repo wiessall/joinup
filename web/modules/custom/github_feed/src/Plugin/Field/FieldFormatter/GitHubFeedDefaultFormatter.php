@@ -76,6 +76,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
         ],
         '#create_placeholder' => TRUE,
         // This portion is render-cached.
+        // @phpstan-ignore-next-line invoked with 5 parameters, 4 required.
         '#cache' => GitHubFeedLazyBuilder::getCacheMetadata(...$lazyBuilderArgs),
       ];
     }
