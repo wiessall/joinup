@@ -10,12 +10,12 @@ dependencies:
     - rdf_sync
     - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     uri:
       predicate: 'http://www.w3.org/ns/dcat#landingPage'
       type: resource
-  tmgmt_content:
-    excluded: false
 id: assessment.asset.landing_page
 field_name: landing_page
 entity_type: assessment
