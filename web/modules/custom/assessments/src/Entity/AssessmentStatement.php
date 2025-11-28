@@ -109,35 +109,28 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE);
 
-    // Reference to the assessment document bundle.
-    $fields['landing_page'] = BaseFieldDefinition::create('entity_reference')
+    $fields['landing_page'] = BaseFieldDefinition::create('file')
       ->setLabel(t('Statement supporting document'))
-      ->setDescription(t('The document that supports this assessment statement.'))
-      ->setSetting('target_type', 'assessment')
-      ->setSetting('handler', 'default')
-      ->setSetting('handler_settings', [
-        'target_bundles' => ['document' => 'document'],
-      ])
+      ->setDescription(t('The supporting document for the assessment statement.'))
+      ->setSetting('file_extensions', 'txt doc docx pdf ppt pptx xls xlsx')
+      ->setSetting('file_directory', 'assessment-statements')
+      ->setSetting('uri_scheme', 'public')
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form',
-        'weight' => 2,
-        'settings' => [
-          'form_mode' => 'default',
-          'allow_new' => TRUE,
-          'allow_existing' => FALSE,
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-      ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'entity_reference_label',
+        'type' => 'uri_link',
         'weight' => 2,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayOptions('form', [
+        'type' => 'file_generic',
+        'weight' => 2,
+        'settings' => [
+          'progress_indicator' => 'throbber',
+          'display_field' => FALSE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     return $fields;
   }
