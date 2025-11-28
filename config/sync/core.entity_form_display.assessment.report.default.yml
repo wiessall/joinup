@@ -207,18 +207,7 @@ content:
     type: provided_by_widget
     weight: 1
     region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Public service'
-      label_plural: 'Public services'
-      allow_new: true
-      allow_existing: true
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
+    settings: {  }
     third_party_settings: {  }
   relevant_report:
     type: conditional_link
