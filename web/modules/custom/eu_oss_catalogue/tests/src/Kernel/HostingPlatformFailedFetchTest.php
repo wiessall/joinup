@@ -187,7 +187,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
           'message' => "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
           'context' => [
             '@provider' => 'developers_italia',
-            '@exception-messages' => "Server error: `GET https://api.developers.italia.it/v1/software?page%5Bsize%5D=100&all=false` resulted in a `500 Internal Server Error` response:\nInternal server error\n",
+            '@exception-messages' => "HTTP request failed: Server error: `GET https://api.developers.italia.it/v1/software?page%5Bsize%5D=100&all=false` resulted in a `500 Internal Server Error` response:\nInternal server error\n",
             'channel' => 'eu_oss_catalogue',
             'link' => '',
             'uid' => 0,
