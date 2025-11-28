@@ -17,13 +17,13 @@ Feature: User role management
     And I click "People" in the "Administration toolbar" region
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
+      | Administrator              |
       | Assessment reporter        |
+      | Developer                  |
+      | Interoperability validator |
       | Licence manager            |
       | Moderator                  |
       | Translator                 |
-      | Administrator              |
-      | Developer                  |
-      | Interoperability validator |
 
     Given I am logged in as "Rick Rolls"
     And I click "People" in the "Administration toolbar" region

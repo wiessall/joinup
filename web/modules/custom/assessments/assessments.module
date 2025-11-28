@@ -7,9 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -17,7 +21,85 @@ use Drupal\user\UserInterface;
 function assessments_theme(): array {
   return [
     'assessment' => ['render element' => 'elements'],
+    'assessment_statement' => ['render element' => 'elements'],
   ];
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function assessments_entity_extra_field_info(): array {
+  return [
+    'assessment' => [
+      'report' => [
+        'form' => [
+          'cross_border' => [
+            'label' => t('Cross border type'),
+            'description' => t('Identified effects on cross-border interoperability'),
+            'weight' => 0,
+          ],
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function assessments_form_alter(array &$form, FormStateInterface $formState, string $formId): void {
+  if (!in_array($formId, ['assessment_report_add_form', 'assessment_report_edit_form'], TRUE)) {
+    return;
+  }
+
+  $form['cross_border'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h3',
+    '#value' => t('Identified effects on cross-border interoperability'),
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function assessments_form_layout_paragraphs_component_form_alter(array &$form, FormStateInterface $formState): void {
+  $paragraph = $formState->getFormObject()->getEntity();
+  if ($paragraph->bundle() === 'binding_requirement') {
+    // We use layout paragraphs, but we use everytime the 1 column layout.
+    $form['layout_paragraphs']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
+  $url = $variables['url'];
+  $layoutParagraphsLayout = \Drupal::service('layout_paragraphs.tempstore_repository')
+    ->getWithStorageKey($url->getRouteParameters()['layout_paragraphs_layout']);
+
+  $entity = $layoutParagraphsLayout?->getEntity();
+  if ($entity instanceof AssessmentReport) {
+    $fieldName = $layoutParagraphsLayout?->getFieldName();
+    if ($fieldName === 'binding_requirement') {
+      $variables['title'] = t('New binding requirement');
+
+      $routeParams = $url->getRouteParameters();
+      $queryParams = $url->getOption('query') ?: [];
+      // Hide component selection buttons inside layout regions for
+      // binding_requirement field. Only hide if this is inside a region
+      // (has parent_uuid AND region parameters). Keep the root-level
+      // "Add section" buttons visible.
+      if (
+          isset($routeParams['layout_paragraphs_layout']) &&
+          $url->getRouteName() === 'layout_paragraphs.builder.choose_component' &&
+          isset($queryParams['parent_uuid']) &&
+          isset($queryParams['region'])
+      ) {
+        $variables['attributes']['class'][] = 'visually-hidden';
+      }
+    }
+  }
 }
 
 /**
@@ -36,6 +118,39 @@ function template_preprocess_assessment(array &$variables): void {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
+}
+
+/**
+ * Prepares variables for assessment_statement templates.
+ *
+ * Default template: assessment_statement.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the assessment
+ *     information and any fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_assessment_statement(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function assessments_theme_suggestions_assessment(array $variables): array {
+  $suggestions = [];
+  $assessment = $variables['elements']['#assessment'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+
+  $suggestions[] = 'assessment__' . $sanitized_view_mode;
+  $suggestions[] = 'assessment__' . $assessment->bundle();
+  $suggestions[] = 'assessment__' . $assessment->bundle() . '__' . $sanitized_view_mode;
+
+  return $suggestions;
 }
 
 /**
@@ -91,17 +206,20 @@ function assessments_user_predelete(UserInterface $account): void {
 function assessments_entity_bundle_info(): array {
   return [
     'assessment_statement' => [
-      'legal_interoperability' => [
+      'legal' => [
         'label' => t('Legal interoperability'),
       ],
-      'organisational_interoperability' => [
+      'organisational' => [
         'label' => t('Organisational interoperability'),
       ],
-      'semantic_interoperability' => [
+      'semantic' => [
         'label' => t('Semantic interoperability'),
       ],
-      'technical_interoperability' => [
+      'technical' => [
         'label' => t('Technical interoperability'),
+      ],
+      'other' => [
+        'label' => t('Other interoperability'),
       ],
     ],
   ];
@@ -111,8 +229,45 @@ function assessments_entity_bundle_info(): array {
  * Implements hook_entity_bundle_info_alter().
  */
 function assessments_entity_bundle_info_alter(array &$bundles): void {
-  // Change the label of the 'default' bundle of assessment entity type.
+  if (isset($bundles['assessment']['report'])) {
+    $bundles['assessment']['report']['class'] = AssessmentReport::class;
+  }
   if (isset($bundles['assessment']['public_organisation'])) {
     $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function assessments_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() == 'assessments_rest') {
+    $results = $view->result;
+    if ($view->current_display === 'public_organisation') {
+      foreach ($results as $result) {
+        // Instead of false we want to show an empty string.
+        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
+        if (empty($result->_entity->get('country')->getValue())) {
+          $result->_entity->get('country')->setValue(['']);
+        }
+        // Instead of country term ID we want to send the two letters
+        // of the country.
+        else {
+          $term_id = $result->_entity->get('country')->getValue()[0]['target_id'];
+          $term = Term::load($term_id);
+          $code = $term?->get('code')->value ?? '';
+          $result->_entity->get('country')->setValue([$code]);
+        }
+      }
+    }
+    elseif ($view->current_display === 'asset') {
+      foreach ($results as $result) {
+        // Instead of false we want to show an empty string.
+        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
+        if (empty($result->_entity->get('landing_page')->getValue())) {
+          $result->_entity->get('landing_page')->setValue(['']);
+        }
+      }
+    }
   }
 }

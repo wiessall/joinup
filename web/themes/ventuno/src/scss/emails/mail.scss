@@ -56,7 +56,7 @@ p time {
 }
 
 .bg-primary {
-  background: $bs-primary;
+  background: #011e30;
 }
 
 .bg-secondary {
@@ -89,6 +89,10 @@ p time {
 
 .text-white {
   color: $bs-white;
+}
+
+.text-warning {
+  color: $bs-warning;
 }
 
 .text-left {

@@ -1,21 +1,16 @@
-uuid: ce4fca10-dc61-4584-a21a-f6dfd3dd9e87
+uuid: e7efe440-5acc-423e-bc48-b62f926b3939
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.public_organisation
     - field.storage.assessment.organisation_type
+    - taxonomy.vocabulary.assess_provider_type
   module:
-    - options
-    - rdf_sync
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
     excluded: false
-  rdf_sync:
-    value:
-      predicate: 'http://purl.org/dc/terms/type'
-      type: 'xsd:string'
 id: assessment.public_organisation.organisation_type
 field_name: organisation_type
 entity_type: assessment
@@ -26,5 +21,14 @@ required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: list_string
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assess_provider_type: assess_provider_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

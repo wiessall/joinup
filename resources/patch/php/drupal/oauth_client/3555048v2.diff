@@ -1,0 +1,67 @@
+diff --git a/.ddev/.env b/.ddev/.env
+index 75e2a848580b325a12024ad805b1dfcab777f46b..9792bf2b44adaf8447dbd9b0cb5cc5dd4bdf581d 100644
+--- a/.ddev/.env
++++ b/.ddev/.env
+@@ -7,6 +7,7 @@ oauth_client.links.menu.yml
+ oauth_client.links.task.yml
+ oauth_client.module
+ oauth_client.permissions.yml
++oauth_client.post_update.php
+ oauth_client.routing.yml
+ oauth_client.services.yml
+ src
+diff --git a/config/install/filter.format.oauth_client_minimal.yml b/config/install/filter.format.oauth_client_minimal.yml
+index 2262c6918db4d416d65c6548d33ba6a2814eef1e..93a0e04c475ba13646fd2af93c4c986fc8970c4b 100644
+--- a/config/install/filter.format.oauth_client_minimal.yml
++++ b/config/install/filter.format.oauth_client_minimal.yml
+@@ -1,9 +1,11 @@
+ langcode: en
+ status: true
+ dependencies:
++  enforced:
++    module:
++      - oauth_client
+   module:
+     - filter
+-    - oauth_client
+ name: 'OAuth Client Minimal (Internal)'
+ format: oauth_client_minimal
+ weight: 10
+diff --git a/oauth_client.post_update.php b/oauth_client.post_update.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..9f5144970498ed633cfa26933ef5dedf06c23e2e
+--- /dev/null
++++ b/oauth_client.post_update.php
+@@ -0,0 +1,32 @@
++<?php
++
++/**
++ * @file
++ * Post update functions for OAuth Client.
++ */
++
++declare(strict_types=1);
++
++use Drupal\Core\Config\FileStorage;
++use Drupal\filter\Entity\FilterFormat;
++
++/**
++ * Install the OAuth Client Minimal filter format.
++ */
++function oauth_client_post_update_8001(): string {
++  if (FilterFormat::load('oauth_client_minimal')) {
++    return 'OAuth Client Minimal filter format already exists.';
++  }
++
++  $config_path = \Drupal::service('extension.list.module')->getPath('oauth_client') . '/config/install';
++  $source = new FileStorage($config_path);
++  $config_data = $source->read('filter.format.oauth_client_minimal');
++
++  if ($config_data) {
++    $format = FilterFormat::create($config_data);
++    $format->save();
++    return 'OAuth Client Minimal filter format has been installed.';
++  }
++
++  return 'Could not load OAuth Client Minimal filter format configuration.';
++}
