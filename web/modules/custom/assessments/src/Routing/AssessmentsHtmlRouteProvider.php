@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\assessments\Routing;
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\Routing\Route;
+
+/**
+ * Provides HTML routes for the Assessment entity.
+ */
+class AssessmentsHtmlRouteProvider extends DefaultHtmlRouteProvider {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAddFormRoute(EntityTypeInterface $entity_type) {
+    $route = parent::getAddFormRoute($entity_type);
+
+    if (!$route instanceof Route) {
+      return $route;
+    }
+
+    // Override the title callback.
+    $route->setDefault('_title_callback', [self::class, 'addBundleTitle']);
+
+    return $route;
+  }
+
+  /**
+   * Provides an add title callback for assessment bundles.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param string $bundle_parameter
+   *   The name of the route parameter that holds the bundle.
+   *
+   * @return string
+   *   The title for the entity add page.
+   */
+  public static function addBundleTitle(RouteMatchInterface $route_match, $entity_type_id, $bundle_parameter): TranslatableMarkup {
+    $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type_id);
+    $bundle = $route_match->getRawParameter($bundle_parameter);
+    return t('Create @bundle', ['@bundle' => $bundles[$bundle]['label_singular']]);
+  }
+
+}
