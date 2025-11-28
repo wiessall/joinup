@@ -32,7 +32,8 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
     }
 
     // Delegate to operation-specific methods.
-    $state = $entity->get('state')->value ?? 'draft';
+    // Only report bundles have a state field.
+    $state = $entity->hasField('state') ? ($entity->get('state')->value ?? 'draft') : 'draft';
 
     return match ($operation) {
       'view' => $this->checkViewAccess($entity, $state, $account),

@@ -6,7 +6,7 @@ Feature: Assessment Report Entity Management
 
   @javascript
   Scenario: Create a new assessment report with required fields
-    Given I am logged in as a developer
+    Given I am logged in as an "authenticated user"
     And I go to "/assessments/add/report"
 
     When I press "Save"
