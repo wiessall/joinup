@@ -7,6 +7,7 @@ namespace Drupal\joinup_group_content_management\Plugin\Action;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
@@ -25,6 +26,15 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
    * Archive state.
    */
   const ARCHIVE_STATE = 'archived';
+
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected readonly RendererInterface $renderer,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
 
   /**
    * {@inheritdoc}
@@ -67,7 +77,6 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
         '#theme' => 'item_list',
         '#items' => $messages,
       ];
-      // @phpstan-ignore-next-line
       $this->messenger()->addMessage($this->renderer->render($list), MessengerInterface::TYPE_ERROR);
       return [];
     }
