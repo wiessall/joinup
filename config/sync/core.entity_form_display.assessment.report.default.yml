@@ -204,17 +204,10 @@ content:
         new_description: ''
         rewrite_description: 0
   provider:
-    type: inline_entity_form_simple
+    type: provided_by_widget
     weight: 1
     region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: 'Public service'
-      label_plural: 'Public services'
-      collapsible: false
-      collapsed: false
-      revision: false
+    settings: {  }
     third_party_settings: {  }
   relevant_report:
     type: conditional_link

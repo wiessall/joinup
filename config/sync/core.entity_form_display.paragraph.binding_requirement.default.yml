@@ -48,7 +48,7 @@ third_party_settings:
       label: General
       region: content
       parent_name: group_tabs
-      weight: 1
+      weight: 10
       format_type: tab
       format_settings:
         classes: ''
@@ -112,7 +112,7 @@ third_party_settings:
       label: Initiatives
       region: content
       parent_name: group_tabs
-      weight: 10
+      weight: 0
       format_type: tab
       format_settings:
         classes: ''
