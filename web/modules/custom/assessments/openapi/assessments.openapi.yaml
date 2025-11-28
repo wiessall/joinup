@@ -117,7 +117,7 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: organisational_interoperability
+                      type: organisational
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
               asStructured:
@@ -140,7 +140,7 @@ paths:
                           thematic_area: digital_and_innovation_services
                       has_participation:
                         - country: BE
-                          participation_type: national_public_sector_body
+                          participant_type: national_public_sector_body
                           agent:
                             name: Federal Agency of X
                             agent_type: organisation
@@ -157,12 +157,12 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: organisational_interoperability
+                      type: organisational
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
                     - interpretation: Requires follow-up
                       judgement: conditional
-                      type: technical_interoperability
+                      type: technical
               mixed:
                 summary: Submit with a mix of references and structured entities
                 value:
@@ -187,7 +187,7 @@ paths:
                   results_in:
                     - interpretation: Compliant with conditions
                       judgement: positive
-                      type: legal_interoperability
+                      type: legal
                       documents:
                         - file_uri: "https://files.example.com/documents/statement-1.pdf"
                     - interpretation: Requires follow-up
@@ -225,6 +225,87 @@ paths:
                 properties:
                   error:
                     type: string
+  /asset:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get all Assessments of type Asset
+      description: Returns all Assets. The shape matches the POST response, with UUID `id` fields on the root.
+      operationId: getAssets
+      tags:
+        - Assessments
+        - Assets
+      security:
+        - oauth2: [ ]
+      responses:
+        '200':
+          description: Assets fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      name: "Asset 1"
+                      landing_page: "https://example.com/asset1"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      name: "Asset 2"
+                      landing_page: "https://example.com/asset2"
+
+  /public-organisation:
+    servers:
+      - url: /api/assessments/v1
+        description: Assessments API endpoint
+    get:
+      summary: Get all Assessments of type Public Organisation
+      description: Returns all Public Organisations. The shape matches the POST response, with UUID `id` fields on the root.
+      operationId: getPublicOrganisation
+      tags:
+        - Assessments
+        - Public Organisations
+      security:
+        - oauth2: [ ]
+      responses:
+        '200':
+          description: Public Organisations fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    example: ok
+                  assessment:
+                    $ref: '#/components/schemas/Assessment'
+              examples:
+                fetched:
+                  value:
+                    - id: "43a50ef2-7d90-4562-ab81-59af10f2e081"
+                      name: "Public Organisation 1"
+                      description": "Description 2"
+                      "organisation_type": "local_public_sector_body"
+                      country: "PT"
+                    - id: "7b9e2cf3-8e91-4673-bc92-6a9f4e5d6c7b"
+                      name: "Public Organisation 2"
+                      description": ""
+                      "organisation_type": "national_public_sector_body"
+                      country: ""
 components:
   securitySchemes:
     oauth2:
@@ -388,7 +469,7 @@ components:
           readOnly: true
         country:
           $ref: '#/components/schemas/Iso3166Alpha2'
-        participation_type:
+        participant_type:
           type: string
           enum:
             - local_public_sector_body
@@ -474,15 +555,22 @@ components:
           readOnly: true
         interpretation:
           type: string
+          description: The interpretation of the statement.
+          enum:
+            - positive
+            - neutral
+            - negative
         judgement:
           type: string
         type:
           type: string
+          description: Type of identified effects on cross-border interoperability
           enum:
-            - legal_interoperability
-            - organisational_interoperability
-            - semantic_interoperability
-            - technical_interoperability
+            - legal
+            - organisational
+            - semantic
+            - technical
+            - other
         documents:
           description: References to Files; allow multiple. Each item may be an ID or a structured object.
           type: array

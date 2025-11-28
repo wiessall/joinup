@@ -9,6 +9,12 @@
     },
     {
       "url": "https://github.com/waldur/waldur-docs"
+    },
+    {
+      "url": "https://github.com/consuldemocracy/consuldemocracy"
+    },
+    {
+      "url": "https://gitlab.com/pleio/platform"
     }
   ]
 }

@@ -83,7 +83,10 @@
 
 // Overrides for Solution wizard form #ISAICP-9918.
 .node-solution-edit-form,
-.node-solution-form {
+.node-solution-form,
+.assessment-report-add-form,
+.assessment-report-edit-form,
+.layout-paragraphs-component-form {
   // Override horizontal-tabs.
   .horizontal-tabs {
     border: 0;
@@ -171,6 +174,21 @@
   }
 }
 
+.assessment-report-add-form,
+.assessment-report-edit-form,
+.layout-paragraphs-component-form {
+  .horizontal-tabs {
+    .horizontal-tab-button {
+      font-size: 1em;
+    }
+    .details-wrapper {
+      .form-label:not(.form-radios .form-label) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
 [data-drupal-selector="edit-og-membership-bulk-form"] {
   label[for="edit-action"].form-required::after {
     content: none !important;
@@ -178,5 +196,15 @@
   .form-actions {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+}
+
+[data-drupal-selector="assessment-report-edit-form"] {
+  #edit-legal .form-check,
+  #edit-organisational .form-check,
+  #edit-semantic .form-check,
+  #edit-technical .form-check,
+  #edit-other .form-check {
+    display: inline-block;
   }
 }
