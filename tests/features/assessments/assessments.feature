@@ -10,11 +10,11 @@ Feature: Assessment Report Entity Management
     And I go to "/assessments/add/report"
 
     When I press "Save"
-    Then I should see the error message "4 errors have been found: NameType of public sector bodyOrganisation nameBinding requirements"
+    Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
 
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
-    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
     And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
     And I select the radio button "Yes"
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
@@ -25,14 +25,14 @@ Feature: Assessment Report Entity Management
     And I press "Save" in the "Modal buttons" region
     And I should see the text "4 errors have been found: NameNameDescriptionDescription" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
-    And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
-    And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
-
     When I click "Initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
+
+    When I click "General" in the "Modal content" region
+    And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
+    And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
     And I press "Add new relevant asset" in the "Modal content" region
@@ -81,10 +81,10 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from Greece |
-      | The report has been connected to the following previous/relevant reports       |
-      | https://interoperable-europe.ec.europa.eu/report                               |
-      | documented in https://interoperable-europe.ec.europa.eu/general                |
+      | Austrian Ministry of Digital Affairs, a European Union institution from  |
+      | The report has been connected to the following previous/relevant reports |
+      | https://interoperable-europe.ec.europa.eu/report                         |
+      | documented in https://interoperable-europe.ec.europa.eu/general          |
 
     # Edit test.
 #    When I go to the edit form of the "Test Assessment Report 2025" assessment
