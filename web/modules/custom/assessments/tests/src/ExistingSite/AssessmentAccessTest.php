@@ -33,11 +33,11 @@ class AssessmentAccessTest extends ExistingSiteBase {
   protected $accessHandler;
 
   /**
-   * User with only 'access content' permission.
+   * Authenticated user (has authenticated role with default permissions).
    *
    * @var \Drupal\user\UserInterface
    */
-  protected UserInterface $contentAccessUser;
+  protected UserInterface $authenticatedUser;
 
   /**
    * Authenticated user who owns the test assessments.
@@ -68,13 +68,6 @@ class AssessmentAccessTest extends ExistingSiteBase {
   protected UserInterface $assessmentReporterUser;
 
   /**
-   * User with administer assessment types permission.
-   *
-   * @var \Drupal\user\UserInterface
-   */
-  protected UserInterface $adminUser;
-
-  /**
    * Test assessments in various workflow states.
    *
    * @var \Drupal\assessments\Entity\Assessment[]
@@ -99,22 +92,18 @@ class AssessmentAccessTest extends ExistingSiteBase {
    */
   protected function createTestUsers(): void {
     // Avoid UID 1 which has special bypass permissions.
-    $this->createUser([]);
+    $this->createUser();
 
-    $this->contentAccessUser = $this->createUser(['access content']);
-
-    $authenticated_permissions = [
-      'access content',
-      'create assessment report',
-      'view own assessment report',
-      'edit own assessment report',
-    ];
-    $this->ownerUser = $this->createUser($authenticated_permissions);
-    $this->nonOwnerUser = $this->createUser($authenticated_permissions);
+    // Create authenticated users (get authenticated role automatically).
+    // The authenticated role includes the assessment permissions:
+    // 'create assessment report', 'view own assessment report',
+    // 'edit own assessment report'.
+    $this->authenticatedUser = $this->createUser();
+    $this->ownerUser = $this->createUser();
+    $this->nonOwnerUser = $this->createUser();
 
     $this->moderatorUser = $this->createUserWithRole('moderator');
     $this->assessmentReporterUser = $this->createUserWithRole('assessment_reporter');
-    $this->adminUser = $this->createUser(['administer assessment types']);
   }
 
   /**
@@ -143,12 +132,11 @@ class AssessmentAccessTest extends ExistingSiteBase {
     }
 
     $users = [
-      $this->contentAccessUser,
+      $this->authenticatedUser,
       $this->ownerUser,
       $this->nonOwnerUser,
       $this->moderatorUser,
       $this->assessmentReporterUser,
-      $this->adminUser,
     ];
 
     foreach ($users as $user) {
@@ -171,8 +159,7 @@ class AssessmentAccessTest extends ExistingSiteBase {
 
     $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->adminUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->contentAccessUser);
+    $this->assertAccessAllowed($assessment, 'view', $this->authenticatedUser);
     $this->assertAccessAllowed($assessment, 'view', User::getAnonymousUser());
   }
 
@@ -188,10 +175,9 @@ class AssessmentAccessTest extends ExistingSiteBase {
 
     $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'view', $this->adminUser);
 
     $this->assertAccessDenied($assessment, 'view', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'view', $this->contentAccessUser);
+    $this->assertAccessDenied($assessment, 'view', $this->authenticatedUser);
   }
 
   /**
@@ -203,8 +189,7 @@ class AssessmentAccessTest extends ExistingSiteBase {
     $this->assertCreateAccessAllowed($this->ownerUser, 'draft');
     $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'draft');
     $this->assertCreateAccessAllowed($this->moderatorUser, 'draft');
-    $this->assertCreateAccessAllowed($this->adminUser, 'draft');
-    $this->assertCreateAccessAllowed($this->contentAccessUser, 'draft');
+    $this->assertCreateAccessAllowed($this->authenticatedUser, 'draft');
 
     $this->assertCreateAccessDenied(User::getAnonymousUser(), 'draft');
   }
@@ -217,10 +202,9 @@ class AssessmentAccessTest extends ExistingSiteBase {
   public function testCreatePublishedAssessment(): void {
     $this->assertCreateAccessAllowed($this->assessmentReporterUser, 'published');
     $this->assertCreateAccessAllowed($this->moderatorUser, 'published');
-    $this->assertCreateAccessAllowed($this->adminUser, 'published');
 
     $this->assertCreateAccessDenied($this->ownerUser, 'published');
-    $this->assertCreateAccessDenied($this->contentAccessUser, 'published');
+    $this->assertCreateAccessDenied($this->authenticatedUser, 'published');
   }
 
   /**
@@ -234,10 +218,9 @@ class AssessmentAccessTest extends ExistingSiteBase {
 
     $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->adminUser);
 
     $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->contentAccessUser);
+    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
   }
 
   /**
@@ -250,11 +233,10 @@ class AssessmentAccessTest extends ExistingSiteBase {
     $assessment = $this->testAssessments['review'];
 
     $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'update', $this->adminUser);
 
     $this->assertAccessDenied($assessment, 'update', $this->ownerUser);
     $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'update', $this->contentAccessUser);
+    $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
   }
 
   /**
@@ -268,11 +250,10 @@ class AssessmentAccessTest extends ExistingSiteBase {
     $assessment = $this->testAssessments[$state];
 
     $this->assertAccessAllowed($assessment, 'delete', $this->moderatorUser);
-    $this->assertAccessAllowed($assessment, 'delete', $this->adminUser);
 
     $this->assertAccessDenied($assessment, 'delete', $this->ownerUser);
     $this->assertAccessDenied($assessment, 'delete', $this->nonOwnerUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->contentAccessUser);
+    $this->assertAccessDenied($assessment, 'delete', $this->authenticatedUser);
     $this->assertAccessDenied($assessment, 'delete', $this->assessmentReporterUser);
   }
 
@@ -401,7 +382,7 @@ class AssessmentAccessTest extends ExistingSiteBase {
    *   The created user.
    */
   protected function createUserWithRole(string $role_id): UserInterface {
-    $user = $this->createUser([]);
+    $user = $this->createUser();
     $user->addRole($role_id);
     $user->save();
 
