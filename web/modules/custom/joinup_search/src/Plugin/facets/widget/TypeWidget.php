@@ -138,11 +138,27 @@ class TypeWidget extends WidgetPluginBase {
    */
   protected function buildListItems(FacetInterface $facet, ResultInterface $result): array {
     $classes = ['facet-item'];
+    if ($children = $result->getChildren()) {
+      $items = $this->prepareLink($result);
 
-    $items = $this->prepareLink($result);
+      $children_markup = [];
+      foreach ($children as $child) {
+        $children_markup[] = $this->buildListItems($facet, $child);
+      }
 
-    if ($result->isActive()) {
-      $items['#attributes'] = ['class' => ['is-active']];
+      $classes[] = 'expanded';
+      $items['children'] = [$children_markup];
+
+      if ($result->isActive()) {
+        $items['#attributes'] = ['class' => ['active-trail']];
+      }
+    }
+    else {
+      $items = $this->prepareLink($result);
+
+      if ($result->isActive()) {
+        $items['#attributes'] = ['class' => ['is-active']];
+      }
     }
 
     $items['#wrapper_attributes'] = ['class' => $classes];
