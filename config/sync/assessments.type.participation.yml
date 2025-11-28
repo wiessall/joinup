@@ -12,6 +12,6 @@ third_party_settings:
 label_singular: participation
 label_plural: participations
 label_count:
-  - "@count participation\03@count participations"
+  no_count_capitalize: !!binary UGFydGljaXBhdGlvbgNQYXJ0aWNpcGF0aW9ucw==
 id: participation
 label: Participation
