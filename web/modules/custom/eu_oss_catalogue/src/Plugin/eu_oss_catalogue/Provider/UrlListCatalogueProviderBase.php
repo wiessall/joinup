@@ -257,7 +257,9 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     foreach ($this->getEndpoints() as $endpointConfig) {
       ['rootKeys' => $rootKeys, 'apiUrl' => $endpointUrl] = $endpointConfig;
       try {
-        $decodedResponse = $this->fetchDataFromSource($endpointUrl);
+        $response = $this->httpClient->get($endpointUrl);
+        $decodedResponse = Json::decode($response->getBody()->getContents());
+
         if (!is_array($decodedResponse)) {
           throw new \Exception('Source returned response is not a valid JSON response.');
         }
@@ -286,41 +288,6 @@ abstract class UrlListCatalogueProviderBase extends EuOssCatalogueProviderPlugin
     }
 
     return TRUE;
-  }
-
-  /**
-   * Fetches data from the given source.
-   *
-   * @param string $source
-   *   The source URL or file path.
-   *
-   * @return array
-   *   The decoded JSON data.
-   *
-   * @throws \Exception
-   *   When the source cannot be fetched or is not valid JSON.
-   */
-  protected function fetchDataFromSource(string $source): array {
-    // Check if source is a file path.
-    if (str_starts_with($source, 'file://') || (!str_contains($source, '://') && file_exists($source))) {
-      $filePath = str_starts_with($source, 'file://') ? substr($source, 7) : $source;
-      $content = file_get_contents($filePath);
-      if ($content === FALSE) {
-        throw new \Exception("Could not read file: $filePath");
-      }
-    }
-    else {
-      // Fetch from HTTP.
-      $response = $this->httpClient->get($source);
-      $content = $response->getBody()->getContents();
-    }
-
-    $decodedResponse = Json::decode($content);
-    if (!is_array($decodedResponse)) {
-      throw new \Exception('Source returned response is not a valid JSON response.');
-    }
-
-    return $decodedResponse;
   }
 
   /**
