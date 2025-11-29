@@ -26,7 +26,7 @@ class BindingRequirementModel extends AssessmentModelBase implements AssessmentM
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'documented_in',
       'name',

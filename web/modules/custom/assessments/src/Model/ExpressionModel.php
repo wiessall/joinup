@@ -26,7 +26,7 @@ class ExpressionModel extends AssessmentModelBase implements AssessmentModelInte
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'name',
       'description',
