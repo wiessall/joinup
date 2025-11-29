@@ -11,6 +11,7 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.contact
     - field.storage.node.description
+    - field.storage.node.domain
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
     - field.storage.node.field_location
@@ -188,6 +189,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.description
+  domain:
+    label: Domain
+    datasource_id: 'entity:node'
+    property_path: domain
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.domain
   eif_perspective:
     label: 'EIF perspective reference'
     datasource_id: 'entity:node'
