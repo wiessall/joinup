@@ -120,6 +120,10 @@ p time {
 }
 
 .fs-lg {
+  font-size: calc($bs-body-font-size * 1.5);
+}
+
+.fs-md {
   font-size: calc($bs-body-font-size * 1.25);
 }
 
