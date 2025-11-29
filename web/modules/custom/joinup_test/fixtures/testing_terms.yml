@@ -269,6 +269,8 @@ assess_provider_type:
     id: european_union_institution
   - name: European Union body
     id: european_union_body
+  - name: Local public sector body
+    id: local_public_sector_body
 assess_participant_type:
   - name: Local public sector body
     id: local_public_sector_body

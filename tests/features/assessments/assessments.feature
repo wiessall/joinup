@@ -97,3 +97,75 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
     When I press "Delete"
     Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+
+  @javascript
+  Scenario: All possible tests for 'Provided by' plugin in assessment report
+    Given I am logged in as a developer
+    And I go to "/assessments/add/report"
+
+    When I fill in "Name" with "Test Provided by in Assessment Report 2025"
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "GR1"
+    And I select the radio button "No"
+
+    # Binding requirements
+    When I click "New binding requirement"
+    And a modal should open
+
+    When I click "Initiatives" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
+    And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
+
+    When I click "General" in the "Modal content" region
+    And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
+
+    When I click "Trans-European digital public services" in the "Modal content" region
+    And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+
+    Then I press "Save" in the "Modal buttons" region
+    # Save Assessment Report.
+    Then I press "Save"
+    Then I should see the success message containing "New assessment Test Provided by in Assessment Report 2025 has been created."
+    And I should see the heading "Test Provided by in Assessment Report 2025"
+
+    # Edit to test all changes in widget.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Organisation name"
+    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Select organisation"
+
+    Then I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And the following field should not be present "Select organisation"
+    And I fill in "Organisation name" with "Portugal Ministry of Digital Affairs"
+    Then I press "Save"
+
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "Spain Ministry of Digital Affairs"
+    Then I press "Select existing organisation"
+    And I wait for AJAX to finish
+    And the option with text "Portugal Ministry of Digital Affairs" from select "Select organisation" is selected
+
+    # Change to local and change back to original state.
+    And I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Organisation name"
+    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Select organisation"
+    And the option with text "- Select -" from select "Select organisation" is selected
+    Then I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And the following field should be present "Select organisation"

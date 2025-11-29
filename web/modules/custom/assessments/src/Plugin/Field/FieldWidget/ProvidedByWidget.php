@@ -84,6 +84,7 @@ final class ProvidedByWidget extends WidgetBase {
     $fieldName = $this->fieldDefinition->getName();
     $parents = $element['#field_parents'];
     $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
+    $triggeringElement = $form_state->getTriggeringElement();
 
     $element['#type'] = 'fieldset';
     $element['#title'] = $this->fieldDefinition->getLabel();
@@ -94,10 +95,13 @@ final class ProvidedByWidget extends WidgetBase {
     $currentType = NULL;
     $currentCountry = NULL;
 
-    // If entity exists, check if its country/type match the current
-    // form selections. This prevents showing stale entity after
-    // country/type changes during AJAX.
-    if ($currentEntity) {
+    // Reset current entity during country AJAX to prevent stale selection.
+    // The 'country_just_changed' flag persists across multiple formElement()
+    // calls during the AJAX rebuild process.
+    if (!empty($widgetState['country_just_changed'])) {
+      $currentEntity = NULL;
+    }
+    elseif ($currentEntity) {
       $currentType = $currentEntity->hasField('organisation_type')
         ? $currentEntity->get('organisation_type')->target_id
         : NULL;
@@ -108,19 +112,14 @@ final class ProvidedByWidget extends WidgetBase {
       $stateType = $widgetState['selected_type'] ?? NULL;
       $stateCountry = $widgetState['selected_country'] ?? NULL;
 
-      if ($stateType && $currentType != $stateType) {
-        $currentEntity = NULL;
-        $currentType = NULL;
-        $currentCountry = NULL;
-      }
-      elseif ($stateCountry && $currentCountry != $stateCountry) {
+      // Clear entity if type or country no longer match current selections.
+      if (($stateType && $currentType != $stateType) ||
+          ($stateCountry && $currentCountry != $stateCountry)) {
         $currentEntity = NULL;
         $currentType = NULL;
         $currentCountry = NULL;
       }
     }
-
-    // Step 1: Organisation Type field (always visible).
     $element['organisation_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of public sector body'),
@@ -139,7 +138,6 @@ final class ProvidedByWidget extends WidgetBase {
       ],
     ];
 
-    $triggeringElement = $form_state->getTriggeringElement();
     $selectedType = NULL;
 
     if ($triggeringElement && isset($triggeringElement['#name']) &&
@@ -183,6 +181,7 @@ final class ProvidedByWidget extends WidgetBase {
 
     if ($selectedType) {
       $requiresCountry = !$this->isEuOrganisationType($selectedType);
+
       $selectedCountry = NULL;
       if ($requiresCountry) {
         $selectedCountry = $this->getSelectedCountry(
@@ -196,23 +195,30 @@ final class ProvidedByWidget extends WidgetBase {
         );
 
         if ($selectedCountry) {
-          $countryChanged = !isset($widgetState['selected_country'])
-            || $widgetState['selected_country'] !== $selectedCountry;
+          // Avoid updating widget state during country AJAX to prevent
+          // inconsistency across multiple formElement() invocations.
+          $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
+            && strpos($triggeringElement['#name'], '[country]') !== FALSE;
 
-          if ($countryChanged) {
-            $widgetState['add_new'] = FALSE;
+          if (!$isCountryAjax) {
+            $countryChanged = !isset($widgetState['selected_country'])
+              || $widgetState['selected_country'] !== $selectedCountry;
 
-            if ($currentEntity && isset($widgetState['selected_country'])) {
-              $currentEntity = NULL;
+            if ($countryChanged) {
+              $widgetState['add_new'] = FALSE;
+
+              if ($currentEntity && isset($widgetState['selected_country'])) {
+                $currentEntity = NULL;
+              }
+
+              if (isset($widgetState['selected_country'])) {
+                $this->clearTargetIdFromUserInput($form_state, $parents, $fieldName, $delta);
+              }
             }
 
-            if (isset($widgetState['selected_country'])) {
-              $this->clearTargetIdFromUserInput($form_state, $parents, $fieldName, $delta);
-            }
+            $widgetState['selected_country'] = $selectedCountry;
+            static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
           }
-
-          $widgetState['selected_country'] = $selectedCountry;
-          static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
         }
       }
       else {
@@ -221,16 +227,17 @@ final class ProvidedByWidget extends WidgetBase {
           static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
         }
       }
-
-      // Step 2: Country field (if required by type).
       if ($requiresCountry) {
+        $countryOptions = $this->getCountryOptions();
+        $defaultCountryValue = $selectedCountry ?? $currentCountry;
+
         $element['content']['country'] = [
           '#type' => 'select',
           '#title' => $this->t('Country'),
-          '#options' => $this->getCountryOptions(),
+          '#options' => $countryOptions,
           '#empty_option' => $this->t('- Select country -'),
           '#required' => TRUE,
-          '#default_value' => $selectedCountry ?? $currentCountry,
+          '#default_value' => $defaultCountryValue,
           '#attributes' => [
             'class' => ['country-select'],
             'data-delta' => $delta,
@@ -242,34 +249,73 @@ final class ProvidedByWidget extends WidgetBase {
           ],
         ];
 
-        // Only show organisation selector if country is selected.
         if (!$selectedCountry) {
           return $element;
         }
       }
 
-      // Check if user wants to add new organisation.
       $addNew = $widgetState['add_new'] ?? FALSE;
 
       if ($triggeringElement && isset($triggeringElement['#name']) &&
           strpos($triggeringElement['#name'], '[add_new_button]') !== FALSE) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
+        unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
       elseif ($triggeringElement && isset($triggeringElement['#name']) &&
                strpos($triggeringElement['#name'], '[select_existing_button]') !== FALSE) {
         $addNew = FALSE;
         $widgetState['add_new'] = FALSE;
+        unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
 
-      // Check if there are any existing organisations matching the filters.
-      // If not, automatically show "add new" form.
-      if (!$addNew) {
-        $countType = $selectedType;
-        $countCountry = $requiresCountry ? $selectedCountry : NULL;
-        $existingCount = $this->countMatchingOrganisations($countType, $countCountry);
+      $isSubmitting = $form_state->isSubmitted() && !$form_state->isRebuilding();
+      $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
+        && strpos($triggeringElement['#name'], '[country]') !== FALSE;
+      $isEdit = !empty($items->getEntity()->id());
+
+      if ($isSubmitting && isset($widgetState['country_just_changed'])) {
+        unset($widgetState['country_just_changed']);
+        static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+      }
+
+      if ($isCountryAjax && !$isSubmitting) {
+        $existingCount = $this->countMatchingOrganisations(
+          $selectedType,
+          $requiresCountry ? $selectedCountry : NULL
+        );
+
+        if ($existingCount > 0) {
+          $addNew = FALSE;
+          $widgetState['add_new'] = FALSE;
+          $widgetState['country_just_changed'] = TRUE;
+          static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+          $this->clearTargetIdFromUserInput($form_state, $parents, $fieldName, $delta);
+        }
+        else {
+          $addNew = TRUE;
+          $widgetState['add_new'] = TRUE;
+          static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+        }
+      }
+      elseif ($isEdit && $currentEntity && $requiresCountry) {
+        $currentOrgCountry = $currentEntity->hasField('country')
+          ? $currentEntity->get('country')->target_id
+          : NULL;
+
+        if ($selectedCountry == $currentOrgCountry && $addNew) {
+          $addNew = FALSE;
+          $widgetState['add_new'] = FALSE;
+          static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+        }
+      }
+      elseif (!$addNew && !$isSubmitting) {
+        $existingCount = $this->countMatchingOrganisations(
+          $selectedType,
+          $requiresCountry ? $selectedCountry : NULL
+        );
 
         if ($existingCount === 0) {
           $addNew = TRUE;
@@ -288,21 +334,35 @@ final class ProvidedByWidget extends WidgetBase {
 
         $defaultValue = NULL;
         if ($currentEntity && isset($options[$currentEntity->id()])) {
-          $defaultValue = $currentEntity->id();
+          $entityType = $currentEntity->hasField('organisation_type')
+            ? $currentEntity->get('organisation_type')->target_id
+            : NULL;
+          $entityCountry = $currentEntity->hasField('country')
+            ? $currentEntity->get('country')->target_id
+            : NULL;
+
+          $typeMatches = !$selectedType || $entityType == $selectedType;
+          $countryMatches = !$requiresCountry || !$selectedCountry || $entityCountry == $selectedCountry;
+
+          if ($typeMatches && $countryMatches) {
+            $defaultValue = $currentEntity->id();
+          }
         }
+
+        $countryJustChanged = !empty($widgetState['country_just_changed']);
 
         $element['content']['target_id'] = [
           '#type' => 'select',
           '#title' => $this->t('Select organisation'),
           '#options' => $options,
           '#empty_option' => $this->t('- Select -'),
-          '#default_value' => $defaultValue,
+          '#empty_value' => '_none',
           '#required' => $this->fieldDefinition->isRequired() && !$addNew,
           '#attributes' => [
             'class' => ['organisation-select'],
             'data-delta' => $delta,
           ],
-        ];
+        ] + ($countryJustChanged ? ['#value' => '_none'] : ['#default_value' => $defaultValue]);
 
         $element['content']['add_new_button'] = [
           '#type' => 'button',
@@ -406,16 +466,14 @@ final class ProvidedByWidget extends WidgetBase {
     array $parents,
     string $fieldName,
     int $delta,
-    $triggeringElement,
-    $currentCountry,
+    mixed $triggeringElement,
+    mixed $currentCountry,
   ): mixed {
-    // Check if country was just selected via AJAX.
+    // When country triggered AJAX, get the newly selected value directly
+    // from the triggering element.
     if ($triggeringElement && isset($triggeringElement['#name'])
       && strpos($triggeringElement['#name'], '[country]') !== FALSE) {
-      return $form_state->getValue(array_merge(
-        $parents,
-        [$fieldName, $delta, 'content', 'country']
-      ));
+      return $triggeringElement['#value'] ?? '';
     }
 
     // Check widget state for previously selected country.
@@ -428,7 +486,7 @@ final class ProvidedByWidget extends WidgetBase {
       return $currentCountry;
     }
 
-    // Fallback: check user input directly for AJAX rebuilds.
+    // Final fallback: check user input for non-AJAX cases.
     $userInput = $form_state->getUserInput();
     $inputPath = array_merge($parents, [$fieldName, $delta, 'content', 'country']);
 
@@ -471,7 +529,7 @@ final class ProvidedByWidget extends WidgetBase {
   }
 
   /**
-   * Clear the target_id value from user input.
+   * Clear target_id from user input to reset organization selection.
    *
    * This is necessary to reset the organization selection when
    * country or type changes.
@@ -487,17 +545,25 @@ final class ProvidedByWidget extends WidgetBase {
    */
   private function clearTargetIdFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
     $userInput = $form_state->getUserInput();
-    $targetPath = array_merge($parents, [$fieldName, $delta, 'target_id']);
+    $paths = [
+      array_merge($parents, [$fieldName, $delta, 'target_id']),
+      array_merge($parents, [$fieldName, $delta, 'content', 'target_id']),
+    ];
 
-    $temp = &$userInput;
-    $lastKey = array_pop($targetPath);
-    foreach ($targetPath as $key) {
-      if (!isset($temp[$key])) {
-        $temp[$key] = [];
+    foreach ($paths as $path) {
+      $temp = &$userInput;
+      $lastKey = array_pop($path);
+      foreach ($path as $key) {
+        if (!isset($temp[$key])) {
+          break;
+        }
+        $temp = &$temp[$key];
       }
-      $temp = &$temp[$key];
+      if (isset($temp[$lastKey])) {
+        unset($temp[$lastKey]);
+      }
     }
-    unset($temp[$lastKey]);
+
     $form_state->setUserInput($userInput);
   }
 
@@ -782,17 +848,14 @@ final class ProvidedByWidget extends WidgetBase {
         continue;
       }
 
-      // Handle "create new" mode - ONLY if create_new flag is set
-      // AND name is provided.
+      // Handle "create new" mode when both flag and name are provided.
       if (isset($value['content']['create_new'])
         && $value['content']['create_new'] === TRUE
         && !empty($value['content']['name'])) {
 
         $organisationName = trim($value['content']['name']);
 
-        // Check if an EXACT duplicate already exists
-        // (same name + type + country).
-        // We only prevent duplicates when ALL fields match.
+        // Check for existing organisation with matching attributes.
         $query = $this->entityTypeManager
           ->getStorage('assessment')
           ->getQuery()
@@ -801,18 +864,12 @@ final class ProvidedByWidget extends WidgetBase {
           ->accessCheck()
           ->range(0, 1);
 
-        // MUST match on type if provided.
         $hasType = FALSE;
         if (!empty($value['content']['new_org_type'])) {
-          // new_org_type is already a term ID (no conversion needed).
-          $query->condition(
-            'organisation_type',
-            $value['content']['new_org_type']
-          );
+          $query->condition('organisation_type', $value['content']['new_org_type']);
           $hasType = TRUE;
         }
 
-        // MUST match on country if provided.
         $hasCountry = FALSE;
         if (!empty($value['content']['new_org_country'])) {
           $query->condition('country', $value['content']['new_org_country']);
@@ -821,18 +878,13 @@ final class ProvidedByWidget extends WidgetBase {
 
         $existingIds = $query->execute();
 
-        // Only use existing if we have a complete match
-        // (name + type + country).
-        // This allows same name with different type or country to
-        // create new entities.
+        // Reuse existing organisation only if all matching criteria are met.
+        // For EU organisations: name + type must match.
+        // For national/regional/local: name + type + country must match.
         if (!empty($existingIds) && $hasType) {
-          // For EU organisations, we only need name + type match
-          // (no country). For national/regional/local, we need
-          // name + type + country match.
           $isEuType = $this->isEuOrganisationType($value['content']['new_org_type']);
 
           if ($isEuType || $hasCountry) {
-            // Complete match found - use existing organisation.
             $existingId = reset($existingIds);
             $newValues[$delta] = [
               'target_id' => $existingId,
@@ -840,21 +892,17 @@ final class ProvidedByWidget extends WidgetBase {
           }
         }
 
-        // If we didn't find and use an existing organisation, create a new one.
         if (!isset($newValues[$delta])) {
-          // Create new organisation entity.
           $organisationValues = [
             'type' => 'public_organisation',
             'name' => $organisationName,
             'status' => TRUE,
           ];
 
-          // Add organisation type (already a term ID).
           if (!empty($value['content']['new_org_type'])) {
             $organisationValues['organisation_type'] = $value['content']['new_org_type'];
           }
 
-          // Add country if provided.
           if (!empty($value['content']['new_org_country'])) {
             $organisationValues['country'] = $value['content']['new_org_country'];
           }
@@ -884,14 +932,8 @@ final class ProvidedByWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state): void {
-    // Temporarily remove filter settings to prevent validation errors
-    // with newly created entities.
     $originalSettings = $this->getSettings();
-
-    // Call parent to extract values.
     parent::extractFormValues($items, $form, $form_state);
-
-    // Restore original settings.
     $this->settings = $originalSettings;
   }
 
@@ -945,7 +987,10 @@ final class ProvidedByWidget extends WidgetBase {
    */
   protected function countMatchingOrganisations(mixed $type, mixed $country = NULL): int {
     try {
-      return (int) $this->buildOrganisationQuery($type, $country)->count()->execute();
+      $query = $this->buildOrganisationQuery($type, $country);
+      $count = (int) $query->count()->execute();
+
+      return $count;
     }
     catch (\Exception $e) {
       $this->logger->error('Failed to count organisations: @message', ['@message' => $e->getMessage()]);
