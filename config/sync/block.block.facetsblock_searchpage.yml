@@ -29,6 +29,7 @@ settings:
     - 'facet_block:type_of_document'
     - 'facet_block:status'
     - 'facet_block:date'
+    - 'facet_block:domain'
   add_js_classes: true
 visibility:
   request_route:
