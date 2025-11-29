@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\ExistingSite;
 
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Tests\user\Traits\UserCreationTrait;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
-use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
  * Tests the assessment access control handler.
@@ -21,9 +20,7 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * @group assessments
  * @coversDefaultClass \Drupal\assessments\AssessmentAccessControlHandler
  */
-class AssessmentAccessTest extends ExistingSiteBase {
-
-  use UserCreationTrait;
+class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
   /**
    * The assessment access control handler.
@@ -91,19 +88,11 @@ class AssessmentAccessTest extends ExistingSiteBase {
    * Creates test users with various roles and permissions.
    */
   protected function createTestUsers(): void {
-    // Avoid UID 1 which has special bypass permissions.
-    $this->createUser();
-
-    // Create authenticated users (get authenticated role automatically).
-    // The authenticated role includes the assessment permissions:
-    // 'create assessment report', 'view own assessment report',
-    // 'edit own assessment report'.
     $this->authenticatedUser = $this->createUser();
     $this->ownerUser = $this->createUser();
     $this->nonOwnerUser = $this->createUser();
-
-    $this->moderatorUser = $this->createUserWithRole('moderator');
-    $this->assessmentReporterUser = $this->createUserWithRole('assessment_reporter');
+    $this->moderatorUser = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
+    $this->assessmentReporterUser = $this->createUser([], NULL, FALSE, ['roles' => ['assessment_reporter']]);
   }
 
   /**
@@ -124,24 +113,10 @@ class AssessmentAccessTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function tearDown(): void {
+  public function tearDown(): void {
     foreach ($this->testAssessments as $assessment) {
       if ($assessment && !$assessment->isNew()) {
         $assessment->delete();
-      }
-    }
-
-    $users = [
-      $this->authenticatedUser,
-      $this->ownerUser,
-      $this->nonOwnerUser,
-      $this->moderatorUser,
-      $this->assessmentReporterUser,
-    ];
-
-    foreach ($users as $user) {
-      if ($user && !$user->isNew()) {
-        $user->delete();
       }
     }
 
