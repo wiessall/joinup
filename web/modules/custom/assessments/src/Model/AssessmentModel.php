@@ -26,8 +26,12 @@ class AssessmentModel extends AssessmentModelBase implements AssessmentModelInte
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
-    return ['name'];
+  public function getAllowedResourceProperties(): array {
+    return [
+      // @todo Probably we need to have it as $fieldName => $property.
+      'name',
+      'relevant_report',
+    ];
   }
 
   /**
@@ -36,7 +40,7 @@ class AssessmentModel extends AssessmentModelBase implements AssessmentModelInte
   public function getReferencedEntityProperties(): array {
     return [
       'binding_requirement',
-      'provided_by',
+      'provider',
       'results_in',
     ];
   }
@@ -48,7 +52,7 @@ class AssessmentModel extends AssessmentModelBase implements AssessmentModelInte
     return [
       'name',
       'binding_requirement',
-      'provided_by',
+      'provider',
       'results_in',
     ];
   }

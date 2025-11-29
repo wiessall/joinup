@@ -26,7 +26,7 @@ class DocumentModel extends AssessmentModelBase implements AssessmentModelInterf
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'file_uri',
     ];

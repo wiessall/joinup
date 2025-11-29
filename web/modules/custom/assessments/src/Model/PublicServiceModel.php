@@ -26,7 +26,7 @@ class PublicServiceModel extends AssessmentModelBase implements AssessmentModelI
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'description',
       'spatial',

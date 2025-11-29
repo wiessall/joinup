@@ -24,6 +24,13 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
   protected bool $isNew = TRUE;
 
   /**
+   * The delta of the current model if referenced by another model.
+   *
+   * @var int|null
+   */
+  protected ?int $delta = NULL;
+
+  /**
    * The parent model.
    *
    * @var \Drupal\assessments\Model\AssessmentModelInterface|null
@@ -31,7 +38,7 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
   protected ?AssessmentModelInterface $parent;
 
   /**
-   * An array of child models.
+   * An array of child models indexed by their key.
    *
    * @var \Drupal\assessments\Model\AssessmentModelInterface[]
    */
@@ -51,24 +58,38 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
    */
   protected array $errors = [];
 
-  public function __construct(array $data = [], ?AssessmentModelInterface $parent = NULL) {
+  public function __construct(array $data = [], ?AssessmentModelInterface $parent = NULL, ?int $delta = NULL) {
     if (in_array('id', $this->getAllowedResourceProperties()) && !empty($data['id'])) {
       $this->isNew = FALSE;
     }
     else {
       $this->isNew = TRUE;
     }
-
-    foreach ($data as $key => $value) {
-      if (in_array($key, $this->getAllowedResourceProperties())) {
-        $this->entityValues[$key] = $value;
-      }
-      elseif (!in_array($key, $this->getReferencedEntityProperties())) {
-        $this->errors[] = "Invalid property: {$key}";
-      }
-    }
-
+    $this->delta = $delta;
     $this->parent = $parent;
+  }
+
+  /**
+   * Calculates the path to the current key.
+   * @param string $key
+   *   The current path.
+   *
+   * @return string
+   *   The calculated path.
+   */
+  protected function calculatePath(string $key): string {
+    return $this->getModelPath() . ' > ' . $key;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getModelPath(): string {
+    $deltaPath = $this->delta === NULL ? '' : '[' . $this->delta . ']';
+    $modelPath = $this->parent === NULL
+      ? $this->getEntityTypeId()
+      : $this->parent->getModelPath() . ' > ' . $this->getEntityBundle();
+    return $modelPath . $deltaPath;
   }
 
   /**
@@ -112,36 +133,15 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
   }
 
   /**
-   * Returns a list of allowed resource incoming API properties.
-   *
-   * @return array{string}
-   *   An array of allowed resource properties.
+   * {@inheritdoc}
    */
-  abstract protected function getAllowedResourceProperties(): array;
-
-  /**
-   * Returns a list of required resource incoming API properties.
-   *
-   * @return array{string}
-   *   An array of required resource properties.
-   */
-  abstract protected function getRequiredResourceProperties(): array;
-
-  /**
-   * Returns the entity type ID of entity to be created.
-   *
-   * @return string
-   *   The entity type ID.
-   */
-  abstract public function getEntityTypeId(): string;
-
-  /**
-   * Returns the bundle of the Drupal side entity that is related to the model.
-   *
-   * @return string
-   *   The entity bundle.
-   */
-  abstract public function getEntityBundle(array $context = []): string;
+  public function addError(string $key, string $message): void {
+    $path = $this->calculatePath($key);
+    $this->errors[] = [
+      'path' => $path,
+      'message' => $message,
+    ];
+  }
 
   /**
    * {@inheritdoc}
@@ -150,6 +150,13 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
     $values = $this->entityValues;
     $values['type'] = $this->getEntityBundle();
     return $values;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addEntityValue(string $key, int|string $value): void {
+    $this->entityValues[$key][] = $value;
   }
 
   /**
@@ -165,7 +172,7 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
    * @return \Drupal\assessments\Model\AssessmentModelInterface
    *   The initialized model.
    */
-  public static function createFromContext(array $data, ?AssessmentModelInterface $parent = NULL, string $type = 'assessment'): AssessmentModelInterface {
+  public static function createFromContext(array $data, ?AssessmentModelInterface $parent = NULL, string $type = 'assessment', ?int $delta = NULL): AssessmentModelInterface {
     // @todo Move to the interface as a constant.
     $mapping = [
       'affects' => PublicServiceModel::class,
@@ -175,11 +182,11 @@ abstract class AssessmentModelBase implements AssessmentModelInterface {
       'documents' => DocumentModel::class,
       'expression' => ExpressionModel::class,
       'has_participation' => ParticipationModel::class,
-      'organisation' => OrganisationModel::class,
+      'provider' => OrganisationModel::class,
       'results_in' => StatementModel::class,
     ];
 
-    return new $mapping[$type]($data, $parent);
+    return new $mapping[$type]($data, $parent, $delta);
   }
 
 }

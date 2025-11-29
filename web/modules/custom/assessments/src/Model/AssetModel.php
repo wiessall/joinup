@@ -26,7 +26,7 @@ class AssetModel extends AssessmentModelBase implements AssessmentModelInterface
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'name',
       'landing_page',

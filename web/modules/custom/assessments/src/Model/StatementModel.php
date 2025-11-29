@@ -29,7 +29,7 @@ class StatementModel extends AssessmentModelBase implements AssessmentModelInter
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'interpretation',
       'judgement',

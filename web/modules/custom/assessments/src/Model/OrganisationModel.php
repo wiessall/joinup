@@ -20,13 +20,13 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
    * {@inheritdoc}
    */
   public function getEntityBundle(array $context = []): string {
-    return 'organisation';
+    return 'public_organisation';
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getAllowedResourceProperties(): array {
+  public function getAllowedResourceProperties(): array {
     return [
       'name',
       'description',
@@ -39,10 +39,8 @@ class OrganisationModel extends AssessmentModelBase implements AssessmentModelIn
    * {@inheritdoc}
    */
   public function getReferencedEntityProperties(): array {
-    return [
-      'name',
-      'description',
-    ];
+    // @todo Return empty by default in the base class.
+    return [];
   }
 
   /**
