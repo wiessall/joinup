@@ -256,19 +256,24 @@ final class ProvidedByWidget extends WidgetBase {
 
       $addNew = $widgetState['add_new'] ?? FALSE;
 
-      if ($triggeringElement && isset($triggeringElement['#name']) &&
-          strpos($triggeringElement['#name'], '[add_new_button]') !== FALSE) {
+      $isAddNewButtonClicked = $triggeringElement && isset($triggeringElement['#name']) &&
+        strpos($triggeringElement['#name'], '[add_new_button]') !== FALSE;
+      $isSelectExistingButtonClicked = $triggeringElement && isset($triggeringElement['#name']) &&
+        strpos($triggeringElement['#name'], '[select_existing_button]') !== FALSE;
+
+      if ($isAddNewButtonClicked) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
-      elseif ($triggeringElement && isset($triggeringElement['#name']) &&
-               strpos($triggeringElement['#name'], '[select_existing_button]') !== FALSE) {
+      elseif ($isSelectExistingButtonClicked) {
         $addNew = FALSE;
         $widgetState['add_new'] = FALSE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+
+        $this->clearAddNewFieldsFromUserInput($form_state, $parents, $fieldName, $delta);
       }
 
       $isSubmitting = $form_state->isSubmitted() && !$form_state->isRebuilding();
@@ -300,7 +305,7 @@ final class ProvidedByWidget extends WidgetBase {
           static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
         }
       }
-      elseif ($isEdit && $currentEntity && $requiresCountry) {
+      elseif ($isEdit && $currentEntity && $requiresCountry && !$isAddNewButtonClicked && !$isSelectExistingButtonClicked) {
         $currentOrgCountry = $currentEntity->hasField('country')
           ? $currentEntity->get('country')->target_id
           : NULL;
@@ -380,7 +385,6 @@ final class ProvidedByWidget extends WidgetBase {
         ];
       }
       else {
-        // Step 3b: Show "add new" form.
         $element['content']['name'] = [
           '#type' => 'textfield',
           '#title' => $this->t('Organisation name'),
@@ -410,14 +414,11 @@ final class ProvidedByWidget extends WidgetBase {
           '#value' => TRUE,
         ];
 
-        // Only show "select existing" button if there are organisations
-        // to select.
         $existingCount = $this->countMatchingOrganisations(
           $selectedType,
           $requiresCountry ? $selectedCountry : NULL
         );
         if ($existingCount > 0) {
-          // Button to switch back to "select existing" mode.
           $element['content']['select_existing_button'] = [
             '#type' => 'button',
             '#value' => $this->t('Select existing organisation'),
@@ -469,24 +470,18 @@ final class ProvidedByWidget extends WidgetBase {
     mixed $triggeringElement,
     mixed $currentCountry,
   ): mixed {
-    // When country triggered AJAX, get the newly selected value directly
-    // from the triggering element.
     if ($triggeringElement && isset($triggeringElement['#name'])
       && strpos($triggeringElement['#name'], '[country]') !== FALSE) {
       return $triggeringElement['#value'] ?? '';
     }
 
-    // Check widget state for previously selected country.
     if (isset($widgetState['selected_country'])) {
       return $widgetState['selected_country'];
     }
 
-    // Check if we have a current country from existing entity.
     if ($currentCountry) {
       return $currentCountry;
     }
-
-    // Final fallback: check user input for non-AJAX cases.
     $userInput = $form_state->getUserInput();
     $inputPath = array_merge($parents, [$fieldName, $delta, 'content', 'country']);
 
@@ -544,27 +539,73 @@ final class ProvidedByWidget extends WidgetBase {
    *   The field delta.
    */
   private function clearTargetIdFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
-    $userInput = $form_state->getUserInput();
     $paths = [
       array_merge($parents, [$fieldName, $delta, 'target_id']),
       array_merge($parents, [$fieldName, $delta, 'content', 'target_id']),
     ];
 
     foreach ($paths as $path) {
-      $temp = &$userInput;
-      $lastKey = array_pop($path);
-      foreach ($path as $key) {
-        if (!isset($temp[$key])) {
-          break;
-        }
-        $temp = &$temp[$key];
+      $this->clearFieldFromFormState($form_state, $path);
+    }
+  }
+
+  /**
+   * Clear all "add new" fields from user input when switching to select mode.
+   *
+   * This ensures that the 'Organisation name', 'create_new', 'new_org_type',
+   * and 'new_org_country' field values are removed when switching from
+   * "add new" to "select existing" mode. This prevents unwanted organisation
+   * creation when the form is submitted.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $parents
+   *   The form parents.
+   * @param string $fieldName
+   *   The field name.
+   * @param int $delta
+   *   The field delta.
+   */
+  private function clearAddNewFieldsFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
+    // List of fields to clear from "add new" mode.
+    $fieldsToRemove = ['name', 'create_new', 'new_org_type', 'new_org_country'];
+
+    foreach ($fieldsToRemove as $field) {
+      $path = array_merge($parents, [$fieldName, $delta, 'content', $field]);
+      $this->clearFieldFromFormState($form_state, $path);
+    }
+  }
+
+  /**
+   * Clear a field from both user input and form state values.
+   *
+   * This helper method removes a field value from both the user input array
+   * and form state values to ensure complete cleanup.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $path
+   *   The array path to the field (e.g., ['field_name', 0, 'content', 'name']).
+   */
+  private function clearFieldFromFormState(FormStateInterface $form_state, array $path): void {
+    $userInput = $form_state->getUserInput();
+    $temp = &$userInput;
+    $pathCopy = $path;
+    $lastKey = array_pop($pathCopy);
+
+    foreach ($pathCopy as $key) {
+      if (!isset($temp[$key])) {
+        return;
       }
-      if (isset($temp[$lastKey])) {
-        unset($temp[$lastKey]);
-      }
+      $temp = &$temp[$key];
     }
 
-    $form_state->setUserInput($userInput);
+    if (isset($temp[$lastKey])) {
+      unset($temp[$lastKey]);
+      $form_state->setUserInput($userInput);
+    }
+
+    $form_state->unsetValue($path);
   }
 
   /**
@@ -828,10 +869,16 @@ final class ProvidedByWidget extends WidgetBase {
   ): array {
     $newValues = [];
 
-    foreach ($values as $delta => $value) {
+    // Only create organisations during actual form submission, not during AJAX
+    // rebuilds. This prevents premature creation when users switch modes or
+    // change selections via AJAX.
+    $isActualSubmission = $form_state->isSubmitted() && !$form_state->isRebuilding();
 
-      // Check if there's a direct target_id (from existing entity
-      // in edit mode).
+    foreach ($values as $delta => $value) {
+      if (empty($value)) {
+        continue;
+      }
+
       if (isset($value['target_id']) && !empty($value['target_id'])) {
         $newValues[$delta] = [
           'target_id' => $value['target_id'],
@@ -839,23 +886,22 @@ final class ProvidedByWidget extends WidgetBase {
         continue;
       }
 
-      // Handle "select existing" mode from dropdown.
       if (isset($value['content']['target_id'])
-        && !empty($value['content']['target_id'])) {
+        && !empty($value['content']['target_id'])
+        && $value['content']['target_id'] !== '_none') {
         $newValues[$delta] = [
           'target_id' => $value['content']['target_id'],
         ];
         continue;
       }
 
-      // Handle "create new" mode when both flag and name are provided.
-      if (isset($value['content']['create_new'])
+      if ($isActualSubmission
+        && isset($value['content']['create_new'])
         && $value['content']['create_new'] === TRUE
         && !empty($value['content']['name'])) {
 
         $organisationName = trim($value['content']['name']);
 
-        // Check for existing organisation with matching attributes.
         $query = $this->entityTypeManager
           ->getStorage('assessment')
           ->getQuery()
@@ -916,9 +962,17 @@ final class ProvidedByWidget extends WidgetBase {
             $newValues[$delta] = [
               'target_id' => $organisation->id(),
             ];
+
+            $this->logger->info('Created new organisation: @name (ID: @id)', [
+              '@name' => $organisationName,
+              '@id' => $organisation->id(),
+            ]);
           }
           catch (\Exception $e) {
-            $this->logger->error('Failed to create organisation: @message', ['@message' => $e->getMessage()]);
+            $this->logger->error('Failed to create organisation "@name": @message', [
+              '@name' => $organisationName,
+              '@message' => $e->getMessage(),
+            ]);
           }
         }
         continue;
