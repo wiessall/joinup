@@ -1,6 +1,6 @@
 uuid: d43c231f-a752-4bca-a4e1-37073309c3e6
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - assessments
@@ -12,8 +12,11 @@ granularity: resource
 configuration:
   methods:
     - GET
-    - POST
   formats:
-    - json
+    - jsonld
+    - rdfxml
+    - ntriples
+    - turtle
+    - n3
   authentication:
-    - oauth2
+    - cookie
