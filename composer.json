@@ -483,7 +483,7 @@
                 "Some mandatory parameters are missing to generate a URL for route 'entity.page.devel_load' @see https://www.drupal.org/i/3438993": "resources/patch/php/drupal/page_manager/3438993.diff"
             },
             "drupal/paragraphs": {
-                "Patch paragraphs to duplicate correctly nested paragraphs (remove when using Drupal 11.2). @see https://www.drupal.org/i/3510842": "resources/patch/php/drupal/paragraphs/3510842.patch"
+                "File entity references incorrectly shared across cloned paragraph instances. @see https://www.drupal.org/i/3079729": "resources/patch/php/drupal/paragraphs/3079729.diff"
             },
             "drupal/private_message": {
                 "Missing langcode in private_message.settings @see https://www.drupal.org/project/private_message/issues/3542616": "resources/patch/php/drupal/private_message/3542616.diff"

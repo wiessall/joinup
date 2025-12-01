@@ -87,13 +87,13 @@ Feature: Assessment Report Entity Management
       | documented in https://interoperable-europe.ec.europa.eu/general          |
 
     # Edit test.
-#    When I go to the edit form of the "Test Assessment Report 2025" assessment
-#    And I fill in "Name" with "Test Assessment Report 2025 v2"
-#    And I press "Save"
-#    Then I should see the heading "Test Assessment Report 2025 v2"
-#
-#    # Delete test.
-#    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
-#    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
-#    When I press "Delete"
-#    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I press "Save"
+    Then I should see the heading "Test Assessment Report 2025 v2"
+
+    # Delete test.
+    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
+    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
+    When I press "Delete"
+    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
