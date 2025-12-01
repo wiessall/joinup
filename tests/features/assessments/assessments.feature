@@ -178,3 +178,51 @@ Feature: Assessment Report Entity Management
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
+
+  Scenario: Test assessment reports views
+    Given the assessments collection exists
+
+    # Test as anonymous.
+    When I am not logged in
+    And I visit "collection/assessments/report/repository"
+    Then I should see the heading "Assessment reports"
+    And I should not see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should see the text "There are no published assessment reports yet."
+    Given report assessments:
+      | name                       |
+      | Weekly Health Check Report |
+      | Portal Assessment Record   |
+    And I reload the page
+    # @todo Validate displayed tiles.
+    # And I should see the text "Weekly Health Check Report"
+    # And I should see the text "Portal Assessment Record"
+    When I go to "/user/assessments"
+    Then I should see the heading "Sign in to continue"
+
+    # Test as logged in user.
+    When I am logged in as a developer
+    And I visit "collection/assessments/report/repository"
+    Then I should see the heading "Assessment reports"
+    And I should see the link "New assessment"
+    And I should see the link "My assessments"
+    # @todo Validate displayed tiles.
+    # And I should see the text "Weekly Health Check Report"
+    # And I should see the text "Portal Assessment Record"
+    When I follow "My assessments"
+    Then I should be on "/user/assessments"
+    Then I should see the heading "My assessment reports"
+    And I should see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should see the text "There are no assessment reports yet for the current user."
+    Given report assessments:
+      | name                  | uid     |
+      | Assessment Report 001 | current |
+    And I reload the page
+    # @todo Validate displayed tiles.
+    # And I should see the text "Assessment Report 001"
+
+    # Ensure the reports view only applies to the assessment collection.
+    When I am not logged in
+    And I go to "/collection/portal-support/report/repository"
+    Then I should get a 404 HTTP response
