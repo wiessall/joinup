@@ -22,23 +22,8 @@
 
 {% set digest_item_body = content.description ?? content.abstract ?? content.body %}
 
-<table role="presentation">
-  <tbody>
-    <tr>
-      <td class="bg-primary p-3">
-        <span class="fw-bold fs-sm text-white text-uppercase">{{ digest_item_date }}</span>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding: 5px 0 0 0;">
-        <p class="fs-lg fw-bold"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a></p>
-        {{ digest_item_body }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <a href="{{ url }}" style="padding: 10px 0; display: block;">{{ 'Read more'|t }}</a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<p style="margin: 20px 0 0 0;" class="fw-bold fs-sm text-uppercase">{{ digest_item_date }}</p>
+<h2 style="margin-top: 0" class="fs-md"><a class="text-primary text-none" href="{{ url }}">{{ digest_item_title }}</a></h2>
+{{ digest_item_body }}
+<p><a href="{{ url }}" style="padding: 10px 0; display: block;">{{ 'Read more'|t }}</a></p>
+<hr>

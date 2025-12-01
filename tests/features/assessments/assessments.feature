@@ -10,11 +10,11 @@ Feature: Assessment Report Entity Management
     And I go to "/assessments/add/report"
 
     When I press "Save"
-    Then I should see the error message "4 errors have been found: NameType of public sector bodyOrganisation nameBinding requirements"
+    Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
 
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
-    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
     And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
     And I select the radio button "Yes"
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
@@ -25,14 +25,14 @@ Feature: Assessment Report Entity Management
     And I press "Save" in the "Modal buttons" region
     And I should see the text "4 errors have been found: NameNameDescriptionDescription" in the "Modal content" region
 
-    When I click "General" in the "Modal content" region
-    And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
-    And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
-
     When I click "Initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][documented_in][0][uri]" with "https://interoperable-europe.ec.europa.eu/initiatives" in the "Modal content" region
+
+    When I click "General" in the "Modal content" region
+    And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
+    And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
     And I press "Add new relevant asset" in the "Modal content" region
@@ -55,24 +55,24 @@ Feature: Assessment Report Entity Management
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
-#    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
+    And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
+    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
-#    And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
-#    And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
+    And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
+    And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
-#    And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
+    And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
+    And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
-#    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
     When I click "Other" in the "Content" region
-#    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-#    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
+    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
@@ -81,19 +81,19 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "New assessment Test Assessment Report 2025 has been created."
     And I should see the heading "Test Assessment Report 2025"
     And I should see the following lines of text:
-      | Austrian Ministry of Digital Affairs, a European Union institution from Greece |
-      | The report has been connected to the following previous/relevant reports       |
-      | https://interoperable-europe.ec.europa.eu/report                               |
-      | documented in https://interoperable-europe.ec.europa.eu/general                |
+      | Austrian Ministry of Digital Affairs, a European Union institution from  |
+      | The report has been connected to the following previous/relevant reports |
+      | https://interoperable-europe.ec.europa.eu/report                         |
+      | documented in https://interoperable-europe.ec.europa.eu/general          |
 
     # Edit test.
-#    When I go to the edit form of the "Test Assessment Report 2025" assessment
-#    And I fill in "Name" with "Test Assessment Report 2025 v2"
-#    And I press "Save"
-#    Then I should see the heading "Test Assessment Report 2025 v2"
-#
-#    # Delete test.
-#    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
-#    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
-#    When I press "Delete"
-#    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I press "Save"
+    Then I should see the heading "Test Assessment Report 2025 v2"
+
+    # Delete test.
+    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
+    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
+    When I press "Delete"
+    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
