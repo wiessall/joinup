@@ -618,7 +618,6 @@ final class ProvidedByWidget extends WidgetBase {
     $options = [];
 
     try {
-      // Load the field definition from public_organisation entity type.
       $fieldDefinitions = $this->entityTypeManager
         ->getStorage('field_config')
         ->loadByProperties([
@@ -629,34 +628,10 @@ final class ProvidedByWidget extends WidgetBase {
 
       if ($field_definition = reset($fieldDefinitions)) {
         $handlerSettings = $field_definition->getSetting('handler_settings');
-        $targetBundles = $handlerSettings['target_bundles'] ?? [];
-
-        // Load terms from the configured vocabulary.
-        if (!empty($targetBundles)) {
-          $vocabulary = reset($targetBundles);
-          $terms = $this->entityTypeManager
-            ->getStorage('taxonomy_term')
-            ->loadByProperties(['vid' => $vocabulary]);
-
-          // Apply sorting if configured.
-          $sortField = $handlerSettings['sort']['field'] ?? 'name';
-          $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
-
-          if ($sortField === 'name') {
-            uasort($terms, function ($a, $b) use ($sortDirection) {
-              $result = strcasecmp($a->label(), $b->label());
-              return $sortDirection === 'asc' ? $result : -$result;
-            });
-          }
-
-          foreach ($terms as $term) {
-            $options[$term->id()] = $term->label();
-          }
-        }
+        $options = $this->getTermOptionsFromHandlerSettings($handlerSettings);
       }
     }
     catch (\Exception $e) {
-      // Fallback: Return empty options if field not available.
       $this->logger->error('Failed to load organisation type options: @message', [
         '@message' => $e->getMessage(),
       ]);
@@ -690,34 +665,11 @@ final class ProvidedByWidget extends WidgetBase {
         $handler = $field_definition->getSetting('handler');
         $handlerSettings = $field_definition->getSetting('handler_settings');
 
-        // If using Views handler, get options from the View.
         if ($handler === 'views') {
           $options = $this->getOptionsFromViewsHandler($handlerSettings);
         }
-        // Otherwise use default taxonomy handler.
         else {
-          $targetBundles = $handlerSettings['target_bundles'] ?? [];
-          if (!empty($targetBundles)) {
-            $vocabulary = reset($targetBundles);
-            $terms = $this->entityTypeManager
-              ->getStorage('taxonomy_term')
-              ->loadByProperties(['vid' => $vocabulary]);
-
-            // Apply sorting if configured.
-            $sortField = $handlerSettings['sort']['field'] ?? 'name';
-            $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
-
-            if ($sortField === 'name') {
-              uasort($terms, function ($a, $b) use ($sortDirection) {
-                $result = strcasecmp($a->label(), $b->label());
-                return $sortDirection === 'asc' ? $result : -$result;
-              });
-            }
-
-            foreach ($terms as $term) {
-              $options[$term->id()] = $term->label();
-            }
-          }
+          $options = $this->getTermOptionsFromHandlerSettings($handlerSettings);
         }
       }
     }
@@ -726,6 +678,45 @@ final class ProvidedByWidget extends WidgetBase {
       $this->logger->error('Failed to load country options: @message', [
         '@message' => $e->getMessage(),
       ]);
+    }
+
+    return $options;
+  }
+
+  /**
+   * Get term options from handler settings.
+   *
+   * Loads taxonomy terms from the configured vocabulary and applies sorting.
+   *
+   * @param array $handlerSettings
+   *   The handler settings containing target bundles and sort configuration.
+   *
+   * @return array
+   *   Array of term options keyed by term ID.
+   */
+  protected function getTermOptionsFromHandlerSettings(array $handlerSettings): array {
+    $options = [];
+    $targetBundles = $handlerSettings['target_bundles'] ?? [];
+
+    if (!empty($targetBundles)) {
+      $vocabulary = reset($targetBundles);
+      $terms = $this->entityTypeManager
+        ->getStorage('taxonomy_term')
+        ->loadByProperties(['vid' => $vocabulary]);
+
+      $sortField = $handlerSettings['sort']['field'] ?? 'name';
+      $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
+
+      if ($sortField === 'name') {
+        uasort($terms, function ($a, $b) use ($sortDirection) {
+          $result = strcasecmp($a->label(), $b->label());
+          return $sortDirection === 'asc' ? $result : -$result;
+        });
+      }
+
+      foreach ($terms as $term) {
+        $options[$term->id()] = $term->label();
+      }
     }
 
     return $options;
