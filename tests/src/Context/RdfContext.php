@@ -253,7 +253,7 @@ class RdfContext extends RawDrupalContext {
       ->execute();
     /** @var \Drupal\taxonomy\TermInterface[] $terms */
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids);
-    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::Update, $terms);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::UPDATE, $terms);
   }
 
   /**
