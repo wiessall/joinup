@@ -6,5 +6,4 @@ services:
 
   Drupal\assessments\AssessmentVocabularyHelper: {}
 
-  assessments.resource_parser:
-    class: Drupal\assessments\ResourceParser
+  Drupal\assessments\ResourceParser: {}

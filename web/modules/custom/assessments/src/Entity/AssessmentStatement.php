@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
+use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -47,7 +48,31 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *    },
  * )
  */
-final class AssessmentStatement extends ContentEntityBase {
+final class AssessmentStatement extends ContentEntityBase implements AssessmentResourceInterface {
+
+  use AssessmentResourceTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourceAllowedProperties(): array {
+    return [
+      'interpretation',
+      'judgement',
+      'type',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourceRequiredProperties(): array {
+    return [
+      'interpretation',
+      'judgement',
+      'type',
+    ];
+  }
 
   /**
    * {@inheritdoc}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\rest\resource;
 
+use Drupal\assessments\ResourceParser;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -81,15 +82,14 @@ class AssessmentReportResource extends ResourceBase {
       return new ResourceResponse(['error' => 'Payload must be a single JSON object.'], 400);
     }
 
-    $processor = \Drupal::service('assessments.resource_parser');
-    $processor->parseInbound($data);
-    if ($validationErrors = $processor->getEntityValidationErrors()) {
-      return new ResourceResponse(['errors' => $validationErrors], 400);
+    $processor = \Drupal::getContainer()->get(ResourceParser::class);
+    $parsed = $processor->parseInbound($data);
+    if (!empty($parsed['errors'])) {
+      // Return an unprocessable entity response with the errors.
+      return new ResourceResponse(['errors' => $parsed['errors']], 422);
     }
 
-    $processor->generateEntityChain();
-
-    $response = new ResourceResponse($validationErrors, 201);
+    $response = new ResourceResponse($parsed['data'], 201);
     $response->addCacheableDependency((new CacheableMetadata())->setCacheMaxAge(0));
     return $response;
   }
