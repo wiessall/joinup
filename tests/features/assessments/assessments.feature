@@ -169,3 +169,26 @@ Feature: Assessment Report Entity Management
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
+
+    # Verify organization is only created when the main assessment form is saved.
+    # Regression test for ticket ISAICP-10555
+    Then I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Select organisation"
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "Organisation Should Not Be Created"
+    Then I press "Select existing organisation"
+    And I wait for AJAX to finish
+
+    # Check if organisation is createad.
+    Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
+    And the following field should be present "Select organisation"
+    And the following field should not be present "Organisation name"
+    And I select "GR1" from "Select organisation"
+    Then I press "Save"
+    Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
