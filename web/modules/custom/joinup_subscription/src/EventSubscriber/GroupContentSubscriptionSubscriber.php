@@ -13,6 +13,7 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessage;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,8 +34,8 @@ readonly class GroupContentSubscriptionSubscriber implements EventSubscriberInte
    */
   public static function getSubscribedEvents(): array {
     return [
-      NotificationEvents::NODE_CREATE => 'notifyOnCommunityContentCreation',
-      NotificationEvents::NODE_UPDATE => 'notifyOnCommunityContentPublication',
+      NotificationEvents::NODE_CREATE => 'notifyOnCollectionContentCreation',
+      NotificationEvents::NODE_UPDATE => 'notifyOnCollectionContentPublication',
     ];
   }
 
