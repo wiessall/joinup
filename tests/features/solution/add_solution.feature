@@ -6,8 +6,8 @@ Feature: Test adding solutions.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Required fields should be filled in
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I click "Add solution" in the plus button menu
 
     And I press "Confirm"
@@ -315,8 +315,8 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: User should see all topic categories.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I click "Add solution" in the plus button menu
     When the "Topic" tagify autocomplete should contain the following option groups:
       | Economy and Welfare  |
@@ -329,8 +329,8 @@ Feature: Test adding solutions.
 
   @javascript
   Scenario: Previous and Next buttons should be present and functional.
-    Given I am logged in as a facilitator of the "The Portal" collection
-    And I go to the homepage of the "The Portal" collection
+    Given I am logged in as a facilitator of the "Portal support" collection
+    And I go to the homepage of the "Portal support" collection
     And I open the plus button menu
     And I click "Add solution"
 
@@ -364,9 +364,9 @@ Feature: Test adding solutions.
   Scenario: Custom constraints point to the correct field.
     Given solution content:
       | title | short ID | state     | collection |
-      | Test  | qwerty   | published | The Portal |
+      | Test  | qwerty   | published | Portal support |
     Given I am logged in as a moderator
-    And I go to the "The Portal" collection
+    And I go to the "Portal support" collection
     And I open the plus button menu
     And I click "Add solution"
     When I click "Additional information"
