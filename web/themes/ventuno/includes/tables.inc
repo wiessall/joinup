@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_HOOK() for table--file-formatter-table.html.twig.
  *
@@ -34,4 +36,8 @@ function ventuno_preprocess_table(array &$variables): void {
     unset($variables['header']);
     $variables['attributes']['class'][] = 'form-table';
   }
+
+  // Allow passing header_attributes.
+  /** @see \ventuno_preprocess_field_multiple_value_form */
+  $variables['header_attributes'] = new Attribute($variables['header_attributes']);
 }
