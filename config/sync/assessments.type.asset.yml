@@ -12,6 +12,6 @@ third_party_settings:
 label_singular: asset
 label_plural: assets
 label_count:
-  - "@count asset\03@count assets"
+  no_count_capitalize: !!binary QXNzZXQDQXNzZXRz
 id: asset
 label: Asset

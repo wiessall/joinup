@@ -97,7 +97,7 @@ final class AssessmentStatement extends ContentEntityBase {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+    $fields['statement_type'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Type'))
       ->setDescription(t('The statement interoperability type.'))
       ->setTranslatable(FALSE)
@@ -153,7 +153,7 @@ final class AssessmentStatement extends ContentEntityBase {
     // bundle. The 'type' is kept in sync with the bundle value.
     $tid = \Drupal::service(AssessmentVocabularyHelper::class)
       ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
-    $this->set('type', $tid);
+    $this->set('statement_type', $tid);
   }
 
 }
