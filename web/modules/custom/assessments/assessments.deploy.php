@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\AssessmentVocabularyHelper;
+
 /**
  * Create 'Code'-type vocabularies terms.
  */
@@ -128,13 +130,9 @@ function assessments_deploy_200801(): void {
     ],
   ];
 
+  $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
   foreach ($institutions as $organisation_type => $institution_names) {
-    $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
-      ->condition('vid', 'assess_provider_type')
-      ->condition('id', $organisation_type)
-      ->execute();
-    assert(!empty($tids));
-    $tid = reset($tids);
+    $tid = $vocabHelper->getTermIdFromIdentifier('assess_provider_type', $organisation_type);
 
     foreach ($institution_names as $institution_name) {
       $entity = $storage->create([
