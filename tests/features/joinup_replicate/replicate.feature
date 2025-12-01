@@ -4,22 +4,22 @@ Feature: Cloning of entities
   Background:
     Given solution content:
       | title    | collection | published at     |
-      | Solution | The Portal | 2015-07-13T13:00 |
+      | Solution | Portal support | 2015-07-13T13:00 |
     And "custom_page" content:
       | title                  | collection | field_paragraphs_body          | published at     |
-      | Collection custom page | The Portal | Collection custom page content | 2016-07-13T13:00 |
+      | Collection custom page | Portal support | Collection custom page content | 2016-07-13T13:00 |
       | Solution custom page   | Solution   | Solution custom page content   | 2016-05-13T13:00 |
     And "event" content:
       | title            | collection | published at     |
-      | Collection event | The Portal | 2017-07-13T13:00 |
+      | Collection event | Portal support | 2017-07-13T13:00 |
       | Solution event   | Solution   | 2018-07-13T13:00 |
     And "news" content:
       | title           | collection | published at     |
-      | Collection news | The Portal | 2016-01-13T13:00 |
+      | Collection news | Portal support | 2016-01-13T13:00 |
       | Solution news   | Solution   | 2016-02-13T13:00 |
     And "document" content:
       | title               | collection | published at     |
-      | Collection document | The Portal | 2017-10-13T13:00 |
+      | Collection document | Portal support | 2017-10-13T13:00 |
       | Solution document   | Solution   | 2017-09-13T13:00 |
     Given users:
       | Username         | Roles |
@@ -27,7 +27,7 @@ Feature: Cloning of entities
       | Solution Owner   |       |
     And the following collection user memberships:
       | collection | user             | roles |
-      | The Portal | Collection Owner | owner |
+      | Portal support | Collection Owner | owner |
     And the following solution user memberships:
       | solution | user           | roles |
       | Solution | Solution Owner | owner |
@@ -55,13 +55,13 @@ Feature: Cloning of entities
       | user                                                   |
       | an anonymous user                                      |
       | logged in as an "authenticated user"                   |
-      | logged in as a "member" of the "The Portal" collection |
+      | logged in as a "member" of the "Portal support" collection |
       | logged in as a "member" of the "Solution" solution     |
 
   Scenario: Only custom page, document, event and news nodes should have the "Clone content" link
     Given "discussion" content:
       | title           | collection |
-      | Test discussion | The Portal |
+      | Test discussion | Portal support |
     And "licence" content:
       | title        |
       | Test licence |
@@ -90,17 +90,17 @@ Feature: Cloning of entities
       | role                                                      | node title             | content type |
       | logged in as a moderator                                  | Collection custom page | custom_page  |
       | logged in as a moderator                                  | Solution custom page   | custom_page  |
-      | logged in as a facilitator of the "The Portal" collection | Collection custom page | custom_page  |
+      | logged in as a facilitator of the "Portal support" collection | Collection custom page | custom_page  |
       | logged in as a facilitator of the "Solution" solution     | Solution custom page   | custom_page  |
       | logged in as "Collection Owner"                           | Collection custom page | custom_page  |
       | logged in as "Solution Owner"                             | Solution custom page   | custom_page  |
       # Testing events, news, and documents for collections only, they behave the same in solutions.
       | logged in as a moderator                                  | Collection event       | event        |
-      | logged in as a facilitator of the "The Portal" collection | Collection event       | event        |
+      | logged in as a facilitator of the "Portal support" collection | Collection event       | event        |
       | logged in as "Collection Owner"                           | Collection event       | event        |
       | logged in as a moderator                                  | Collection news        | news         |
-      | logged in as a facilitator of the "The Portal" collection | Collection news        | news         |
+      | logged in as a facilitator of the "Portal support" collection | Collection news        | news         |
       | logged in as "Collection Owner"                           | Collection news        | news         |
       | logged in as a moderator                                  | Collection document    | document     |
-      | logged in as a facilitator of the "The Portal" collection | Collection document    | document     |
+      | logged in as a facilitator of the "Portal support" collection | Collection document    | document     |
       | logged in as "Collection Owner"                           | Collection document    | document     |

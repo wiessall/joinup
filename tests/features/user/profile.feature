@@ -169,7 +169,7 @@ Feature: User profile
       | Botanic E.D.E.N.              |
       # Always present in all tests.
       # See joinup_test.install
-      | The Portal                    |
+      | Portal support                   |
     And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
@@ -299,7 +299,7 @@ Feature: User profile
       | Salt is salty           |
       # Always present in all tests.
       # See joinup_test.install
-      | The Portal              |
+      | Portal support             |
 
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
@@ -348,3 +348,24 @@ Feature: User profile
       | title  | type                   | weight |
       | Type   | Collection content top | -10    |
       | Status | Collection content top | -9     |
+
+  # Regression test for ticket ISAICP-10510.
+  Scenario: User profile with orphaned nationality reference does not cause errors
+    Given spatial terms:
+      | name    |
+      | Valeron |
+    Given users:
+      | Username      | E-mail                    | First name | Family name | Business title      | Nationality |
+      | Jane Doe      | jane.doe@example.com      | Jane       | Doe         | Software Engineer   | Valeron     |
+    # Delete the term we just created, leaving a stale reference in the user.
+    And I delete the "Spatial" term "Valeron"
+
+    # Visit search results where users are rendered in tile view mode
+    # This is where the bug would occur - in ventuno_preprocess_user() for tile view modes
+    When I am an anonymous user
+    And I visit "/search?f[0]=type:user&text=Jane"
+    # The search should complete without errors even though Jane has an orphaned nationality
+    Then I should see the text "Jane Doe"
+    And I should see the text "Software Engineer"
+    # The nationality should not be displayed since the referenced entity is gone
+    But I should not see the text "Country of origin:"

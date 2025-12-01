@@ -10,10 +10,10 @@ Feature: Custom page workflow transitions.
       | Mickey Mouse | mickey.mouse@example.com |
     And the following collection user memberships:
       | collection | user         | roles       |
-      | The Portal | Mickey Mouse | facilitator |
+      | Portal support | Mickey Mouse | facilitator |
     And custom_page content:
       | title          | collection | state     |
-      | Silent Echo v2 | The Portal | published |
+      | Silent Echo v2 | Portal support | published |
 
     When I am logged in as "Mickey Mouse"
     And I go to the edit form of the "Silent Echo v2" "custom page"
@@ -35,7 +35,7 @@ Feature: Custom page workflow transitions.
   Scenario: Test unpublish transition makes page unavailable to end users
     Given custom_page content:
       | title       | collection | state     |
-      | Help Center | The Portal | published |
+      | Help Center | Portal support | published |
 
     When I am an anonymous user
     And I go to the "Help Center" custom_page
