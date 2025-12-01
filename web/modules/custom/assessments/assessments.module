@@ -7,10 +7,16 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\assessments\Entity\AssessmentReport;
-use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\assessments\Entity\Assessment\Asset;
+use Drupal\assessments\Entity\Assessment\Expression;
+use Drupal\assessments\Entity\Assessment\Participation;
+use Drupal\assessments\Entity\Assessment\PublicOrganisation;
+use Drupal\assessments\Entity\Assessment\PublicService;
+use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
@@ -226,18 +232,6 @@ function assessments_entity_bundle_info(): array {
 }
 
 /**
- * Implements hook_entity_bundle_info_alter().
- */
-function assessments_entity_bundle_info_alter(array &$bundles): void {
-  if (isset($bundles['assessment']['report'])) {
-    $bundles['assessment']['report']['class'] = AssessmentReport::class;
-  }
-  if (isset($bundles['assessment']['public_organisation'])) {
-    $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
-  }
-}
-
-/**
  * Implements hook_views_pre_render().
  */
 function assessments_views_pre_render(ViewExecutable $view): void {
@@ -269,5 +263,32 @@ function assessments_views_pre_render(ViewExecutable $view): void {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function assessments_entity_bundle_info_alter(array &$bundles): void {
+  if (isset($bundles['assessment']['asset'])) {
+    $bundles['assessment']['asset']['class'] = Asset::class;
+  }
+  if (isset($bundles['assessment']['report'])) {
+    $bundles['assessment']['report']['class'] = Report::class;
+  }
+  if (isset($bundles['assessment']['expression'])) {
+    $bundles['assessment']['expression']['class'] = Expression::class;
+  }
+  if (isset($bundles['assessment']['participation'])) {
+    $bundles['assessment']['participation']['class'] = Participation::class;
+  }
+  if (isset($bundles['assessment']['public_organisation'])) {
+    $bundles['assessment']['public_organisation']['class'] = PublicOrganisation::class;
+  }
+  if (isset($bundles['assessment']['public_service'])) {
+    $bundles['assessment']['public_service']['class'] = PublicService::class;
+  }
+  if (isset($bundles['paragraph']['binding_requirement'])) {
+    $bundles['paragraph']['binding_requirement']['class'] = BindingRequirement::class;
   }
 }

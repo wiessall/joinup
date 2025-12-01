@@ -4,10 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\assessments\Entity\Assessment\Asset;
+use Drupal\assessments\Entity\Assessment\Participation;
+use Drupal\assessments\Entity\Assessment\PublicOrganisation;
+use Drupal\assessments\Entity\Assessment\PublicService;
+use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\AssessmentStatement;
+use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\Component\Uuid\Php;
 use Drupal\assessments\Model\AssessmentModel;
 use Drupal\assessments\Model\AssessmentModelInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityStorageException;
+use Github\Api\Repo;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -45,141 +56,144 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class ResourceParser implements ResourceParserInterface {
 
   /**
-   * The list of models.
+   * An array of errors.
    *
-   * @var \Drupal\assessments\Model\AssessmentModelInterface[]
+   * @var array
    */
-  protected array $models;
+  protected array $errors = [];
 
   /**
-   * The assessment report model.
+   * The assessment report to be created.
    *
-   * @var \Drupal\assessments\Model\AssessmentModelInterface
+   * @var \Drupal\assessments\Entity\Assessment\Report
    */
-  protected AssessmentModelInterface $assessmentReport;
-
-  /**
-   * The entity chain.
-   *
-   * @var \Drupal\Core\Entity\EntityInterface[]
-   */
-  protected array $entities = [];
+  protected Report $assessmentReport;
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'uuid')]
     protected Php $uuid,
+    protected Connection $database,
   ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function parseInbound(array $data, ?AssessmentModelInterface $parent = NULL, string $type = 'assessment', ?int $delta = NULL): void {
-    // Initialize an assessment model.
-    $model = AssessmentModel::createFromContext($data, $parent, $type, $delta);
-    if ($type === 'assessment') {
-      $this->assessmentReport = $model;
-    }
+  public function parseInbound(array &$data): array {
+    // Reset error state for this invocation.
+    $this->errors = [];
+    // Start a transaction for the full parse/create process.
+    $transaction = $this->database->startTransaction();
+    try {
+      // Reuse the generic sub-entry parser for the root assessment report.
+      $report_id = $this->parseSubEntry($data, 'assessment');
 
-    // First, check for the required properties.
-    foreach ($model->getRequiredResourceProperties() as $key) {
-      if (!isset($data[$key])) {
-        $model->addError($key, 'Missing required property: ' . $key);
+      // Optionally keep a reference to the created/updated report entity.
+      $loaded = Report::load($report_id);
+      if ($loaded instanceof Report) {
+        $this->assessmentReport = $loaded;
+      }
+
+      // If validation errors were collected during parsing, rollback.
+      if (!empty($this->errors)) {
+        $transaction->rollBack();
       }
     }
-
-    // Then, get all values apart from the referenced entities.
-    foreach ($model->getAllowedResourceProperties() as $key) {
-      if (isset($data[$key]) && !in_array($key, $model->getReferencedEntityProperties())) {
-        $model->addEntityValue($key, $data[$key] ?? NULL);
-      }
+    catch (\Throwable $e) {
+      // Rollback in case of any exception and rethrow.
+      $transaction->rollBack();
+      throw $e;
     }
 
-    $this->models[] = $model;
-    foreach ($model->getReferencedEntityProperties() as $key) {
-      if (isset($data[$key])) {
-        foreach ($this->entryAsList($data[$key]) as $index => $subentry) {
-          $this->parseInbound($subentry, $model, $key, $index);
-        }
-      }
-    }
-  }
-
-  public function generateEntityChain(AssessmentModelInterface $parent = NULL): array {
-    // Start from the root assessment model when no parent is provided.
-    if ($parent === NULL) {
-      $parent = $this->assessmentReport;
-    }
-
-    $violations = [];
-
-    // Recurse into child models first (post-order traversal).
-    foreach ($this->models as $model) {
-      if ($model->getParent() === $parent) {
-        $violations = array_merge($violations, $this->generateEntityChain($model));
-      }
-    }
-
-    // Create (but do not save) the entity for the current model.
-    $storage = $this->entityTypeManager->getStorage($parent->getEntityTypeId());
-    $entity = $storage->create($parent->getEntityValues());
-
-    // Keep the created entity in the chain for potential later use.
-    $this->entities[] = $entity;
-
-    // Validate the entity and collect violations.
-    $entity_errors = $entity->validate();
-    if ($entity_errors->count() > 0) {
-      foreach ($entity_errors as $error) {
-        $violations[] = [
-          'message' => $error->getMessage(),
-        ];
-      }
-    }
-
-    return $violations;
+    return ['data' => $data, 'errors' => $this->errors];
   }
 
   /**
-   * {@inheritdoc}
+   * Initializes an entity object based on the reference key.
+   *
+   * @param string $key
+   *   The reference key.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface
+   *   The initialized entity object.
    */
-  public function getEntityValidationErrors(?AssessmentModelInterface $model = NULL): array {
-    static $errors = [];
-    if ($model !== NULL) {
-      $model = $this->assessmentReport;
-    }
+  protected function initializeObject(string $key): ContentEntityInterface {
+    $mapping = [
+      'assessment' => Report::class,
+      'statement' => AssessmentStatement::class,
+      'asset' => Asset::class,
+      'participation' => Participation::class,
+      'public_organisation' => PublicOrganisation::class,
+      'affects' => PublicService::class,
+      'binding_requirement' => BindingRequirement::class,
+    ];
 
-    foreach ($this->models as $model) {
-      $entity = \Drupal::entityTypeManager()
-        ->getStorage($model->getEntityTypeId())
-        ->create($model->getEntityValues());
-
-      $entity_errors = $entity->validate();
-      if ($entity_errors->count() > 0) {
-        foreach ($entity_errors as $error) {
-          $errors[] = [
-            'message' => 'Property path: ' . $error->getPropertyPath() . ', Error: ' . $error->getMessage(),
-          ];
-        }
-      }
+    $class = $mapping[$key] ?? null;
+    if (!$class) {
+      $this->errors[] = sprintf('Unknown entity reference key: %s', $key);
+      throw new \InvalidArgumentException(sprintf('Unknown reference key: %s', $key));
     }
-    return $errors;
+    // Some entities use a different bundle name than the reference key.
+    $bundle = match ($key) {
+      'assessment' => 'report',
+      default => $key,
+    };
+    return $class::create(['type' => $bundle]);
   }
 
   /**
-   * Returns an array from a single value.
+   * Parses a sub-entry and returns its ID.
    *
-   * @param array|string|null $entry
-   *   The value to be converted.
+   * @param array $data
+   *   The data to parse.
+   * @param string $key
+   *   The reference key.
    *
-   * @return array
-   *   The converted value.
+   * @return string|int
+   *   The ID of the created or existing entity.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function entryAsList(array|string|null $entry): array {
-    if ($entry === NULL) {
-      return [];
-    }
-    return is_array($entry) && array_is_list($entry) ? $entry : [$entry];
-  }
+  protected function parseSubEntry(array &$data, string $key): string|int {
+    $entity = $this->initializeObject($key);
 
+    foreach ($entity->getResourceRequiredProperties() as $property) {
+      if (empty($data[$property])) {
+        $this->errors[] = sprintf('%s: Missing required property: %s', $key, $property);
+      }
+    }
+
+    foreach ($entity->getResourceAllowedProperties() as $property) {
+      if (!empty($data[$property]) && !in_array($property, $entity->getResourceReferenceProperties())) {
+        $entity->set($property, $data[$property]);
+        $violations = $entity->get($property)->validate();
+        foreach ($violations as $violation) {
+          $this->errors[] = sprintf('%s > %s: %s', $key, $violation->getPropertyPath(), $violation->getMessage());
+        }
+      }
+    }
+
+    foreach ($entity->getResourceReferenceProperties() as $property) {
+      $values = [];
+      $children = $data[$property] ?? [];
+      if (!is_array($children)) {
+        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $key, $property);
+        $children = [];
+      }
+      foreach ($children as &$subentry) {
+        $values[] = $this->parseSubEntry($subentry, $property);
+      }
+      unset($subentry);
+      $entity->set($property, $values);
+      $violations = $entity->get($property)->validate();
+      foreach ($violations as $violation) {
+        $this->errors[] = sprintf('%s > %s > %s: %s', $key, $property, $violation->getPropertyPath(), $violation->getMessage());
+      }
+    }
+
+    $entity->save();
+    // Write back the generated ID into the current sub-entry data.
+    $data['id'] = $entity->id();
+    return $entity->id();
+  }
 }
