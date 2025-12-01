@@ -13,6 +13,7 @@ use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -57,9 +58,11 @@ final class ProvidedByWidget extends WidgetBase {
     array $third_party_settings,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelFactoryInterface $loggerFactory,
+    MessengerInterface $messenger,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
     $this->logger = $loggerFactory->get('assessments');
+    $this->messenger = $messenger;
   }
 
   /**
@@ -74,6 +77,7 @@ final class ProvidedByWidget extends WidgetBase {
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
       $container->get('logger.factory'),
+      $container->get('messenger'),
     );
   }
 
@@ -892,7 +896,10 @@ final class ProvidedByWidget extends WidgetBase {
         && !empty($value['content']['name'])) {
 
         $organisationName = trim($value['content']['name']);
+        $isEuType = !empty($value['content']['new_org_type']) &&
+          $this->isEuOrganisationType($value['content']['new_org_type']);
 
+        // Build query to find potential matches.
         $query = $this->entityTypeManager
           ->getStorage('assessment')
           ->getQuery()
@@ -901,31 +908,32 @@ final class ProvidedByWidget extends WidgetBase {
           ->accessCheck()
           ->range(0, 1);
 
-        $hasType = FALSE;
         if (!empty($value['content']['new_org_type'])) {
           $query->condition('organisation_type', $value['content']['new_org_type']);
-          $hasType = TRUE;
         }
 
-        $hasCountry = FALSE;
         if (!empty($value['content']['new_org_country'])) {
           $query->condition('country', $value['content']['new_org_country']);
-          $hasCountry = TRUE;
         }
 
         $existingIds = $query->execute();
 
-        // Reuse existing organisation only if all matching criteria are met.
-        // For EU organisations: name + type must match.
-        // For national/regional/local: name + type + country must match.
-        if (!empty($existingIds) && $hasType) {
-          $isEuType = $this->isEuOrganisationType($value['content']['new_org_type']);
+        // Reuse existing organisation if found.
+        if (!empty($existingIds)) {
+          $newValues[$delta] = [
+            'target_id' => reset($existingIds),
+          ];
 
-          if ($isEuType || $hasCountry) {
-            $existingId = reset($existingIds);
-            $newValues[$delta] = [
-              'target_id' => $existingId,
-            ];
+          // Display warning message.
+          if ($isEuType) {
+            $this->messenger->addWarning($this->t(
+              "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+            ));
+          }
+          else {
+            $this->messenger->addWarning($this->t(
+              "You tried to create a new organisation but one with the same type, country, and name already exists. We've linked the existing one to your report."
+            ));
           }
         }
 

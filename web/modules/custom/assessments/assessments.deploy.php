@@ -153,3 +153,17 @@ function assessments_deploy_200801(): void {
     }
   }
 }
+
+/**
+ * Ensure name field uses utf8mb4_unicode_ci collation in assessment_field_data.
+ */
+function assessments_deploy_200802(): void {
+  $connection = \Drupal::database();
+  if ($connection->schema()->tableExists('assessment_field_data')) {
+    $connection->query("
+      ALTER TABLE {assessment_field_data}
+      CONVERT TO CHARACTER SET utf8mb4
+      COLLATE utf8mb4_unicode_ci
+    ");
+  }
+}
