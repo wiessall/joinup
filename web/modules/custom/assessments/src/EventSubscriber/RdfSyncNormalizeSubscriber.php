@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\EventSubscriber;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
+use Drupal\Core\Url;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\AssessmentStatement;
+use Drupal\file\FileInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\Normalizer\RdfSyncNormalizer;
+use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +35,59 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    return [RdfSyncNormalizeEvent::class => 'expandReport'];
+    return [
+      RdfSyncNormalizeEvent::class => [
+        ['addDocumentTriples'],
+        ['expandReport'],
+      ],
+    ];
+  }
+
+  /**
+   * Appends the document triples to the normalized array.
+   *
+   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
+   *   The event.
+   */
+  public function addDocumentTriples(RdfSyncNormalizeEvent $event): void {
+    $entity = $event->getEntity();
+    if (!$fieldName = $this->getDocumentField($entity)) {
+      return;
+    }
+
+    $normalized = $event->getNormalizedArray();
+
+    foreach ($entity->get($fieldName) as $item) {
+      $file = $item->entity;
+      assert($file instanceof FileInterface);
+      $fileUrl = Url::fromUserInput($file->get('uri')->url)
+        ->setAbsolute()
+        ->toString();
+
+      // Reference from entity to the file.
+      $normalized[$entity->get('uri')->value]['http://xmlns.com/foaf/0.1/page'][] = (new Resource($fileUrl))->toRdfPhp();
+      // The type of the file.
+      $normalized[$fileUrl]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource('http://xmlns.com/foaf/0.1/Document'))->toRdfPhp();
+    }
+
+    $event->setNormalizedArray($normalized);
+  }
+
+  /**
+   * Returns the document field name given an entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity.
+   *
+   * @return string|null
+   *   The name of the document field or NULL.
+   */
+  protected function getDocumentField(ContentEntityInterface $entity): ?string {
+    return match(TRUE) {
+      $entity instanceof ParagraphInterface && $entity->bundle() === 'binding_requirement' => 'requirement_documents',
+      $entity instanceof AssessmentStatement => 'landing_page',
+      default => NULL,
+    };
   }
 
   /**
@@ -46,7 +103,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function expandReport(RdfSyncNormalizeEvent $event): void {
-    if (!$this->isApplicable($event)) {
+    if (!$this->expandReportAllowed($event)) {
       return;
     }
 
@@ -100,7 +157,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Checks whether to subscribe to the given event.
+   * Checks whether is possible to expand the report.
    *
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
    *   The event.
@@ -108,7 +165,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
    * @return bool
    *   Whether to subscribe to the given event.
    */
-  protected function isApplicable(RdfSyncNormalizeEvent $event): bool {
+  protected function expandReportAllowed(RdfSyncNormalizeEvent $event): bool {
     $request = $event->getContext()['request'] ?? NULL;
     return $request instanceof Request &&
       $event->getEntity() instanceof AssessmentReport &&
