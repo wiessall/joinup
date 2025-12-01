@@ -29,4 +29,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "/interoperable-europe\r\n/interoperable-europe/events\r\n/interoperable-europe/policy"
+    pages: "\r\n"
