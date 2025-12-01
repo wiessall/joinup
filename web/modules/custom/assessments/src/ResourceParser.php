@@ -164,6 +164,12 @@ final class ResourceParser implements ResourceParserInterface {
     }
 
     foreach ($entity->getResourceAllowedProperties() as $property) {
+      // @todo Probably this is not needed?
+      if (!$entity->hasField($property)) {
+        $this->errors[] = sprintf('%s: Unknown property: %s', $key, $property);
+        continue;
+      }
+
       if (!empty($data[$property]) && !in_array($property, $entity->getResourceReferenceProperties())) {
         $entity->set($property, $data[$property]);
         $violations = $entity->get($property)->validate();
@@ -174,6 +180,12 @@ final class ResourceParser implements ResourceParserInterface {
     }
 
     foreach ($entity->getResourceReferenceProperties() as $property) {
+      // @todo Probably this is not needed?
+      if (!$entity->hasField($property)) {
+        $this->errors[] = sprintf('%s: Unknown property: %s', $key, $property);
+        continue;
+      }
+
       $values = [];
       $children = $data[$property] ?? [];
       if (!is_array($children)) {
