@@ -192,3 +192,26 @@ Feature: Assessment Report Entity Management
     Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
 
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
+
+    # Test case-insensitive matching for local organizations.
+    # Regression test for case-insensitive name matching.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "gr1"
+    Then I press "Save"
+    Then I should see the warning message containing "one with the same type, country, and name already exists"
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    # Test case-insensitive matching for EU organizations.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "portugal ministry of digital affairs"
+    Then I press "Save"
+    Then I should see the warning message containing "one with the same type and name already exists"
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
