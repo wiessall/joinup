@@ -30,12 +30,12 @@ final class Participation extends Assessment {
         'is_reference' => FALSE,
       ],
       'country' => [
-        'field_name' => 'country',
+        'field_name' => 'stakeholder_country',
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'participation_type' => [
-        'field_name' => 'participation_type',
+      'type' => [
+        'field_name' => 'participant_type',
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],

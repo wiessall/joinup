@@ -42,7 +42,7 @@ final class Report extends Assessment implements AssessmentResourceInterface {
         'is_reference' => TRUE,
       ],
       'results_in' => [
-        'field_name' => 'results_in',
+        'field_name' => 'other',
         'is_required' => TRUE,
         'is_reference' => TRUE,
       ],

@@ -30,11 +30,6 @@ final class Asset extends Assessment implements AssessmentResourceInterface {
         'is_required' => TRUE,
         'is_reference' => FALSE,
       ],
-      'description' => [
-        'field_name' => 'description',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
       'landing_page' => [
         'field_name' => 'landing_page',
         'is_required' => FALSE,

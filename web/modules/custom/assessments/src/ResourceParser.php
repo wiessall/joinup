@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments;
 
 use Drupal\assessments\Entity\Assessment\Asset;
+use Drupal\assessments\Entity\Assessment\Expression;
 use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
 use Drupal\assessments\Entity\Assessment\PublicService;
@@ -141,7 +142,7 @@ final class ResourceParser implements ResourceParserInterface {
       'results_in' => AssessmentStatement::class,
       'asset' => Asset::class,
       'documents' => Asset::class,
-      'expression' => \Drupal\assessments\Entity\Assessment\Expression::class,
+      'expression' => Expression::class,
       'participation' => Participation::class,
       'has_participation' => Participation::class,
       'public_organisation' => PublicOrganisation::class,
@@ -159,20 +160,23 @@ final class ResourceParser implements ResourceParserInterface {
    *   The data to parse.
    * @param string $key
    *   The reference key.
+   * @param string $basePath
+   *   The base path for error reporting. Default is empty as the key will be
+   *   appended.
    *
    * @return string|int
    *   The ID of the created or existing entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function parseSubEntry(array &$data, string $key): string|int {
+  protected function parseSubEntry(array &$data, string $key, string $basePath = ''): string|int {
     $entity = $this->initializeObject($key);
     $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
 
     // Validate required properties based on mappings.
     foreach ($mappings as $property => $definition) {
       if (!empty($definition['is_required']) && empty($data[$property])) {
-        $this->errors[] = sprintf('%s: Missing required property: %s', $key, $property);
+        $this->errors[] = sprintf('%s: Missing required property: %s', $basePath . $key, $property);
       }
     }
 
@@ -187,7 +191,7 @@ final class ResourceParser implements ResourceParserInterface {
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $basePath . $key, $property, $fieldName);
         continue;
       }
       if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '') {
@@ -199,7 +203,7 @@ final class ResourceParser implements ResourceParserInterface {
       $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
-        $this->errors[] = sprintf('%s > %s: %s', $key, $violation->getPropertyPath(), $violation->getMessage());
+        $this->errors[] = sprintf('%s > %s: %s', $basePath . $key, $violation->getPropertyPath(), $violation->getMessage());
       }
     }
 
@@ -210,13 +214,13 @@ final class ResourceParser implements ResourceParserInterface {
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $basePath . $key, $property, $fieldName);
         continue;
       }
       $values = [];
       $children = $data[$property] ?? [];
       if (!is_array($children)) {
-        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $key, $property);
+        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $basePath . $key, $property);
         $children = [];
       }
       foreach ($children as &$subentry) {
@@ -232,13 +236,13 @@ final class ResourceParser implements ResourceParserInterface {
               continue;
             }
             // Provided ID not found or wrong type.
-            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
+            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
             // Skip further processing for this invalid reference.
             continue;
           }
         }
         // Fallback to recursive parsing when no valid id provided.
-        $values[] = $this->parseSubEntry($subentry, $property);
+        $values[] = $this->parseSubEntry($subentry, $property, $basePath . $key . ' > ');
       }
       unset($subentry);
       $translated = method_exists($entity, 'translateResourceValue')
@@ -247,7 +251,7 @@ final class ResourceParser implements ResourceParserInterface {
       $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
-        $this->errors[] = sprintf('%s > %s > %s: %s', $key, $property, $violation->getPropertyPath(), $violation->getMessage());
+        $this->errors[] = sprintf('%s > %s: %s', $basePath . $key, $violation->getPropertyPath(), $violation->getMessage());
       }
     }
 
