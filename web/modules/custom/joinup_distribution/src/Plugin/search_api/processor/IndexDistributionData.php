@@ -125,12 +125,11 @@ class IndexDistributionData extends ProcessorPluginBase {
       if (!empty($distribution->getResources())) {
         foreach ($distribution->getResources() as $resource) {
           if ($resource instanceof LinkItemInterface) {
-            $url = $resource->uri;
+            $sapiField->addValue($resource->uri);
           }
           elseif ($resource instanceof FileInterface) {
-            $url = $this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri());
+            $sapiField->addValue($this->fileUrlGenerator->generateAbsoluteString($resource->getFileUri()));
           }
-          $sapiField->addValue($url);
         }
       }
 
