@@ -315,6 +315,13 @@ function assessments_views_data(): array {
 }
 
 /**
+ * Enable options_buttons widget for state.
+ */
+function assessments_field_widget_info_alter(array &$info): void {
+  $info['options_buttons']['field_types'][] = 'state';
+}
+
+/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
@@ -337,8 +344,14 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
 }
 
 /**
- * Enable options_buttons widget for state.
+ * Implements hook_inline_entity_form_table_fields_alter().
  */
-function assessments_field_widget_info_alter(array &$info): void {
-  $info['options_buttons']['field_types'][] = 'state';
+function assessments_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
+  unset($fields['status']);
+
+  $fields['landing_page'] = [
+    'type' => 'field',
+    'label' => t('Relevant website'),
+    'weight' => 10,
+  ];
 }
