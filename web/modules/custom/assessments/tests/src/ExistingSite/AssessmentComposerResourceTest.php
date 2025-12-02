@@ -47,7 +47,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               // Required by participation mapping.
               'name' => 'BE participant',
               'country' => 'BE',
-              'type' => 'national_public_sector_body',
+              'type' => 'local_public_sector_body',
             ],
           ],
           'asset' => [
@@ -63,7 +63,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
       'provider' => [
         [
           'name' => 'City of Brussels',
-          'organisation_type' => 'local_public_sector_body',
+          'type' => 'local_public_sector_body',
           'country' => 'BE',
         ],
       ],
