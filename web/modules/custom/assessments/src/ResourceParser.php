@@ -118,17 +118,7 @@ final class ResourceParser implements ResourceParserInterface {
    *   The initialized entity object.
    */
   protected function initializeObject(string $key): ContentEntityInterface {
-    $mapping = [
-      'assessment' => Report::class,
-      'statement' => AssessmentStatement::class,
-      'asset' => Asset::class,
-      'participation' => Participation::class,
-      'public_organisation' => PublicOrganisation::class,
-      'affects' => PublicService::class,
-      'binding_requirement' => BindingRequirement::class,
-    ];
-
-    $class = $mapping[$key] ?? null;
+    $class = $this->resolveClassFromKey($key);
     if (!$class) {
       $this->errors[] = sprintf('Unknown entity reference key: %s', $key);
       throw new \InvalidArgumentException(sprintf('Unknown reference key: %s', $key));
@@ -139,6 +129,27 @@ final class ResourceParser implements ResourceParserInterface {
       default => $key,
     };
     return $class::create(['type' => $bundle]);
+  }
+
+  /**
+   * Resolves the expected entity class for a reference key.
+   */
+  protected function resolveClassFromKey(string $key): ?string {
+    $mapping = [
+      'assessment' => Report::class,
+      'statement' => AssessmentStatement::class,
+      'results_in' => AssessmentStatement::class,
+      'asset' => Asset::class,
+      'documents' => Asset::class,
+      'expression' => \Drupal\assessments\Entity\Assessment\Expression::class,
+      'participation' => Participation::class,
+      'has_participation' => Participation::class,
+      'public_organisation' => PublicOrganisation::class,
+      'provider' => PublicOrganisation::class,
+      'affects' => PublicService::class,
+      'binding_requirement' => BindingRequirement::class,
+    ];
+    return $mapping[$key] ?? null;
   }
 
   /**
@@ -156,36 +167,49 @@ final class ResourceParser implements ResourceParserInterface {
    */
   protected function parseSubEntry(array &$data, string $key): string|int {
     $entity = $this->initializeObject($key);
+    $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
 
-    foreach ($entity->getResourceRequiredProperties() as $property) {
-      if (empty($data[$property])) {
+    // Validate required properties based on mappings.
+    foreach ($mappings as $property => $definition) {
+      if (!empty($definition['is_required']) && empty($data[$property])) {
         $this->errors[] = sprintf('%s: Missing required property: %s', $key, $property);
       }
     }
 
-    foreach ($entity->getResourceAllowedProperties() as $property) {
-      // @todo Probably this is not needed?
-      if (!$entity->hasField($property)) {
-        $this->errors[] = sprintf('%s: Unknown property: %s', $key, $property);
+    // Handle scalar (non-reference) properties using field mappings.
+    foreach ($mappings as $property => $definition) {
+      if (!empty($definition['is_reference'])) {
         continue;
       }
-
-      if (!empty($data[$property]) && !in_array($property, $entity->getResourceReferenceProperties())) {
-        $entity->set($property, $data[$property]);
-        $violations = $entity->get($property)->validate();
-        foreach ($violations as $violation) {
-          $this->errors[] = sprintf('%s > %s: %s', $key, $violation->getPropertyPath(), $violation->getMessage());
-        }
+      // Special property 'id' is supported inbound but should not be set.
+      if ($property === 'id') {
+        continue;
+      }
+      $fieldName = $definition['field_name'] ?? $property;
+      if (!$entity->hasField($fieldName)) {
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $key, $property, $fieldName);
+        continue;
+      }
+      if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '') {
+        continue;
+      }
+      $entity->set($fieldName, $data[$property]);
+      $violations = $entity->get($fieldName)->validate();
+      foreach ($violations as $violation) {
+        $this->errors[] = sprintf('%s > %s: %s', $key, $violation->getPropertyPath(), $violation->getMessage());
       }
     }
 
-    foreach ($entity->getResourceReferenceProperties() as $property) {
-      // @todo Probably this is not needed?
-      if (!$entity->hasField($property)) {
-        $this->errors[] = sprintf('%s: Unknown property: %s', $key, $property);
+    // Handle reference (nested) properties using field mappings.
+    foreach ($mappings as $property => $definition) {
+      if (empty($definition['is_reference'])) {
         continue;
       }
-
+      $fieldName = $definition['field_name'] ?? $property;
+      if (!$entity->hasField($fieldName)) {
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $key, $property, $fieldName);
+        continue;
+      }
       $values = [];
       $children = $data[$property] ?? [];
       if (!is_array($children)) {
@@ -193,11 +217,29 @@ final class ResourceParser implements ResourceParserInterface {
         $children = [];
       }
       foreach ($children as &$subentry) {
+        // If an explicit ID is provided for a reference, try to load it and
+        // short-circuit without deeper parsing.
+        if (is_array($subentry) && !empty($subentry['id'])) {
+          $expectedClass = $this->resolveClassFromKey($property);
+          if ($expectedClass) {
+            $loaded = $expectedClass::load($subentry['id']);
+            if ($loaded instanceof $expectedClass) {
+              $values[] = $loaded->id();
+              // No further processing for this subentry.
+              continue;
+            }
+            // Provided ID not found or wrong type.
+            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
+            // Skip further processing for this invalid reference.
+            continue;
+          }
+        }
+        // Fallback to recursive parsing when no valid id provided.
         $values[] = $this->parseSubEntry($subentry, $property);
       }
       unset($subentry);
-      $entity->set($property, $values);
-      $violations = $entity->get($property)->validate();
+      $entity->set($fieldName, $values);
+      $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
         $this->errors[] = sprintf('%s > %s > %s: %s', $key, $property, $violation->getPropertyPath(), $violation->getMessage());
       }

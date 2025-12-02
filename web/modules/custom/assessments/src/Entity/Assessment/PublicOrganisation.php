@@ -102,12 +102,33 @@ final class PublicOrganisation extends Assessment implements AssessmentResourceI
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'name',
-      'description',
-      'organisation_type',
-      'country',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'description' => [
+        'field_name' => 'description',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'organisation_type' => [
+        'field_name' => 'organisation_type',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'country' => [
+        'field_name' => 'country',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 

@@ -55,22 +55,23 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'interpretation',
-      'judgement',
-      'type',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'interpretation',
-      'judgement',
-      'type',
+      'interpretation' => [
+        'field_name' => 'interpretation',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'judgement' => [
+        'field_name' => 'judgement',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'type' => [
+        'field_name' => 'statement_type',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 

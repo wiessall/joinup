@@ -17,20 +17,28 @@ final class Participation extends Assessment {
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'name',
-      'country',
-      'participation_type',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'name',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'country' => [
+        'field_name' => 'country',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'participation_type' => [
+        'field_name' => 'participation_type',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 
