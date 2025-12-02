@@ -68,6 +68,7 @@ class UriConverterForm extends FormBase {
     // Build a Drupal internal URI.
     $internalUri = 'internal:/' . trim($path, "/");
     $url = Url::fromUri($internalUri);
+    $entity = NULL;
 
     if (!$url->isRouted() || !preg_match('/^entity.(node|taxonomy_term).canonical$/', $url->getRouteName(), $match)) {
       // Maybe it's a legacy URL.
