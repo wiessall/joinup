@@ -199,6 +199,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Sign in to continue"
 
     # Test as logged in user.
+    # @todo ISAICP-10419 Use authenticated?
     When I am logged in as a developer
     And I visit "collection/assessments/report/repository"
     Then I should see the heading "Assessment reports"
