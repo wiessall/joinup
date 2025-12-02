@@ -1,3 +1,20 @@
 - publiccodeYmlVersion: "0.2"
   name: GitHub solution 1
   url: https://github.com/dummy-namespace-1/dummy-name-1
+
+- id: 6011
+  source: 'gitlab'
+  owner_name: 'group1'
+  name: 'project-1-1'
+  description: 'Implementatie mbv IaC van de verwerkinglogging standaard'
+  last_change: '2024-07-11T00:05:41.000Z'
+  stars: 5
+  avatar_url: 'https://avatars.githubusercontent.com/u/29945117?v=4'
+  fork_count: 0
+  issue_open_count: 14
+  last_fetched_at: '2024-07-11T13:22:46.916Z'
+  merge_request_open_count: 0
+  archived: false
+  organization_id: 9
+  readme_url: ''
+  slug: 'gemeentenijmegen-verwerkingenlogging-33391'
