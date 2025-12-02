@@ -68,6 +68,7 @@ class JoinupLicenceCompatibilityRulePluginManager extends DefaultPluginManager {
         return $plugin_id;
       }
     }
+    return self::INCOMPATIBLE_DOCUMENT_ID;
   }
 
   /**
