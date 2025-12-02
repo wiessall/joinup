@@ -54,17 +54,14 @@ class AssessmentsReportsLinks extends AreaPluginBase {
 
     $build = [
       '#type' => 'container',
-      '#attributes' => [
-        'class' => ['d-flex', 'col-gap-2', 'mb-4'],
-      ],
+      '#attributes' => ['class' => ['assessments-report-links']],
     ];
 
-    foreach ($links as $i => $link) {
+    foreach ($links as $link) {
       $build[] = [
         '#type' => 'link',
         '#url' => $link['url'],
         '#title' => $link['title'],
-        '#attributes' => ['class' => ['btn', $i === 0 ? 'btn-primary' : 'btn-secondary']],
       ];
     }
 
