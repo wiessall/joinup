@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Step definitions for assessments.
@@ -45,10 +46,12 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
-      // Use "current" to set the owner to the current user.
-      if (isset($assessment['uid']) && $assessment['uid'] === 'current') {
-        $user = $this->userManager->getCurrentUser();
-        $assessment['uid'] = $user->uid;
+      // Resolve username passed to uid.
+      if (isset($assessment['uid']) && !is_numeric($assessment['uid'])) {
+        $user = user_load_by_name($assessment['uid']);
+        if ($user instanceof UserInterface) {
+          $assessment['uid'] = $user->id();
+        }
       }
 
       $assessment = (object) $assessment;
