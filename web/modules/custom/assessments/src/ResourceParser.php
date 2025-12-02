@@ -83,11 +83,25 @@ final class ResourceParser implements ResourceParserInterface {
   public function parseInbound(array &$data): array {
     // Reset error state for this invocation.
     $this->errors = [];
-    // Start a transaction for the full parse/create process.
+
+    // STEP 1: Validation-only pass — do not save anything.
+    try {
+      $this->validateSubEntry($data, 'assessment');
+    }
+    catch (\Throwable $e) {
+      // Any unexpected exception during validation should surface as a 422.
+      $this->errors[] = sprintf('Validation failed: %s', $e->getMessage());
+    }
+
+    // If there are validation errors, return early without saving.
+    if (!empty($this->errors)) {
+      return ['data' => $data, 'errors' => $this->errors];
+    }
+
+    // STEP 2: Persistence pass — create/update entities in a transaction.
     $transaction = $this->database->startTransaction();
     try {
-      // Reuse the generic sub-entry parser for the root assessment report.
-      $report_id = $this->parseSubEntry($data, 'assessment');
+      $report_id = $this->persistSubEntry($data, 'assessment');
 
       // Optionally keep a reference to the created/updated report entity.
       $loaded = Report::load($report_id);
@@ -95,13 +109,13 @@ final class ResourceParser implements ResourceParserInterface {
         $this->assessmentReport = $loaded;
       }
 
-      // If validation errors were collected during parsing, rollback.
       if (!empty($this->errors)) {
+        // Any errors discovered during persistence (e.g., field violations)
+        // cause a rollback and will be returned to the client.
         $transaction->rollBack();
       }
     }
     catch (\Throwable $e) {
-      // Rollback in case of any exception and rethrow.
       $transaction->rollBack();
       throw $e;
     }
@@ -170,51 +184,144 @@ final class ResourceParser implements ResourceParserInterface {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function parseSubEntry(array &$data, string $key, string $basePath = ''): string|int {
+    // Backwards-compatible wrapper. The actual implementation now lives in
+    // persistSubEntry() as part of the two-phase processing (validate + persist).
+    return $this->persistSubEntry($data, $key, $basePath);
+  }
+
+  /**
+   * First pass: validate inbound data without creating/saving entities.
+   *
+   * - Ensures only allowed properties exist in the JSON (based on mappings).
+   * - Ensures required properties are present and not empty.
+   * - Recursively validates nested references, including provided IDs.
+   * - Does NOT perform field constraint validations or any persistence.
+   */
+  protected function validateSubEntry(array &$data, string $key, string $basePath = ''): void {
     $entity = $this->initializeObject($key);
     $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
 
-    // Validate required properties based on mappings.
-    foreach ($mappings as $property => $definition) {
-      if (!empty($definition['is_required']) && empty($data[$property])) {
-        $this->errors[] = sprintf('%s: Missing required property: %s', $basePath . $key, $property);
+    // Allowed properties are those defined in mappings plus the inbound 'id'.
+    $allowedProperties = array_keys($mappings);
+    $allowedProperties[] = 'id';
+    foreach ($data as $prop => $value) {
+      if (!in_array($prop, $allowedProperties, true)) {
+        $this->errors[] = sprintf('%s: Unexpected property: %s', $basePath . $key, (string) $prop);
       }
     }
+
+    // Check required properties are present and not empty.
+    foreach ($mappings as $property => $definition) {
+      // Skip special-case statements if needed (mirrors persist pass).
+      if ($property === 'results_in' && $key === 'assessment') {
+        continue;
+      }
+      if (!empty($definition['is_required'])) {
+        if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '' || $data[$property] === []) {
+          $this->errors[] = sprintf('%s: Missing required property: %s', $basePath . $key, $property);
+        }
+      }
+    }
+
+    // Validate reference children structure and recurse.
+    foreach ($mappings as $property => $definition) {
+      if (empty($definition['is_reference'])) {
+        continue;
+      }
+      if ($property === 'results_in' && $key === 'assessment') {
+        continue;
+      }
+      $children = $data[$property] ?? [];
+      if ($children === null || $children === '') {
+        // Nothing to validate.
+        continue;
+      }
+      if (!is_array($children)) {
+        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $basePath . $key, $property);
+        continue;
+      }
+      foreach ($children as &$subentry) {
+        // If an explicit ID is provided, ensure it references the correct entity type and exists.
+        if (is_array($subentry) && !empty($subentry['id'])) {
+          $expectedClass = $this->resolveClassFromKey($property);
+          if ($expectedClass) {
+            $loaded = $expectedClass::load($subentry['id']);
+            if ($loaded instanceof $expectedClass) {
+              // OK: existing reference. No further validation on its internals.
+              continue;
+            }
+            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
+            continue;
+          }
+        }
+        // Recurse for embedded new/updated entities.
+        if (is_array($subentry)) {
+          $this->validateSubEntry($subentry, $property, $basePath . $key . ' > ');
+        }
+        else {
+          $this->errors[] = sprintf('%s > %s: Invalid sub-entry format', $basePath . $key, $property);
+        }
+      }
+      unset($subentry);
+    }
+  }
+
+  /**
+   * Second pass: persist entities (create/update) from leaf to root.
+   *
+   * Performs field-level Drupal validations and saves entities, writing back
+   * generated IDs to the inbound structure. Assumes structural validation has
+   * already succeeded in the first pass.
+   *
+   * @return string|int
+   *   The ID of the created or existing entity.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  protected function persistSubEntry(array &$data, string $key, string $basePath = ''): string|int {
+    $entity = $this->initializeObject($key);
+    $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
 
     // Handle scalar (non-reference) properties using field mappings.
     foreach ($mappings as $property => $definition) {
       if (!empty($definition['is_reference'])) {
         continue;
       }
-      // Special property 'id' is supported inbound but should not be set.
       if ($property === 'id') {
         continue;
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $basePath . $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s \u2192 %s', $basePath . $key, $property, $fieldName);
         continue;
       }
       if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '') {
         continue;
       }
-      $translated = method_exists($entity, 'translateResourceValue')
-        ? $entity->translateResourceValue($fieldName, $data[$property])
-        : $data[$property];
+      $translated = $entity->translateResourceValue($fieldName, $data[$property]);
+      if ($translated === NULL) {
+        $this->errors[] = sprintf('%s > %s: Unable to translate value', $basePath . $key, $fieldName);
+        continue;
+      }
       $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
-        $this->errors[] = sprintf('%s > %s: %s', $basePath . $key, $violation->getPropertyPath(), $violation->getMessage());
+        $this->errors[] = sprintf('%s > %s: %s', $basePath . $key, $fieldName, $violation->getMessage());
       }
     }
 
     // Handle reference (nested) properties using field mappings.
     foreach ($mappings as $property => $definition) {
+      // Statements (results_in) are handled as a special case.
+      if ($property === 'results_in' && $key === 'assessment') {
+        continue;
+      }
       if (empty($definition['is_reference'])) {
         continue;
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s -> %s', $basePath . $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s \u2192 %s', $basePath . $key, $property, $fieldName);
         continue;
       }
       $values = [];
@@ -224,30 +331,22 @@ final class ResourceParser implements ResourceParserInterface {
         $children = [];
       }
       foreach ($children as &$subentry) {
-        // If an explicit ID is provided for a reference, try to load it and
-        // short-circuit without deeper parsing.
         if (is_array($subentry) && !empty($subentry['id'])) {
           $expectedClass = $this->resolveClassFromKey($property);
           if ($expectedClass) {
             $loaded = $expectedClass::load($subentry['id']);
             if ($loaded instanceof $expectedClass) {
               $values[] = $loaded->id();
-              // No further processing for this subentry.
               continue;
             }
-            // Provided ID not found or wrong type.
             $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
-            // Skip further processing for this invalid reference.
             continue;
           }
         }
-        // Fallback to recursive parsing when no valid id provided.
-        $values[] = $this->parseSubEntry($subentry, $property, $basePath . $key . ' > ');
+        $values[] = $this->persistSubEntry($subentry, $property, $basePath . $key . ' > ');
       }
       unset($subentry);
-      $translated = method_exists($entity, 'translateResourceValue')
-        ? $entity->translateResourceValue($fieldName, $values)
-        : $values;
+      $translated = $entity->translateResourceValue($fieldName, $values);
       $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
@@ -256,7 +355,6 @@ final class ResourceParser implements ResourceParserInterface {
     }
 
     $entity->save();
-    // Write back the generated ID into the current sub-entry data.
     $data['id'] = $entity->id();
     return $entity->id();
   }

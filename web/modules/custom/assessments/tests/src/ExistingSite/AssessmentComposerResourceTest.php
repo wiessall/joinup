@@ -36,11 +36,10 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
           ],
           'affects' => [
             [
-              'description' => 'Online permit application',
               'spatial' => 'BE',
               'identifier' => 'ps-123',
               'name' => 'Permit Application Service',
-              'thematic_area' => 'digital_and_innovation_services',
+              'thematic_area' => 'core_governance_and_administration',
             ],
           ],
           'has_participation' => [
@@ -48,14 +47,12 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               // Required by participation mapping.
               'name' => 'BE participant',
               'country' => 'BE',
-              'participation_type' => 'national_public_sector_body',
+              'type' => 'national_public_sector_body',
             ],
           ],
           'asset' => [
             [
               'name' => 'Portal EU',
-              // Required by asset mapping.
-              'description' => 'Public service portal',
               'landing_page' => 'https://portal.example.eu',
             ],
           ],
@@ -66,7 +63,6 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
       'provider' => [
         [
           'name' => 'City of Brussels',
-          'description' => 'Local authority',
           'organisation_type' => 'local_public_sector_body',
           'country' => 'BE',
         ],
