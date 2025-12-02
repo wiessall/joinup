@@ -53,6 +53,7 @@ class SparqlReadOnlyEndpoint implements SparqlReadOnlyEndpointInterface {
   public function getRequirement(): array {
     $args = ['@user' => $this->settings->get('sparql')['user_readonly'] ?? ''];
     $severity = REQUIREMENT_ERROR;
+    $value = NULL;
 
     try {
       $triple = '<http://subject> <http://predicate> "object"';
