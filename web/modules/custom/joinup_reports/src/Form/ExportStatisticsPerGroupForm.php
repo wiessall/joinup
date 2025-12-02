@@ -168,7 +168,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       'Total number of archived items' => $total_archived,
       'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => str_word_count(strip_tags($description)),
-      'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,
+      'Total number of likes' => $this->getLikesCount($content_ids),
     ];
   }
 

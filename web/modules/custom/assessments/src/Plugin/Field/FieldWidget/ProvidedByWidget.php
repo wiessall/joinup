@@ -32,6 +32,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  - User can select existing or add new organisation
  *  - When "add new" is chosen: Hides listing, shows only
  *    Organisation Name field
+ *
+ * Implementation notes:
+ *  - Uses a custom #op property on form elements to identify operations.
+ *    This simplifies operation detection compared to parsing #name values,
+ *    improving code maintainability and reducing complexity.
  */
 #[FieldWidget(
   id: 'provided_by_widget',
@@ -39,6 +44,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   field_types: ['entity_reference'],
 )]
 final class ProvidedByWidget extends WidgetBase {
+
+  /**
+   * Operation identifier for organisation type select.
+   */
+  protected const string OP_TYPE_SELECT = 'assessment_org_type_select';
+
+  /**
+   * Operation identifier for country select.
+   */
+  protected const string OP_COUNTRY_SELECT = 'assessment_org_country_select';
+
+  /**
+   * Operation identifier for add new organisation button.
+   */
+  protected const string OP_ADD_NEW = 'assessment_org_add_new';
+
+  /**
+   * Operation identifier for select existing organisation button.
+   */
+  protected const string OP_SELECT_EXISTING = 'assessment_org_select_existing';
 
   /**
    * The logger channel.
@@ -140,12 +165,14 @@ final class ProvidedByWidget extends WidgetBase {
         'wrapper' => 'provided-by-content-' . $delta,
         'effect' => 'fade',
       ],
+      '#op' => self::OP_TYPE_SELECT,
     ];
 
     $selectedType = NULL;
+    $operation = $triggeringElement['#op'] ?? NULL;
+    $isCountryAjax = $operation === self::OP_COUNTRY_SELECT;
 
-    if ($triggeringElement && isset($triggeringElement['#name']) &&
-        strpos($triggeringElement['#name'], '[organisation_type]') !== FALSE) {
+    if ($operation === self::OP_TYPE_SELECT) {
       $selectedType = $form_state->getValue(array_merge($parents, [$fieldName, $delta, 'organisation_type']));
 
       $typeChanged = !isset($widgetState['selected_type']) ||
@@ -194,6 +221,7 @@ final class ProvidedByWidget extends WidgetBase {
           $parents,
           $fieldName,
           $delta,
+          $operation,
           $triggeringElement,
           $currentCountry
         );
@@ -201,9 +229,6 @@ final class ProvidedByWidget extends WidgetBase {
         if ($selectedCountry) {
           // Avoid updating widget state during country AJAX to prevent
           // inconsistency across multiple formElement() invocations.
-          $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
-            && strpos($triggeringElement['#name'], '[country]') !== FALSE;
-
           if (!$isCountryAjax) {
             $countryChanged = !isset($widgetState['selected_country'])
               || $widgetState['selected_country'] !== $selectedCountry;
@@ -251,6 +276,7 @@ final class ProvidedByWidget extends WidgetBase {
             'wrapper' => 'provided-by-content-' . $delta,
             'effect' => 'fade',
           ],
+          '#op' => self::OP_COUNTRY_SELECT,
         ];
 
         if (!$selectedCountry) {
@@ -260,29 +286,22 @@ final class ProvidedByWidget extends WidgetBase {
 
       $addNew = $widgetState['add_new'] ?? FALSE;
 
-      $isAddNewButtonClicked = $triggeringElement && isset($triggeringElement['#name']) &&
-        strpos($triggeringElement['#name'], '[add_new_button]') !== FALSE;
-      $isSelectExistingButtonClicked = $triggeringElement && isset($triggeringElement['#name']) &&
-        strpos($triggeringElement['#name'], '[select_existing_button]') !== FALSE;
-
-      if ($isAddNewButtonClicked) {
+      // Handle button clicks.
+      if ($operation === self::OP_ADD_NEW) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
-      elseif ($isSelectExistingButtonClicked) {
+      elseif ($operation === self::OP_SELECT_EXISTING) {
         $addNew = FALSE;
         $widgetState['add_new'] = FALSE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
-
         $this->clearAddNewFieldsFromUserInput($form_state, $parents, $fieldName, $delta);
       }
 
       $isSubmitting = $form_state->isSubmitted() && !$form_state->isRebuilding();
-      $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
-        && strpos($triggeringElement['#name'], '[country]') !== FALSE;
       $isEdit = !empty($items->getEntity()->id());
 
       if ($isSubmitting && isset($widgetState['country_just_changed'])) {
@@ -309,7 +328,7 @@ final class ProvidedByWidget extends WidgetBase {
           static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
         }
       }
-      elseif ($isEdit && $currentEntity && $requiresCountry && !$isAddNewButtonClicked && !$isSelectExistingButtonClicked) {
+      elseif ($isEdit && $currentEntity && $requiresCountry && $operation !== self::OP_ADD_NEW && $operation !== self::OP_SELECT_EXISTING) {
         $currentOrgCountry = $currentEntity->hasField('country')
           ? $currentEntity->get('country')->target_id
           : NULL;
@@ -386,6 +405,7 @@ final class ProvidedByWidget extends WidgetBase {
             'effect' => 'fade',
           ],
           '#limit_validation_errors' => [],
+          '#op' => self::OP_ADD_NEW,
         ];
       }
       else {
@@ -436,6 +456,7 @@ final class ProvidedByWidget extends WidgetBase {
               'effect' => 'fade',
             ],
             '#limit_validation_errors' => [],
+            '#op' => self::OP_SELECT_EXISTING,
           ];
         }
       }
@@ -457,6 +478,8 @@ final class ProvidedByWidget extends WidgetBase {
    *   The field name.
    * @param int $delta
    *   The field delta.
+   * @param string|null $operation
+   *   The current operation identifier.
    * @param mixed $triggeringElement
    *   The triggering element.
    * @param mixed $currentCountry
@@ -471,11 +494,11 @@ final class ProvidedByWidget extends WidgetBase {
     array $parents,
     string $fieldName,
     int $delta,
+    ?string $operation,
     mixed $triggeringElement,
     mixed $currentCountry,
   ): mixed {
-    if ($triggeringElement && isset($triggeringElement['#name'])
-      && strpos($triggeringElement['#name'], '[country]') !== FALSE) {
+    if ($operation === self::OP_COUNTRY_SELECT) {
       return $triggeringElement['#value'] ?? '';
     }
 
@@ -798,7 +821,7 @@ final class ProvidedByWidget extends WidgetBase {
         ], TRUE);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return FALSE;
     }
 
