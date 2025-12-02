@@ -194,9 +194,7 @@ Feature: Assessment Report Entity Management
       | Weekly Health Check Report |
       | Portal Assessment Record   |
     And I reload the page
-    # @todo Validate displayed tiles.
-    # And I should see the text "Weekly Health Check Report"
-    # And I should see the text "Portal Assessment Record"
+    And the page should show the tiles "Weekly Health Check Report, Portal Assessment Record"
     When I go to "/user/assessments"
     Then I should see the heading "Sign in to continue"
 
@@ -206,9 +204,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
-    # @todo Validate displayed tiles.
-    # And I should see the text "Weekly Health Check Report"
-    # And I should see the text "Portal Assessment Record"
+    And the page should show the tiles "Weekly Health Check Report, Portal Assessment Record"
     When I follow "My assessments"
     Then I should be on "/user/assessments"
     Then I should see the heading "My assessment reports"
@@ -219,8 +215,7 @@ Feature: Assessment Report Entity Management
       | name                  | uid     |
       | Assessment Report 001 | current |
     And I reload the page
-    # @todo Validate displayed tiles.
-    # And I should see the text "Assessment Report 001"
+    And the page should show the tiles "Assessment Report 001"
 
     # Ensure the reports view only applies to the assessment collection.
     When I am not logged in
