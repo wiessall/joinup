@@ -272,3 +272,16 @@ function assessments_views_pre_render(ViewExecutable $view): void {
     }
   }
 }
+
+/**
+ * Implements hook_views_data().
+ */
+function assessments_views_data(): array {
+  $data['views']['assessments_reports_links'] = [
+    'title' => t('Assessment reports links'),
+    'area' => [
+      'id' => 'assessments_reports_links',
+    ],
+  ];
+  return $data;
+}
