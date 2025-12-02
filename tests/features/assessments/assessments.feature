@@ -56,24 +56,24 @@ Feature: Assessment Report Entity Management
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
-#    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
+    And I select the radio button "Beneficial" with the name "legal[0][inline_entity_form][interpretation]"
+    And I fill in "legal[0][inline_entity_form][judgement][0][value]" with "Complies with GDPR and eIDAS regulations"
 
     When I click "Organisational" in the "Content" region
-#    And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
-#    And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
+    And I select the radio button "Negligible" with the name "organisational[0][inline_entity_form][interpretation]"
+    And I fill in "organisational[0][inline_entity_form][judgement][0][value]" with "Requires coordination between authorities"
 
     When I click "Semantic" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
-#    And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
+    And I select the radio button "Beneficial" with the name "semantic[0][inline_entity_form][interpretation]"
+    And I fill in "semantic[0][inline_entity_form][judgement][0][value]" with "Uses standardized Core Vocabularies"
 
     When I click "Technical" in the "Content" region
-#    And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
-#    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
+    And I select the radio button "Beneficial" with the name "technical[0][inline_entity_form][interpretation]"
+    And I fill in "technical[0][inline_entity_form][judgement][0][value]" with "Implements REST APIs and OpenAPI specs"
 
     When I click "Other" in the "Content" region
-#    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
-#    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
+    And I select the radio button "Risky" with the name "other[0][inline_entity_form][interpretation]"
+    And I fill in "other[0][inline_entity_form][judgement][0][value]" with "Language barriers may present challenges"
 
     # Assessment supporting documents
     And I attach the file "text.pdf" to "Add a new file"
@@ -88,13 +88,13 @@ Feature: Assessment Report Entity Management
       | documented in https://interoperable-europe.ec.europa.eu/general          |
 
     # Edit test.
-#    When I go to the edit form of the "Test Assessment Report 2025" assessment
-#    And I fill in "Name" with "Test Assessment Report 2025 v2"
-#    And I press "Save"
-#    Then I should see the heading "Test Assessment Report 2025 v2"
-#
-#    # Delete test.
-#    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
-#    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
-#    When I press "Delete"
-#    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."
+    When I go to the edit form of the "Test Assessment Report 2025" assessment
+    And I fill in "Name" with "Test Assessment Report 2025 v2"
+    And I press "Save"
+    Then I should see the heading "Test Assessment Report 2025 v2"
+
+    # Delete test.
+    When I go to the delete form of the "Test Assessment Report 2025 v2" assessment
+    Then I should see the heading "Are you sure you want to delete the assessment Test Assessment Report 2025 v2?"
+    When I press "Delete"
+    Then I should see the success message containing "The assessment Test Assessment Report 2025 v2 has been deleted."

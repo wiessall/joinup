@@ -5,6 +5,6 @@ dependencies: {  }
 label_singular: 'assessment report'
 label_plural: 'assessment reports'
 label_count:
-  - "@count assessment report\03@count assessment reports"
+  no_count_capitalize: !!binary QXNzZXNzbWVudCByZXBvcnQDQXNzZXNzbWVudCByZXBvcnRz
 id: report
 label: 'Assessment report'
