@@ -30,12 +30,12 @@ class ArchiveAction extends StateActionBase {
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected readonly RendererInterface $renderer,
+    RendererInterface $renderer,
     protected readonly TimeInterface $time,
     protected readonly AccountInterface $currentUser,
     protected readonly WorkflowHelperInterface $workflowHelper,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $renderer);
   }
 
   /**
