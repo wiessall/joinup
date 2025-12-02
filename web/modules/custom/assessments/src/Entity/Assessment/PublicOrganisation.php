@@ -114,11 +114,6 @@ final class PublicOrganisation extends Assessment implements AssessmentResourceI
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'description' => [
-        'field_name' => 'description',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
       'organisation_type' => [
         'field_name' => 'organisation_type',
         'is_required' => FALSE,
