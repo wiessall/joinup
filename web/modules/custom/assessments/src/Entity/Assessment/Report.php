@@ -6,42 +6,45 @@ namespace Drupal\assessments\Entity\Assessment;
 
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * A bundle class for assessment entities.
  */
 final class Report extends Assessment implements AssessmentResourceInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceAllowedProperties(): array {
-    return [
-      'name',
-      'relevant_report',
-    ];
-  }
+  use AssessmentResourceTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function getResourceReferenceProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'binding_requirement',
-      'provider',
-      'results_in',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'name',
-      'binding_requirement',
-      'provider',
-      'results_in',
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'relevant_report' => [
+        'field_name' => 'relevant_report',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'binding_requirement' => [
+        'field_name' => 'binding_requirement',
+        'is_required' => TRUE,
+        'is_reference' => TRUE,
+      ],
+      'provider' => [
+        'field_name' => 'provider',
+        'is_required' => TRUE,
+        'is_reference' => TRUE,
+      ],
+      'results_in' => [
+        'field_name' => 'results_in',
+        'is_required' => TRUE,
+        'is_reference' => TRUE,
+      ],
     ];
   }
 

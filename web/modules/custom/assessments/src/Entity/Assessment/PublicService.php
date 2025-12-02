@@ -18,24 +18,38 @@ final class PublicService extends Assessment implements AssessmentResourceInterf
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'description',
-      'spatial',
-      'identifier',
-      'name',
-      'thematic_area',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'description',
-      'identifier',
-      'name',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'description' => [
+        'field_name' => 'description',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'spatial' => [
+        'field_name' => 'spatial',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'identifier' => [
+        'field_name' => 'identifier',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'thematic_area' => [
+        'field_name' => 'thematic_area',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 

@@ -18,22 +18,33 @@ final class Expression extends Assessment implements AssessmentResourceInterface
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'name',
-      'description',
-      'documented_in',
-      'expression_type',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'name',
-      'description',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'description' => [
+        'field_name' => 'description',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'documented_in' => [
+        'field_name' => 'documented_in',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'expression_type' => [
+        'field_name' => 'expression_type',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 

@@ -12,36 +12,53 @@ use Drupal\paragraphs\Entity\Paragraph;
  */
 final class BindingRequirement extends Paragraph implements AssessmentResourceInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceAllowedProperties(): array {
-    return [
-      'documented_in',
-      'name',
-    ];
-  }
+  use \Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function getResourceReferenceProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'expression',
-      'affects',
-      'has_participation',
-      'asset',
-      'documents',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'name',
-      'affects',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'documented_in' => [
+        'field_name' => 'documented_in',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'expression' => [
+        'field_name' => 'expression',
+        'is_required' => FALSE,
+        'is_reference' => TRUE,
+      ],
+      'affects' => [
+        'field_name' => 'affects',
+        'is_required' => TRUE,
+        'is_reference' => TRUE,
+      ],
+      'has_participation' => [
+        'field_name' => 'has_participation',
+        'is_required' => FALSE,
+        'is_reference' => TRUE,
+      ],
+      'asset' => [
+        'field_name' => 'asset',
+        'is_required' => FALSE,
+        'is_reference' => TRUE,
+      ],
+      'documents' => [
+        'field_name' => 'documents',
+        'is_required' => FALSE,
+        'is_reference' => TRUE,
+      ],
     ];
   }
 

@@ -14,22 +14,31 @@ trait AssessmentResourceTrait {
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourceAllowedProperties(): array {
+    return array_keys($this->getResourcePropertyMappings());
   }
 
   /**
    * {@inheritdoc}
    */
   public function getResourceReferenceProperties(): array {
-    return [];
+    $mappings = $this->getResourcePropertyMappings();
+    return array_values(array_keys(array_filter($mappings, static fn(array $def): bool => !empty($def['is_reference']))));
   }
 
   /**
    * {@inheritdoc}
    */
   public function getResourceRequiredProperties(): array {
-    return [];
+    $mappings = $this->getResourcePropertyMappings();
+    return array_values(array_keys(array_filter($mappings, static fn(array $def): bool => !empty($def['is_required']))));
   }
 
 }

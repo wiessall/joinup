@@ -18,20 +18,28 @@ final class Asset extends Assessment implements AssessmentResourceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getResourceAllowedProperties(): array {
+  public function getResourcePropertyMappings(): array {
     return [
-      'name',
-      'landing_page',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResourceRequiredProperties(): array {
-    return [
-      'name',
-      'description',
+      'id' => [
+        'field_name' => 'id',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
+      'name' => [
+        'field_name' => 'name',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'description' => [
+        'field_name' => 'description',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'landing_page' => [
+        'field_name' => 'landing_page',
+        'is_required' => FALSE,
+        'is_reference' => FALSE,
+      ],
     ];
   }
 
