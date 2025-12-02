@@ -118,7 +118,7 @@ class DownloadTrackingController extends ControllerBase {
     $paragraph_id = array_key_first($paragraph);
     $distribution = $this->getDistributionByParagraphId($paragraph_id);
 
-    if (empty($distribution)) {
+    if (!$distribution instanceof DistributionInterface) {
       return AccessResult::forbidden();
     }
 
@@ -131,7 +131,7 @@ class DownloadTrackingController extends ControllerBase {
    * @param int $paragraph_id
    *   Id of paragraph from resources field.
    */
-  protected function getDistributionByParagraphId(int $paragraph_id): DistributionInterface {
+  protected function getDistributionByParagraphId(int $paragraph_id): ?DistributionInterface {
     $distribution = $this->entityTypeManager
       ->getStorage('node')
       ->loadByProperties([
