@@ -1,0 +1,33 @@
+uuid: d0c76d8f-3bc6-48f4-a5ee-faf26972adc6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.assess_public_service_area.id
+    - taxonomy.vocabulary.assess_public_service_area
+  module:
+    - text
+id: taxonomy_term.assess_public_service_area.default
+targetEntityType: taxonomy_term
+bundle: assess_public_service_area
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  id:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
+  uri: true
