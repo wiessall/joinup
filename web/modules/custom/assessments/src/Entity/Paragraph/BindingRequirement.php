@@ -55,11 +55,6 @@ final class BindingRequirement extends Paragraph implements AssessmentResourceIn
         'is_required' => FALSE,
         'is_reference' => TRUE,
       ],
-      'documents' => [
-        'field_name' => 'documents',
-        'is_required' => FALSE,
-        'is_reference' => TRUE,
-      ],
     ];
   }
 
