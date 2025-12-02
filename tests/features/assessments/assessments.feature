@@ -34,12 +34,6 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
     And I fill in "documented_in[0][uri]" with "https://interoperable-europe.ec.europa.eu/general" in the "Modal content" region
 
-    When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant asset" in the "Modal content" region
-    And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant asset" in the "Modal content" region
-
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
     And I select "Core governance and administration" from "has_related_service[0][inline_entity_form][thematic_area]" in the "Modal content" region
@@ -47,6 +41,12 @@ Feature: Assessment Report Entity Management
     When I click "Affected stakeholders" in the "Modal content" region
     And I select "Local public sector body" from "affected_party[0][inline_entity_form][participant_type][]" in the "Modal content" region
     And I select "Belgium" from "affected_party[0][inline_entity_form][stakeholder_country][]" in the "Modal content" region
+
+    When I click "Interoperability solutions" in the "Modal content" region
+    And I press "Add new relevant asset" in the "Modal content" region
+    And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    Then I press "Create relevant asset" in the "Modal content" region
 
     When I click "Documents" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
