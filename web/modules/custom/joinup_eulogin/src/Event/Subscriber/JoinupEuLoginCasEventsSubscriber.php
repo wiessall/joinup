@@ -95,7 +95,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
     $key = strtolower((new Random())->machineName(3));
     $value = bin2hex(random_bytes(3));
-    $new_destination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY, $new_destination);
+    $new_destination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY);
 
     $event->getCasRedirectData()->setServiceParameter('destination', $new_destination);
   }

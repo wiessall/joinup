@@ -21,6 +21,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
   use NodeTrait;
   use ParagraphTrait;
+  use ConfigTestTrait;
 
   /**
    * A list of users to clean from the cas mock server.
@@ -40,8 +41,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    * Stores the latest deleted user UID.
    */
   protected int $latestDeletedUserUid;
-
-  use ConfigTestTrait;
 
   /**
    * {@inheritdoc}

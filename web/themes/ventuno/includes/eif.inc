@@ -8,19 +8,20 @@
 declare(strict_types=1);
 
 use Drupal\Core\Url;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_node__solution__eif_perspective(array &$variables): void {
-  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $variables['node'];
-  if (empty($solution)) {
+  if (!$solution instanceof SolutionInterface) {
     return;
   }
 
   $meta_entity = $solution->eif_perspective->entity;
-  if (empty($meta_entity)) {
+  if (!$meta_entity instanceof MetaEntityInterface) {
     return;
   }
 
