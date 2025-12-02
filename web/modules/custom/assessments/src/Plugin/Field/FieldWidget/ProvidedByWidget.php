@@ -955,7 +955,7 @@ final class ProvidedByWidget extends WidgetBase {
           }
           else {
             $this->messenger->addWarning($this->t(
-              "You tried to create a new organisation but one with the same type, country, and name already exists. We've linked the existing one to your report."
+              "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
             ));
           }
         }
