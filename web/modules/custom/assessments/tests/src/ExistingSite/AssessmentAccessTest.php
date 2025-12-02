@@ -150,6 +150,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertAccessAllowed($assessment, 'view', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'view', $this->moderatorUser);
+    $this->assertAccessAllowed($assessment, 'view', $this->assessmentReporterUser);
 
     $this->assertAccessDenied($assessment, 'view', $this->nonOwnerUser);
     $this->assertAccessDenied($assessment, 'view', $this->authenticatedUser);
@@ -193,6 +194,7 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
 
     $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
+    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
 
     $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
     $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
@@ -207,9 +209,10 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
   public function testUpdateReviewAssessment(): void {
     $assessment = $this->testAssessments['review'];
 
+    $this->assertAccessAllowed($assessment, 'update', $this->ownerUser);
     $this->assertAccessAllowed($assessment, 'update', $this->moderatorUser);
+    $this->assertAccessAllowed($assessment, 'update', $this->assessmentReporterUser);
 
-    $this->assertAccessDenied($assessment, 'update', $this->ownerUser);
     $this->assertAccessDenied($assessment, 'update', $this->nonOwnerUser);
     $this->assertAccessDenied($assessment, 'update', $this->authenticatedUser);
   }
@@ -225,11 +228,11 @@ class AssessmentAccessTest extends JoinupExistingSiteTestBase {
     $assessment = $this->testAssessments[$state];
 
     $this->assertAccessAllowed($assessment, 'delete', $this->moderatorUser);
+    $this->assertAccessAllowed($assessment, 'delete', $this->assessmentReporterUser);
 
     $this->assertAccessDenied($assessment, 'delete', $this->ownerUser);
     $this->assertAccessDenied($assessment, 'delete', $this->nonOwnerUser);
     $this->assertAccessDenied($assessment, 'delete', $this->authenticatedUser);
-    $this->assertAccessDenied($assessment, 'delete', $this->assessmentReporterUser);
   }
 
   /**

@@ -22,7 +22,7 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
+  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
     // Admin permission grants full access.
     $admin_result = AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission())
       ->addCacheableDependency($entity);
@@ -61,26 +61,40 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
   protected function checkViewAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
     $is_owner = $entity->getOwnerId() == $account->id();
 
-    // Published assessments: viewable by anyone with access content, view or
-    // moderate permission.
+    // Published assessments: viewable by everyone with 'access content' permission.
     if ($state === 'published') {
-      return AccessResult::allowedIfHasPermissions($account, [
-        'access content',
-        'view own assessment report',
-        'moderate assessment report',
-      ], 'OR')
+      return AccessResult::allowedIfHasPermission($account, 'access content')
+        ->cachePerPermissions()
         ->addCacheableDependency($entity);
     }
 
-    // Draft and review states: owners with view permission OR moderators.
-    if ($is_owner && $account->hasPermission('view own assessment report')) {
-      return AccessResult::allowed()
+    // Non-published assessments (draft, review, require_updates): restricted to owner, assessment reporters and moderators.
+    if (in_array($state, ['draft', 'review', 'require_updates'], TRUE)) {
+      // Owner can view their own non-published assessment with view permission.
+      if ($is_owner && $account->hasPermission('view own assessment report')) {
+        return AccessResult::allowed()
+          ->cachePerPermissions()
+          ->cachePerUser()
+          ->addCacheableDependency($entity);
+      }
+
+      // Assessment reporters and moderators can view any non-published assessment.
+      if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
+        return AccessResult::allowed()
+          ->cachePerPermissions()
+          ->addCacheableDependency($entity);
+      }
+
+      // Deny access with forbidden to show access denied page.
+      return AccessResult::forbidden('Non-published assessments are only viewable by the owner, assessment reporters, and moderators.')
         ->cachePerPermissions()
         ->cachePerUser()
         ->addCacheableDependency($entity);
     }
 
-    return AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
+    // Other states (if any): deny access by default.
+    return AccessResult::neutral()
+      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
@@ -98,15 +112,15 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    *   The access result.
    */
   protected function checkUpdateAccess(EntityInterface $entity, string $state, AccountInterface $account): AccessResultInterface {
-    // Moderators can update in any state.
-    if ($account->hasPermission('moderate assessment report')) {
+    // Assessment reporters and moderators can update in any state.
+    if ($account->hasPermission('bypass assessment report moderation') || $account->hasPermission('moderate assessment report')) {
       return AccessResult::allowed()
         ->cachePerPermissions()
         ->addCacheableDependency($entity);
     }
 
-    // Owners can update only in draft state with edit permission.
-    if ($state === 'draft' && $entity->getOwnerId() == $account->id()) {
+    // Owners can update only in non-published states with edit permission.
+    if (in_array($state, ['draft', 'review', 'require_updates'], TRUE) && $entity->getOwnerId() == $account->id()) {
       return AccessResult::allowedIfHasPermission($account, 'edit own assessment report')
         ->cachePerUser()
         ->addCacheableDependency($entity);
@@ -130,8 +144,12 @@ final class AssessmentAccessControlHandler extends EntityAccessControlHandler {
    *   The access result.
    */
   protected function checkDeleteAccess(EntityInterface $entity, AccountInterface $account): AccessResultInterface {
-    // Only moderators can delete in any state.
-    return AccessResult::allowedIfHasPermission($account, 'moderate assessment report')
+    // Assessment reporters and moderators can delete in any state.
+    return AccessResult::allowedIfHasPermissions($account, [
+      'bypass assessment report moderation',
+      'moderate assessment report',
+    ], 'OR')
+      ->cachePerPermissions()
       ->addCacheableDependency($entity);
   }
 
