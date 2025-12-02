@@ -9,6 +9,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\UrlListCatalogueProviderBase;
@@ -204,9 +205,6 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
 
       'Multiple endpoints with different structure' => [
         'apiResponses' => [
-          'wrong keys' => json_encode([
-            'root' => [['url' => 'https://example.com/wrongNS/wrongProject']],
-          ]),
           'foo' => json_encode([
             'fooRoot' => [['fooUrl' => 'https://example.com/fooNS/fooProject']],
           ]),
@@ -216,11 +214,6 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
         ],
         'pluginConfiguration' => [
           'endpoints' => [
-            'wrong keys' => [
-              'apiUrl' => 'https://example.com/wrong.json',
-              'rootKeys' => ['wrongRoot'],
-              'urlKeys' => ['url'],
-            ],
             'foo' => [
               'apiUrl' => 'https://example.com/foo.json',
               'rootKeys' => ['fooRoot'],
@@ -233,9 +226,51 @@ class UrlListCatalogueProviderTest extends KernelTestBase {
             ],
           ],
         ],
-        'expectedResults' => [],
+        'expectedResults' => [
+          [
+            'namespace' => 'fooNS',
+            'name' => 'fooProject',
+            'url' => 'https://example.com/fooNS/fooProject',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'fooNS/fooProject'\n"],
+          ],
+          [
+            'namespace' => 'barNs',
+            'name' => 'barProject',
+            'url' => 'https://example.com/barNs/barProject',
+            'platform' => 'testPlatform',
+            'defaultBranch' => 'main',
+            'files' => ['publiccodeYml' => "name: 'barNs/barProject'\n"],
+          ],
+        ],
       ],
     ];
+  }
+
+  /**
+   * Tests that endpoint failure throws ProviderFetchException.
+   */
+  public function testEndpointFailureThrowsException(): void {
+    $mockHandler = new MockHandler([
+      new Response(404, [], 'Not Found'),
+    ]);
+    $httpClient = new Client(['handler' => HandlerStack::create($mockHandler)]);
+
+    $plugin = new TestUrlListProvider(
+      ['endpoints' => [['apiUrl' => 'https://example.com/404.json', 'rootKeys' => [], 'urlKeys' => ['url']]]],
+      'test',
+      ['label' => new TranslatableMarkup('Test provider')],
+      $this->container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $this->container->get('logger.channel.eu_oss_catalogue'),
+      $httpClient,
+      $this->apiGuesserMock->reveal(),
+      $this->hostingPlatformManagerMock->reveal(),
+    );
+
+    $this->expectException(ProviderFetchException::class);
+    $this->expectExceptionMessageMatches('/Endpoint .* failed for Test provider catalogue/');
+    iterator_to_array($plugin->fetch());
   }
 
   /**

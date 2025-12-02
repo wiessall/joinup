@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Drupal\search_api_field\Plugin\facets\facet_source;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\facets\FacetSource\FacetSourceDeriverBase;
 use Drupal\field\Entity\FieldConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,9 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SearchApiFieldDeriver extends FacetSourceDeriverBase {
 
   public function __construct(
-    EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,
-    TranslationInterface $stringTranslation,
   ) {}
 
   /**
@@ -34,9 +30,7 @@ class SearchApiFieldDeriver extends FacetSourceDeriverBase {
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
     return new static(
-      $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
-      $container->get('string_translation')
     );
   }
 

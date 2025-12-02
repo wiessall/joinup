@@ -7,6 +7,7 @@ namespace Drupal\adms_validator\Form;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\adms_validator\AdmsValidationResult;
 use Drupal\adms_validator\AdmsValidatorInterface;
 use Drupal\file\FileInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
@@ -56,9 +57,9 @@ class AdmsValidatorForm extends FormBase {
       '#value' => $this->t('Upload'),
       '#button_type' => 'primary',
     ];
-    /** @var \Drupal\adms_validator\AdmsValidationResult $validation_errors */
+
     $validation_errors = $form_state->get('validation_errors');
-    if (!empty($validation_errors)) {
+    if ($validation_errors instanceof AdmsValidationResult && $validation_errors->errorCount() > 0) {
       // The form was submitted, and validation errors have been set.
       $form['table'] = $validation_errors->toTable();
     }
