@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
-    - assessments
+    - node
     - paragraphs
 id: paragraph.asset
 field_name: asset
 entity_type: paragraph
 type: entity_reference
 settings:
-  target_type: assessment
+  target_type: node
 module: core
 locked: false
 cardinality: -1

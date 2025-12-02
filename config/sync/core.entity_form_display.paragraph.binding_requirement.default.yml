@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.node.assessment
     - field.field.paragraph.binding_requirement.affected_party
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
@@ -174,10 +175,10 @@ content:
     weight: 3
     region: content
     settings:
-      form_mode: default
+      form_mode: assessment
       override_labels: true
-      label_singular: 'relevant asset'
-      label_plural: 'relevant assets'
+      label_singular: 'relevant solution'
+      label_plural: 'relevant solutions'
       allow_new: true
       allow_existing: true
       match_operator: CONTAINS
@@ -186,7 +187,12 @@ content:
       collapsed: false
       revision: false
       removed_reference: keep
-    third_party_settings: {  }
+    third_party_settings:
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   description:
     type: text_textarea
     weight: 41
