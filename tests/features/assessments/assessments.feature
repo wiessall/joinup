@@ -25,6 +25,14 @@ Feature: Assessment Report Entity Management
     And I press "Save" in the "Modal buttons" region
     And I should see the text "4 errors have been found: NameNameDescriptionDescription" in the "Modal content" region
 
+    Then I should see the following lines of text in the correct order in "Modal content":
+      | Initiatives                            |
+      | General                                |
+      | Trans-European digital public services |
+      | Affected stakeholders                  |
+      | Interoperability solutions             |
+      | Documents                              |
+
     When I click "Initiatives" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][name][0][value]" with "Digital Transformation Initiative" in the "Modal content" region
     And I fill in "expression[0][inline_entity_form][description][0][value]" with "This initiative focuses on digital transformation across public services" in the "Modal content" region
