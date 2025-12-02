@@ -300,7 +300,7 @@ final class ResourceParser implements ResourceParserInterface {
       }
       $translated = $entity->translateResourceValue($fieldName, $data[$property]);
       if ($translated === NULL) {
-        $this->errors[] = sprintf('%s > %s: Unable to translate value', $basePath . $key, $fieldName);
+        $this->errors[] = sprintf('%s > %s: Unable to translate value "%s"', $basePath . $key, $property, $data[$property]);
         continue;
       }
       $entity->set($fieldName, $translated);

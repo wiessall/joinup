@@ -54,10 +54,11 @@ final class Participation extends Assessment {
       return empty($terms) ? NULL : (reset($terms))->id();
     }
     elseif ($fieldName === 'stakeholder_country') {
-      $countries = \Drupal::service('country_manager')->getList();
-      if (!in_array($values, array_keys($countries), TRUE)) {
-        return NULL;
-      }
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+        'code' => $values,
+        'vid' => 'spatial',
+      ]);
+      return empty($terms) ? NULL : (reset($terms))->id();
     }
     return $values;
   }

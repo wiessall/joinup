@@ -114,7 +114,7 @@ final class PublicOrganisation extends Assessment implements AssessmentResourceI
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'organisation_type' => [
+      'type' => [
         'field_name' => 'organisation_type',
         'is_required' => FALSE,
         'is_reference' => FALSE,
@@ -125,6 +125,27 @@ final class PublicOrganisation extends Assessment implements AssessmentResourceI
         'is_reference' => FALSE,
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    if ($fieldName === 'organisation_type') {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+        'id' => $values,
+        'vid' => 'assess_provider_type',
+      ]);
+      return empty($terms) ? NULL : (reset($terms))->id();
+    }
+    elseif ($fieldName === 'country') {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+        'code' => $values,
+        'vid' => 'spatial',
+      ]);
+      return empty($terms) ? NULL : (reset($terms))->id();
+    }
+    return $values;
   }
 
 }
