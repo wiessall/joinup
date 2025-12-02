@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Utility\UpdateException;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
 
 /**
  * Create 'Code'-type vocabularies terms.
@@ -164,7 +165,7 @@ function assessments_deploy_200802(): void {
   $entity_repository = \Drupal::service('entity.repository');
 
   // Load the node at /collection/assessments/assessments-repository.
-  $node = $entity_repository->loadEntityByUuid('node', 'a9896322-f334-485c-be5d-673a106f68ad');
+  $node = $entity_repository->loadEntityByUuid('node', AssessmentInterface::ASSESSMENT_REPORTS_UUID);
   if (!$node instanceof CustomPageInterface) {
     throw new UpdateException("Deploy hook failed: could not load custom page node by UUID, see " . __FUNCTION__);
   }
