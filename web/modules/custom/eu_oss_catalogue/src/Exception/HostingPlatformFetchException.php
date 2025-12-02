@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Exception;
 
 /**
- * Exception if hosting platform fetching failed.
+ * Thrown when fetching from hosting platforms or endpoints fails.
+ *
+ * Triggers catalogue sync skip (no additions, updates, or cleanup).
  */
 class HostingPlatformFetchException extends EuOssCatalogueException {}
