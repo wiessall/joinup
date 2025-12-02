@@ -25,7 +25,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
       'binding_requirement' => [
         [
           'documented_in' => 'https://example.com/law/123',
-          'name' => 'Article 5',
+          'description' => 'This is some description.',
           'expression' => [
             [
               'name' => 'Legal Act 2024',
@@ -45,6 +45,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
           ],
           'has_participation' => [
             [
+              // Required by participation mapping.
+              'name' => 'BE participant',
               'country' => 'BE',
               'participation_type' => 'national_public_sector_body',
             ],
@@ -52,16 +54,22 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
           'asset' => [
             [
               'name' => 'Portal EU',
+              // Required by asset mapping.
+              'description' => 'Public service portal',
               'landing_page' => 'https://portal.example.eu',
             ],
           ],
+          // Optional: 'documents' => [ ... ],
         ],
       ],
+      // Parser expects all reference properties as arrays, even when single.
       'provider' => [
-        'name' => 'City of Brussels',
-        'description' => 'Local authority',
-        'organisation_type' => 'local_public_sector_body',
-        'country' => 'BE',
+        [
+          'name' => 'City of Brussels',
+          'description' => 'Local authority',
+          'organisation_type' => 'local_public_sector_body',
+          'country' => 'BE',
+        ],
       ],
       'results_in' => [
         [

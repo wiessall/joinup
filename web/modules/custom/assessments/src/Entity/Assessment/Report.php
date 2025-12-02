@@ -6,6 +6,7 @@ namespace Drupal\assessments\Entity\Assessment;
 
 use Drupal\assessments\Entity\Assessment;
 use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
@@ -46,6 +47,24 @@ final class Report extends Assessment implements AssessmentResourceInterface {
         'is_reference' => TRUE,
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    switch ($fieldName) {
+      case 'binding_requirement':
+        // Binding requirements is a revision reference field, so we need to
+        // further get the revision ID.
+        $entities = BindingRequirement::loadMultiple($values);
+        return array_values(array_map(fn($entity) => [
+          'target_id' => $entity->id(),
+          'target_revision_id' => $entity->getRevisionId(),
+        ], $entities));
+      default:
+        return $values;
+    }
   }
 
 }

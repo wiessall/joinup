@@ -41,4 +41,13 @@ trait AssessmentResourceTrait {
     return array_values(array_keys(array_filter($mappings, static fn(array $def): bool => !empty($def['is_required']))));
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    // Default identity translation. Classes may override and specialize per
+    // field using a switch on $fieldName.
+    return $values;
+  }
+
 }
