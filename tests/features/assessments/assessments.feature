@@ -8,6 +8,7 @@ Feature: Assessment Report Entity Management
   Scenario: Create a new assessment report with required fields
     Given I am logged in as a developer
     And I go to "/assessments/add/report"
+    Then I should see the heading "Create assessment report"
 
     When I press "Save"
     Then I should see the error message "3 errors have been found: NameType of public sector bodyBinding requirements"
