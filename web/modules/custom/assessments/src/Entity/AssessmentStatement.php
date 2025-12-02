@@ -78,6 +78,20 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
   /**
    * {@inheritdoc}
    */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    switch ($fieldName) {
+      case 'interpretation':
+      case 'judgement':
+      case 'statement_type':
+        return $values;
+      default:
+        return $values;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')

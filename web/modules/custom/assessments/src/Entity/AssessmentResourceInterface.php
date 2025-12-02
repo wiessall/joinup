@@ -48,4 +48,21 @@ interface AssessmentResourceInterface {
    */
   public function getResourceRequiredProperties(): array;
 
+  /**
+   * Translates an inbound API value for a given mapped field.
+   *
+   * Implementations may convert raw inbound values to the expected Drupal
+   * field value format. For now, the default behavior is to return the value
+   * as-is.
+   *
+   * @param string $fieldName
+   *   The Drupal field machine name resolved from the resource mapping.
+   * @param mixed $values
+   *   The inbound value(s) for the field.
+   *
+   * @return mixed
+   *   The translated value(s) to be assigned to the field.
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed;
+
 }

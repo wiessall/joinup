@@ -193,7 +193,10 @@ final class ResourceParser implements ResourceParserInterface {
       if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '') {
         continue;
       }
-      $entity->set($fieldName, $data[$property]);
+      $translated = method_exists($entity, 'translateResourceValue')
+        ? $entity->translateResourceValue($fieldName, $data[$property])
+        : $data[$property];
+      $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
         $this->errors[] = sprintf('%s > %s: %s', $key, $violation->getPropertyPath(), $violation->getMessage());
@@ -238,7 +241,10 @@ final class ResourceParser implements ResourceParserInterface {
         $values[] = $this->parseSubEntry($subentry, $property);
       }
       unset($subentry);
-      $entity->set($fieldName, $values);
+      $translated = method_exists($entity, 'translateResourceValue')
+        ? $entity->translateResourceValue($fieldName, $values)
+        : $values;
+      $entity->set($fieldName, $translated);
       $violations = $entity->get($fieldName)->validate();
       foreach ($violations as $violation) {
         $this->errors[] = sprintf('%s > %s > %s: %s', $key, $property, $violation->getPropertyPath(), $violation->getMessage());

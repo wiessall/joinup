@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments\Entity\Paragraph;
 
 use Drupal\assessments\Entity\AssessmentResourceInterface;
+use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**
@@ -12,7 +13,7 @@ use Drupal\paragraphs\Entity\Paragraph;
  */
 final class BindingRequirement extends Paragraph implements AssessmentResourceInterface {
 
-  use \Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
+  use AssessmentResourceTrait;
 
   /**
    * {@inheritdoc}
@@ -29,8 +30,8 @@ final class BindingRequirement extends Paragraph implements AssessmentResourceIn
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'name' => [
-        'field_name' => 'name',
+      'description' => [
+        'field_name' => 'description',
         'is_required' => TRUE,
         'is_reference' => FALSE,
       ],
@@ -40,12 +41,12 @@ final class BindingRequirement extends Paragraph implements AssessmentResourceIn
         'is_reference' => TRUE,
       ],
       'affects' => [
-        'field_name' => 'affects',
+        'field_name' => 'has_related_service',
         'is_required' => TRUE,
         'is_reference' => TRUE,
       ],
       'has_participation' => [
-        'field_name' => 'has_participation',
+        'field_name' => 'affected_party',
         'is_required' => FALSE,
         'is_reference' => TRUE,
       ],
