@@ -42,4 +42,24 @@ final class Participation extends Assessment {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    if ($fieldName === 'participant_type') {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+        'id' => $values,
+        'vid' => 'assess_participant_type',
+      ]);
+      return empty($terms) ? NULL : (reset($terms))->id();
+    }
+    elseif ($fieldName === 'stakeholder_country') {
+      $countries = \Drupal::service('country_manager')->getList();
+      if (!in_array($values, array_keys($countries), TRUE)) {
+        return NULL;
+      }
+    }
+    return $values;
+  }
+
 }

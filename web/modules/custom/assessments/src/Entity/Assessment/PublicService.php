@@ -48,4 +48,18 @@ final class PublicService extends Assessment implements AssessmentResourceInterf
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    if ($fieldName === 'thematic_area') {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+        'id' => $values,
+        'vid' => 'assess_public_service_area',
+      ]);
+      return empty($terms) ? NULL : (reset($terms))->id();
+    }
+    return $values;
+  }
+
 }
