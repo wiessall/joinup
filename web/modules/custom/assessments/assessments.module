@@ -10,8 +10,11 @@ declare(strict_types=1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
@@ -299,13 +302,6 @@ function assessments_views_pre_render(ViewExecutable $view): void {
 }
 
 /**
- * Enable options_buttons widget for state.
- */
-function assessments_field_widget_info_alter(array &$info): void {
-  $info['options_buttons']['field_types'][] = 'state';
-}
-
-/**
  * Implements hook_views_data().
  */
 function assessments_views_data(): array {
@@ -316,4 +312,33 @@ function assessments_views_data(): array {
     ],
   ];
   return $data;
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function assessments_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$formState): void {
+  $solution = $entity_form['#entity'];
+
+  if ($entity_form['#ief_id'] === 'asset-form' && $solution instanceof SolutionInterface) {
+    $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+    assert($collection instanceof CollectionInterface);
+
+    $solution
+      // All solutions created via assessments form are belonging to a
+      // 'collector' collection.
+      ->setGroup($collection)
+      // And are published by default.
+      ->set('field_state', 'published');
+
+    // In this context the landing page is mandatory.
+    $entity_form['landing_page']['widget']['uri']['#required'] = TRUE;
+  }
+}
+
+/**
+ * Enable options_buttons widget for state.
+ */
+function assessments_field_widget_info_alter(array &$info): void {
+  $info['options_buttons']['field_types'][] = 'state';
 }
