@@ -55,7 +55,7 @@ class GroupDeleteForm extends ContentEntityDeleteForm {
     $form = parent::buildForm($form, $form_state);
 
     $entity = $this->getEntity();
-    if (empty($entity) || $entity->isNew() || !($entity instanceof CollectionInterface)) {
+    if (!($entity instanceof CollectionInterface) || $entity->isNew()) {
       return $form;
     }
 

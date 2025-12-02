@@ -73,6 +73,7 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
   if ($paragraph->bundle() === 'binding_requirement') {
     // We use layout paragraphs, but we use everytime the 1 column layout.
     $form['layout_paragraphs']['#access'] = FALSE;
+    $form['asset']['widget']['#title_display'] = 'invisible';
   }
 }
 

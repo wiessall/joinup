@@ -7,7 +7,13 @@ namespace Drupal\eu_oss_catalogue\Exception;
 use Drupal\Core\Serialization\Yaml;
 
 /**
- * Exception to be thrown when a value cannot be resolved.
+ * Exception used for logging field resolution failures.
+ *
+ * This exception is created and logged (not thrown) when a field value cannot
+ * be resolved during catalogue import, such as when a taxonomy term doesn't
+ * exist in a controlled vocabulary.
+ *
+ * @see \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver\TaxonomyTermResolver::resolve()
  */
 class UnresolvableValueException extends EuOssCatalogueException {
 

@@ -12,6 +12,6 @@ third_party_settings:
 label_singular: 'public service'
 label_plural: 'public services'
 label_count:
-  - "@count public service\03@count public services"
+  no_count_capitalize: !!binary UHVibGljIHNlcnZpY2UDUHVibGljIHNlcnZpY2Vz
 id: public_service
 label: 'Public service'

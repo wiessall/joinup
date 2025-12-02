@@ -12,6 +12,6 @@ third_party_settings:
 label_singular: expression
 label_plural: expressions
 label_count:
-  - "@count expression\03@count expressions"
+  no_count_capitalize: !!binary RXhwcmVzc2lvbgNFeHByZXNzaW9ucw==
 id: expression
 label: Expression
