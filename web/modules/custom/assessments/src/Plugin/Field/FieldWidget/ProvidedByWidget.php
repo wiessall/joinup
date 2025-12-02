@@ -114,7 +114,8 @@ class ProvidedByWidget extends WidgetBase {
     $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
     $triggeringElement = $form_state->getTriggeringElement();
 
-    $element['#type'] = 'fieldset';
+    $element['#type'] = 'details';
+    $element['#open'] = TRUE;
     $element['#title'] = $this->fieldDefinition->getLabel();
     $element['#attributes']['class'][] = 'provided-by-widget';
     $element['#attributes']['data-delta'] = $delta;
