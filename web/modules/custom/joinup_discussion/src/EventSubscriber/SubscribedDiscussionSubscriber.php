@@ -98,7 +98,7 @@ readonly class SubscribedDiscussionSubscriber implements EventSubscriberInterfac
 
     // The discussion owner is added to the list of subscribers.
     $owner = $discussion->getOwner();
-    if (!empty($owner) && !$owner->isAnonymous()) {
+    if ($owner && !$owner->isAnonymous()) {
       $subscribers[$owner->id()] = $owner;
     }
     $subscribers += $this->subscribeService->getSubscribers($discussion, 'subscribe_discussions');

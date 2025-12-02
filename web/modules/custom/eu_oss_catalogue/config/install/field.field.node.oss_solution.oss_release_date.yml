@@ -12,7 +12,7 @@ third_party_settings:
       override: preserve_not_empty
       resolvers:
         -
-          plugin: default
+          plugin: date
           config:
             path: releaseDate
 id: node.oss_solution.oss_release_date

@@ -75,7 +75,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
     $this->assertTrue($updatedSolution->get('oss_maintenance_contractors')->isEmpty());
     $this->assertTrue($updatedSolution->get('oss_maintenance_contacts')->isEmpty());
-    $this->assertSame('28OZmw72O4Ze_d4gDdqVyMV3bvNSPwD-y07NKPgvkMg', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('UviES-yJZ_QF-Xp_Ivd4RwxVno_qG_8nutZOqff3Vy0', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];

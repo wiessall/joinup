@@ -47,7 +47,7 @@ readonly class CustomPageProvider implements CustomPageProviderInterface {
         $menu_link = reset($menu_links);
 
         // Sanity check that our data is valid.
-        if (empty($menu_link) || !$menu_link instanceof MenuLinkContent || empty($entity_id = $menu_link->getPluginDefinition()['metadata']['entity_id'])) {
+        if (!$menu_link instanceof MenuLinkContent || empty($entity_id = $menu_link->getPluginDefinition()['metadata']['entity_id'])) {
           return FALSE;
         }
 
