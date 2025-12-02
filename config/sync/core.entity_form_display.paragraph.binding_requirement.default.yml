@@ -23,11 +23,11 @@ third_party_settings:
   field_group:
     group_tabs:
       children:
-        - group_general
         - group_initiatives
-        - group_assets
+        - group_general
         - group_related_services
         - group_affected_parties
+        - group_assets
         - group_documents
       label: Tabs
       region: content
@@ -48,7 +48,7 @@ third_party_settings:
       label: General
       region: content
       parent_name: group_tabs
-      weight: 10
+      weight: 20
       format_type: tab
       format_settings:
         classes: ''
@@ -64,7 +64,7 @@ third_party_settings:
       label: 'Interoperability solutions'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 50
       format_type: tab
       format_settings:
         classes: ''
@@ -80,7 +80,7 @@ third_party_settings:
       label: 'Trans-European digital public services'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 30
       format_type: tab
       format_settings:
         classes: ''
@@ -96,7 +96,7 @@ third_party_settings:
       label: 'Affected stakeholders'
       region: content
       parent_name: group_tabs
-      weight: 20
+      weight: 40
       format_type: tab
       format_settings:
         classes: ''
@@ -112,7 +112,7 @@ third_party_settings:
       label: Initiatives
       region: content
       parent_name: group_tabs
-      weight: 0
+      weight: 10
       format_type: tab
       format_settings:
         classes: ''
@@ -128,7 +128,7 @@ third_party_settings:
       label: Documents
       region: content
       parent_name: group_tabs
-      weight: 40
+      weight: 60
       format_type: tab
       format_settings:
         classes: ''

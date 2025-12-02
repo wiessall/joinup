@@ -170,7 +170,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     // Add arguments related to the parent collection or solution.
     $parent = $entity->getParent();
-    if (!empty($parent) && $parent instanceof ReleaseInterface) {
+    if ($parent instanceof ReleaseInterface) {
       $arguments['@release:info:with_version'] = $this->t('of the release @release, @version', [
         '@release' => $parent->label(),
         '@version' => $parent->getVersion(),
