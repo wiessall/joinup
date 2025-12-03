@@ -132,7 +132,7 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "This is the general binding requirement description" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
-    And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
+    And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
     # Save Assessment Report.
