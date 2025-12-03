@@ -264,7 +264,7 @@ class AssessmentContext extends RawDrupalContext {
       // If we reach here, the entity exists, so throw an exception.
       throw new \Exception(sprintf('A %s assessment with name "%s" exists but should not.', $type, $name));
     }
-    catch (\RuntimeException $e) {
+    catch (\RuntimeException) {
       // Expected: entity not found. This is what we want.
     }
   }
