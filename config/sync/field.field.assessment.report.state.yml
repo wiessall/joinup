@@ -17,7 +17,7 @@ entity_type: assessment
 bundle: report
 label: State
 description: ''
-required: false
+required: true
 translatable: false
 default_value:
   -
