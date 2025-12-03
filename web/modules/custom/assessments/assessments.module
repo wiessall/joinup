@@ -7,16 +7,15 @@
 
 declare(strict_types=1);
 
-use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\Assessment\Asset;
 use Drupal\assessments\Entity\Assessment\Expression;
 use Drupal\assessments\Entity\Assessment\Participation;
 use Drupal\assessments\Entity\Assessment\PublicOrganisation;
 use Drupal\assessments\Entity\Assessment\PublicService;
 use Drupal\assessments\Entity\Assessment\Report;
+use Drupal\assessments\Entity\Paragraph\BindingRequirement;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;

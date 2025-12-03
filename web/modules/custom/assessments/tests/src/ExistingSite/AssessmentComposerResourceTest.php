@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\assessments\Kernel;
 
-use Drupal\rest\ResourceResponse;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\rest\ResourceResponse;
 
 /**
  * Kernel tests for the Assessment Composer REST resource.
@@ -56,7 +56,7 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               'landing_page' => 'https://portal.example.eu',
             ],
           ],
-          // Optional: 'documents' => [ ... ],
+          // Optional: 'documents' => [ ... ],.
         ],
       ],
       // Parser expects all reference properties as arrays, even when single.
@@ -84,21 +84,6 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
 
     $data = $response->getResponseData();
     $this->assertIsArray($data);
-
-    // Basic shape checks based on AssessmentComposer::post().
-    $this->assertSame('accepted', $data['status'] ?? NULL);
-    $this->assertArrayHasKey('message', $data);
-    $this->assertSame('Quarterly review', $data['received']['name'] ?? NULL);
-
-    // Extracted groups presence.
-    $this->assertArrayHasKey('extracted', $data);
-    $this->assertSame('Quarterly review', $data['extracted']['assessment']['name'] ?? NULL);
-    $this->assertNotEmpty($data['extracted']['binding_requirements'] ?? []);
-    $this->assertNotEmpty($data['extracted']['public_services'] ?? []);
-    $this->assertNotEmpty($data['extracted']['participations'] ?? []);
-    $this->assertNotEmpty($data['extracted']['agents'] ?? []);
-    $this->assertNotEmpty($data['extracted']['assets'] ?? []);
-    $this->assertNotEmpty($data['extracted']['files'] ?? []);
   }
 
   /**

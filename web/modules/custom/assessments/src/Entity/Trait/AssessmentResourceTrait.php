@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity\Trait;
 
-use Drupal\assessments\Entity\AssessmentResourceInterface;
-
 /**
  * Defines the assessment model base class.
  */

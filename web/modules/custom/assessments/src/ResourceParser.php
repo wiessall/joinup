@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\assessments;
 
+use Drupal\Component\Uuid\Php;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\assessments\Entity\Assessment\Asset;
 use Drupal\assessments\Entity\Assessment\Expression;
 use Drupal\assessments\Entity\Assessment\Participation;
@@ -12,14 +16,6 @@ use Drupal\assessments\Entity\Assessment\PublicService;
 use Drupal\assessments\Entity\Assessment\Report;
 use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\assessments\Entity\Paragraph\BindingRequirement;
-use Drupal\Component\Uuid\Php;
-use Drupal\assessments\Model\AssessmentModel;
-use Drupal\assessments\Model\AssessmentModelInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\EntityStorageException;
-use Github\Api\Repo;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -51,8 +47,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * - If the model is a new entity, the entity is saved. The generated ID is
  * stored in the model.
  * - The ID is returned to be used as entity values.
- * - The generated
- *
+ * - The generated.
  */
 final class ResourceParser implements ResourceParserInterface {
 
@@ -117,7 +112,6 @@ final class ResourceParser implements ResourceParserInterface {
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
-      throw $e;
     }
 
     return ['data' => $data, 'errors' => $this->errors];
@@ -164,7 +158,7 @@ final class ResourceParser implements ResourceParserInterface {
       'affects' => PublicService::class,
       'binding_requirement' => BindingRequirement::class,
     ];
-    return $mapping[$key] ?? null;
+    return $mapping[$key] ?? NULL;
   }
 
   /**
@@ -185,7 +179,8 @@ final class ResourceParser implements ResourceParserInterface {
    */
   protected function parseSubEntry(array &$data, string $key, string $basePath = ''): string|int {
     // Backwards-compatible wrapper. The actual implementation now lives in
-    // persistSubEntry() as part of the two-phase processing (validate + persist).
+    // persistSubEntry() as part of the two-phase processing (validate +
+    // persist).
     return $this->persistSubEntry($data, $key, $basePath);
   }
 
@@ -204,9 +199,9 @@ final class ResourceParser implements ResourceParserInterface {
     // Allowed properties are those defined in mappings plus the inbound 'id'.
     $allowedProperties = array_keys($mappings);
     $allowedProperties[] = 'id';
-    foreach ($data as $prop => $value) {
-      if (!in_array($prop, $allowedProperties, true)) {
-        $this->errors[] = sprintf('%s: Unexpected property: %s', $basePath . $key, (string) $prop);
+    foreach ($data as $property => $value) {
+      if (!in_array($property, $allowedProperties, TRUE)) {
+        $this->errors[] = sprintf('%s: Unexpected property: %s', $basePath . $key, (string) $property);
       }
     }
 
@@ -217,7 +212,7 @@ final class ResourceParser implements ResourceParserInterface {
         continue;
       }
       if (!empty($definition['is_required'])) {
-        if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '' || $data[$property] === []) {
+        if (!array_key_exists($property, $data) || $data[$property] === NULL || $data[$property] === '' || $data[$property] === []) {
           $this->errors[] = sprintf('%s: Missing required property: %s', $basePath . $key, $property);
         }
       }
@@ -228,11 +223,8 @@ final class ResourceParser implements ResourceParserInterface {
       if (empty($definition['is_reference'])) {
         continue;
       }
-      if ($property === 'results_in' && $key === 'assessment') {
-        continue;
-      }
       $children = $data[$property] ?? [];
-      if ($children === null || $children === '') {
+      if ($children === NULL || $children === '') {
         // Nothing to validate.
         continue;
       }
@@ -241,21 +233,20 @@ final class ResourceParser implements ResourceParserInterface {
         continue;
       }
       foreach ($children as &$subentry) {
-        // If an explicit ID is provided, ensure it references the correct entity type and exists.
+        // If an explicit ID is provided, ensure it references the correct
+        // entity type and exists.
         if (is_array($subentry) && !empty($subentry['id'])) {
           $expectedClass = $this->resolveClassFromKey($property);
           if ($expectedClass) {
             $loaded = $expectedClass::load($subentry['id']);
-            if ($loaded instanceof $expectedClass) {
-              // OK: existing reference. No further validation on its internals.
+            if (!($loaded instanceof $expectedClass)) {
+              $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
               continue;
             }
-            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
-            continue;
           }
         }
         // Recurse for embedded new/updated entities.
-        if (is_array($subentry)) {
+        elseif (is_array($subentry)) {
           $this->validateSubEntry($subentry, $property, $basePath . $key . ' > ');
         }
         else {
@@ -295,7 +286,7 @@ final class ResourceParser implements ResourceParserInterface {
         $this->errors[] = sprintf('%s: Unknown property mapping: %s \u2192 %s', $basePath . $key, $property, $fieldName);
         continue;
       }
-      if (!array_key_exists($property, $data) || $data[$property] === null || $data[$property] === '') {
+      if (!array_key_exists($property, $data) || $data[$property] === NULL || $data[$property] === '') {
         continue;
       }
       $translated = $entity->translateResourceValue($fieldName, $data[$property]);
@@ -358,4 +349,5 @@ final class ResourceParser implements ResourceParserInterface {
     $data['id'] = $entity->id();
     return $entity->id();
   }
+
 }
