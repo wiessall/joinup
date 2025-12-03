@@ -7,7 +7,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as a developer
-    And I go to "collection/assessments/report/create"
+    And I go to "/collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
