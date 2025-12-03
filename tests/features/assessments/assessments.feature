@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-e @assessments
 Feature: Assessment Report Entity Management
   In order to manage assessment reports directly
   As a user with appropriate permissions
@@ -54,10 +54,11 @@ Feature: Assessment Report Entity Management
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solutions" in the "Modal content" region
-    And I press "Add new relevant asset" in the "Modal content" region
-    And I fill in "asset[form][0][name][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
-    And I fill in "asset[form][0][landing_page][0][uri]" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
-    Then I press "Create relevant asset" in the "Modal content" region
+    And I press "Add new relevant solution" in the "Modal content" region
+    And I fill in "asset[form][0][title][0][value]" with "European Interoperability Framework (EIF)" in the "Modal content" region
+    And I enter "Description of European Interoperability Framework (EIF)" in the "asset[form][0][description][0][value]" wysiwyg editor
+    And I fill in "Relevant website" with "https://interoperable-europe.ec.europa.eu/collection/eif" in the "Modal content" region
+    Then I press "Create relevant solution" in the "Modal content" region
 
     When I click "Trans-European digital public services" in the "Modal content" region
     And I fill in "affects[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
