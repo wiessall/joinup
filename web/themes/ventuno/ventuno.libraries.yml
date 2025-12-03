@@ -561,3 +561,8 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
+
+inline-items:
+  css:
+    theme:
+      assets/css/inline-items.min.css: { minified: true }

@@ -205,9 +205,13 @@ class ProvidedByWidget extends WidgetBase {
     $element['content'] = [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['provided-by-content'],
+        'class' => [
+          'provided-by-content',
+          'assessments-inline',
+        ],
         'id' => 'provided-by-content-' . $delta,
       ],
+      '#attached' => ['library' => ['assessments/inline-items']],
     ];
 
     if ($selectedType) {
@@ -270,6 +274,11 @@ class ProvidedByWidget extends WidgetBase {
           '#attributes' => [
             'class' => ['country-select'],
             'data-delta' => $delta,
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
           ],
           '#ajax' => [
             'callback' => [static::class, 'ajaxRefresh'],
@@ -391,6 +400,11 @@ class ProvidedByWidget extends WidgetBase {
             'class' => ['organisation-select'],
             'data-delta' => $delta,
           ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
+          ],
         ] + ($countryJustChanged ? ['#value' => '_none'] : ['#default_value' => $defaultValue]);
 
         $element['content']['add_new_button'] = [
@@ -398,7 +412,12 @@ class ProvidedByWidget extends WidgetBase {
           '#value' => $this->t('Add new organisation'),
           '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'add_new_button'),
           '#attributes' => [
-            'class' => ['button', 'button--small', 'add-new-organisation-button'],
+            'class' => [
+              'button',
+              'button--small',
+              'add-new-organisation-button',
+              'assessments-inline__item--compact',
+            ],
           ],
           '#ajax' => [
             'callback' => [static::class, 'ajaxRefresh'],
@@ -418,6 +437,11 @@ class ProvidedByWidget extends WidgetBase {
           '#default_value' => '',
           '#attributes' => [
             'class' => ['organisation-name-field'],
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'assessments-inline__item',
+            ],
           ],
         ];
 
@@ -449,7 +473,12 @@ class ProvidedByWidget extends WidgetBase {
             '#value' => $this->t('Select existing organisation'),
             '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'select_existing_button'),
             '#attributes' => [
-              'class' => ['button', 'button--small', 'select-existing-button'],
+              'class' => [
+                'button',
+                'button--small',
+                'select-existing-button',
+                'assessments-inline__item--compact',
+              ],
             ],
             '#ajax' => [
               'callback' => [static::class, 'ajaxRefresh'],

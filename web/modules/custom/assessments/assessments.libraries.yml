@@ -2,3 +2,8 @@ radios_inline:
   css:
     component:
       css/radios-inline.css: {}
+
+inline-items:
+  css:
+    component:
+      css/inline-items.css: {}
