@@ -19,7 +19,7 @@ id: paragraph.binding_requirement.documented_in
 field_name: documented_in
 entity_type: paragraph
 bundle: binding_requirement
-label: Link
+label: 'Documented in'
 description: 'Provide a legal reference for the binding requirement, if available'
 required: false
 translatable: true

@@ -31,6 +31,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  - User can select existing or add new organisation
  *  - When "add new" is chosen: Hides listing, shows only
  *    Organisation Name field
+ *
+ * Implementation notes:
+ *  - Uses a custom #op property on form elements to identify operations.
+ *    This simplifies operation detection compared to parsing #name values,
+ *    improving code maintainability and reducing complexity.
  */
 #[FieldWidget(
   id: 'provided_by_widget',
@@ -38,6 +43,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   field_types: ['entity_reference'],
 )]
 final class ProvidedByWidget extends WidgetBase {
+
+  /**
+   * Operation identifier for organisation type select.
+   */
+  protected const string OP_TYPE_SELECT = 'assessment_org_type_select';
+
+  /**
+   * Operation identifier for country select.
+   */
+  protected const string OP_COUNTRY_SELECT = 'assessment_org_country_select';
+
+  /**
+   * Operation identifier for add new organisation button.
+   */
+  protected const string OP_ADD_NEW = 'assessment_org_add_new';
+
+  /**
+   * Operation identifier for select existing organisation button.
+   */
+  protected const string OP_SELECT_EXISTING = 'assessment_org_select_existing';
 
   /**
    * The logger channel.
@@ -136,12 +161,14 @@ final class ProvidedByWidget extends WidgetBase {
         'wrapper' => 'provided-by-content-' . $delta,
         'effect' => 'fade',
       ],
+      '#op' => self::OP_TYPE_SELECT,
     ];
 
     $selectedType = NULL;
+    $operation = $triggeringElement['#op'] ?? NULL;
+    $isCountryAjax = $operation === self::OP_COUNTRY_SELECT;
 
-    if ($triggeringElement && isset($triggeringElement['#name']) &&
-        strpos($triggeringElement['#name'], '[organisation_type]') !== FALSE) {
+    if ($operation === self::OP_TYPE_SELECT) {
       $selectedType = $form_state->getValue(array_merge($parents, [$fieldName, $delta, 'organisation_type']));
 
       $typeChanged = !isset($widgetState['selected_type']) ||
@@ -190,6 +217,7 @@ final class ProvidedByWidget extends WidgetBase {
           $parents,
           $fieldName,
           $delta,
+          $operation,
           $triggeringElement,
           $currentCountry
         );
@@ -197,9 +225,6 @@ final class ProvidedByWidget extends WidgetBase {
         if ($selectedCountry) {
           // Avoid updating widget state during country AJAX to prevent
           // inconsistency across multiple formElement() invocations.
-          $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
-            && strpos($triggeringElement['#name'], '[country]') !== FALSE;
-
           if (!$isCountryAjax) {
             $countryChanged = !isset($widgetState['selected_country'])
               || $widgetState['selected_country'] !== $selectedCountry;
@@ -247,6 +272,7 @@ final class ProvidedByWidget extends WidgetBase {
             'wrapper' => 'provided-by-content-' . $delta,
             'effect' => 'fade',
           ],
+          '#op' => self::OP_COUNTRY_SELECT,
         ];
 
         if (!$selectedCountry) {
@@ -256,24 +282,22 @@ final class ProvidedByWidget extends WidgetBase {
 
       $addNew = $widgetState['add_new'] ?? FALSE;
 
-      if ($triggeringElement && isset($triggeringElement['#name']) &&
-          strpos($triggeringElement['#name'], '[add_new_button]') !== FALSE) {
+      // Handle button clicks.
+      if ($operation === self::OP_ADD_NEW) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
-      elseif ($triggeringElement && isset($triggeringElement['#name']) &&
-               strpos($triggeringElement['#name'], '[select_existing_button]') !== FALSE) {
+      elseif ($operation === self::OP_SELECT_EXISTING) {
         $addNew = FALSE;
         $widgetState['add_new'] = FALSE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
+        $this->clearAddNewFieldsFromUserInput($form_state, $parents, $fieldName, $delta);
       }
 
       $isSubmitting = $form_state->isSubmitted() && !$form_state->isRebuilding();
-      $isCountryAjax = $triggeringElement && isset($triggeringElement['#name'])
-        && strpos($triggeringElement['#name'], '[country]') !== FALSE;
       $isEdit = !empty($items->getEntity()->id());
 
       if ($isSubmitting && isset($widgetState['country_just_changed'])) {
@@ -300,7 +324,7 @@ final class ProvidedByWidget extends WidgetBase {
           static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
         }
       }
-      elseif ($isEdit && $currentEntity && $requiresCountry) {
+      elseif ($isEdit && $currentEntity && $requiresCountry && $operation !== self::OP_ADD_NEW && $operation !== self::OP_SELECT_EXISTING) {
         $currentOrgCountry = $currentEntity->hasField('country')
           ? $currentEntity->get('country')->target_id
           : NULL;
@@ -377,10 +401,10 @@ final class ProvidedByWidget extends WidgetBase {
             'effect' => 'fade',
           ],
           '#limit_validation_errors' => [],
+          '#op' => self::OP_ADD_NEW,
         ];
       }
       else {
-        // Step 3b: Show "add new" form.
         $element['content']['name'] = [
           '#type' => 'textfield',
           '#title' => $this->t('Organisation name'),
@@ -410,14 +434,11 @@ final class ProvidedByWidget extends WidgetBase {
           '#value' => TRUE,
         ];
 
-        // Only show "select existing" button if there are organisations
-        // to select.
         $existingCount = $this->countMatchingOrganisations(
           $selectedType,
           $requiresCountry ? $selectedCountry : NULL
         );
         if ($existingCount > 0) {
-          // Button to switch back to "select existing" mode.
           $element['content']['select_existing_button'] = [
             '#type' => 'button',
             '#value' => $this->t('Select existing organisation'),
@@ -431,6 +452,7 @@ final class ProvidedByWidget extends WidgetBase {
               'effect' => 'fade',
             ],
             '#limit_validation_errors' => [],
+            '#op' => self::OP_SELECT_EXISTING,
           ];
         }
       }
@@ -452,6 +474,8 @@ final class ProvidedByWidget extends WidgetBase {
    *   The field name.
    * @param int $delta
    *   The field delta.
+   * @param string|null $operation
+   *   The current operation identifier.
    * @param mixed $triggeringElement
    *   The triggering element.
    * @param mixed $currentCountry
@@ -466,27 +490,21 @@ final class ProvidedByWidget extends WidgetBase {
     array $parents,
     string $fieldName,
     int $delta,
+    ?string $operation,
     mixed $triggeringElement,
     mixed $currentCountry,
   ): mixed {
-    // When country triggered AJAX, get the newly selected value directly
-    // from the triggering element.
-    if ($triggeringElement && isset($triggeringElement['#name'])
-      && strpos($triggeringElement['#name'], '[country]') !== FALSE) {
+    if ($operation === self::OP_COUNTRY_SELECT) {
       return $triggeringElement['#value'] ?? '';
     }
 
-    // Check widget state for previously selected country.
     if (isset($widgetState['selected_country'])) {
       return $widgetState['selected_country'];
     }
 
-    // Check if we have a current country from existing entity.
     if ($currentCountry) {
       return $currentCountry;
     }
-
-    // Final fallback: check user input for non-AJAX cases.
     $userInput = $form_state->getUserInput();
     $inputPath = array_merge($parents, [$fieldName, $delta, 'content', 'country']);
 
@@ -544,27 +562,73 @@ final class ProvidedByWidget extends WidgetBase {
    *   The field delta.
    */
   private function clearTargetIdFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
-    $userInput = $form_state->getUserInput();
     $paths = [
       array_merge($parents, [$fieldName, $delta, 'target_id']),
       array_merge($parents, [$fieldName, $delta, 'content', 'target_id']),
     ];
 
     foreach ($paths as $path) {
-      $temp = &$userInput;
-      $lastKey = array_pop($path);
-      foreach ($path as $key) {
-        if (!isset($temp[$key])) {
-          break;
-        }
-        $temp = &$temp[$key];
+      $this->clearFieldFromFormState($form_state, $path);
+    }
+  }
+
+  /**
+   * Clear all "add new" fields from user input when switching to select mode.
+   *
+   * This ensures that the 'Organisation name', 'create_new', 'new_org_type',
+   * and 'new_org_country' field values are removed when switching from
+   * "add new" to "select existing" mode. This prevents unwanted organisation
+   * creation when the form is submitted.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $parents
+   *   The form parents.
+   * @param string $fieldName
+   *   The field name.
+   * @param int $delta
+   *   The field delta.
+   */
+  private function clearAddNewFieldsFromUserInput(FormStateInterface $form_state, array $parents, string $fieldName, int $delta): void {
+    // List of fields to clear from "add new" mode.
+    $fieldsToRemove = ['name', 'create_new', 'new_org_type', 'new_org_country'];
+
+    foreach ($fieldsToRemove as $field) {
+      $path = array_merge($parents, [$fieldName, $delta, 'content', $field]);
+      $this->clearFieldFromFormState($form_state, $path);
+    }
+  }
+
+  /**
+   * Clear a field from both user input and form state values.
+   *
+   * This helper method removes a field value from both the user input array
+   * and form state values to ensure complete cleanup.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $path
+   *   The array path to the field (e.g., ['field_name', 0, 'content', 'name']).
+   */
+  private function clearFieldFromFormState(FormStateInterface $form_state, array $path): void {
+    $userInput = $form_state->getUserInput();
+    $temp = &$userInput;
+    $pathCopy = $path;
+    $lastKey = array_pop($pathCopy);
+
+    foreach ($pathCopy as $key) {
+      if (!isset($temp[$key])) {
+        return;
       }
-      if (isset($temp[$lastKey])) {
-        unset($temp[$lastKey]);
-      }
+      $temp = &$temp[$key];
     }
 
-    $form_state->setUserInput($userInput);
+    if (isset($temp[$lastKey])) {
+      unset($temp[$lastKey]);
+      $form_state->setUserInput($userInput);
+    }
+
+    $form_state->unsetValue($path);
   }
 
   /**
@@ -577,7 +641,6 @@ final class ProvidedByWidget extends WidgetBase {
     $options = [];
 
     try {
-      // Load the field definition from public_organisation entity type.
       $fieldDefinitions = $this->entityTypeManager
         ->getStorage('field_config')
         ->loadByProperties([
@@ -588,34 +651,10 @@ final class ProvidedByWidget extends WidgetBase {
 
       if ($field_definition = reset($fieldDefinitions)) {
         $handlerSettings = $field_definition->getSetting('handler_settings');
-        $targetBundles = $handlerSettings['target_bundles'] ?? [];
-
-        // Load terms from the configured vocabulary.
-        if (!empty($targetBundles)) {
-          $vocabulary = reset($targetBundles);
-          $terms = $this->entityTypeManager
-            ->getStorage('taxonomy_term')
-            ->loadByProperties(['vid' => $vocabulary]);
-
-          // Apply sorting if configured.
-          $sortField = $handlerSettings['sort']['field'] ?? 'name';
-          $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
-
-          if ($sortField === 'name') {
-            uasort($terms, function ($a, $b) use ($sortDirection) {
-              $result = strcasecmp($a->label(), $b->label());
-              return $sortDirection === 'asc' ? $result : -$result;
-            });
-          }
-
-          foreach ($terms as $term) {
-            $options[$term->id()] = $term->label();
-          }
-        }
+        $options = $this->getTermOptionsFromHandlerSettings($handlerSettings);
       }
     }
     catch (\Exception $e) {
-      // Fallback: Return empty options if field not available.
       $this->logger->error('Failed to load organisation type options: @message', [
         '@message' => $e->getMessage(),
       ]);
@@ -649,34 +688,11 @@ final class ProvidedByWidget extends WidgetBase {
         $handler = $field_definition->getSetting('handler');
         $handlerSettings = $field_definition->getSetting('handler_settings');
 
-        // If using Views handler, get options from the View.
         if ($handler === 'views') {
           $options = $this->getOptionsFromViewsHandler($handlerSettings);
         }
-        // Otherwise use default taxonomy handler.
         else {
-          $targetBundles = $handlerSettings['target_bundles'] ?? [];
-          if (!empty($targetBundles)) {
-            $vocabulary = reset($targetBundles);
-            $terms = $this->entityTypeManager
-              ->getStorage('taxonomy_term')
-              ->loadByProperties(['vid' => $vocabulary]);
-
-            // Apply sorting if configured.
-            $sortField = $handlerSettings['sort']['field'] ?? 'name';
-            $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
-
-            if ($sortField === 'name') {
-              uasort($terms, function ($a, $b) use ($sortDirection) {
-                $result = strcasecmp($a->label(), $b->label());
-                return $sortDirection === 'asc' ? $result : -$result;
-              });
-            }
-
-            foreach ($terms as $term) {
-              $options[$term->id()] = $term->label();
-            }
-          }
+          $options = $this->getTermOptionsFromHandlerSettings($handlerSettings);
         }
       }
     }
@@ -685,6 +701,45 @@ final class ProvidedByWidget extends WidgetBase {
       $this->logger->error('Failed to load country options: @message', [
         '@message' => $e->getMessage(),
       ]);
+    }
+
+    return $options;
+  }
+
+  /**
+   * Get term options from handler settings.
+   *
+   * Loads taxonomy terms from the configured vocabulary and applies sorting.
+   *
+   * @param array $handlerSettings
+   *   The handler settings containing target bundles and sort configuration.
+   *
+   * @return array
+   *   Array of term options keyed by term ID.
+   */
+  protected function getTermOptionsFromHandlerSettings(array $handlerSettings): array {
+    $options = [];
+    $targetBundles = $handlerSettings['target_bundles'] ?? [];
+
+    if (!empty($targetBundles)) {
+      $vocabulary = reset($targetBundles);
+      $terms = $this->entityTypeManager
+        ->getStorage('taxonomy_term')
+        ->loadByProperties(['vid' => $vocabulary]);
+
+      $sortField = $handlerSettings['sort']['field'] ?? 'name';
+      $sortDirection = $handlerSettings['sort']['direction'] ?? 'asc';
+
+      if ($sortField === 'name') {
+        uasort($terms, function ($a, $b) use ($sortDirection) {
+          $result = strcasecmp($a->label(), $b->label());
+          return $sortDirection === 'asc' ? $result : -$result;
+        });
+      }
+
+      foreach ($terms as $term) {
+        $options[$term->id()] = $term->label();
+      }
     }
 
     return $options;
@@ -762,7 +817,7 @@ final class ProvidedByWidget extends WidgetBase {
         ], TRUE);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return FALSE;
     }
 
@@ -828,10 +883,16 @@ final class ProvidedByWidget extends WidgetBase {
   ): array {
     $newValues = [];
 
-    foreach ($values as $delta => $value) {
+    // Only create organisations during actual form submission, not during AJAX
+    // rebuilds. This prevents premature creation when users switch modes or
+    // change selections via AJAX.
+    $isActualSubmission = $form_state->isSubmitted() && !$form_state->isRebuilding();
 
-      // Check if there's a direct target_id (from existing entity
-      // in edit mode).
+    foreach ($values as $delta => $value) {
+      if (empty($value)) {
+        continue;
+      }
+
       if (isset($value['target_id']) && !empty($value['target_id'])) {
         $newValues[$delta] = [
           'target_id' => $value['target_id'],
@@ -839,23 +900,22 @@ final class ProvidedByWidget extends WidgetBase {
         continue;
       }
 
-      // Handle "select existing" mode from dropdown.
       if (isset($value['content']['target_id'])
-        && !empty($value['content']['target_id'])) {
+        && !empty($value['content']['target_id'])
+        && $value['content']['target_id'] !== '_none') {
         $newValues[$delta] = [
           'target_id' => $value['content']['target_id'],
         ];
         continue;
       }
 
-      // Handle "create new" mode when both flag and name are provided.
-      if (isset($value['content']['create_new'])
+      if ($isActualSubmission
+        && isset($value['content']['create_new'])
         && $value['content']['create_new'] === TRUE
         && !empty($value['content']['name'])) {
 
         $organisationName = trim($value['content']['name']);
 
-        // Check for existing organisation with matching attributes.
         $query = $this->entityTypeManager
           ->getStorage('assessment')
           ->getQuery()
@@ -916,9 +976,17 @@ final class ProvidedByWidget extends WidgetBase {
             $newValues[$delta] = [
               'target_id' => $organisation->id(),
             ];
+
+            $this->logger->info('Created new organisation: @name (ID: @id)', [
+              '@name' => $organisationName,
+              '@id' => $organisation->id(),
+            ]);
           }
           catch (\Exception $e) {
-            $this->logger->error('Failed to create organisation: @message', ['@message' => $e->getMessage()]);
+            $this->logger->error('Failed to create organisation "@name": @message', [
+              '@name' => $organisationName,
+              '@message' => $e->getMessage(),
+            ]);
           }
         }
         continue;
