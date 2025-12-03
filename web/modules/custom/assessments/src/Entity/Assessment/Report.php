@@ -62,6 +62,7 @@ final class Report extends Assessment implements AssessmentResourceInterface {
           'target_id' => $entity->id(),
           'target_revision_id' => $entity->getRevisionId(),
         ], $entities));
+
       default:
         return $values;
     }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Plugin\rest\resource;
 
-use Drupal\assessments\ResourceParser;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\assessments\Entity\Assessment;
+use Drupal\assessments\ResourceParser;
 use Drupal\rest\Attribute\RestResource;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -77,7 +76,8 @@ class AssessmentReportResource extends ResourceBase {
    *   The decoded JSON payload.
    */
   public function post(array $data): ResourceResponse {
-    // Basic validation: ensure we got a single object with a name field as per schema.
+    // Basic validation: ensure we got a single object with a name field as
+    // per schema.
     if (!is_array($data) || (isset($data[0]) && is_array($data[0]))) {
       return new ResourceResponse(['error' => 'Payload must be a single JSON object.'], 400);
     }

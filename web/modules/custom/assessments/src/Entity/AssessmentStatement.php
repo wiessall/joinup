@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\assessments\Entity;
 
-use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
 
 /**
  * Defines the Assessment statement entity.
