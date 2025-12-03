@@ -409,7 +409,7 @@ class ProvidedByWidget extends WidgetBase {
 
         $element['content']['add_new_button'] = [
           '#type' => 'button',
-          '#value' => $this->t('Add new organisation'),
+          '#value' => $this->t('…or add new'),
           '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'add_new_button'),
           '#attributes' => [
             'class' => [
@@ -431,7 +431,7 @@ class ProvidedByWidget extends WidgetBase {
       else {
         $element['content']['name'] = [
           '#type' => 'textfield',
-          '#title' => $this->t('Organisation name'),
+          '#title' => $this->t('New organisation name'),
           '#required' => TRUE,
           '#maxlength' => 255,
           '#default_value' => '',
@@ -470,7 +470,7 @@ class ProvidedByWidget extends WidgetBase {
         if ($existingCount > 0) {
           $element['content']['select_existing_button'] = [
             '#type' => 'button',
-            '#value' => $this->t('Select existing organisation'),
+            '#value' => $this->t('…or select existing'),
             '#name' => $this->buildButtonName($parents, $fieldName, $delta, 'select_existing_button'),
             '#attributes' => [
               'class' => [
