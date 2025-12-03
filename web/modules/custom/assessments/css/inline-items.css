@@ -1,0 +1,19 @@
+/**
+ * @file
+ * Inline item styles.
+ */
+
+.assessments-inline {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 1.5rem;
+  align-items: self-end;
+}
+
+.assessments-inline__item {
+  flex: 1 0 auto;
+}
+
+.assessments-inline__item--compact {
+  flex-grow: 0;
+}
