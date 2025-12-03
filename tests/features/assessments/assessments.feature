@@ -182,6 +182,29 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
 
+    # Verify organization is only created when the main assessment form is saved.
+    # Regression test for ticket ISAICP-10555
+    Then I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Greece" from "Country"
+    And I wait for AJAX to finish
+    And the following field should be present "Select organisation"
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "Organisation Should Not Be Created"
+    Then I press "Select existing organisation"
+    And I wait for AJAX to finish
+
+    # Check if organisation is createad.
+    Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
+    And the following field should be present "Select organisation"
+    And the following field should not be present "Organisation name"
+    And I select "GR1" from "Select organisation"
+    Then I press "Save"
+    Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
+
   @javascript
   Scenario: Published assessments are viewable by anonymous and authenticated users
     Given user:
@@ -214,7 +237,7 @@ Feature: Assessment Report Entity Management
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
-    And I select "In Review" from "State"
+    And I select the radio button "In Review"
     Then I press "Save"
     Then I should see the success message containing "New assessment Test permissions in Assessment Report 2025 has been created."
     And I should see the heading "Test permissions in Assessment Report 2025"
@@ -234,7 +257,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
-    And I select "Publish" from "State"
+    And I select the radio button "Published"
     And I press "Save"
     Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
 
