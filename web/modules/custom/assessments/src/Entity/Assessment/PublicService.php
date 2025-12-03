@@ -25,11 +25,6 @@ final class PublicService extends Assessment implements AssessmentResourceInterf
         'is_required' => FALSE,
         'is_reference' => FALSE,
       ],
-      'spatial' => [
-        'field_name' => 'spatial',
-        'is_required' => FALSE,
-        'is_reference' => FALSE,
-      ],
       'identifier' => [
         'field_name' => 'identifier',
         'is_required' => TRUE,

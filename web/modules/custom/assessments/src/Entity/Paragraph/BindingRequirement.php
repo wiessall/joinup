@@ -37,7 +37,7 @@ final class BindingRequirement extends Paragraph implements AssessmentResourceIn
       ],
       'expression' => [
         'field_name' => 'expression',
-        'is_required' => FALSE,
+        'is_required' => TRUE,
         'is_reference' => TRUE,
       ],
       'affects' => [

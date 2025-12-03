@@ -52,6 +52,20 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class ResourceParser implements ResourceParserInterface {
 
   /**
+   * Cached mappings per key to avoid repeated entity instantiation.
+   *
+   * @var array<string, array>
+   */
+  protected array $mappingsCache = [];
+
+  /**
+   * Cached short class names for reflection messages.
+   *
+   * @var array<string, string>
+   */
+  protected array $classShortNameCache = [];
+
+  /**
    * An array of errors.
    *
    * @var array
@@ -193,6 +207,83 @@ final class ResourceParser implements ResourceParserInterface {
   }
 
   /**
+   * Builds a path string used in error messages.
+   */
+  protected function makePath(string $basePath, string $key, ?string $property = NULL): string {
+    return $property === NULL ? ($basePath . $key) : ($basePath . $key . ' > ' . $property);
+  }
+
+  /**
+   * Adds a formatted error for the given path.
+   */
+  protected function addError(string $basePath, string $key, string $message, ?string $property = NULL): void {
+    $path = $this->makePath($basePath, $key, $property);
+    $this->errors[] = sprintf('%s: %s', $path, $message);
+  }
+
+  /**
+   * Checks for the specific empty cases we care about.
+   */
+  protected function isEmptyValue(mixed $value): bool {
+    return $value === NULL || $value === '' || $value === [];
+  }
+
+  /**
+   * Centralizes special-case skips (e.g. results_in on root assessment).
+   */
+  protected function isSkippedSpecialCase(string $key, string $property): bool {
+    return $key === 'assessment' && $property === 'results_in';
+  }
+
+  /**
+   * Returns mappings for a given key, cached to avoid repeat instantiation.
+   *
+   * @return array<string, mixed>
+   *   The property mappings.
+   */
+  protected function getMappingsForKey(string $key): array {
+    if (!array_key_exists($key, $this->mappingsCache)) {
+      $entity = $this->initializeObject($key);
+      $this->mappingsCache[$key] = $entity->getResourcePropertyMappings();
+    }
+    return $this->mappingsCache[$key];
+  }
+
+  /**
+   * Validates/loads an existing reference id, returns the numeric id or null.
+   */
+  protected function resolveExistingReferenceId(string $propertyKey, mixed $id, string $basePath, string $key): ?int {
+    $expectedClass = $this->resolveClassFromKey($propertyKey);
+    if (!$expectedClass) {
+      return NULL;
+    }
+    $loaded = $expectedClass::load($id);
+    if ($loaded instanceof $expectedClass) {
+      return (int) $loaded->id();
+    }
+    $this->addError($basePath, $key, sprintf('Provided id %s does not reference a valid entity', $id), $propertyKey);
+    return NULL;
+  }
+
+  /**
+   * Normalizes children input to an array and records structural errors.
+   *
+   * @return array
+   *   The normalized children. An empty array is returned if the children are
+   *   not an array or are empty.
+   */
+  protected function normalizeChildren(mixed $children, string $basePath, string $key, string $property): array {
+    if ($children === NULL || $children === '') {
+      return [];
+    }
+    if (!is_array($children)) {
+      $this->addError($basePath, $key, 'Expected an array of sub-entries', $property);
+      return [];
+    }
+    return $children;
+  }
+
+  /**
    * Parses a sub-entry and returns its ID.
    *
    * @param array $data
@@ -224,8 +315,11 @@ final class ResourceParser implements ResourceParserInterface {
    * - Does NOT perform field constraint validations or any persistence.
    */
   protected function validateSubEntry(array &$data, string $key, string $basePath = ''): void {
-    $entity = $this->initializeObject($key);
-    $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
+    // Ensure the key resolves to a valid entity. Throws exception on unknown
+    // keys, caught by parseInbound and transformed to error.
+    $this->initializeObject($key);
+
+    $mappings = $this->getMappingsForKey($key);
 
     // Allowed properties are those defined in mappings plus the inbound 'id'.
     $allowedProperties = array_keys($mappings);
@@ -238,12 +332,11 @@ final class ResourceParser implements ResourceParserInterface {
 
     // Check required properties are present and not empty.
     foreach ($mappings as $property => $definition) {
-      // Skip special-case statements if needed (mirrors persist pass).
-      if ($property === 'results_in' && $key === 'assessment') {
+      if ($this->isSkippedSpecialCase($key, $property)) {
         continue;
       }
       if (!empty($definition['is_required'])) {
-        if (!array_key_exists($property, $data) || $data[$property] === NULL || $data[$property] === '' || $data[$property] === []) {
+        if (!array_key_exists($property, $data) || $this->isEmptyValue($data[$property])) {
           $this->errors[] = sprintf('%s: Missing required property: %s', $basePath . $key, $property);
         }
       }
@@ -254,30 +347,17 @@ final class ResourceParser implements ResourceParserInterface {
       if (empty($definition['is_reference'])) {
         continue;
       }
-      $children = $data[$property] ?? [];
-      if ($children === NULL || $children === '') {
-        // Nothing to validate.
-        continue;
-      }
-      if (!is_array($children)) {
-        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $basePath . $key, $property);
+      $children = $this->normalizeChildren($data[$property] ?? [], $basePath, $key, $property);
+      if ($children === []) {
         continue;
       }
       foreach ($children as &$subentry) {
-        // If an explicit ID is provided, ensure it references the correct
-        // entity type and exists.
         if (is_array($subentry) && !empty($subentry['id'])) {
-          $expectedClass = $this->resolveClassFromKey($property);
-          if ($expectedClass) {
-            $loaded = $expectedClass::load($subentry['id']);
-            if (!($loaded instanceof $expectedClass)) {
-              $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
-              continue;
-            }
-          }
+          // Validate that the provided ID points to the correct entity type.
+          $this->resolveExistingReferenceId($property, $subentry['id'], $basePath, $key);
+          continue;
         }
-        // Recurse for embedded new/updated entities.
-        elseif (is_array($subentry)) {
+        if (is_array($subentry)) {
           $this->validateSubEntry($subentry, $property, $basePath . $key . ' > ');
         }
         else {
@@ -302,7 +382,7 @@ final class ResourceParser implements ResourceParserInterface {
    */
   protected function persistSubEntry(array &$data, string $key, string $basePath = ''): string|int {
     $entity = $this->initializeObject($key);
-    $mappings = method_exists($entity, 'getResourcePropertyMappings') ? $entity->getResourcePropertyMappings() : [];
+    $mappings = $this->getMappingsForKey($key);
 
     // Handle scalar (non-reference) properties using field mappings.
     foreach ($mappings as $property => $definition) {
@@ -310,14 +390,14 @@ final class ResourceParser implements ResourceParserInterface {
         continue;
       }
       if ($property === 'id') {
-        continue;
+        break;
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s \u2192 %s', $basePath . $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s > %s', $basePath . $key, $property, $fieldName);
         continue;
       }
-      if (!array_key_exists($property, $data) || $data[$property] === NULL || $data[$property] === '') {
+      if (!array_key_exists($property, $data) || $this->isEmptyValue($data[$property])) {
         continue;
       }
       $translated = $entity->translateResourceValue($fieldName, $data[$property]);
@@ -334,8 +414,7 @@ final class ResourceParser implements ResourceParserInterface {
 
     // Handle reference (nested) properties using field mappings.
     foreach ($mappings as $property => $definition) {
-      // Statements (results_in) are handled as a special case.
-      if ($property === 'results_in' && $key === 'assessment') {
+      if ($this->isSkippedSpecialCase($key, $property)) {
         continue;
       }
       if (empty($definition['is_reference'])) {
@@ -343,27 +422,18 @@ final class ResourceParser implements ResourceParserInterface {
       }
       $fieldName = $definition['field_name'] ?? $property;
       if (!$entity->hasField($fieldName)) {
-        $this->errors[] = sprintf('%s: Unknown property mapping: %s \u2192 %s', $basePath . $key, $property, $fieldName);
+        $this->errors[] = sprintf('%s: Unknown property mapping: %s > %s', $basePath . $key, $property, $fieldName);
         continue;
       }
       $values = [];
-      $children = $data[$property] ?? [];
-      if (!is_array($children)) {
-        $this->errors[] = sprintf('%s > %s: Expected an array of sub-entries', $basePath . $key, $property);
-        $children = [];
-      }
+      $children = $this->normalizeChildren($data[$property] ?? [], $basePath, $key, $property);
       foreach ($children as &$subentry) {
         if (is_array($subentry) && !empty($subentry['id'])) {
-          $expectedClass = $this->resolveClassFromKey($property);
-          if ($expectedClass) {
-            $loaded = $expectedClass::load($subentry['id']);
-            if ($loaded instanceof $expectedClass) {
-              $values[] = $loaded->id();
-              continue;
-            }
-            $this->errors[] = sprintf('%s > %s: Provided id %s does not reference a valid %s entity', $basePath . $key, $property, (string) $subentry['id'], (new \ReflectionClass($expectedClass))->getShortName());
-            continue;
+          $resolvedId = $this->resolveExistingReferenceId($property, $subentry['id'], $basePath, $key);
+          if ($resolvedId !== NULL) {
+            $values[] = $resolvedId;
           }
+          continue;
         }
         $values[] = $this->persistSubEntry($subentry, $property, $basePath . $key . ' > ');
       }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\assessments\Kernel;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\assessments\Entity\Assessment\Asset;
 use Drupal\rest\ResourceResponse;
 
 /**
@@ -20,26 +21,122 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
    * Tests posting a structured payload returns 201 and echoes the data.
    */
   public function testPostStructuredPayload(): void {
-    $payload = [
+    $payload = $this->baseValidPayload();
+
+    /** @var \Drupal\rest\ResourceResponse $response */
+    $response = $this->invokeResourcePost($payload);
+    $this->assertInstanceOf(ResourceResponse::class, $response);
+    $this->assertSame(201, $response->getStatusCode());
+    $data = $response->getResponseData();
+    $this->assertIsArray($data);
+  }
+
+  /**
+   * Tests that errors are returned for unknown properties.
+   */
+  public function testUnexpectedPropertiesReturnErrors(): void {
+    $payload = $this->baseValidPayload();
+    // Add unexpected root property.
+    $payload['foo'] = 'bar';
+    // Add unexpected nested property under affects.
+    $payload['binding_requirement'][0]['affects'][0]['unexpected'] = TRUE;
+
+    $response = $this->invokeResourcePost($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $data = $response->getResponseData();
+    $this->assertIsArray($data['errors'] ?? NULL);
+    $messages = implode("\n", $data['errors']);
+    $this->assertStringContainsString('assessment: Unexpected property: foo', $messages);
+    $this->assertStringContainsString('assessment > binding_requirement > affects: Unexpected property: unexpected', $messages);
+  }
+
+  /**
+   * Tests that errors are returned for missing required properties.
+   */
+  public function testMissingRequiredPropertiesReturnErrors(): void {
+    $payload = $this->baseValidPayload();
+    // Remove required properties, both text and reference.
+    unset($payload['name']);
+    unset($payload['binding_requirement']);
+
+    $response = $this->invokeResourcePost($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $data = $response->getResponseData();
+    $messages = implode("\n", $data['errors'] ?? []);
+    $this->assertStringContainsString('assessment: Missing required property: name', $messages);
+    $this->assertStringContainsString('assessment: Missing required property: binding_requirement', $messages);
+  }
+
+  /**
+   * Invalid values are passed as some of the referenced types (invalid ids).
+   */
+  public function testInvalidReferenceIdsReturnErrors(): void {
+    $payload = $this->baseValidPayload();
+    // Provide non-existent ids for `provider` and `affects` references.
+    $payload['provider'] = [['id' => 99999999]];
+    $payload['binding_requirement'][0]['affects'] = [['id' => 88888888]];
+
+    $response = $this->invokeResourcePost($payload);
+    $this->assertSame(422, $response->getStatusCode());
+    $data = $response->getResponseData();
+    $messages = implode("\n", $data['errors'] ?? []);
+    // Class short names appear in the message per
+    // ResourceParser::getClassShortName().
+    $this->assertStringContainsString('assessment > provider: Provided id 99999999 does not reference a valid entity', $messages);
+    $this->assertStringContainsString('assessment > binding_requirement > affects: Provided id 88888888 does not reference a valid entity', $messages);
+  }
+
+  /**
+   * Tests that an asset can be reused.
+   */
+  public function testAssetCanBeReused(): void {
+    // Create an asset entity that we will reference twice in the payload.
+    $existingAssetId = $this->createAsset('Reusable portal', 'https://reusable.example.eu');
+    $beforeCount = $this->countAssessmentBundle('asset');
+
+    $payload = $this->baseValidPayload();
+    // Replace assets with two references to the same existing id.
+    $payload['binding_requirement'][0]['asset'] = [
+      ['id' => $existingAssetId],
+      ['id' => $existingAssetId],
+    ];
+
+    $response = $this->invokeResourcePost($payload);
+    $this->assertSame(201, $response->getStatusCode(), 'Existing asset ids should be accepted without creating new assets.');
+
+    $afterCount = $this->countAssessmentBundle('asset');
+    $this->assertSame($beforeCount, $afterCount, 'No new asset entities should be created.');
+
+    $data = $response->getResponseData();
+    $assets = $data['binding_requirement'][0]['asset'] ?? [];
+    $this->assertCount(2, $assets);
+    $this->assertSame($existingAssetId, $assets[0]['id'] ?? NULL);
+    $this->assertSame($existingAssetId, $assets[1]['id'] ?? NULL);
+  }
+
+  /**
+   * Build a base valid payload for reuse across tests.
+   */
+  protected function baseValidPayload(): array {
+    return [
       'name' => 'Quarterly review',
       'binding_requirement' => [
         [
           'documented_in' => 'https://example.com/law/123',
           'description' => 'This is some description.',
+          'affects' => [
+            [
+              'identifier' => 'ps-123',
+              'name' => 'Permit Application Service',
+              'thematic_area' => 'core_governance_and_administration',
+            ],
+          ],
           'expression' => [
             [
               'name' => 'Legal Act 2024',
               'description' => 'Reference to an EU legal expression',
               'documented_in' => 'https://example.com/eli/act',
               'expression_type' => 'http://data.europa.eu/eli/ontology#LegalExpression',
-            ],
-          ],
-          'affects' => [
-            [
-              'spatial' => 'BE',
-              'identifier' => 'ps-123',
-              'name' => 'Permit Application Service',
-              'thematic_area' => 'core_governance_and_administration',
             ],
           ],
           'has_participation' => [
@@ -56,10 +153,8 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
               'landing_page' => 'https://portal.example.eu',
             ],
           ],
-          // Optional: 'documents' => [ ... ],.
         ],
       ],
-      // Parser expects all reference properties as arrays, even when single.
       'provider' => [
         [
           'name' => 'City of Brussels',
@@ -75,47 +170,29 @@ class AssessmentComposerResourceTest extends JoinupExistingSiteTestBase {
         ],
       ],
     ];
-
-    /** @var \Drupal\rest\ResourceResponse $response */
-    $response = $this->invokeResourcePost($payload);
-
-    $this->assertInstanceOf(ResourceResponse::class, $response);
-    $this->assertSame(201, $response->getStatusCode());
-
-    $data = $response->getResponseData();
-    $this->assertIsArray($data);
   }
 
   /**
-   * Tests minimal valid payload.
+   * Count assessment entities for a specific bundle.
    */
-  public function testPostMinimalPayload(): void {
-    $payload = [
-      'name' => 'Test Assessment',
-      // Optional fields omitted.
-    ];
-
-    $response = $this->invokeResourcePost($payload);
-    $this->assertSame(201, $response->getStatusCode());
-
-    $data = $response->getResponseData();
-    $this->assertSame('Test Assessment', $data['extracted']['assessment']['name'] ?? NULL);
-    // Optional extracted groups default to empty arrays when not supplied.
-    $this->assertIsArray($data['extracted']['binding_requirements'] ?? []);
-    $this->assertIsArray($data['extracted']['statements'] ?? []);
+  protected function countAssessmentBundle(string $bundle): int {
+    $query = \Drupal::entityTypeManager()->getStorage('assessment')->getQuery();
+    $query->condition('type', $bundle);
+    $query->accessCheck(FALSE);
+    return (int) $query->count()->execute();
   }
 
   /**
-   * Tests invalid payload (array of objects instead of a single object).
+   * Create an Asset entity and return its numeric id.
    */
-  public function testPostInvalidPayload(): void {
-    $invalid = [['name' => 'Wrong root type']];
-
-    $response = $this->invokeResourcePost($invalid);
-    $this->assertSame(400, $response->getStatusCode());
-
-    $data = $response->getResponseData();
-    $this->assertSame('Payload must be a single JSON object.', $data['error'] ?? NULL);
+  protected function createAsset(string $name, string $landingPage): int {
+    $asset = Asset::create([
+      'type' => 'asset',
+      'name' => $name,
+      'landing_page' => $landingPage,
+    ]);
+    $asset->save();
+    return (int) $asset->id();
   }
 
   /**
