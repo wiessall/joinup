@@ -16,7 +16,7 @@ Feature: Assessment Report Entity Management
     When I fill in "Name" with "Test Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Austrian Ministry of Digital Affairs"
+    And I fill in "New organisation name" with "Austrian Ministry of Digital Affairs"
     And I select the radio button "Yes"
     And I fill in "Relevant assessment report" with "https://interoperable-europe.ec.europa.eu/report"
 
@@ -120,7 +120,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "GR1"
+    And I fill in "New organisation name" with "GR1"
     And I select the radio button "No"
 
     # Binding requirements
@@ -148,7 +148,7 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And the following field should be present "Organisation name"
+    And the following field should be present "New organisation name"
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
@@ -156,15 +156,15 @@ Feature: Assessment Report Entity Management
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
     And the following field should not be present "Select organisation"
-    And I fill in "Organisation name" with "Portugal Ministry of Digital Affairs"
+    And I fill in "New organisation name" with "Portugal Ministry of Digital Affairs"
     Then I press "Save"
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Spain Ministry of Digital Affairs"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "Spain Ministry of Digital Affairs"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
     And the option with text "Portugal Ministry of Digital Affairs" from select "Select organisation" is selected
 
@@ -173,7 +173,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And the following field should be present "Organisation name"
+    And the following field should be present "New organisation name"
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
