@@ -547,9 +547,9 @@ function joinup_core_field_widget_single_element_tagify_select_widget_form_alter
  * Remove the "Drag to re-order @entity_types." mention in description.
  *
  * @param array $element
- *  The field widget form element.
+ *   The field widget form element.
  * @param array $context
- *  Context array.
+ *   Context array.
  */
 function _joinup_core_remove_drag_message_in_description(array &$element, array $context): void {
   /* @see \Drupal\tagify\Plugin\Field\FieldWidget\TagifyEntityReferenceAutocompleteWidget::formElement */
