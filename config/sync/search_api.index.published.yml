@@ -876,6 +876,7 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
+  assessment_status: {  }
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
@@ -928,6 +929,8 @@ processor_settings:
     weights:
       preprocess_index: -42
     boosts:
+      'entity:assessment':
+        datasource_boost: 0.0
       'entity:node':
         datasource_boost: 0.0
         bundle_boosts:

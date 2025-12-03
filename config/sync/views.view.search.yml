@@ -466,8 +466,11 @@ display:
         type: search_api
         options:
           view_modes:
+            'entity:assessment':
+              ':default': view_mode_tile_horizontal
+              report: ':default'
             'entity:node':
-              assessment_report: view_mode_tile_horizontal
+              ':default': default
               collection: view_mode_tile_horizontal
               custom_page: view_mode_tile_horizontal
               discussion: view_mode_tile_horizontal
@@ -479,6 +482,7 @@ display:
               release: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
             'entity:taxonomy_term':
+              ':default': default
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
@@ -486,6 +490,7 @@ display:
               oss_category: default
               topic: default
             'entity:user':
+              ':default': default
               user: view_mode_tile_horizontal
       query:
         type: search_api_query

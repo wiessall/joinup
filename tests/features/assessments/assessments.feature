@@ -415,3 +415,16 @@ Feature: Assessment Report Entity Management
     When I am not logged in
     And I go to "/collection/portal-support/report/repository"
     Then I should get a 404 HTTP response
+
+  @javascript
+  Scenario: Advanced search
+    Given report assessments:
+      | name         | state     | created              |
+      | Assessment 1 | published | 2020-01-01T00:00:00Z |
+      | Assessment 2 | published | 2020-01-02T00:00:00Z |
+      | Assessment 3 | review    | 2020-01-03T00:00:00Z |
+      | Assessment 4 | draft     | 2020-01-04T00:00:00Z |
+    And I am an anonymous user
+    When I visit the advanced search page
+    And I check the "Assessment reports (2)" checkbox from the "Content types" facet
+    Then the page should show only the tiles "Assessment 1, Assessment 2"

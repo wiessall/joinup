@@ -24,4 +24,12 @@ interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    */
   public const string SOLUTION_COLLECTOR = 'e0f3b87b-9de3-48d5-8fff-5ec88ccd1a71';
 
+  /**
+   * Returns whether the entity is published.
+   *
+   * @return bool
+   *   TRUE if the entity is published, FALSE otherwise.
+   */
+  public function isPublished(): bool;
+
 }
