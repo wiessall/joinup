@@ -237,7 +237,7 @@ Feature: Assessment Report Entity Management
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
-    And I select "In Review" from "State"
+    And I select the radio button "In Review"
     Then I press "Save"
     Then I should see the success message containing "New assessment Test permissions in Assessment Report 2025 has been created."
     And I should see the heading "Test permissions in Assessment Report 2025"
@@ -257,7 +257,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
-    And I select "Publish" from "State"
+    And I select the radio button "Published"
     And I press "Save"
     Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
 
