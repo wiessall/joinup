@@ -55,43 +55,6 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
   /**
    * {@inheritdoc}
    */
-  public function getResourcePropertyMappings(): array {
-    return [
-      'interpretation' => [
-        'field_name' => 'interpretation',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-      'judgement' => [
-        'field_name' => 'judgement',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-      'type' => [
-        'field_name' => 'statement_type',
-        'is_required' => TRUE,
-        'is_reference' => FALSE,
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function translateResourceValue(string $fieldName, mixed $values): mixed {
-    switch ($fieldName) {
-      case 'interpretation':
-      case 'judgement':
-      case 'statement_type':
-        return $values;
-      default:
-        return $values;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields['judgement'] = BaseFieldDefinition::create('string_long')
@@ -193,6 +156,48 @@ final class AssessmentStatement extends ContentEntityBase implements AssessmentR
     $tid = \Drupal::service(AssessmentVocabularyHelper::class)
       ->getTermIdFromIdentifier('assess_statement_type', $this->bundle());
     $this->set('statement_type', $tid);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getResourcePropertyMappings(): array {
+    return [
+      'interpretation' => [
+        'field_name' => 'interpretation',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'judgement' => [
+        'field_name' => 'judgement',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+      'type' => [
+        'field_name' => 'statement_type',
+        'is_required' => TRUE,
+        'is_reference' => FALSE,
+      ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function translateResourceValue(string $fieldName, mixed $values): mixed {
+    if ($fieldName === 'interpretation') {
+      $terms = \Drupal::entityTypeManager()
+        ->getStorage('taxonomy_term')
+        ->loadByProperties([
+          'vid' => 'assess_statement_interpretation',
+          'id' => $values,
+        ]);
+
+      $term = reset($terms);
+      return $term ? $term->id() : NULL;
+    }
+
+    return $values;
   }
 
 }
