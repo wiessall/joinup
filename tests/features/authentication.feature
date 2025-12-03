@@ -46,7 +46,7 @@ Feature: User authentication
       | admin/tmgmt/settings                                |
       | announcements                                       |
       | api/assessments/v1                                  |
-      | assessments/add/report                              |
+      | collection/assessments/report/create                |
       | collection/portal-support/revisions                 |
       | dashboard                                           |
       | dashboard/private-message-report                    |
@@ -101,7 +101,7 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
-      | assessments/add/report                              |
+      | collection/assessments/report/create                |
       | collection/portal-support/revisions                 |
       | dashboard                                           |
       | dashboard/private-message-report                    |
@@ -116,9 +116,9 @@ Feature: User authentication
     Then the response status code should be 403
 
     Examples:
-      | path                                        |
-      | admin/structure/webform                     |
-      | admin/structure/webform/submissions/manage  |
+      | path                                       |
+      | admin/structure/webform                    |
+      | admin/structure/webform/submissions/manage |
 
   Scenario Outline: Moderator can access pages they are authorized to
     Given I am logged in as a user with the "moderator" role
@@ -183,12 +183,12 @@ Feature: User authentication
     Then I should get an access denied error
 
     Examples:
-      | path                                       |
-      | admin                                      |
-      | admin/config                               |
-      | admin/config/search/redirect               |
-      | admin/content                              |
-      | admin/legal-notice                         |
-      | admin/legal-notice/add                     |
-      | admin/structure                            |
-      | node/add                                   |
+      | path                         |
+      | admin                        |
+      | admin/config                 |
+      | admin/config/search/redirect |
+      | admin/content                |
+      | admin/legal-notice           |
+      | admin/legal-notice/add       |
+      | admin/structure              |
+      | node/add                     |

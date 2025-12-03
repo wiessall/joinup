@@ -7,7 +7,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: Create a new assessment report with required fields
     Given I am logged in as a developer
-    And I go to "/assessments/add/report"
+    And I go to "collection/assessments/report/create"
     Then I should see the heading "Create assessment report"
 
     When I press "Save"
@@ -110,7 +110,7 @@ Feature: Assessment Report Entity Management
   @javascript
   Scenario: All possible tests for 'Provided by' plugin in assessment report
     Given I am logged in as a developer
-    And I go to "/assessments/add/report"
+    And I go to "/collection/assessments/report/create"
 
     When I fill in "Name" with "Test Provided by in Assessment Report 2025"
     And I select "Local public sector body" from "Type of public sector body"
