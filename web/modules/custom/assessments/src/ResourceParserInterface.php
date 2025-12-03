@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\assessments;
 
 /**
- * @todo Add interface description.
+ * Interface for assessment related classes that are imported via API.
  */
 interface ResourceParserInterface {
 
