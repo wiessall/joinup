@@ -104,6 +104,37 @@ final class ResourceParser implements ResourceParserInterface {
         $this->assessmentReport = $loaded;
       }
 
+      if (isset($data['results_in'])) {
+        // Ensure the 'results_in' statements are linked back to this report.
+        $statementIds = [];
+        foreach ($data['results_in'] as $statementData) {
+          $statement = AssessmentStatement::create([
+            'type' => $statementData['type'],
+            'judgement' => $statementData['judgement'],
+          ]);
+          $statement->set('interpretation', $statement->translateResourceValue('interpretation', $statementData['interpretation']));
+          $violations = $statement->validate();
+          foreach ($violations as $violation) {
+            $this->errors[] = sprintf('assessment > results_in > %s: %s', $violation->getPropertyPath(), $violation->getMessage());
+          }
+          if (empty($this->errors)) {
+            $statement->save();
+            $statementIds[$statementData['type']][] = $statement->id();
+          }
+        }
+
+        if (!empty($statementIds)) {
+          foreach ($statementIds as $fieldName => $ids) {
+            $this->assessmentReport->set($fieldName, $ids);
+            $violations = $this->assessmentReport->get($fieldName)->validate();
+            foreach ($violations as $violation) {
+              $this->errors[] = sprintf('assessment > %s: %s', $fieldName, $violation->getMessage());
+            }
+          }
+          $this->assessmentReport->save();
+        }
+      }
+
       if (!empty($this->errors)) {
         // Any errors discovered during persistence (e.g., field violations)
         // cause a rollback and will be returned to the client.
