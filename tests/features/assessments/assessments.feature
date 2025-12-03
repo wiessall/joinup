@@ -285,22 +285,19 @@ Feature: Assessment Report Entity Management
     And I should not see the link "My assessments"
     And I should see the text "There are no published assessment reports yet."
     Given report assessments:
-      | name                        | field_state |
-      | Weekly Health Check         | published   |
-      | Portal Accessibility Review | review      |
-      | System Audit Draft          | draft       |
+      | name                        | state     |
+      | Weekly Health Check         | published |
+      | Portal Accessibility Review | review    |
+      | System Audit Draft          | draft     |
     And I reload the page
-    # @todo ISAICP-10419 This should only show published items.
-    And the page should show the tiles "Weekly Health Check, Portal Accessibility Review, System Audit Draft"
+    And the page should show the tiles "Weekly Health Check"
     When I go to "/user/assessments"
     Then I should see the heading "Sign in to continue"
 
     # Test as logged in user.
-    # @todo ISAICP-10419 Use/add authenticated user tests.
-    When I am logged in as a developer
-    And users:
-      | Username         | Roles     |
-      | Lorian Nightfall | developer |
+    Given users:
+      | Username         |
+      | Lorian Nightfall |
     And I am logged in as "Lorian Nightfall"
     And I visit "collection/assessments/report/repository"
     Then I should see the heading "Assessment reports"
@@ -314,10 +311,10 @@ Feature: Assessment Report Entity Management
     And I should not see the link "My assessments"
     And I should see the text "There are no assessment reports yet for the current user."
     Given report assessments:
-      | name                       | field_state | uid              |
-      | Alpha Release Summary      | published   | Lorian Nightfall |
-      | Beta Feature Review        | review      | Lorian Nightfall |
-      | Prototype Evaluation Draft | draft       | Lorian Nightfall |
+      | name                       | state     | uid              |
+      | Alpha Release Summary      | published | Lorian Nightfall |
+      | Beta Feature Review        | review    | Lorian Nightfall |
+      | Prototype Evaluation Draft | draft     | Lorian Nightfall |
     And I reload the page
     And the page should show the tiles "Alpha Release Summary, Beta Feature Review, Prototype Evaluation Draft"
 
