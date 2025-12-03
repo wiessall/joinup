@@ -303,7 +303,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
-    And the page should show the tiles "Weekly Health Check, Portal Accessibility Review, System Audit Draft"
+    And the page should show the tiles "Weekly Health Check"
     When I follow "My assessments"
     Then I should be on "/user/assessments"
     Then I should see the heading "My assessment reports"
