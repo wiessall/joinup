@@ -13,7 +13,7 @@ use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -43,7 +43,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup('Provided by widget'),
   field_types: ['entity_reference'],
 )]
-final class ProvidedByWidget extends WidgetBase {
+class ProvidedByWidget extends WidgetBase {
+
+  use MessengerTrait;
 
   /**
    * Operation identifier for organisation type select.
@@ -83,11 +85,9 @@ final class ProvidedByWidget extends WidgetBase {
     array $third_party_settings,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelFactoryInterface $loggerFactory,
-    MessengerInterface $messenger,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
     $this->logger = $loggerFactory->get('assessments');
-    $this->messenger = $messenger;
   }
 
   /**
@@ -102,7 +102,6 @@ final class ProvidedByWidget extends WidgetBase {
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
       $container->get('logger.factory'),
-      $container->get('messenger'),
     );
   }
 
@@ -290,6 +289,7 @@ final class ProvidedByWidget extends WidgetBase {
       if ($operation === self::OP_ADD_NEW) {
         $addNew = TRUE;
         $widgetState['add_new'] = TRUE;
+        $widgetState['add_new_just_clicked'] = TRUE;
         unset($widgetState['country_just_changed']);
         static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
       }
@@ -892,6 +892,12 @@ final class ProvidedByWidget extends WidgetBase {
     // change selections via AJAX.
     $isActualSubmission = $form_state->isSubmitted() && !$form_state->isRebuilding();
 
+    // Get widget state to check if "Add New" was just clicked.
+    $fieldName = $this->fieldDefinition->getName();
+    $parents = $form['#parents'] ?? [];
+    $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
+    $addNewJustClicked = $widgetState['add_new_just_clicked'] ?? FALSE;
+
     foreach ($values as $delta => $value) {
       if (empty($value)) {
         continue;
@@ -943,20 +949,25 @@ final class ProvidedByWidget extends WidgetBase {
 
         // Reuse existing organisation if found.
         if (!empty($existingIds)) {
+          $existingId = reset($existingIds);
           $newValues[$delta] = [
-            'target_id' => reset($existingIds),
+            'target_id' => $existingId,
           ];
 
-          // Display warning message.
-          if ($isEuType) {
-            $this->messenger->addWarning($this->t(
-              "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
-            ));
-          }
-          else {
-            $this->messenger->addWarning($this->t(
-              "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
-            ));
+          // Display warning message only when user just clicked "Add New".
+          // This prevents showing the warning on simple edits like changing
+          // the report title.
+          if ($addNewJustClicked) {
+            if ($isEuType) {
+              $this->messenger()->addWarning($this->t(
+                "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+              ));
+            }
+            else {
+              $this->messenger()->addWarning($this->t(
+                "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
+              ));
+            }
           }
         }
 
@@ -999,6 +1010,12 @@ final class ProvidedByWidget extends WidgetBase {
         }
         continue;
       }
+    }
+
+    // Clear the "add_new_just_clicked" flag after processing.
+    if ($addNewJustClicked && $isActualSubmission) {
+      unset($widgetState['add_new_just_clicked']);
+      static::setWidgetState($parents, $fieldName, $form_state, $widgetState);
     }
 
     return $newValues;
