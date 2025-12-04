@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Assert;
 
 /**
  * Step definitions for assessments.
@@ -78,6 +82,28 @@ class AssessmentsContext extends RawDrupalContext {
         'field_state' => 'published',
       ]);
     }
+  }
+
+  /**
+   * Asserts that a GET request returns an expected array serialized as JSON.
+   *
+   * @param string $path
+   *   The path of the GET request to be checked.
+   * @param \Behat\Gherkin\Node\PyStringNode $expectedJsonAsYaml
+   *   The expected JSON. For convenience, the value should be serialized with
+   *   YAML encoding as it offers better developer experience (DX).
+   *
+   * @Then a GET request to :path should return the following JSON:
+   */
+  public function assertResponseJson($path, PyStringNode $expectedJsonAsYaml): void {
+    $baseUrl = $this->getMinkParameter('base_url');
+    $replacements = ['__base_url__' => $baseUrl];
+    $expected = Yaml::decode(strtr($expectedJsonAsYaml->getRaw(), $replacements));
+
+    $this->visitPath($path);
+    $actual = Json::decode($this->getSession()->getPage()->getContent());
+
+    Assert::assertEquals($expected, $actual);
   }
 
 }
