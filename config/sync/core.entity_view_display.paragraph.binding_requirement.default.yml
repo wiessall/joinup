@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
@@ -20,7 +20,7 @@ targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
-  affected_party:
+  has_participation:
     type: entity_reference_label
     label: above
     settings:
