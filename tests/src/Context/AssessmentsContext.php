@@ -10,9 +10,9 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\user\UserInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\user\UserInterface;
 
 /**
  * Step definitions for assessments.
