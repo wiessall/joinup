@@ -25,4 +25,5 @@ class AssessmentReport extends Assessment implements AssessmentInterface {
 
     return [['value' => $state]];
   }
+
 }
