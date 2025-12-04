@@ -189,16 +189,16 @@ Feature: Assessment Report Entity Management
     And I select "Greece" from "Country"
     And I wait for AJAX to finish
     And the following field should be present "Select organisation"
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Organisation Should Not Be Created"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "Organisation Should Not Be Created"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
 
-    # Check if organisation is createad.
+    # Check if organisation is created.
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
     And the following field should be present "Select organisation"
-    And the following field should not be present "Organisation name"
+    And the following field should not be present "New organisation name"
     And I select "GR1" from "Select organisation"
     Then I press "Save"
     Then I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -209,9 +209,9 @@ Feature: Assessment Report Entity Management
     # Regression test for case-insensitive name matching.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "gr1"
+    And I fill in "New organisation name" with "gr1"
     Then I press "Save"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -221,9 +221,9 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "portugal ministry of digital affairs"
+    And I fill in "New organisation name" with "portugal ministry of digital affairs"
     Then I press "Save"
     Then I should see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -236,7 +236,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I select "Belgium" from "Country"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Brand New Belgian Organisation 2025"
+    And I fill in "New organisation name" with "Brand New Belgian Organisation 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -244,9 +244,9 @@ Feature: Assessment Report Entity Management
     # Test that a second NEW organization with different name is also created without warnings.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "Another New Belgian Organisation 2025"
+    And I fill in "New organisation name" with "Another New Belgian Organisation 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
@@ -264,9 +264,9 @@ Feature: Assessment Report Entity Management
     And I click "Edit" in the "Entity actions" region
     Then I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "New EU Institution 2025"
+    And I fill in "New organisation name" with "New EU Institution 2025"
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
     And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
@@ -282,10 +282,10 @@ Feature: Assessment Report Entity Management
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
-    Then I press "Add new organisation"
+    Then I press "…or add new"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "New EU Institution 2025"
-    Then I press "Select existing organisation"
+    And I fill in "New organisation name" with "New EU Institution 2025"
+    Then I press "…or select existing"
     And I wait for AJAX to finish
     Then I press "Save"
     Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
@@ -305,7 +305,7 @@ Feature: Assessment Report Entity Management
     When I fill in "Name" with "Test permissions in Assessment Report 2025"
     And I select "European Union institution" from "Type of public sector body"
     And I wait for AJAX to finish
-    And I fill in "Organisation name" with "CTT PT"
+    And I fill in "New organisation name" with "CTT PT"
     And I select the radio button "No"
 
     # Binding requirements
