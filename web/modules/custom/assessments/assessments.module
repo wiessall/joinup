@@ -310,11 +310,17 @@ function assessments_inline_entity_form_entity_form_alter(array &$entity_form, F
  * Implements hook_inline_entity_form_table_fields_alter().
  */
 function assessments_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
-  unset($fields['status']);
+  if (
+    $context['parent_entity_type'] === 'paragraph' &&
+    $context['parent_bundle'] === 'binding_requirement' &&
+    $context['field_name'] === 'asset'
+  ) {
+    unset($fields['status']);
 
-  $fields['landing_page'] = [
-    'type' => 'field',
-    'label' => t('Relevant website'),
-    'weight' => 10,
-  ];
+    $fields['landing_page'] = [
+      'type' => 'field',
+      'label' => t('Relevant website'),
+      'weight' => 10,
+    ];
+  }
 }
