@@ -51,3 +51,4 @@ hidden:
   path: true
   status: true
   uri: true
+  uuid: true

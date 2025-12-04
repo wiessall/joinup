@@ -15,9 +15,7 @@ use Drupal\assessments\Entity\AssessmentReport;
 use Drupal\assessments\Entity\PublicOrganisation;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\user\UserInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -264,41 +262,6 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
   array_walk($bundles['assessment_statement'], function (array &$info) use ($rdfSync): void {
     $info['rdf_sync'] = $rdfSync;
   });
-}
-
-/**
- * Implements hook_views_pre_render().
- */
-function assessments_views_pre_render(ViewExecutable $view): void {
-  if ($view->id() == 'assessments_rest') {
-    $results = $view->result;
-    if ($view->current_display === 'public_organisation') {
-      foreach ($results as $result) {
-        // Instead of false we want to show an empty string.
-        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->get('country')->getValue())) {
-          $result->_entity->get('country')->setValue(['']);
-        }
-        // Instead of country term ID we want to send the two letters
-        // of the country.
-        else {
-          $term_id = $result->_entity->get('country')->getValue()[0]['target_id'];
-          $term = Term::load($term_id);
-          $code = $term?->get('code')->value ?? '';
-          $result->_entity->get('country')->setValue([$code]);
-        }
-      }
-    }
-    elseif ($view->current_display === 'asset') {
-      foreach ($results as $result) {
-        // Instead of false we want to show an empty string.
-        // @see \Drupal\views\Plugin\views\field\EntityField::getValue().
-        if (empty($result->_entity->get('landing_page')->getValue())) {
-          $result->_entity->get('landing_page')->setValue(['']);
-        }
-      }
-    }
-  }
 }
 
 /**

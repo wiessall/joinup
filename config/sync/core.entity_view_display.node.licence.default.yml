@@ -110,3 +110,4 @@ hidden:
   spdx_licence_external_url: true
   spdx_licence_label: true
   uri: true
+  uuid: true

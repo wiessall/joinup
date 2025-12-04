@@ -96,3 +96,4 @@ content:
 hidden:
   search_api_excerpt: true
   uri: true
+  uuid: true

@@ -251,3 +251,4 @@ hidden:
   created: true
   status: true
   uri: true
+  uuid: true
