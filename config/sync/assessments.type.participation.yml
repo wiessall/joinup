@@ -9,5 +9,9 @@ third_party_settings:
     type: 'http://data.europa.eu/m8g/Participation'
     uri_plugin: null
     fields: {  }
+label_singular: participation
+label_plural: participations
+label_count:
+  no_count_capitalize: !!binary UGFydGljaXBhdGlvbgNQYXJ0aWNpcGF0aW9ucw==
 id: participation
 label: Participation

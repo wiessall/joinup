@@ -9,5 +9,9 @@ third_party_settings:
     type: 'http://data.europa.eu/m8g/PublicOrganisation'
     uri_plugin: null
     fields: {  }
+label_singular: 'public organisation'
+label_plural: 'public organisations'
+label_count:
+  no_count_capitalize: !!binary UHVibGljIG9yZ2FuaXNhdGlvbgNQdWJsaWMgb3JnYW5pc2F0aW9ucw==
 id: public_organisation
 label: 'Public organisation'

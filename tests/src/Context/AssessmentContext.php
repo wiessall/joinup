@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -23,6 +25,43 @@ class AssessmentContext extends RawDrupalContext {
   use EntityTrait;
   use TestingEntitiesTrait;
   use UtilityTrait;
+
+  /**
+   * Programmatically creates assessment contents.
+   *
+   * Table format:
+   * | name   | <field n>       |
+   * | <name> | <field n value> |
+   *
+   * @param string $type
+   *   The bundle machine name.
+   * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
+   *   The table with the data for the fields of the assessment.
+   *
+   * @Given :type assessments:
+   */
+  public function createAssessments(string $type, TableNode $assessmentsTable): void {
+    foreach ($assessmentsTable->getHash() as $assessment) {
+      $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+
+      $fieldVocabMap = [
+        'public_organisation' => ['organisation_type' => 'assess_provider_type'],
+        'participation' => ['participant_type' => 'assess_participant_type'],
+        'public_service' => ['thematic_area' => 'assess_public_service_area'],
+      ];
+
+      foreach ($fieldVocabMap[$type] ?? [] as $fieldName => $vid) {
+        if (isset($assessment[$fieldName])) {
+          $assessment[$fieldName] = $vocabHelper->getTermFromIdentifier($vid, $assessment[$fieldName])->label();
+        }
+      }
+      $assessment = (object) $assessment;
+
+      $assessment->type = $type;
+      $this->parseEntityFields('assessment', $assessment);
+      $this->getDriver()->createEntity('assessment', $assessment);
+    }
+  }
 
   /**
    * Navigates to the latest assessment webform submission.
@@ -204,6 +243,30 @@ class AssessmentContext extends RawDrupalContext {
     $assessment_report->set('submission', $submission);
     $assessment_report->save();
     return $submission;
+  }
+
+  /**
+   * Asserts that an assessment with the given name and type does not exist.
+   *
+   * @param string $type
+   *   The type of the assessment.
+   * @param string $name
+   *   The name of the assessment.
+   *
+   * @throws \Exception
+   *   When an assessment with the given name and type exists.
+   *
+   * @Then the :type assessment :name should not exist
+   */
+  public function assertAssessmentNotExists(string $type, string $name): void {
+    try {
+      $this->getEntityByLabel('assessment', $name, $type);
+      // If we reach here, the entity exists, so throw an exception.
+      throw new \Exception(sprintf('A %s assessment with name "%s" exists but should not.', $type, $name));
+    }
+    catch (\RuntimeException) {
+      // Expected: entity not found. This is what we want.
+    }
   }
 
 }

@@ -11,9 +11,9 @@ import pageUtils from "../utils/pageUtils";
 test.describe("Solution homepage components", () => {
   async function validateSolutionPage(page: Page, user: string) {
     await page.goto(
-      "/collection/portal/solution/information-sharing-protocols",
+      "/collection/portal-support/solution/information-sharing-protocols",
     );
-    await pageUtils.waitForWebtools(page);
+    await pageUtils.prepareForScreenshot(page);
 
     await expect(page.locator(".region-header")).toHaveScreenshot(
       `group-header-${user}.png`,

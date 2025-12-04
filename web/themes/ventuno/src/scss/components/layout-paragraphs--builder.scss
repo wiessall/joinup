@@ -33,4 +33,16 @@ $wireframe-opacity: 0.5;
   .js-lpb-region.js-lpb-region {
     outline: none;
   }
+
+  // Hide the region when the add button is visually hidden.
+  div.layout:has(a.lpb-btn--add.visually-hidden) {
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
 }

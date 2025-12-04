@@ -193,10 +193,10 @@ Feature:
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given news content:
       | title  | headline | collection |
-      | News 1 | News 1   | The Portal |
+      | News 1 | News 1   | Portal support |
     And custom_page content:
       | title          | collection |
-      | Popular quotes | The Portal |
+      | Popular quotes | Portal support |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                           |
@@ -461,8 +461,8 @@ Feature:
   Scenario: Configurable listing for solutions
     Given solution content:
       | title                   | description              | collection | abstract                          | topic                                                                    | created    | changed    |
-      | Another rough day       | Lorem description issum  | The Portal |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
-      | Just another day & solt | Second description issum | The Portal | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
+      | Another rough day       | Lorem description issum  | Portal support |                                   | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis | 01-01-2023 | 03-02-2023 |
+      | Just another day & solt | Second description issum | Portal support | This is an solution with abstract | E-justice                                                                | 02-01-2023 | 03-02-2023 |
     When I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
     Then I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
@@ -486,7 +486,7 @@ Feature:
     And I should not see the text "Just another day amp solt" in the "Just another day & solt" tile
 
     # Show abstract instead of description in Collection/Solution tiles.
-    And I should see the text "The Portal is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme." in the "The Portal" tile
+    And I should see the text "Portal support is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme." in the "Portal support" tile
     And I should see the text "Lorem description issum" in the "Another rough day" tile
     And I should see the text "This is an solution with abstract" in the "Just another day & solt" tile
 

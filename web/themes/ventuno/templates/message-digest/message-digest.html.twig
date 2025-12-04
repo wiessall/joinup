@@ -6,168 +6,68 @@
 
 {% set contact_url = site_url ~ path('contact_form.contact_page') %}
 
-<tbody>
-<tr>
-  <td class="bg-secondary">
-    <table role="presentation" style="max-width:500px; margin: 0 auto;">
-      <tbody>
-        <tr>
-          <td class="bg-secondary text-right">
-            <table role="presentation">
-              <tbody>
-                <tr>
-                  <td style="height: 30px;" class="bg-secondary">&nbsp;</td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-          <td style="max-width:500px;">
-            <table role="presentation" style="max-width:500px;">
-              <tbody>
-              <!-- ISSUE START-->
-              <tr>
-                <td class="bg-primary">
-                  <table role="presentation">
-                    <tbody>
-                      <tr>
-                        <td style="width: 350px;" class="bg-primary">&nbsp;</td>
-                        <td style="width: 20px;" class="bg-warning">&nbsp;</td>
-                        <td style="width: 110px; height: 30px;" class="bg-warning fs-sm text-uppercase fw-bold">
-                          {% trans %}Issue: {{ issue_date }}{% endtrans %}
-                        </td>
-                        <td style="width: 20px;" class="bg-warning">&nbsp;</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              <!-- ISSUE END-->
-              <!-- HEADER START-->
-              <tr>
-                <td class="bg-primary text-center">
-                  <table role="presentation">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <table role="presentation">
-                            <tbody>
-                              <tr>
-                                <td class="text-center">
-                                  <a href="{{ site_url }}">
-                                    <img src="{{ images_directory }}/logo-interoperable-europe.svg" width="250" height="75" alt=""/>
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="text-center text-white" >
-                                  <span class="fs-lg">{% trans %}{{ frequency }} digest message{% endtrans %}</span>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style="height: 20px;" class="bg-primary">&nbsp;</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              <!-- HEADER END-->
+<table role="presentation" style="max-width:750px; margin: 0 auto;">
+  <tbody>
+    <!-- HEADER START-->
+    <tr>
+      <td valign="top">
+        <table role="presentation">
+          <tbody>
+            <tr>
+              <td style="padding: 0; background-color: #031E2F">
+                <p style="text-align: right; margin: 6px 8px 0 0; color: #eba843" class="text-warning fs-sm fw-bold">{% trans %}Issue: {{ issue_date }}{% endtrans %}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 0; background-color: #031E2F">
+                <img style="display:block; max-width: 100%" src="{{ images_directory }}/digest-message/digest-message-header.jpg">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <!-- HEADER END-->
 
-              <!-- WELCOME START-->
-              <tr>
-                <td class="bg-white text-left">
-                  <table role="presentation">
-                    <tbody>
-                    <tr>
-                      <td style="width: 30px; height: 25px;">&nbsp;</td>
-                      <td>&nbsp;</td>
-                      <td style="width: 30px;">&nbsp;</td>
-                    </tr>
-                    <tr>
-                      <td>&nbsp;</td>
-                      <td>
-                        <span class="fs-lg fw-bold">{% trans %}Dear {{ receiver_name }},{% endtrans %}</span>
-                      </td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              <!-- WELCOME END-->
+    <!-- WELCOME START-->
+    <tr>
+      <td class="text-left">
+        <h2 class="fs-lg fw-bold">{% trans %}Dear {{ receiver_name }},{% endtrans %}</h2>
+      </td>
+    </tr>
+    <!-- WELCOME END-->
 
-              <!-- MESSAGES START-->
-              <tr>
-                <td class="p-0">
-                  {{ messages }}
-                </td>
-              </tr>
-              <!-- MESSAGES END-->
+    <!-- MESSAGES START-->
+    <tr>
+      <td>
+        {{ messages }}
+      </td>
+    </tr>
+    <!-- MESSAGES END-->
 
-              <tr>
-                <td>
-                  {% trans %}
-                    <b>Kind regards,</b><br/>
-                    <small>The Portal Support Team</small>
-                  {% endtrans %}
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </td>
-          <td class="bg-secondary">
-            <table role="presentation">
-              <tbody>
-              <tr>
-                <td style="height: 30px;" class="bg-secondary">&nbsp;</td>
-              </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td style="height: 20px;">&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
+    <tr>
+      <td style="padding: 10px 0;">
+        {% trans %}
+          <p>Kind regards,</p>
+          <p><small>The Portal Support Team</small></p>
+        {% endtrans %}
+      </td>
+    </tr>
 
-<!-- FOOTER START-->
-  <tr>
-    <td class="fs-sm">
-      <table role="presentation">
-        <tbody>
-          <tr>
-            <td style="height: 50px;" class="bg-primary">&nbsp;</td>
-          </tr>
-          <tr>
-            <td class="bg-primary text-center">
-              <a href="{{ site_url }}">
-                <img src="{{ images_directory }}/logo-interoperable-europe.svg" width="200" height="50" alt=""/>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="height: 50px;" class="bg-primary">&nbsp;</td>
-          </tr>
-          <tr>
-            <td style="height: 100px;" class="bg-white fs-sm text-center">
-              {% trans %}
-                You received this email because you opted in for Interoperable Europe Portal digest messages.<br/>
-                <a href="{{ subscription_url }}">Manage</a> your subscription notifications or <a href="{{ unsubscription_url }}">unsubscribe</a> from all.<br/>
-                <a href="{{ contact_url }}">Contact us</a>.
-              {% endtrans %}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
+    <!-- FOOTER START-->
+    <tr>
+      <td style="height: 10px;" class="bg-primary">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="fs-sm" style="padding: 10px 0;">
+        <p>{% trans %}
+          You received this email because you opted in for Interoperable Europe Portal digest messages.<br/>
+          <a href="{{ subscription_url }}">Manage</a> your subscription notifications or <a href="{{ unsubscription_url }}">unsubscribe</a> from all.<br/>
+          <a href="{{ contact_url }}">Contact us</a>.
+        {% endtrans %}</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 <!-- FOOTER END-->
-</tbody>

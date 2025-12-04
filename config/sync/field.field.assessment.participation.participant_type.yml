@@ -1,12 +1,12 @@
-uuid: 3154661c-d290-47aa-a4db-c5fae757e82f
+uuid: 9a4bc5e5-df4a-45bb-b1ee-a5e5e1484b88
 langcode: en
 status: true
 dependencies:
   config:
     - assessments.type.participation
     - field.storage.assessment.participant_type
+    - taxonomy.vocabulary.assess_participant_type
   module:
-    - options
     - tmgmt_content
 third_party_settings:
   tmgmt_content:
@@ -16,10 +16,19 @@ field_name: participant_type
 entity_type: assessment
 bundle: participation
 label: 'Participant type'
-description: ''
+description: 'Select the groups of stakeholders to which binding requirement(s) are relevant'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: list_string
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assess_participant_type: assess_participant_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -234,7 +234,7 @@ developers_italia:
               name: GitHub solution 1
               url: http://example.com/vendor/solution1
               softwareVersion: '1.4'
-              releaseDate: "2017-05-01"
+              releaseDate: 2017-05-01
               logo: images/logo-solution-1.png
               platforms:
                 - web

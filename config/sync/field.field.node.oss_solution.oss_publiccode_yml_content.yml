@@ -10,7 +10,7 @@ third_party_settings:
     publiccode_yml:
       resolvers:
         -
-          plugin: metadata_content
+          plugin: publiccode_yml_content
           config: {  }
 id: node.oss_solution.oss_publiccode_yml_content
 field_name: oss_publiccode_yml_content

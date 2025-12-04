@@ -1,0 +1,61 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present an assessment entity.
+ */
+#}
+<article{{ attributes }}>
+  {% if view_mode != 'full' %}
+    {{ title_prefix }}
+    {{ title_suffix }}
+  {% endif %}
+
+  <div class="page-title__details">
+    <span
+      class="page-title__detail">{{ 'Submitted by'|t }}&nbsp;{{ content.uid }}</span>
+    <span
+      class="page-title__detail">{{ 'on'|t }}&nbsp;{{ content.created }},</span>
+    <span class="page-title__detail"><strong>{{ 'Provided by'|t }}</strong>&nbsp;{{ content.provider }}</span>
+    <span
+      class="page-title__detail">{{ 'Status:'|t }}&nbsp;{{ content.state }}</span>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      {% if not (assessment.relevant_report.isEmpty == true) and content.relevant_report is defined %}
+        <span
+          class="heading-d mt-4">{{ 'The report has been connected to the following previous/relevant reports'|t }}: </span>
+        {{ content.relevant_report }}
+      {% endif %}
+    </div>
+    <div class="col text-end">
+      <a href="#" class="btn btn-primary mt-4">{{ 'Export Report'|t }}</a>
+    </div>
+  </div>
+  <hr/>
+
+  {% if not (assessment.binding_requirement.isEmpty == true) and content.binding_requirement is defined %}
+    <h2
+      class="heading-d mt-3">{{ 'The assessment report was based on the following binding requirements'|t }}</h2>
+    {{ content.binding_requirement }}
+  {% endif %}
+
+  <h2 class="heading-d mt-4">{{ 'Results'|t }}</h2>
+  <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
+    {% for section in [
+      'legal',
+      'organisational',
+      'semantic',
+      'technical',
+      'other',
+    ] %}
+      {% if not (assessment[section].isEmpty == true) and content[section] is defined %}
+        <div class="col">
+          {{ content[section] }}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
+
+</article>

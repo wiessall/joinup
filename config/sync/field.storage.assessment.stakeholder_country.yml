@@ -1,0 +1,20 @@
+uuid: c34f5324-24d5-44a5-bfd2-36bff18273be
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+    - taxonomy
+id: assessment.stakeholder_country
+field_name: stakeholder_country
+entity_type: assessment
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

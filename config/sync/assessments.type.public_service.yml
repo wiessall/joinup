@@ -9,5 +9,9 @@ third_party_settings:
     type: 'http://purl.org/vocab/cpsv#PublicService'
     uri_plugin: null
     fields: {  }
+label_singular: 'public service'
+label_plural: 'public services'
+label_count:
+  no_count_capitalize: !!binary UHVibGljIHNlcnZpY2UDUHVibGljIHNlcnZpY2Vz
 id: public_service
 label: 'Public service'

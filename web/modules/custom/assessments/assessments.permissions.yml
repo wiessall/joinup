@@ -2,14 +2,21 @@ administer assessment types:
   title: 'Administer assessment types'
   description: 'Maintain the types of assessment entity.'
   restrict access: true
-view assessment:
-  title: 'View assessment'
-edit assessment:
-  title: 'Edit assessment'
-delete assessment:
-  title: 'Delete assessment'
-create assessment:
-  title: 'Create assessment'
+moderate assessment report:
+  title: 'Moderate assessment reports'
+  description: 'Moderate assessment reports and perform moderation transitions.'
+bypass assessment report moderation:
+  title: 'Bypass assessment report moderation'
+  description: 'Create assessment reports directly in published state and bypass moderation workflow.'
+create assessment report:
+  title: 'Create assessment reports'
+  description: 'Create new assessment reports.'
+view own assessment report:
+  title: 'View own assessment reports'
+  description: 'View assessment reports created by the user.'
+edit own assessment report:
+  title: 'Edit own assessment reports'
+  description: 'Edit assessment reports created by the user.'
 administer assessment statement types:
   title: 'Administer assessment statement types'
   description: 'Maintain the types of assessment statement type entity.'

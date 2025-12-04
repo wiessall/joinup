@@ -2,5 +2,9 @@ uuid: 25a79667-8885-4165-a6c8-802da1b8ea94
 langcode: en
 status: true
 dependencies: {  }
+label_singular: 'assessment report'
+label_plural: 'assessment reports'
+label_count:
+  no_count_capitalize: !!binary QXNzZXNzbWVudCByZXBvcnQDQXNzZXNzbWVudCByZXBvcnRz
 id: report
-label: Report
+label: 'Assessment report'

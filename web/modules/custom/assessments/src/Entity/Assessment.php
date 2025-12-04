@@ -12,7 +12,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\ctools\Testing\EntityCreationTrait;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\user\EntityOwnerTrait;
 
@@ -42,7 +41,7 @@ use Drupal\user\EntityOwnerTrait;
  *       "moderate" = "Drupal\assessments\Form\AssessmentModerationForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\assessments\AssessmentHtmlRouteProvider",
+ *       "html" = "Drupal\assessments\Routing\AssessmentsHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "assessment",
@@ -71,7 +70,7 @@ use Drupal\user\EntityOwnerTrait;
  *   field_ui_base_route = "entity.assessment_type.edit_form",
  * )
  */
-class Assessment extends ContentEntityBase implements AssessmentInterface, RdfSyncEntityInterface {
+class Assessment extends ContentEntityBase implements AssessmentInterface {
 
   use EntityChangedTrait;
   use EntityCreationTrait;
@@ -103,11 +102,6 @@ class Assessment extends ContentEntityBase implements AssessmentInterface, RdfSy
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'string',
-        'weight' => 0,
-      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
