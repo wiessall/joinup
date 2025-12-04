@@ -1,0 +1,11 @@
+uuid: 658521bf-0b50-4cee-a83d-f969da451e0a
+langcode: en
+status: true
+dependencies:
+  module:
+    - assessments
+id: assessment.view_mode_tile_horizontal
+label: 'Tile horizontal'
+description: ''
+targetEntityType: assessment
+cache: true

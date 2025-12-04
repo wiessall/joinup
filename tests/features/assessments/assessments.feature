@@ -205,6 +205,92 @@ Feature: Assessment Report Entity Management
 
     Then the public_organisation assessment "Organisation Should Not Be Created" should not exist
 
+    # Test case-insensitive matching for local organizations.
+    # Regression test for case-insensitive name matching.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "gr1"
+    Then I press "Save"
+    Then I should see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    # Test case-insensitive matching for EU organizations.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "portugal ministry of digital affairs"
+    Then I press "Save"
+    Then I should see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    # Test that NEW organizations are created without warnings.
+    # Regression test for false positive warning messages on new organization creation.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I select "Local public sector body" from "Type of public sector body"
+    And I wait for AJAX to finish
+    And I select "Belgium" from "Country"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "Brand New Belgian Organisation 2025"
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    # Test that a second NEW organization with different name is also created without warnings.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "Another New Belgian Organisation 2025"
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type, country and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 has been updated."
+
+    # Test that editing and saving without changing local organization shows no warning.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Updated"
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
+
+    # Test that NEW EU organizations are created without warnings.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I select "European Union institution" from "Type of public sector body"
+    And I wait for AJAX to finish
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "New EU Institution 2025"
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 - Updated has been updated."
+
+    # Test that editing and saving without changing EU organization shows no warning.
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
+
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I fill in "Name" with "Test Provided by in Assessment Report 2025 - Re-updated"
+    Then I press "Add new organisation"
+    And I wait for AJAX to finish
+    And I fill in "Organisation name" with "New EU Institution 2025"
+    Then I press "Select existing organisation"
+    And I wait for AJAX to finish
+    Then I press "Save"
+    Then I should not see the warning message containing "You tried to create a new organisation but one with the same type and name already exists. We've linked the existing one to your report."
+    And I should see the success message containing "Test Provided by in Assessment Report 2025 - Re-updated has been updated."
+
   @javascript
   Scenario: Published assessments are viewable by anonymous and authenticated users
     Given user:
@@ -237,7 +323,7 @@ Feature: Assessment Report Entity Management
     And I fill in "has_related_service[0][inline_entity_form][name][0][value]" with "eIDAS Authentication Service" in the "Modal content" region
 
     Then I press "Save" in the "Modal buttons" region
-    And I select "In Review" from "State"
+    And I select the radio button "In Review"
     Then I press "Save"
     Then I should see the success message containing "New assessment Test permissions in Assessment Report 2025 has been created."
     And I should see the heading "Test permissions in Assessment Report 2025"
@@ -257,7 +343,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Test permissions in Assessment Report 2025" assessment
-    And I select "Publish" from "State"
+    And I select the radio button "Published"
     And I press "Save"
     Then I should see the success message containing "The assessment Test permissions in Assessment Report 2025 has been updated."
 
@@ -273,3 +359,52 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a "assessment_reporter"
     Then I go to the "Test permissions in Assessment Report 2025" report
     And I should see the heading "Test permissions in Assessment Report 2025"
+
+  Scenario: Test assessment reports views
+    Given the assessments collection exists
+
+    # Test as anonymous.
+    When I am not logged in
+    And I visit "collection/assessments/report/repository"
+    Then I should see the heading "Assessment reports"
+    And I should not see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should see the text "There are no published assessment reports yet."
+    Given report assessments:
+      | name                        | state     |
+      | Weekly Health Check         | published |
+      | Portal Accessibility Review | review    |
+      | System Audit Draft          | draft     |
+    And I reload the page
+    And the page should show only the tiles "Weekly Health Check"
+    When I go to "/user/assessments"
+    Then I should see the heading "Sign in to continue"
+
+    # Test as logged in user.
+    Given users:
+      | Username         |
+      | Lorian Nightfall |
+    And I am logged in as "Lorian Nightfall"
+    And I visit "collection/assessments/report/repository"
+    Then I should see the heading "Assessment reports"
+    And I should see the link "New assessment"
+    And I should see the link "My assessments"
+    And the page should show only the tiles "Weekly Health Check"
+    When I follow "My assessments"
+    Then I should be on "/user/assessments"
+    Then I should see the heading "My assessment reports"
+    And I should see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should see the text "There are no assessment reports yet for the current user."
+    Given report assessments:
+      | name                       | state     | uid              |
+      | Alpha Release Summary      | published | Lorian Nightfall |
+      | Beta Feature Review        | review    | Lorian Nightfall |
+      | Prototype Evaluation Draft | draft     | Lorian Nightfall |
+    And I reload the page
+    And the page should show only the tiles "Alpha Release Summary, Beta Feature Review, Prototype Evaluation Draft"
+
+    # Ensure the reports view only applies to the assessment collection.
+    When I am not logged in
+    And I go to "/collection/portal-support/report/repository"
+    Then I should get a 404 HTTP response

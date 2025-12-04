@@ -1,0 +1,4 @@
+radios_inline:
+  css:
+    component:
+      css/radios-inline.css: {}
