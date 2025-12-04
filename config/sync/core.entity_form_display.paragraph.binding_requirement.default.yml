@@ -4,11 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
-    - field.field.paragraph.binding_requirement.has_related_service
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
@@ -76,7 +76,7 @@ third_party_settings:
         required_fields: true
     group_related_services:
       children:
-        - has_related_service
+        - affects
       label: 'Trans-European digital public services'
       region: content
       parent_name: group_tabs
@@ -216,7 +216,7 @@ content:
       collapsed: false
       revision: false
     third_party_settings: {  }
-  has_related_service:
+  affects:
     type: inline_entity_form_simple
     weight: 4
     region: content

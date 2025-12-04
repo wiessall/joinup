@@ -68,12 +68,12 @@
                 </div>
               </div>
             {% endif %}
-            {% if not (paragraph.has_related_service.isEmpty == true) and content.has_related_service is defined %}
+            {% if not (paragraph.affects.isEmpty == true) and content.affects is defined %}
               <div class="col">
                 <div class="border rounded p-2 h-100">
                   <div class="fw-bold mb-1">{{ 'Related service'|t }}</div>
                   <div
-                    class="small text-muted">{{ content.has_related_service }}</div>
+                    class="small text-muted">{{ content.affects }}</div>
                 </div>
               </div>
             {% endif %}
