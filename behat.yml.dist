@@ -25,7 +25,7 @@
         # Third-party code injected in page with Javascript.
         - #globan
   - Drupal\joinup\Context\AssessmentContext
-  - Drupal\joinup\Context\AssessmentReportContext
+  - Drupal\joinup\Context\AssessmentsContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CalendarContext
