@@ -108,15 +108,27 @@ class ProvidedByWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
+  public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL) {
+    $renderable = parent::form($items, $form, $form_state, $get_delta);
+    $renderable['#theme_wrappers']['details'] = [
+      '#title' => $this->fieldDefinition->getLabel(),
+      '#summary_attributes' => [],
+      '#attributes' => ['open' => TRUE],
+    ];
+    return $renderable;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $fieldName = $this->fieldDefinition->getName();
     $parents = $element['#field_parents'];
     $widgetState = static::getWidgetState($parents, $fieldName, $form_state);
     $triggeringElement = $form_state->getTriggeringElement();
 
-    $element['#type'] = 'details';
-    $element['#open'] = TRUE;
-    $element['#title'] = $this->fieldDefinition->getLabel();
+    $element['#type'] = 'container';
+    $element['#attributes']['id'] = 'provided-by-content-' . $delta;
     $element['#attributes']['class'][] = 'provided-by-widget';
     $element['#attributes']['data-delta'] = $delta;
 
@@ -166,6 +178,7 @@ class ProvidedByWidget extends WidgetBase {
         'effect' => 'fade',
       ],
       '#op' => self::OP_TYPE_SELECT,
+      '#description' => (string) time(),
     ];
 
     $selectedType = NULL;
@@ -209,7 +222,6 @@ class ProvidedByWidget extends WidgetBase {
           'provided-by-content',
           'assessments-inline',
         ],
-        'id' => 'provided-by-content-' . $delta,
       ],
       '#attached' => ['library' => ['assessments/inline-items']],
     ];
@@ -877,18 +889,12 @@ class ProvidedByWidget extends WidgetBase {
       return ['#type' => 'container'];
     }
 
-    // Navigate to the content wrapper.
+    // Navigate to the current field item delta wrapper.
     $elementParents = $triggeringElement['#array_parents'];
-
-    // Remove the last element (the triggering element itself).
-    array_pop($elementParents);
-
-    // If the last element is not 'content', we need to add it.
-    // This handles the case where organisation_type triggers AJAX.
-    // When country or buttons trigger AJAX, 'content' is already in the path.
-    if (end($elementParents) !== 'content') {
-      $elementParents[] = 'content';
-    }
+    do {
+      array_pop($elementParents);
+      $currentLast = end($elementParents);
+    } while (count($elementParents) > 1 && !is_numeric($currentLast));
 
     // Navigate to the element.
     $element = $form;
