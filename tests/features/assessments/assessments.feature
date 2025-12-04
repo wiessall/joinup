@@ -376,7 +376,7 @@ Feature: Assessment Report Entity Management
       | Portal Accessibility Review | review    |
       | System Audit Draft          | draft     |
     And I reload the page
-    And the page should show the tiles "Weekly Health Check"
+    And the page should show only the tiles "Weekly Health Check"
     When I go to "/user/assessments"
     Then I should see the heading "Sign in to continue"
 
@@ -389,7 +389,7 @@ Feature: Assessment Report Entity Management
     Then I should see the heading "Assessment reports"
     And I should see the link "New assessment"
     And I should see the link "My assessments"
-    And the page should show the tiles "Weekly Health Check"
+    And the page should show only the tiles "Weekly Health Check"
     When I follow "My assessments"
     Then I should be on "/user/assessments"
     Then I should see the heading "My assessment reports"
@@ -402,7 +402,7 @@ Feature: Assessment Report Entity Management
       | Beta Feature Review        | review    | Lorian Nightfall |
       | Prototype Evaluation Draft | draft     | Lorian Nightfall |
     And I reload the page
-    And the page should show the tiles "Alpha Release Summary, Beta Feature Review, Prototype Evaluation Draft"
+    And the page should show only the tiles "Alpha Release Summary, Beta Feature Review, Prototype Evaluation Draft"
 
     # Ensure the reports view only applies to the assessment collection.
     When I am not logged in
