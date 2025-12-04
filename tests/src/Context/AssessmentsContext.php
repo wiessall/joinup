@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup\Traits\EntityTrait;
+use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\user\UserInterface;
 
 /**
  * Step definitions for assessments.
  */
 class AssessmentsContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -28,7 +33,7 @@ class AssessmentsContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
    *   The table with the data for the fields of the assessment.
    *
-   * @Given :type assessments:
+   * @Given :type assessment(s):
    */
   public function createAssessments(string $type, TableNode $assessmentsTable): void {
     foreach ($assessmentsTable->getHash() as $assessment) {
@@ -52,6 +57,19 @@ class AssessmentsContext extends RawDrupalContext {
         if ($user instanceof UserInterface) {
           $assessment['uid'] = $user->id();
         }
+      }
+
+      if (isset($assessment['binding_requirement'])) {
+        $paragraph = $this->getEntityById('paragraph', $assessment['binding_requirement'], 'binding_requirement');
+        $assessment['binding_requirement:target_id'] = $paragraph->id();
+        $assessment['binding_requirement:target_revision_id'] = $paragraph->getRevisionId();
+        unset($assessment['binding_requirement']);
+      }
+
+      if (isset($assessment['results_in'])) {
+        $statement = $this->getEntityById('assessment_statement', $assessment['results_in']);
+        $assessment[$statement->bundle() . ':target_id'] = $statement->id();
+        unset($assessment['results_in']);
       }
 
       $assessment = (object) $assessment;
@@ -80,4 +98,22 @@ class AssessmentsContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Creates assessment statements.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table with the data for the fields of the assessment statement.
+   *
+   * @Given (the following )assessment statement(s):
+   */
+  public function createAssessmentStatements(TableNode $table): void {
+    foreach ($table->getColumnsHash() as $values) {
+      assert(in_array($values['statement_type'], ['legal', 'technical', 'other'], TRUE), 'Invalid assessment statement type provided.');
+      $values['type'] = $values['statement_type'];
+      $values = (object) $values;
+
+      $this->parseEntityFields('assessment_statement', $values);
+      $this->getDriver()->createEntity('assessment_statement', $values);
+    }
+  }
 }

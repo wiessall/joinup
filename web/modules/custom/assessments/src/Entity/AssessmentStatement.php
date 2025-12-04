@@ -40,6 +40,7 @@ use Drupal\assessments\AssessmentVocabularyHelper;
  *   data_table = "assessment_statement_field_data",
  *   entity_keys = {
  *     "id" = "id",
+ *     "label" = "id",
  *     "uuid" = "uuid",
  *     "bundle" = "type"
  *   },
