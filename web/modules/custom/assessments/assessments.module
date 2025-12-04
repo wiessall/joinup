@@ -286,6 +286,19 @@ function assessments_field_widget_info_alter(array &$info): void {
 }
 
 /**
+ * Implements hook_views_data().
+ */
+function assessments_views_data(): array {
+  $data['views']['assessments_reports_links'] = [
+    'title' => t('Assessment reports links'),
+    'area' => [
+      'id' => 'assessments_reports_links',
+    ],
+  ];
+  return $data;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert() for assessment entities.
  */
 function assessments_assessment_insert(AssessmentInterface $entity): void {

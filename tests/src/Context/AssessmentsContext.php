@@ -7,6 +7,10 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\assessments\AssessmentInterface;
+use Drupal\assessments\AssessmentVocabularyHelper;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\user\UserInterface;
 use Drupal\assessments\Entity\Assessment;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -14,7 +18,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 
 /**
- * Step definitions for assessment report entities.
+ * Step definitions for assessments.
  */
 class AssessmentsContext extends RawDrupalContext {
 
@@ -24,43 +28,66 @@ class AssessmentsContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Creates assessment entities of a given bundle.
+   * Programmatically creates assessment contents.
    *
-   * @param string $bundle
-   *   The assessment bundle (e.g., 'report').
-   * @param \Behat\Gherkin\Node\TableNode $assessmentTable
-   *   The table of assessment data.
+   * Table format:
+   * | name   | <field n>       |
+   * | <name> | <field n value> |
    *
-   * @Given :bundle assessment content:
+   * @param string $type
+   *   The bundle machine name.
+   * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
+   *   The table with the data for the fields of the assessment.
+   *
+   * @Given :type assessments:
    */
-  public function createAssessmentContent(string $bundle, TableNode $assessmentTable): void {
-    foreach ($assessmentTable->getHash() as $assessmentHash) {
-      $values = [
-        'type' => $bundle,
+  public function createAssessments(string $type, TableNode $assessmentsTable): void {
+    foreach ($assessmentsTable->getHash() as $assessment) {
+      $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
+
+      $fieldVocabMap = [
+        'public_organisation' => ['organisation_type' => 'assess_provider_type'],
+        'participation' => ['participant_type' => 'assess_participant_type'],
+        'public_service' => ['thematic_area' => 'assess_public_service_area'],
       ];
 
-      foreach ($assessmentHash as $field => $value) {
-        switch ($field) {
-          case 'author':
-            $user = $this->getUserByName($value);
-            $values['uid'] = $user->id();
-            break;
-
-          case 'created':
-          case 'changed':
-            $values[$field] = strtotime($value);
-            break;
-
-          default:
-            $values[$field] = $value;
-            break;
+      foreach ($fieldVocabMap[$type] ?? [] as $fieldName => $vid) {
+        if (isset($assessment[$fieldName])) {
+          $assessment[$fieldName] = $vocabHelper->getTermFromIdentifier($vid, $assessment[$fieldName])->label();
         }
       }
 
-      $assessment = Assessment::create($values);
-      $assessment->save();
+      // Resolve username passed to uid.
+      if (isset($assessment['uid']) && !is_numeric($assessment['uid'])) {
+        $user = user_load_by_name($assessment['uid']);
+        if ($user instanceof UserInterface) {
+          $assessment['uid'] = $user->id();
+        }
+      }
 
-      $this->entities['assessment'][$assessment->id()] = $assessment;
+      $assessment = (object) $assessment;
+
+      $assessment->type = $type;
+      $this->parseEntityFields('assessment', $assessment);
+      $this->getDriver()->createEntity('assessment', $assessment);
+    }
+  }
+
+  /**
+   * Creates the assessment collection if it doesn't exist yet.
+   *
+   * @Given the assessments collection exists
+   */
+  public function createAssessmentsCollection(): void {
+    $collection = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
+    if (!$collection instanceof CollectionInterface) {
+      $this->nodeCreate((object) [
+        'type' => 'collection',
+        'uuid' => AssessmentInterface::GROUP_UUID,
+        'title' => 'Interoperability assessments space',
+        'short_id' => 'assessments',
+        'field_state' => 'published',
+      ]);
     }
   }
 
