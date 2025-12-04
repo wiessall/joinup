@@ -24,7 +24,7 @@
       excludeElements:
         # Third-party code injected in page with Javascript.
         - #globan
-  - Drupal\joinup\Context\AssessmentContext
+  - Drupal\joinup\Context\AssessmentsContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CalendarContext
@@ -48,6 +48,7 @@
   - Drupal\joinup\Context\InputFilterContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JavascriptContext
+  - Drupal\joinup\Context\JoinupAssessmentContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
   - Drupal\joinup\Context\JoinupContext
   - Drupal\joinup\Context\JoinupCoreContext

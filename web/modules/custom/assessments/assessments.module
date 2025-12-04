@@ -58,6 +58,8 @@ function assessments_form_alter(array &$form, FormStateInterface $formState, str
     '#tag' => 'h3',
     '#value' => t('Identified effects on cross-border interoperability'),
   ];
+  $form['#attached']['library'][] = 'assessments/radios_inline';
+  $form['state']['#attributes']['class'][] = 'radios-inline';
 }
 
 /**
@@ -294,4 +296,24 @@ function assessments_views_pre_render(ViewExecutable $view): void {
       }
     }
   }
+}
+
+/**
+ * Enable options_buttons widget for state.
+ */
+function assessments_field_widget_info_alter(array &$info): void {
+  $info['options_buttons']['field_types'][] = 'state';
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function assessments_views_data(): array {
+  $data['views']['assessments_reports_links'] = [
+    'title' => t('Assessment reports links'),
+    'area' => [
+      'id' => 'assessments_reports_links',
+    ],
+  ];
+  return $data;
 }
