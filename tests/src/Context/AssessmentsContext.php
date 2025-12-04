@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\user\UserInterface;
 
 /**
@@ -116,4 +114,5 @@ class AssessmentsContext extends RawDrupalContext {
       $this->getDriver()->createEntity('assessment_statement', $values);
     }
   }
+
 }

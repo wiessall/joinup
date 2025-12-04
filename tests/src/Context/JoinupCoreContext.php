@@ -481,4 +481,23 @@ class JoinupCoreContext extends RawDrupalContext {
     );
   }
 
+  /**
+   * Asserts that the response body contains multiple lines of text.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   *
+   * @Then the response should contain the following lines of text:
+   */
+  public function assertResponseBodyEquals(TableNode $table): void {
+    $response = $this->getSession()->getDriver()->getContent();
+    foreach ($table->getColumn(0) as $expected_line) {
+      Assert::assertStringContainsString(
+        $expected_line,
+        $response,
+        "The expected line '$expected_line' was not found in the response body.",
+      );
+    }
+  }
+
 }

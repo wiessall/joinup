@@ -69,6 +69,7 @@ language:
 spatial:
   - name: Belgium
     eu_member: true
+    uri: 'https://joinup.ddev.local/taxonomy-term/spatial/dfa6aecc-1a7d-4bee-83b7-363b0db1ba66'
   - name: Switzerland
   - name: 'European Union'
   - name: Luxembourg
@@ -267,6 +268,7 @@ tags:
 assess_provider_type:
   - name: European Union institution
     id: european_union_institution
+    uri: 'https://joinup.ddev.local/taxonomy-term/assess-provider-type/5870cf04-2d28-472d-9486-39b1e4670b25'
   - name: European Union body
     id: european_union_body
   - name: Local public sector body
@@ -274,11 +276,13 @@ assess_provider_type:
 assess_participant_type:
   - name: Local public sector body
     id: local_public_sector_body
+    uri: 'https://joinup.ddev.local/taxonomy-term/assess-participant-type/b8c59bef-e579-440a-91f0-8c7983524336'
   - name: European Union agency
     id: european_union_agency
 assess_public_service_area:
   - name: Core governance and administration
     id: core_governance_and_administration
+    uri: 'https://joinup.ddev.local/taxonomy-term/assess-public-service-area/34229fe8-14ac-40f8-9434-765e441eae3b'
 assess_statement_interpretation:
   - name: Beneficial
     id: positive
@@ -289,6 +293,7 @@ assess_statement_interpretation:
 assess_statement_type:
   - name: Legal
     id: legal
+    uri: 'https://joinup.ddev.local/taxonomy-term/assess-statement-type/219d8117-fd8e-4455-830d-9a0c6e81ab47'
   - name: Organisational
     id: organisational
   - name: Semantic
