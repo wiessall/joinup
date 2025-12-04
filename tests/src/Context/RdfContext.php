@@ -324,6 +324,25 @@ class RdfContext extends RawDrupalContext {
   }
 
   /**
+   * Visit the export page of an entity given its RDF resource (URI).
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   * @param string $format
+   *   The export format.
+   *
+   * @Given I visit the export page of the entity having :uri as RDF resource in :format format
+   */
+  public function visitEntityExportPageByRdfUri(string $uri, string $format): void {
+    if (!$entity = \Drupal::getContainer()
+      ->get('rdf_sync.mapper')
+      ->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $this->visitPath($entity->toUrl(NULL, ['query' => ['_format' => $format]])->toString());
+  }
+
+  /**
    * Asserts that no triples exist with the given URI as the given property.
    *
    * @param string $property
