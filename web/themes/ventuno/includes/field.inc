@@ -81,7 +81,7 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       'field_event_online_location',
       // Paragraph: binding_requirement.
       'expression',
-      'has_related_service',
+      'affects',
       'affected_party',
     ];
     if (\in_array($variables['element']['#field_name'], $fields)) {

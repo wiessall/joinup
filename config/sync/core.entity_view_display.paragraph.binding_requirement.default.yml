@@ -4,11 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
     - field.field.paragraph.binding_requirement.documented_in
     - field.field.paragraph.binding_requirement.expression
-    - field.field.paragraph.binding_requirement.has_related_service
     - field.field.paragraph.binding_requirement.requirement_documents
     - paragraphs.paragraphs_type.binding_requirement
   module:
@@ -77,7 +77,7 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  has_related_service:
+  affects:
     type: entity_reference_label
     label: above
     settings:

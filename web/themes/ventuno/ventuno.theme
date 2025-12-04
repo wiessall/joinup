@@ -46,7 +46,7 @@ function ventuno_preprocess_paragraph__binding_requirement(array &$variables): v
   $details_text = [];
   foreach ([
     'affected_party' => ['prefix' => 'affecting', 'suffix' => 'stakeholders'],
-    'has_related_service' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
+    'affects' => ['prefix' => 'related to', 'suffix' => 'service(s)'],
     'asset' => ['prefix' => 'related to', 'suffix' => 'assets'],
     'requirement_documents' => ['prefix' => 'supported by', 'suffix' => 'documents'],
   ] as $field => $data) {
