@@ -32,21 +32,21 @@ class UnarchiveAction extends StateActionBase {
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected readonly RendererInterface $renderer,
+    RendererInterface $renderer,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly WorkflowHelperInterface $workflowHelper,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $renderer);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('renderer'),
       $container->get('entity_type.manager'),
       $container->get('joinup_workflow.workflow_helper')

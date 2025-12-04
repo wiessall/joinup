@@ -7,10 +7,68 @@
 
 declare(strict_types=1);
 
+use Drupal\assessments\AssessmentVocabularyHelper;
+
+/**
+ * Create 'Code'-type vocabularies terms.
+ */
+function assessments_deploy_200800(): void {
+  $all = [
+    'assess_statement_interpretation' => [
+      'positive' => 'Beneficial',
+      'negative' => 'Risky',
+      'neutral' => 'Negligible',
+    ],
+    'assess_statement_type' => [
+      'legal' => 'Legal',
+      'organisational' => 'Organisational',
+      'semantic' => 'Semantic',
+      'technical' => 'Technical',
+      'other' => 'Other',
+    ],
+    'assess_participant_type' => [
+      'local_public_sector_body' => 'Local public sector body',
+      'regional_public_sector_body' => 'Regional public sector body',
+      'national_public_sector_body' => 'National public sector body',
+      'european_union_institution' => 'European Union institution',
+      'european_union_agency' => 'European Union agency',
+      'european_union_body' => 'European Union body',
+      'private_businesses' => 'Private Businesses',
+    ],
+    'assess_provider_type' => [
+      'local_public_sector_body' => 'Local public sector body',
+      'regional_public_sector_body' => 'Regional public sector body',
+      'national_public_sector_body' => 'National public sector body',
+      'european_union_institution' => 'European Union institution',
+      'european_union_agency' => 'European Union agency',
+      'european_union_body' => 'European Union body',
+    ],
+    'assess_public_service_area' => [
+      'core_governance_and_administration' => 'Core Governance and Administration',
+      'health_and_wellbeing' => 'Health and Wellbeing',
+      'education_and_research' => 'Education and Research',
+      'environment_and_energy' => 'Environment and Energy',
+      'economy_and_employment' => 'Economy and Employment',
+      'social_and_community_services' => 'Social and Community Services',
+      'security_justice_and_emergency_services' => 'Security, Justice, and Emergency Services',
+      'transport_and_infrastructure' => 'Transport and Infrastructure',
+      'digital_and_innovation_services' => 'Digital and Innovation Services',
+      'international_and_regional_cooperation' => 'International and Regional Cooperation',
+    ],
+  ];
+
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  foreach ($all as $vid => $terms) {
+    foreach ($terms as $id => $label) {
+      $storage->create(['vid' => $vid, 'name' => $label, 'id' => $id])->save();
+    }
+  }
+}
+
 /**
  * Create EU institutions as public_organisation assessment entities.
  */
-function assessments_deploy_200700(): void {
+function assessments_deploy_200801(): void {
   $entity_type_manager = \Drupal::entityTypeManager();
   $storage = $entity_type_manager->getStorage('assessment');
 
@@ -72,12 +130,15 @@ function assessments_deploy_200700(): void {
     ],
   ];
 
+  $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
   foreach ($institutions as $organisation_type => $institution_names) {
+    $tid = $vocabHelper->getTermIdFromIdentifier('assess_provider_type', $organisation_type);
+
     foreach ($institution_names as $institution_name) {
       $entity = $storage->create([
         'type' => 'public_organisation',
         'name' => $institution_name,
-        'organisation_type' => $organisation_type,
+        'organisation_type' => $tid,
       ]);
 
       try {

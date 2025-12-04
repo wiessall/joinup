@@ -3,8 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.domain
     - facets.facet.group
     - facets.facet.interoperable_flag
+    - facets.facet.solution_classification
     - facets.facet.spatial_coverage
     - facets.facet.topic
     - facets.facet.type
@@ -19,6 +21,12 @@ facet_source_id: 'search_api:views_page__search__page_1'
 only_visible_when_facet_source_is_visible: true
 processor_configs: {  }
 facets:
+  solution_classification:
+    checked: true
+    label: 'Solution classification'
+    separator: ', '
+    show_count: false
+    weight: -11
   spatial_coverage:
     checked: true
     label: 'Geographic coverage'
@@ -55,3 +63,9 @@ facets:
     separator: ', '
     show_count: false
     weight: -5
+  domain:
+    checked: true
+    label: Domain
+    separator: ', '
+    show_count: false
+    weight: 0

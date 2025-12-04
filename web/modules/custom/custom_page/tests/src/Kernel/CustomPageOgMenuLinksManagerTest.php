@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\Tests\custom_page\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
@@ -19,8 +18,6 @@ use Drupal\og_menu\Entity\OgMenuInstance;
  * @group custom_page
  */
 class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
-
-  use ConfigTestTrait;
 
   /**
    * {@inheritdoc}

@@ -9,6 +9,7 @@ use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Plugin\facets\query_type\SearchApiString;
 use Drupal\facets\Result\Result;
+use Drupal\search_api\Query\Query;
 use Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface;
 use Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -58,7 +59,7 @@ class FacetQuery extends SearchApiString implements ContainerFactoryPluginInterf
    */
   public function execute() {
     $query = $this->query;
-    if (empty($query)) {
+    if (!$query instanceof Query) {
       return;
     }
 

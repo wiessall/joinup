@@ -15,55 +15,40 @@ use Drupal\Core\File\FileSystemInterface;
 function joinup_api_install(): void {
   $fileSystem = \Drupal::service('file_system');
   $directory = 'private://simple_oauth';
-  $fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
+  $fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
   $keygen = \Drupal::service('simple_oauth.key.generator');
-  $keygen->generateKeys($directory);
+  $keygen->generateKeys($fileSystem->realpath($directory));
 }
 
 /**
- * Implements hook_requirements().
+ * Cleanup comment REST demo.
  */
-function joinup_api_requirements($phase): array {
-  $requirements = [];
+function joinup_api_update_200800(): void {
+  // The webform_update_8648 updates roles with a given permission. The
+  // developer role, being an admin, has all permissions so it tries to grant
+  // them a new permission. This triggers a series of events that collects all
+  // permissions according to all providers, one of which is the rest module.
+  // The removed discussion_comment REST resource is still registered there
+  // during the update process, causing a plugin not found exception, as the
+  // class does not exist yet. To avoid this, we delete the configuration here
+  // before  the rest module collects permissions.
+  \Drupal::configFactory()->getEditable('rest.resource.discussion_comment')->delete();
 
-  if ($phase !== 'runtime') {
-    return $requirements;
+  // Delete testing OAuth2 client requests and clients.
+  $storage = \Drupal::entityTypeManager()->getStorage('oauth_client_request');
+  $ids = $storage->getQuery()->accessCheck(FALSE)->execute();
+  if ($ids) {
+    $storage->delete($storage->loadMultiple($ids));
   }
+}
 
-  $config = \Drupal::config('simple_oauth.settings');
-  $privateKey = $config->get('private_key');
-  $publicKey = $config->get('public_key');
-
-  $fileSystem = \Drupal::service('file_system');
-
-  $privateKeyPath = $fileSystem->realpath($privateKey);
-  $publicKeyPath = $fileSystem->realpath($publicKey);
-  $requirements['simple_oauth_keys'] = [
-    'title' => t('Simple OAuth keys'),
-    'value' => t('OK'),
-    'description' => t('Both private and public keys are present.'),
-    'severity' => REQUIREMENT_OK,
+/**
+ * Implements hook_update_dependencies().
+ */
+function joinup_api_update_dependencies(): array {
+  return [
+    'webform' => [
+      8648 => ['joinup_api' => 200800],
+    ],
   ];
-
-  if (!file_exists($privateKeyPath)) {
-    $requirements['simple_oauth_keys'] = [
-      'title' => t('Simple OAuth private key'),
-      'value' => t('Missing'),
-      'description' => t('The private key does not exist at @path.', ['@path' => $privateKeyPath]),
-      'severity' => REQUIREMENT_ERROR,
-    ];
-    return $requirements;
-  }
-
-  if (!file_exists($publicKeyPath)) {
-    $requirements['simple_oauth_keys'] = [
-      'title' => t('Simple OAuth public key'),
-      'value' => t('Missing'),
-      'description' => t('The public key does not exist at @path.', ['@path' => $publicKeyPath]),
-      'severity' => REQUIREMENT_ERROR,
-    ];
-    return $requirements;
-  }
-
-  return $requirements;
 }

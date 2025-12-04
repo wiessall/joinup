@@ -4,6 +4,8 @@ services:
     autoconfigure: true
     autowire: true
 
+  Drupal\assessments\AssessmentVocabularyHelper: {}
+
   Drupal\assessments\AssessmentReportNotificationInterface:
     class: Drupal\assessments\AssessmentReportNotification
 

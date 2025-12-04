@@ -35,7 +35,7 @@ final class AssessmentListBuilder extends EntityListBuilder {
     $row['bundle'] = $entity->bundle();
     $username_options = [
       'label' => 'hidden',
-      'settings' => ['link' => $entity->get('uid')->entity->isAuthenticated()],
+      'settings' => ['link' => $entity->get('uid')->entity?->isAuthenticated()],
     ];
     $row['uid']['data'] = $entity->get('uid')->view($username_options);
     $row['created']['data'] = $entity->get('created')->view(['label' => 'hidden']);

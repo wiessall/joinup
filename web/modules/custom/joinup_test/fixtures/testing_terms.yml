@@ -68,10 +68,13 @@ language:
   - name: English
 spatial:
   - name: Belgium
+    eu_member: true
   - name: Switzerland
   - name: 'European Union'
   - name: Luxembourg
+    eu_member: true
   - name: Greece
+    eu_member: true
 file_type:
   - name: 'ZIP'
     mime_type: 'application/zip'
@@ -260,3 +263,37 @@ tags:
   - name: 'games'
   - name: 'some unpublished tag'
     status: 0
+# Assessment vocabularies
+assess_provider_type:
+  - name: European Union institution
+    id: european_union_institution
+  - name: European Union body
+    id: european_union_body
+  - name: Local public sector body
+    id: local_public_sector_body
+assess_participant_type:
+  - name: Local public sector body
+    id: local_public_sector_body
+  - name: European Union agency
+    id: european_union_agency
+assess_public_service_area:
+  - name: Core governance and administration
+    id: core_governance_and_administration
+assess_statement_interpretation:
+  - name: Beneficial
+    id: positive
+  - name: Risky
+    id: negative
+  - name: Negligible
+    id: neutral
+assess_statement_type:
+  - name: Legal
+    id: legal
+  - name: Organisational
+    id: organisational
+  - name: Semantic
+    id: semantic
+  - name: Technical
+    id: technical
+  - name: Other
+    id: other

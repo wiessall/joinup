@@ -5,6 +5,7 @@ package: Custom
 core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:options
+  - drupal:taxonomy
   - drupal:rest
   - inline_entity_form:inline_entity_form
   - joinup:joinup_api

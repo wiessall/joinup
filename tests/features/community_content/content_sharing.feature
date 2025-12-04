@@ -10,10 +10,10 @@ Feature: Sharing content between collections
       | Target group |
     And "news" content:
       | title       | collection | shared on    | shared at |
-      | Shared news | The Portal | Target group | - 32 days |
+      | Shared news | Portal support | Target group | - 32 days |
     And "event" content:
       | title        | collection | shared on    | shared at |
-      | Shared event | The Portal | Target group | -7 months |
+      | Shared event | Portal support | Target group | -7 months |
 
     When I go to the "Target group" collection
     Then I should see the "Shared event" tile
@@ -257,7 +257,7 @@ Feature: Sharing content between collections
       | Chocolate Way |
     And "document" content:
       | title                 | collection    | shared on     | created    | pinned |
-      | Milky Way content     | The Portal    | Chocolate Way | 2017-06-04 | yes    |
+      | Milky Way content     | Portal support   | Chocolate Way | 2017-06-04 | yes    |
       | Chocolate Way content | Chocolate Way |               | 2017-06-05 | no     |
     When I go to the homepage of the "Chocolate Way" collection
     Then I should see the following tiles in the correct order:
