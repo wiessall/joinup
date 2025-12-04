@@ -30,13 +30,6 @@ trait EntityTrait {
   }
 
   /**
-   * Finds an entity by UUID with the given type and bundle.
-   */
-  protected static function getEntityByUuid(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
-    return static::getEntityByKey('uuid', $entity_type_id, $label, $bundle);
-  }
-
-  /**
    * Returns the entity with the given type, bundle and key.
    *
    * If multiple entities have the same label then the first one is returned.
