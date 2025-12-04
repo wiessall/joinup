@@ -265,6 +265,13 @@ function assessments_entity_bundle_info_alter(array &$bundles): void {
 }
 
 /**
+ * Enable options_buttons widget for state.
+ */
+function assessments_field_widget_info_alter(array &$info): void {
+  $info['options_buttons']['field_types'][] = 'state';
+}
+
+/**
  * Implements hook_views_data().
  */
 function assessments_views_data(): array {
@@ -275,13 +282,6 @@ function assessments_views_data(): array {
     ],
   ];
   return $data;
-}
-
-/**
- * Enable options_buttons widget for state.
- */
-function assessments_field_widget_info_alter(array &$info): void {
-  $info['options_buttons']['field_types'][] = 'state';
 }
 
 /**
