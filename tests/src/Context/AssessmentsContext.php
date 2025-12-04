@@ -11,11 +11,8 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\assessments\AssessmentVocabularyHelper;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\user\UserInterface;
-use Drupal\assessments\Entity\Assessment;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup\Traits\UserTrait;
-use Drupal\joinup\Traits\UtilityTrait;
 
 /**
  * Step definitions for assessments.
@@ -24,8 +21,6 @@ class AssessmentsContext extends RawDrupalContext {
 
   use EntityTrait;
   use TestingEntitiesTrait;
-  use UserTrait;
-  use UtilityTrait;
 
   /**
    * Programmatically creates assessment contents.
@@ -65,12 +60,72 @@ class AssessmentsContext extends RawDrupalContext {
         }
       }
 
+      // Resolve provider by name if provided (skip for report type).
+      if ($type !== 'report' && isset($assessment['provider']) && !is_numeric($assessment['provider'])) {
+        $provider = $this->getEntityByLabel('assessment', $assessment['provider'], 'public_organisation');
+        $assessment['provider'] = $provider->id();
+      }
+
       $assessment = (object) $assessment;
 
       $assessment->type = $type;
       $this->parseEntityFields('assessment', $assessment);
       $this->getDriver()->createEntity('assessment', $assessment);
     }
+  }
+
+  /**
+   * Adds a binding requirement paragraph to a report assessment.
+   *
+   * Table format (vertical):
+   * | report      | Report Name     |
+   * | expression  | Expression Name |
+   * | service     | Service Name    |
+   * | description | Description     |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $bindingTable
+   *   The table with binding requirement data.
+   *
+   * @Given the following report has binding requirement:
+   */
+  public function addBindingRequirementToReport(TableNode $bindingTable): void {
+    $binding = $bindingTable->getRowsHash();
+
+    $report = $this->getEntityByLabel('assessment', $binding['report'], 'report');
+
+    $expression_id = NULL;
+    $service_id = NULL;
+
+    if (!empty($binding['expression'])) {
+      $expression = $this->getEntityByLabel('assessment', $binding['expression'], 'expression');
+      $expression_id = $expression->id();
+    }
+
+    if (!empty($binding['service'])) {
+      $service = $this->getEntityByLabel('assessment', $binding['service'], 'public_service');
+      $service_id = $service->id();
+    }
+
+    $description = $binding['description'] ?? 'Test requirement description';
+    $paragraph = \Drupal::entityTypeManager()
+      ->getStorage('paragraph')
+      ->create([
+        'type' => 'binding_requirement',
+        'description' => ['value' => $description, 'format' => 'plain_text'],
+        'expression' => $expression_id ? [$expression_id] : [],
+        'has_related_service' => $service_id ? [$service_id] : [],
+      ]);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+
+    $report->set('binding_requirement', [
+      [
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ],
+    ]);
+    $report->save();
   }
 
   /**
