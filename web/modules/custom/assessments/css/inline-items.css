@@ -12,6 +12,7 @@
 
 .assessments-inline__item {
   flex: 1 0 auto;
+  max-width: 100%;
 }
 
 .assessments-inline__item--compact {

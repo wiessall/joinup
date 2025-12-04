@@ -161,7 +161,12 @@ class ProvidedByWidget extends WidgetBase {
         $currentCountry = NULL;
       }
     }
-    $element['organisation_type'] = [
+    $element['org_type_wrapper'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['assessments-inline']],
+      '#attached' => ['library' => ['assessments/inline-items']],
+    ];
+    $element['org_type_wrapper']['organisation_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of public sector body'),
       '#options' => $this->getOrganisationTypeOptions(),
@@ -172,13 +177,13 @@ class ProvidedByWidget extends WidgetBase {
         'class' => ['organisation-type-select'],
         'data-delta' => $delta,
       ],
+      '#wrapper_attributes' => ['class' => ['assessments-inline__item']],
       '#ajax' => [
         'callback' => [static::class, 'ajaxRefresh'],
         'wrapper' => 'provided-by-content-' . $delta,
         'effect' => 'fade',
       ],
       '#op' => self::OP_TYPE_SELECT,
-      '#description' => (string) time(),
     ];
 
     $selectedType = NULL;
@@ -186,7 +191,9 @@ class ProvidedByWidget extends WidgetBase {
     $isCountryAjax = $operation === self::OP_COUNTRY_SELECT;
 
     if ($operation === self::OP_TYPE_SELECT) {
-      $selectedType = $form_state->getValue(array_merge($parents, [$fieldName, $delta, 'organisation_type']));
+      $selectedType = $form_state->getValue(
+        array_merge($parents, [$fieldName, $delta, 'org_type_wrapper', 'organisation_type'])
+      );
 
       $typeChanged = !isset($widgetState['selected_type']) ||
                       $widgetState['selected_type'] !== $selectedType;
@@ -276,7 +283,7 @@ class ProvidedByWidget extends WidgetBase {
         $countryOptions = $this->getCountryOptions();
         $defaultCountryValue = $selectedCountry ?? $currentCountry;
 
-        $element['content']['country'] = [
+        $element['org_type_wrapper']['country'] = [
           '#type' => 'select',
           '#title' => $this->t('Country'),
           '#options' => $countryOptions,
@@ -552,7 +559,7 @@ class ProvidedByWidget extends WidgetBase {
       return $currentCountry;
     }
     $userInput = $form_state->getUserInput();
-    $inputPath = array_merge($parents, [$fieldName, $delta, 'content', 'country']);
+    $inputPath = array_merge($parents, [$fieldName, $delta, 'org_type_wrapper', 'country']);
 
     $tempInput = $userInput;
     foreach ($inputPath as $key) {
