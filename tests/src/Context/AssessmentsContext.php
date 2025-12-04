@@ -16,7 +16,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 /**
  * Step definitions for assessment report entities.
  */
-class AssessmentReportContext extends RawDrupalContext {
+class AssessmentsContext extends RawDrupalContext {
 
   use EntityTrait;
   use TestingEntitiesTrait;
