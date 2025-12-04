@@ -14,4 +14,9 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface AssessmentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface, RdfSyncEntityInterface {
 
+  /**
+   * The UUID of the assessment collection.
+   */
+  public const string GROUP_UUID = 'c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
+
 }
