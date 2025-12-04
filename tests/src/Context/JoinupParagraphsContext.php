@@ -477,6 +477,25 @@ class JoinupParagraphsContext extends RawDrupalContext {
   /**
    * Creates a paragraph with the given values.
    *
+   * @param string $type
+   *  The type of the paragraph.
+   * @param \Behat\Gherkin\Node\TableNode $values
+   *   The data to add in the paragraph.
+   *
+   * @Given the following :type paragraph:
+   */
+  public function iCreateAParagraphWith(string $type, TableNode $values): void {
+    $values = $values->getRowsHash();
+    $values['type'] = $type;
+    $values = (object) $values;
+
+    $this->parseEntityFields('paragraph', $values);
+    $this->getDriver()->createEntity('paragraph', $values);
+  }
+
+  /**
+   * Creates a paragraph with the given values.
+   *
    * If saved, then the paragraph is queued to be removed after the current test
    * is finished.
    *

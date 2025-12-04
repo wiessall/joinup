@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Gherkin\Node\TableNode;
-use Drupal\assessments\Entity\AssessmentStatement;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
@@ -25,81 +23,6 @@ class JoinupAssessmentContext extends RawDrupalContext {
   use EntityTrait;
   use TestingEntitiesTrait;
   use UtilityTrait;
-
-  /**
-   * Programmatically creates assessment contents.
-   *
-   * Table format:
-   * | name   | <field n>       |
-   * | <name> | <field n value> |
-   *
-   * @param string $type
-   *   The bundle machine name.
-   * @param \Behat\Gherkin\Node\TableNode $assessmentsTable
-   *   The table with the data for the fields of the assessment.
-   *
-   * @Given :type assessment(s):
-   */
-  public function createAssessments(string $type, TableNode $assessmentsTable): void {
-    foreach ($assessmentsTable->getHash() as $assessment) {
-      $vocabHelper = \Drupal::service(AssessmentVocabularyHelper::class);
-
-      $fieldVocabMap = [
-        'public_organisation' => ['organisation_type' => 'assess_provider_type'],
-        'participation' => ['participant_type' => 'assess_participant_type'],
-        'public_service' => ['thematic_area' => 'assess_public_service_area'],
-      ];
-
-      foreach ($fieldVocabMap[$type] ?? [] as $fieldName => $vid) {
-        if (isset($assessment[$fieldName])) {
-          $assessment[$fieldName] = $vocabHelper->getTermFromIdentifier($vid, $assessment[$fieldName])->label();
-        }
-      }
-
-      $assessment = (object) $assessment;
-      $assessment->type = $type;
-      $this->parseEntityFields('assessment', $assessment);
-      $this->getDriver()->createEntity('assessment', $assessment);
-    }
-  }
-
-  /**
-   * Creates a binding requirement paragraph.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table with the data for the fields of the paragraph.
-   *
-   * @Given (the following )binding requirement(s):
-   */
-  public function createBindingRequirements(TableNode $table): void {
-    foreach ($table->getHash() as $paragraph) {
-      $paragraph = Paragraph::create([
-        'type' => 'binding_requirement',
-      ]);
-
-      $paragraph = (object) $paragraph;
-      $paragraph->type = $type;
-      $this->parseEntityFields('paragraph', $paragraph);
-      $this->getDriver()->createEntity('paragraph ', $paragraph);
-    }
-
-    $paragraph->save();
-  }
-
-  /**
-   * Creates assessment statements.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table with the data for the fields of the assessment statement.
-   *
-   * @Given (the following )assessment statement(s):
-   */
-  public function createAssessmentStatements(TableNode $table): void {
-    foreach ($table->getHash() as $row) {
-      $statement = AssessmentStatement::create($row);
-      $statement->save();
-    }
-  }
 
   /**
    * Navigates to the latest assessment webform submission.
