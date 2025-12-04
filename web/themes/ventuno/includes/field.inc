@@ -82,7 +82,7 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       // Paragraph: binding_requirement.
       'expression',
       'affects',
-      'affected_party',
+      'has_participation',
     ];
     if (\in_array($variables['element']['#field_name'], $fields)) {
       $variables['table']['#attributes']['class'][] = 'thead-visually-hidden';

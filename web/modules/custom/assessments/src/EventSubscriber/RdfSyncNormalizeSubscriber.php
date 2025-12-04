@@ -123,7 +123,7 @@ class RdfSyncNormalizeSubscriber implements EventSubscriberInterface {
     }
 
     // Add binding requirement triples.
-    $fields = ['expression', 'affects', 'affected_party', 'asset'];
+    $fields = ['expression', 'affects', 'has_participation', 'asset'];
     foreach ($report->get('binding_requirement') as $bindingRequirementField) {
       $bindingRequirement = $bindingRequirementField->entity;
       $normalized += $this->normalizer->normalize($bindingRequirement);

@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.assessment
-    - field.field.paragraph.binding_requirement.affected_party
+    - field.field.paragraph.binding_requirement.has_participation
     - field.field.paragraph.binding_requirement.affects
     - field.field.paragraph.binding_requirement.asset
     - field.field.paragraph.binding_requirement.description
@@ -93,7 +93,7 @@ third_party_settings:
         required_fields: true
     group_affected_parties:
       children:
-        - affected_party
+        - has_participation
       label: 'Affected stakeholders'
       region: content
       parent_name: group_tabs
@@ -144,15 +144,15 @@ targetEntityType: paragraph
 bundle: binding_requirement
 mode: default
 content:
-  affected_party:
+  has_participation:
     type: inline_entity_form_simple
     weight: 5
     region: content
     settings:
       form_mode: default
       override_labels: true
-      label_singular: 'Affected party'
-      label_plural: 'Affected parties'
+      label_singular: 'Has participation'
+      label_plural: 'Has participations'
       collapsible: false
       collapsed: false
       revision: false
