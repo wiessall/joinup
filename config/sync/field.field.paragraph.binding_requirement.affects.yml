@@ -4,15 +4,19 @@ status: true
 dependencies:
   config:
     - assessments.type.public_service
-    - field.storage.paragraph.has_related_service
+    - field.storage.paragraph.affects
     - paragraphs.paragraphs_type.binding_requirement
   module:
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2qy/iopa#affects'
+      type: resource
   tmgmt_content:
     excluded: false
-id: paragraph.binding_requirement.has_related_service
-field_name: has_related_service
+id: paragraph.binding_requirement.affects
+field_name: affects
 entity_type: paragraph
 bundle: binding_requirement
 label: 'Affected service'

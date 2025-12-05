@@ -140,6 +140,16 @@
     > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
       --#{$prefix}table-accent-bg: $white;
     }
+
+    &.thead-visually-hidden {
+      > thead {
+        @include visually-hidden;
+      }
+
+      > tbody > tr:first-child {
+        border: none;
+      }
+    }
   }
 
   // Override fieldset elements on confirmation page.

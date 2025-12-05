@@ -10,6 +10,10 @@ dependencies:
     - entity_reference_revisions
     - tmgmt_content
 third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/2sa/cav#assesses'
+      type: resource
   tmgmt_content:
     excluded: false
 id: assessment.report.binding_requirement

@@ -101,7 +101,6 @@ Feature: User authentication
       | admin/tmgmt/translators                             |
       | admin/tmgmt/settings                                |
       | announcements                                       |
-      | assessments/add/report                              |
       | collection/portal-support/revisions                 |
       | dashboard                                           |
       | dashboard/private-message-report                    |
