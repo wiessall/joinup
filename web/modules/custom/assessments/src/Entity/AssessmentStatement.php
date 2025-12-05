@@ -30,6 +30,7 @@ use Drupal\assessments\Entity\Trait\AssessmentResourceTrait;
  *     plural = "@count assessment statements",
  *   ),
  *   handlers = {
+ *     "access" = "Drupal\assessments\AssessmentStatementAccessControlHandler",
  *     "list_builder" = "Drupal\assessments\AssessmentStatementListBuilder",
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",

@@ -6,7 +6,6 @@ dependencies:
     - assessments.type.expression
     - field.field.assessment.expression.description
     - field.field.assessment.expression.documented_in
-    - field.field.assessment.expression.expression_type
   module:
     - allowed_formats
     - entity_form_field_label
@@ -55,13 +54,12 @@ content:
       placeholder: ''
     third_party_settings:
       entity_form_field_label:
-        new_label: ''
+        new_label: 'Name of the initiative'
         rewrite_label: 1
         new_description: 'Provide the name of the initiative, project or action containing the binding requirements to be assessed'
         rewrite_description: 1
 hidden:
   created: true
-  expression_type: true
   langcode: true
   status: true
   uid: true

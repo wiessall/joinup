@@ -14,6 +14,9 @@ assessments.type.*:
 assessments.type.*.third_party.rdf_sync:
   type: rdf_sync.bundle_mapping
 
+paragraphs.paragraphs_type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
+
 field.widget.settings.conditional_link:
   type: field.widget.settings.link_default
   label: Link with confirmation widget settings
